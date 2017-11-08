@@ -1,0 +1,8 @@
+pairs:
+  dj: Danny Joyce; djoyce
+  jr: Jason Rimer; jrimer
+email:
+  prefix: pair
+  domain: pivotal.io
+  no_solo_prefix: true
+global: false
