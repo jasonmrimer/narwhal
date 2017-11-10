@@ -9,4 +9,4 @@ export PATH="${PATH}:/root/.yarn/bin"
 pushd repo/client
 
 yarn install --no-progress
-yarn test
+CI=true yarn test
