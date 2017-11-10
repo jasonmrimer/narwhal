@@ -9,4 +9,4 @@ export GRADLE_USER_HOME="${PWD}/gradle"
 pushd repo
 
 # ./gradlew flywayMigrate
-./gradlew test
+gradle test
