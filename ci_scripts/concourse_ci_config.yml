@@ -19,8 +19,7 @@ jobs:
   plan:
   - get: repo
     trigger: true
-    passed:
-      - client-test
+    passed: [client-test]
   - task: client_build
     file: repo/ci_scripts/client_build.yml
 
@@ -28,7 +27,6 @@ jobs:
   plan: 
   - get: repo
     trigger: true
-    passed:
-      - client-build
+    passed: [client-build]
   - task: server_test
     file: repo/ci_scripts/server_test.yml
