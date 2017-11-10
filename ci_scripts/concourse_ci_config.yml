@@ -1,0 +1,19 @@
+resources:
+  - name: repo
+    type: git
+    source:
+      uri: git@bitbucket.org:lovenirds/project_name.git
+      branch: master
+      private_key: {{bitbucket_ssh_key}}
+      check_every: 1s
+
+jobs:
+- name: lint-js-java
+  plan:
+  - get: repo
+    trigger: true
+  - aggregate:
+    - task: js_test
+      file: repo/ci_scripts/js_test.yml
+    - task: java_test
+      file: repo/ci_scripts/java_test.yml
