@@ -8,25 +8,11 @@ resources:
       check_every: 20s
 
 jobs:
-- name: client-test
+- name: test
   plan:
   - get: repo
     trigger: true
   - task: client_test
     file: repo/ci_scripts/client_test.yml
-
-- name: client-build
-  plan:
-  - get: repo
-    trigger: true
-    passed: [client-test]
-  - task: client_build
-    file: repo/ci_scripts/client_build.yml
-
-- name: server-test
-  plan: 
-  - get: repo
-    trigger: true
-    passed: [client-build]
   - task: server_test
     file: repo/ci_scripts/server_test.yml
