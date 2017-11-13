@@ -6,7 +6,9 @@ set -o pipefail
 
 export PATH="${PATH}:/root/.yarn/bin"
 
-pushd repo/client
+pushd repo
 
 yarn install --no-progress
-CI=true yarn test
+yarn build
+
+popd

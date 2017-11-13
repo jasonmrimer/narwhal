@@ -9,11 +9,10 @@ inputs:
   - name: repo
 
 run:
-  path: repo/ci_scripts/java_test.sh
+  path: repo/ci_scripts/client_build.sh
 
 params:
   TERM: -dumb
-  GRADLE_OPTS: -Dorg.gradle.native=false
 
 caches:
-  - path: gradle
+  - path: repo/node_modules
