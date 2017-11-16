@@ -1,12 +1,12 @@
-package mil.af.skeleton;
+package mil.af.us.narwhal;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SkeletonApplication {
+public class Application {
 
 	public static void main(String[] args) {
-		SpringApplication.run(SkeletonApplication.class, args);
+		SpringApplication.run(Application.class, args);
 	}
 }
