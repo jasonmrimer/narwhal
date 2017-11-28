@@ -11,12 +11,18 @@
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
-    "eject": "react-scripts-ts eject"
+    "eject": "react-scripts-ts eject",
+    "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'"
   },
   "devDependencies": {
+    "@types/enzyme": "^3.1.4",
     "@types/jest": "^21.1.5",
     "@types/node": "^8.0.50",
     "@types/react": "^16.0.21",
-    "@types/react-dom": "^16.0.2"
-  }
+    "@types/react-dom": "^16.0.2",
+    "@types/enzyme-adapter-react-16": "^1.0.1",
+    "enzyme-adapter-react-16": "^1.1.0",
+    "enzyme": "^3.2.0"
+  },
+  "proxy": "http://localhost:8080"
 }

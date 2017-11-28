@@ -14,7 +14,6 @@ yarn install --no-progress
 yarn build
 popd
 
-# ./gradlew flywayMigrate
 ./gradlew test
 
 popd

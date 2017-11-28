@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/narwhal.iml" filepath="$PROJECT_DIR$/narwhal.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/narwhal_main.iml" filepath="$PROJECT_DIR$/.idea/modules/narwhal_main.iml" group="narwhal" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/narwhal_test.iml" filepath="$PROJECT_DIR$/.idea/modules/narwhal_test.iml" group="narwhal" />
+    </modules>
+  </component>
+</project>
