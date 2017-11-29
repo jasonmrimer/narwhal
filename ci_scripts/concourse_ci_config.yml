@@ -2,17 +2,26 @@ resources:
   - name: repo
     type: git
     source:
-      uri: git@gitlab.gs.mil:DCGS_Crew_Manager/narwhal.git
+      uri: git@bitbucket.org:lovenirds/narwhal.git
       branch: master
       private_key: {{gitlab_ssh_key}}
-      check_every: 120s
+      check_every: 10s
 
 jobs:
-- name: test
+- name: unit-test
   plan:
   - get: repo
     trigger: true
-  - task: client_test
-    file: repo/ci_scripts/client_test.yml
-  - task: server_test
-    file: repo/ci_scripts/server_test.yml
+  - aggregate:
+    - task: client_test
+      file: repo/ci_scripts/client_test.yml
+    - task: server_test
+      file: repo/ci_scripts/server_test.yml
+- name: acceptance-test
+  plan:
+  - get: repo
+    trigger: true
+    passed: [unit-test]
+  - task: acceptance_test
+    privileged: true
+    file: repo/ci_scripts/acceptance_test.yml

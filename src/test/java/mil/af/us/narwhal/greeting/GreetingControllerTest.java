@@ -13,11 +13,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
 @WebMvcTest
+@RunWith(SpringRunner.class)
 public class GreetingControllerTest {
     @Autowired MockMvc mockMvc;
-
     @MockBean GreetingService greetingService;
 
     @Test

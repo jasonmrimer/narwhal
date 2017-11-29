@@ -1,0 +1,41 @@
+---
+platform: linux
+
+image_resource:
+  type: docker-image
+  source: {repository: "amidos/dcind", tag: "latest"}
+
+inputs:
+  - name: repo
+
+run:
+  path: sh
+  args:
+    - -exc
+    - |
+      source /docker-lib.sh
+      start_docker
+
+      # Strictly speaking, preloading of Docker images is not required.
+      # However, you might want to do this for a couple of reasons:
+      # - If the image comes from a private repository, it is much easier to let Concourse pull it,
+      #   and then pass it through to the task.
+      # - When the image is passed to the task, Concourse can often get the image from its cache.
+
+      # docker load -i redis/image
+      # docker tag "$(cat redis/image-id)" "$(cat redis/repository):$(cat redis/tag)"
+
+      # docker load -i busybox/image
+      # docker tag "$(cat busybox/image-id)" "$(cat busybox/repository):$(cat busybox/tag)"
+
+      # This is just to visually check in the log that images have been loaded successfully
+      # docker images
+
+      # Run the container with tests and its dependencies.
+      docker-compose run app
+
+      # Cleanup.
+      # Not sure if this is required.
+      # It's quite possible that Concourse is smart enough to clean up the Docker mess itself.
+      docker-compose down
+      docker volume rm $(docker volume ls -q)

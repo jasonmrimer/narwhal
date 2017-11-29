@@ -1,7 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/narwhal-dev
-    username: narwhal
+    url: ${NARWHAL_DB_URL}
+    username: ${NARWHAL_DB_USERNAME}
+    password: ${NARWHAL_DB_PASSWORD}
 flyway:
   baseline-on-migrate: true
   baseline-version: 0
