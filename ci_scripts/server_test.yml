@@ -17,3 +17,4 @@ params:
 
 caches:
   - path: gradle
+  - path: repo/client/node_modules

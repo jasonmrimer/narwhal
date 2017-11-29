@@ -15,4 +15,4 @@ params:
   TERM: -dumb
 
 caches:
-  - path: repo/node_modules
+  - path: repo/client/node_modules
