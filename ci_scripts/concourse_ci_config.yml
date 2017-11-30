@@ -2,10 +2,10 @@ resources:
   - name: repo
     type: git
     source:
-      uri: git@bitbucket.org:lovenirds/narwhal.git
+      uri: git@gitlab.gs.mil:DCGS_Crew_Manager/narwhal.git
       branch: master
       private_key: {{gitlab_ssh_key}}
-      check_every: 10s
+      check_every: 60s
 
 jobs:
 - name: unit-test

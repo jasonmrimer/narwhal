@@ -1,7 +1,15 @@
 version: '3'
 services:
+  db:
+    image: "postgres:latest"
+    environment:
+      POSTGRES_PASSWORD: narwhal
+      POSTGRES_USER: narwhal
+      POSTGRES_DB: narwhal-dev
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile.app
     ports:
       - "8080:8080"
     depends_on:
@@ -10,9 +18,14 @@ services:
       NARWHAL_DB_URL: jdbc:postgresql://db:5432/narwhal-dev
       NARWHAL_DB_PASSWORD: narwhal
       NARWHAL_DB_USERNAME: narwhal
-  db:
-    image: "postgres:latest"
+    command: ./gradlew bootrun
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    depends_on:
+      - app
+    privileged: true
     environment:
-      POSTGRES_PASSWORD: narwhal
-      POSTGRES_USER: narwhal
-      POSTGRES_DB: narwhal-dev
+      NARWHAL_APP_URL: http://app:8080
+    command: ./ci_scripts/acceptance_test.sh

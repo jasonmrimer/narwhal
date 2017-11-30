@@ -6,6 +6,6 @@ class GreetingsPage
     end
 
     def has_random_greeting?
-        ['Whats up', 'Hola', 'Bonjour', 'Moshi Moshi', 'Gutentag'].any? { |word| page.text.include?(word) }
+        page.has_text? /Whats\sup|Hola|Bonjour|Moshi\sMoshi|Gutentag/            
     end
 end

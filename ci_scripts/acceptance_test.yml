@@ -32,7 +32,7 @@ run:
       # docker images
 
       # Run the container with tests and its dependencies.
-      docker-compose -f repo/docker-compose.yml run app
+      docker-compose -f repo/docker-compose.yml run test
 
       # Cleanup.
       # Not sure if this is required.

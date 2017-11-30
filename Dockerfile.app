@@ -5,5 +5,3 @@ RUN npm install yarn -g
 RUN yarn install --no-progress
 RUN yarn build
 WORKDIR /app
-RUN bundle install
-CMD ["./gradlew", "bootrun"]
