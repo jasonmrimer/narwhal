@@ -37,5 +37,5 @@ run:
       # Cleanup.
       # Not sure if this is required.
       # It's quite possible that Concourse is smart enough to clean up the Docker mess itself.
-      docker-compose down
+      docker-compose -f repo/docker-compose.yml down
       docker volume rm $(docker volume ls -q)
