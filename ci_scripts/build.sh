@@ -14,6 +14,6 @@ yarn install --no-progress
 yarn build
 popd
 
-./gradlew clean test
+./gradlew clean assemble
 
 popd

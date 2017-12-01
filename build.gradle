@@ -44,3 +44,9 @@ dependencies {
             'org.springframework.boot:spring-boot-starter-test'
     )
 }
+
+test {
+    testLogging {
+        events "PASSED", "FAILED", "SKIPPED"
+    }
+}
