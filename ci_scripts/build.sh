@@ -16,4 +16,7 @@ popd
 
 ./gradlew clean assemble
 
+cp -R repo/build artifacts/
+cp repo/manifest.yml artifacts/
+
 popd

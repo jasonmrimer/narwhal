@@ -41,3 +41,5 @@ jobs:
   - task: build
     file: repo/ci_scripts/build.yml
   - put: prod
+    params:
+      manifest: artifacts/manifest.yml
