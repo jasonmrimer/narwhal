@@ -20,3 +20,6 @@ popd
 
 cp -R repo/build artifacts/
 cp repo/manifest.yml artifacts/
+ls -al artifacts
+ls -al artifacts/build
+ls -al artifacts/build/libs
