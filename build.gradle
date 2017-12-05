@@ -18,6 +18,7 @@ apply plugin: 'org.springframework.boot'
 
 group = 'mil.af.us'
 version = '0.0.1-SNAPSHOT'
+archivesBaseName = 'narwhal'
 sourceCompatibility = 1.8
 
 repositories {
