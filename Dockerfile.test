@@ -1,4 +1,3 @@
-FROM jigsawdiux/ruby-golang-java-nodejs-chrome
+FROM narwhalpivotal/capybara-chrome
 ADD . /app
 WORKDIR /app
-RUN bundle install
