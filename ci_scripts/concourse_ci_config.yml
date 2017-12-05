@@ -6,6 +6,22 @@ resources:
       branch: master
       private_key: {{gitlab_ssh_key}}
       check_every: 60s
+
+  - name: app-image
+    type: docker-image
+    source:
+      repository: jigsawdiux/ruby-golang-java-nodejs-chrome
+
+  - name: db-image
+    type: docker-image
+    source:
+      repository: mysql
+
+  - name: test-image
+    type: docker-image
+    source:
+      repository: narwhalpivotal/capybara-chrome
+
   - name: prod
     type: cf
     source:
@@ -25,14 +41,22 @@ jobs:
       file: repo/ci_scripts/client_test.yml
     - task: server_test
       file: repo/ci_scripts/server_test.yml
+
 - name: acceptance-test
   plan:
   - get: repo
     trigger: true
     passed: [unit-test]
+  - get: app-image
+    params: {save: true}
+  - get: db-image
+    params: {save: true}
+  - get: test-image
+    params: {save: true}
   - task: acceptance_test
     privileged: true
     file: repo/ci_scripts/acceptance_test.yml
+
 - name: deploy
   plan:
   - get: repo
