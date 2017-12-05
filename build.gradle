@@ -34,7 +34,7 @@ dependencies {
 
     runtime(
             'com.h2database:h2',
-            'org.postgresql:postgresql:42.1.4'
+            'mysql:mysql-connector-java'
     )
 
     compileOnly(

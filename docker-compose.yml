@@ -1,11 +1,12 @@
 version: '3'
 services:
   db:
-    image: "postgres:latest"
+    image: "mysql:latest"
     environment:
-      POSTGRES_PASSWORD: narwhal
-      POSTGRES_USER: narwhal
-      POSTGRES_DB: narwhal-dev
+      MYSQL_PASSWORD: narwhal
+      MYSQL_USER: narwhal
+      MYSQL_DATABASE: narwhaldev
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
   app:
     build:
       context: .
@@ -15,7 +16,7 @@ services:
     depends_on:
       - db
     environment:
-      NARWHAL_DB_URL: jdbc:postgresql://db:5432/narwhal-dev
+      NARWHAL_DB_URL: jdbc:mysql://db:3306/narwhaldev?useSSL=false
       NARWHAL_DB_PASSWORD: narwhal
       NARWHAL_DB_USERNAME: narwhal
     command: ./gradlew bootrun
