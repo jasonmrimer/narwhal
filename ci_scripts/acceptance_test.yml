@@ -7,9 +7,6 @@ image_resource:
 
 inputs:
   - name: repo
-  - name: app-image
-  - name: db-image
-  - name: test-image
 
 run:
   path: sh
@@ -30,12 +27,6 @@ run:
 
       # docker load -i busybox/image
       # docker tag "$(cat busybox/image-id)" "$(cat busybox/repository):$(cat busybox/tag)"
-
-      docker load -i app-image/image
-      docker load -i db-image/image
-      docker load -i test-image/image
-
-      docker images
 
       # This is just to visually check in the log that images have been loaded successfully
       # docker images
