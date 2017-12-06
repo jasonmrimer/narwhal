@@ -200,3 +200,7 @@ crashlytics-build.properties
 fabric.properties
 
 .DS_Store
+
+src/main/resources/static/*
+
+client/.vscode/*

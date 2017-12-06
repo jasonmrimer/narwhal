@@ -1,4 +1,4 @@
-package mil.af.us.narwhal.greeting;
+package mil.af.us.narwhal.airman;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,10 +12,12 @@ import javax.persistence.Id;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Greeting {
+public class Airman {
     @Id
     @GeneratedValue
     private Long id;
 
-    private String phrase;
+    private String firstName;
+
+    private String lastName;
 }
