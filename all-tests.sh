@@ -12,6 +12,7 @@ mkdir -p tmp
 ./gradlew clean
 
 pushd client
+yarn install
 CI=true yarn test
 yarn build
 popd
@@ -30,4 +31,9 @@ pushd client
 CI=true yarn contracts
 popd
 
-bundle exec rspec
+if [ "$NARWHAL_CI" = "true" ]
+then
+    rspec
+else
+    bundle exec rspec
+fi

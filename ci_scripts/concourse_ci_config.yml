@@ -16,28 +16,17 @@ resources:
       space: {{cf_space}}
 
 jobs:
-- name: unit-test
+- name: test
   plan:
   - get: repo
     trigger: true
-  - aggregate:
-    - task: client_test
-      file: repo/ci_scripts/client_test.yml
-    - task: server_test
-      file: repo/ci_scripts/server_test.yml
-- name: acceptance-test
-  plan:
-  - get: repo
-    trigger: true
-    passed: [unit-test]
-  - task: acceptance_test
-    privileged: true
-    file: repo/ci_scripts/acceptance_test.yml
+  - task: test
+    file: repo/ci_scripts/test.yml
 - name: deploy
   plan:
   - get: repo
     trigger: true
-    passed: [acceptance-test]
+    passed: [test]
   - task: build
     file: repo/ci_scripts/build.yml
   - put: prod

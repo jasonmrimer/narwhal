@@ -3,13 +3,13 @@ platform: linux
 
 image_resource:
   type: docker-image
-  source: {repository: jigsawdiux/ruby-golang-java-nodejs-chrome}
+  source: {repository: narwhalpivotal/base-image}
 
 inputs:
   - name: repo
 
 run:
-  path: repo/ci_scripts/server_test.sh
+  path: repo/ci_scripts/test.sh
 
 params:
   TERM: -dumb

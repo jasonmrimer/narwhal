@@ -1,3 +1,0 @@
-FROM narwhalpivotal/capybara-chrome
-ADD . /app
-WORKDIR /app
