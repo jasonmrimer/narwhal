@@ -7,6 +7,8 @@ function cleanup {
 }
 trap cleanup EXIT
 
+export REACT_APP_HOST=http://localhost:9090
+
 mkdir -p tmp
 
 ./gradlew clean
@@ -35,7 +37,7 @@ until curl http://localhost:9090 &>/dev/null; do
 done
 
 pushd client
-    REACT_APP_HOST=http://localhost:9090 CI=true yarn contracts
+    CI=true yarn contracts
 popd
 
 if [ "$NARWHAL_CI" = "true" ]
