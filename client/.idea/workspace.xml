@@ -48,11 +48,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="testUtils.ts" pinned="false" current-in-tab="true">
+      <file leaf-file-name="testUtils.ts" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/utils/testUtils.ts">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="513">
-              <caret line="27" column="3" lean-forward="true" selection-start-line="27" selection-start-column="3" selection-end-line="27" selection-end-column="3" />
+              <caret line="27" column="3" lean-forward="false" selection-start-line="27" selection-start-column="3" selection-end-line="27" selection-end-column="3" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="WebRosterRepository.contract.ts" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/roster/WebRosterRepository.contract.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="95">
+              <caret line="6" column="3" lean-forward="true" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="3" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="WebRosterRepository.ts" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/roster/WebRosterRepository.ts">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="57">
+              <caret line="4" column="43" lean-forward="false" selection-start-line="4" selection-start-column="43" selection-end-line="4" selection-end-column="43" />
               <folding />
             </state>
           </provider>
@@ -119,6 +139,7 @@
         <option value="$PROJECT_DIR$/src/roster/Roster.tsx" />
         <option value="$PROJECT_DIR$/src/roster/Roster.test.tsx" />
         <option value="$PROJECT_DIR$/src/utils/testUtils.ts" />
+        <option value="$PROJECT_DIR$/src/roster/WebRosterRepository.contract.ts" />
       </list>
     </option>
   </component>
@@ -223,12 +244,12 @@
       <workItem from="1511369642661" duration="1775000" />
       <workItem from="1512576913631" duration="4565000" />
       <workItem from="1512593250686" duration="4574000" />
-      <workItem from="1512665402140" duration="5030000" />
+      <workItem from="1512665402140" duration="5534000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="32231000" />
+    <option name="totallyTimeSpent" value="32735000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="2560" height="1412" extended-state="6" />
@@ -443,24 +464,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/roster/WebRosterRepository.contract.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#66#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/roster/WebRosterRepository.ts">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/App.tsx">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="133">
@@ -550,7 +553,23 @@
     <entry file="file://$PROJECT_DIR$/src/utils/testUtils.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="513">
-          <caret line="27" column="3" lean-forward="true" selection-start-line="27" selection-start-column="3" selection-end-line="27" selection-end-column="3" />
+          <caret line="27" column="3" lean-forward="false" selection-start-line="27" selection-start-column="3" selection-end-line="27" selection-end-column="3" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/roster/WebRosterRepository.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="57">
+          <caret line="4" column="43" lean-forward="false" selection-start-line="4" selection-start-column="43" selection-end-line="4" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/roster/WebRosterRepository.contract.ts">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="6" column="3" lean-forward="true" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="3" />
           <folding />
         </state>
       </provider>

@@ -20,15 +20,22 @@ popd
 ./gradlew test
 
 ./gradlew assemble
-java -jar ./build/libs/narwhal-0.0.1-SNAPSHOT.jar &>./tmp/test.log &
+java -jar ./build/libs/narwhal-0.0.1-SNAPSHOT.jar --server.port=9090 &>./tmp/test.log &
 echo $! > ./tmp/narwhal.pid
 
-until curl http://localhost:8080 &>/dev/null; do
+COUNTER=0
+until curl http://localhost:9090 &>/dev/null; do
     sleep 1
+    let COUNTER+=1
+    if [[ "$COUNTER" -gt 40 ]]
+    then
+        echo "Could not connect to app server. Ya blew it!"
+        exit 1
+    fi
 done
 
 pushd client
-CI=true yarn contracts
+    REACT_APP_HOST=http://localhost:9090 CI=true yarn contracts
 popd
 
 if [ "$NARWHAL_CI" = "true" ]
