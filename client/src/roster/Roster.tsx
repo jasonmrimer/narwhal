@@ -31,6 +31,7 @@ export class Roster extends React.Component<Props, State> {
       return (
         <tr key={index}>
           <td>{airman.lastName}</td>
+          <td>{airman.qualifications.map((qualification) => qualification.acronym).join(' / ')}</td>
         </tr>
       );
     });
@@ -43,6 +44,7 @@ export class Roster extends React.Component<Props, State> {
         <thead>
         <tr>
           <th>NAME</th>
+          <th>QUALIFICATIONS</th>
         </tr>
         </thead>
         <tbody>
@@ -63,9 +65,16 @@ export default styled(Roster)`
   thead {
     background-color: ${props => props.theme.lighter};
     text-align: left;
+    th {
+      font-weight: 400;
+    }
   };
    
   tbody tr:nth-child(even) {
     background-color: ${props => props.theme.light};
+  }
+  
+  td, th {
+    padding: 0.75rem;
   }
 `;
