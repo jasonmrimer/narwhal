@@ -2,9 +2,9 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 
 import App from './App';
-import Roster from './roster/Roster';
+import Tracker from './tracker/Tracker';
 
-it('renders a roster', () => {
+it('renders a tracker', () => {
   const wrapper = shallow(<App/>);
-  expect(wrapper.find(Roster).exists()).toBeTruthy();
+  expect(wrapper.find(Tracker).exists()).toBeTruthy();
 });

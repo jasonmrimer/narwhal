@@ -1,19 +1,19 @@
-import {mount, ReactWrapper} from 'enzyme';
+import { shallow, ShallowWrapper } from 'enzyme';
 import * as React from 'react';
 
-import {forIt, Table} from '../utils/testUtils';
-import {Roster} from './Roster';
-import RosterRepositoryStub from './RosterRepositoryStub';
+import { Table } from '../utils/testUtils';
+import { Roster } from './Roster';
+import RosterRepositoryStub from './repositories/RosterRepositoryStub';
+import RosterModel from './models/RosterModel';
 
 const repositoryStub = new RosterRepositoryStub();
 
-let subject: ReactWrapper, table: Table;
+let subject: ShallowWrapper, table: Table, roster: RosterModel;
 
 describe('Roster', () => {
   beforeEach(async () => {
-    subject = mount(<Roster rosterRepository={repositoryStub}/>);
-    await forIt();
-    subject.update();
+    roster = await repositoryStub.findOne();
+    subject = shallow(<Roster roster={roster}/>);
     table = new Table(subject);
   });
 
@@ -22,10 +22,9 @@ describe('Roster', () => {
   });
 
   it('render airmen last names', async () => {
-    const {airmen} = await repositoryStub.findOne();
-    const expectedLastNames = airmen.map(airman => airman.lastName);
+    const expectedLastNames = roster.airmen.map(airman => airman.lastName);
 
-    expect(table.getRowCount()).toEqual(airmen.length);
+    expect(table.getRowCount()).toEqual(roster.airmen.length);
     expect(table.getTextForRowAndCol(0, 'NAME')).toBe(expectedLastNames[0]);
     expect(table.getTextForRowAndCol(1, 'NAME')).toBe(expectedLastNames[1]);
     expect(table.getTextForRowAndCol(2, 'NAME')).toBe(expectedLastNames[2]);

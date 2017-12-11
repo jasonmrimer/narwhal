@@ -1,5 +1,4 @@
-import RosterModel from './RosterModel';
-import RosterRepository from './RosterRepository';
+import RosterModel from '../models/RosterModel';
 
 const airmanOne = {
   firstName: 'First1',
@@ -8,26 +7,37 @@ const airmanOne = {
     {id: 1, acronym: 'MMS', title: 'My Mission Supervisor'},
     {id: 13, acronym: 'I', title: 'Instructor'},
     {id: 14, acronym: 'E', title: 'Evaluator'},
-  ]
+  ],
+  unit: {id: 1, name: '1'}
 };
+
 const airmanTwo = {
   firstName: 'First2',
   lastName: 'Last2',
   qualifications: [
     {id: 2, acronym: 'MSA', title: 'Multi Source Analyst'},
     {id: 5, acronym: 'GRE', title: 'Geospatial Reports Editor'},
-  ]
+  ],
+  unit: {id: 1, name: '1'}
 };
+
 const airmanThree = {
   firstName: 'First3',
   lastName: 'Last3',
   qualifications: [
     {id: 4, acronym: 'IMS', title: 'Imagery Mission Supervisor'}
-  ]
+  ],
+  unit: {id: 2, name: '2'}
 };
 
-export default class RosterRepositoryStub implements RosterRepository {
-  findOne() {
-    return Promise.resolve(new RosterModel([airmanOne, airmanTwo, airmanThree]));
+const airmen = [airmanOne, airmanTwo, airmanThree];
+
+export default class RosterModelFactory {
+  static build() {
+    return new RosterModel(airmen);
+  }
+
+  static buildForUnit(unitId: number) {
+    return new RosterModel(airmen.filter((airman) => airman.unit.id === unitId));
   }
 }

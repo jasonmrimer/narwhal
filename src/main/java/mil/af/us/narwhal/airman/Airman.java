@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import mil.af.us.narwhal.qualification.Qualification;
+import mil.af.us.narwhal.unit.Unit;
 
 import javax.persistence.*;
 import java.util.List;
@@ -28,4 +29,7 @@ public class Airman {
     inverseJoinColumns = @JoinColumn(name = "qualification_id", referencedColumnName = "id")
   )
   private List<Qualification> qualifications;
+
+  @ManyToOne
+  private Unit unit;
 }

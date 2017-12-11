@@ -204,3 +204,17 @@ fabric.properties
 src/main/resources/static/*
 
 client/.vscode/*
+
+# User-specific stuff:
+client/.idea/**/workspace.xml
+client/.idea/**/tasks.xml
+client/.idea/dictionaries
+
+# Sensitive or high-churn files:
+client/.idea/**/dataSources/
+client/.idea/**/dataSources.ids
+client/.idea/**/dataSources.xml
+client/.idea/**/dataSources.local.xml
+client/.idea/**/sqlDataSources.xml
+client/.idea/**/dynamic.xml
+client/.idea/**/uiDesigner.xml

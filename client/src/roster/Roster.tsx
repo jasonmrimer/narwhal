@@ -1,32 +1,16 @@
 import * as React from 'react';
 
-import RosterModel from './RosterModel';
-import RosterRepository from './RosterRepository';
+import RosterModel from './models/RosterModel';
 import styled from 'styled-components';
 
 interface Props {
-  rosterRepository: RosterRepository;
+  roster: RosterModel;
   className?: string;
 }
 
-interface State {
-  roster: RosterModel;
-}
-
-export class Roster extends React.Component<Props, State> {
-  state = {roster: new RosterModel()};
-
-  componentDidMount() {
-    this.getAirmen();
-  }
-
-  async getAirmen() {
-    const roster = await this.props.rosterRepository.findOne();
-    this.setState({roster});
-  }
-
+export class Roster extends React.Component<Props> {
   renderAirmen() {
-    const {airmen} = this.state.roster;
+    const {airmen} = this.props.roster;
     return airmen.map((airman, index) => {
       return (
         <tr key={index}>
@@ -58,10 +42,8 @@ export class Roster extends React.Component<Props, State> {
 export default styled(Roster)`
   border-collapse: collapse;
   background-color: ${props => props.theme.dark};
-  min-width: 75%;
-  margin: 0 auto;
   border: 1px solid ${props => props.theme.lighter};
-  
+  width: 100%; 
   thead {
     background-color: ${props => props.theme.lighter};
     text-align: left;

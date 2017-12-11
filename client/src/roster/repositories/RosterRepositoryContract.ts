@@ -13,4 +13,17 @@ export default function rosterRepositoryContract(subject: RosterRepository) {
       });
     });
   });
+
+  describe('findByUnit', () => {
+    it('returns a roster with airmen filtered by unit', async () => {
+      const roster = await subject.findOne();
+      expect(roster).toBeDefined();
+
+      const filteredRoster = await subject.findByUnit(1);
+      expect(filteredRoster).toBeDefined();
+
+      expect(filteredRoster.airmen.length).toBeLessThan(roster.airmen.length);
+      filteredRoster.airmen.forEach(airman => expect(airman.unit.id).toBe(1));
+    });
+  });
 }
