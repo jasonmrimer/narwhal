@@ -1,8 +1,10 @@
-export function forIt(wait: number = 0): Promise<any> {
+export function forIt(wait: number = 0): Promise<{}> {
   return new Promise((resolve) => {
     setTimeout(resolve, wait);
   });
 }
+
+/* tslint:disable:no-any*/
 
 export class Table {
   private wrapper: any;

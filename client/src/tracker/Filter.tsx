@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {ChangeEvent} from 'react';
+import { ChangeEvent } from 'react';
 import FilterOption from './models/FilterOption';
 import styled from 'styled-components';
 
@@ -23,10 +23,17 @@ export const Filter = (props: Props) => {
   );
 };
 
+const caret = (fillColor: string) => {
+  return `url("data:image/svg+xml;utf8,
+    <svg xmlns='http://www.w3.org/2000/svg' width='100' height='50' fill='${fillColor}'>
+        <polygon points='0,0 100,0 50,50'/>
+    </svg>")
+    no-repeat center right`;
+};
 
 export default styled(Filter)`
     background-color: ${props => props.theme.dark};
-    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='50' fill='${props => props.theme.fontColor}'><polygon points='0,0 100,0 50,50'/></svg>") no-repeat center right;
+    background: ${props => caret(props.theme.fontColor)};
     background-position: 98%;
     background-size: 0.75rem;
     color: ${props => props.theme.fontColor};

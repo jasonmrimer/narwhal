@@ -44,7 +44,7 @@ export class Tracker extends React.Component<Props, State> {
       await this.props.rosterRepository.findByUnit(option.value);
 
     this.setState({selectedUnitId: option.value, roster: updatedRoster});
-  };
+  }
 
   render() {
     const options = this.state.units.map((unit: UnitModel) => {

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
-import {Filter} from './Filter';
+import { Filter } from './Filter';
 import Mock = jest.Mock;
 
 const expectedOptions = [
