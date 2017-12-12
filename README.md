@@ -19,4 +19,5 @@ TBD
 ## Resources
 - Tracker: https://www.pivotaltracker.com/n/projects/2126100
 - Continous Integration and Deployment: https://ci.pcfplatform.net/teams/unicorncm/pipelines/unicorncm 
-- Acceptance: https://narwhal.cfapps.io/
+- Acceptance: https://narwhal.dev.dev.east.paas.geointservices.io/
+
