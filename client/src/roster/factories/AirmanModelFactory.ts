@@ -1,5 +1,3 @@
-import RosterModel from '../models/RosterModel';
-
 const airmanOne = {
   firstName: 'First1',
   lastName: 'Last1',
@@ -32,12 +30,12 @@ const airmanThree = {
 
 const airmen = [airmanOne, airmanTwo, airmanThree];
 
-export default class RosterModelFactory {
+export default class AirmanModelFactory {
   static build() {
-    return new RosterModel(airmen);
+    return airmen;
   }
 
   static buildForUnit(unitId: number) {
-    return new RosterModel(airmen.filter((airman) => airman.unit.id === unitId));
+    return airmen.filter((airman) => airman.unit.id === unitId);
   }
 }

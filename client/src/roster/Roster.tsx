@@ -1,16 +1,15 @@
 import * as React from 'react';
-
-import RosterModel from './models/RosterModel';
 import styled from 'styled-components';
+import AirmanModel from './models/AirmanModel';
 
 interface Props {
-  roster: RosterModel;
+  airmen: AirmanModel[];
   className?: string;
 }
 
 export class Roster extends React.Component<Props> {
   renderAirmen() {
-    const {airmen} = this.props.roster;
+    const {airmen} = this.props;
     return airmen.map((airman, index) => {
       return (
         <tr key={index}>

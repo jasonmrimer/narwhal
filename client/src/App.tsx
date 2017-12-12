@@ -1,5 +1,5 @@
 import * as React from 'react';
-import WebRosterRepository from './roster/repositories/WebRosterRepository';
+import WebAirmanRepository from './roster/repositories/WebAirmanRepository';
 import Tracker from './tracker/Tracker';
 import WebUnitRepository from './tracker/respositories/WebUnitRepository';
 
@@ -7,7 +7,7 @@ export default class App extends React.Component {
   render() {
     return (
       <Tracker
-        rosterRepository={new WebRosterRepository()}
+        airmanRepository={new WebAirmanRepository()}
         unitRepository={new WebUnitRepository()}
       />
     );

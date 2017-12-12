@@ -1,7 +1,5 @@
-package mil.af.us.narwhal.roster;
+package mil.af.us.narwhal.airman;
 
-import mil.af.us.narwhal.airman.Airman;
-import mil.af.us.narwhal.airman.AirmanRepository;
 import mil.af.us.narwhal.qualification.Qualification;
 import mil.af.us.narwhal.unit.Unit;
 import org.hamcrest.Matchers;
@@ -21,9 +19,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(RosterController.class)
+@WebMvcTest(AirmanController.class)
 @RunWith(SpringRunner.class)
-public class RosterControllerTest {
+public class AirmanControllerTest {
   @Autowired MockMvc mockMvc;
   @MockBean AirmanRepository airmanRepository;
 
@@ -39,14 +37,14 @@ public class RosterControllerTest {
 
     when(airmanRepository.findAll()).thenReturn(airmen);
 
-    mockMvc.perform(get("/api/roster"))
+    mockMvc.perform(get(AirmanController.URI))
       .andExpect(status().isOk())
-      .andExpect(jsonPath("$.airmen.size()", Matchers.equalTo(1)))
-      .andExpect(jsonPath("$.airmen[0]").value(airmen.get(0)));
+      .andExpect(jsonPath("$.size()", Matchers.equalTo(1)))
+      .andExpect(jsonPath("$[0]").value(airmen.get(0)));
   }
 
   @Test
-  public void showByUnitId() throws Exception {
+  public void indexByUnitId() throws Exception {
     final Unit unit = new Unit(1L, "1");
 
     final Qualification qualification1 = new Qualification(1L, "Qual1", "qualification1");
@@ -57,9 +55,9 @@ public class RosterControllerTest {
 
     when(airmanRepository.findByUnitId(unit.getId())).thenReturn(airmen);
 
-    mockMvc.perform(get("/api/roster").param("unit", unit.getId().toString()))
+    mockMvc.perform(get(AirmanController.URI).param("unit", unit.getId().toString()))
       .andExpect(status().isOk())
-      .andExpect(jsonPath("$.airmen.size()", Matchers.equalTo(1)))
-      .andExpect(jsonPath("$.airmen[0]").value(airmen.get(0)));
+      .andExpect(jsonPath("$.size()", Matchers.equalTo(1)))
+      .andExpect(jsonPath("$[0]").value(airmen.get(0)));
   }
 }

@@ -1,27 +1,27 @@
 import * as React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
-import RosterRepositoryStub from '../roster/repositories/RosterRepositoryStub';
+import AirmanRepositoryStub from '../roster/repositories/AirmanRepositoryStub';
 import Roster from '../roster/Roster';
 import { Tracker, DefaultFilter } from './Tracker';
 import { forIt } from '../utils/testUtils';
 import Filter from './Filter';
 import UnitRepositoryStub from './respositories/UnitRepositoryStub';
 
-const rosterRepositoryStub = new RosterRepositoryStub();
+const airmanRepositoryStub = new AirmanRepositoryStub();
 const unitRepositoryStub = new UnitRepositoryStub();
 
 let subject: ReactWrapper;
 
 describe('Tracker', () => {
   beforeEach(async () => {
-    subject = mount(<Tracker rosterRepository={rosterRepositoryStub} unitRepository={unitRepositoryStub}/>);
+    subject = mount(<Tracker airmanRepository={airmanRepositoryStub} unitRepository={unitRepositoryStub}/>);
     await forIt();
     subject.update();
   });
 
   it('renders a roster with all units', async () => {
-    const roster = await rosterRepositoryStub.findOne();
-    expect(subject.find(Roster).prop('roster')).toEqual(roster);
+    const roster = await airmanRepositoryStub.findAll();
+    expect(subject.find(Roster).prop('airmen')).toEqual(roster);
   });
 
   describe('filtering', () => {
@@ -37,8 +37,8 @@ describe('Tracker', () => {
     });
 
     it('can filter a roster by unit', async () => {
-      const filteredRoster = await rosterRepositoryStub.findByUnit(unitId);
-      expect(subject.find(Roster).prop('roster')).toEqual(filteredRoster);
+      const filteredRoster = await airmanRepositoryStub.findByUnit(unitId);
+      expect(subject.find(Roster).prop('airmen')).toEqual(filteredRoster);
     });
 
     it('can filter a roster by all units', async () => {
@@ -46,8 +46,8 @@ describe('Tracker', () => {
       await forIt();
       subject.update();
 
-      const roster = await rosterRepositoryStub.findOne();
-      expect(subject.find(Roster).prop('roster')).toEqual(roster);
+      const airmen = await airmanRepositoryStub.findAll();
+      expect(subject.find(Roster).prop('airmen')).toEqual(airmen);
     });
   });
 });

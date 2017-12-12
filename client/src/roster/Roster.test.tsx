@@ -3,17 +3,17 @@ import * as React from 'react';
 
 import { Table } from '../utils/testUtils';
 import { Roster } from './Roster';
-import RosterRepositoryStub from './repositories/RosterRepositoryStub';
-import RosterModel from './models/RosterModel';
+import AirmanRepositoryStub from './repositories/AirmanRepositoryStub';
+import AirmanModel from './models/AirmanModel';
 
-const repositoryStub = new RosterRepositoryStub();
+const repositoryStub = new AirmanRepositoryStub();
 
-let subject: ShallowWrapper, table: Table, roster: RosterModel;
+let subject: ShallowWrapper, table: Table, airmen: AirmanModel[];
 
 describe('Roster', () => {
   beforeEach(async () => {
-    roster = await repositoryStub.findOne();
-    subject = shallow(<Roster roster={roster}/>);
+    airmen = await repositoryStub.findAll();
+    subject = shallow(<Roster airmen={airmen}/>);
     table = new Table(subject);
   });
 
@@ -22,9 +22,9 @@ describe('Roster', () => {
   });
 
   it('render airmen last names', async () => {
-    const expectedLastNames = roster.airmen.map(airman => airman.lastName);
+    const expectedLastNames = airmen.map(airman => airman.lastName);
 
-    expect(table.getRowCount()).toEqual(roster.airmen.length);
+    expect(table.getRowCount()).toEqual(airmen.length);
     expect(table.getTextForRowAndCol(0, 'NAME')).toBe(expectedLastNames[0]);
     expect(table.getTextForRowAndCol(1, 'NAME')).toBe(expectedLastNames[1]);
     expect(table.getTextForRowAndCol(2, 'NAME')).toBe(expectedLastNames[2]);

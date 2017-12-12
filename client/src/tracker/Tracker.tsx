@@ -1,21 +1,21 @@
 import * as React from 'react';
-import RosterRepository from '../roster/repositories/RosterRepository';
+import AirmanRepository from '../roster/repositories/AirmanRepository';
 import Roster from '../roster/Roster';
-import RosterModel from '../roster/models/RosterModel';
 import Filter from './Filter';
 import UnitRepository from './respositories/UnitRepository';
 import UnitModel from './models/UnitModel';
 import FilterOption from './models/FilterOption';
 import styled from 'styled-components';
+import AirmanModel from '../roster/models/AirmanModel';
 
 interface Props {
-  rosterRepository: RosterRepository;
+  airmanRepository: AirmanRepository;
   unitRepository: UnitRepository;
   className?: string;
 }
 
 interface State {
-  roster: RosterModel;
+  airmen: AirmanModel[];
   units: UnitModel[];
   selectedUnitId: number;
 }
@@ -27,23 +27,23 @@ export const DefaultFilter = {
 
 export class Tracker extends React.Component<Props, State> {
   state = {
-    roster: new RosterModel(),
+    airmen: [],
     units: [],
     selectedUnitId: DefaultFilter.value
   };
 
   async componentDidMount() {
-    const roster = await this.props.rosterRepository.findOne();
+    const airmen = await this.props.airmanRepository.findAll();
     const units = await this.props.unitRepository.findAll();
-    this.setState({roster, units});
+    this.setState({airmen, units});
   }
 
   setSelectedUnitId = async (option: FilterOption) => {
     const updatedRoster = (option.value === DefaultFilter.value) ?
-      await this.props.rosterRepository.findOne() :
-      await this.props.rosterRepository.findByUnit(option.value);
+      await this.props.airmanRepository.findAll() :
+      await this.props.airmanRepository.findByUnit(option.value);
 
-    this.setState({selectedUnitId: option.value, roster: updatedRoster});
+    this.setState({selectedUnitId: option.value, airmen: updatedRoster});
   }
 
   render() {
@@ -52,8 +52,8 @@ export class Tracker extends React.Component<Props, State> {
     });
     return (
       <div className={this.props.className}>
-        <Filter key="0" callback={this.setSelectedUnitId} options={[DefaultFilter, ...options]}/>
-        <Roster key="1" roster={this.state.roster}/>
+        <Filter callback={this.setSelectedUnitId} options={[DefaultFilter, ...options]}/>
+        <Roster airmen={this.state.airmen}/>
       </div>
     );
   }
