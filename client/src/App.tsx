@@ -1,7 +1,7 @@
 import * as React from 'react';
-import WebAirmanRepository from './roster/repositories/WebAirmanRepository';
+import WebAirmanRepository from './airman/repositories/web/WebAirmanRepository';
 import Tracker from './tracker/Tracker';
-import WebUnitRepository from './tracker/respositories/WebUnitRepository';
+import WebUnitRepository from './unit/repositories/web/WebUnitRepository';
 
 export default class App extends React.Component {
   render() {

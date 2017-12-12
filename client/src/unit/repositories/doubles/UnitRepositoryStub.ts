@@ -1,5 +1,5 @@
-import UnitRepository from './UnitRepository';
-import UnitModel from '../models/UnitModel';
+import UnitRepository from '../UnitRepository';
+import UnitModel from '../../models/UnitModel';
 
 const units = [
   {id: 1, name: '1 U'},

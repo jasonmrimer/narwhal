@@ -1,5 +1,5 @@
-import UnitRepository from './UnitRepository';
-import UnitModel from '../models/UnitModel';
+import UnitRepository from '../UnitRepository';
+import UnitModel from '../../models/UnitModel';
 
 export default class WebUnitRepository implements UnitRepository {
   constructor(private baseUrl: string = '') {

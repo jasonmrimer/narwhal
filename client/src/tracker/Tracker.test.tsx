@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
-import AirmanRepositoryStub from '../roster/repositories/AirmanRepositoryStub';
+import AirmanRepositoryStub from '../airman/repositories/doubles/AirmanRepositoryStub';
 import Roster from '../roster/Roster';
 import { Tracker, DefaultFilter } from './Tracker';
 import { forIt } from '../utils/testUtils';
 import Filter from './Filter';
-import UnitRepositoryStub from './respositories/UnitRepositoryStub';
+import UnitRepositoryStub from '../unit/repositories/doubles/UnitRepositoryStub';
 
 const airmanRepositoryStub = new AirmanRepositoryStub();
 const unitRepositoryStub = new UnitRepositoryStub();

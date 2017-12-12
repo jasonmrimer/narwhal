@@ -1,4 +1,4 @@
-import unitRepositoryContract from './UnitRepositoryContract';
+import unitRepositoryContract from '../UnitRepositoryContract';
 import UnitRepositoryStub from './UnitRepositoryStub';
 
 describe('UnitRepositoryStub', () => {

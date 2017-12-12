@@ -1,4 +1,4 @@
-import airmanRepositoryContract from './AirmanRepositoryContract';
+import airmanRepositoryContract from '../AirmanRepositoryContract';
 import WebAirmanRepository from './WebAirmanRepository';
 
 describe('WebAirmanRepository', () => {

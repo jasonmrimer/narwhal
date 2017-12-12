@@ -3,8 +3,8 @@ import * as React from 'react';
 
 import { Table } from '../utils/testUtils';
 import { Roster } from './Roster';
-import AirmanRepositoryStub from './repositories/AirmanRepositoryStub';
-import AirmanModel from './models/AirmanModel';
+import AirmanRepositoryStub from '../airman/repositories/doubles/AirmanRepositoryStub';
+import AirmanModel from '../airman/models/AirmanModel';
 
 const repositoryStub = new AirmanRepositoryStub();
 

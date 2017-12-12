@@ -1,4 +1,4 @@
-import unitRepositoryContract from './UnitRepositoryContract';
+import unitRepositoryContract from '../UnitRepositoryContract';
 import WebUnitRepository from './WebUnitRepository';
 
 describe('WebUnitRepository', () => {

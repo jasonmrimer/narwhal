@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import AirmanModel from './models/AirmanModel';
+import AirmanModel from '../airman/models/AirmanModel';
 
 interface Props {
   airmen: AirmanModel[];

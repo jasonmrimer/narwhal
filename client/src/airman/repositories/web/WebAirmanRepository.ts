@@ -1,4 +1,4 @@
-import AirmanRepository from './AirmanRepository';
+import AirmanRepository from '../AirmanRepository';
 
 export default class WebAirmanRepository implements AirmanRepository {
   constructor(private baseUrl: string = '') {

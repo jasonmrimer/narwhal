@@ -1,5 +1,5 @@
-import QualificationModel from './QualificationModel';
-import UnitModel from '../../tracker/models/UnitModel';
+import QualificationModel from '../../qualification/models/QualificationModel';
+import UnitModel from '../../unit/models/UnitModel';
 
 export default interface AirmanModel {
   firstName: string;

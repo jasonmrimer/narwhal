@@ -1,12 +1,12 @@
 import * as React from 'react';
-import AirmanRepository from '../roster/repositories/AirmanRepository';
+import AirmanRepository from '../airman/repositories/AirmanRepository';
 import Roster from '../roster/Roster';
 import Filter from './Filter';
-import UnitRepository from './respositories/UnitRepository';
-import UnitModel from './models/UnitModel';
+import UnitRepository from '../unit/repositories/UnitRepository';
+import UnitModel from '../unit/models/UnitModel';
 import FilterOption from './models/FilterOption';
 import styled from 'styled-components';
-import AirmanModel from '../roster/models/AirmanModel';
+import AirmanModel from '../airman/models/AirmanModel';
 
 interface Props {
   airmanRepository: AirmanRepository;

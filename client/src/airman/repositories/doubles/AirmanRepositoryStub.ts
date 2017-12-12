@@ -1,5 +1,5 @@
-import AirmanRepository from './AirmanRepository';
-import AirmanModelFactory from '../factories/AirmanModelFactory';
+import AirmanRepository from '../AirmanRepository';
+import AirmanModelFactory from '../../factories/AirmanModelFactory';
 
 export default class AirmanRepositoryStub implements AirmanRepository {
   findAll() {
