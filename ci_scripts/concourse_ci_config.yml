@@ -2,7 +2,7 @@ resources:
   - name: repo
     type: git
     source:
-      uri: git@gitlab.gs.mil:DCGS_Crew_Manager/narwhal.git
+      uri: git@gitlab.devops.geointservices.io:rimerjm/narwhal.git
       branch: master
       private_key: {{gitlab_ssh_key}}
       check_every: 60s
