@@ -4,5 +4,6 @@ export default Object.freeze({
   fontColor: '#fff',
   lighter: '#363636',
   light: '#272727',
-  dark: '#222'
+  dark: '#222',
+  darkest: '#000'
 });

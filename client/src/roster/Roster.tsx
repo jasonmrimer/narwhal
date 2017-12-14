@@ -42,12 +42,20 @@ export default styled(Roster)`
   border-collapse: collapse;
   background-color: ${props => props.theme.dark};
   border: 1px solid ${props => props.theme.lighter};
-  width: 100%; 
+  width: 100%;
+  margin-top: 0.5rem;
+  
+  caption {
+    display: none;
+  }
+  
   thead {
     background-color: ${props => props.theme.lighter};
     text-align: left;
+    
     th {
-      font-weight: 400;
+      font-size: 0.875rem;
+      font-weight: 500;
     }
   };
    

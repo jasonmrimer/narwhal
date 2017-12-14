@@ -1,14 +1,18 @@
 const globalAny: {} = global;
 
 (globalAny.requestAnimationFrame = (cb: () => void) => {
-    setTimeout(cb, 0);
+  setTimeout(cb, 0);
 });
 
 import * as enzyme from 'enzyme';
 import * as Adapter from 'enzyme-adapter-react-16';
-
-enzyme.configure({ adapter: new Adapter() });
-
 import * as fetch from 'isomorphic-fetch';
 
-globalAny.fetch = fetch;
+enzyme.configure({adapter: new Adapter()});
+
+globalAny.fetch = (url, args) => {
+  return fetch(url, {
+    headers: {'Authorization': 'Basic dHl0dXM6cGFzc3dvcmQ='},
+    ...args
+  });
+};

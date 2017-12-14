@@ -5,10 +5,12 @@ export default class WebAirmanRepository implements AirmanRepository {
   }
 
   findAll() {
-    return fetch(`${this.baseUrl}/api/airmen`).then(resp => resp.json());
+    return fetch(`${this.baseUrl}/api/airmen`, {credentials: 'include'})
+      .then(resp => resp.json());
   }
 
   async findByUnit(id: number) {
-    return fetch(`${this.baseUrl}/api/airmen?unit=${id}`).then(resp => resp.json());
+    return fetch(`${this.baseUrl}/api/airmen?unit=${id}`, {credentials: 'include'})
+      .then(resp => resp.json());
   }
 }

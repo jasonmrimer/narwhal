@@ -9,3 +9,8 @@ flyway:
 logging:
   level:
     org.springframework.web.filter.CommonsRequestLoggingFilter: debug
+security:
+  user:
+    name: tytus
+    password: password
+    role: USER

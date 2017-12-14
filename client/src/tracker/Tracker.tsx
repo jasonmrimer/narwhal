@@ -62,4 +62,5 @@ export class Tracker extends React.Component<Props, State> {
 export default styled(Tracker)`
   width: 75%;
   margin: 0 auto;
+  padding: 0.5rem;
 `;

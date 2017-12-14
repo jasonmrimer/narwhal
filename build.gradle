@@ -29,7 +29,8 @@ dependencies {
     compile(
             'org.flywaydb:flyway-core',
             'org.springframework.boot:spring-boot-starter-data-jpa',
-            'org.springframework.boot:spring-boot-starter-web'
+            'org.springframework.boot:spring-boot-starter-web',
+            'org.springframework.boot:spring-boot-starter-security'
     )
 
     runtime(
@@ -42,7 +43,8 @@ dependencies {
     )
 
     testCompile(
-            'org.springframework.boot:spring-boot-starter-test'
+            'org.springframework.boot:spring-boot-starter-test',
+            'org.springframework.security:spring-security-test'
     )
 }
 

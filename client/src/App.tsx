@@ -1,15 +1,39 @@
 import * as React from 'react';
-import WebAirmanRepository from './airman/repositories/web/WebAirmanRepository';
 import Tracker from './tracker/Tracker';
-import WebUnitRepository from './unit/repositories/web/WebUnitRepository';
+import TopBar from './TopBar';
+import ProfileRepository from './profile/repositories/ProfileRepository';
+import AirmanRepository from './airman/repositories/AirmanRepository';
+import UnitRepository from './unit/repositories/UnitRepository';
 
-export default class App extends React.Component {
+interface Props {
+  profileRepository: ProfileRepository;
+  airmanRepository: AirmanRepository;
+  unitRepository: UnitRepository;
+}
+
+interface State {
+  username: string;
+}
+
+export default class App extends React.Component<Props, State> {
+  state = {
+    username: ''
+  };
+
+  async componentDidMount() {
+    const {username} = await this.props.profileRepository.findOne();
+    this.setState({username});
+  }
+
   render() {
     return (
-      <Tracker
-        airmanRepository={new WebAirmanRepository()}
-        unitRepository={new WebUnitRepository()}
-      />
+      <div>
+        <TopBar username={this.state.username}/>
+        <Tracker
+          airmanRepository={this.props.airmanRepository}
+          unitRepository={this.props.unitRepository}
+        />
+      </div>
     );
   }
 }

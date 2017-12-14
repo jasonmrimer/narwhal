@@ -6,6 +6,7 @@ export default class WebUnitRepository implements UnitRepository {
   }
 
   findAll(): Promise<UnitModel[]> {
-    return fetch(`${this.baseUrl}/api/units`).then(resp => resp.json());
+    return fetch(`${this.baseUrl}/api/units`, {credentials: 'include'})
+      .then(resp => resp.json());
   }
 }

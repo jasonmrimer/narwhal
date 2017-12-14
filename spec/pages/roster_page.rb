@@ -3,11 +3,7 @@ class RosterPage
 
   @@number_of_airmen = 3
   @@expected_columns = %w(NAME, QUALIFICATIONS)
-
-  def initialize
-    visit '/'
-  end
-
+  
   def has_a_roster?
     within_table('Roster') do
       @@expected_columns.each {|column_name| page.has_text?(column_name)}
