@@ -2,7 +2,7 @@ class RosterPage
   include Capybara::DSL
 
   @@number_of_airmen = 3
-  @@expected_columns = %w(NAME, QUALIFICATIONS)
+  @@expected_columns = %w(NAME, QUALIFICATIONS, CERTIFICATION)
   
   def has_a_roster?
     within_table('Roster') do

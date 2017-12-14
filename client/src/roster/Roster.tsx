@@ -7,6 +7,8 @@ interface Props {
   className?: string;
 }
 
+const formatAttributes = (objArray: object[], key: string) => objArray.map((object: object) => object[key]).join(' / ');
+
 export class Roster extends React.Component<Props> {
   renderAirmen() {
     const {airmen} = this.props;
@@ -14,7 +16,8 @@ export class Roster extends React.Component<Props> {
       return (
         <tr key={index}>
           <td>{airman.lastName}</td>
-          <td>{airman.qualifications.map((qualification) => qualification.acronym).join(' / ')}</td>
+          <td>{formatAttributes(airman.qualifications, 'acronym')}</td>
+          <td>{formatAttributes(airman.certifications, 'title')}</td>
         </tr>
       );
     });
@@ -28,6 +31,7 @@ export class Roster extends React.Component<Props> {
         <tr>
           <th>NAME</th>
           <th>QUALIFICATIONS</th>
+          <th>CERTIFICATION</th>
         </tr>
         </thead>
         <tbody>

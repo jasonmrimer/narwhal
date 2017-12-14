@@ -6,7 +6,12 @@ const airmanOne = {
     {id: 13, acronym: 'I', title: 'Instructor'},
     {id: 14, acronym: 'E', title: 'Evaluator'},
   ],
-  unit: {id: 1, name: '1'}
+  unit: {id: 1, name: '1'},
+  certifications: [
+    {id: 1, title: 'Laser Vision'},
+    {id: 2, title: 'Flight'},
+    {id: 3, title: 'Super Speed'},
+  ]
 };
 
 const airmanTwo = {
@@ -16,7 +21,8 @@ const airmanTwo = {
     {id: 2, acronym: 'MSA', title: 'Multi Source Analyst'},
     {id: 5, acronym: 'GRE', title: 'Geospatial Reports Editor'},
   ],
-  unit: {id: 1, name: '1'}
+  unit: {id: 1, name: '1'},
+  certifications: [{id: 1, title: 'Laser Vision'}]
 };
 
 const airmanThree = {
@@ -25,7 +31,8 @@ const airmanThree = {
   qualifications: [
     {id: 4, acronym: 'IMS', title: 'Imagery Mission Supervisor'}
   ],
-  unit: {id: 2, name: '2'}
+  unit: {id: 2, name: '2'},
+  certifications: [{id: 1, title: 'Laser Vision'}]
 };
 
 const airmen = [airmanOne, airmanTwo, airmanThree];

@@ -1,8 +1,10 @@
 package mil.af.us.narwhal.airman;
 
+import mil.af.us.narwhal.certification.Certification;
 import mil.af.us.narwhal.qualification.Qualification;
 import mil.af.us.narwhal.unit.Unit;
 import org.hamcrest.Matchers;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,19 +26,27 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(AirmanController.class)
 @RunWith(SpringRunner.class)
 public class AirmanControllerTest {
+  Unit unit;
+  List<Airman> airmen;
+
   @Autowired MockMvc mockMvc;
   @MockBean AirmanRepository airmanRepository;
 
-  @Test
-  public void index() throws Exception {
-    final Unit unit = new Unit(1L, "1");
+  @Before
+  public void setUp() {
+    unit = new Unit(1L, "1");
 
     final Qualification qualification1 = new Qualification(1L, "Qual1", "qualification1");
 
-    final List<Airman> airmen = singletonList(
-      new Airman(1L, "FirstOne", "LastOne", singletonList(qualification1), unit)
-    );
+    final Certification certification1 = new Certification(1L, "Certification 1");
 
+    airmen = singletonList(
+      new Airman(1L, "FirstOne", "LastOne", singletonList(qualification1), singletonList(certification1), unit)
+    );
+  }
+
+  @Test
+  public void index() throws Exception {
     when(airmanRepository.findAll()).thenReturn(airmen);
 
     mockMvc.perform(get(AirmanController.URI))
@@ -47,14 +57,6 @@ public class AirmanControllerTest {
 
   @Test
   public void indexByUnitId() throws Exception {
-    final Unit unit = new Unit(1L, "1");
-
-    final Qualification qualification1 = new Qualification(1L, "Qual1", "qualification1");
-
-    final List<Airman> airmen = singletonList(
-      new Airman(1L, "FirstOne", "LastOne", singletonList(qualification1), unit)
-    );
-
     when(airmanRepository.findByUnitId(unit.getId())).thenReturn(airmen);
 
     mockMvc.perform(get(AirmanController.URI).param("unit", unit.getId().toString()))

@@ -17,8 +17,8 @@ describe('Roster', () => {
     table = new Table(subject);
   });
 
-  it('renders NAME and QUALIFICATIONS table header', () => {
-    expect(table.getColumnHeaders()).toEqual(['NAME', 'QUALIFICATIONS']);
+  it('renders NAME, QUALIFICATIONS, and CERTIFICATION table header', () => {
+    expect(table.getColumnHeaders()).toEqual(['NAME', 'QUALIFICATIONS', 'CERTIFICATION']);
   });
 
   it('render airmen last names', async () => {
@@ -33,5 +33,10 @@ describe('Roster', () => {
   it('renders airmen qualifications', () => {
     const expectedQualifications = 'MMS / I / E';
     expect(table.getTextForRowAndCol(0, 'QUALIFICATIONS')).toBe(expectedQualifications);
+  });
+
+  it('renders airmen certification', () => {
+    const expectedCertification = 'Laser Vision / Flight / Super Speed';
+    expect(table.getTextForRowAndCol(0, 'CERTIFICATION')).toBe(expectedCertification);
   });
 });
