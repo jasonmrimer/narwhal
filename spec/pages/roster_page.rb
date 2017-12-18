@@ -28,4 +28,19 @@ class RosterPage
   def filter_by(unit: 'All Units')
     page.find(:select).find(:option, text: unit).select_option
   end
+
+  def click_on_airman(name)
+    page.find(:xpath,"//*[text()='#{name}']").click
+  end
+
+  def has_currency?
+    within '.side-panel' do
+      page.has_content?('Currency')
+      page.has_content?('MMS')
+      page.has_content?('25 JAN 18')
+      page.has_content?('Laser Vision')
+      page.has_content?('18 Apr 18')
+      page.has_content?('LastName1, FirstName1')
+    end
+  end
 end

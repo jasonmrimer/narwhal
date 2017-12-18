@@ -1,16 +1,25 @@
 import AirmanRepository from '../AirmanRepository';
+import { AirmanSerializer } from '../../AirmanSerializer';
 
 export default class WebAirmanRepository implements AirmanRepository {
+  private serializer: AirmanSerializer = new AirmanSerializer();
+
   constructor(private baseUrl: string = '') {
   }
 
-  findAll() {
-    return fetch(`${this.baseUrl}/api/airmen`, {credentials: 'include'})
-      .then(resp => resp.json());
+  async findAll() {
+    const resp = await fetch(`${this.baseUrl}/api/airmen`, {credentials: 'include'});
+    const json = await resp.json();
+    return json.map((obj: object) => {
+      return this.serializer.deserialize(obj);
+    });
   }
 
   async findByUnit(id: number) {
-    return fetch(`${this.baseUrl}/api/airmen?unit=${id}`, {credentials: 'include'})
-      .then(resp => resp.json());
+    const resp = await fetch(`${this.baseUrl}/api/airmen?unit=${id}`, {credentials: 'include'});
+    const json = await resp.json();
+    return json.map((obj: object) => {
+      return this.serializer.deserialize(obj);
+    });
   }
 }

@@ -6,15 +6,18 @@ import { Tracker, DefaultFilter } from './Tracker';
 import { forIt } from '../utils/testUtils';
 import Filter from './Filter';
 import UnitRepositoryStub from '../unit/repositories/doubles/UnitRepositoryStub';
+import Sidebar from '../SideBar';
+import AirmanModel from '../airman/models/AirmanModel';
 
 const airmanRepositoryStub = new AirmanRepositoryStub();
 const unitRepositoryStub = new UnitRepositoryStub();
 
-let subject: ReactWrapper;
+let subject: ReactWrapper, airmen: AirmanModel[];
 
 describe('Tracker', () => {
   beforeEach(async () => {
     subject = mount(<Tracker airmanRepository={airmanRepositoryStub} unitRepository={unitRepositoryStub}/>);
+    airmen = await airmanRepositoryStub.findAll();
     await forIt();
     subject.update();
   });
@@ -46,8 +49,12 @@ describe('Tracker', () => {
       await forIt();
       subject.update();
 
-      const airmen = await airmanRepositoryStub.findAll();
       expect(subject.find(Roster).prop('airmen')).toEqual(airmen);
+    });
+
+    it('can fill the sidebar when clicking an airman', () => {
+      subject.find(Roster).find('tbody tr').at(0).simulate('click');
+      expect(subject.find(Sidebar).prop('airman')).toEqual(airmen[0]);
     });
   });
 });

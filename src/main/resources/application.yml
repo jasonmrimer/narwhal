@@ -3,6 +3,9 @@ spring:
     url: ${NARWHAL_DB_URL}
     username: ${NARWHAL_DB_USERNAME}
     password: ${NARWHAL_DB_PASSWORD}
+  jackson:
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: false
 flyway:
   baseline-on-migrate: true
   baseline-version: 0

@@ -4,17 +4,19 @@ import AirmanModel from '../airman/models/AirmanModel';
 
 interface Props {
   airmen: AirmanModel[];
+  selectAirman: (airman: AirmanModel) => void;
   className?: string;
 }
 
 const formatAttributes = (objArray: object[], key: string) => objArray.map((object: object) => object[key]).join(' / ');
 
 export class Roster extends React.Component<Props> {
+
   renderAirmen() {
     const {airmen} = this.props;
     return airmen.map((airman, index) => {
       return (
-        <tr key={index}>
+        <tr key={index} onClick={() => this.props.selectAirman(airman)}>
           <td>{airman.lastName}</td>
           <td>{formatAttributes(airman.qualifications, 'acronym')}</td>
           <td>{formatAttributes(airman.certifications, 'title')}</td>
@@ -30,7 +32,7 @@ export class Roster extends React.Component<Props> {
         <thead>
         <tr>
           <th>NAME</th>
-          <th>QUALIFICATIONS</th>
+          <th>QUALIFICATION</th>
           <th>CERTIFICATION</th>
         </tr>
         </thead>

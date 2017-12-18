@@ -1,4 +1,5 @@
 import AirmanRepository from './AirmanRepository';
+import * as moment from 'moment';
 
 export default function airmenRepositoryContract(subject: AirmanRepository) {
   describe('findAll', () => {
@@ -7,9 +8,13 @@ export default function airmenRepositoryContract(subject: AirmanRepository) {
       expect(airmen).toBeDefined();
 
       expect(airmen.length).toBeGreaterThan(0);
-
       airmen.forEach(({qualifications}) => {
         expect(qualifications.length).toBeGreaterThan(0);
+        expect(moment.isMoment(qualifications[0].expirationDate)).toBeTruthy();
+      });
+
+      airmen.forEach(({certifications}) => {
+        expect(certifications.length).toBeGreaterThan(0);
       });
     });
   });
@@ -23,7 +28,11 @@ export default function airmenRepositoryContract(subject: AirmanRepository) {
       expect(filteredAirmen).toBeDefined();
 
       expect(filteredAirmen.length).toBeLessThan(airmen.length);
-      filteredAirmen.forEach(airman => expect(airman.unit.id).toBe(1));
+      filteredAirmen.forEach(airman => {
+        if (airman.unit) {
+          expect(airman.unit.id).toBe(1);
+        }
+      });
     });
   });
 }

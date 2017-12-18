@@ -7,6 +7,7 @@ import UnitModel from '../unit/models/UnitModel';
 import FilterOption from './models/FilterOption';
 import styled from 'styled-components';
 import AirmanModel from '../airman/models/AirmanModel';
+import SideBar from '../SideBar';
 
 interface Props {
   airmanRepository: AirmanRepository;
@@ -18,6 +19,7 @@ interface State {
   airmen: AirmanModel[];
   units: UnitModel[];
   selectedUnitId: number;
+  selectedAirman: AirmanModel;
 }
 
 export const DefaultFilter = {
@@ -29,12 +31,14 @@ export class Tracker extends React.Component<Props, State> {
   state = {
     airmen: [],
     units: [],
-    selectedUnitId: DefaultFilter.value
+    selectedUnitId: DefaultFilter.value,
+    selectedAirman: AirmanModel.empty(),
   };
 
   async componentDidMount() {
     const airmen = await this.props.airmanRepository.findAll();
     const units = await this.props.unitRepository.findAll();
+
     this.setState({airmen, units});
   }
 
@@ -46,14 +50,21 @@ export class Tracker extends React.Component<Props, State> {
     this.setState({selectedUnitId: option.value, airmen: updatedRoster});
   }
 
+  handleSelectAirman = (airman: AirmanModel) => {
+    this.setState({selectedAirman: airman});
+  }
+
   render() {
     const options = this.state.units.map((unit: UnitModel) => {
       return {value: unit.id, text: unit.name};
     });
     return (
       <div className={this.props.className}>
-        <Filter callback={this.setSelectedUnitId} options={[DefaultFilter, ...options]}/>
-        <Roster airmen={this.state.airmen}/>
+        <div className="main">
+          <Filter callback={this.setSelectedUnitId} options={[DefaultFilter, ...options]}/>
+          <Roster airmen={this.state.airmen} selectAirman={this.handleSelectAirman}/>
+        </div>
+        <SideBar airman={this.state.selectedAirman} />
       </div>
     );
   }
@@ -63,4 +74,10 @@ export default styled(Tracker)`
   width: 75%;
   margin: 0 auto;
   padding: 0.5rem;
+  display: flex;
+  
+  .main {
+    width: 75%;
+    margin-right: 2rem;
+  }
 `;

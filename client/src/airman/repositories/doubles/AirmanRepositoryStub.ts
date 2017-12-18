@@ -3,7 +3,7 @@ import AirmanModelFactory from '../../factories/AirmanModelFactory';
 
 export default class AirmanRepositoryStub implements AirmanRepository {
   findAll() {
-    return Promise.resolve(AirmanModelFactory.build());
+    return Promise.resolve(AirmanModelFactory.buildList());
   }
 
   findByUnit(id: number) {

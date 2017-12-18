@@ -1,10 +1,12 @@
 package mil.af.us.narwhal.airman;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import mil.af.us.narwhal.qualification.Qualification;
-import mil.af.us.narwhal.certification.Certification;
+import mil.af.us.narwhal.airman_certification.AirmanCertification;
+import mil.af.us.narwhal.airman_qualification.AirmanQualification;
 import mil.af.us.narwhal.unit.Unit;
 
 import javax.persistence.*;
@@ -23,21 +25,15 @@ public class Airman {
 
   private String lastName;
 
-  @ManyToMany(cascade = CascadeType.ALL)
-  @JoinTable(
-    name = "join_airman_qualification",
-    joinColumns = @JoinColumn(name = "airman_id", referencedColumnName = "id"),
-    inverseJoinColumns = @JoinColumn(name = "qualification_id", referencedColumnName = "id")
-  )
-  private List<Qualification> qualifications;
+  @OneToMany(mappedBy = "airman_id")
+  @JsonManagedReference
+  @JsonProperty("qualifications")
+  private List<AirmanQualification> airmanQualifications;
 
-  @ManyToMany(cascade = CascadeType.ALL)
-  @JoinTable(
-    name = "join_airman_certification",
-    joinColumns = @JoinColumn(name = "airman_id", referencedColumnName = "id"),
-    inverseJoinColumns = @JoinColumn(name = "certification_id", referencedColumnName = "id")
-  )
-  private List<Certification> certifications;
+  @OneToMany(mappedBy = "airman_id")
+  @JsonManagedReference
+  @JsonProperty("certifications")
+  private List<AirmanCertification> certifications;
 
   @ManyToOne
   private Unit unit;
