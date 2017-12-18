@@ -1,8 +1,15 @@
 node ('') {
-    stage 'Checkout'
+    stage ('Checkout') {
         git url: 'git@gitlab.devops.geointservices.io:rimerjm/narwhal.git', branch: 'master', credentialsId: '358d626c-22cc-4bd9-a0e3-74d99d4dabab', poll: true
+    }
     
-    stage 'Test and Build'
+    stage ('FortifyScan') {
+        sh '/opt/hp_fortify_sca/bin/sourceanalyzer -64 -verbose -Xms2G -Xmx10G -b ${BUILD_NUMBER} -clean'
+        sh '/opt/hp_fortify_sca/bin/sourceanalyzer -64 -verbose -Xms2G -Xmx10G -b ${BUILD_NUMBER} "**/*" -exclude "**/test/*"'
+        sh '/opt/hp_fortify_sca/bin/sourceanalyzer -64 -verbose -Xms2G -Xmx10G -b ${BUILD_NUMBER} -scan -f fortifyResults-${BUILD_NUMBER}.fpr'
+    }
+
+    stage ('Test and Build') {
         sh """
         if [[ \"\$(docker images -q narwhalpivotal/base-image 2> /dev/null)\" == \"\" ]]; then
             docker pull narwhalpivotal/base-image
@@ -14,12 +21,14 @@ node ('') {
         
         docker exec narwhal /bin/bash -c "cd /app && ./all-tests.sh"
         """
-        
-    stage 'Deploy'
+    }
+  
+    stage ('Deploy') {
         withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'a8703712-1b39-4b55-9d80-18e84137bc22', passwordVariable: 'PCFPass', usernameVariable: 'PCFUser']]) {
           withEnv(["CF_HOME=${pwd()}"]) {
             sh "cf login -a api.system.dev.east.paas.geointservices.io -u $PCFUser -p $PCFPass -o USAF_Narwhal -s Development"
             sh "cf push"
           }
         }
+    }
 }
