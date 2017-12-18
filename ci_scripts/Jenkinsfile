@@ -1,0 +1,25 @@
+node ('') {
+    stage 'Checkout'
+        git url: 'git@gitlab.devops.geointservices.io:rimerjm/narwhal.git', branch: 'master', credentialsId: '358d626c-22cc-4bd9-a0e3-74d99d4dabab', poll: true
+    
+    stage 'Test and Build'
+        sh """
+        if [[ \"\$(docker images -q narwhalpivotal/base-image 2> /dev/null)\" == \"\" ]]; then
+            docker pull narwhalpivotal/base-image
+        fi
+        
+        docker stop narwhal || true && docker rm narwhal || true
+        
+        docker run --name narwhal -v `pwd`:/app -itd  narwhalpivotal/base-image
+        
+        docker exec narwhal /bin/bash -c "cd /app && ./all-tests.sh"
+        """
+        
+    stage 'Deploy'
+        withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'a8703712-1b39-4b55-9d80-18e84137bc22', passwordVariable: 'PCFPass', usernameVariable: 'PCFUser']]) {
+          withEnv(["CF_HOME=${pwd()}"]) {
+            sh "cf login -a api.system.dev.east.paas.geointservices.io -u $PCFUser -p $PCFPass -o USAF_Narwhal -s Development"
+            sh "cf push"
+          }
+        }
+}
