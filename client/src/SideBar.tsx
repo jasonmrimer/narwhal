@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 interface Props {
   airman: AirmanModel;
-  className?: string
+  className?: string;
 }
 
 export const SideBar = (props: Props) => {
@@ -43,6 +43,7 @@ export default styled(SideBar)`
   right: 0;
   top: 0;
   height: 100%;
+  
   h2 {
     font-size: 1.2rem;
     border-bottom: 1px solid white;

@@ -8,6 +8,7 @@ import FilterOption from './models/FilterOption';
 import styled from 'styled-components';
 import AirmanModel from '../airman/models/AirmanModel';
 import SideBar from '../SideBar';
+import Planner from '../planner/Planner';
 
 interface Props {
   airmanRepository: AirmanRepository;
@@ -62,9 +63,15 @@ export class Tracker extends React.Component<Props, State> {
       <div className={this.props.className}>
         <div className="main">
           <Filter callback={this.setSelectedUnitId} options={[DefaultFilter, ...options]}/>
-          <Roster airmen={this.state.airmen} selectAirman={this.handleSelectAirman}/>
+          <div style={{display: 'flex'}}>
+            <span style={{marginLeft: 'auto', fontSize: '0.75rem'}}>White = Uncommitted, Blue = Committed</span>
+          </div>
+          <div style={{display: 'flex'}}>
+            <Roster airmen={this.state.airmen} selectAirman={this.handleSelectAirman}/>
+            <Planner airmen={this.state.airmen}/>
+          </div>
         </div>
-        <SideBar airman={this.state.selectedAirman} />
+        <SideBar airman={this.state.selectedAirman}/>
       </div>
     );
   }

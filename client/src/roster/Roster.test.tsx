@@ -41,7 +41,7 @@ describe('Roster', () => {
     expect(table.getTextForRowAndCol(0, 'CERTIFICATION')).toBe(expectedCertification);
   });
 
-  it('calls the selectAirman when click on an airman', () => {
+  it('calls the selectAirman when clicking on an airman', () => {
     table.getRows().at(0).simulate('click');
     expect(selectAirmanMock).toBeCalledWith(airmen[0]);
   });

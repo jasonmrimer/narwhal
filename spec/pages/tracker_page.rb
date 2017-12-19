@@ -1,4 +1,4 @@
-class RosterPage
+class TrackerPage
   include Capybara::DSL
 
   @@number_of_airmen = 3
@@ -21,7 +21,17 @@ class RosterPage
     when 'All Units'
       has_airmen_in_roster?
     when unit
-      page.find_all('tbody tr').count < @@number_of_airmen
+      did_filter_roster = false
+      within_table('Roster') do
+        did_filter_roster = page.find_all('tbody tr').count < @@number_of_airmen
+      end
+
+      did_filter_planner = false
+      within_table('Planner') do
+        did_filter_planner = page.find_all('tbody tr').count < @@number_of_airmen
+      end
+
+      return did_filter_roster && did_filter_planner
     end
   end
 
@@ -41,6 +51,19 @@ class RosterPage
       page.has_content?('Laser Vision')
       page.has_content?('18 Apr 18')
       page.has_content?('LastName1, FirstName1')
+    end
+  end
+
+  def has_planner?
+    within_table('Planner') do
+      page.has_content?('SUN')
+      page.has_content?('MON')
+      page.has_content?('TUE')
+      page.has_content?('WED')
+      page.has_content?('THU')
+      page.has_content?('FRI')
+      page.has_content?('SAT')
+      page.has_selector?('tbody tr', count: @@number_of_airmen)
     end
   end
 end

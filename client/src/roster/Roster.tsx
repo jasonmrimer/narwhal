@@ -11,7 +11,6 @@ interface Props {
 const formatAttributes = (objArray: object[], key: string) => objArray.map((object: object) => object[key]).join(' / ');
 
 export class Roster extends React.Component<Props> {
-
   renderAirmen() {
     const {airmen} = this.props;
     return airmen.map((airman, index) => {

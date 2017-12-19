@@ -2,12 +2,13 @@ import * as React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import AirmanRepositoryStub from '../airman/repositories/doubles/AirmanRepositoryStub';
 import Roster from '../roster/Roster';
-import { Tracker, DefaultFilter } from './Tracker';
+import { DefaultFilter, Tracker } from './Tracker';
 import { forIt } from '../utils/testUtils';
 import Filter from './Filter';
 import UnitRepositoryStub from '../unit/repositories/doubles/UnitRepositoryStub';
 import Sidebar from '../SideBar';
 import AirmanModel from '../airman/models/AirmanModel';
+import Planner from '../planner/Planner';
 
 const airmanRepositoryStub = new AirmanRepositoryStub();
 const unitRepositoryStub = new UnitRepositoryStub();
@@ -22,9 +23,12 @@ describe('Tracker', () => {
     subject.update();
   });
 
-  it('renders a roster with all units', async () => {
-    const roster = await airmanRepositoryStub.findAll();
-    expect(subject.find(Roster).prop('airmen')).toEqual(roster);
+  it('renders a Roster with all units', async () => {
+    expect(subject.find(Roster).prop('airmen')).toEqual(airmen);
+  });
+
+  it('renders a Planner', async () => {
+    expect(subject.find(Planner).prop('airmen')).toEqual(airmen);
   });
 
   describe('filtering', () => {
