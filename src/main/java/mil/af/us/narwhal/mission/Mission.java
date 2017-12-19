@@ -14,5 +14,5 @@ import javax.persistence.Id;
 public class Mission {
     @Id
     private String missionId;
-
+    private String atoMissionNumber;
 }

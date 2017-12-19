@@ -1,15 +1,18 @@
 import * as React from 'react';
 import Tracker from './tracker/Tracker';
-import TopBar from './TopBar';
 import ProfileRepository from './profile/repositories/ProfileRepository';
 import AirmanRepository from './airman/repositories/AirmanRepository';
 import UnitRepository from './unit/repositories/UnitRepository';
-import { MomentPlannerService } from './tracker/services/MomentPlannerService';
+import {MomentPlannerService} from './tracker/services/MomentPlannerService';
+import Dashboard from './dashboard/Dashboard';
+import {Route, Switch} from 'react-router-dom';
+import MissionRepository from './mission/repositories/MissionRepository';
 
 interface Props {
   profileRepository: ProfileRepository;
   airmanRepository: AirmanRepository;
   unitRepository: UnitRepository;
+  missionRepository: MissionRepository;
 }
 
 interface State {
@@ -29,12 +32,30 @@ export default class App extends React.Component<Props, State> {
   render() {
     return (
       <div>
-        <TopBar username={this.state.username}/>
-        <Tracker
-          airmanRepository={this.props.airmanRepository}
-          unitRepository={this.props.unitRepository}
-          plannerService={new MomentPlannerService()}
+        <Switch>
+        <Route
+          path="/dashboard"
+          render={() => {
+          return (
+            <Dashboard username={this.state.username} missionRepository={this.props.missionRepository}/>
+          );
+        }}
         />
+
+        <Route
+          path="/"
+          render={() => {
+            return (
+                <Tracker
+                    username={this.state.username}
+                    airmanRepository={this.props.airmanRepository}
+                    unitRepository={this.props.unitRepository}
+                    plannerService={new MomentPlannerService()}
+                />
+            );
+          }}
+        />
+        </Switch>
       </div>
     );
   }

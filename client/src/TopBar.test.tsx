@@ -6,7 +6,7 @@ describe('TopBar', () => {
   let subject: ReactWrapper;
 
   beforeEach(() => {
-    subject = mount(<TopBar username="Tytus"/>);
+    subject = mount(<TopBar username="Tytus" pageTitle="AVAILABILITY ROSTER"/>);
   });
 
   it('renders the username', () => {

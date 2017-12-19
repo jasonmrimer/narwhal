@@ -1,5 +1,6 @@
 package mil.af.us.narwhal.mission;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Component;
 import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
@@ -10,15 +11,25 @@ import unicorn.GetMissionMetaDataResponse;
 @Component
 public class MissionClient extends WebServiceGatewaySupport {
 
-    public GetMissionMetaDataResponse getMissionMetaDataResponse() {
+    private String unicornUri;
+
+    public MissionClient(@Value("${unicorn-uri}") String unicornUri) {
+        this.unicornUri = unicornUri;
+    }
+
+    @Override
+    protected void initGateway() throws Exception {
         Jaxb2Marshaller marshaller = new Jaxb2Marshaller();
         marshaller.setContextPath("unicorn");
+        setMarshaller(marshaller);
+        setUnmarshaller(marshaller);
+        setDefaultUri(unicornUri);
+    }
 
-        this.setMarshaller(marshaller);
-        this.setUnmarshaller(marshaller);
-
-        GetMissionMetaData request = new GetMissionMetaData();
-        request.setXmlRequest("");
-        return (GetMissionMetaDataResponse)this.getWebServiceTemplate().marshalSendAndReceive("http://codweb1.leidoshost.com/UNICORN.NET/WebServices/UnicornMissionWebservicesV2.asmx", request, new SoapActionCallback("Unicorn/GetMissionMetaData"));
+    public GetMissionMetaDataResponse getMissionMetaData() {
+        GetMissionMetaData getMissionMetaData = new GetMissionMetaData();
+        getMissionMetaData.setXmlRequest("");
+        return (GetMissionMetaDataResponse) getWebServiceTemplate()
+                .marshalSendAndReceive(getMissionMetaData, new SoapActionCallback("Unicorn/GetMissionMetaData"));
     }
 }

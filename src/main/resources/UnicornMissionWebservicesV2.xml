@@ -1,0 +1,431 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="Unicorn" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="Unicorn" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="Unicorn">
+      <s:element name="GetMissionMetaData">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="xmlRequest" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMissionMetaDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetMissionMetaDataResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMissionMetaDataRest">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="keyword" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="start" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="end" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="latitude" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="longitude" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="radius" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMissionMetaDataRestResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetMissionMetaDataRestResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMissionMetaDataRestV2">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="keyword" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="start" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="end" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="latitude" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="longitude" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="radius" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="platforms" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMissionMetaDataRestV2Response">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetMissionMetaDataRestV2Result">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMissionMetaDataWithTargetsRest">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="keyword" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="start" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="end" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="latitude" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="longitude" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="radius" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetMissionMetaDataWithTargetsRestResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetMissionMetaDataWithTargetsRestResult">
+              <s:complexType mixed="true">
+                <s:sequence>
+                  <s:any />
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetMissionMetaDataSoapIn">
+    <wsdl:part name="parameters" element="tns:GetMissionMetaData" />
+  </wsdl:message>
+  <wsdl:message name="GetMissionMetaDataSoapOut">
+    <wsdl:part name="parameters" element="tns:GetMissionMetaDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetMissionMetaDataRestSoapIn">
+    <wsdl:part name="parameters" element="tns:GetMissionMetaDataRest" />
+  </wsdl:message>
+  <wsdl:message name="GetMissionMetaDataRestSoapOut">
+    <wsdl:part name="parameters" element="tns:GetMissionMetaDataRestResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetMissionMetaDataRestV2SoapIn">
+    <wsdl:part name="parameters" element="tns:GetMissionMetaDataRestV2" />
+  </wsdl:message>
+  <wsdl:message name="GetMissionMetaDataRestV2SoapOut">
+    <wsdl:part name="parameters" element="tns:GetMissionMetaDataRestV2Response" />
+  </wsdl:message>
+  <wsdl:message name="GetMissionMetaDataWithTargetsRestSoapIn">
+    <wsdl:part name="parameters" element="tns:GetMissionMetaDataWithTargetsRest" />
+  </wsdl:message>
+  <wsdl:message name="GetMissionMetaDataWithTargetsRestSoapOut">
+    <wsdl:part name="parameters" element="tns:GetMissionMetaDataWithTargetsRestResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetMissionMetaDataHttpGetIn">
+    <wsdl:part name="xmlRequest" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetMissionMetaDataHttpGetOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="GetMissionMetaDataRestHttpGetIn">
+    <wsdl:part name="keyword" type="s:string" />
+    <wsdl:part name="start" type="s:string" />
+    <wsdl:part name="end" type="s:string" />
+    <wsdl:part name="latitude" type="s:string" />
+    <wsdl:part name="longitude" type="s:string" />
+    <wsdl:part name="radius" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetMissionMetaDataRestHttpGetOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="GetMissionMetaDataRestV2HttpGetIn">
+    <wsdl:part name="keyword" type="s:string" />
+    <wsdl:part name="start" type="s:string" />
+    <wsdl:part name="end" type="s:string" />
+    <wsdl:part name="latitude" type="s:string" />
+    <wsdl:part name="longitude" type="s:string" />
+    <wsdl:part name="radius" type="s:string" />
+    <wsdl:part name="platforms" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetMissionMetaDataRestV2HttpGetOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="GetMissionMetaDataWithTargetsRestHttpGetIn">
+    <wsdl:part name="keyword" type="s:string" />
+    <wsdl:part name="start" type="s:string" />
+    <wsdl:part name="end" type="s:string" />
+    <wsdl:part name="latitude" type="s:string" />
+    <wsdl:part name="longitude" type="s:string" />
+    <wsdl:part name="radius" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetMissionMetaDataWithTargetsRestHttpGetOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="GetMissionMetaDataHttpPostIn">
+    <wsdl:part name="xmlRequest" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetMissionMetaDataHttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="GetMissionMetaDataRestHttpPostIn">
+    <wsdl:part name="keyword" type="s:string" />
+    <wsdl:part name="start" type="s:string" />
+    <wsdl:part name="end" type="s:string" />
+    <wsdl:part name="latitude" type="s:string" />
+    <wsdl:part name="longitude" type="s:string" />
+    <wsdl:part name="radius" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetMissionMetaDataRestHttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="GetMissionMetaDataRestV2HttpPostIn">
+    <wsdl:part name="keyword" type="s:string" />
+    <wsdl:part name="start" type="s:string" />
+    <wsdl:part name="end" type="s:string" />
+    <wsdl:part name="latitude" type="s:string" />
+    <wsdl:part name="longitude" type="s:string" />
+    <wsdl:part name="radius" type="s:string" />
+    <wsdl:part name="platforms" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetMissionMetaDataRestV2HttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:message name="GetMissionMetaDataWithTargetsRestHttpPostIn">
+    <wsdl:part name="keyword" type="s:string" />
+    <wsdl:part name="start" type="s:string" />
+    <wsdl:part name="end" type="s:string" />
+    <wsdl:part name="latitude" type="s:string" />
+    <wsdl:part name="longitude" type="s:string" />
+    <wsdl:part name="radius" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="GetMissionMetaDataWithTargetsRestHttpPostOut">
+    <wsdl:part name="Body" />
+  </wsdl:message>
+  <wsdl:portType name="UnicornMissionWebservicesV2Soap">
+    <wsdl:operation name="GetMissionMetaData">
+      <wsdl:input message="tns:GetMissionMetaDataSoapIn" />
+      <wsdl:output message="tns:GetMissionMetaDataSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMissionMetaDataRest">
+      <wsdl:input message="tns:GetMissionMetaDataRestSoapIn" />
+      <wsdl:output message="tns:GetMissionMetaDataRestSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMissionMetaDataRestV2">
+      <wsdl:input message="tns:GetMissionMetaDataRestV2SoapIn" />
+      <wsdl:output message="tns:GetMissionMetaDataRestV2SoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMissionMetaDataWithTargetsRest">
+      <wsdl:input message="tns:GetMissionMetaDataWithTargetsRestSoapIn" />
+      <wsdl:output message="tns:GetMissionMetaDataWithTargetsRestSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="UnicornMissionWebservicesV2HttpGet">
+    <wsdl:operation name="GetMissionMetaData">
+      <wsdl:input message="tns:GetMissionMetaDataHttpGetIn" />
+      <wsdl:output message="tns:GetMissionMetaDataHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMissionMetaDataRest">
+      <wsdl:input message="tns:GetMissionMetaDataRestHttpGetIn" />
+      <wsdl:output message="tns:GetMissionMetaDataRestHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMissionMetaDataRestV2">
+      <wsdl:input message="tns:GetMissionMetaDataRestV2HttpGetIn" />
+      <wsdl:output message="tns:GetMissionMetaDataRestV2HttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMissionMetaDataWithTargetsRest">
+      <wsdl:input message="tns:GetMissionMetaDataWithTargetsRestHttpGetIn" />
+      <wsdl:output message="tns:GetMissionMetaDataWithTargetsRestHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="UnicornMissionWebservicesV2HttpPost">
+    <wsdl:operation name="GetMissionMetaData">
+      <wsdl:input message="tns:GetMissionMetaDataHttpPostIn" />
+      <wsdl:output message="tns:GetMissionMetaDataHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMissionMetaDataRest">
+      <wsdl:input message="tns:GetMissionMetaDataRestHttpPostIn" />
+      <wsdl:output message="tns:GetMissionMetaDataRestHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMissionMetaDataRestV2">
+      <wsdl:input message="tns:GetMissionMetaDataRestV2HttpPostIn" />
+      <wsdl:output message="tns:GetMissionMetaDataRestV2HttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetMissionMetaDataWithTargetsRest">
+      <wsdl:input message="tns:GetMissionMetaDataWithTargetsRestHttpPostIn" />
+      <wsdl:output message="tns:GetMissionMetaDataWithTargetsRestHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="UnicornMissionWebservicesV2Soap" type="tns:UnicornMissionWebservicesV2Soap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetMissionMetaData">
+      <soap:operation soapAction="Unicorn/GetMissionMetaData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMissionMetaDataRest">
+      <soap:operation soapAction="Unicorn/GetMissionMetaDataRest" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMissionMetaDataRestV2">
+      <soap:operation soapAction="Unicorn/GetMissionMetaDataRestV2" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMissionMetaDataWithTargetsRest">
+      <soap:operation soapAction="Unicorn/GetMissionMetaDataWithTargetsRest" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="UnicornMissionWebservicesV2Soap12" type="tns:UnicornMissionWebservicesV2Soap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetMissionMetaData">
+      <soap12:operation soapAction="Unicorn/GetMissionMetaData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMissionMetaDataRest">
+      <soap12:operation soapAction="Unicorn/GetMissionMetaDataRest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMissionMetaDataRestV2">
+      <soap12:operation soapAction="Unicorn/GetMissionMetaDataRestV2" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMissionMetaDataWithTargetsRest">
+      <soap12:operation soapAction="Unicorn/GetMissionMetaDataWithTargetsRest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="UnicornMissionWebservicesV2HttpGet" type="tns:UnicornMissionWebservicesV2HttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="GetMissionMetaData">
+      <http:operation location="/GetMissionMetaData" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMissionMetaDataRest">
+      <http:operation location="/GetMissionMetaDataRest" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMissionMetaDataRestV2">
+      <http:operation location="/GetMissionMetaDataRestV2" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMissionMetaDataWithTargetsRest">
+      <http:operation location="/GetMissionMetaDataWithTargetsRest" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="UnicornMissionWebservicesV2HttpPost" type="tns:UnicornMissionWebservicesV2HttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="GetMissionMetaData">
+      <http:operation location="/GetMissionMetaData" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMissionMetaDataRest">
+      <http:operation location="/GetMissionMetaDataRest" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMissionMetaDataRestV2">
+      <http:operation location="/GetMissionMetaDataRestV2" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetMissionMetaDataWithTargetsRest">
+      <http:operation location="/GetMissionMetaDataWithTargetsRest" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:content part="Body" type="text/xml" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="UnicornMissionWebservicesV2">
+    <wsdl:port name="UnicornMissionWebservicesV2Soap" binding="tns:UnicornMissionWebservicesV2Soap">
+      <soap:address location="http://codweb1.leidoshost.com/UNICORN.NET/WebServices/UnicornMissionWebservicesV2.asmx" />
+    </wsdl:port>
+    <wsdl:port name="UnicornMissionWebservicesV2Soap12" binding="tns:UnicornMissionWebservicesV2Soap12">
+      <soap12:address location="http://codweb1.leidoshost.com/UNICORN.NET/WebServices/UnicornMissionWebservicesV2.asmx" />
+    </wsdl:port>
+    <wsdl:port name="UnicornMissionWebservicesV2HttpGet" binding="tns:UnicornMissionWebservicesV2HttpGet">
+      <http:address location="http://codweb1.leidoshost.com/UNICORN.NET/WebServices/UnicornMissionWebservicesV2.asmx" />
+    </wsdl:port>
+    <wsdl:port name="UnicornMissionWebservicesV2HttpPost" binding="tns:UnicornMissionWebservicesV2HttpPost">
+      <http:address location="http://codweb1.leidoshost.com/UNICORN.NET/WebServices/UnicornMissionWebservicesV2.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

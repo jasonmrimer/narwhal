@@ -4,13 +4,14 @@ import styled from 'styled-components';
 interface Props {
   username: string;
   className?: string;
+  pageTitle: string;
 }
 
 export const TopBar = (props: Props) => {
   return (
     <div className={props.className}>
       <span>
-        AVAILABILITY ROSTER
+        {props.pageTitle}
       </span>
       <span>
         {props.username}

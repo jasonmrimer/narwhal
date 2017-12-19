@@ -9,11 +9,13 @@ import styled from 'styled-components';
 import AirmanModel from '../airman/models/AirmanModel';
 import SideBar from '../SideBar';
 import PlannerService from './services/PlannerService';
+import TopBar from '../TopBar';
 
 interface Props {
   airmanRepository: AirmanRepository;
   unitRepository: UnitRepository;
   plannerService: PlannerService;
+  username: string;
   className?: string;
 }
 
@@ -50,33 +52,33 @@ export class Tracker extends React.Component<Props, State> {
       await this.props.airmanRepository.findByUnit(option.value);
 
     this.setState({selectedUnitId: option.value, airmen: updatedRoster});
-  }
+  };
 
   handleSelectAirman = (airman: AirmanModel) => {
     this.setState({selectedAirman: airman});
-  }
+  };
 
   render() {
     const options = this.state.units.map((unit: UnitModel) => {
       return {value: unit.id, text: unit.name};
     });
     return (
-      <div className={this.props.className}>
+      [
+        <TopBar key="0" username={this.props.username} pageTitle="AVAILABILITY ROSTER"/>,
+        (<div key="1"className={this.props.className}>
         <div className="main">
           <Filter callback={this.setSelectedUnitId} options={[DefaultFilter, ...options]}/>
           <div style={{display: 'flex'}}>
             <span style={{marginLeft: 'auto', fontSize: '0.75rem'}}>White = Uncommitted, Blue = Committed</span>
           </div>
           <div style={{display: 'flex'}}>
-            <Roster
-              airmen={this.state.airmen}
-              week={this.props.plannerService.getCurrentWeek()}
-              selectAirman={this.handleSelectAirman}
+            <Roster airmen={this.state.airmen}week={this.props.plannerService.getCurrentWeek()} selectAirman={this.handleSelectAirman}
             />
           </div>
         </div>
         <SideBar airman={this.state.selectedAirman}/>
-      </div>
+      </div>)
+      ]
     );
   }
 }

@@ -31,18 +31,20 @@ repositories {
 task genJaxb {
     ext.sourcesDir = "${buildDir}/generated-sources/jaxb"
     ext.classesDir = "${buildDir}/classes/jaxb"
-    ext.schema = "http://codweb1.leidoshost.com/UNICORN.NET/WebServices/UnicornMissionWebservicesV2.asmx?WSDL"
+    ext.schema = "src/main/resources/UnicornMissionWebservicesV2.xml"
 
     outputs.dir classesDir
 
-    doLast() {
+    doLast {
         project.ant {
-            taskdef name: "xjc", classname: "com.sun.tools.xjc.XJCTask",
+            taskdef name: "xjc",
+                    classname: "com.sun.tools.xjc.XJCTask",
                     classpath: configurations.jaxb.asPath
             mkdir(dir: sourcesDir)
             mkdir(dir: classesDir)
 
-            xjc(destdir: sourcesDir, schema: schema) {
+            xjc(destdir: sourcesDir,
+                    schema: schema) {
                 arg(value: "-wsdl")
                 produces(dir: sourcesDir, includes: "**/*.java")
             }
@@ -69,10 +71,9 @@ dependencies {
             'org.flywaydb:flyway-core',
             'org.springframework.boot:spring-boot-starter-data-jpa',
             'org.springframework.boot:spring-boot-starter-web',
+            'org.springframework.boot:spring-boot-starter-web-services',
             'org.springframework.boot:spring-boot-starter-security',
             'com.fasterxml.jackson.datatype:jackson-datatype-jsr310',
-            'com.fasterxml.jackson.core:jackson-databind',
-            'org.springframework.ws:spring-ws-core',
             files(genJaxb.classesDir).builtBy(genJaxb)
     )
 
@@ -91,6 +92,11 @@ dependencies {
     )
 
     jaxb "com.sun.xml.bind:jaxb-xjc:2.1.7"
+}
+
+
+jar {
+    from genJaxb.classesDir
 }
 
 test {
