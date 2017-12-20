@@ -1,0 +1,116 @@
+---
+# .about.yml project metadata
+#
+# Copy this template into your project repository's root directory as
+# .about.yml and fill in the fields as described below.
+
+# This is a short name of your project that can be used as a URL slug.
+# (required)
+name: narwhal
+
+# This is the display name of your project. (required)
+full_name: Crew Management Tool
+
+# What is the problem your project solves? What is the solution? Use the
+# format shown below. Ref. [CNSSI 1254, #19][NIST SP800-37] (required)
+description: 
+Crew management is currently done leveraging several tools depending on the location: excel, compass, PEX, whiteboards, Metrics, access databases, and hard copies of schedules. This is a slow and error filled process that results in wasted man hours and overstaffing of missions.  The Crew Management Tool is aimed to reduce the amount of tools that a scheduler has to review in order to plan a single mission by combining all data into a single tracker to help reduce the time wasted searching for data. The application will also integrate mission information to allow for planning to exist within the same application in order to reduce the number of errors due to transcription and to pave the way for future automatization. This is in an effort to create a corporate base line, so that data across locations is consistent. The application will reside on NGA’s NIPR PCF and use MDDS to transfer to a mirrored PCF on JWICS.
+
+
+# What is the measurable impact of your project? Use the format shown below. (required)
+impact: medium
+
+# What kind of team owns the repository? (required)
+# values: guild, working-group, project
+owner_type: project
+
+# What is your project's current status? (required)
+# values: discovery, alpha, beta, production
+stage: alpha
+
+# Should this repo have automated tests? If so, set to `true`. (required)
+# values: true, false
+testable: true
+
+________________________
+# What are the licenses that apply to the project and/or its components?
+# (required)
+# Items by property name pattern:
+#   .*:
+#     name: Name of the license from the Software Package Data Exchange (SPDX): https://spdx.org/licenses/
+#     url: URL for the text of the license
+licenses:
+  placeholder_label:
+
+# The main point of contact(s) and/or the issue reporting system for your
+# project, and either a `mailto:` link or URL for each contact.
+# Items:
+# - url: URL for the link
+#   text: Anchor text for the link
+contact:
+- url: mailto:jason.rimer@us.af.mil
+  text: Jason Rimer
+- url: mailto:jared.kaufman@us.af.mil
+  text: Jared Kaufman
+- url: mailto:ryan.hatfield.6@us.af.mil
+  text: Ryan Hatfield
+- url: mailto:cory.bowman@us.af.mil
+  text: Cory Bowman
+
+# Who are the team members on your project? You can specify GitHub usernames,
+# email addresses, or other organizational usernames. (required)
+# Items:
+# - github: GitHub user name
+#   id: Internal team identifier/user name
+#   role: Team member's role; leads should be designated as 'lead'
+team:
+- github: @rimerjm
+  id: Jason M Rimer
+  role: developer
+- github: @joycedj
+  id: Daniel J Joyce
+  role: developer
+- github: @edwardtl
+  id: Travis L Edwards
+  role: developer
+- github: @speismcd
+  id: Cory D Speisman
+  role: developer
+
+# What kind of content is contained in the project repository?
+# values: app, data, policy
+type: app
+
+# Name of the main project repo if this is a sub-repo; name of the grouplet
+# repo if this is a working group/guild subproject
+parent: narwhal
+
+# What technologies are used in this project? Ref. [CNSSI 1254, All Core RMF-#3,SSP-#7] [SP800-37] (required)
+# Or multiple stacks
+# stack:
+# - python:2.8
+# stacks:
+#  -
+#    pythonstack:
+#      - "python:3.5.0"
+#  -
+#    gostack:
+#      - "go:1.6.1"
+stack:
+- java:1.8
+- spring:4.3.12
+- reactjs:16.0.0
+
+# What are the services used to supply project status information? Ref. [CNSSI 1254, All Core RMF-#3,SSP-#7] [SP800-37] (required)
+# Items:
+# - name: Name of the service
+#   category: Type of the service
+#   url: URL for detailed information
+#   badge: URL for the status badge
+services:
+- name: HP Fortify
+  category: scan
+  url: https://threadfix.devops.geointservices.io/organizations/30/applications/175?nonce=F0F10758595CA0E0F328DE8965CCE26E
+- name: SonarQube
+  category: scan
+  url: https://sonar.geointservices.io/components/index?id=narwhal%3Anarwhal
