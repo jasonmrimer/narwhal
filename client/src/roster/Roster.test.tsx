@@ -1,25 +1,37 @@
-import { shallow, ShallowWrapper } from 'enzyme';
+import { shallow } from 'enzyme';
 import * as React from 'react';
 
 import { Table } from '../utils/testUtils';
 import { Roster } from './Roster';
-import AirmanRepositoryStub from '../airman/repositories/doubles/AirmanRepositoryStub';
 import AirmanModel from '../airman/models/AirmanModel';
+import AirmanModelFactory from '../airman/factories/AirmanModelFactory';
+import PlannerServiceStub from '../tracker/services/doubles/PlannerServiceStub';
 
-const repositoryStub = new AirmanRepositoryStub();
-
-let subject: ShallowWrapper, table: Table, airmen: AirmanModel[], selectAirmanMock: (airman: AirmanModel) => void;
+let table: Table;
+let airmen: AirmanModel[];
+let selectAirmanMock: (airman: AirmanModel) => void;
 
 describe('Roster', () => {
   beforeEach(async () => {
     selectAirmanMock = jest.fn();
-    airmen = await repositoryStub.findAll();
-    subject = shallow(<Roster airmen={airmen} selectAirman={selectAirmanMock}/>);
-    table = new Table(subject);
+    airmen = AirmanModelFactory.buildList();
+    const week = new PlannerServiceStub().getCurrentWeek();
+    table = new Table(shallow(
+      <Roster
+        airmen={airmen}
+        selectAirman={selectAirmanMock}
+        week={week}
+      />
+    ));
   });
 
   it('renders NAME, QUALIFICATION, CERTIFICATION, and Planner table headers', () => {
-    expect(table.getColumnHeaders()).toEqual(['NAME', 'QUALIFICATION', 'CERTIFICATION', 'SUNMONTUEWEDTHUFRISAT']);
+    expect(table.getColumnHeaders()).toEqual([
+      'NAME',
+      'QUALIFICATION',
+      'CERTIFICATION',
+      'NOVEMBER 201726SUN27MON28TUE29WED30THU01FRI02SAT'
+    ]);
   });
 
   it('render airmen last names', async () => {
@@ -45,5 +57,4 @@ describe('Roster', () => {
     table.getRows().at(0).simulate('click');
     expect(selectAirmanMock).toBeCalledWith(airmen[0]);
   });
-
 });

@@ -4,6 +4,7 @@ import TopBar from './TopBar';
 import ProfileRepository from './profile/repositories/ProfileRepository';
 import AirmanRepository from './airman/repositories/AirmanRepository';
 import UnitRepository from './unit/repositories/UnitRepository';
+import { MomentPlannerService } from './tracker/services/MomentPlannerService';
 
 interface Props {
   profileRepository: ProfileRepository;
@@ -32,6 +33,7 @@ export default class App extends React.Component<Props, State> {
         <Tracker
           airmanRepository={this.props.airmanRepository}
           unitRepository={this.props.unitRepository}
+          plannerService={new MomentPlannerService()}
         />
       </div>
     );
