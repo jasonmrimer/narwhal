@@ -19,6 +19,15 @@ export class Roster extends React.Component<Props> {
           <td>{airman.lastName}</td>
           <td>{formatAttributes(airman.qualifications, 'acronym')}</td>
           <td>{formatAttributes(airman.certifications, 'title')}</td>
+          <td className="planner-row">
+            <span><input type="checkbox" /></span>
+            <span><input type="checkbox" /></span>
+            <span><input type="checkbox" /></span>
+            <span><input type="checkbox" /></span>
+            <span><input type="checkbox" /></span>
+            <span><input type="checkbox" /></span>
+            <span><input type="checkbox" /></span>
+          </td>
         </tr>
       );
     });
@@ -33,6 +42,17 @@ export class Roster extends React.Component<Props> {
           <th>NAME</th>
           <th>QUALIFICATION</th>
           <th>CERTIFICATION</th>
+          <th>
+            <div className="planner-header">
+              <span>SUN</span>
+              <span>MON</span>
+              <span>TUE</span>
+              <span>WED</span>
+              <span>THU</span>
+              <span>FRI</span>
+              <span>SAT</span>
+            </div>
+          </th>
         </tr>
         </thead>
         <tbody>
@@ -70,5 +90,10 @@ export default styled(Roster)`
   
   td, th {
     padding: 0.75rem;
+  }
+  
+  .planner-header, .planner-row {
+    display: flex;
+    justify-content: space-between;
   }
 `;

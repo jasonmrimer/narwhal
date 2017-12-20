@@ -18,8 +18,8 @@ describe('Roster', () => {
     table = new Table(subject);
   });
 
-  it('renders NAME, QUALIFICATION, and CERTIFICATION table header', () => {
-    expect(table.getColumnHeaders()).toEqual(['NAME', 'QUALIFICATION', 'CERTIFICATION']);
+  it('renders NAME, QUALIFICATION, CERTIFICATION, and Planner table headers', () => {
+    expect(table.getColumnHeaders()).toEqual(['NAME', 'QUALIFICATION', 'CERTIFICATION', 'SUNMONTUEWEDTHUFRISAT']);
   });
 
   it('render airmen last names', async () => {

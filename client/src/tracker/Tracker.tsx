@@ -8,7 +8,6 @@ import FilterOption from './models/FilterOption';
 import styled from 'styled-components';
 import AirmanModel from '../airman/models/AirmanModel';
 import SideBar from '../SideBar';
-import Planner from '../planner/Planner';
 
 interface Props {
   airmanRepository: AirmanRepository;
@@ -68,7 +67,6 @@ export class Tracker extends React.Component<Props, State> {
           </div>
           <div style={{display: 'flex'}}>
             <Roster airmen={this.state.airmen} selectAirman={this.handleSelectAirman}/>
-            <Planner airmen={this.state.airmen}/>
           </div>
         </div>
         <SideBar airman={this.state.selectedAirman}/>
