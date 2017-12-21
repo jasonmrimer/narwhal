@@ -1,0 +1,139 @@
+# NSS Determination.  Has the program owner designated this system as a National Security System, Yes / No?
+nss determination: Yes
+
+# Full name of the system.  Ref. [NIST SP800-37] (required)
+system name: Crew Management Tool
+
+# Shortname or abbreviation. Ref. [NIST SP800-37] (required)
+short name: *NEEDED*
+
+# System unique identifier. Ref. [NIST SP800-37] (required)
+uniqueID: <SPID ID>
+
+# System version or release number. Ref. [NIST SP800-37] (required)
+version: 1.0
+
+# Operational Environments: production, test, research and development, tactical, deployed, or other.  Ref. [NIST SP800-37] (required)
+environment: test
+
+# Authorization Status: ATO, ATO w/ conditions, IATT, DATO, None.  Ref. [CNSSI 1254, #2] [NIST SP800-53] (required)
+authorization: IATT
+
+# Authorization Termination Date.  Ref. [CNSSI 1254, #3] [NIST SP800-37] (required)
+authorization termination date: ~
+
+# Security Review Date. Identify the date of last annual security review within ATO. Ref. [CNSSI 1254, #17][NIST SP800-53] (required)
+review date: ~
+
+# Security Categorization. Ref. [NIST SP800-37] [CNSSI 1253] (required)
+# http://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-60v1r1.pdf
+information-types: D3 Intelligence Operations
+confidentiality: *NEEDED*
+integrity: *NEEDED*
+availability: *NEEDED*
+overlay: none
+system-type: minor
+
+# Software category. Identify Commercial off-the-shelf, Government off-the-shelf, and Open Source Software. Ref. [CNSSI 1254, #18] [NIST SP800-53] (required)
+Software Category: custom
+
+# User access requirements. Ref. [CNSSI 1254, #21,22] [NIST SP800-53] (required)
+system user categories: Organization Personnel
+level-of-identity-assurance: 0
+
+#Securiy Controls: List and provide a short descrition of how controls are met. Ref. [CNSSI 1254, #16] [NIST SP800-37, NIST SP800-53, CNSSI 1253] (required)
+controls: https://gitlab.diux.io/kessel-run/kr-wiki/blob/master/ato-examples/FISMA%20Moderate%20SP800-53%20Controls.xlsx
+
+# Mission criticality / Critical Functions.  Identify if there are critical functions.  Yes/No. Ref. [CNSSI 1254, #12] [FIPS Pub 199, NIST SP800-53]
+mission critical: no
+
+# Ownership /Operation.  Identify whether: Government Owned, governement operated; government owned, contractor operated; contractor owned, contractor operated; non-federal (state/local/etc).  Ref. [CNSSI 1254, #13] [NIST SP800-37]
+ownership: Government Owned
+
+# RMF Key Roles. Identify member names, roles, parent org., and contact information (phone and email). Ref. [CNSSI 1254, #15][NIST SP800-37] (required)
+role identification:
+  authorizing-official:
+    name: Johnathan Murray
+    title: Authorizing Official
+    org: NGA
+    email: Johnathon.E.Murray@nga.mil
+  system-owner:
+    name: Enrique Oti
+    title: Project Manager
+    org: DIUx
+    email: enrique@diux.mil
+    phone: 916-662-3571
+  system-management:
+    name: Wayne Starr
+    title: Technical Lead
+    org: DIUx
+    email: starr@diux.mil
+    phone: 650-447-4633
+  system-security-officer:
+    name: Andrew Altizer
+    title: System Security Officer
+    org: AFLCMC
+    email: andrew.altizer@us.af.mil
+    phone: 781-225-9049
+  technical-lead:
+    name: Wayne Starr
+    title: Technical Lead
+    org: DIUx
+    email: starr@diux.mil
+    phone: 650-447-4633
+
+leveraged-authorizations:
+- https://www.fedramp.gov/marketplace/compliant-systems/amazon-web-services-aws-eastwest-us-public-cloud/
+
+# Provide link to about.yml
+purpose: https://gitlab.diux.io/kessel-run/kr-wiki/blob/master/ato-examples/about.yml
+components: https://gitlab.diux.io/kessel-run/kr-wiki/blob/master/ato-examples/about.yml
+
+# authorization boundary diagram. Ref. [CNSSI 1254, #1, 11] [NIST SP800-53] (required)
+system-diagram: https://gitlab.diux.io/kessel-run/kr-wiki/blob/master/ato-examples/
+network-diagram: https://gitlab.diux.io/kessel-run/kr-wiki/blob/master/ato-examples/
+internal and external system interfaces: https://gitlab.diux.io/kessel-run/kr-wiki/blob/master/ato-examples/
+
+environments:
+- geoaxis.nga.smil.mil
+user-types:
+  developer:
+    functions:
+    - deployment
+    - engineering
+
+# Cyptographic Key Management Information. CNSS specific.  FIPS Validated for unclassified access? NSA Approved Crypto? Ref. [CNSSI 1254, #4] [NIST SP800-37]
+key management: N/A
+
+# E-Autenitication Assessment/Privacy Impact Assessment performed? Yes or No. Ref. [CNSSI 1254, #5] [NIST SP 800-63, OMB M-04-04]
+privacy impact assessment: no
+
+# External security services/ Network connection rules. List the 1) provider(s), 2) component(s), 3) description. Ref. [CNSSI 1254, #6] [NIST SP800-37] (required)
+interconnections: N/A
+system dependencies: N/A
+
+# Internal System Interfaces.  List application program interfaces (APIs). [CNSSI 1254, #8] [NIST SP800-47] (required)
+interfaces:
+- /api/airspaces (GET,POST,DELETE)
+- /api/aocoi (GET)
+- /api/ato-date-data-bundle (GET)
+- /api/base (POST,DELETE)
+- /api/configured-tanker (POST)
+- /api/configured-tanker/{id}/compatibilities (POST)
+- /api/current-contracts (GET,POST,DELETE)
+- /api/drag-requests (POST, DELETE)
+- /api/flight-times (GET,PUT)
+- /api/fuel-requests (GET,POST,PUT,DELETE)
+- /api/initial-load-data-bundle (GET)
+- /api/notifications (GET,PUT)
+- /api/notifications-data-bundle (GET)
+- /api/receivers/{id} (PUT, POST)
+- /api/receivers/{id}/compatibilities (POST)
+- /api/pairable-sorties (GET,POST,PUT,DELETE)
+- /api/compatibility-modal-bundle (GET)
+
+# Hardware  / Sofware inventory. Ref. [CNSSI 1254, #7] [NIST SP800-37, CNSSP 11] (required)
+hw/sw inventory: https://gitlab.diux.io/kessel-run/kr-wiki/blob/master/ato-examples/about.yml
+
+# Information Type. List type of information processed, stored, and transmited by the system. Ref. [CNSSI 1254, #10] [NIST SP800-60] (required)
+information type: D26 Military Operations
