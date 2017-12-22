@@ -1,0 +1,13 @@
+security:
+  ignored: "/**/*.css,/**/*.js,/**/*.map,/**/*.woff"
+  oauth2:
+    client:
+      # these should be set in your environment get the values off CloudFoundry
+      client-id: 5cc09048-0068-41fe-9191-958b2925080e
+      client-secret: 7600e88e-7b81-4192-920c-14985a8074ae
+      user-authorization-uri: ${sso-service-url}/oauth/authorize
+      access-token-uri: ${sso-service-url}/oauth/token
+    resource:
+      user-info-uri: ${sso-service-url}/userinfo
+
+sso-service-url: https://ssotest.login.system.dev.east.paas.geointservices.io

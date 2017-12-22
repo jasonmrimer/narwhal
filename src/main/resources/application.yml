@@ -13,6 +13,7 @@ logging:
   level:
     org.springframework.web.filter.CommonsRequestLoggingFilter: debug
     org.springframework.ws: debug
+    org.springframework.security: debug
 security:
   user:
     name: tytus
