@@ -3,6 +3,7 @@ import './index.css';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
+import './polyfills';
 import App from './App';
 import { ThemeProvider } from 'styled-components';
 import theme from './themes/default';

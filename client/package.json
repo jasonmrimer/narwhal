@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@types/moment": "^2.13.0",
+    "core-js": "^2.5.3",
     "moment": "^2.19.4",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
