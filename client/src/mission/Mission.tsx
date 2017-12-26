@@ -21,7 +21,10 @@ export const Mission = (props: Props) => {
 
 export default styled(Mission)`
   background-color: ${props => props.theme.lighter};
-  width: 25%;
-  min-height: 100px;
-  padding: 0.75rem;
+  width: calc(31% + 1% / 3);
+  min-height:  8rem;
+  padding: calc(1% / 3);
+  margin-right: calc(2% / 3);
+  margin-bottom: calc(4% / 3);
+  margin-left: calc(2% / 3);
 `;

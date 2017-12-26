@@ -39,6 +39,7 @@ export class Dashboard extends React.Component<Props, State> {
 
 export default styled(Dashboard)`
   display: flex;
-  justify-content: space-around;
+  justify-content: flex-start;
+  flex-wrap: wrap;
   padding: 2rem;
 `;
