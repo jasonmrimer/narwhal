@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {mount, ReactWrapper} from 'enzyme';
+import { mount, ReactWrapper } from 'enzyme';
 import AirmanRepositoryStub from '../airman/repositories/doubles/AirmanRepositoryStub';
 import Roster from '../roster/Roster';
-import {DefaultFilter, Tracker} from './Tracker';
-import {forIt} from '../utils/testUtils';
+import { DefaultFilter, Tracker } from './Tracker';
+import { forIt } from '../utils/testUtils';
 import Filter from './Filter';
 import UnitRepositoryStub from '../unit/repositories/doubles/UnitRepositoryStub';
 import Sidebar from '../SideBar';
@@ -20,11 +20,11 @@ let subject: ReactWrapper, airmen: AirmanModel[];
 describe('Tracker', () => {
   beforeEach(async () => {
     subject = mount(
-        <Tracker
-            username="Tytus"
-            airmanRepository={airmanRepositoryStub}
-            unitRepository={unitRepositoryStub}
-            plannerService={plannerServiceStub}
+      <Tracker
+        username="Tytus"
+        airmanRepository={airmanRepositoryStub}
+        unitRepository={unitRepositoryStub}
+        plannerService={plannerServiceStub}
       />
     );
     airmen = await airmanRepositoryStub.findAll();

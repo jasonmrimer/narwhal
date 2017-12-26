@@ -74,6 +74,7 @@ dependencies {
             'org.springframework.boot:spring-boot-starter-web-services',
             'org.springframework.boot:spring-boot-starter-security',
             'com.fasterxml.jackson.datatype:jackson-datatype-jsr310',
+            'org.hibernate:hibernate-java8',
             files(genJaxb.classesDir).builtBy(genJaxb)
     )
 

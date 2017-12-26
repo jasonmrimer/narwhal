@@ -34,6 +34,9 @@ Set the following environment variables:
 ### Backend Development Server
 * `./gradlew bootrun`
 
+### Generate client side repository with contract tests
+* `yarn generate-repo {directory} {component name}`
+
 ## Test
 #### Client Tests
 * `cd client && yarn test`

@@ -8,10 +8,14 @@ interface Props {
 }
 
 export const Mission = (props: Props) => {
+  const {atoMissionNumber, startDateTime, endDateTime} = props.mission;
   return (
-    <div className={props.className}>
-      {props.mission.atoMissionNumber}
-    </div>
+    <span className={props.className}>
+      <div>{atoMissionNumber}</div>
+      <div>MSN DATE: {startDateTime.format('DD MMM YY').toUpperCase()}</div>
+      <div>MSN START: {startDateTime.format('HHmm[Z]')}</div>
+      <div>MSN END: {endDateTime ? endDateTime.format('HHmm[Z]') : 'TBD'}</div>
+    </span>
   );
 };
 

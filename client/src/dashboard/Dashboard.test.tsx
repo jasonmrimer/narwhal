@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {Dashboard} from './Dashboard';
-import {mount} from 'enzyme';
+import { Dashboard } from './Dashboard';
+import { mount } from 'enzyme';
 import MissionRepositoryStub from '../mission/repositories/doubles/MissionRepositoryStub';
 import Mission from '../mission/Mission';
-import {forIt} from '../utils/testUtils';
+import { forIt } from '../utils/testUtils';
 import TopBar from '../TopBar';
 
 describe('Dashboard', () => {

@@ -1,4 +1,4 @@
-package mil.af.us.narwhal;
+package mil.af.us.narwhal.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;

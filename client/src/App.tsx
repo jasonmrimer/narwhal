@@ -3,9 +3,9 @@ import Tracker from './tracker/Tracker';
 import ProfileRepository from './profile/repositories/ProfileRepository';
 import AirmanRepository from './airman/repositories/AirmanRepository';
 import UnitRepository from './unit/repositories/UnitRepository';
-import {MomentPlannerService} from './tracker/services/MomentPlannerService';
+import { MomentPlannerService } from './tracker/services/MomentPlannerService';
 import Dashboard from './dashboard/Dashboard';
-import {Route, Switch} from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import MissionRepository from './mission/repositories/MissionRepository';
 
 interface Props {
