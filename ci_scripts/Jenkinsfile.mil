@@ -38,7 +38,7 @@ node ('') {
         
         docker run --name narwhal -v `pwd`:/app -itd  narwhalpivotal/base-image
         
-        docker exec narwhal /bin/bash -c "cd /app && ./all-tests.sh"
+        docker exec narwhal /bin/bash -c "NARWHAL_MIL='true' && cd /app && ./all-tests.sh"
         """
     }
   

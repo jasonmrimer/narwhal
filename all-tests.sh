@@ -21,7 +21,13 @@ yarn build
 
 popd
 
-./gradlew test
+if [ "$NARWHAL_MIL" = "true" ]
+then
+    ./gradlew test -PexcludeTests=**/UnicornMissionClientTest.class
+else
+    ./gradlew test
+fi
+
 
 ./gradlew assemble
 java -jar ./build/libs/narwhal-0.0.1-SNAPSHOT.jar --server.port=9090 &>./tmp/test.log &
