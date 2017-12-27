@@ -1,6 +1,6 @@
 node ('') {
     stage ('Checkout') {
-        git url: 'git@gitlab.gs.mil:narwhal/Narwhal.git', branch: 'master', credentialsId: '358d626c-22cc-4bd9-a0e3-74d99d4dabab', poll: true
+        git url: 'git@gitlab.gs.mil:DCGS_Crew_Manager/Narwhal.git', branch: 'master', credentialsId: '358d626c-22cc-4bd9-a0e3-74d99d4dabab', poll: true
     }
 
     // stage ('SonarQube') {
@@ -38,7 +38,7 @@ node ('') {
         
         docker run --name narwhal -v `pwd`:/app -itd  narwhalpivotal/base-image
         
-        docker exec narwhal /bin/bash -c "NARWHAL_MIL='true' && cd /app && ./all-tests.sh"
+        docker exec narwhal /bin/bash -c "NARWHAL_MIL=true && cd /app && ./all-tests.sh"
         """
     }
   
