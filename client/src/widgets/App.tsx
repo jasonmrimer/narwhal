@@ -1,13 +1,13 @@
 import * as React from 'react';
-import Tracker from './tracker/Tracker';
-import ProfileRepository from './profile/repositories/ProfileRepository';
-import AirmanRepository from './airman/repositories/AirmanRepository';
-import UnitRepository from './unit/repositories/UnitRepository';
-import { MomentPlannerService } from './tracker/services/MomentPlannerService';
-import Dashboard from './dashboard/Dashboard';
+import Tracker from '../tracker/Tracker';
+import ProfileRepository from '../profile/repositories/ProfileRepository';
+import AirmanRepository from '../airman/repositories/AirmanRepository';
+import UnitRepository from '../unit/repositories/UnitRepository';
+import { MomentPlannerService } from '../tracker/services/MomentPlannerService';
+import Dashboard from '../dashboard/Dashboard';
 import { Route, Switch } from 'react-router-dom';
-import MissionRepository from './mission/repositories/MissionRepository';
-import SiteRepository from './site/repositories/SiteRepository';
+import MissionRepository from '../mission/repositories/MissionRepository';
+import SiteRepository from '../site/repositories/SiteRepository';
 
 interface Props {
   profileRepository: ProfileRepository;

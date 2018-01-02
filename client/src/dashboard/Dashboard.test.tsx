@@ -4,8 +4,8 @@ import { mount, ReactWrapper } from 'enzyme';
 import MissionRepositoryStub from '../mission/repositories/doubles/MissionRepositoryStub';
 import Mission from '../mission/Mission';
 import { forIt } from '../utils/testUtils';
-import TopBar from '../TopBar';
-import { Filter } from '../utils/Filter';
+import TopBar from '../widgets/TopBar';
+import { Filter } from '../widgets/Filter';
 import SiteRepositoryStub from '../site/repositories/doubles/SiteRepositoryStub';
 import { MissionModel } from '../mission/models/MissionModel';
 

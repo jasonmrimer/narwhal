@@ -4,12 +4,12 @@ import AirmanRepositoryStub from '../airman/repositories/doubles/AirmanRepositor
 import Roster from '../roster/Roster';
 import { DefaultFilter, Tracker } from './Tracker';
 import { forIt } from '../utils/testUtils';
-import Filter from '../utils/Filter';
+import Filter from '../widgets/Filter';
 import UnitRepositoryStub from '../unit/repositories/doubles/UnitRepositoryStub';
-import Sidebar from '../SideBar';
+import Sidebar from '../widgets/SideBar';
 import AirmanModel from '../airman/models/AirmanModel';
 import PlannerServiceStub from './services/doubles/PlannerServiceStub';
-import TopBar from '../TopBar';
+import TopBar from '../widgets/TopBar';
 
 const airmanRepositoryStub = new AirmanRepositoryStub();
 const unitRepositoryStub = new UnitRepositoryStub();

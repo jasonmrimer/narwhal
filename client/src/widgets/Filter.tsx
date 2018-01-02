@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { ChangeEvent } from 'react';
 import styled from 'styled-components';
-import FilterOption from './models/FilterOption';
+import FilterOptionModel from './models/FilterOptionModel';
 
 interface Props {
-  options: FilterOption[];
-  callback: (option: FilterOption) => void;
+  options: FilterOptionModel[];
+  callback: (option: FilterOptionModel) => void;
   className?: string;
 }
 

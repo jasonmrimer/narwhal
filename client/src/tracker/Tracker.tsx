@@ -1,15 +1,15 @@
 import * as React from 'react';
 import AirmanRepository from '../airman/repositories/AirmanRepository';
 import Roster from '../roster/Roster';
-import Filter from '../utils/Filter';
+import Filter from '../widgets/Filter';
 import UnitRepository from '../unit/repositories/UnitRepository';
 import UnitModel from '../unit/models/UnitModel';
-import FilterOption from '../utils/models/FilterOption';
+import FilterOption from '../widgets/models/FilterOptionModel';
 import styled from 'styled-components';
 import AirmanModel from '../airman/models/AirmanModel';
-import SideBar from '../SideBar';
+import SideBar from '../widgets/SideBar';
 import PlannerService from './services/PlannerService';
-import TopBar from '../TopBar';
+import TopBar from '../widgets/TopBar';
 
 interface Props {
   airmanRepository: AirmanRepository;

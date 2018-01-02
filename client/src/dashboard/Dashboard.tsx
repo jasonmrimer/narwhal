@@ -3,9 +3,9 @@ import MissionRepository from '../mission/repositories/MissionRepository';
 import { MissionModel } from '../mission/models/MissionModel';
 import Mission from '../mission/Mission';
 import styled from 'styled-components';
-import TopBar from '../TopBar';
-import Filter from '../utils/Filter';
-import FilterOption from '../utils/models/FilterOption';
+import TopBar from '../widgets/TopBar';
+import Filter from '../widgets/Filter';
+import FilterOption from '../widgets/models/FilterOptionModel';
 import SiteRepository from '../site/repositories/SiteRepository';
 import SiteModel from '../site/models/SiteModel';
 

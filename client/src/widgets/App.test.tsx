@@ -2,14 +2,14 @@ import { mount, ReactWrapper, shallow, ShallowWrapper } from 'enzyme';
 import * as React from 'react';
 
 import App from './App';
-import ProfileRepositoryStub from './profile/repositories/doubles/ProfileRepositoryStub';
-import AirmanRepositoryStub from './airman/repositories/doubles/AirmanRepositoryStub';
-import UnitRepositoryStub from './unit/repositories/doubles/UnitRepositoryStub';
+import ProfileRepositoryStub from '../profile/repositories/doubles/ProfileRepositoryStub';
+import AirmanRepositoryStub from '../airman/repositories/doubles/AirmanRepositoryStub';
+import UnitRepositoryStub from '../unit/repositories/doubles/UnitRepositoryStub';
 import { MemoryRouter, Route } from 'react-router-dom';
-import MissionRepositoryStub from './mission/repositories/doubles/MissionRepositoryStub';
-import { Tracker } from './tracker/Tracker';
-import Dashboard from './dashboard/Dashboard';
-import SiteRepositoryStub from './site/repositories/doubles/SiteRepositoryStub';
+import MissionRepositoryStub from '../mission/repositories/doubles/MissionRepositoryStub';
+import { Tracker } from '../tracker/Tracker';
+import Dashboard from '../dashboard/Dashboard';
+import SiteRepositoryStub from '../site/repositories/doubles/SiteRepositoryStub';
 
 describe('App', () => {
   const airmanRepository = new AirmanRepositoryStub();

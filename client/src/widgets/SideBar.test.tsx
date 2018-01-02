@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
 import { SideBar } from './SideBar';
-import AirmanModelFactory from './airman/factories/AirmanModelFactory';
+import AirmanModelFactory from '../airman/factories/AirmanModelFactory';
 
 describe('Sidebar', () => {
   it('renders the currency for a selected airman', () => {

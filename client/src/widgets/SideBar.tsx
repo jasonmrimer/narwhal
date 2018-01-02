@@ -1,5 +1,5 @@
 import * as React from 'react';
-import AirmanModel from './airman/models/AirmanModel';
+import AirmanModel from '../airman/models/AirmanModel';
 import styled from 'styled-components';
 
 interface Props {
