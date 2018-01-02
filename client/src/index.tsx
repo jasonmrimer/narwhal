@@ -12,6 +12,7 @@ import WebAirmanRepository from './airman/repositories/web/WebAirmanRepository';
 import WebUnitRepository from './unit/repositories/web/WebUnitRepository';
 import { BrowserRouter } from 'react-router-dom';
 import WebMissionRepository from './mission/repositories/web/WebMissionRepository';
+import WebSiteRepository from './site/repositories/web/WebSiteRepository';
 
 document.body.style.fontFamily = theme.fontFamily;
 document.body.style.color = theme.fontColor;
@@ -25,6 +26,7 @@ ReactDOM.render(
         unitRepository={new WebUnitRepository()}
         profileRepository={new WebProfileRepository()}
         missionRepository={new WebMissionRepository()}
+        siteRepository={new WebSiteRepository()}
       />
     </BrowserRouter>
   </ThemeProvider>,

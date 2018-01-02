@@ -13,7 +13,8 @@ export class MissionSerializer implements Serializer<MissionModel> {
       item.missionId,
       item.atoMissionNumber,
       moment(item.startDateTime, moment.ISO_8601).utc(),
-      item.endDateTime ? moment(item.endDateTime, moment.ISO_8601).utc() : null
+      item.endDateTime ? moment(item.endDateTime, moment.ISO_8601).utc() : null,
+      item.site
     );
   }
 }

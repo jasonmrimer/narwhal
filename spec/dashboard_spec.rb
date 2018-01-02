@@ -11,4 +11,10 @@ describe 'Dashboard page', type: :feature do
   it 'shows a Dashboard' do
     expect(dashboard_page).to have_missions
   end
+
+  it 'filters missions by site' do
+    expect(dashboard_page).to have_site('All Sites')
+    dashboard_page.filter_by(site: 'DGS-1')
+    expect(dashboard_page).to have_site('DGS-1')  
+  end
 end

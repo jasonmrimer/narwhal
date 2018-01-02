@@ -12,4 +12,5 @@ public class MissionMetaData {
   private String atomissionnumber;
   private String startdttime;
   private String enddttime;
-}
+  private String primaryorg;
+ }

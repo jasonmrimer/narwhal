@@ -218,3 +218,5 @@ client/.idea/**/dataSources.local.xml
 client/.idea/**/sqlDataSources.xml
 client/.idea/**/dynamic.xml
 client/.idea/**/uiDesigner.xml
+
+.idea/sonarlint/*

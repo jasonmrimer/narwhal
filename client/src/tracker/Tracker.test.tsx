@@ -4,7 +4,7 @@ import AirmanRepositoryStub from '../airman/repositories/doubles/AirmanRepositor
 import Roster from '../roster/Roster';
 import { DefaultFilter, Tracker } from './Tracker';
 import { forIt } from '../utils/testUtils';
-import Filter from './Filter';
+import Filter from '../utils/Filter';
 import UnitRepositoryStub from '../unit/repositories/doubles/UnitRepositoryStub';
 import Sidebar from '../SideBar';
 import AirmanModel from '../airman/models/AirmanModel';

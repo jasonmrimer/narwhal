@@ -9,23 +9,25 @@ import { MemoryRouter, Route } from 'react-router-dom';
 import MissionRepositoryStub from './mission/repositories/doubles/MissionRepositoryStub';
 import { Tracker } from './tracker/Tracker';
 import Dashboard from './dashboard/Dashboard';
+import SiteRepositoryStub from './site/repositories/doubles/SiteRepositoryStub';
 
 describe('App', () => {
   const airmanRepository = new AirmanRepositoryStub();
   const unitRepository = new UnitRepositoryStub();
   const profileRepository = new ProfileRepositoryStub();
   const missionRepositoryStub = new MissionRepositoryStub();
+  const siteRepositoryStub = new SiteRepositoryStub();
   let subject: ShallowWrapper;
   let mountedSubject: ReactWrapper;
 
   it('renders a route for the dashboard and roster', () => {
     subject = shallow(
-
       <App
         airmanRepository={airmanRepository}
         unitRepository={unitRepository}
         profileRepository={profileRepository}
         missionRepository={missionRepositoryStub}
+        siteRepository={siteRepositoryStub}
       />
     );
     const routes = subject.find(Route);
@@ -38,12 +40,13 @@ describe('App', () => {
   it('renders the Tracker component when the route is /', () => {
     mountedSubject = mount(
       <MemoryRouter initialEntries={['/']}>
-      <App
-        airmanRepository={airmanRepository}
-        unitRepository={unitRepository}
-        profileRepository={profileRepository}
-        missionRepository={missionRepositoryStub}
-      />
+        <App
+          airmanRepository={airmanRepository}
+          unitRepository={unitRepository}
+          profileRepository={profileRepository}
+          missionRepository={missionRepositoryStub}
+          siteRepository={siteRepositoryStub}
+        />
       </MemoryRouter>
     );
 
@@ -58,6 +61,7 @@ describe('App', () => {
           unitRepository={unitRepository}
           profileRepository={profileRepository}
           missionRepository={missionRepositoryStub}
+          siteRepository={siteRepositoryStub}
         />
       </MemoryRouter>
     );

@@ -1,5 +1,7 @@
 package mil.af.us.narwhal.mission;
 
+import mil.af.us.narwhal.site.Site;
+import mil.af.us.narwhal.site.SiteRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
@@ -11,12 +13,14 @@ import java.util.stream.Collectors;
 public class MissionService {
   private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("MM-dd-uuuu'T'HH:mm:ss.sX");
 
-  private MissionRepository repository;
+  private MissionRepository missionRepository;
   private MissionClient client;
+  private SiteRepository siteRepository;
 
-  public MissionService(MissionRepository repository, MissionClient client) {
-    this.repository = repository;
+  public MissionService(MissionRepository repository, MissionClient client, SiteRepository siteRepository) {
+    this.missionRepository = repository;
     this.client = client;
+    this.siteRepository = siteRepository;
   }
 
   public void refreshMissions() {
@@ -24,18 +28,25 @@ public class MissionService {
       .stream()
       .map(this::mapMetaDataToMission)
       .collect(Collectors.toList());
-    repository.save(missions);
+    missionRepository.save(missions);
   }
 
   private Mission mapMetaDataToMission(MissionMetaData metaData) {
     final ZonedDateTime startDateTime = mapStringToZonedDateTime(metaData.getStartdttime());
     final ZonedDateTime endDateTime = mapStringToZonedDateTime(metaData.getEnddttime());
+    final Site site = mapSiteNameToSite(metaData.getPrimaryorg());
+
     return Mission.builder()
       .missionId(metaData.getMissionid())
       .atoMissionNumber(metaData.getAtomissionnumber())
       .startDateTime(startDateTime)
       .endDateTime(endDateTime)
+      .site(site)
       .build();
+  }
+
+  private Site mapSiteNameToSite(String siteName) {
+    return siteName.isEmpty() ? null : siteRepository.findByName(siteName).get(0);
   }
 
   private ZonedDateTime mapStringToZonedDateTime(String dateTime) {

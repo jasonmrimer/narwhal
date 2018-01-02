@@ -1,10 +1,10 @@
 import * as React from 'react';
 import AirmanRepository from '../airman/repositories/AirmanRepository';
 import Roster from '../roster/Roster';
-import Filter from './Filter';
+import Filter from '../utils/Filter';
 import UnitRepository from '../unit/repositories/UnitRepository';
 import UnitModel from '../unit/models/UnitModel';
-import FilterOption from './models/FilterOption';
+import FilterOption from '../utils/models/FilterOption';
 import styled from 'styled-components';
 import AirmanModel from '../airman/models/AirmanModel';
 import SideBar from '../SideBar';

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ChangeEvent } from 'react';
-import FilterOption from './models/FilterOption';
 import styled from 'styled-components';
+import FilterOption from './models/FilterOption';
 
 interface Props {
   options: FilterOption[];

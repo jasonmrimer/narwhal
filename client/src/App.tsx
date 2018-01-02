@@ -7,12 +7,14 @@ import { MomentPlannerService } from './tracker/services/MomentPlannerService';
 import Dashboard from './dashboard/Dashboard';
 import { Route, Switch } from 'react-router-dom';
 import MissionRepository from './mission/repositories/MissionRepository';
+import SiteRepository from './site/repositories/SiteRepository';
 
 interface Props {
   profileRepository: ProfileRepository;
   airmanRepository: AirmanRepository;
   unitRepository: UnitRepository;
   missionRepository: MissionRepository;
+  siteRepository: SiteRepository;
 }
 
 interface State {
@@ -37,7 +39,11 @@ export default class App extends React.Component<Props, State> {
           path="/dashboard"
           render={() => {
           return (
-            <Dashboard username={this.state.username} missionRepository={this.props.missionRepository}/>
+            <Dashboard
+              username={this.state.username}
+              missionRepository={this.props.missionRepository}
+              siteRepository={this.props.siteRepository}
+            />
           );
         }}
         />

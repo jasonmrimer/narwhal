@@ -1,5 +1,7 @@
 package mil.af.us.narwhal.mission;
 
+import mil.af.us.narwhal.site.Site;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.when;
@@ -22,24 +25,48 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(MissionController.class)
 @RunWith(SpringRunner.class)
 public class MissionControllerTest {
-    @Autowired MockMvc mockMvc;
-    @MockBean MissionRepository repository;
+  Site site;
+  List<Mission> missions;
 
-    @Test
-    public void index() throws Exception {
-        when(repository.findAll()).thenReturn(singletonList(
-          new Mission(
-            "mission-id-1",
-            "MISNUM1",
-            ZonedDateTime.of(2017, 12, 12, 9, 0, 0, 0, ZoneId.of("UTC")),
-            ZonedDateTime.of(2017, 12, 12, 15, 0, 0, 0, ZoneId.of("UTC")))
-        ));
+  @Autowired MockMvc mockMvc;
+  @MockBean MissionRepository missionRepository;
 
-        mockMvc.perform(get("/api/missions"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].missionId").value("mission-id-1"))
-                .andExpect(jsonPath("$[0].atoMissionNumber").value("MISNUM1"))
-                .andExpect(jsonPath("$[0].startDateTime").value("2017-12-12T09:00:00Z"))
-                .andExpect(jsonPath("$[0].endDateTime").value("2017-12-12T15:00:00Z"));
-    }
+  @Before
+  public void setUp() {
+    site = new Site(1L, "Site-1");
+    missions = singletonList(
+      new Mission(
+        "mission-id-1",
+        "MISNUM1",
+        ZonedDateTime.of(2017, 12, 12, 9, 0, 0, 0, ZoneId.of("UTC")),
+        ZonedDateTime.of(2017, 12, 12, 15, 0, 0, 0, ZoneId.of("UTC")),
+        site)
+    );
+  }
+
+  @Test
+  public void index() throws Exception {
+    when(missionRepository.findAll()).thenReturn(missions);
+
+    mockMvc.perform(get("/api/missions"))
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$[0].missionId").value("mission-id-1"))
+      .andExpect(jsonPath("$[0].atoMissionNumber").value("MISNUM1"))
+      .andExpect(jsonPath("$[0].startDateTime").value("2017-12-12T09:00:00Z"))
+      .andExpect(jsonPath("$[0].endDateTime").value("2017-12-12T15:00:00Z"))
+      .andExpect(jsonPath("$[0].site").value(new Site(1L, "Site-1")));
+  }
+
+  @Test
+  public void indexBySiteId() throws Exception {
+    when(missionRepository.findBySiteId(site.getId())).thenReturn(missions);
+
+    mockMvc.perform(get(MissionController.URI).param("site", site.getId().toString()))
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$[0].missionId").value("mission-id-1"))
+      .andExpect(jsonPath("$[0].atoMissionNumber").value("MISNUM1"))
+      .andExpect(jsonPath("$[0].startDateTime").value("2017-12-12T09:00:00Z"))
+      .andExpect(jsonPath("$[0].endDateTime").value("2017-12-12T15:00:00Z"))
+      .andExpect(jsonPath("$[0].site").value(new Site(1L, "Site-1")));
+  }
 }
