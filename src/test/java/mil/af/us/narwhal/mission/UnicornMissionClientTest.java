@@ -23,21 +23,21 @@ public class UnicornMissionClientTest {
         "HGZ3W09",
         "12-12-2017T04:29:00.0Z",
         "12-12-2017T04:29:00.0Z",
-        "zTom1"
+        "DGS-1"
         ),
       new MissionMetaData(
         "929e9a89-b8a1-493d-a69c-e0836e719f78",
         "HGZ3W08",
         "12-12-2017T09:00:00.0Z",
         "12-12-2017T12:00:00.0Z",
-        "XBOW"
+        "DGS-2"
       ),
       new MissionMetaData(
         "a991c6f9-a5ed-4d76-9719-7231e8da2c98",
         "HGZ3W98",
         "12-21-2017T14:04:00.0Z",
-        "",
-        "XBOW"
+        "12-21-2017T16:00:00.0Z",
+        "DGS-1"
       )
     );
   }

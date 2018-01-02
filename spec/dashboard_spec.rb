@@ -9,12 +9,12 @@ describe 'Dashboard page', type: :feature do
   }
 
   it 'shows a Dashboard' do
-    expect(dashboard_page).to have_missions
+    dashboard_page.assert_shows_missions
   end
 
   it 'filters missions by site' do
-    expect(dashboard_page).to have_site('All Sites')
+    dashboard_page.assert_shows_site('All Sites')
     dashboard_page.filter_by(site: 'DGS-1')
-    expect(dashboard_page).to have_site('DGS-1')  
+    dashboard_page.assert_shows_site('DGS-1')
   end
 end

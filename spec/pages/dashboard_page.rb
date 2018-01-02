@@ -1,21 +1,23 @@
 class DashboardPage
     include Capybara::DSL
-    @@number_of_missions = 3
-    
+    include RSpec::Matchers
+
     def initialize 
         visit '/dashboard'
+        expect(page).to have_css('.mission-card')
+        @@number_of_missions = page.find_all('.mission-card').count
     end
 
-    def has_missions?
-        page.has_css?('.mission-card', :count => @@number_of_missions)
+    def assert_shows_missions
+        expect(page).to have_css('.mission-card', count: @@number_of_missions)
     end
 
-    def has_site?(site)
+    def assert_shows_site(site)
         case site
         when 'All Sites'
-            has_missions?
+            assert_shows_missions
         when site
-            page.find_all('.mission-card').count < @@number_of_missions
+            expect(page).to have_css('.mission-card', maximum: @@number_of_missions - 1)
         end
     end
     

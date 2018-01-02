@@ -1,0 +1,1 @@
+ALTER TABLE site ADD CONSTRAINT unique_site_name UNIQUE (name);

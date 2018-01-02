@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class MissionService {
-  private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("MM-dd-uuuu'T'HH:mm:ss.sX");
+  private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("MM-dd-uuuu'T'HH:mm:ss.0X");
 
   private MissionRepository missionRepository;
   private MissionClient client;
@@ -34,7 +34,7 @@ public class MissionService {
   private Mission mapMetaDataToMission(MissionMetaData metaData) {
     final ZonedDateTime startDateTime = mapStringToZonedDateTime(metaData.getStartdttime());
     final ZonedDateTime endDateTime = mapStringToZonedDateTime(metaData.getEnddttime());
-    final Site site = mapSiteNameToSite(metaData.getPrimaryorg());
+    final Site site = siteRepository.findOneByName(metaData.getPrimaryorg());
 
     return Mission.builder()
       .missionId(metaData.getMissionid())
@@ -43,10 +43,6 @@ public class MissionService {
       .endDateTime(endDateTime)
       .site(site)
       .build();
-  }
-
-  private Site mapSiteNameToSite(String siteName) {
-    return siteName.isEmpty() ? null : siteRepository.findByName(siteName).get(0);
   }
 
   private ZonedDateTime mapStringToZonedDateTime(String dateTime) {
