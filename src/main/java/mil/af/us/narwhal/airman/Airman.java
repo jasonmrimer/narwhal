@@ -25,12 +25,12 @@ public class Airman {
 
   private String lastName;
 
-  @OneToMany(mappedBy = "airman_id")
+  @OneToMany(mappedBy = "airmanId")
   @JsonManagedReference
   @JsonProperty("qualifications")
   private List<AirmanQualification> airmanQualifications;
 
-  @OneToMany(mappedBy = "airman_id")
+  @OneToMany(mappedBy = "airmanId")
   @JsonManagedReference
   @JsonProperty("certifications")
   private List<AirmanCertification> certifications;

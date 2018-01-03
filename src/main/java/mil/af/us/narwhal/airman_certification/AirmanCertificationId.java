@@ -4,21 +4,20 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class AirmanCertificationId implements Serializable {
-  private long airman_id;
-  private long certification_id;
+  private long airmanId;
+  private long certificationId;
 
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     AirmanCertificationId that = (AirmanCertificationId) o;
-    return airman_id == that.airman_id &&
-      certification_id == that.certification_id;
+    return airmanId == that.airmanId &&
+      certificationId == that.certificationId;
   }
 
   @Override
   public int hashCode() {
-
-    return Objects.hash(airman_id, certification_id);
+    return Objects.hash(airmanId, certificationId);
   }
 }

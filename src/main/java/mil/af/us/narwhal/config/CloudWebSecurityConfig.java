@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.User;
 
 import java.util.Collections;
-import java.util.Map;
 
 @Profile("cloud")
 @Configuration
@@ -29,11 +28,6 @@ public class CloudWebSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Bean
   PrincipalExtractor principalExtractor() {
-    return new PrincipalExtractor() {
-      @Override
-      public Object extractPrincipal(Map<String, Object> map) {
-        return new User((String) map.get("user_name"), "", Collections.emptyList());
-      }
-    };
+    return map -> new User((String) map.get("user_name"), "", Collections.emptyList());
   }
 }

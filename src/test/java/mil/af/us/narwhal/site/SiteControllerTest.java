@@ -26,13 +26,13 @@ public class SiteControllerTest {
 
   @Test
   public void indexTest() throws Exception {
-    Site site1 = new Site(1L, "Site 1");
-    Site site2 = new Site(2L, "Site 2");
+    final Site site1 = new Site(1L, "Site 1");
+    final Site site2 = new Site(2L, "Site 2");
 
     when(siteRepository.findAll()).thenReturn(asList(site1, site2));
 
-    mockMvc.perform((get(SiteController.URI)))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.size()", equalTo(2)));
+    mockMvc.perform(get(SiteController.URI))
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$.size()", equalTo(2)));
   }
 }

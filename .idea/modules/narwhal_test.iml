@@ -119,4 +119,8 @@
     <orderEntry type="library" name="Gradle: org.ow2.asm:asm:5.0.3" level="project" />
   </component>
   <component name="TestModuleProperties" production-module="narwhal_main" />
+  <component name="sonarModuleSettings">
+    <option name="localAnalysisScripName" value="&lt;PROJECT&gt;" />
+    <option name="serverName" value="&lt;PROJECT&gt;" />
+  </component>
 </module>

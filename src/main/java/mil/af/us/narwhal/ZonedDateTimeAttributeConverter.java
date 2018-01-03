@@ -11,11 +11,11 @@ public class ZonedDateTimeAttributeConverter implements AttributeConverter<Zoned
 
   @Override
   public Timestamp convertToDatabaseColumn(ZonedDateTime zonedDateTime) {
-    return (zonedDateTime == null ? null : Timestamp.valueOf(zonedDateTime.toLocalDateTime()));
+    return zonedDateTime == null ? null : Timestamp.valueOf(zonedDateTime.toLocalDateTime());
   }
 
   @Override
   public ZonedDateTime convertToEntityAttribute(Timestamp sqlTimestamp) {
-    return (sqlTimestamp == null ? null : sqlTimestamp.toLocalDateTime().atZone(ZoneId.of("UTC")));
+    return sqlTimestamp == null ? null : sqlTimestamp.toLocalDateTime().atZone(ZoneId.of("UTC"));
   }
 }

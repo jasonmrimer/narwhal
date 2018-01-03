@@ -19,11 +19,13 @@ import java.util.Date;
 public class AirmanQualification {
   @Id
   @JsonIgnore
-  private long airman_id;
+  @Column(name="airman_id")
+  private long airmanId;
 
   @Id
   @JsonIgnore
-  private long qualification_id;
+  @Column(name="qualification_id")
+  private long qualificationId;
 
   @Column(name = "expiration_date")
   private Date expirationDate;

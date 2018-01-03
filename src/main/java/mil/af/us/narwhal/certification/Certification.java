@@ -13,7 +13,6 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Certification {
-
   @Id
   @GeneratedValue
   private Long id;
