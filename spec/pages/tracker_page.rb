@@ -1,29 +1,51 @@
 class TrackerPage
   include Capybara::DSL
+  include RSpec::Matchers
 
-  @@number_of_airmen = 3
-  @@expected_columns = %w(NAME, QUALIFICATIONS, CERTIFICATION, SUNMONTUEWEDTHUFRISAT)
+  @@expected_columns = %w(NAME QUALIFICATION CERTIFICATION SUN MON TUE WED THU FRI SAT)
   
-  def has_a_roster?
-    within_table('Roster') do
-      @@expected_columns.each {|column_name| page.has_text?(column_name)}
-    end
+  def initialize
+    expect(page).to have_content("All Unit")
+    @@all_airmen = page.find_all('tbody tr').count
   end
 
-  def has_airmen_in_roster?
-    within_table('Roster') do
-      page.has_selector?('td', count: @@number_of_airmen * @@expected_columns.count)
-    end
+  def assert_shows_tracker
+    has_a_roster
+    has_airmen_in_roster
+    has_no_side_panel
   end
 
-  def has_unit?(unit)
+  def assert_filters_by_unit
+    has_unit('All Units')
+    filter_by(unit: '30 IS')
+    has_unit('30 IS')
+  end
+
+  def assert_shows_currency
+    click_on_airman('LastName1')
+    has_currency
+  end
+
+  private
+  def has_a_roster
+    @@expected_columns.each {|column_name| expect(page).to have_content(column_name) }
+  end
+
+  def has_no_side_panel
+    # TODO fail test
+    expect(page).to have_selector('.side-panel')
+  end
+
+  def has_airmen_in_roster
+    expect(page).to have_css('tbody tr', minimum: 1)
+  end
+
+  def has_unit(unit)
     case unit
     when 'All Units'
-      has_airmen_in_roster?
+      has_airmen_in_roster
     when unit
-      within_table('Roster') do
-        return page.find_all('tbody tr').count < @@number_of_airmen
-      end
+      expect(page).to have_css('tbody tr', :maximum => @@all_airmen - 1)
     end
   end
 
@@ -35,14 +57,14 @@ class TrackerPage
     page.find(:xpath,"//*[text()='#{name}']").click
   end
 
-  def has_currency?
+  def has_currency
     within '.side-panel' do
-      page.has_content?('Currency')
-      page.has_content?('MMS')
-      page.has_content?('25 JAN 18')
-      page.has_content?('Laser Vision')
-      page.has_content?('18 Apr 18')
-      page.has_content?('LastName1, FirstName1')
+      expect(page).to have_content('Currency')
+      expect(page).to have_content('MMS')
+      expect(page).to have_content('25 Jan 18')
+      expect(page).to have_content('Laser Vision')
+      expect(page).to have_content('18 Apr 18')
+      expect(page).to have_content('LastName1, FirstName1')
     end
   end
 end
