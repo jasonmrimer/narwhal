@@ -1,4 +1,4 @@
-package mil.af.us.narwhal.airman_certification;
+package mil.af.us.narwhal.airman;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -9,8 +9,14 @@ public class AirmanCertificationId implements Serializable {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) {
+      return true;
+    }
+
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
+
     AirmanCertificationId that = (AirmanCertificationId) o;
     return airmanId == that.airmanId &&
       certificationId == that.certificationId;

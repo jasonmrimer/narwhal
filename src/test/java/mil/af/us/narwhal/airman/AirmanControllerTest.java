@@ -1,7 +1,5 @@
 package mil.af.us.narwhal.airman;
 
-import mil.af.us.narwhal.airman_certification.AirmanCertification;
-import mil.af.us.narwhal.airman_qualification.AirmanQualification;
 import mil.af.us.narwhal.certification.Certification;
 import mil.af.us.narwhal.qualification.Qualification;
 import mil.af.us.narwhal.unit.Unit;
@@ -21,7 +19,6 @@ import java.util.List;
 
 import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.content;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
