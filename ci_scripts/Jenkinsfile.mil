@@ -1,4 +1,4 @@
-node ('') {
+    node ('') {
     stage ('Checkout') {
         git url: 'git@gitlab.gs.mil:Narwhal/narwhal.git', branch: 'master', credentialsId: '358d626c-22cc-4bd9-a0e3-74d99d4dabab', poll: true
     }
@@ -11,7 +11,7 @@ node ('') {
             // update env var JOB_NAME to replace all non word chars to underscores      
             def jobname = JOB_NAME.replaceAll(/[^a-zA-Z0-9\_]/, "_")      
             def jobshortname = JOB_NAME.replaceAll(/^.*\//, "")      
-            sh "JOB_NAME=${jobname} && JOB_SHORT_NAME=${jobshortname} && set && ${scannerHome}/bin/sonar-scanner -Dsonar.host.url=${sonarHost} -Dsonar.projectName=narwhal -Dsonar.projectKey=narwhal:narwhal"  
+            sh "JOB_NAME=${jobname} && JOB_SHORT_NAME=${jobshortname} && set && ${scannerHome}/bin/sonar-scanner -Dsonar.host.url=${sonarHost} -Dsonar.projectName=Narwhal -Dsonar.projectKey=narwhal:narwhal"  
         }   
     }
     
