@@ -26,6 +26,9 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+    maven {
+        url 'https://nexus.gs.mil/content/repositories/central'
+    }
 }
 
 task genJaxb {
