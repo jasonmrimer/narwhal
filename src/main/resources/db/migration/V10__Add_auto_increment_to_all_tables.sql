@@ -1,0 +1,9 @@
+-- ALTER TABLE join_airman_certification DROP FOREIGN KEY airman_id;
+SET foreign_key_checks = 0;
+ALTER TABLE airman MODIFY COLUMN id INT AUTO_INCREMENT;
+ALTER TABLE certification MODIFY COLUMN id INT AUTO_INCREMENT;
+ALTER TABLE qualification MODIFY COLUMN id INT AUTO_INCREMENT;
+ALTER TABLE unit MODIFY COLUMN id INT AUTO_INCREMENT;
+ALTER TABLE site MODIFY COLUMN id INT AUTO_INCREMENT;
+SET foreign_key_checks = 1;
+-- ALTER TABLE join_airman_certification FOREIGN KEY (airman_id) REFERENCES airman(id);
