@@ -1,13 +1,20 @@
 import * as React from 'react';
-import { shallow } from 'enzyme';
-import { SideBar } from './SideBar';
+import { shallow, ShallowWrapper } from 'enzyme';
+import { SidePanel } from './SidePanel';
 import AirmanModelFactory from '../airman/factories/AirmanModelFactory';
+import AirmanModel from '../airman/models/AirmanModel';
 
-describe('Sidebar', () => {
+const clickSpy = jest.fn();
+let airman: AirmanModel;
+let subject: ShallowWrapper;
+
+describe('SidePanel', () => {
+  beforeEach(() => {
+    airman = AirmanModelFactory.build();
+    subject = shallow(<SidePanel airman={airman} closeCallback={clickSpy}/>);
+  });
+
   it('renders the currency for a selected airman', () => {
-    const airman = AirmanModelFactory.build();
-    const subject = shallow(<SideBar airman={airman}/>);
-
     expect(subject.text()).toContain(`${airman.lastName}, ${airman.firstName}`);
     airman.qualifications.forEach((qualification) => {
       expect(subject.text()).toContain(qualification.acronym);
@@ -18,5 +25,10 @@ describe('Sidebar', () => {
       expect(subject.text()).toContain(certification.title);
       expect(subject.text()).toContain(certification.expirationDate.format('DD MMM YY'));
     });
+  });
+
+  it('calls the click callback', () => {
+    subject.find('button').simulate('click');
+    expect(clickSpy).toHaveBeenCalled();
   });
 });

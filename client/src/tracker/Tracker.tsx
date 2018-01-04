@@ -7,7 +7,7 @@ import UnitModel from '../unit/models/UnitModel';
 import FilterOption from '../widgets/models/FilterOptionModel';
 import styled from 'styled-components';
 import AirmanModel from '../airman/models/AirmanModel';
-import SideBar from '../widgets/SideBar';
+import SideBar from '../widgets/SidePanel';
 import PlannerService from './services/PlannerService';
 import TopBar from '../widgets/TopBar';
 
@@ -24,6 +24,7 @@ interface State {
   units: UnitModel[];
   selectedUnitId: number;
   selectedAirman: AirmanModel;
+  showSidePanel: boolean;
 }
 
 export const DefaultFilter = {
@@ -37,6 +38,7 @@ export class Tracker extends React.Component<Props, State> {
     units: [],
     selectedUnitId: DefaultFilter.value,
     selectedAirman: AirmanModel.empty(),
+    showSidePanel: false,
   };
 
   async componentDidMount() {
@@ -56,6 +58,11 @@ export class Tracker extends React.Component<Props, State> {
 
   handleSelectAirman = (airman: AirmanModel) => {
     this.setState({selectedAirman: airman});
+    this.setState({showSidePanel: true});
+  }
+
+  handleSidePanelClose = () => {
+    this.setState({showSidePanel: false});
   }
 
   render() {
@@ -80,7 +87,11 @@ export class Tracker extends React.Component<Props, State> {
                 />
               </div>
             </div>
-            <SideBar airman={this.state.selectedAirman}/>
+            {
+              this.state.showSidePanel
+                ? <SideBar airman={this.state.selectedAirman} closeCallback={this.handleSidePanelClose}/>
+                : null
+            }
           </div>
         )
       ]

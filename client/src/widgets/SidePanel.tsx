@@ -1,18 +1,27 @@
 import * as React from 'react';
 import AirmanModel from '../airman/models/AirmanModel';
 import styled from 'styled-components';
+import CloseIcon from '../icons/CloseIcon';
 
 interface Props {
   airman: AirmanModel;
+  closeCallback: () => void;
   className?: string;
 }
 
-export const SideBar = (props: Props) => {
+export const SidePanel = (props: Props) => {
   const {airman, className} = props;
 
   return (
     <div className={`${className} side-panel`}>
-      <h2>{props.airman.lastName}, {props.airman.firstName}</h2>
+      <div className={'header'}>
+        <button onClick={props.closeCallback}>
+          <CloseIcon/>
+        </button>
+        <h2>
+          {props.airman.lastName}, {props.airman.firstName}
+        </h2>
+      </div>
       <span>Currency</span>
       {airman.qualifications.map((qualification, index) => {
         return (
@@ -35,7 +44,7 @@ export const SideBar = (props: Props) => {
   );
 };
 
-export default styled(SideBar)`
+export default styled(SidePanel)`
   background-color: ${props => props.theme.lighter};
   width: 25%;
   padding: 1rem;
@@ -43,6 +52,15 @@ export default styled(SideBar)`
   right: 0;
   top: 0;
   height: 100%;
+  
+  .header{
+  justify-content: baseline;
+  }
+  
+  button {
+    background-color: ${props => props.theme.lighter};
+    border: none;
+  }
   
   h2 {
     font-size: 1.2rem;

@@ -32,8 +32,7 @@ class TrackerPage
   end
 
   def has_no_side_panel
-    # TODO fail test
-    expect(page).to have_selector('.side-panel')
+    expect(page).not_to have_selector('.side-panel')
   end
 
   def has_airmen_in_roster
