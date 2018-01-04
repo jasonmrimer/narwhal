@@ -50,7 +50,6 @@ export default styled(SidePanel)`
   padding: 1rem;
   position: absolute;
   right: 0;
-  top: 0;
   height: 100%;
   
   .header{
