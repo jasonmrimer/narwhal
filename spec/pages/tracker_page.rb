@@ -3,8 +3,10 @@ class TrackerPage
   include RSpec::Matchers
 
   @@expected_columns = %w(NAME QUALIFICATION CERTIFICATION SUN MON TUE WED THU FRI SAT)
+  @@expected_availability_days = %w(SUN MON TUE WED THU FRI SAT)
   
   def initialize
+    page.driver.browser.manage.window.resize_to(4096, 4096)
     expect(page).to have_content("All Unit")
     @@all_airmen = page.find_all('tbody tr').count
   end
@@ -27,12 +29,21 @@ class TrackerPage
     has_filter('SUPER CREW')
   end
 
+  def assert_shows_availability
+    click_on_airman('LastName1')
+    has_availability
+  end
+
   def assert_shows_currency
     click_on_airman('LastName1')
+    page.within('.side-panel') do
+      find('a', text: 'CURRENCY').click
+    end
     has_currency
   end
 
   private
+
   def has_a_roster
     @@expected_columns.each {|column_name| expect(page).to have_content(column_name) }
   end
@@ -69,13 +80,22 @@ class TrackerPage
   end
 
   def has_currency
-    within '.side-panel' do
-      expect(page).to have_content('Currency')
+    page.within('.side-panel') do
+      expect(page).to have_content('LastName1, FirstName1')
+      expect(page).to have_content('CURRENCY')
       expect(page).to have_content('MMS')
       expect(page).to have_content('25 Jan 18')
       expect(page).to have_content('Laser Vision')
-      expect(page).to have_content('18 Apr 18')
+      expect(page).to have_content('18 Jan 18')
+    end
+  end
+
+  def has_availability
+    page.within('.side-panel') do
       expect(page).to have_content('LastName1, FirstName1')
+      expect(page).to have_content('AVAILABILITY')
+      expect(page).to have_content('No Events Scheduled', count: 7)
+      @@expected_availability_days.each {|day_name| expect(page).to have_content(day_name)}
     end
   end
 end

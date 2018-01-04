@@ -7,7 +7,7 @@ import UnitModel from '../unit/models/UnitModel';
 import FilterOption from '../widgets/models/FilterOptionModel';
 import styled from 'styled-components';
 import AirmanModel from '../airman/models/AirmanModel';
-import SideBar from '../widgets/SidePanel';
+import SideBar from './SidePanel';
 import PlannerService from './services/PlannerService';
 import TopBar from '../widgets/TopBar';
 import CrewRepository from '../crew/repositories/CrewRepository';
@@ -120,7 +120,11 @@ export class Tracker extends React.Component<Props, State> {
             </div>
             {
               this.state.showSidePanel
-                ? <SideBar airman={this.state.selectedAirman} closeCallback={this.handleSidePanelClose}/>
+                ? <SideBar
+                  airman={this.state.selectedAirman}
+                  closeCallback={this.handleSidePanelClose}
+                  week={this.props.plannerService.getCurrentWeek()}
+                />
                 : null
             }
           </div>

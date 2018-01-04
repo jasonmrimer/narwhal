@@ -14,6 +14,10 @@ describe 'Tracker page', type: :feature do
   it 'can filter the Roster by unit' do
     tracker_page.assert_filters_by_unit
   end
+  
+  it "shows an airman's availability in the sidebar" do
+    tracker_page.assert_shows_availability
+  end
 
   it 'can filter the Roster by crew' do
     tracker_page.assert_filters_by_crew

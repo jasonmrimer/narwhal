@@ -5,7 +5,7 @@ import Roster from '../roster/Roster';
 import { Tracker } from './Tracker';
 import { forIt } from '../utils/testUtils';
 import UnitRepositoryStub from '../unit/repositories/doubles/UnitRepositoryStub';
-import SidePanel from '../widgets/SidePanel';
+import SidePanel from './SidePanel';
 import AirmanModel from '../airman/models/AirmanModel';
 import PlannerServiceStub from './services/doubles/PlannerServiceStub';
 import TopBar from '../widgets/TopBar';
@@ -53,7 +53,7 @@ describe('Tracker', () => {
       expect(subject.find(SidePanel).exists()).toBeFalsy();
     });
 
-    it('shows airman details', () => {
+    it('populates the side panel with the selected airman', () => {
       subject.find(Roster).find('tbody tr').at(0).simulate('click');
       expect(subject.find(SidePanel).prop('airman')).toEqual(airmen[0]);
     });
@@ -63,6 +63,7 @@ describe('Tracker', () => {
       subject.find(SidePanel).find('button').simulate('click');
       expect(subject.find(SidePanel).exists()).toBeFalsy();
     });
+
   });
 
   describe('filtering', () => {

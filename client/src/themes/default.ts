@@ -6,5 +6,6 @@ export default Object.freeze({
   light: '#272727',
   dark: '#222',
   darkest: '#000',
-  yellow: '#E9A90F'
+  yellow: '#E9A90F',
+  graySteel: '#ADADAD'
 });
