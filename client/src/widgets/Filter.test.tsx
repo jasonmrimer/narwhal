@@ -14,7 +14,7 @@ let subject: ShallowWrapper, callbackSpy: Mock;
 describe('Filter', () => {
   beforeEach(() => {
     callbackSpy = jest.fn();
-    subject = shallow(<Filter options={expectedOptions} callback={callbackSpy}/>);
+    subject = shallow(<Filter options={expectedOptions} callback={callbackSpy} id="fakeid" />);
   });
 
   it('renders a select element with the provided options', () => {
@@ -33,5 +33,9 @@ describe('Filter', () => {
   it('calls a callback when an option is selected', () => {
     subject.find('select').simulate('change', {target: {value: 2}});
     expect(callbackSpy).toBeCalledWith(expectedOptions[1]);
+  });
+
+  it('takes an id as a prop', () => {
+    expect( subject.prop('id')).toBe('fakeid');
   });
 });

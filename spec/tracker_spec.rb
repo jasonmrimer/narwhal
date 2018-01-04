@@ -15,6 +15,10 @@ describe 'Tracker page', type: :feature do
     tracker_page.assert_filters_by_unit
   end
 
+  it 'can filter the Roster by crew' do
+    tracker_page.assert_filters_by_crew
+  end
+
   it "shows an airman's currency in the sidebar" do
     tracker_page.assert_shows_currency
   end

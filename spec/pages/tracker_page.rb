@@ -16,9 +16,15 @@ class TrackerPage
   end
 
   def assert_filters_by_unit
-    has_unit('All Units')
-    filter_by(unit: '30 IS')
-    has_unit('30 IS')
+    has_filter('All Units')
+    filter_by_unit(unit: '30 IS')
+    has_filter('30 IS')
+  end
+
+  def assert_filters_by_crew
+    has_filter('All Crew')
+    filter_by_crew(crew: 'SUPER CREW')
+    has_filter('SUPER CREW')
   end
 
   def assert_shows_currency
@@ -39,17 +45,23 @@ class TrackerPage
     expect(page).to have_css('tbody tr', minimum: 1)
   end
 
-  def has_unit(unit)
+  def has_filter(unit)
     case unit
     when 'All Units'
+      has_airmen_in_roster
+    when 'All Crew'
       has_airmen_in_roster
     when unit
       expect(page).to have_css('tbody tr', :maximum => @@all_airmen - 1)
     end
   end
 
-  def filter_by(unit: 'All Units')
-    page.find(:select).find(:option, text: unit).select_option
+  def filter_by_unit(unit: 'All Units')
+    page.find("#unit-filter").find(:option, text: unit).select_option
+  end
+
+  def filter_by_crew(crew: 'All Crew')
+    page.find("#crew-filter").find(:option, text: crew).select_option
   end
 
   def click_on_airman(name)

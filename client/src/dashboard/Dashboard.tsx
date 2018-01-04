@@ -8,6 +8,7 @@ import Filter from '../widgets/Filter';
 import FilterOption from '../widgets/models/FilterOptionModel';
 import SiteRepository from '../site/repositories/SiteRepository';
 import SiteModel from '../site/models/SiteModel';
+import { default as createDefaultOption, DefaultValue } from '../utils/createDefaultOption';
 
 interface Props {
   missionRepository: MissionRepository;
@@ -22,17 +23,18 @@ interface State {
   selectedSiteId: number;
 }
 
-export const DefaultFilter = {
-  value: -1,
-  text: 'All Sites'
-};
-
 export class Dashboard extends React.Component<Props, State> {
-  state = {
-    missions: [],
-    sites: [],
-    selectedSiteId: DefaultFilter.value
-  };
+  private defaultSiteOption: DefaultValue;
+
+  constructor(props: Props) {
+    super(props);
+    this.defaultSiteOption = createDefaultOption('All Sites');
+    this.state = {
+      missions: [],
+      sites: [],
+      selectedSiteId: this.defaultSiteOption.value
+    };
+  }
 
   async componentDidMount() {
     const missions = await this.props.missionRepository.findAll();
@@ -42,7 +44,7 @@ export class Dashboard extends React.Component<Props, State> {
   }
 
   setSelectedSiteId = async (option: FilterOption) => {
-    const updatedDashboard = (option.value === DefaultFilter.value) ?
+    const updatedDashboard = (option.value === this.defaultSiteOption.value) ?
       await this.props.missionRepository.findAll() :
       await this.props.missionRepository.findBySite(option.value);
 
@@ -59,7 +61,11 @@ export class Dashboard extends React.Component<Props, State> {
         (
           <div key="1" className={`${this.props.className} filter`}>
             <div className="filter">
-              <Filter callback={this.setSelectedSiteId} options={[DefaultFilter, ...options]}/>
+              <Filter
+                id="site-filter"
+                callback={this.setSelectedSiteId}
+                options={[this.defaultSiteOption, ...options]}
+              />
             </div>
           </div>),
         (

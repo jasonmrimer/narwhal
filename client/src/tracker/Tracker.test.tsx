@@ -2,19 +2,21 @@ import * as React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import AirmanRepositoryStub from '../airman/repositories/doubles/AirmanRepositoryStub';
 import Roster from '../roster/Roster';
-import { DefaultFilter, Tracker } from './Tracker';
+import { Tracker } from './Tracker';
 import { forIt } from '../utils/testUtils';
-import Filter from '../widgets/Filter';
 import UnitRepositoryStub from '../unit/repositories/doubles/UnitRepositoryStub';
 import SidePanel from '../widgets/SidePanel';
 import AirmanModel from '../airman/models/AirmanModel';
 import PlannerServiceStub from './services/doubles/PlannerServiceStub';
 import TopBar from '../widgets/TopBar';
+import { Filter } from '../widgets/Filter';
+import CrewRepositoryStub from '../crew/repositories/doubles/CrewRepositoryStub';
+import createDefaultOption from '../utils/createDefaultOption';
 
 const airmanRepositoryStub = new AirmanRepositoryStub();
 const unitRepositoryStub = new UnitRepositoryStub();
 const plannerServiceStub = new PlannerServiceStub();
-
+const crewRepository = new CrewRepositoryStub();
 let subject: ReactWrapper, airmen: AirmanModel[];
 
 describe('Tracker', () => {
@@ -25,6 +27,7 @@ describe('Tracker', () => {
         airmanRepository={airmanRepositoryStub}
         unitRepository={unitRepositoryStub}
         plannerService={plannerServiceStub}
+        crewRepository={crewRepository}
       />
     );
     airmen = await airmanRepositoryStub.findAll();
@@ -32,7 +35,7 @@ describe('Tracker', () => {
     subject.update();
   });
 
-  it('renders a Roster with all units', async () => {
+  it('renders a Roster with all units and all crew', async () => {
     expect(subject.find(Roster).prop('airmen')).toEqual(airmen);
   });
 
@@ -62,29 +65,51 @@ describe('Tracker', () => {
     });
   });
 
-  describe('filtering', () => {
-    const unitId = 1;
+  it('renders the TopBar with a username and pageTitle', async () => {
+    expect(subject.find(TopBar).prop('username')).toBe('Tytus');
+    expect(subject.find(TopBar).prop('pageTitle')).toBe('AVAILABILITY ROSTER');
+  });
 
+  describe('filtering', () => {
+    describe('filer by unit', () => {const unitId = 1;
     let filter: ReactWrapper;
+
     beforeEach(async () => {
-      filter = subject.find(Filter);
+      filter = subject.find(Filter).at(0);
       filter.simulate('change', {target: {value: unitId}});
       await forIt();
       subject.update();
-
     });
 
-    it('can filter a roster by unit', async () => {
-      const filteredRoster = await airmanRepositoryStub.findByUnit(unitId);
-      expect(subject.find(Roster).prop('airmen')).toEqual(filteredRoster);
-    });
+      it('can filter a roster by unit', async () => {
+        const filteredRoster = await airmanRepositoryStub.findByUnit(unitId);
+        expect(subject.find(Roster).prop('airmen')).toEqual(filteredRoster);
+      });
 
-    it('can filter a roster by all units', async () => {
-      filter.simulate('change', {target: {value: DefaultFilter.value}});
+      it('can filter a roster by all units', async () => {
+        filter.simulate('change', {target: {value: createDefaultOption('').value}});
+        await forIt();
+        subject.update();
+
+        expect(subject.find(Roster).prop('airmen')).toEqual(airmen);
+      });
+    });
+  });
+
+  describe('filter by crew', () => {
+    const crewId = 1;
+    let filter: ReactWrapper;
+
+    beforeEach(async () => {
+      filter = subject.find(Filter).at(1);
+      filter.simulate('change', {target: {value: crewId}});
       await forIt();
       subject.update();
+    });
 
-      expect(subject.find(Roster).prop('airmen')).toEqual(airmen);
+    it('can filter a roster by crew', async () => {
+      const filteredRoster = await airmanRepositoryStub.findByCrew(crewId);
+      expect(subject.find(Roster).prop('airmen')).toEqual(filteredRoster);
     });
   });
 });

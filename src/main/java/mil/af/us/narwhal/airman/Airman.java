@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mil.af.us.narwhal.crew.Crew;
 import mil.af.us.narwhal.unit.Unit;
 
 import javax.persistence.*;
@@ -35,4 +36,8 @@ public class Airman {
 
   @ManyToOne
   private Unit unit;
+
+  @ManyToMany
+  @JoinTable(name = "join_airman_crew", joinColumns = @JoinColumn(name = "airman_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "crew_id", referencedColumnName = "id"))
+  private List<Crew> crew;
 }

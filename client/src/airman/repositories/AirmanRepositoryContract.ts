@@ -35,4 +35,19 @@ export default function airmenRepositoryContract(subject: AirmanRepository) {
       });
     });
   });
+
+  describe('findByCrew', () => {
+    it('returns airmen filtered by crew', async () => {
+      const airmen = await subject.findAll();
+      expect(airmen).toBeDefined();
+
+      const filteredAirmen = await subject.findByCrew(1);
+
+      expect(filteredAirmen.length).toBeLessThan(airmen.length);
+      filteredAirmen.forEach(airman => {
+        const crewIds = airman.crews.map(crew => crew.id);
+        expect(crewIds.indexOf(1)).toBeGreaterThan(-1);
+      });
+    });
+  });
 }

@@ -10,11 +10,15 @@ import AirmanModel from '../airman/models/AirmanModel';
 import SideBar from '../widgets/SidePanel';
 import PlannerService from './services/PlannerService';
 import TopBar from '../widgets/TopBar';
+import CrewRepository from '../crew/repositories/CrewRepository';
+import CrewModel from '../crew/model/CrewModel';
+import createDefaultOption, { DefaultValue } from '../utils/createDefaultOption';
 
 interface Props {
   airmanRepository: AirmanRepository;
   unitRepository: UnitRepository;
   plannerService: PlannerService;
+  crewRepository: CrewRepository;
   username: string;
   className?: string;
 }
@@ -22,38 +26,49 @@ interface Props {
 interface State {
   airmen: AirmanModel[];
   units: UnitModel[];
-  selectedUnitId: number;
   selectedAirman: AirmanModel;
+  crews: CrewModel[];
   showSidePanel: boolean;
 }
 
-export const DefaultFilter = {
-  value: -1,
-  text: 'All Units'
-};
-
 export class Tracker extends React.Component<Props, State> {
-  state = {
-    airmen: [],
-    units: [],
-    selectedUnitId: DefaultFilter.value,
-    selectedAirman: AirmanModel.empty(),
-    showSidePanel: false,
-  };
+  private defaultUnitOption: DefaultValue;
+  private defaultCrewOption: DefaultValue;
+
+  constructor(props: Props) {
+    super(props);
+    this.defaultUnitOption = createDefaultOption('All Units');
+    this.defaultCrewOption = createDefaultOption('All Crews');
+    this.state = {
+      airmen: [],
+      units: [],
+      crews: [],
+      selectedAirman: AirmanModel.empty(),
+      showSidePanel: false,
+    };
+  }
 
   async componentDidMount() {
     const airmen = await this.props.airmanRepository.findAll();
     const units = await this.props.unitRepository.findAll();
-
-    this.setState({airmen, units});
+    const crews = await this.props.crewRepository.findAll();
+    this.setState({airmen, units, crews});
   }
 
   setSelectedUnitId = async (option: FilterOption) => {
-    const updatedRoster = (option.value === DefaultFilter.value) ?
+    const updatedRoster = (option.value === this.defaultUnitOption.value) ?
       await this.props.airmanRepository.findAll() :
       await this.props.airmanRepository.findByUnit(option.value);
 
-    this.setState({selectedUnitId: option.value, airmen: updatedRoster});
+    this.setState({airmen: updatedRoster});
+  }
+
+  setSelectedCrewId = async (option: FilterOption) => {
+    const updatedRoster = (option.value === this.defaultCrewOption.value) ?
+      await this.props.airmanRepository.findAll() :
+      await this.props.airmanRepository.findByCrew(option.value);
+
+    this.setState({airmen: updatedRoster});
   }
 
   handleSelectAirman = (airman: AirmanModel) => {
@@ -69,13 +84,23 @@ export class Tracker extends React.Component<Props, State> {
     const options = this.state.units.map((unit: UnitModel) => {
       return {value: unit.id, text: unit.name};
     });
+
+    const crews = this.state.crews.map((crew: CrewModel) => {
+      return {value: crew.id, text: crew.name};
+    });
+
     return (
       [
         <TopBar key="0" username={this.props.username} pageTitle="AVAILABILITY ROSTER"/>,
         (
           <div key="1" className={this.props.className}>
             <div className="main">
-              <Filter callback={this.setSelectedUnitId} options={[DefaultFilter, ...options]}/>
+              <Filter
+                callback={this.setSelectedUnitId}
+                options={[this.defaultUnitOption, ...options]}
+                id="unit-filter"
+              />
+              <Filter callback={this.setSelectedCrewId} options={[this.defaultCrewOption, ...crews]} id="crew-filter"/>
               <div style={{display: 'flex'}}>
                 <span style={{marginLeft: 'auto', fontSize: '0.75rem'}}>White = Uncommitted, Blue = Committed</span>
               </div>

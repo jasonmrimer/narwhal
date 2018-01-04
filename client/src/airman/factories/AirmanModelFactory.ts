@@ -1,4 +1,5 @@
 import * as moment from 'moment';
+import CrewModel from '../../crew/model/CrewModel';
 
 const airmanOne = {
   firstName: 'First1',
@@ -13,7 +14,8 @@ const airmanOne = {
     {id: 1, title: 'Laser Vision', expirationDate: moment('20180126')},
     {id: 2, title: 'Flight', expirationDate: moment('20180126')},
     {id: 3, title: 'Super Speed', expirationDate: moment('20180126')},
-  ]
+  ],
+  crews: [new CrewModel(1, 'SUPER CREW')],
 };
 
 const airmanTwo = {
@@ -24,7 +26,8 @@ const airmanTwo = {
     {id: 5, acronym: 'GRE', title: 'Geospatial Reports Editor', expirationDate: moment('20180525')},
   ],
   unit: {id: 1, name: '1'},
-  certifications: [{id: 1, title: 'Laser Vision', expirationDate: moment('20180126')}]
+  certifications: [{id: 1, title: 'Laser Vision', expirationDate: moment('20180126')}],
+  crews: [new CrewModel(1, 'SUPER CREW')],
 };
 
 const airmanThree = {
@@ -34,10 +37,12 @@ const airmanThree = {
     {id: 4, acronym: 'IMS', title: 'Imagery Mission Supervisor', expirationDate: moment('20180625')}
   ],
   unit: {id: 2, name: '2'},
-  certifications: [{id: 1, title: 'Laser Vision', expirationDate: moment('20180126')}]
+  certifications: [{id: 1, title: 'Laser Vision', expirationDate: moment('20180126')}],
+  crews: [new CrewModel(2, 'NOT SUPER CREW')],
 };
 
-const airmen = [airmanOne, airmanTwo, airmanThree];
+/* tslint:disable:no-any*/
+const airmen: any[] = [airmanOne, airmanTwo, airmanThree];
 
 export default class AirmanModelFactory {
   static buildList() {
@@ -45,10 +50,28 @@ export default class AirmanModelFactory {
   }
 
   static buildForUnit(unitId: number) {
-    return airmen.filter((airman) => airman.unit.id === unitId);
+    return airmen.filter((airman) => {
+      if (airman.unit) {
+        return airman.unit.id === unitId;
+      } else {
+        return false;
+      }
+    });
   }
 
-  static  build() {
+  static build() {
     return airmanOne;
+  }
+
+  static buildForCrew(crewId: number) {
+    /*tslint:disable:align*/
+    return airmen.reduce((prev, airman) => {
+      const crewArray = airman.crews.filter((crew: any) => crew.id === crewId);
+      if (crewArray.length > 0) {
+        return [...prev, airman];
+      } else {
+        return prev;
+      }
+    }, []);
   }
 }

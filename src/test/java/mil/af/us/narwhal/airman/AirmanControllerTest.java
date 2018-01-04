@@ -1,6 +1,7 @@
 package mil.af.us.narwhal.airman;
 
 import mil.af.us.narwhal.certification.Certification;
+import mil.af.us.narwhal.crew.Crew;
 import mil.af.us.narwhal.qualification.Qualification;
 import mil.af.us.narwhal.unit.Unit;
 import org.hamcrest.Matchers;
@@ -27,46 +28,59 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(AirmanController.class)
 @RunWith(SpringRunner.class)
 public class AirmanControllerTest {
-    Unit unit;
-    List<Airman> airmen;
+  Unit unit;
+  List<Airman> airmen;
+  Crew crew;
 
-    @Autowired
-    MockMvc mockMvc;
-    @MockBean
-    AirmanRepository airmanRepository;
+  @Autowired
+  MockMvc mockMvc;
+  @MockBean
+  AirmanRepository airmanRepository;
 
-    @Before
-    public void setUp() {
-        unit = new Unit(1L, "1");
-        Qualification qualification1 = new Qualification(1L, "Qual1", "qualification1");
-        final AirmanQualification airQual = new AirmanQualification(1L, qualification1.getId(), new Date(), qualification1);
+  @Before
+  public void setUp() {
+    unit = new Unit(1L, "1");
+    Qualification qualification1 = new Qualification(1L, "Qual1", "qualification1");
+    final AirmanQualification airQual = new AirmanQualification(1L, qualification1.getId(), new Date(), qualification1);
 
-        Certification certification1 = new Certification(1L, "Certification 1");
-        final AirmanCertification airCert = new AirmanCertification(1L, certification1.getId(), new Date(), certification1);
+    Certification certification1 = new Certification(1L, "Certification 1");
+    final AirmanCertification airCert = new AirmanCertification(1L, certification1.getId(), new Date(), certification1);
 
-        airmen = singletonList(
-                new Airman(1L, "FirstOne", "LastOne", singletonList(airQual), singletonList(airCert), unit)
-        );
-    }
+    crew = new Crew(1L, "SUPER CREW");
+    airmen = singletonList(
+      new Airman(1L, "FirstOne", "LastOne", singletonList(airQual), singletonList(airCert), unit, singletonList(crew))
+    );
+  }
 
-    @Test
-    public void index() throws Exception {
-        when(airmanRepository.findAll()).thenReturn(airmen);
+  @Test
+  public void index() throws Exception {
+    when(airmanRepository.findAll()).thenReturn(airmen);
 
-        mockMvc.perform(get(AirmanController.URI))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", Matchers.equalTo(1)))
-                .andExpect(jsonPath("$[0].id").value(airmen.get(0).getId()));
-    }
+    mockMvc.perform(get(AirmanController.URI))
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$.size()", Matchers.equalTo(1)))
+      .andExpect(jsonPath("$[0].id").value(airmen.get(0).getId()))
+      .andExpect(jsonPath("$[0].crew").isNotEmpty());
+  }
 
 
-    @Test
-    public void indexByUnitId() throws Exception {
-        when(airmanRepository.findByUnitId(unit.getId())).thenReturn(airmen);
+  @Test
+  public void indexByUnitId() throws Exception {
+    when(airmanRepository.findByUnitId(unit.getId())).thenReturn(airmen);
 
-        mockMvc.perform(get(AirmanController.URI).param("unit", unit.getId().toString()))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.size()", Matchers.equalTo(1)))
-                .andExpect(jsonPath("$[0].id").value(airmen.get(0).getId()));
-    }
+    mockMvc.perform(get(AirmanController.URI).param("unit", unit.getId().toString()))
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$.size()", Matchers.equalTo(1)))
+      .andExpect(jsonPath("$[0].id").value(airmen.get(0).getId()));
+  }
+
+  @Test
+  public void indexByCrewId() throws Exception {
+    when(airmanRepository.findByCrewId(crew.getId())).thenReturn(airmen);
+
+    mockMvc.perform(get(AirmanController.URI).param("crew", crew.getId().toString()))
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$.size()", Matchers.equalTo(1)))
+      .andExpect(jsonPath("$[0].id").value(airmen.get(0).getId()));
+  }
 }
