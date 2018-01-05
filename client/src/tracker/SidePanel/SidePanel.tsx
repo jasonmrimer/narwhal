@@ -1,7 +1,7 @@
 import * as React from 'react';
-import AirmanModel from '../airman/models/AirmanModel';
+import AirmanModel from '../../airman/models/AirmanModel';
 import styled from 'styled-components';
-import CloseIcon from '../icons/CloseIcon';
+import CloseIcon from '../../icons/CloseIcon';
 import { Moment } from 'moment';
 import Availability from './Availability';
 import Currency from './Currency';

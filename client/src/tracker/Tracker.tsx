@@ -7,7 +7,7 @@ import UnitModel from '../unit/models/UnitModel';
 import FilterOption from '../widgets/models/FilterOptionModel';
 import styled from 'styled-components';
 import AirmanModel from '../airman/models/AirmanModel';
-import SideBar from './SidePanel';
+import SideBar from './SidePanel/SidePanel';
 import PlannerService from './services/PlannerService';
 import TopBar from '../widgets/TopBar';
 import CrewRepository from '../crew/repositories/CrewRepository';

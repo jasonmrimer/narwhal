@@ -5,7 +5,7 @@ import Roster from '../roster/Roster';
 import { Tracker } from './Tracker';
 import { forIt } from '../utils/testUtils';
 import UnitRepositoryStub from '../unit/repositories/doubles/UnitRepositoryStub';
-import SidePanel from './SidePanel';
+import SidePanel from './SidePanel/SidePanel';
 import AirmanModel from '../airman/models/AirmanModel';
 import PlannerServiceStub from './services/doubles/PlannerServiceStub';
 import TopBar from '../widgets/TopBar';

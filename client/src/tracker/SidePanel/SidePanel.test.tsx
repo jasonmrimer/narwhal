@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { SidePanel } from './SidePanel';
-import AirmanModelFactory from '../airman/factories/AirmanModelFactory';
-import AirmanModel from '../airman/models/AirmanModel';
-import PlannerServiceStub from './services/doubles/PlannerServiceStub';
+import AirmanModelFactory from '../../airman/factories/AirmanModelFactory';
+import AirmanModel from '../../airman/models/AirmanModel';
+import PlannerServiceStub from '../services/doubles/PlannerServiceStub';
 import Currency from './Currency';
 import Availability from './Availability';
 import Tab from './Tab';

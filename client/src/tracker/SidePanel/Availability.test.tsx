@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
-import PlannerServiceStub from './services/doubles/PlannerServiceStub';
+import PlannerServiceStub from '../services/doubles/PlannerServiceStub';
 import { Availability } from './Availability';
 
 describe('Availability', () => {

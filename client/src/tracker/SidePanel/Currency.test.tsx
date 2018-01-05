@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
-import AirmanModelFactory from '../airman/factories/AirmanModelFactory';
+import AirmanModelFactory from '../../airman/factories/AirmanModelFactory';
 import { Currency } from './Currency';
 
 describe('Currency', () => {
