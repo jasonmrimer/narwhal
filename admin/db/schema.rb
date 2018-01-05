@@ -12,22 +12,19 @@
 
 ActiveRecord::Schema.define(version: 20180102221647) do
 
-  create_table "airman", id: :integer, default: nil, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "airman", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "first_name", limit: 64, null: false
     t.string "last_name", limit: 64, null: false
     t.integer "unit_id"
     t.index ["unit_id"], name: "unit_id"
   end
 
-  create_table "airmen", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string "firstName"
-    t.string "lastName"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+  create_table "certification", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "title", limit: 64, null: false
   end
 
-  create_table "certification", id: :integer, default: nil, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string "title", limit: 64, null: false
+  create_table "crew", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "name", limit: 64, null: false
   end
 
   create_table "join_airman_certification", primary_key: ["airman_id", "certification_id"], force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -35,6 +32,12 @@ ActiveRecord::Schema.define(version: 20180102221647) do
     t.integer "certification_id", null: false
     t.date "expiration_date"
     t.index ["certification_id"], name: "certification_id"
+  end
+
+  create_table "join_airman_crew", primary_key: ["airman_id", "crew_id"], force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer "airman_id", null: false
+    t.integer "crew_id", null: false
+    t.index ["crew_id"], name: "crew_id"
   end
 
   create_table "join_airman_qualification", primary_key: ["airman_id", "qualification_id"], force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -52,7 +55,7 @@ ActiveRecord::Schema.define(version: 20180102221647) do
     t.index ["site_id"], name: "site_id"
   end
 
-  create_table "qualification", id: :integer, default: nil, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "qualification", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "acronym", limit: 64, null: false
     t.string "title", limit: 64, null: false
   end
@@ -73,18 +76,20 @@ ActiveRecord::Schema.define(version: 20180102221647) do
     t.index ["version_rank"], name: "schema_version_vr_idx"
   end
 
-  create_table "site", id: :integer, default: nil, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "site", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name", limit: 64, null: false
     t.index ["name"], name: "unique_site_name", unique: true
   end
 
-  create_table "unit", id: :integer, default: nil, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "unit", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name", limit: 64, null: false
   end
 
   add_foreign_key "airman", "unit", name: "airman_ibfk_1"
   add_foreign_key "join_airman_certification", "airman", name: "join_airman_certification_ibfk_1"
   add_foreign_key "join_airman_certification", "certification", name: "join_airman_certification_ibfk_2"
+  add_foreign_key "join_airman_crew", "airman", name: "join_airman_crew_ibfk_1"
+  add_foreign_key "join_airman_crew", "crew", name: "join_airman_crew_ibfk_2"
   add_foreign_key "join_airman_qualification", "airman", name: "join_airman_qualification_ibfk_1"
   add_foreign_key "join_airman_qualification", "qualification", name: "join_airman_qualification_ibfk_2"
   add_foreign_key "mission", "site", name: "mission_ibfk_1"

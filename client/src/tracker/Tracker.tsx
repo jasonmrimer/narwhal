@@ -96,11 +96,17 @@ export class Tracker extends React.Component<Props, State> {
           <div key="1" className={this.props.className}>
             <div className="main">
               <Filter
+                id="unit-filter"
+                className="filter"
                 callback={this.setSelectedUnitId}
                 options={[this.defaultUnitOption, ...options]}
-                id="unit-filter"
               />
-              <Filter callback={this.setSelectedCrewId} options={[this.defaultCrewOption, ...crews]} id="crew-filter"/>
+              <Filter
+                id="crew-filter"
+                className="filter"
+                callback={this.setSelectedCrewId}
+                options={[this.defaultCrewOption, ...crews]}
+              />
               <div style={{display: 'flex'}}>
                 <span style={{marginLeft: 'auto', fontSize: '0.75rem'}}>White = Uncommitted, Blue = Committed</span>
               </div>
@@ -132,6 +138,10 @@ export default styled(Tracker)`
   
   .main {
     width: 75%;
+    margin-right: 2rem;
+  }
+
+  .filter {
     margin-right: 2rem;
   }
 `;

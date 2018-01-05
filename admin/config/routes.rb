@@ -6,7 +6,7 @@ Rails.application.routes.draw do
     resources :qualifications
     resources :sites
     resources :units
-
+    resources :crews
   end
   root to: "admin/airmen#index"
 
