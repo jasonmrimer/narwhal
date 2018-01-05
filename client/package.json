@@ -18,7 +18,8 @@
     "contracts": "react-scripts-ts test --env=jsdom --testMatch='<rootDir>/src/**/?(*.)contract.ts?(x)'",
     "eject": "react-scripts-ts eject",
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
-    "generate-repo": "./scripts/generate_repository.sh $1 $2"
+    "generate-repo": "./scripts/generate_repository.sh $1 $2",
+    "test:debug": "react-scripts-ts --inspect-brk test --runInBand --env=jsdom"
   },
   "devDependencies": {
     "@types/enzyme": "^3.1.4",

@@ -4,7 +4,7 @@ import { Filter } from './Filter';
 import Mock = jest.Mock;
 
 const expectedOptions = [
-  {text: 'A-text', value: 1},
+  {text: 'A-text', value: -1},
   {text: 'B-text', value: 2},
   {text: 'C-text', value: 3}
 ];
@@ -14,10 +14,17 @@ let subject: ShallowWrapper, callbackSpy: Mock;
 describe('Filter', () => {
   beforeEach(() => {
     callbackSpy = jest.fn();
-    subject = shallow(<Filter options={expectedOptions} callback={callbackSpy} id="fakeid" />);
+    subject = shallow(
+      <Filter
+        id="filter"
+        defaultOption={expectedOptions[0]}
+        options={expectedOptions.slice(1)}
+        callback={callbackSpy}
+      />
+    );
   });
 
-  it('renders a select element with the provided options', () => {
+  it('renders a select element with the default option and provided options', () => {
     const select = subject.find('select');
     expect(select.exists()).toBeTruthy();
 
@@ -30,12 +37,13 @@ describe('Filter', () => {
     });
   });
 
+  it('calls a callback when a the default option is selected', () => {
+    subject.find('select').simulate('change', {target: {value: expectedOptions[0].value}});
+    expect(callbackSpy).toBeCalledWith(expectedOptions[0]);
+  });
+
   it('calls a callback when an option is selected', () => {
     subject.find('select').simulate('change', {target: {value: 2}});
     expect(callbackSpy).toBeCalledWith(expectedOptions[1]);
-  });
-
-  it('takes an id as a prop', () => {
-    expect( subject.prop('id')).toBe('fakeid');
   });
 });

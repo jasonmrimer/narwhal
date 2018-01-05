@@ -13,6 +13,6 @@ export default class AirmanModel {
               public qualifications: QualificationModel[],
               public certifications: CertificationModel[],
               public crews: CrewModel[],
-              public unit?: UnitModel) {
+              public unit: UnitModel | null = null) {
   }
 }

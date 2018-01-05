@@ -1,4 +1,5 @@
-export default interface UnitModel {
-  id: number;
-  name: string;
+export default class UnitModel {
+  constructor(public id: number,
+              public name: string) {
+  }
 }

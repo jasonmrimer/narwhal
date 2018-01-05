@@ -24,11 +24,10 @@ interface State {
 }
 
 export class Dashboard extends React.Component<Props, State> {
-  private defaultSiteOption: DefaultValue;
+  readonly defaultSiteOption: DefaultValue = createDefaultOption('All Sites');
 
   constructor(props: Props) {
     super(props);
-    this.defaultSiteOption = createDefaultOption('All Sites');
     this.state = {
       missions: [],
       sites: [],
@@ -63,8 +62,9 @@ export class Dashboard extends React.Component<Props, State> {
             <div className="filter">
               <Filter
                 id="site-filter"
+                defaultOption={this.defaultSiteOption}
+                options={options}
                 callback={this.setSelectedSiteId}
-                options={[this.defaultSiteOption, ...options]}
               />
             </div>
           </div>),

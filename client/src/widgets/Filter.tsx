@@ -4,21 +4,29 @@ import styled from 'styled-components';
 import FilterOptionModel from './models/FilterOptionModel';
 
 interface Props {
+  id: string;
+  defaultOption: FilterOptionModel;
   options: FilterOptionModel[];
   callback: (option: FilterOptionModel) => void;
-  id: string;
   className?: string;
 }
 
-const handleChange = (event: ChangeEvent<HTMLSelectElement>, {callback, options}: Props) => {
+const handleChange = (event: ChangeEvent<HTMLSelectElement>, {callback, defaultOption, options}: Props) => {
   const {value} = event.target;
-  callback(options.find((opt) => opt.value === Number(value))!);
+  callback([defaultOption, ...options].find((opt) => opt.value === Number(value))!);
 };
 
 export const Filter = (props: Props) => {
-  const options = props.options.map((opt, i) => <option key={i} value={opt.value}>{opt.text}</option>);
+  const options = [props.defaultOption, ...props.options].map((opt, i) => {
+    return <option key={i} value={opt.value}>{opt.text}</option>;
+  });
+
   return (
-    <select id={props.id} onChange={(event) => handleChange(event, props)} className={props.className} name="test">
+    <select
+      id={props.id}
+      className={props.className}
+      onChange={(event) => handleChange(event, props)}
+    >
       {options}
     </select>
   );

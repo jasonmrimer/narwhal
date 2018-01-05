@@ -8,6 +8,6 @@ export class CrewSerializer implements Serializer<CrewModel> {
 
   /* tslint:disable:no-any*/
   deserialize(item: any): CrewModel {
-    return new CrewModel(item.id, item.name);
+    return new CrewModel(item.id, item.unitId, item.name);
   }
 }

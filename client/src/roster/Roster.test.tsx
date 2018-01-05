@@ -14,7 +14,7 @@ let selectAirmanMock: (airman: AirmanModel) => void;
 describe('Roster', () => {
   beforeEach(async () => {
     selectAirmanMock = jest.fn();
-    airmen = AirmanModelFactory.buildList();
+    airmen = AirmanModelFactory.buildList(3);
     const week = new PlannerServiceStub().getCurrentWeek();
     table = new Table(shallow(
       <Roster
@@ -36,7 +36,6 @@ describe('Roster', () => {
 
   it('render airmen last names', async () => {
     const expectedLastNames = airmen.map(airman => airman.lastName);
-
     expect(table.getRowCount()).toEqual(airmen.length);
     expect(table.getTextForRowAndCol(0, 'NAME')).toBe(expectedLastNames[0]);
     expect(table.getTextForRowAndCol(1, 'NAME')).toBe(expectedLastNames[1]);
@@ -44,12 +43,12 @@ describe('Roster', () => {
   });
 
   it('renders airmen qualification', () => {
-    const expectedQualifications = 'MMS / I / E';
+    const expectedQualifications = airmen[0].qualifications.map(qual => qual.acronym).join(' / ');
     expect(table.getTextForRowAndCol(0, 'QUALIFICATION')).toBe(expectedQualifications);
   });
 
   it('renders airmen certification', () => {
-    const expectedCertification = 'Laser Vision / Flight / Super Speed';
+    const expectedCertification = airmen[0].certifications.map(cert => cert.title).join(' / ');
     expect(table.getTextForRowAndCol(0, 'CERTIFICATION')).toBe(expectedCertification);
   });
 

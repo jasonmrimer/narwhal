@@ -9,9 +9,9 @@ import SidePanel from '../widgets/SidePanel';
 import AirmanModel from '../airman/models/AirmanModel';
 import PlannerServiceStub from './services/doubles/PlannerServiceStub';
 import TopBar from '../widgets/TopBar';
-import { Filter } from '../widgets/Filter';
 import CrewRepositoryStub from '../crew/repositories/doubles/CrewRepositoryStub';
 import createDefaultOption from '../utils/createDefaultOption';
+import { Filter } from '../widgets/Filter';
 
 const airmanRepositoryStub = new AirmanRepositoryStub();
 const unitRepositoryStub = new UnitRepositoryStub();
@@ -65,51 +65,58 @@ describe('Tracker', () => {
     });
   });
 
-  it('renders the TopBar with a username and pageTitle', async () => {
-    expect(subject.find(TopBar).prop('username')).toBe('Tytus');
-    expect(subject.find(TopBar).prop('pageTitle')).toBe('AVAILABILITY ROSTER');
-  });
-
   describe('filtering', () => {
-    describe('filer by unit', () => {const unitId = 1;
+    const defaultFilterValue = createDefaultOption('').value;
+    const unitId = 1;
+    const crewId = 1;
     let filter: ReactWrapper;
 
-    beforeEach(async () => {
-      filter = subject.find(Filter).at(0);
-      filter.simulate('change', {target: {value: unitId}});
-      await forIt();
-      subject.update();
-    });
+    describe('by unit', () => {
+      beforeEach(async () => {
+        filter = findFilterById(subject, 'unit-filter');
+        await selectOption(subject, filter, unitId);
+      });
 
-      it('can filter a roster by unit', async () => {
+      xit('limits the crew filter options', () => {
+        // TODO : implement feature
+      });
+
+      it('shows the airmen for the selected unit', async () => {
         const filteredRoster = await airmanRepositoryStub.findByUnit(unitId);
         expect(subject.find(Roster).prop('airmen')).toEqual(filteredRoster);
       });
 
-      it('can filter a roster by all units', async () => {
-        filter.simulate('change', {target: {value: createDefaultOption('').value}});
-        await forIt();
-        subject.update();
+      it('shows all airmen for the default filter', async () => {
+        await selectOption(subject, filter, defaultFilterValue);
+        expect(subject.find(Roster).prop('airmen')).toEqual(airmen);
+      });
+    });
 
+    describe('by crew', () => {
+      beforeEach(async () => {
+        filter = findFilterById(subject, 'crew-filter');
+        await selectOption(subject, filter, crewId);
+      });
+
+      it('shows airmen for the selected crew', async () => {
+        const filteredRoster = await airmanRepositoryStub.findByCrew(crewId);
+        expect(subject.find(Roster).prop('airmen')).toEqual(filteredRoster);
+      });
+
+      it('shows all airmen for the default filter', async () => {
+        await selectOption(subject, filter, defaultFilterValue);
         expect(subject.find(Roster).prop('airmen')).toEqual(airmen);
       });
     });
   });
-
-  describe('filter by crew', () => {
-    const crewId = 1;
-    let filter: ReactWrapper;
-
-    beforeEach(async () => {
-      filter = subject.find(Filter).at(1);
-      filter.simulate('change', {target: {value: crewId}});
-      await forIt();
-      subject.update();
-    });
-
-    it('can filter a roster by crew', async () => {
-      const filteredRoster = await airmanRepositoryStub.findByCrew(crewId);
-      expect(subject.find(Roster).prop('airmen')).toEqual(filteredRoster);
-    });
-  });
 });
+
+function findFilterById(wrapper: any, id: string) {
+  return subject.find(Filter).filterWhere(elem => elem.prop('id') === id);
+}
+
+async function selectOption(wrapper: any, filter: any, value: number) {
+  filter.simulate('change', {target: {value: value}});
+  await forIt();
+  wrapper.update();
+}

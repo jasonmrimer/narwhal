@@ -32,13 +32,11 @@ interface State {
 }
 
 export class Tracker extends React.Component<Props, State> {
-  private defaultUnitOption: DefaultValue;
-  private defaultCrewOption: DefaultValue;
+  readonly defaultUnitOption: DefaultValue = createDefaultOption('All Units');
+  readonly defaultCrewOption: DefaultValue = createDefaultOption('All Crews');
 
   constructor(props: Props) {
     super(props);
-    this.defaultUnitOption = createDefaultOption('All Units');
-    this.defaultCrewOption = createDefaultOption('All Crews');
     this.state = {
       airmen: [],
       units: [],
@@ -81,11 +79,11 @@ export class Tracker extends React.Component<Props, State> {
   }
 
   render() {
-    const options = this.state.units.map((unit: UnitModel) => {
+    const unitOptions = this.state.units.map((unit: UnitModel) => {
       return {value: unit.id, text: unit.name};
     });
 
-    const crews = this.state.crews.map((crew: CrewModel) => {
+    const crewOptions = this.state.crews.map((crew: CrewModel) => {
       return {value: crew.id, text: crew.name};
     });
 
@@ -98,14 +96,16 @@ export class Tracker extends React.Component<Props, State> {
               <Filter
                 id="unit-filter"
                 className="filter"
+                defaultOption={this.defaultUnitOption}
+                options={unitOptions}
                 callback={this.setSelectedUnitId}
-                options={[this.defaultUnitOption, ...options]}
               />
               <Filter
                 id="crew-filter"
                 className="filter"
+                defaultOption={this.defaultCrewOption}
+                options={crewOptions}
                 callback={this.setSelectedCrewId}
-                options={[this.defaultCrewOption, ...crews]}
               />
               <div style={{display: 'flex'}}>
                 <span style={{marginLeft: 'auto', fontSize: '0.75rem'}}>White = Uncommitted, Blue = Committed</span>
