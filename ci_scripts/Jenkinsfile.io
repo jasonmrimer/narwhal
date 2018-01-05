@@ -3,6 +3,20 @@ node ('') {
         git url: 'git@gitlab.devops.geointservices.io:rimerjm/narwhal.git', branch: 'master', credentialsId: '358d626c-22cc-4bd9-a0e3-74d99d4dabab', poll: true
     }
 
+    stage ('Test and Build') {
+        sh """
+        if [[ \"\$(docker images -q narwhalpivotal/base-image 2> /dev/null)\" == \"\" ]]; then
+            docker pull narwhalpivotal/base-image
+        fi
+        
+        docker stop narwhal || true && docker rm narwhal || true
+        
+        docker run --name narwhal -v `pwd`:/app -itd  narwhalpivotal/base-image
+        
+        docker exec narwhal /bin/bash -c "cd /app && ./all-tests.sh"
+        """
+    }
+
     stage ('SonarQube') {
         def sonarXmx = '512m'
         def sonarHost = 'https://sonar.geointservices.io'
@@ -26,20 +40,6 @@ node ('') {
         sh "/bin/curl -v --insecure -H 'Accept: application/json' -X POST --form file=@fortifyResults-${BUILD_NUMBER}.fpr\
             https://threadfix.devops.geointservices.io/rest/applications/175/upload?apiKey=${THREADFIX_VARIABLE}"
         }
-    }
-
-    stage ('Test and Build') {
-        sh """
-        if [[ \"\$(docker images -q narwhalpivotal/base-image 2> /dev/null)\" == \"\" ]]; then
-            docker pull narwhalpivotal/base-image
-        fi
-        
-        docker stop narwhal || true && docker rm narwhal || true
-        
-        docker run --name narwhal -v `pwd`:/app -itd  narwhalpivotal/base-image
-        
-        docker exec narwhal /bin/bash -c "cd /app && ./all-tests.sh"
-        """
     }
   
     stage ('Deploy') {
