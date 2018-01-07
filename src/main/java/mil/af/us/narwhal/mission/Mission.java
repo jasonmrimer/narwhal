@@ -9,7 +9,7 @@ import mil.af.us.narwhal.site.Site;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import java.time.ZonedDateTime;
+import java.time.Instant;
 
 @Entity
 @Data
@@ -21,8 +21,8 @@ public class Mission {
   private String missionId;
 
   private String atoMissionNumber;
-  private ZonedDateTime startDateTime;
-  private ZonedDateTime endDateTime;
+  private Instant startDateTime;
+  private Instant endDateTime;
 
   @ManyToOne
   private Site site;
@@ -30,7 +30,7 @@ public class Mission {
   public Mission(
     String missionId,
     String atoMissionNumber,
-    ZonedDateTime startDateTime,
+    Instant startDateTime,
     Site site) {
       this.missionId = missionId;
       this.atoMissionNumber = atoMissionNumber;

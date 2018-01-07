@@ -1,17 +1,49 @@
 package mil.af.us.narwhal.mission;
 
+import generated.Results;
+import org.springframework.xml.transform.StringSource;
+import unicorn.GetMissionMetaDataResponse;
+
+import javax.xml.bind.JAXB;
 import java.util.List;
 
-import static java.util.Arrays.asList;
-
 public class MissionClientStub implements MissionClient {
+  //language=XML
+  public static final String RESPONSE = "<GetMissionMetaDataResponse xmlns=\"Unicorn\">\n" +
+    "  <GetMissionMetaDataResult>\n" +
+    "    <results xmlns=\"\">\n" +
+    "      <missionMetaData>\n" +
+    "        <missionid>70497d73-a7e4-4000-879a-feaf9099bfa1</missionid>\n" +
+    "        <description>U2 over</description>\n" +
+    "        <missionStatus>CLOSED</missionStatus>\n" +
+    "        <classification>Unclassified</classification>\n" +
+    "        <distrocontrol>FOUO</distrocontrol>\n" +
+    "        <atomissionnumber>HGZ3W09</atomissionnumber>\n" +
+    "        <atoday>aaa</atoday>\n" +
+    "        <startdttime>12-12-2017T04:29:00.0Z</startdttime>\n" +
+    "        <enddttime>12-12-2017T04:29:00.0Z</enddttime>\n" +
+    "        <primaryorg>DGS-1</primaryorg>\n" +
+    "        <callsign>Spaceman</callsign>\n" +
+    "        <platform>U2</platform>\n" +
+    "        <tailnumber>NW1</tailnumber>\n" +
+    "        <missionstatickmllink>\n" +
+    "          http://codweb1.leidoshost.com/UNICORN.NET/webservices/googleearth.asmx/getkmzformissionbyato?ato=HGZ3W09&amp;streaming=false\n" +
+    "        </missionstatickmllink>\n" +
+    "        <missiondynamickmllink>\n" +
+    "          http://codweb1.leidoshost.com/UNICORN.NET/webservices/googleearth.asmx/getkmzformissionbyato?ato=HGZ3W09&amp;streaming=true\n" +
+    "        </missiondynamickmllink>\n" +
+    "        <unicornmissiondataurl>\n" +
+    "          http://codweb1.leidoshost.com/UNICORN.NET/pages/public/publiccustomerreport.aspx?strATO=HGZ3W09\n" +
+    "        </unicornmissiondataurl>\n" +
+    "      </missionMetaData>\n" +
+    "    </results>\n" +
+    "  </GetMissionMetaDataResult>\n" +
+    "</GetMissionMetaDataResponse>";
+
   @Override
-  public List<MissionMetaData> getMissionMetaData() {
-    return asList(
-      new MissionMetaData("1", "A", "01-01-2017T01:30:00.0Z", "01-01-2017T11:30:00.0Z", "DGS-1"),
-      new MissionMetaData("2", "B", "02-02-2017T02:00:00.0Z", "02-02-2017T14:00:00.0Z", "DGS-1"),
-      new MissionMetaData("3", "C", "03-03-2017T03:00:00.0Z", "", "DGS-2")
-    );
+  public List<Results.MissionMetaData> getMissionMetaData() {
+    GetMissionMetaDataResponse getMissionMetaDataResponse = JAXB.unmarshal(new StringSource(RESPONSE), GetMissionMetaDataResponse.class);
+    return getMissionMetaDataResponse.getGetMissionMetaDataResult().getResults().getMissionMetaData();
   }
 }
 

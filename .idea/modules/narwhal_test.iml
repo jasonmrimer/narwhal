@@ -33,6 +33,7 @@
     <orderEntry type="library" name="Gradle: org.flywaydb:flyway-core:3.2.1" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-data-jpa:1.5.8.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-web:1.5.8.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-actuator:1.5.8.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-web-services:1.5.8.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-security:1.5.8.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.8.10" level="project" />
@@ -54,6 +55,7 @@
     <orderEntry type="library" name="Gradle: com.fasterxml.jackson.core:jackson-databind:2.8.10" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-web:4.3.12.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-webmvc:4.3.12.RELEASE" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-actuator:1.5.8.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-oxm:4.3.12.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.ws:spring-ws-core:2.4.0.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework:spring-aop:4.3.12.RELEASE" level="project" />

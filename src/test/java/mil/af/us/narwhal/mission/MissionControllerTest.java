@@ -11,8 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.List;
 
 import static java.util.Collections.singletonList;
@@ -38,8 +37,8 @@ public class MissionControllerTest {
       new Mission(
         "mission-id-1",
         "MISNUM1",
-        ZonedDateTime.of(2017, 12, 12, 9, 0, 0, 0, ZoneId.of("UTC")),
-        ZonedDateTime.of(2017, 12, 12, 15, 0, 0, 0, ZoneId.of("UTC")),
+        Instant.parse("2017-12-12T09:00:00Z"),
+        Instant.parse("2017-12-12T15:00:00Z"),
         site)
     );
   }

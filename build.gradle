@@ -52,10 +52,14 @@ task genJaxb {
                 produces(dir: sourcesDir, includes: "**/*.java")
             }
 
-            javac(destdir: classesDir, source: 1.8, target: 1.8, debug: true,
+            javac(destdir: classesDir,
+                    source: 1.8,
+                    target: 1.8,
+                    debug: true,
                     debugLevel: "lines,vars,source",
                     classpath: configurations.jaxb.asPath) {
                 src(path: sourcesDir)
+                src(path: 'src/main/java/mil/af/us/narwhal/jaxb/')
                 include(name: "**/*.java")
                 include(name: "*.java")
             }
@@ -74,6 +78,7 @@ dependencies {
             'org.flywaydb:flyway-core',
             'org.springframework.boot:spring-boot-starter-data-jpa',
             'org.springframework.boot:spring-boot-starter-web',
+            'org.springframework.boot:spring-boot-starter-actuator',
             'org.springframework.boot:spring-boot-starter-web-services',
             'org.springframework.boot:spring-boot-starter-security',
             'com.fasterxml.jackson.datatype:jackson-datatype-jsr310',

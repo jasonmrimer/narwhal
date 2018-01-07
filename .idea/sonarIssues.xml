@@ -8,6 +8,16 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/build/classes/jaxb/generated/Results.class">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/build/classes/jaxb/unicorn/GetMissionMetaData.class">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/ci_scripts/Jenkinsfile.io">
           <value>
             <set />
@@ -24,6 +34,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/sonar-project.properties">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/ScheduledTasks.java">
           <value>
             <set />
           </value>
@@ -78,7 +93,17 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/config/DefaultConfig.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/config/WebSecurityConfig.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/jaxb/StringToXMLGregorianCalendarXmlAdapter.java">
           <value>
             <set />
           </value>
@@ -88,7 +113,32 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/mission/MissionClientStub.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/mission/MissionService.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/mission/UnicornMissionClient.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/profile/ProfileController.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/resources/UnicornMissionWebservicesV2.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/resources/response.xml">
           <value>
             <set />
           </value>
@@ -98,7 +148,47 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/test/java/mil/af/us/narwhal/mission/MissionServiceTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/test/java/mil/af/us/narwhal/mission/UnicornMissionClientTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/test/java/mil/af/us/narwhal/site/SiteControllerTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="/XML Fragment (MissionClientStub.java:328).xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="/XML Fragment (MissionClientStub.java:616).xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="/XML Fragment (MissionServiceTest.java:1523).xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="/XML Fragment (MissionServiceTest.java:1581).xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="/XML Fragment (MissionServiceTest.java:1586).xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="/XML Fragment (MissionServiceTest.java:4390).xml">
           <value>
             <set />
           </value>

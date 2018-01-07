@@ -1,18 +1,15 @@
 package mil.af.us.narwhal.mission;
 
+import generated.Results;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class MissionService {
-  private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("MM-dd-uuuu'T'HH:mm:ss.0X");
-
   private MissionRepository missionRepository;
   private MissionClient client;
   private SiteRepository siteRepository;
@@ -23,29 +20,27 @@ public class MissionService {
     this.siteRepository = siteRepository;
   }
 
-  public void refreshMissions() {
-    List<Mission> missions = client.getMissionMetaData()
+  public void refreshMissions()  {
+    List<Results.MissionMetaData> missionMetaData = client.getMissionMetaData();
+
+    List<Mission> missions = missionMetaData
       .stream()
-      .map(this::mapMetaDataToMission)
+      .map(MissionService.this::mapMetaDataToMission)
       .collect(Collectors.toList());
     missionRepository.save(missions);
   }
 
-  private Mission mapMetaDataToMission(MissionMetaData metaData) {
-    final ZonedDateTime startDateTime = mapStringToZonedDateTime(metaData.getStartdttime());
-    final ZonedDateTime endDateTime = mapStringToZonedDateTime(metaData.getEnddttime());
+  private Mission mapMetaDataToMission(Results.MissionMetaData metaData) {
     final Site site = siteRepository.findOneByName(metaData.getPrimaryorg());
+
 
     return Mission.builder()
       .missionId(metaData.getMissionid())
       .atoMissionNumber(metaData.getAtomissionnumber())
-      .startDateTime(startDateTime)
-      .endDateTime(endDateTime)
+      .startDateTime(metaData.getStartdttime().toGregorianCalendar().getTime().toInstant())
+      .endDateTime(metaData.getEnddttime().toGregorianCalendar().getTime().toInstant())
       .site(site)
       .build();
   }
 
-  private ZonedDateTime mapStringToZonedDateTime(String dateTime) {
-    return dateTime.isEmpty() ? null : ZonedDateTime.parse(dateTime, FORMATTER);
-  }
 }
