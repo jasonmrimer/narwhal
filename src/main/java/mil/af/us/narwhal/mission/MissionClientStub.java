@@ -36,6 +36,25 @@ public class MissionClientStub implements MissionClient {
     "          http://codweb1.leidoshost.com/UNICORN.NET/pages/public/publiccustomerreport.aspx?strATO=HGZ3W09\n" +
     "        </unicornmissiondataurl>\n" +
     "      </missionMetaData>\n" +
+    "      <missionMetaData>\n" +
+    "        <missionid>929e9a89-b8a1-493d-a69c-e0836e719f78</missionid>\n" +
+    "        <description>U-2 over </description>\n" +
+    "        <missionStatus>CLOSED</missionStatus>\n" +
+    "        <classification>Unclassified</classification>\n" +
+    "        <distrocontrol>FOUO</distrocontrol>\n" +
+    "        <atomissionnumber>HGZ3W08</atomissionnumber>\n" +
+    "        <atoday>aaa</atoday>\n" +
+    "        <startdttime>12-12-2017T09:00:00.0Z</startdttime>\n" +
+    "        <enddttime>12-12-2017T12:00:00.0Z</enddttime>\n" +
+    "        <primaryorg>DGS-2</primaryorg>\n" +
+    "        <callsign>Spaceman</callsign>\n" +
+    "        <platform>U-2</platform>\n" +
+    "        <tailnumber>\n" +
+    "        </tailnumber>\n" +
+    "        <missionstatickmllink>http://codweb1.leidoshost.com/UNICORN.NET/webservices/googleearth.asmx/getkmzformissionbyato?ato=HGZ3W08&amp;streaming=false</missionstatickmllink>\n" +
+    "        <missiondynamickmllink>http://codweb1.leidoshost.com/UNICORN.NET/webservices/googleearth.asmx/getkmzformissionbyato?ato=HGZ3W08&amp;streaming=true</missiondynamickmllink>\n" +
+    "        <unicornmissiondataurl>http://codweb1.leidoshost.com/UNICORN.NET/pages/public/publiccustomerreport.aspx?strATO=HGZ3W08</unicornmissiondataurl>\n" +
+    "      </missionMetaData>\n" +
     "    </results>\n" +
     "  </GetMissionMetaDataResult>\n" +
     "</GetMissionMetaDataResponse>";
