@@ -13,7 +13,7 @@ import { BrowserRouter } from 'react-router-dom';
 import WebMissionRepository from './mission/repositories/web/WebMissionRepository';
 import WebSiteRepository from './site/repositories/web/WebSiteRepository';
 import WebAirmanRepository from './airman/repositories/web/WebAirmanRepository';
-import WebCrewRepository from './crew/repositories/web/WebCrewRepository';
+import WebFlightRepository from './flight/repositories/web/WebFlightRepository';
 
 document.body.style.fontFamily = theme.fontFamily;
 document.body.style.color = theme.fontColor;
@@ -28,7 +28,7 @@ ReactDOM.render(
         profileRepository={new WebProfileRepository()}
         missionRepository={new WebMissionRepository()}
         siteRepository={new WebSiteRepository()}
-        crewRepository={new WebCrewRepository()}
+        flightRepository={new WebFlightRepository()}
       />
     </BrowserRouter>
   </ThemeProvider>,

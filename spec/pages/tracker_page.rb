@@ -23,10 +23,10 @@ class TrackerPage
     has_filter('30 IS')
   end
 
-  def assert_filters_by_crew
-    has_filter('All Crew')
-    filter_by_crew(crew: 'SUPER CREW')
-    has_filter('SUPER CREW')
+  def assert_filters_by_flight
+    has_filter('All Flights')
+    filter_by_flight(flight: 'SUPER FLIGHT')
+    has_filter('SUPER FLIGHT')
   end
 
   def assert_shows_availability
@@ -60,7 +60,7 @@ class TrackerPage
     case unit
     when 'All Units'
       has_airmen_in_roster
-    when 'All Crew'
+    when 'All Flights'
       has_airmen_in_roster
     when unit
       expect(page).to have_css('tbody tr', :maximum => @@all_airmen - 1)
@@ -71,8 +71,8 @@ class TrackerPage
     page.find("#unit-filter").find(:option, text: unit).select_option
   end
 
-  def filter_by_crew(crew: 'All Crew')
-    page.find("#crew-filter").find(:option, text: crew).select_option
+  def filter_by_flight(flight: 'All Flights')
+    page.find("#flight-filter").find(:option, text: flight).select_option
   end
 
   def click_on_airman(name)

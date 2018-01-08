@@ -28,25 +28,19 @@ export default function airmenRepositoryContract(subject: AirmanRepository) {
       expect(filteredAirmen).toBeDefined();
 
       expect(filteredAirmen.length).toBeLessThan(airmen.length);
-      filteredAirmen.forEach(airman => {
-        if (airman.unit) {
-          expect(airman.unit.id).toBe(1);
-        }
-      });
     });
   });
 
-  describe('findByCrew', () => {
-    it('returns airmen filtered by crew', async () => {
+  describe('findByFlight', () => {
+    it('returns airmen filtered by flight', async () => {
       const airmen = await subject.findAll();
       expect(airmen).toBeDefined();
 
-      const filteredAirmen = await subject.findByCrew(1);
+      const filteredAirmen = await subject.findByFlight(1);
 
       expect(filteredAirmen.length).toBeLessThan(airmen.length);
       filteredAirmen.forEach(airman => {
-        const crewIds = airman.crews.map(crew => crew.id);
-        expect(crewIds.indexOf(1)).toBeGreaterThan(-1);
+        expect(airman.flightId).toEqual(1);
       });
     });
   });

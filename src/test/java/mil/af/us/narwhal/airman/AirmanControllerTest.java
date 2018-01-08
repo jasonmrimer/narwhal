@@ -1,7 +1,7 @@
 package mil.af.us.narwhal.airman;
 
 import mil.af.us.narwhal.certification.Certification;
-import mil.af.us.narwhal.crew.Crew;
+import mil.af.us.narwhal.flight.Flight;
 import mil.af.us.narwhal.qualification.Qualification;
 import mil.af.us.narwhal.unit.Unit;
 import org.hamcrest.Matchers;
@@ -30,7 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class AirmanControllerTest {
   Unit unit;
   List<Airman> airmen;
-  Crew crew;
+  Flight flight;
 
   @Autowired
   MockMvc mockMvc;
@@ -46,9 +46,9 @@ public class AirmanControllerTest {
     Certification certification1 = new Certification(1L, "Certification 1");
     final AirmanCertification airCert = new AirmanCertification(1L, certification1.getId(), new Date(), certification1);
 
-    crew = new Crew(1L, "SUPER CREW");
+    flight = new Flight(1L, unit.getId(), "SUPER FLIGHT");
     airmen = singletonList(
-      new Airman(1L, "FirstOne", "LastOne", singletonList(airQual), singletonList(airCert), unit, singletonList(crew))
+      new Airman(1L, flight.getId(), "FirstOne", "LastOne", singletonList(airQual), singletonList(airCert))
     );
   }
 
@@ -60,9 +60,8 @@ public class AirmanControllerTest {
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.size()", Matchers.equalTo(1)))
       .andExpect(jsonPath("$[0].id").value(airmen.get(0).getId()))
-      .andExpect(jsonPath("$[0].crew").isNotEmpty());
+      .andExpect(jsonPath("$[0].flightId").value(flight.getId()));
   }
-
 
   @Test
   public void indexByUnitId() throws Exception {
@@ -75,10 +74,10 @@ public class AirmanControllerTest {
   }
 
   @Test
-  public void indexByCrewId() throws Exception {
-    when(airmanRepository.findByCrewId(crew.getId())).thenReturn(airmen);
+  public void indexByFlightId() throws Exception {
+    when(airmanRepository.findByFlightId(flight.getId())).thenReturn(airmen);
 
-    mockMvc.perform(get(AirmanController.URI).param("crew", crew.getId().toString()))
+    mockMvc.perform(get(AirmanController.URI).param("flight", flight.getId().toString()))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.size()", Matchers.equalTo(1)))
       .andExpect(jsonPath("$[0].id").value(airmen.get(0).getId()));

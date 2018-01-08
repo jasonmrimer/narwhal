@@ -9,14 +9,14 @@ import SidePanel from './SidePanel/SidePanel';
 import AirmanModel from '../airman/models/AirmanModel';
 import PlannerServiceStub from './services/doubles/PlannerServiceStub';
 import TopBar from '../widgets/TopBar';
-import CrewRepositoryStub from '../crew/repositories/doubles/CrewRepositoryStub';
+import FlightRepositoryStub from '../flight/repositories/doubles/FlightRepositoryStub';
 import createDefaultOption from '../utils/createDefaultOption';
 import { Filter } from '../widgets/Filter';
 
 const airmanRepositoryStub = new AirmanRepositoryStub();
 const unitRepositoryStub = new UnitRepositoryStub();
 const plannerServiceStub = new PlannerServiceStub();
-const crewRepository = new CrewRepositoryStub();
+const flightRepository = new FlightRepositoryStub();
 let subject: ReactWrapper, airmen: AirmanModel[];
 
 describe('Tracker', () => {
@@ -27,7 +27,7 @@ describe('Tracker', () => {
         airmanRepository={airmanRepositoryStub}
         unitRepository={unitRepositoryStub}
         plannerService={plannerServiceStub}
-        crewRepository={crewRepository}
+        flightRepository={flightRepository}
       />
     );
     airmen = await airmanRepositoryStub.findAll();
@@ -35,7 +35,7 @@ describe('Tracker', () => {
     subject.update();
   });
 
-  it('renders a Roster with all units and all crew', async () => {
+  it('renders a Roster with all units and all flight', async () => {
     expect(subject.find(Roster).prop('airmen')).toEqual(airmen);
   });
 
@@ -69,7 +69,7 @@ describe('Tracker', () => {
   describe('filtering', () => {
     const defaultFilterValue = createDefaultOption('').value;
     const unitId = 1;
-    const crewId = 1;
+    const flightId = 1;
     let filter: ReactWrapper;
 
     describe('by unit', () => {
@@ -78,7 +78,7 @@ describe('Tracker', () => {
         await selectOption(subject, filter, unitId);
       });
 
-      xit('limits the crew filter options', () => {
+      xit('limits the flight filter options', () => {
         // TODO : implement feature
       });
 
@@ -93,14 +93,14 @@ describe('Tracker', () => {
       });
     });
 
-    describe('by crew', () => {
+    describe('by flight', () => {
       beforeEach(async () => {
-        filter = findFilterById(subject, 'crew-filter');
-        await selectOption(subject, filter, crewId);
+        filter = findFilterById(subject, 'flight-filter');
+        await selectOption(subject, filter, flightId);
       });
 
-      it('shows airmen for the selected crew', async () => {
-        const filteredRoster = await airmanRepositoryStub.findByCrew(crewId);
+      it('shows airmen for the selected flight', async () => {
+        const filteredRoster = await airmanRepositoryStub.findByFlight(flightId);
         expect(subject.find(Roster).prop('airmen')).toEqual(filteredRoster);
       });
 

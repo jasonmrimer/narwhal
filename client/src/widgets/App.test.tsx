@@ -10,7 +10,7 @@ import MissionRepositoryStub from '../mission/repositories/doubles/MissionReposi
 import { Tracker } from '../tracker/Tracker';
 import Dashboard from '../dashboard/Dashboard';
 import SiteRepositoryStub from '../site/repositories/doubles/SiteRepositoryStub';
-import CrewRepositoryStub from '../crew/repositories/doubles/CrewRepositoryStub';
+import FlightRepositoryStub from '../flight/repositories/doubles/FlightRepositoryStub';
 
 describe('App', () => {
   const airmanRepository = new AirmanRepositoryStub();
@@ -18,7 +18,7 @@ describe('App', () => {
   const profileRepository = new ProfileRepositoryStub();
   const missionRepositoryStub = new MissionRepositoryStub();
   const siteRepositoryStub = new SiteRepositoryStub();
-  const crewRepositoryStub = new CrewRepositoryStub();
+  const flightRepositoryStub = new FlightRepositoryStub();
   let subject: ShallowWrapper;
   let mountedSubject: ReactWrapper;
 
@@ -30,7 +30,7 @@ describe('App', () => {
         profileRepository={profileRepository}
         missionRepository={missionRepositoryStub}
         siteRepository={siteRepositoryStub}
-        crewRepository={crewRepositoryStub}
+        flightRepository={flightRepositoryStub}
       />
     );
     const routes = subject.find(Route);
@@ -49,7 +49,7 @@ describe('App', () => {
           profileRepository={profileRepository}
           missionRepository={missionRepositoryStub}
           siteRepository={siteRepositoryStub}
-          crewRepository={crewRepositoryStub}
+          flightRepository={flightRepositoryStub}
         />
       </MemoryRouter>
     );
@@ -66,7 +66,7 @@ describe('App', () => {
           profileRepository={profileRepository}
           missionRepository={missionRepositoryStub}
           siteRepository={siteRepositoryStub}
-          crewRepository={crewRepositoryStub}
+          flightRepository={flightRepositoryStub}
         />
       </MemoryRouter>
     );

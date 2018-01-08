@@ -1,4 +1,4 @@
-package mil.af.us.narwhal.crew;
+package mil.af.us.narwhal.flight;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,22 +17,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ActiveProfiles("test")
-@WebMvcTest(CrewController.class)
+@WebMvcTest(FlightController.class)
 @RunWith(SpringRunner.class)
-public class CrewControllerTest {
+public class FlightControllerTest {
   @Autowired
   MockMvc mockMvc;
   @MockBean
-  CrewRepository crewRepository;
+  FlightRepository flightRepository;
 
   @Test
   public void indexTest() throws Exception {
-    Crew crew1 = new Crew(1L, "Super Crew");
-    Crew crew2 = new Crew(2L, "Lame Crew");
+    Flight flight1 = new Flight(1L, 1L, "Super Flight");
+    Flight flight2 = new Flight(2L, 1L, "Lame Flight");
 
-    when(crewRepository.findAll()).thenReturn(asList(crew1, crew2));
+    when(flightRepository.findAll()).thenReturn(asList(flight1, flight2));
 
-    mockMvc.perform(get(CrewController.URI))
+    mockMvc.perform(get(FlightController.URI))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.size()", equalTo(2)));
   }

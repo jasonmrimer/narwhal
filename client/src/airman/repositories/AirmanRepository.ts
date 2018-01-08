@@ -5,7 +5,7 @@ interface AirmanRepository {
 
   findByUnit(id: number): Promise<AirmanModel[]>;
 
-  findByCrew(id: number): Promise<AirmanModel[]>;
+  findByFlight(id: number): Promise<AirmanModel[]>;
 }
 
 export default AirmanRepository;

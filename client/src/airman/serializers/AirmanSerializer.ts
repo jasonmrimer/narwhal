@@ -2,12 +2,10 @@ import AirmanModel from '../models/AirmanModel';
 import { Serializer } from '../../utils/serializer';
 import { QualificationSerializer } from './QualificationSerializer';
 import { CertificationSerializer } from './CertificationSerializer';
-import { CrewSerializer } from '../../crew/serializers/CrewSerializer';
 
 export class AirmanSerializer implements Serializer<AirmanModel> {
   private qualSerializer = new QualificationSerializer();
   private certSerializer = new CertificationSerializer();
-  private crewSerializer = new CrewSerializer();
 
   serialize(item: AirmanModel): {} {
     throw new Error('Not implemented');
@@ -20,8 +18,7 @@ export class AirmanSerializer implements Serializer<AirmanModel> {
       item.lastName,
       item.qualifications.map((qual: object) => this.qualSerializer.deserialize(qual)),
       item.certifications.map((cert: object) => this.certSerializer.deserialize(cert)),
-      item.crew.map((crew: object) => this.crewSerializer.deserialize(crew)),
-      item.unit
+      item.flightId
     );
   }
 }

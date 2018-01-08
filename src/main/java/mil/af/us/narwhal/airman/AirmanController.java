@@ -28,8 +28,8 @@ public class AirmanController {
     return airmanRepository.findByUnitId(unitId);
   }
 
-  @GetMapping(params = {"crew"})
-  public List<Airman> indexByCrewId(@RequestParam("crew") Long crewId) {
-    return airmanRepository.findByCrewId(crewId);
+  @GetMapping(params = {"flight"})
+  public List<Airman> indexByFlightId(@RequestParam("flight") Long flightId) {
+    return airmanRepository.findByFlightId(flightId);
   }
 }

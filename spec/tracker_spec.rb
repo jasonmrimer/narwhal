@@ -19,8 +19,8 @@ describe 'Tracker page', type: :feature do
     tracker_page.assert_shows_availability
   end
 
-  it 'can filter the Roster by crew' do
-    tracker_page.assert_filters_by_crew
+  it 'can filter the Roster by flight' do
+    tracker_page.assert_filters_by_flight
   end
 
   it "shows an airman's currency in the sidebar" do
