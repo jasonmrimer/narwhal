@@ -1,5 +1,5 @@
-import { Serializer } from '../utils/serializer';
-import { MissionModel } from './models/MissionModel';
+import { Serializer } from '../../utils/serializer';
+import { MissionModel } from '../models/MissionModel';
 import * as moment from 'moment';
 
 export class MissionSerializer implements Serializer<MissionModel> {

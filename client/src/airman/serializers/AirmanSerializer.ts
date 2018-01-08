@@ -1,8 +1,8 @@
-import AirmanModel from './models/AirmanModel';
-import { Serializer } from '../utils/serializer';
-import { QualificationSerializer } from '../qualification/QualificationSerializer';
-import { CertificationSerializer } from '../certification/CertificationSerializer';
-import { CrewSerializer } from '../crew/CrewSerializer';
+import AirmanModel from '../models/AirmanModel';
+import { Serializer } from '../../utils/serializer';
+import { QualificationSerializer } from './QualificationSerializer';
+import { CertificationSerializer } from './CertificationSerializer';
+import { CrewSerializer } from '../../crew/serializers/CrewSerializer';
 
 export class AirmanSerializer implements Serializer<AirmanModel> {
   private qualSerializer = new QualificationSerializer();

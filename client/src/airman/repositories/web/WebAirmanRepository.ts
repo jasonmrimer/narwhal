@@ -1,5 +1,5 @@
 import AirmanRepository from '../AirmanRepository';
-import { AirmanSerializer } from '../../AirmanSerializer';
+import { AirmanSerializer } from '../../serializers/AirmanSerializer';
 
 export default class WebAirmanRepository implements AirmanRepository {
   private serializer: AirmanSerializer = new AirmanSerializer();

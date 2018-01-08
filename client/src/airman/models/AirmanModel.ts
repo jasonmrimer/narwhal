@@ -1,6 +1,6 @@
-import QualificationModel from '../../qualification/models/QualificationModel';
+import QualificationModel from './QualificationModel';
 import UnitModel from '../../unit/models/UnitModel';
-import CertificationModel from '../../certification/models/CertificationModel';
+import CertificationModel from './CertificationModel';
 import CrewModel from '../../crew/model/CrewModel';
 
 export default class AirmanModel {

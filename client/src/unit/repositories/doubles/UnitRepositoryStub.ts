@@ -1,11 +1,10 @@
 import UnitRepository from '../UnitRepository';
 import UnitModel from '../../models/UnitModel';
+import UnitModelFactory from '../../factories/UnitModelFactory';
 
 const units = [
-  {id: 1, name: '1 U'},
-  {id: 2, name: '2 U'},
-  {id: 3, name: '3 U'},
-  {id: 4, name: '4 U'}
+  UnitModelFactory.build(1),
+  UnitModelFactory.build(2)
 ];
 
 export default class UnitRepositoryStub implements UnitRepository {

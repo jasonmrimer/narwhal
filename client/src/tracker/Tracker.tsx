@@ -10,9 +10,9 @@ import AirmanModel from '../airman/models/AirmanModel';
 import SideBar from './SidePanel/SidePanel';
 import PlannerService from './services/PlannerService';
 import TopBar from '../widgets/TopBar';
+import createDefaultOption, { DefaultValue } from '../utils/createDefaultOption';
 import CrewRepository from '../crew/repositories/CrewRepository';
 import CrewModel from '../crew/model/CrewModel';
-import createDefaultOption, { DefaultValue } from '../utils/createDefaultOption';
 
 interface Props {
   airmanRepository: AirmanRepository;

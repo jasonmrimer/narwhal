@@ -1,9 +1,9 @@
 import AirmanModel from '../models/AirmanModel';
-import CertificationModelFactory from '../../certification/CertificationModelFactory';
-import QualificationModelFactory from '../../qualification/QualificationModelFactory';
-import CrewModelFactory from '../../crew/factories/CrewModelFactory';
+import CertificationModelFactory from './CertificationModelFactory';
+import QualificationModelFactory from './QualificationModelFactory';
 import UnitModelFactory from '../../unit/factories/UnitModelFactory';
 import { randomText } from '../../utils/randomizer';
+import CrewModelFactory from '../../crew/factories/CrewModelFactory';
 
 export default class AirmanModelFactory {
   static build(unitId: number = 1, crewId: number = 1) {
@@ -12,7 +12,7 @@ export default class AirmanModelFactory {
       randomText(5),
       QualificationModelFactory.buildList(2),
       CertificationModelFactory.buildList(3),
-      CrewModelFactory.buildList(crewId, unitId),
+      [CrewModelFactory.build(crewId, unitId)],
       UnitModelFactory.build(unitId)
     );
   }

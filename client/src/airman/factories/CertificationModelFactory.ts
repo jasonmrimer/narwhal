@@ -1,6 +1,6 @@
-import CertificationModel from './models/CertificationModel';
+import CertificationModel from '../models/CertificationModel';
 import * as moment from 'moment';
-import { randomText } from '../utils/randomizer';
+import { randomText } from '../../utils/randomizer';
 
 export default class CertificationModelFactory {
   static build(id: number) {

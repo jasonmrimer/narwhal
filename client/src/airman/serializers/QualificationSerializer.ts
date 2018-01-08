@@ -1,5 +1,5 @@
-import { Serializer } from '../utils/serializer';
-import QualificationModel from './models/QualificationModel';
+import { Serializer } from '../../utils/serializer';
+import QualificationModel from '../models/QualificationModel';
 import * as moment from 'moment';
 
 export class QualificationSerializer implements Serializer<QualificationModel> {

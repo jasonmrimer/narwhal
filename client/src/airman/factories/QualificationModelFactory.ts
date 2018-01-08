@@ -1,6 +1,6 @@
-import QualificationModel from './models/QualificationModel';
+import QualificationModel from '../models/QualificationModel';
 import * as moment from 'moment';
-import { randomText } from '../utils/randomizer';
+import { randomText } from '../../utils/randomizer';
 
 export default class QualificationModelFactory {
   static build(id: number) {

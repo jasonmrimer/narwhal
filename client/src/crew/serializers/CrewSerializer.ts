@@ -1,5 +1,5 @@
-import { Serializer } from '../utils/serializer';
-import CrewModel from './model/CrewModel';
+import { Serializer } from '../../utils/serializer';
+import CrewModel from '../model/CrewModel';
 
 export class CrewSerializer implements Serializer<CrewModel> {
   serialize(item: CrewModel): {} {

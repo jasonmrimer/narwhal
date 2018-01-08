@@ -3,11 +3,10 @@ import AirmanModelFactory from '../../factories/AirmanModelFactory';
 import AirmanModel from '../../models/AirmanModel';
 
 const airmen = [
-  ...AirmanModelFactory.buildList(2, 1, 1),
-  ...AirmanModelFactory.buildList(2, 1, 2),
-  ...AirmanModelFactory.buildList(2, 2, 1),
-  ...AirmanModelFactory.buildList(1, 2, 2),
-  ...AirmanModelFactory.buildList(3, 3, 1)
+  ...AirmanModelFactory.buildList(3, 1, 1),
+  ...AirmanModelFactory.buildList(3, 1, 2),
+  ...AirmanModelFactory.buildList(3, 2, 3),
+  ...AirmanModelFactory.buildList(3, 2, 4)
 ];
 
 export default class AirmanRepositoryStub implements AirmanRepository {
