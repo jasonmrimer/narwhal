@@ -47,4 +47,32 @@ describe('Filter', () => {
     subject.find('select').simulate('change', {target: {value: 2}});
     expect(callbackSpy).toBeCalledWith(expectedOptions[1]);
   });
+
+  it('displays the default option when options are null', () => {
+    subject = shallow(
+      <Filter
+        id="filter"
+        defaultOption={{text: 'Default Option', value: -1}}
+        options={null}
+        callback={callbackSpy}
+        label="Filter"
+      />
+    );
+
+    expect(subject.text()).toContain('Default Option');
+  });
+
+  it('disables the select if options is null', () => {
+    subject = shallow(
+      <Filter
+        id="filter"
+        defaultOption={expectedOptions[0]}
+        options={null}
+        callback={callbackSpy}
+        label="Filter"
+      />
+    );
+
+    expect(subject.find('select').prop('disabled')).toBeTruthy();
+  });
 });

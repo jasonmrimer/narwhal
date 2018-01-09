@@ -4,7 +4,8 @@ class TrackerPage
 
   @@expected_columns = %w(NAME QUALIFICATION CERTIFICATION SUN MON TUE WED THU FRI SAT)
   @@expected_availability_days = %w(SUN MON TUE WED THU FRI SAT)
-  
+  @@expected_flights = ['SUPER FLIGHT']
+
   def initialize
     page.driver.browser.manage.window.resize_to(4096, 4096)
     expect(page).to have_content("All Squadrons")
@@ -18,12 +19,18 @@ class TrackerPage
   end
 
   def assert_filters_by_squadron
-    has_filter('All Squadrons')
+    expect(page).to have_content('Select Squadron')
     filter_by_squadron(squadron: '30 IS')
     has_filter('30 IS')
   end
+  
+  def assert_populate_flights
+    filter_by_squadron(squadron: '30 IS')
+    has_filter_options(@@expected_flights)
+  end
 
   def assert_filters_by_flight
+    filter_by_squadron(squadron: '30 IS')
     has_filter('All Flights')
     filter_by_flight(flight: 'SUPER FLIGHT')
     has_filter('SUPER FLIGHT')
@@ -43,17 +50,23 @@ class TrackerPage
   end
 
   private
-
+  
   def has_a_roster
     @@expected_columns.each {|column_name| expect(page).to have_content(column_name) }
   end
-
+  
   def has_no_side_panel
     expect(page).not_to have_selector('.side-panel')
   end
-
+  
   def has_airmen_in_roster
     expect(page).to have_css('tbody tr', minimum: 1)
+  end
+  
+  def has_filter_options(options = [])
+    options.each do |option_text|
+      expect(page).to have_css('option', text: option_text)
+    end
   end
 
   def has_filter(squadron)

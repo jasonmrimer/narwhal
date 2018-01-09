@@ -6,7 +6,7 @@ export default class WebSquadronRepository implements SquadronRepository {
   }
 
   async findAll(): Promise<SquadronModel[]> {
-    const resp = await fetch(`${this.baseUrl}/api/squadrons`, {credentials: 'include'})
+    const resp = await fetch(`${this.baseUrl}/api/squadrons`, {credentials: 'include'});
     const json = await resp.json();
     return json;
   }

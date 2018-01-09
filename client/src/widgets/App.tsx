@@ -8,7 +8,6 @@ import Dashboard from '../dashboard/Dashboard';
 import { Route, Switch } from 'react-router-dom';
 import MissionRepository from '../mission/repositories/MissionRepository';
 import SiteRepository from '../site/repositories/SiteRepository';
-import FlightRepositoryStub from '../flight/repositories/doubles/FlightRepositoryStub';
 
 interface Props {
   profileRepository: ProfileRepository;
@@ -16,7 +15,6 @@ interface Props {
   squadronRepository: SquadronRepository;
   missionRepository: MissionRepository;
   siteRepository: SiteRepository;
-  flightRepository: FlightRepositoryStub;
 }
 
 interface State {
@@ -59,7 +57,6 @@ export default class App extends React.Component<Props, State> {
                     airmanRepository={this.props.airmanRepository}
                     squadronRepository={this.props.squadronRepository}
                     plannerService={new MomentPlannerService()}
-                    flightRepository={this.props.flightRepository}
                 />
             );
           }}

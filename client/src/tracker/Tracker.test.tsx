@@ -9,13 +9,12 @@ import SidePanel from './SidePanel/SidePanel';
 import AirmanModel from '../airman/models/AirmanModel';
 import PlannerServiceStub from './services/doubles/PlannerServiceStub';
 import TopBar from '../widgets/TopBar';
-import FlightRepositoryStub from '../flight/repositories/doubles/FlightRepositoryStub';
 import createDefaultOption from '../utils/createDefaultOption';
+import SquadronModelFactory from '../squadron/factories/SquadronModelFactory';
 
 const airmanRepositoryStub = new AirmanRepositoryStub();
 const squadronRepositoryStub = new SquadronRepositoryStub();
 const plannerServiceStub = new PlannerServiceStub();
-const flightRepository = new FlightRepositoryStub();
 let subject: ReactWrapper, airmen: AirmanModel[];
 
 describe('Tracker', () => {
@@ -26,7 +25,6 @@ describe('Tracker', () => {
         airmanRepository={airmanRepositoryStub}
         squadronRepository={squadronRepositoryStub}
         plannerService={plannerServiceStub}
-        flightRepository={flightRepository}
       />
     );
     airmen = await airmanRepositoryStub.findAll();
@@ -45,6 +43,10 @@ describe('Tracker', () => {
   it('renders the TopBar with a username and pageTitle', async () => {
     expect(subject.find(TopBar).prop('username')).toBe('Tytus');
     expect(subject.find(TopBar).prop('pageTitle')).toBe('AVAILABILITY ROSTER');
+  });
+
+  it('renders a Flight Filter with a default message', () => {
+    expect(findFilterById(subject, 'flight-filter').text()).toContain('Select Squadron');
   });
 
   describe('the sidepanel', () => {
@@ -77,8 +79,17 @@ describe('Tracker', () => {
         await selectOption(subject, filter, squadronId);
       });
 
-      xit('limits the flight filter options', () => {
-        // TODO : implement feature
+      it('selecting a squadron sets the selectedSquadronId', () => {
+        expect(subject.state('selectedSquadronId')).toBe(squadronId);
+      });
+
+      it('limits the flight filter options', () => {
+        const selectedSquadron = SquadronModelFactory.build(squadronId);
+        const flightOptions = selectedSquadron.flights.map((flight) => {
+          return {value: flight.id, text: flight.name};
+        });
+        let flightFilter = findFilterById(subject, 'flight-filter');
+        expect(flightFilter.prop('options')).toMatchObject(flightOptions);
       });
 
       it('shows the airmen for the selected squadron', async () => {
@@ -94,6 +105,8 @@ describe('Tracker', () => {
 
     describe('by flight', () => {
       beforeEach(async () => {
+        filter = findFilterById(subject, 'squadron-filter');
+        await selectOption(subject, filter, squadronId);
         filter = findFilterById(subject, 'flight-filter');
         await selectOption(subject, filter, flightId);
       });
@@ -110,4 +123,3 @@ describe('Tracker', () => {
     });
   });
 });
-

@@ -15,6 +15,10 @@ describe 'Tracker page', type: :feature do
     tracker_page.assert_filters_by_squadron
   end
   
+  it 'filtering by squadron populates the flight options' do
+    tracker_page.assert_populate_flights
+  end
+
   it "shows an airman's availability in the sidebar" do
     tracker_page.assert_shows_availability
   end

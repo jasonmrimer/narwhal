@@ -39,7 +39,7 @@ public class AirmanControllerTest {
 
   @Before
   public void setUp() {
-    squadron = new Squadron(1L, "1");
+    squadron = new Squadron(1L, "1", null);
     Qualification qualification1 = new Qualification(1L, "Qual1", "qualification1");
     final AirmanQualification airQual = new AirmanQualification(1L, qualification1.getId(), new Date(), qualification1);
 
