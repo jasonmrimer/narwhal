@@ -1,4 +1,4 @@
-package mil.af.us.narwhal.unit;
+package mil.af.us.narwhal.squadron;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +12,7 @@ import javax.persistence.Id;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Unit {
+public class Squadron {
   @Id
   @GeneratedValue
   private Long id;

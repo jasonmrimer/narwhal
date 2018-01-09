@@ -2,7 +2,7 @@ import * as React from 'react';
 import Tracker from '../tracker/Tracker';
 import ProfileRepository from '../profile/repositories/ProfileRepository';
 import AirmanRepository from '../airman/repositories/AirmanRepository';
-import UnitRepository from '../unit/repositories/UnitRepository';
+import SquadronRepository from '../squadron/repositories/SquadronRepository';
 import { MomentPlannerService } from '../tracker/services/MomentPlannerService';
 import Dashboard from '../dashboard/Dashboard';
 import { Route, Switch } from 'react-router-dom';
@@ -13,7 +13,7 @@ import FlightRepositoryStub from '../flight/repositories/doubles/FlightRepositor
 interface Props {
   profileRepository: ProfileRepository;
   airmanRepository: AirmanRepository;
-  unitRepository: UnitRepository;
+  squadronRepository: SquadronRepository;
   missionRepository: MissionRepository;
   siteRepository: SiteRepository;
   flightRepository: FlightRepositoryStub;
@@ -57,7 +57,7 @@ export default class App extends React.Component<Props, State> {
                 <Tracker
                     username={this.state.username}
                     airmanRepository={this.props.airmanRepository}
-                    unitRepository={this.props.unitRepository}
+                    squadronRepository={this.props.squadronRepository}
                     plannerService={new MomentPlannerService()}
                     flightRepository={this.props.flightRepository}
                 />

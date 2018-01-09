@@ -8,6 +8,6 @@ export class FlightSerializer implements Serializer<FlightModel> {
 
   /* tslint:disable:no-any*/
   deserialize(item: any): FlightModel {
-    return new FlightModel(item.id, item.unitId, item.name);
+    return new FlightModel(item.id, item.squadronId, item.name);
   }
 }

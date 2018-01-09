@@ -8,7 +8,7 @@ import App from './widgets/App';
 import { ThemeProvider } from 'styled-components';
 import theme from './themes/default';
 import WebProfileRepository from './profile/repositories/web/WebProfileRepository';
-import WebUnitRepository from './unit/repositories/web/WebUnitRepository';
+import WebSquadronRepository from './squadron/repositories/web/WebSquadronRepository';
 import { BrowserRouter } from 'react-router-dom';
 import WebMissionRepository from './mission/repositories/web/WebMissionRepository';
 import WebSiteRepository from './site/repositories/web/WebSiteRepository';
@@ -24,7 +24,7 @@ ReactDOM.render(
     <BrowserRouter>
       <App
         airmanRepository={new WebAirmanRepository()}
-        unitRepository={new WebUnitRepository()}
+        squadronRepository={new WebSquadronRepository()}
         profileRepository={new WebProfileRepository()}
         missionRepository={new WebMissionRepository()}
         siteRepository={new WebSiteRepository()}

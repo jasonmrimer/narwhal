@@ -4,7 +4,7 @@ import AirmanRepositoryStub from '../airman/repositories/doubles/AirmanRepositor
 import Roster from '../roster/Roster';
 import { Tracker } from './Tracker';
 import { findFilterById, forIt, selectOption } from '../utils/testUtils';
-import UnitRepositoryStub from '../unit/repositories/doubles/UnitRepositoryStub';
+import SquadronRepositoryStub from '../squadron/repositories/doubles/SquadronRepositoryStub';
 import SidePanel from './SidePanel/SidePanel';
 import AirmanModel from '../airman/models/AirmanModel';
 import PlannerServiceStub from './services/doubles/PlannerServiceStub';
@@ -13,7 +13,7 @@ import FlightRepositoryStub from '../flight/repositories/doubles/FlightRepositor
 import createDefaultOption from '../utils/createDefaultOption';
 
 const airmanRepositoryStub = new AirmanRepositoryStub();
-const unitRepositoryStub = new UnitRepositoryStub();
+const squadronRepositoryStub = new SquadronRepositoryStub();
 const plannerServiceStub = new PlannerServiceStub();
 const flightRepository = new FlightRepositoryStub();
 let subject: ReactWrapper, airmen: AirmanModel[];
@@ -24,7 +24,7 @@ describe('Tracker', () => {
       <Tracker
         username="Tytus"
         airmanRepository={airmanRepositoryStub}
-        unitRepository={unitRepositoryStub}
+        squadronRepository={squadronRepositoryStub}
         plannerService={plannerServiceStub}
         flightRepository={flightRepository}
       />
@@ -34,7 +34,7 @@ describe('Tracker', () => {
     subject.update();
   });
 
-  it('renders a Roster with all units and all flight', async () => {
+  it('renders a Roster with all squadrons and all flight', async () => {
     expect(subject.find(Roster).prop('airmen')).toEqual(airmen);
   });
 
@@ -67,22 +67,22 @@ describe('Tracker', () => {
 
   describe('filtering', () => {
     const defaultFilterValue = createDefaultOption('').value;
-    const unitId = 1;
+    const squadronId = 1;
     const flightId = 1;
     let filter: ReactWrapper;
 
-    describe('by unit', () => {
+    describe('by squadron', () => {
       beforeEach(async () => {
-        filter = findFilterById(subject, 'unit-filter');
-        await selectOption(subject, filter, unitId);
+        filter = findFilterById(subject, 'squadron-filter');
+        await selectOption(subject, filter, squadronId);
       });
 
       xit('limits the flight filter options', () => {
         // TODO : implement feature
       });
 
-      it('shows the airmen for the selected unit', async () => {
-        const filteredRoster = await airmanRepositoryStub.findByUnit(unitId);
+      it('shows the airmen for the selected squadron', async () => {
+        const filteredRoster = await airmanRepositoryStub.findBySquadron(squadronId);
         expect(subject.find(Roster).prop('airmen')).toEqual(filteredRoster);
       });
 

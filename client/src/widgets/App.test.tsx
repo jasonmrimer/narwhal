@@ -4,7 +4,7 @@ import * as React from 'react';
 import App from './App';
 import ProfileRepositoryStub from '../profile/repositories/doubles/ProfileRepositoryStub';
 import AirmanRepositoryStub from '../airman/repositories/doubles/AirmanRepositoryStub';
-import UnitRepositoryStub from '../unit/repositories/doubles/UnitRepositoryStub';
+import SquadronRepositoryStub from '../squadron/repositories/doubles/SquadronRepositoryStub';
 import { MemoryRouter, Route } from 'react-router-dom';
 import MissionRepositoryStub from '../mission/repositories/doubles/MissionRepositoryStub';
 import { Tracker } from '../tracker/Tracker';
@@ -14,7 +14,7 @@ import FlightRepositoryStub from '../flight/repositories/doubles/FlightRepositor
 
 describe('App', () => {
   const airmanRepository = new AirmanRepositoryStub();
-  const unitRepository = new UnitRepositoryStub();
+  const squadronRepository = new SquadronRepositoryStub();
   const profileRepository = new ProfileRepositoryStub();
   const missionRepositoryStub = new MissionRepositoryStub();
   const siteRepositoryStub = new SiteRepositoryStub();
@@ -26,7 +26,7 @@ describe('App', () => {
     subject = shallow(
       <App
         airmanRepository={airmanRepository}
-        unitRepository={unitRepository}
+        squadronRepository={squadronRepository}
         profileRepository={profileRepository}
         missionRepository={missionRepositoryStub}
         siteRepository={siteRepositoryStub}
@@ -45,7 +45,7 @@ describe('App', () => {
       <MemoryRouter initialEntries={['/']}>
         <App
           airmanRepository={airmanRepository}
-          unitRepository={unitRepository}
+          squadronRepository={squadronRepository}
           profileRepository={profileRepository}
           missionRepository={missionRepositoryStub}
           siteRepository={siteRepositoryStub}
@@ -62,7 +62,7 @@ describe('App', () => {
       <MemoryRouter initialEntries={['/dashboard']}>
         <App
           airmanRepository={airmanRepository}
-          unitRepository={unitRepository}
+          squadronRepository={squadronRepository}
           profileRepository={profileRepository}
           missionRepository={missionRepositoryStub}
           siteRepository={siteRepositoryStub}

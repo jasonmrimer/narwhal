@@ -2,8 +2,8 @@ import * as React from 'react';
 import AirmanRepository from '../airman/repositories/AirmanRepository';
 import Roster from '../roster/Roster';
 import { TopLevelFilter } from '../widgets/Filter';
-import UnitRepository from '../unit/repositories/UnitRepository';
-import UnitModel from '../unit/models/UnitModel';
+import SquadronRepository from '../squadron/repositories/SquadronRepository';
+import SquadronModel from '../squadron/models/SquadronModel';
 import FilterOption from '../widgets/models/FilterOptionModel';
 import styled from 'styled-components';
 import AirmanModel from '../airman/models/AirmanModel';
@@ -16,7 +16,7 @@ import FlightModel from '../flight/model/FlightModel';
 
 interface Props {
   airmanRepository: AirmanRepository;
-  unitRepository: UnitRepository;
+  squadronRepository: SquadronRepository;
   plannerService: PlannerService;
   flightRepository: FlightRepository;
   username: string;
@@ -25,21 +25,21 @@ interface Props {
 
 interface State {
   airmen: AirmanModel[];
-  units: UnitModel[];
+  squadrons: SquadronModel[];
   selectedAirman: AirmanModel;
   flights: FlightModel[];
   showSidePanel: boolean;
 }
 
 export class Tracker extends React.Component<Props, State> {
-  readonly defaultUnitOption: DefaultValue = createDefaultOption('All Units');
+  readonly defaultSquadronOption: DefaultValue = createDefaultOption('All Squadrons');
   readonly defaultFlightOption: DefaultValue = createDefaultOption('All Flights');
 
   constructor(props: Props) {
     super(props);
     this.state = {
       airmen: [],
-      units: [],
+      squadrons: [],
       flights: [],
       selectedAirman: AirmanModel.empty(),
       showSidePanel: false,
@@ -48,15 +48,15 @@ export class Tracker extends React.Component<Props, State> {
 
   async componentDidMount() {
     const airmen = await this.props.airmanRepository.findAll();
-    const units = await this.props.unitRepository.findAll();
+    const squadrons = await this.props.squadronRepository.findAll();
     const flights = await this.props.flightRepository.findAll();
-    this.setState({airmen, units, flights});
+    this.setState({airmen, squadrons, flights});
   }
 
-  setSelectedUnitId = async (option: FilterOption) => {
-    const updatedRoster = (option.value === this.defaultUnitOption.value) ?
+  setSelectedSquadronId = async (option: FilterOption) => {
+    const updatedRoster = (option.value === this.defaultSquadronOption.value) ?
       await this.props.airmanRepository.findAll() :
-      await this.props.airmanRepository.findByUnit(option.value);
+      await this.props.airmanRepository.findBySquadron(option.value);
     this.setState({airmen: updatedRoster});
   }
 
@@ -76,8 +76,8 @@ export class Tracker extends React.Component<Props, State> {
   }
 
   render() {
-    const unitOptions = this.state.units.map((unit: UnitModel) => {
-      return {value: unit.id, text: unit.name};
+    const squadronOptions = this.state.squadrons.map((squadron: SquadronModel) => {
+      return {value: squadron.id, text: squadron.name};
     });
 
     const flightOptions = this.state.flights.map((flight: FlightModel) => {
@@ -91,10 +91,10 @@ export class Tracker extends React.Component<Props, State> {
           <div key="1" className={this.props.className}>
             <div className="main">
               <TopLevelFilter
-                id="unit-filter"
-                defaultOption={this.defaultUnitOption}
-                options={unitOptions}
-                callback={this.setSelectedUnitId}
+                id="squadron-filter"
+                defaultOption={this.defaultSquadronOption}
+                options={squadronOptions}
+                callback={this.setSelectedSquadronId}
                 label="SQUADRON"
               />
               <TopLevelFilter

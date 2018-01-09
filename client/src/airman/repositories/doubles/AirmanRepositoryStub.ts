@@ -2,7 +2,7 @@ import AirmanRepository from '../AirmanRepository';
 import AirmanModelFactory from '../../factories/AirmanModelFactory';
 import AirmanModel from '../../models/AirmanModel';
 
-const units = [
+const squadrons = [
   {
     id: 1,
     airmen: [
@@ -30,17 +30,17 @@ const units = [
 export default class AirmanRepositoryStub implements AirmanRepository {
   findAll() {
     // TODO: use spread operator instead of concat. ES6 FTW
-    const airmen = units.reduce((accum, unit) => accum.concat(unit.airmen), ([] as AirmanModel[]));
+    const airmen = squadrons.reduce((accum, squadron) => accum.concat(squadron.airmen), ([] as AirmanModel[]));
     return Promise.resolve(airmen);
   }
 
-  findByUnit(id: number) {
-    const airmenForUnit = units.reduce((accum, unit) => id === unit.id ? unit.airmen : accum, ([] as AirmanModel[]));
-    return Promise.resolve(airmenForUnit);
+  findBySquadron(id: number) {
+    const airmenForSquadron = squadrons.reduce((accum, squadron) => id === squadron.id ? squadron.airmen : accum, ([] as AirmanModel[]));
+    return Promise.resolve(airmenForSquadron);
   }
 
   findByFlight(id: number): Promise<AirmanModel[]> {
-    const airmen = units.reduce((accum, unit) => accum.concat(unit.airmen), ([] as AirmanModel[]));
+    const airmen = squadrons.reduce((accum, squadron) => accum.concat(squadron.airmen), ([] as AirmanModel[]));
     const airmenForFlight = airmen.filter(airman => id === airman.flightId);
     return Promise.resolve(airmenForFlight);
   }

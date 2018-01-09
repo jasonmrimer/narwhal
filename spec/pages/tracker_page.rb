@@ -7,7 +7,7 @@ class TrackerPage
   
   def initialize
     page.driver.browser.manage.window.resize_to(4096, 4096)
-    expect(page).to have_content("All Unit")
+    expect(page).to have_content("All Squadrons")
     @@all_airmen = page.find_all('tbody tr').count
   end
 
@@ -17,9 +17,9 @@ class TrackerPage
     has_no_side_panel
   end
 
-  def assert_filters_by_unit
-    has_filter('All Units')
-    filter_by_unit(unit: '30 IS')
+  def assert_filters_by_squadron
+    has_filter('All Squadrons')
+    filter_by_squadron(squadron: '30 IS')
     has_filter('30 IS')
   end
 
@@ -56,19 +56,19 @@ class TrackerPage
     expect(page).to have_css('tbody tr', minimum: 1)
   end
 
-  def has_filter(unit)
-    case unit
-    when 'All Units'
+  def has_filter(squadron)
+    case squadron
+    when 'All Squadrons'
       has_airmen_in_roster
     when 'All Flights'
       has_airmen_in_roster
-    when unit
+    when squadron
       expect(page).to have_css('tbody tr', :maximum => @@all_airmen - 1)
     end
   end
 
-  def filter_by_unit(unit: 'All Units')
-    page.find("#unit-filter").find(:option, text: unit).select_option
+  def filter_by_squadron(squadron: 'All Squadrons')
+    page.find("#squadron-filter").find(:option, text: squadron).select_option
   end
 
   def filter_by_flight(flight: 'All Flights')

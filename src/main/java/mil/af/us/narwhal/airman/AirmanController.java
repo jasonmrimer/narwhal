@@ -23,9 +23,9 @@ public class AirmanController {
     return airmanRepository.findAll();
   }
 
-  @GetMapping(params = {"unit"})
-  public List<Airman> indexUnitId(@RequestParam("unit") Long unitId) {
-    return airmanRepository.findByUnitId(unitId);
+  @GetMapping(params = {"squadron"})
+  public List<Airman> indexSquadronId(@RequestParam("squadron") Long squadronId) {
+    return airmanRepository.findBySquadronId(squadronId);
   }
 
   @GetMapping(params = {"flight"})

@@ -1,4 +1,4 @@
-package mil.af.us.narwhal.unit;
+package mil.af.us.narwhal.squadron;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,20 +17,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ActiveProfiles("test")
-@WebMvcTest(UnitController.class)
+@WebMvcTest(SquadronController.class)
 @RunWith(SpringRunner.class)
-public class UnitControllerTest {
+public class SquadronControllerTest {
   @Autowired MockMvc mockMvc;
-  @MockBean UnitRepository unitRepository;
+  @MockBean
+  SquadronRepository squadronRepository;
 
   @Test
   public void indexTest() throws Exception {
-    Unit unit1 = new Unit(1L, "1");
-    Unit unit2 = new Unit(2L, "2");
+    Squadron squadron1 = new Squadron(1L, "1");
+    Squadron squadron2 = new Squadron(2L, "2");
 
-    when(unitRepository.findAll()).thenReturn(asList(unit1, unit2));
+    when(squadronRepository.findAll()).thenReturn(asList(squadron1, squadron2));
 
-    mockMvc.perform(get(UnitController.URI))
+    mockMvc.perform(get(SquadronController.URI))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.size()", equalTo(2)));
   }

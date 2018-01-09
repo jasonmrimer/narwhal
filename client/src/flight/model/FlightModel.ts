@@ -1,6 +1,6 @@
 export default class FlightModel {
   constructor(public id: number,
-              public unitId: number,
+              public squadronId: number,
               public name: string) {
   }
 }

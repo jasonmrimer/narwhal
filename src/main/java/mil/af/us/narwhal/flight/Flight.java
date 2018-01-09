@@ -18,8 +18,8 @@ public class Flight {
   @GeneratedValue
   private Long id;
 
-  @Column(name = "unit_id")
-  private Long unitId;
+  @Column(name = "squadron_id")
+  private Long squadronId;
 
   private String name;
 }

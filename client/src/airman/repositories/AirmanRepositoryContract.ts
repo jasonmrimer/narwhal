@@ -23,12 +23,12 @@ export default function airmenRepositoryContract(subject: AirmanRepository) {
     });
   });
 
-  describe('findByUnit', () => {
-    it('returns airmen filtered by unit', async () => {
+  describe('findBySquadron', () => {
+    it('returns airmen filtered by squadron', async () => {
       const airmen = await subject.findAll();
       expect(airmen).toBeDefined();
 
-      const filteredAirmen = await subject.findByUnit(1);
+      const filteredAirmen = await subject.findBySquadron(1);
       expect(filteredAirmen).toBeDefined();
 
       const uniqueIds = filteredAirmen.map(airman => airman.id).filter((el, i, a) => i === a.indexOf(el));

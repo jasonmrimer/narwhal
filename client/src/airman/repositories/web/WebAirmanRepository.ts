@@ -15,8 +15,8 @@ export default class WebAirmanRepository implements AirmanRepository {
     });
   }
 
-  async findByUnit(id: number) {
-    const resp = await fetch(`${this.baseUrl}/api/airmen?unit=${id}`, {credentials: 'include'});
+  async findBySquadron(id: number) {
+    const resp = await fetch(`${this.baseUrl}/api/airmen?squadron=${id}`, {credentials: 'include'});
     const json = await resp.json();
     return json.map((obj: object) => {
       return this.serializer.deserialize(obj);
