@@ -77,6 +77,7 @@ export default styled(SidePanel)`
   button {
     background-color: ${props => props.theme.lighter};
     border: none;
+    cursor: pointer;
   }
 
   h2 {

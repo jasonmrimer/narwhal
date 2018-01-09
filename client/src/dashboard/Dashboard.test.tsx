@@ -3,26 +3,17 @@ import { Dashboard } from './Dashboard';
 import { mount, ReactWrapper } from 'enzyme';
 import MissionRepositoryStub from '../mission/repositories/doubles/MissionRepositoryStub';
 import Mission from '../mission/Mission';
-import { forIt } from '../utils/testUtils';
+import { findFilterById, forIt, selectOption } from '../utils/testUtils';
 import TopBar from '../widgets/TopBar';
-import { Filter } from '../widgets/Filter';
 import SiteRepositoryStub from '../site/repositories/doubles/SiteRepositoryStub';
 import { MissionModel } from '../mission/models/MissionModel';
 
 const missionRepositoryStub = new MissionRepositoryStub();
 
-let subject: ReactWrapper, missions: MissionModel[];
-// TODO inject subject instead of making global variable
-function dashboardMissions() {
-  let missionCards: MissionModel[];
-  missionCards = [];
-  subject.find(Mission).map((mission) => {
-    missionCards.push(mission.props().mission);
-  });
-  return missionCards;
-}
-
 describe('Dashboard', () => {
+  let missions: MissionModel[];
+  let subject: ReactWrapper;
+
   beforeEach(async () => {
     subject = mount(
       <Dashboard
@@ -31,16 +22,15 @@ describe('Dashboard', () => {
         siteRepository={new SiteRepositoryStub()}
       />
     );
-    missions = await missionRepositoryStub.findAll();
     await forIt();
     subject.update();
+
+    missions = await missionRepositoryStub.findAll();
   });
 
-  it('renders a Dashboard with all missions', async () => {
-    await forIt();
-    subject.update();
+  it('renders a Dashboard with all missions', () => {
     expect(subject.find(Mission).length).toBe(3);
-    expect(dashboardMissions()).toEqual(missions);
+    expect(dashboardMissions(subject)).toEqual(missions);
   });
 
   it('renders the TopBar with a username and pageTitle', async () => {
@@ -50,20 +40,20 @@ describe('Dashboard', () => {
 
   describe('filtering', () => {
     const siteId = 1;
-    let filter: ReactWrapper;
 
     beforeEach(async () => {
-      filter = subject.find(Filter);
-      filter.simulate('change', {target: {value: siteId}});
-      missions = [];
-      await forIt();
-      subject.update();
+      const filter = findFilterById(subject, 'site-filter');
+      await selectOption(subject, filter, siteId);
     });
 
     it('can filter a dashboard by site', async () => {
-      missions = await missionRepositoryStub.findBySite(siteId);
-      expect(dashboardMissions()).toEqual(missions);
+      const filteredMissions = await missionRepositoryStub.findBySite(siteId);
+      expect(dashboardMissions(subject)).toEqual(filteredMissions);
     });
 
   });
 });
+
+function dashboardMissions(wrapper: ReactWrapper) {
+  return wrapper.find(Mission).map(mission => mission.props().mission);
+}

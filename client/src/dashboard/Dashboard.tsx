@@ -4,7 +4,7 @@ import { MissionModel } from '../mission/models/MissionModel';
 import Mission from '../mission/Mission';
 import styled from 'styled-components';
 import TopBar from '../widgets/TopBar';
-import Filter from '../widgets/Filter';
+import { TopLevelFilter } from '../widgets/Filter';
 import FilterOption from '../widgets/models/FilterOptionModel';
 import SiteRepository from '../site/repositories/SiteRepository';
 import SiteModel from '../site/models/SiteModel';
@@ -60,11 +60,12 @@ export class Dashboard extends React.Component<Props, State> {
         (
           <div key="1" className={`${this.props.className} filter`}>
             <div className="filter">
-              <Filter
+              <TopLevelFilter
                 id="site-filter"
                 defaultOption={this.defaultSiteOption}
                 options={options}
                 callback={this.setSelectedSiteId}
+                label={'SITE'}
               />
             </div>
           </div>),

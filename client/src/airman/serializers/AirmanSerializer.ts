@@ -14,6 +14,7 @@ export class AirmanSerializer implements Serializer<AirmanModel> {
   /* tslint:disable:no-any*/
   deserialize(item: any): AirmanModel {
     return new AirmanModel(
+      item.id,
       item.firstName,
       item.lastName,
       item.qualifications.map((qual: object) => this.qualSerializer.deserialize(qual)),

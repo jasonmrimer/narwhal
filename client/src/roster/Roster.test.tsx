@@ -14,13 +14,18 @@ let selectAirmanMock: (airman: AirmanModel) => void;
 describe('Roster', () => {
   beforeEach(async () => {
     selectAirmanMock = jest.fn();
-    airmen = AirmanModelFactory.buildList(3);
+    airmen = [
+      AirmanModelFactory.build(),
+      AirmanModelFactory.build(),
+      AirmanModelFactory.build()
+    ];
     const week = new PlannerServiceStub().getCurrentWeek();
     table = new Table(shallow(
       <Roster
         airmen={airmen}
-        selectAirman={selectAirmanMock}
+        selectedAirmanId={null}
         week={week}
+        selectAirman={selectAirmanMock}
       />
     ));
   });

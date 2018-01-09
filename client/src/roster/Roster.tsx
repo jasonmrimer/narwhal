@@ -6,8 +6,9 @@ import { Moment } from 'moment';
 interface Props {
   airmen: AirmanModel[];
   selectAirman: (airman: AirmanModel) => void;
-  className?: string;
+  selectedAirmanId: number | null;
   week: Moment[];
+  className?: string;
 }
 
 const formatAttributes = (objArray: object[], key: string) => objArray.map((object: object) => object[key]).join(' / ');
@@ -36,10 +37,15 @@ export class Roster extends React.Component<Props> {
   }
 
   private renderAirmen() {
-    const {airmen} = this.props;
+    const {airmen, selectedAirmanId} = this.props;
     return airmen.map((airman, index) => {
+      const className = airman.id === selectedAirmanId ? 'selected' : '';
       return (
-        <tr key={index} onClick={() => this.props.selectAirman(airman)}>
+        <tr
+          key={index}
+          className={className}
+          onClick={() => this.props.selectAirman(airman)}
+        >
           <td>{airman.lastName}</td>
           <td>{formatAttributes(airman.qualifications, 'acronym')}</td>
           <td>{formatAttributes(airman.certifications, 'title')}</td>
@@ -95,13 +101,26 @@ export default styled(Roster)`
     }
   };
    
+  tbody tr:hover {
+    background-color: ${props => props.theme.darker}
+
+  }
+  
+  tbody tr {
+    cursor: pointer;
+  }
+  
   tbody tr:nth-child(even) {
     background-color: ${props => props.theme.light};
+    &:hover {
+      background-color: ${props => props.theme.darker};
+    }
   }
   
   td, th {
     padding: 0.75rem;
   }
+  
   
   .planner-header, .planner-row {
     display: flex;
@@ -122,5 +141,9 @@ export default styled(Roster)`
       font-size: 0.625rem;
       font-weight: 100;
     }
+  }
+  
+  .selected {
+    box-shadow: inset 0.5rem 0px 0px ${props => props.theme.yellow};
   }
 `;

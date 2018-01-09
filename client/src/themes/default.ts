@@ -7,5 +7,7 @@ export default Object.freeze({
   dark: '#222',
   darkest: '#000',
   yellow: '#E9A90F',
-  graySteel: '#ADADAD'
+  graySteel: '#ADADAD',
+  darker: '#1D1D1D',
+  blueSteel: '#9CA9B9'
 });

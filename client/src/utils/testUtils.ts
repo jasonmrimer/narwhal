@@ -1,3 +1,5 @@
+import { Filter } from '../widgets/Filter';
+
 export function forIt(wait: number = 0): Promise<{}> {
   return new Promise((resolve) => {
     setTimeout(resolve, wait);
@@ -30,4 +32,14 @@ export class Table {
   getRowCount() {
     return this.getRows().length;
   }
+}
+
+export function findFilterById(wrapper: any, id: string) {
+  return wrapper.find(Filter).filterWhere((elem: any) => elem.prop('id') === id);
+}
+
+export async function selectOption(wrapper: any, filter: any, value: number) {
+  filter.find('select').simulate('change', {target: {value: value}});
+  await forIt();
+  wrapper.update();
 }

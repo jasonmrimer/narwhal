@@ -1,7 +1,7 @@
 import * as React from 'react';
 import AirmanRepository from '../airman/repositories/AirmanRepository';
 import Roster from '../roster/Roster';
-import Filter from '../widgets/Filter';
+import { TopLevelFilter } from '../widgets/Filter';
 import UnitRepository from '../unit/repositories/UnitRepository';
 import UnitModel from '../unit/models/UnitModel';
 import FilterOption from '../widgets/models/FilterOptionModel';
@@ -57,7 +57,6 @@ export class Tracker extends React.Component<Props, State> {
     const updatedRoster = (option.value === this.defaultUnitOption.value) ?
       await this.props.airmanRepository.findAll() :
       await this.props.airmanRepository.findByUnit(option.value);
-
     this.setState({airmen: updatedRoster});
   }
 
@@ -65,17 +64,15 @@ export class Tracker extends React.Component<Props, State> {
     const updatedRoster = (option.value === this.defaultFlightOption.value) ?
       await this.props.airmanRepository.findAll() :
       await this.props.airmanRepository.findByFlight(option.value);
-
     this.setState({airmen: updatedRoster});
   }
 
-  handleSelectAirman = (airman: AirmanModel) => {
-    this.setState({selectedAirman: airman});
-    this.setState({showSidePanel: true});
+  setSelectedAirman = (airman: AirmanModel) => {
+    this.setState({selectedAirman: airman, showSidePanel: true});
   }
 
-  handleSidePanelClose = () => {
-    this.setState({showSidePanel: false});
+  closeSidePanel = () => {
+    this.setState({selectedAirman: AirmanModel.empty(), showSidePanel: false});
   }
 
   render() {
@@ -93,19 +90,19 @@ export class Tracker extends React.Component<Props, State> {
         (
           <div key="1" className={this.props.className}>
             <div className="main">
-              <Filter
+              <TopLevelFilter
                 id="unit-filter"
-                className="filter"
                 defaultOption={this.defaultUnitOption}
                 options={unitOptions}
                 callback={this.setSelectedUnitId}
+                label="SQUADRON"
               />
-              <Filter
+              <TopLevelFilter
                 id="flight-filter"
-                className="filter"
                 defaultOption={this.defaultFlightOption}
                 options={flightOptions}
                 callback={this.setSelectedFlightId}
+                label="FLIGHT"
               />
               <div style={{display: 'flex'}}>
                 <span style={{marginLeft: 'auto', fontSize: '0.75rem'}}>White = Uncommitted, Blue = Committed</span>
@@ -114,7 +111,8 @@ export class Tracker extends React.Component<Props, State> {
                 <Roster
                   airmen={this.state.airmen}
                   week={this.props.plannerService.getCurrentWeek()}
-                  selectAirman={this.handleSelectAirman}
+                  selectedAirmanId={this.state.selectedAirman.id}
+                  selectAirman={this.setSelectedAirman}
                 />
               </div>
             </div>
@@ -122,7 +120,7 @@ export class Tracker extends React.Component<Props, State> {
               this.state.showSidePanel
                 ? <SideBar
                   airman={this.state.selectedAirman}
-                  closeCallback={this.handleSidePanelClose}
+                  closeCallback={this.closeSidePanel}
                   week={this.props.plannerService.getCurrentWeek()}
                 />
                 : null
@@ -141,11 +139,6 @@ export default styled(Tracker)`
   display: flex;
   
   .main {
-    width: 75%;
-    margin-right: 2rem;
+    width: 100%;
   }
-
-  .filter {
-    margin-right: 2rem;
-  }
-`;
+  `;

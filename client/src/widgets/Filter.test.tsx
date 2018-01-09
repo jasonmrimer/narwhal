@@ -17,6 +17,7 @@ describe('Filter', () => {
     subject = shallow(
       <Filter
         id="filter"
+        label="foo"
         defaultOption={expectedOptions[0]}
         options={expectedOptions.slice(1)}
         callback={callbackSpy}

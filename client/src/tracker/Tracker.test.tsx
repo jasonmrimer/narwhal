@@ -3,7 +3,7 @@ import { mount, ReactWrapper } from 'enzyme';
 import AirmanRepositoryStub from '../airman/repositories/doubles/AirmanRepositoryStub';
 import Roster from '../roster/Roster';
 import { Tracker } from './Tracker';
-import { forIt } from '../utils/testUtils';
+import { findFilterById, forIt, selectOption } from '../utils/testUtils';
 import UnitRepositoryStub from '../unit/repositories/doubles/UnitRepositoryStub';
 import SidePanel from './SidePanel/SidePanel';
 import AirmanModel from '../airman/models/AirmanModel';
@@ -11,7 +11,6 @@ import PlannerServiceStub from './services/doubles/PlannerServiceStub';
 import TopBar from '../widgets/TopBar';
 import FlightRepositoryStub from '../flight/repositories/doubles/FlightRepositoryStub';
 import createDefaultOption from '../utils/createDefaultOption';
-import { Filter } from '../widgets/Filter';
 
 const airmanRepositoryStub = new AirmanRepositoryStub();
 const unitRepositoryStub = new UnitRepositoryStub();
@@ -112,12 +111,3 @@ describe('Tracker', () => {
   });
 });
 
-function findFilterById(wrapper: any, id: string) {
-  return subject.find(Filter).filterWhere(elem => elem.prop('id') === id);
-}
-
-async function selectOption(wrapper: any, filter: any, value: number) {
-  filter.simulate('change', {target: {value: value}});
-  await forIt();
-  wrapper.update();
-}

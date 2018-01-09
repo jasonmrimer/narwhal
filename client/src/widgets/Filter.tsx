@@ -9,6 +9,7 @@ interface Props {
   options: FilterOptionModel[];
   callback: (option: FilterOptionModel) => void;
   className?: string;
+  label: string;
 }
 
 const handleChange = (event: ChangeEvent<HTMLSelectElement>, {callback, defaultOption, options}: Props) => {
@@ -22,13 +23,16 @@ export const Filter = (props: Props) => {
   });
 
   return (
-    <select
-      id={props.id}
-      className={props.className}
-      onChange={(event) => handleChange(event, props)}
-    >
-      {options}
-    </select>
+    <div className={props.className}>
+      <label htmlFor={props.id}>{props.label}</label>
+      <br/>
+      <select
+        id={props.id}
+        onChange={(event) => handleChange(event, props)}
+      >
+        {options}
+      </select>
+    </div>
   );
 };
 
@@ -40,17 +44,28 @@ const caret = (fillColor: string) => {
     no-repeat center right`;
 };
 
-export default styled(Filter)`
+export const TopLevelFilter = styled(Filter)`
+  min-width: 20%;
+  display: inline-block;
+  
+  label {
+    font-weight: 500;
+    font-size: .75rem;
+    color: ${props => props.theme.blueSteel};
+  }
+  
+  select {
     background-color: ${props => props.theme.dark};
     background: ${props => caret(props.theme.fontColor)};
     background-position: 98%;
     background-size: 0.75rem;
     color: ${props => props.theme.fontColor};
-    min-width: 20%;
     height: 2rem;
     border: none;
     font-size: 1rem;
     border-bottom: 1px solid ${props => props.theme.fontColor};
     -webkit-appearance: none;
     -webkit-border-radius: 0;
+    min-width: 50%;
+  }
 `;
