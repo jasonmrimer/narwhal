@@ -1,11 +1,19 @@
 import * as React from 'react';
 import { Moment } from 'moment';
 import styled from 'styled-components';
+import EventModel from '../../event/EventModel';
+import AirmanEvent from '../../airman/AirmanEvent';
 
 interface Props {
   week: Moment[];
+  events: EventModel[];
   className?: string;
 }
+
+const scheduledEventForDate = (day: Moment, events: EventModel[]) => {
+  const [matchedEvent]: EventModel[] = events.filter((event) => day.isSame(event.startTime, 'day'));
+  return matchedEvent ? <AirmanEvent event={matchedEvent}/> : <div className="event_name">No Events Scheduled</div>;
+};
 
 export const Availability = (props: Props) => {
   const {week} = props;
@@ -18,9 +26,9 @@ export const Availability = (props: Props) => {
         {
           week.map((day, index) => {
             return (
-              <div key={index}>
+              <div key={`day-${index}`}>
                 <div className="event_date">{day.format('ddd, DD MMM YY').toUpperCase()}</div>
-                <div className="event_name">No Events Scheduled</div>
+                {scheduledEventForDate(day.utc(), props.events)}
               </div>
             );
           })
@@ -41,6 +49,7 @@ export default styled(Availability)`
   .event_date {
     text-align: left;
     font-size: 0.75rem;
+    margin-top: 1.5rem;
   }  
 
   .event_name {

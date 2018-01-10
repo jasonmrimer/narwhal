@@ -59,5 +59,4 @@ describe('SidePanel', () => {
     subject.find('button').simulate('click');
     expect(clickSpy).toHaveBeenCalled();
   });
-
 });

@@ -1,6 +1,7 @@
 package mil.af.us.narwhal.airman;
 
 import mil.af.us.narwhal.certification.Certification;
+import mil.af.us.narwhal.event.Event;
 import mil.af.us.narwhal.flight.Flight;
 import mil.af.us.narwhal.qualification.Qualification;
 import mil.af.us.narwhal.squadron.Squadron;
@@ -15,10 +16,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 
 import static java.util.Collections.singletonList;
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -29,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @RunWith(SpringRunner.class)
 public class AirmanControllerTest {
   Squadron squadron;
+  Event event;
   List<Airman> airmen;
   Flight flight;
 
@@ -40,6 +44,7 @@ public class AirmanControllerTest {
   @Before
   public void setUp() {
     squadron = new Squadron(1L, "1", null);
+    event = new Event(1L, "Dentist", "", Instant.parse("2007-12-03T10:15:30.00Z"), Instant.parse("2007-12-03T10:15:30.00Z"), 1L);
     Qualification qualification1 = new Qualification(1L, "Qual1", "qualification1");
     final AirmanQualification airQual = new AirmanQualification(1L, qualification1.getId(), new Date(), qualification1);
 
@@ -48,7 +53,7 @@ public class AirmanControllerTest {
 
     flight = new Flight(1L, squadron.getId(), "SUPER FLIGHT");
     airmen = singletonList(
-      new Airman(1L, flight.getId(), "FirstOne", "LastOne", singletonList(airQual), singletonList(airCert))
+      new Airman(1L, flight.getId(), "FirstOne", "LastOne", singletonList(airQual), singletonList(airCert), singletonList(event))
     );
   }
 
@@ -60,7 +65,8 @@ public class AirmanControllerTest {
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.size()", Matchers.equalTo(1)))
       .andExpect(jsonPath("$[0].id").value(airmen.get(0).getId()))
-      .andExpect(jsonPath("$[0].flightId").value(flight.getId()));
+      .andExpect(jsonPath("$[0].flightId").value(flight.getId()))
+      .andExpect(jsonPath("[0].events", hasSize(1)));
   }
 
   @Test

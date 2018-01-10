@@ -10,8 +10,8 @@ import Tab from './Tab';
 interface Props {
   airman: AirmanModel;
   closeCallback: () => void;
-  className?: string;
   week: Moment[];
+  className?: string;
 }
 
 interface State {
@@ -28,12 +28,13 @@ export class SidePanel extends React.Component<Props, State> {
   }
 
   renderSelectedTab = () => {
+    const {airman} = this.props;
     switch (this.state.selectedTab) {
       case 0:
         return <Currency airman={this.props.airman}/>;
       case 1:
       default:
-        return <Availability week={this.props.week}/>;
+        return <Availability week={this.props.week} events={airman.events}/>;
     }
   }
 
@@ -51,8 +52,8 @@ export class SidePanel extends React.Component<Props, State> {
           </h2>
         </div>
         <div className="tabs">
-          <Tab onClick={() => this.setSelectedTab(0)} title={'CURRENCY'} isActive={this.state.selectedTab === 0} />
-          <Tab onClick={() => this.setSelectedTab(1)} title={'AVAILABILITY'} isActive={this.state.selectedTab === 1} />
+          <Tab onClick={() => this.setSelectedTab(0)} title={'CURRENCY'} isActive={this.state.selectedTab === 0}/>
+          <Tab onClick={() => this.setSelectedTab(1)} title={'AVAILABILITY'} isActive={this.state.selectedTab === 1}/>
         </div>
         <div>
           {this.renderSelectedTab()}

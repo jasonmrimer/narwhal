@@ -30,4 +30,8 @@ describe 'Tracker page', type: :feature do
   it "shows an airman's currency in the sidebar" do
     tracker_page.assert_shows_currency
   end
+
+  xit "show's an airman's scheduled events" do
+    tracker_page.assert_show_events
+  end
 end

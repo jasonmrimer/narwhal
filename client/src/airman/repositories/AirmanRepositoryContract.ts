@@ -20,6 +20,10 @@ export default function airmenRepositoryContract(subject: AirmanRepository) {
       airmen.forEach(({certifications}) => {
         expect(certifications.length).toBeGreaterThan(0);
       });
+
+      airmen.forEach(({events}) => {
+        expect(events.length).toBeGreaterThan(0);
+      });
     });
   });
 

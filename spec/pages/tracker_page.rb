@@ -49,6 +49,14 @@ class TrackerPage
     has_currency
   end
 
+  def assert_show_events
+    click_on_airman('LastName2')
+    page.within('.side-panel') do
+      expect(page).to have_content('10 JAN 18') 
+      expect(page).to have_content('Sleep')
+      expect(page).to have_content('1232Z - 1632Z')
+    end
+  end
   private
   
   def has_a_roster

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mil.af.us.narwhal.event.Event;
 
 import javax.persistence.*;
 import java.util.List;
@@ -34,4 +35,8 @@ public class Airman {
   @JsonManagedReference
   @JsonProperty("certifications")
   private List<AirmanCertification> certifications;
+
+  @OneToMany(mappedBy = "airmanId")
+  @JsonManagedReference
+  List<Event> events;
 }

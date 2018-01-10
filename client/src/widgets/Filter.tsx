@@ -55,7 +55,7 @@ export const TopLevelFilter = styled(Filter)`
   label {
     font-weight: 500;
     font-size: .75rem;
-    color: ${props => props.theme.blueSteel};
+    color: ${props => props.theme.darkSteel};
   }
   
   select {
