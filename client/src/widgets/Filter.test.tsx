@@ -18,7 +18,8 @@ describe('Filter', () => {
       <Filter
         id="filter"
         label="foo"
-        defaultOption={expectedOptions[0]}
+        value={expectedOptions[0].value}
+        unfilteredOption={expectedOptions[0]}
         options={expectedOptions.slice(1)}
         callback={callbackSpy}
       />
@@ -48,26 +49,14 @@ describe('Filter', () => {
     expect(callbackSpy).toBeCalledWith(expectedOptions[1]);
   });
 
-  it('displays the default option when options are null', () => {
+  it('disables the select if disabled is true', () => {
     subject = shallow(
       <Filter
         id="filter"
-        defaultOption={{label: 'Default Option', value: -1}}
-        options={null}
-        callback={callbackSpy}
-        label="Filter"
-      />
-    );
-
-    expect(subject.text()).toContain('Default Option');
-  });
-
-  it('disables the select if options is null', () => {
-    subject = shallow(
-      <Filter
-        id="filter"
-        defaultOption={expectedOptions[0]}
-        options={null}
+        disabled={true}
+        unfilteredOption={expectedOptions[0]}
+        options={[]}
+        value={expectedOptions[0].value}
         callback={callbackSpy}
         label="Filter"
       />

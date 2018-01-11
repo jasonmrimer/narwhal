@@ -29,13 +29,14 @@ interface State {
   squadrons: SquadronModel[];
   selectedAirman: AirmanModel;
   selectedSquadronId: number;
+  selectedFlightId: number;
   selectedCertificationIds: number[];
   showSidePanel: boolean;
 }
 
 export class Tracker extends React.Component<Props, State> {
-  readonly defaultSquadronOption: DefaultValue = createDefaultOption('All Squadrons');
-  readonly defaultFlightOption: DefaultValue = createDefaultOption('All Flights');
+  readonly unfilteredSquadronOption: DefaultValue = createDefaultOption('All Squadrons');
+  readonly unfilteredFlightOption: DefaultValue = createDefaultOption('All Flights');
 
   constructor(props: Props) {
     super(props);
@@ -44,7 +45,8 @@ export class Tracker extends React.Component<Props, State> {
       certifications: [],
       squadrons: [],
       selectedAirman: AirmanModel.empty(),
-      selectedSquadronId: -1,
+      selectedSquadronId: this.unfilteredSquadronOption.value,
+      selectedFlightId: this.unfilteredFlightOption.value,
       selectedCertificationIds: [],
       showSidePanel: false,
     };
@@ -58,17 +60,24 @@ export class Tracker extends React.Component<Props, State> {
   }
 
   setSelectedSquadronId = async (option: FilterOption) => {
-    const updatedRoster = (option.value === this.defaultSquadronOption.value) ?
+    const updatedRoster = (option.value === this.unfilteredSquadronOption.value) ?
       await this.props.airmanRepository.findAll() :
       await this.props.airmanRepository.findBySquadron(option.value);
-    this.setState({airmen: updatedRoster, selectedSquadronId: option.value});
+    this.setState({
+      airmen: updatedRoster,
+      selectedSquadronId: option.value,
+      selectedFlightId: this.unfilteredFlightOption.value
+    });
   }
 
   setSelectedFlightId = async (option: FilterOption) => {
-    const updatedRoster = (option.value === this.defaultFlightOption.value) ?
-      await this.props.airmanRepository.findAll() :
+    const updatedRoster = (option.value === this.unfilteredFlightOption.value) ?
+      await this.props.airmanRepository.findBySquadron(this.state.selectedSquadronId) :
       await this.props.airmanRepository.findByFlight(option.value);
-    this.setState({airmen: updatedRoster});
+    this.setState({
+      airmen: updatedRoster,
+      selectedFlightId: option.value
+    });
   }
 
   setSelectedAirman = (airman: AirmanModel) => {
@@ -84,64 +93,64 @@ export class Tracker extends React.Component<Props, State> {
   }
 
   render() {
-    const squadronOptions = this.state.squadrons.map((squadron: SquadronModel) => {
-      return {value: squadron.id, label: squadron.name};
-    });
+    const {username, className, plannerService} = this.props;
+    const {
+      selectedSquadronId,
+      selectedFlightId,
+      certifications,
+      selectedAirman,
+      showSidePanel,
+      selectedCertificationIds
+    } = this.state;
 
-    const [selectedSquadron] = this.state.squadrons.filter(squadron => squadron.id === this.state.selectedSquadronId);
-
-    const flightOptions = selectedSquadron ? selectedSquadron.flights.map((flight) => {
-      return {value: flight.id, label: flight.name};
-    }) : null;
-
-    let {airmen, selectedCertificationIds} = this.state;
-    if (selectedCertificationIds.length > 0) {
-      airmen = airmen.filter(airman => {
-        return !selectedCertificationIds.some(val => airman.certifications.map(cert => cert.id).indexOf(val) === -1);
-      });
-    }
+    const squadronOptions = this.getSquadronFilterOptions();
+    const flightOptions = this.getFlightFilterOptions();
+    const filteredAirmen = this.getFilteredAirmen();
 
     return (
       [
-        <TopBar key="0" username={this.props.username} pageTitle="AVAILABILITY ROSTER"/>,
+        <TopBar key="0" username={username} pageTitle="AVAILABILITY ROSTER"/>,
         (
-          <div key="1" className={this.props.className}>
+          <div key="1" className={className}>
             <div className="main">
               <TopLevelFilter
                 id="squadron-filter"
-                defaultOption={this.defaultSquadronOption}
+                value={selectedSquadronId}
+                unfilteredOption={this.unfilteredSquadronOption}
                 options={squadronOptions}
                 callback={this.setSelectedSquadronId}
                 label="SQUADRON"
               />
               <TopLevelFilter
                 id="flight-filter"
-                defaultOption={flightOptions ? this.defaultFlightOption : createDefaultOption('Select Squadron')}
+                value={selectedFlightId}
+                disabled={selectedSquadronId === this.unfilteredSquadronOption.value}
+                unfilteredOption={this.unfilteredFlightOption}
                 options={flightOptions}
                 callback={this.setSelectedFlightId}
                 label="FLIGHT"
               />
               <div style={{display: 'flex'}}>
-                <span style={{marginLeft: 'auto', fontSize: '0.75rem'}}>White = Uncommitted, Blue = Committed</span>
+                <span style={{marginLeft: 'auto', fontSize: '0.75rem'}}>Empty = Available, Filled = Unavailable</span>
               </div>
               <div style={{display: 'flex'}}>
                 <Roster
-                  airmen={airmen}
-                  certifications={this.state.certifications}
-                  week={this.props.plannerService.getCurrentWeek()}
-                  selectedAirmanId={this.state.selectedAirman.id}
+                  airmen={filteredAirmen}
+                  certifications={certifications}
+                  week={plannerService.getCurrentWeek()}
+                  selectedAirmanId={selectedAirman.id}
                   selectAirman={this.setSelectedAirman}
-                  selectedCertificationIds={this.state.selectedCertificationIds}
+                  selectedCertificationIds={selectedCertificationIds}
                   setSelectedCertifications={this.setSelectedCertificationIds}
                 />
               </div>
             </div>
             {
-              this.state.showSidePanel
+              showSidePanel
                 ? <SideBar
-                  airman={this.state.selectedAirman}
+                  airman={selectedAirman}
                   closeCallback={this.closeSidePanel}
-                  week={this.props.plannerService.getCurrentWeek()}
+                  week={plannerService.getCurrentWeek()}
                 />
                 : null
             }
@@ -149,6 +158,32 @@ export class Tracker extends React.Component<Props, State> {
         )
       ]
     );
+  }
+
+  private getSquadronFilterOptions() {
+    return this.state.squadrons.map((squadron: SquadronModel) => {
+      return {value: squadron.id, label: squadron.name};
+    });
+  }
+
+  private getFlightFilterOptions() {
+    const {squadrons, selectedSquadronId} = this.state;
+    const selectedSquadron = squadrons.find(squadron => squadron.id === selectedSquadronId);
+    if (selectedSquadron) {
+      return selectedSquadron.flights.map((flight) => ({value: flight.id, label: flight.name}));
+    }
+    return [];
+  }
+
+  private getFilteredAirmen() {
+    const {airmen, selectedCertificationIds} = this.state;
+    if (selectedCertificationIds.length > 0) {
+      return airmen.filter(airman => {
+        const airmanCertificationIds = airman.certifications.map(cert => cert.id);
+        return !selectedCertificationIds.some(val => airmanCertificationIds.indexOf(val) === -1);
+      });
+    }
+    return airmen;
   }
 }
 

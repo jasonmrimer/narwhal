@@ -24,14 +24,14 @@ interface State {
 }
 
 export class Dashboard extends React.Component<Props, State> {
-  readonly defaultSiteOption: DefaultValue = createDefaultOption('All Sites');
+  readonly unfilteredSiteOption: DefaultValue = createDefaultOption('All Sites');
 
   constructor(props: Props) {
     super(props);
     this.state = {
       missions: [],
       sites: [],
-      selectedSiteId: this.defaultSiteOption.value
+      selectedSiteId: this.unfilteredSiteOption.value
     };
   }
 
@@ -43,7 +43,7 @@ export class Dashboard extends React.Component<Props, State> {
   }
 
   setSelectedSiteId = async (option: FilterOption) => {
-    const updatedDashboard = (option.value === this.defaultSiteOption.value) ?
+    const updatedDashboard = (option.value === this.unfilteredSiteOption.value) ?
       await this.props.missionRepository.findAll() :
       await this.props.missionRepository.findBySite(option.value);
 
@@ -63,7 +63,8 @@ export class Dashboard extends React.Component<Props, State> {
             <div className="filter">
               <TopLevelFilter
                 id="site-filter"
-                defaultOption={this.defaultSiteOption}
+                value={this.state.selectedSiteId}
+                unfilteredOption={this.unfilteredSiteOption}
                 options={options}
                 callback={this.setSelectedSiteId}
                 label={'SITE'}

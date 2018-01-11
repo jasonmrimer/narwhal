@@ -49,10 +49,6 @@ describe('Tracker', () => {
     expect(subject.find(TopBar).prop('pageTitle')).toBe('AVAILABILITY ROSTER');
   });
 
-  it('renders a Flight Filter with a default message', () => {
-    expect(findFilterById(subject, 'flight-filter').text()).toContain('Select Squadron');
-  });
-
   describe('the side panel', () => {
     it('does not render by default', () => {
       expect(subject.find(SidePanel).exists()).toBeFalsy();
@@ -123,7 +119,8 @@ describe('Tracker', () => {
 
       it('shows all airmen for the default filter', async () => {
         await selectOption(subject, filter, defaultFilterValue);
-        expect(subject.find(Roster).prop('airmen')).toEqual(airmen);
+        const filteredRoster = await airmanRepositoryStub.findBySquadron(squadronId);
+        expect(subject.find(Roster).prop('airmen')).toEqual(filteredRoster);
       });
     });
 

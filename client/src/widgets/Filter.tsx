@@ -5,36 +5,33 @@ import FilterOption from './models/FilterOptionModel';
 
 interface Props {
   id: string;
-  defaultOption: FilterOption;
-  options: FilterOption[] | null;
+  label: string;
+  value: number;
+  unfilteredOption: FilterOption;
+  options: FilterOption[];
   callback: (option: FilterOption) => void;
   className?: string;
-  label: string;
+  disabled?: boolean;
 }
 
-const handleChange = (event: ChangeEvent<HTMLSelectElement>, {callback, defaultOption, options}: Props) => {
+const handleChange = (event: ChangeEvent<HTMLSelectElement>, {callback, unfilteredOption, options}: Props) => {
   const {value} = event.target;
-  if (options !== null) {
-    callback([defaultOption, ...options].find((opt) => opt.value === Number(value))!);
-  }
+  callback([unfilteredOption, ...options].find((opt) => opt.value === Number(value))!);
 };
 
 export const Filter = (props: Props) => {
-  const options = props.options === null ? [props.defaultOption] : [props.defaultOption, ...props.options];
-  const optionElements = options.map((opt, i) => {
-    return <option key={i} value={opt.value}>{opt.label}</option>;
-  });
-
+  const options = props.disabled ? [] : [props.unfilteredOption, ...props.options];
   return (
     <div className={props.className}>
       <label htmlFor={props.id}>{props.label}</label>
       <br/>
       <select
         id={props.id}
+        disabled={!!props.disabled}
+        value={props.value}
         onChange={(event) => handleChange(event, props)}
-        disabled={props.options === null}
       >
-        {optionElements}
+        {options.map((opt, i) => <option key={i} value={opt.value}>{opt.label}</option>)}
       </select>
     </div>
   );

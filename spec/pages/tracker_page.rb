@@ -8,7 +8,7 @@ class TrackerPage
 
   def initialize
     page.driver.browser.manage.window.resize_to(4096, 4096)
-    expect(page).to have_content("All Squadrons")
+    expect(page).to have_content('All Squadrons')
     @@all_airmen = page.find_all('tbody tr').count
   end
 
@@ -19,7 +19,7 @@ class TrackerPage
   end
 
   def assert_filters_by_squadron
-    expect(page).to have_content('Select Squadron')
+    expect(page).to have_content('All Squadron')
     filter_by_squadron('30 IS')
     has_filter('30 IS')
   end
