@@ -36,7 +36,8 @@ export default class AirmanRepositoryStub implements AirmanRepository {
   }
 
   findBySquadron(id: number) {
-    const airmenForSquadron = squadrons.reduce((accum, squadron) => id === squadron.id ? squadron.airmen : accum, ([] as AirmanModel[]));
+    const airmenForSquadron = squadrons.reduce(
+      (accum, squad) => id === squad.id ? squad.airmen : accum, ([] as AirmanModel[]));
     return Promise.resolve(airmenForSquadron);
   }
 

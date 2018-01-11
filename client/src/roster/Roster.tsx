@@ -2,6 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import AirmanModel from '../airman/models/AirmanModel';
 import { Moment } from 'moment';
+import AvailabilityOverview from './AvailabilityOverview';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import CertificationModel from '../airman/models/CertificationModel';
@@ -67,15 +68,7 @@ export class Roster extends React.Component<Props> {
           <td>{airman.lastName}</td>
           <td>{formatAttributes(airman.qualifications, 'acronym')}</td>
           <td>{formatAttributes(airman.certifications, 'title')}</td>
-          <td className="planner-row">
-            <span><input type="checkbox"/></span>
-            <span><input type="checkbox"/></span>
-            <span><input type="checkbox"/></span>
-            <span><input type="checkbox"/></span>
-            <span><input type="checkbox"/></span>
-            <span><input type="checkbox"/></span>
-            <span><input type="checkbox"/></span>
-          </td>
+          <AvailabilityOverview week={this.props.week} airman={airman}/>
         </tr>
       );
     });

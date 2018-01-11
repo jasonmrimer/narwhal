@@ -31,6 +31,10 @@ describe 'Tracker page', type: :feature do
     tracker_page.assert_shows_currency
   end
 
+  it "shows a high level view of airmen's availability" do
+    tracker_page.assert_shows_highlevel_availability
+  end
+
   it 'can filter the Roster by certification' do
     tracker_page.assert_filters_by_certification
   end

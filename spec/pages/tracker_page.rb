@@ -64,6 +64,17 @@ class TrackerPage
     end
   end
 
+  def assert_shows_highlevel_availability
+    firstRow = page.first('tbody tr')
+    expect(firstRow).to have_content('LastName1')
+
+    page.within(firstRow) do
+      expect(page).to have_selector('span', :text => '', count: 7)
+      expect(page).to have_css('span.unavailable', count: 1)
+      expect(page).to have_css('span.available', count: 6)
+    end
+  end
+
   private
 
   def has_a_roster
@@ -130,7 +141,8 @@ class TrackerPage
     page.within('.side-panel') do
       expect(page).to have_content('LastName1, FirstName1')
       expect(page).to have_content('AVAILABILITY')
-      expect(page).to have_content('No Events Scheduled', count: 7)
+      expect(page).to have_content('No Events Scheduled', count: 6)
+      expect(page).to have_content('dentist', count: 1)
       @@expected_availability_days.each {|day_name| expect(page).to have_content(day_name)}
     end
   end

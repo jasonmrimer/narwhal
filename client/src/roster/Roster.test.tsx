@@ -100,4 +100,8 @@ describe('Roster', () => {
       expect(setSelectedCertificationsSpy).toHaveBeenCalledWith([{label: '0', value: 0}]);
     });
   });
+
+  it('renders an AvailabilityOverview for every airman', () => {
+    expect(table.getAvailabilityOverview().length).toBe(3);
+  });
 });

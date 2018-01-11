@@ -1,4 +1,5 @@
 import { Filter } from '../widgets/Filter';
+import AvailabilityOverview from '../roster/AvailabilityOverview';
 
 export function forIt(wait: number = 0): Promise<{}> {
   return new Promise((resolve) => {
@@ -32,6 +33,10 @@ export class Table {
 
   getRowCount() {
     return this.getRows().length;
+  }
+
+  getAvailabilityOverview() {
+    return this.wrapper.find(AvailabilityOverview);
   }
 
   getColumnSubHeaders(columnIndex: number) {

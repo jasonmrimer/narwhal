@@ -3,6 +3,16 @@
   <component name="issues">
     <option name="index">
       <map>
+        <entry key="$APPLICATION_CONFIG_DIR$/consoles/.datagrid/cell">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$APPLICATION_CONFIG_DIR$/scratches/buffer1">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/build.gradle">
           <value>
             <set />
@@ -28,6 +38,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/client/src/roster/Roster.tsx">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/client/src/tracker/Tracker.test.tsx">
           <value>
             <set />
@@ -38,7 +53,17 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/client/src/utils/testUtils.ts">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/client/tsconfig.test.json">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/client/yarn.lock">
           <value>
             <set />
           </value>
@@ -49,6 +74,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/spec/pages/tracker_page.rb">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/spec/tracker_spec.rb">
           <value>
             <set />
           </value>
@@ -169,6 +199,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/resources/UnicornMissionWebservicesV2.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/resources/db/migration/V13__Create_event_table.sql">
           <value>
             <set />
           </value>
