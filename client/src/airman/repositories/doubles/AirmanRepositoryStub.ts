@@ -1,28 +1,29 @@
 import AirmanRepository from '../AirmanRepository';
 import AirmanModelFactory from '../../factories/AirmanModelFactory';
 import AirmanModel from '../../models/AirmanModel';
+import CertificationModelFactory from '../../factories/CertificationModelFactory';
 
 const squadrons = [
   {
     id: 1,
     airmen: [
-      AirmanModelFactory.build(1, 1),
-      AirmanModelFactory.build(2, 1),
-      AirmanModelFactory.build(3, 1),
-      AirmanModelFactory.build(4, 2),
-      AirmanModelFactory.build(5, 2),
-      AirmanModelFactory.build(6, 2)
+      AirmanModelFactory.build(1, 1, [CertificationModelFactory.build(1)]),
+      AirmanModelFactory.build(2, 1, [CertificationModelFactory.build(2)]),
+      AirmanModelFactory.build(3, 1, [CertificationModelFactory.build(3)]),
+      AirmanModelFactory.build(4, 2, [CertificationModelFactory.build(1), CertificationModelFactory.build(2)]),
+      AirmanModelFactory.build(5, 2, [CertificationModelFactory.build(2)]),
+      AirmanModelFactory.build(6, 2, [CertificationModelFactory.build(3)])
     ]
   },
   {
     id: 2,
     airmen: [
-      AirmanModelFactory.build(7, 3),
-      AirmanModelFactory.build(8, 3),
-      AirmanModelFactory.build(9, 3),
-      AirmanModelFactory.build(10, 4),
-      AirmanModelFactory.build(11, 5),
-      AirmanModelFactory.build(12, 6)
+      AirmanModelFactory.build(7, 3, [CertificationModelFactory.build(1)]),
+      AirmanModelFactory.build(8, 3, [CertificationModelFactory.build(2)]),
+      AirmanModelFactory.build(9, 3, [CertificationModelFactory.build(3)]),
+      AirmanModelFactory.build(10, 4, [CertificationModelFactory.build(1), CertificationModelFactory.build(2)]),
+      AirmanModelFactory.build(11, 5, [CertificationModelFactory.build(2)]),
+      AirmanModelFactory.build(12, 6, [CertificationModelFactory.build(3)])
     ]
   }
 ];

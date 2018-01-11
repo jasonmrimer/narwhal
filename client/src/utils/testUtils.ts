@@ -16,7 +16,8 @@ export class Table {
   }
 
   getColumnHeaders() {
-    return this.wrapper.find('th').map((header: any) => header.text());
+    const headers = this.wrapper.find('th');
+    return headers.map((header: any) => header.childAt(0).text());
   }
 
   getTextForRowAndCol(rowIndex: number, columnName: string) {
@@ -32,6 +33,11 @@ export class Table {
   getRowCount() {
     return this.getRows().length;
   }
+
+  getColumnSubHeaders(columnIndex: number) {
+    const headers = this.wrapper.find('th');
+    return headers.at(columnIndex).childAt(1).text();
+  }
 }
 
 export function findFilterById(wrapper: any, id: string) {
@@ -42,4 +48,18 @@ export async function selectOption(wrapper: any, filter: any, value: number) {
   filter.find('select').simulate('change', {target: {value: value}});
   await forIt();
   wrapper.update();
+}
+
+export function selectOptionByValue(wrapper: any, value: number) {
+  const input = wrapper.find('input');
+  input.simulate('keyDown', {keyCode: 40});
+
+  const options = wrapper.prop('options');
+  for (let i = 0; i < options.length; i++) {
+    if (options[i].value === value) {
+      input.simulate('keyDown', {keyCode: 13});
+      return;
+    }
+    input.simulate('keyDown', {keyCode: 40});
+  }
 }

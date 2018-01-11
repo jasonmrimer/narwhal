@@ -4,9 +4,9 @@ import { Filter } from './Filter';
 import Mock = jest.Mock;
 
 const expectedOptions = [
-  {text: 'A-text', value: -1},
-  {text: 'B-text', value: 2},
-  {text: 'C-text', value: 3}
+  {label: 'A-label', value: -1},
+  {label: 'B-label', value: 2},
+  {label: 'C-label', value: 3}
 ];
 
 let subject: ShallowWrapper, callbackSpy: Mock;
@@ -34,7 +34,7 @@ describe('Filter', () => {
 
     options.forEach((option, index) => {
       expect(option.prop('value')).toBe(expectedOptions[index].value);
-      expect(option.text()).toBe(expectedOptions[index].text);
+      expect(option.text()).toBe(expectedOptions[index].label);
     });
   });
 
@@ -52,7 +52,7 @@ describe('Filter', () => {
     subject = shallow(
       <Filter
         id="filter"
-        defaultOption={{text: 'Default Option', value: -1}}
+        defaultOption={{label: 'Default Option', value: -1}}
         options={null}
         callback={callbackSpy}
         label="Filter"

@@ -1,10 +1,9 @@
 import CertificationModel from '../models/CertificationModel';
 import * as moment from 'moment';
-import { randomText } from '../../utils/randomizer';
 
 export default class CertificationModelFactory {
   static build(id: number) {
-    return new CertificationModel(id, randomText(1), moment.utc());
+    return new CertificationModel(id, `${id}`, moment(0).add(id, 'd'));
   }
 
   static buildList(amount: number) {

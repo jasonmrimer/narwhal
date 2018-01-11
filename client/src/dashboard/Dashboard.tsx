@@ -52,8 +52,9 @@ export class Dashboard extends React.Component<Props, State> {
 
   render() {
     const options = this.state.sites.map((site: SiteModel) => {
-      return {value: site.id, text: site.name};
+      return {value: site.id, label: site.name};
     });
+
     return (
       [
         <TopBar key="0" username={this.props.username} pageTitle="MPS DASHBOARD"/>,

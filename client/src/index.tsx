@@ -13,6 +13,7 @@ import { BrowserRouter } from 'react-router-dom';
 import WebMissionRepository from './mission/repositories/web/WebMissionRepository';
 import WebSiteRepository from './site/repositories/web/WebSiteRepository';
 import WebAirmanRepository from './airman/repositories/web/WebAirmanRepository';
+import WebCertificationRepository from './airman/repositories/web/WebCertificationRepository';
 
 document.body.style.fontFamily = theme.fontFamily;
 document.body.style.color = theme.fontColor;
@@ -23,6 +24,7 @@ ReactDOM.render(
     <BrowserRouter>
       <App
         airmanRepository={new WebAirmanRepository()}
+        certificationRepository={new WebCertificationRepository()}
         squadronRepository={new WebSquadronRepository()}
         profileRepository={new WebProfileRepository()}
         missionRepository={new WebMissionRepository()}

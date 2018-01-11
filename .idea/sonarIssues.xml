@@ -28,6 +28,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/client/src/tracker/Tracker.test.tsx">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/client/src/tracker/Tracker.tsx">
           <value>
             <set />
@@ -39,6 +44,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/sonar-project.properties">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/spec/pages/tracker_page.rb">
           <value>
             <set />
           </value>
@@ -68,6 +78,16 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/airman/AirmanRepository.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/airman/CertificationRepository.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/airman_certification/AirmanCertification.java">
           <value>
             <set />
@@ -89,6 +109,16 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/certification/Certification.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/certification/CertificationController.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/certification/CertificationRepository.java">
           <value>
             <set />
           </value>
@@ -144,6 +174,16 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/resources/response.xml">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/test/java/mil/af/us/narwhal/airman/AirmanControllerTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/test/java/mil/af/us/narwhal/certification/CertificationControllerTest.java">
           <value>
             <set />
           </value>

@@ -8,10 +8,12 @@ import Dashboard from '../dashboard/Dashboard';
 import { Route, Switch } from 'react-router-dom';
 import MissionRepository from '../mission/repositories/MissionRepository';
 import SiteRepository from '../site/repositories/SiteRepository';
+import CertificationRepository from '../airman/repositories/CertificationRepository';
 
 interface Props {
   profileRepository: ProfileRepository;
   airmanRepository: AirmanRepository;
+  certificationRepository: CertificationRepository;
   squadronRepository: SquadronRepository;
   missionRepository: MissionRepository;
   siteRepository: SiteRepository;
@@ -55,6 +57,7 @@ export default class App extends React.Component<Props, State> {
                 <Tracker
                     username={this.state.username}
                     airmanRepository={this.props.airmanRepository}
+                    certificationRepository={this.props.certificationRepository}
                     squadronRepository={this.props.squadronRepository}
                     plannerService={new MomentPlannerService()}
                 />

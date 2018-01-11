@@ -20,19 +20,19 @@ class TrackerPage
 
   def assert_filters_by_squadron
     expect(page).to have_content('Select Squadron')
-    filter_by_squadron(squadron: '30 IS')
+    filter_by_squadron('30 IS')
     has_filter('30 IS')
   end
-  
+
   def assert_populate_flights
-    filter_by_squadron(squadron: '30 IS')
+    filter_by_squadron('30 IS')
     has_filter_options(@@expected_flights)
   end
 
   def assert_filters_by_flight
-    filter_by_squadron(squadron: '30 IS')
+    filter_by_squadron('30 IS')
     has_filter('All Flights')
-    filter_by_flight(flight: 'SUPER FLIGHT')
+    filter_by_flight('SUPER FLIGHT')
     has_filter('SUPER FLIGHT')
   end
 
@@ -49,51 +49,66 @@ class TrackerPage
     has_currency
   end
 
+  def assert_filters_by_certification
+    has_filter('Filter Certifications')
+    filter_by_certification('Super Speed')
+    has_filter('Super Speed')
+  end
+
   def assert_show_events
     click_on_airman('LastName2')
     page.within('.side-panel') do
-      expect(page).to have_content('10 JAN 18') 
+      expect(page).to have_content('10 JAN 18')
       expect(page).to have_content('Sleep')
       expect(page).to have_content('1232Z - 1632Z')
     end
   end
+
   private
-  
+
   def has_a_roster
     @@expected_columns.each {|column_name| expect(page).to have_content(column_name) }
   end
-  
+
   def has_no_side_panel
     expect(page).not_to have_selector('.side-panel')
   end
-  
+
   def has_airmen_in_roster
-    expect(page).to have_css('tbody tr', minimum: 1)
+    expect(page).to have_css('tbody tr', count: @@all_airmen)
   end
-  
+
   def has_filter_options(options = [])
     options.each do |option_text|
       expect(page).to have_css('option', text: option_text)
     end
   end
 
-  def has_filter(squadron)
-    case squadron
+  def has_filter(filter)
+    case filter
     when 'All Squadrons'
-      has_airmen_in_roster
+      return has_airmen_in_roster
     when 'All Flights'
-      has_airmen_in_roster
-    when squadron
-      expect(page).to have_css('tbody tr', :maximum => @@all_airmen - 1)
+      @@all_airmen_in_squadron = page.find_all('tbody tr').count
+      return expect(page).to have_css('tbody tr', maximum: @@all_airmen - 1)
+    default
+      expect(page).to have_css('tbody tr', maximum: @@all_airmen_in_squadron - 1)
     end
   end
 
-  def filter_by_squadron(squadron: 'All Squadrons')
+  def filter_by_squadron(squadron)
     page.find("#squadron-filter").find(:option, text: squadron).select_option
   end
 
-  def filter_by_flight(flight: 'All Flights')
+  def filter_by_flight(flight)
     page.find("#flight-filter").find(:option, text: flight).select_option
+  end
+
+  def filter_by_certification(cert)
+    page.within('table') do
+      find('#certification-filter').send_keys('Super Speed')
+      find('#certification-filter').send_keys(:enter)
+    end
   end
 
   def click_on_airman(name)

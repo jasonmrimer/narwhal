@@ -1,4 +1,4 @@
-import { shallow } from 'enzyme';
+import { mount, ReactWrapper } from 'enzyme';
 import * as React from 'react';
 
 import { Table } from '../utils/testUtils';
@@ -6,28 +6,42 @@ import { Roster } from './Roster';
 import AirmanModel from '../airman/models/AirmanModel';
 import AirmanModelFactory from '../airman/factories/AirmanModelFactory';
 import PlannerServiceStub from '../tracker/services/doubles/PlannerServiceStub';
+import CertificationModelFactory from '../airman/factories/CertificationModelFactory';
+import CertificationModel from '../airman/models/CertificationModel';
+import FilterOptionModel from '../widgets/models/FilterOptionModel';
 
-let table: Table;
 let airmen: AirmanModel[];
-let selectAirmanMock: (airman: AirmanModel) => void;
+let certifications: CertificationModel[];
+let selectAirmanSpy: (airman: AirmanModel) => void;
+let setSelectedCertificationsSpy: (certifications: FilterOptionModel[]) => void;
+let table: Table;
+let subject: ReactWrapper;
 
 describe('Roster', () => {
   beforeEach(async () => {
-    selectAirmanMock = jest.fn();
+    certifications = CertificationModelFactory.buildList(3);
+
     airmen = [
-      AirmanModelFactory.build(),
-      AirmanModelFactory.build(),
-      AirmanModelFactory.build()
+      AirmanModelFactory.build(1, 1, certifications.slice(0, 1)),
+      AirmanModelFactory.build(2, 1, certifications.slice(1, 2)),
+      AirmanModelFactory.build(3, 1, certifications.slice(0, 2))
     ];
-    const week = new PlannerServiceStub().getCurrentWeek();
-    table = new Table(shallow(
+
+    selectAirmanSpy = jest.fn();
+    setSelectedCertificationsSpy = jest.fn();
+
+    subject = mount(
       <Roster
         airmen={airmen}
+        certifications={certifications}
         selectedAirmanId={null}
-        week={week}
-        selectAirman={selectAirmanMock}
+        selectAirman={selectAirmanSpy}
+        selectedCertificationIds={[]}
+        setSelectedCertifications={setSelectedCertificationsSpy}
+        week={new PlannerServiceStub().getCurrentWeek()}
       />
-    ));
+    );
+    table = new Table(subject);
   });
 
   it('renders NAME, QUALIFICATION, CERTIFICATION, and Planner table headers', () => {
@@ -35,8 +49,9 @@ describe('Roster', () => {
       'NAME',
       'QUALIFICATION',
       'CERTIFICATION',
-      'NOVEMBER 201726SUN27MON28TUE29WED30THU01FRI02SAT'
+      'NOVEMBER 2017'
     ]);
+    expect(table.getColumnSubHeaders(3)).toEqual('26SUN27MON28TUE29WED30THU01FRI02SAT');
   });
 
   it('render airmen last names', async () => {
@@ -59,6 +74,30 @@ describe('Roster', () => {
 
   it('calls the selectAirman when clicking on an airman', () => {
     table.getRows().at(0).simulate('click');
-    expect(selectAirmanMock).toBeCalledWith(airmen[0]);
+    expect(selectAirmanSpy).toBeCalledWith(airmen[0]);
+  });
+
+  describe('multiselect', () => {
+    let multiSelect: ReactWrapper;
+
+    beforeEach(() => {
+      multiSelect = subject.find('Select');
+    });
+
+    it('renders multiple certfications', () => {
+      const certificationOptions = certifications.map(certification => {
+        return {value: certification.id, label: certification.title};
+      });
+      expect(multiSelect.prop('options')).toEqual(certificationOptions);
+    });
+
+    it('calls the setSelectedCertifications when selecting a single certification', () => {
+      const input = multiSelect.find('input');
+      input.simulate('keyDown', {keyCode: 40});
+      input.simulate('keyDown', {keyCode: 13});
+      subject.update();
+
+      expect(setSelectedCertificationsSpy).toHaveBeenCalledWith([{label: '0', value: 0}]);
+    });
   });
 });

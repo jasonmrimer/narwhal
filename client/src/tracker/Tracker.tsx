@@ -11,9 +11,12 @@ import SideBar from './SidePanel/SidePanel';
 import PlannerService from './services/PlannerService';
 import TopBar from '../widgets/TopBar';
 import createDefaultOption, { DefaultValue } from '../utils/createDefaultOption';
+import CertificationModel from '../airman/models/CertificationModel';
+import CertificationRepository from '../airman/repositories/CertificationRepository';
 
 interface Props {
   airmanRepository: AirmanRepository;
+  certificationRepository: CertificationRepository;
   squadronRepository: SquadronRepository;
   plannerService: PlannerService;
   username: string;
@@ -22,9 +25,11 @@ interface Props {
 
 interface State {
   airmen: AirmanModel[];
+  certifications: CertificationModel[];
   squadrons: SquadronModel[];
   selectedAirman: AirmanModel;
   selectedSquadronId: number;
+  selectedCertificationIds: number[];
   showSidePanel: boolean;
 }
 
@@ -36,17 +41,20 @@ export class Tracker extends React.Component<Props, State> {
     super(props);
     this.state = {
       airmen: [],
+      certifications: [],
       squadrons: [],
       selectedAirman: AirmanModel.empty(),
       selectedSquadronId: -1,
+      selectedCertificationIds: [],
       showSidePanel: false,
     };
   }
 
   async componentDidMount() {
     const airmen = await this.props.airmanRepository.findAll();
+    const certifications = await this.props.certificationRepository.findAll();
     const squadrons = await this.props.squadronRepository.findAll();
-    this.setState({airmen, squadrons});
+    this.setState({airmen, squadrons, certifications});
   }
 
   setSelectedSquadronId = async (option: FilterOption) => {
@@ -67,20 +75,31 @@ export class Tracker extends React.Component<Props, State> {
     this.setState({selectedAirman: airman, showSidePanel: true});
   }
 
+  setSelectedCertificationIds = (options: FilterOption[]) => {
+    this.setState({selectedCertificationIds: options.map(option => option.value)});
+  }
+
   closeSidePanel = () => {
     this.setState({selectedAirman: AirmanModel.empty(), showSidePanel: false});
   }
 
   render() {
     const squadronOptions = this.state.squadrons.map((squadron: SquadronModel) => {
-      return {value: squadron.id, text: squadron.name};
+      return {value: squadron.id, label: squadron.name};
     });
 
     const [selectedSquadron] = this.state.squadrons.filter(squadron => squadron.id === this.state.selectedSquadronId);
 
     const flightOptions = selectedSquadron ? selectedSquadron.flights.map((flight) => {
-      return {value: flight.id, text: flight.name};
+      return {value: flight.id, label: flight.name};
     }) : null;
+
+    let {airmen, selectedCertificationIds} = this.state;
+    if (selectedCertificationIds.length > 0) {
+      airmen = airmen.filter(airman => {
+        return !selectedCertificationIds.some(val => airman.certifications.map(cert => cert.id).indexOf(val) === -1);
+      });
+    }
 
     return (
       [
@@ -107,10 +126,13 @@ export class Tracker extends React.Component<Props, State> {
               </div>
               <div style={{display: 'flex'}}>
                 <Roster
-                  airmen={this.state.airmen}
+                  airmen={airmen}
+                  certifications={this.state.certifications}
                   week={this.props.plannerService.getCurrentWeek()}
                   selectedAirmanId={this.state.selectedAirman.id}
                   selectAirman={this.setSelectedAirman}
+                  selectedCertificationIds={this.state.selectedCertificationIds}
+                  setSelectedCertifications={this.setSelectedCertificationIds}
                 />
               </div>
             </div>

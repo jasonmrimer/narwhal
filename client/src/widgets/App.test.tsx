@@ -10,9 +10,11 @@ import MissionRepositoryStub from '../mission/repositories/doubles/MissionReposi
 import { Tracker } from '../tracker/Tracker';
 import Dashboard from '../dashboard/Dashboard';
 import SiteRepositoryStub from '../site/repositories/doubles/SiteRepositoryStub';
+import CertificationRepositoryStub from '../airman/repositories/doubles/CertificationRepositoryStub';
 
 describe('App', () => {
   const airmanRepository = new AirmanRepositoryStub();
+  const certificationRepository = new CertificationRepositoryStub();
   const squadronRepository = new SquadronRepositoryStub();
   const profileRepository = new ProfileRepositoryStub();
   const missionRepositoryStub = new MissionRepositoryStub();
@@ -24,6 +26,7 @@ describe('App', () => {
     subject = shallow(
       <App
         airmanRepository={airmanRepository}
+        certificationRepository={certificationRepository}
         squadronRepository={squadronRepository}
         profileRepository={profileRepository}
         missionRepository={missionRepositoryStub}
@@ -42,6 +45,7 @@ describe('App', () => {
       <MemoryRouter initialEntries={['/']}>
         <App
           airmanRepository={airmanRepository}
+          certificationRepository={certificationRepository}
           squadronRepository={squadronRepository}
           profileRepository={profileRepository}
           missionRepository={missionRepositoryStub}
@@ -58,6 +62,7 @@ describe('App', () => {
       <MemoryRouter initialEntries={['/dashboard']}>
         <App
           airmanRepository={airmanRepository}
+          certificationRepository={certificationRepository}
           squadronRepository={squadronRepository}
           profileRepository={profileRepository}
           missionRepository={missionRepositoryStub}

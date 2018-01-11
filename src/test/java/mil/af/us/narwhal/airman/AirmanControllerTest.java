@@ -31,15 +31,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(AirmanController.class)
 @RunWith(SpringRunner.class)
 public class AirmanControllerTest {
-  Squadron squadron;
-  Event event;
-  List<Airman> airmen;
-  Flight flight;
-
-  @Autowired
-  MockMvc mockMvc;
-  @MockBean
-  AirmanRepository airmanRepository;
+  private Squadron squadron;
+  private Event event;
+  private List<Airman> airmen;
+  private Flight flight;
+  @Autowired private MockMvc mockMvc;
+  @MockBean private AirmanRepository airmanRepository;
 
   @Before
   public void setUp() {

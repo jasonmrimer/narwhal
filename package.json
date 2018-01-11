@@ -1,6 +1,8 @@
 {
   "dependencies": {
     "@types/moment": "^2.13.0",
-    "moment": "^2.19.4"
+    "@types/react-select": "^1.1.0",
+    "moment": "^2.19.4",
+    "react-select": "^1.2.0"
   }
 }

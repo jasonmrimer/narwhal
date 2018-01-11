@@ -1,4 +1,4 @@
 export default interface FilterOptionModel {
   value: number;
-  text: string;
+  label: string;
 }

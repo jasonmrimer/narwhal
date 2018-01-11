@@ -1,10 +1,9 @@
 import QualificationModel from '../models/QualificationModel';
 import * as moment from 'moment';
-import { randomText } from '../../utils/randomizer';
 
 export default class QualificationModelFactory {
   static build(id: number) {
-    return new QualificationModel(id, randomText(3), randomText(8), moment.utc());
+    return new QualificationModel(id, `${id}`, `${id}`, moment(0).add(id, 'days'));
   }
 
   static buildList(amount: number) {

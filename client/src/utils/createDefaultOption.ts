@@ -1,11 +1,11 @@
 export interface DefaultValue {
   value: number;
-  text: string;
+  label: string;
 }
 
-export default (text: string): DefaultValue => {
+export default (label: string): DefaultValue => {
   return {
     value: -1,
-    text: text
+    label: label
   };
 };

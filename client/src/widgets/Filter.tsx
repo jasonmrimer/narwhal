@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { ChangeEvent } from 'react';
 import styled from 'styled-components';
-import FilterOptionModel from './models/FilterOptionModel';
+import FilterOption from './models/FilterOptionModel';
 
 interface Props {
   id: string;
-  defaultOption: FilterOptionModel;
-  options: FilterOptionModel[] | null;
-  callback: (option: FilterOptionModel) => void;
+  defaultOption: FilterOption;
+  options: FilterOption[] | null;
+  callback: (option: FilterOption) => void;
   className?: string;
   label: string;
 }
@@ -22,7 +22,7 @@ const handleChange = (event: ChangeEvent<HTMLSelectElement>, {callback, defaultO
 export const Filter = (props: Props) => {
   const options = props.options === null ? [props.defaultOption] : [props.defaultOption, ...props.options];
   const optionElements = options.map((opt, i) => {
-    return <option key={i} value={opt.value}>{opt.text}</option>;
+    return <option key={i} value={opt.value}>{opt.label}</option>;
   });
 
   return (

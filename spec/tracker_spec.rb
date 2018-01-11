@@ -31,6 +31,10 @@ describe 'Tracker page', type: :feature do
     tracker_page.assert_shows_currency
   end
 
+  it 'can filter the Roster by certification' do
+    tracker_page.assert_filters_by_certification
+  end
+
   xit "show's an airman's scheduled events" do
     tracker_page.assert_show_events
   end

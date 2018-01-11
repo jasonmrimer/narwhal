@@ -4,11 +4,13 @@
   "private": true,
   "dependencies": {
     "@types/moment": "^2.13.0",
+    "@types/react-select": "^1.1.0",
     "core-js": "^2.5.3",
     "moment": "^2.19.4",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-scripts-ts": "2.8.0",
+    "react-select": "^1.2.0",
     "styled-components": "^2.2.4"
   },
   "scripts": {
