@@ -53,7 +53,7 @@ public class MissionControllerTest {
       .andExpect(jsonPath("$[0].atoMissionNumber").value("MISNUM1"))
       .andExpect(jsonPath("$[0].startDateTime").value("2017-12-12T09:00:00Z"))
       .andExpect(jsonPath("$[0].endDateTime").value("2017-12-12T15:00:00Z"))
-      .andExpect(jsonPath("$[0].site").value(new Site(1L, "Site-1")));
+      .andExpect(jsonPath("$[0].site.id").value(site.getId()));
   }
 
   @Test
@@ -66,6 +66,6 @@ public class MissionControllerTest {
       .andExpect(jsonPath("$[0].atoMissionNumber").value("MISNUM1"))
       .andExpect(jsonPath("$[0].startDateTime").value("2017-12-12T09:00:00Z"))
       .andExpect(jsonPath("$[0].endDateTime").value("2017-12-12T15:00:00Z"))
-      .andExpect(jsonPath("$[0].site").value(new Site(1L, "Site-1")));
+      .andExpect(jsonPath("$[0].site.id").value(site.getId()));
   }
 }

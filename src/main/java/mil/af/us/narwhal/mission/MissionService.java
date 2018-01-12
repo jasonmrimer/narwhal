@@ -34,7 +34,7 @@ public class MissionService {
     final Site site = siteRepository.findOneByName(metaData.getPrimaryorg());
 
 
-    return Mission.builder()
+    return new Mission.Builder()
       .missionId(metaData.getMissionid())
       .atoMissionNumber(metaData.getAtomissionnumber())
       .startDateTime(metaData.getStartdttime().toGregorianCalendar().getTime().toInstant())
@@ -42,5 +42,4 @@ public class MissionService {
       .site(site)
       .build();
   }
-
 }

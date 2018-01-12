@@ -1,24 +1,48 @@
 package mil.af.us.narwhal.qualification;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Qualification {
 
   @Id
-  @GeneratedValue
   private Long id;
 
   private String acronym;
 
   private String title;
+
+  public Qualification(Long id, String acronym, String title) {
+    this.id = id;
+    this.acronym = acronym;
+    this.title = title;
+  }
+
+  public Qualification() {
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public String getAcronym() {
+    return acronym;
+  }
+
+  public void setAcronym(String acronym) {
+    this.acronym = acronym;
+  }
+
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
+  }
 }
