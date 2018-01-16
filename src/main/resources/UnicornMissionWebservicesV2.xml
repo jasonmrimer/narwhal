@@ -12,7 +12,7 @@
       <s:element name="results">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="unbounded" name="missionMetaData">
+            <s:element minOccurs="0" maxOccurs="1" name="missionMetaData">
               <s:complexType>
                 <s:sequence>
                   <s:element name="missionid" type="s:string"/>
