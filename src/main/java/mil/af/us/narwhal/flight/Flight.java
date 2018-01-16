@@ -14,13 +14,20 @@ public class Flight {
 
   private String name;
 
-  public Flight(Long id, Long squadronId, String name) {
-    this.id = id;
+  // Compliant
+  public Flight() {
+    // no-arg constructor
+  }
+
+  public Flight(Long squadronId, String name) {
     this.squadronId = squadronId;
     this.name = name;
   }
 
-  public Flight() {
+  public Flight(Long id, Long squadronId, String name) {
+    this.id = id;
+    this.squadronId = squadronId;
+    this.name = name;
   }
 
   public Long getId() {
@@ -44,12 +51,6 @@ public class Flight {
   }
 
   public void setName(String name) {
-    this.name = name;
-  }
-
-  public Flight(Long squadronId, String name) {
-
-    this.squadronId = squadronId;
     this.name = name;
   }
 }

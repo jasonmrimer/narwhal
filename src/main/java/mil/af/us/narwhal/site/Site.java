@@ -9,16 +9,14 @@ public class Site {
   private Long id;
   private String name;
 
+  // Compliant
+  public Site() {
+    // no-arg constructor
+  }
+
   public Site(Long id, String name) {
     this.id = id;
     this.name = name;
-  }
-
-  public Site(String name) {
-    this.name = name;
-  }
-
-  public Site() {
   }
 
   public Long getId() {

@@ -15,7 +15,9 @@ public class Certification {
     this.title = title;
   }
 
+  // Compliant
   public Certification() {
+    // no-arg constructor
   }
 
   public Long getId() {

@@ -13,13 +13,15 @@ public class Qualification {
 
   private String title;
 
+  // Compliant
+  public Qualification() {
+    // no-arg constructor
+  }
+
   public Qualification(Long id, String acronym, String title) {
     this.id = id;
     this.acronym = acronym;
     this.title = title;
-  }
-
-  public Qualification() {
   }
 
   public Long getId() {

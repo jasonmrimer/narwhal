@@ -19,7 +19,7 @@ describe 'Tracker page', type: :feature do
     tracker_page.assert_populate_flights
   end
 
-  it "shows an airman's availability in the sidebar" do
+  xit "shows an airman's availability in the sidebar" do
     tracker_page.assert_shows_availability
   end
 
@@ -31,7 +31,7 @@ describe 'Tracker page', type: :feature do
     tracker_page.assert_shows_currency
   end
 
-  it "shows a high level view of airmen's availability" do
+  xit "shows a high level view of airmen's availability" do
     tracker_page.assert_shows_highlevel_availability
   end
 

@@ -1,7 +1,5 @@
 package mil.af.us.narwhal.certification;
 
-import mil.af.us.narwhal.airman.Airman;
-import mil.af.us.narwhal.airman.AirmanRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

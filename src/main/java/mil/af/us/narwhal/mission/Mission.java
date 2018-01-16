@@ -19,7 +19,9 @@ public class Mission {
   @ManyToOne
   private Site site;
 
+  // Compliant
   public Mission() {
+    // no-arg constructor
   }
 
   public Mission(String missionId, String atoMissionNumber, Instant startDateTime, Instant endDateTime, Site site) {
@@ -95,7 +97,9 @@ public class Mission {
     private Instant endDateTime;
     private Site site;
 
+    // Compliant
     public Builder() {
+      // factory builder
     }
 
     public Builder missionId(String val) {

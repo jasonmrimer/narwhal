@@ -19,13 +19,15 @@ public class Squadron {
   @JsonManagedReference
   List<Flight> flights;
 
+  // Compliant
+  public Squadron() {
+    // no-arg contructor
+  }
+
   public Squadron(Long id, String name, List<Flight> flights) {
     this.id = id;
     this.name = name;
     this.flights = flights;
-  }
-
-  public Squadron() {
   }
 
   public Long getId() {

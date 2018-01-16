@@ -27,7 +27,9 @@ public class Event {
     this.airmanId = airmanId;
   }
 
+  // Compliant
   public Event() {
+    // no-arg constructor
   }
 
   public Long getId() {
