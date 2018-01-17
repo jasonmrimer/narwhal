@@ -10,6 +10,7 @@ import MissionRepositoryStub from '../mission/repositories/doubles/MissionReposi
 import { Tracker } from '../tracker/Tracker';
 import Dashboard from '../dashboard/Dashboard';
 import CertificationRepositoryStub from '../airman/repositories/doubles/CertificationRepositoryStub';
+import EventRepositoryStub from '../event/repositories/doubles/EventRepositoryStub';
 import { AirmanStore } from '../airman/AirmanStore';
 import { FlightStore } from '../flight/FlightStore';
 import { CertificationStore } from '../airman/CertificationStore';
@@ -22,6 +23,7 @@ describe('App', () => {
   const certificationStore: CertificationStore = new CertificationStore(new CertificationRepositoryStub());
   const squadronStore: SquadronStore = new SquadronStore(new SquadronRepositoryStub());
   const profileRepository = new ProfileRepositoryStub();
+  const eventRepositoryStub = new EventRepositoryStub();
   const flightStore: FlightStore = new FlightStore(squadronStore);
   const siteStore = new SiteStore(new SiteRepositoryStub());
   const missionStore = new MissionStore(new MissionRepositoryStub(), siteStore);
@@ -42,6 +44,7 @@ describe('App', () => {
         certificationStore={certificationStore}
         squadronStore={squadronStore}
         profileRepository={profileRepository}
+        eventRepository={eventRepositoryStub}
         flightStore={flightStore}
         missionStore={missionStore}
         siteStore={siteStore}
@@ -62,6 +65,7 @@ describe('App', () => {
           certificationStore={certificationStore}
           squadronStore={squadronStore}
           profileRepository={profileRepository}
+          eventRepository={eventRepositoryStub}
           flightStore={flightStore}
           missionStore={missionStore}
           siteStore={siteStore}
@@ -80,6 +84,7 @@ describe('App', () => {
           certificationStore={certificationStore}
           squadronStore={squadronStore}
           profileRepository={profileRepository}
+          eventRepository={eventRepositoryStub}
           flightStore={flightStore}
           missionStore={missionStore}
           siteStore={siteStore}

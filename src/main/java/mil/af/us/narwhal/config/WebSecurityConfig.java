@@ -20,6 +20,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
       .and()
       .formLogin()
       .and()
-      .httpBasic();
+      .httpBasic()
+      .and()
+      .csrf()
+      .disable();
   }
 }

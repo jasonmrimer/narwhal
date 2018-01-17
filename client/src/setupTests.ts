@@ -12,8 +12,19 @@ import * as fetch from 'isomorphic-fetch';
 enzyme.configure({adapter: new Adapter()});
 
 (globalAny as any).fetch = (url, args) => {
+  let headers = {'Authorization': 'Basic dHl0dXM6cGFzc3dvcmQ='};
+
+  if (args.headers) {
+    const additionalHeaders = args.headers.reduce((accum, item) => {
+      accum[item[0]] = item[1];
+      return accum;
+    },                                            {});
+    (<any> Object).assign(headers, additionalHeaders);
+    delete args.headers;
+  }
+
   return fetch(url, {
-    headers: {'Authorization': 'Basic dHl0dXM6cGFzc3dvcmQ='},
+    headers: headers,
     ...args
   });
 };

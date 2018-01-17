@@ -7,10 +7,12 @@ import Currency from './Currency';
 import Tab from './Tab';
 import { AirmanStore } from '../../airman/AirmanStore';
 import { observer } from 'mobx-react';
+import EventModel from '../../event/EventModel';
 
 interface Props {
   airmanStore: AirmanStore;
   week: Moment[];
+  submitEvent: (event: EventModel) => void;
   className?: string;
 }
 
@@ -30,12 +32,19 @@ export class SidePanel extends React.Component<Props, State> {
 
   renderSelectedTab = () => {
     const airman = this.props.airmanStore.getSelectedAirman;
+    const {submitEvent} = this.props;
     switch (this.state.selectedTab) {
       case 0:
         return <Currency airman={airman}/>;
       case 1:
       default:
-        return <Availability week={this.props.week} events={airman.events}/>;
+        return (
+          <Availability
+            week={this.props.week}
+            airman={airman}
+            submitEvent={submitEvent}
+          />
+        );
     }
   }
 
@@ -45,7 +54,10 @@ export class SidePanel extends React.Component<Props, State> {
     return (
       <div className={`${className} side-panel`}>
         <div className={'header'}>
-          <button onClick={() => airmanStore.setAirman()}>
+          <button
+              className="close"
+              onClick={() => airmanStore.setAirman()}
+          >
             <CloseIcon/>
           </button>
           <h2>

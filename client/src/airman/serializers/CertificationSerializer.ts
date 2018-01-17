@@ -9,6 +9,10 @@ export class CertificationSerializer implements Serializer<CertificationModel> {
 
   /* tslint:disable:no-any*/
   deserialize(item: any): CertificationModel {
-    return new CertificationModel(item.id, item.title, moment(item.expirationDate));
+    return new CertificationModel(
+      item.id,
+      item.title,
+      moment.utc(item.expirationDate)
+    );
   }
 }

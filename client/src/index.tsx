@@ -12,6 +12,7 @@ import WebSquadronRepository from './squadron/repositories/web/WebSquadronReposi
 import { BrowserRouter } from 'react-router-dom';
 import WebAirmanRepository from './airman/repositories/web/WebAirmanRepository';
 import WebCertificationRepository from './airman/repositories/web/WebCertificationRepository';
+import WebEventRepository from './event/repositories/web/WebEventRepository';
 import { AirmanStore } from './airman/AirmanStore';
 import { CertificationStore } from './airman/CertificationStore';
 import { SquadronStore } from './squadron/SquadronStore';
@@ -43,6 +44,7 @@ ReactDOM.render(
         flightStore={flightStore}
         missionStore={missionStore}
         siteStore={siteStore}
+        eventRepository={new WebEventRepository()}
       />
     </BrowserRouter>
   </ThemeProvider>,

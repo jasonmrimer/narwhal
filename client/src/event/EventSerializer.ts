@@ -4,11 +4,18 @@ import * as moment from 'moment';
 
 export default class EventSerializer implements Serializer<EventModel> {
   serialize(item: EventModel): {} {
-    throw new Error('Not implemented');
+    return JSON.stringify(item);
   }
 
   /* tslint:disable:no-any*/
   deserialize(item: any): EventModel {
-    return new EventModel(item.id, item.title, item.description, moment(item.startTime), moment(item.endTime));
+    return new EventModel(
+      item.title,
+      item.description,
+      moment.utc(item.startTime),
+      moment.utc(item.endTime),
+      item.airmanId,
+      item.id
+    );
   }
 }

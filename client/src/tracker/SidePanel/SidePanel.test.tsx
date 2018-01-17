@@ -15,6 +15,8 @@ import { SquadronStore } from '../../squadron/SquadronStore';
 import { CertificationStore } from '../../airman/CertificationStore';
 import AirmanRepositoryStub from '../../airman/repositories/doubles/AirmanRepositoryStub';
 
+const clickSpy = jest.fn();
+const submitEventSpy = jest.fn();
 const plannerServiceStub = new PlannerServiceStub();
 let airman: AirmanModel;
 let subject: ShallowWrapper;
@@ -36,6 +38,7 @@ describe('SidePanel', () => {
       <SidePanel
         airmanStore={airmanStore}
         week={plannerServiceStub.getCurrentWeek()}
+        submitEvent={submitEventSpy}
       />);
   });
 
@@ -52,6 +55,7 @@ describe('SidePanel', () => {
   it('renders the availability for a selected airman', () => {
     const availability = subject.find(Availability);
     expect(availability.exists()).toBeTruthy();
+    expect(availability.prop('submitEvent')).toEqual(submitEventSpy);
   });
 
   it('renders the currency for a selected airman', () => {

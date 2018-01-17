@@ -2,7 +2,8 @@ import * as React from 'react';
 import Roster from '../roster/Roster';
 import { TopLevelFilter } from '../widgets/Filter';
 import styled from 'styled-components';
-import SideBar from './SidePanel/SidePanel';
+import AirmanModel from '../airman/models/AirmanModel';
+import SidePanel from './SidePanel/SidePanel';
 import PlannerService from './services/PlannerService';
 import TopBar from '../widgets/TopBar';
 import createDefaultOption, { DefaultValue } from '../utils/createDefaultOption';
@@ -11,8 +12,14 @@ import { SquadronStore } from '../squadron/SquadronStore';
 import { AirmanStore } from '../airman/AirmanStore';
 import { CertificationStore } from '../airman/CertificationStore';
 import { FlightStore } from '../flight/FlightStore';
+import EventModel from '../event/EventModel';
+import EventRepository from '../event/repositories/EventRepository';
 
 interface Props {
+  airmanRepository: AirmanRepository;
+  certificationRepository: CertificationRepository;
+  squadronRepository: SquadronRepository;
+  eventRepository: EventRepository;
   plannerService: PlannerService;
   username: string;
   squadronStore: SquadronStore;
@@ -33,7 +40,20 @@ export class Tracker extends React.Component<Props> {
     this.props.certificationStore.fetchAllCertifications();
   }
 
-  render() {
+    submitEvent = async (event: EventModel) => {
+        const savedEvent = await this.props.eventRepository.save(event);
+
+        const index = this.state.airmen.findIndex(a => event.airmanId === a.id);
+        if (index === -1) {
+            return;
+        }
+
+        const airman = this.state.airmen[index];
+        airman.events.push(savedEvent);
+        this.setState({airmen: this.state.airmen});
+    }
+
+    render() {
     const {username, className, plannerService} = this.props;
     return (
       [
@@ -73,6 +93,7 @@ export class Tracker extends React.Component<Props> {
                 ? <SideBar
                   airmanStore={this.props.airmanStore}
                   week={plannerService.getCurrentWeek()}
+                  submitEvent={this.submitEvent}
                 />
                 : null
             }

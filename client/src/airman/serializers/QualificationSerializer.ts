@@ -13,7 +13,7 @@ export class QualificationSerializer implements Serializer<QualificationModel> {
       item.id,
       item.acronym,
       item.title,
-      moment(item.expirationDate)
+      moment.utc(item.expirationDate)
     );
   }
 }

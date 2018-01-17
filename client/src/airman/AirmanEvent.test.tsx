@@ -8,7 +8,7 @@ describe('AirmanEvent', () => {
   it('renders the event attributes', () => {
     const startTime = moment('2017-11-22T08:00:00.000Z').utc();
     const endTime = moment('2017-11-22T09:00:00.000Z').utc();
-    const event = new EventModel(1, 'Dentist', '', startTime, endTime);
+    const event = new EventModel('Dentist', '', startTime, endTime, 1);
     const subject = shallow(<AirmanEvent event={event}/>);
 
     expect(subject.text()).toContain('Dentist');

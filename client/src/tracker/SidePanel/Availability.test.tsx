@@ -5,11 +5,37 @@ import { Availability } from './Availability';
 import AirmanEvent from '../../airman/AirmanEvent';
 import EventModel from '../../event/EventModel';
 import * as moment from 'moment';
+import EventForm from './EventForm';
+import AirmanModelFactory from '../../airman/factories/AirmanModelFactory';
 
 describe('Availability', () => {
-  const event = new EventModel(1, 'Event', '', moment('2017-11-27T05:00:00.000Z'), moment('2017-11-27T10:00:00.000Z'));
+  const airman = AirmanModelFactory.build();
+  const eventOne = new EventModel(
+    'Event One',
+    '',
+    moment('2017-11-27T05:00:00.000Z'),
+    moment('2017-11-27T10:00:00.000Z'),
+    1
+  );
+  const eventTwo = new EventModel(
+    'Event Two',
+    '',
+    moment('2017-11-27T12:00:00.000Z'),
+    moment('2017-11-27T15:00:00.000Z'),
+    1
+  );
+  airman.events = [eventOne, eventTwo];
   const week = new PlannerServiceStub().getCurrentWeek();
-  const subject = shallow(<Availability week={week} events={[event]}/>);
+
+  /*tslint:disable:no-empty*/
+  const subject = shallow(
+    <Availability
+      week={week}
+      airman={airman}
+      submitEvent={() => {
+      }}
+    />
+  );
 
   it('renders the availability for an airman', () => {
     expect(subject.text()).toContain('26 NOV - 02 DEC');
@@ -23,12 +49,22 @@ describe('Availability', () => {
   });
 
   it('renders a list of events', () => {
-    expect(subject.find(AirmanEvent).length).toBe(1);
+    expect(subject.find(AirmanEvent).length).toBe(airman.events.length);
   });
 
-  it('renders the scheduled event for the given day', () => {
+  it('renders all the scheduled events for the given day', () => {
     const dateWrapper = subject.findWhere((s) => s.key() === 'day-1');
-    expect(dateWrapper.find(AirmanEvent).exists()).toBeTruthy();
-    expect(dateWrapper.find('.event_date').text()).toContain('MON, 27 NOV 17');
+    expect(dateWrapper.find(AirmanEvent).length).toBe(2);
+    expect(dateWrapper.find('.event-date').text()).toContain('MON, 27 NOV 17');
+  });
+
+  it('renders an Add Event button', () => {
+    expect(subject.find('button').exists()).toBeTruthy();
+    expect(subject.find('button').text()).toBe('+ Add Event');
+  });
+
+  it('opens a New Event form after clicking Add Event', () => {
+    subject.find('button').simulate('click');
+    expect(subject.find(EventForm).exists()).toBeTruthy();
   });
 });

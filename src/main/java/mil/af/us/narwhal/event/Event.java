@@ -2,17 +2,22 @@ package mil.af.us.narwhal.event;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.Instant;
 
 @Entity
 public class Event {
   @Id
+  @GeneratedValue
   private Long id;
 
   private String title;
+
   private String description;
+
   private Instant startTime;
+
   private Instant endTime;
 
   @Column(name = "airman_id")

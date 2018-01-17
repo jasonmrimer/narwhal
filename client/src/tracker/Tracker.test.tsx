@@ -15,10 +15,14 @@ import { SquadronStore } from '../squadron/SquadronStore';
 import { CertificationStore } from '../airman/CertificationStore';
 import { FlightStore } from '../flight/FlightStore';
 import createDefaultOption from '../utils/createDefaultOption';
+import * as moment from 'moment';
+import EventModel from '../event/EventModel';
+import EventRepositoryStub from '../event/repositories/doubles/EventRepositoryStub';
 
 const airmanRepositoryStub = new AirmanRepositoryStub();
 const certificationRepositoryStub = new CertificationRepositoryStub();
 const squadronRepositoryStub = new SquadronRepositoryStub();
+const eventRepositoryStub = new EventRepositoryStub();
 const plannerServiceStub = new PlannerServiceStub();
 const squadronStore = new SquadronStore(squadronRepositoryStub);
 const flightStore = new FlightStore(squadronStore);
@@ -36,6 +40,7 @@ describe('Tracker', () => {
         certificationStore={certificationStore}
         squadronStore={squadronStore}
         flightStore={flightStore}
+        eventRepository={eventRepositoryStub}
         plannerService={plannerServiceStub}
       />
     );
@@ -54,6 +59,17 @@ describe('Tracker', () => {
     expect(subject.find(TopBar).prop('pageTitle')).toBe('AVAILABILITY ROSTER');
   });
 
+  it('successfully submits an event', async () => {
+    const airman = airmen[0];
+    const event = new EventModel('Dentist', '', moment(), moment(), airman.id);
+
+    await (subject.instance() as Tracker).submitEvent(event);
+    subject.update();
+
+    const updatedAirman = subject.find(Roster).prop('airmen').find(a => a.id === airman.id);
+    expect(updatedAirman!.events).toContainEqual(event);
+  });
+
   describe('the side panelStore', () => {
     it('does not render by default', () => {
       expect(subject.find(SidePanel).exists()).toBeFalsy();
@@ -70,7 +86,7 @@ describe('Tracker', () => {
 
     it('closes the sidepanel', () => {
       subject.find(Roster).find('tbody tr').at(0).simulate('click');
-      subject.find(SidePanel).find('button').simulate('click');
+      subject.find(SidePanel).find('button').at(0).simulate('click');
       expect(subject.find(SidePanel).exists()).toBeFalsy();
     });
 

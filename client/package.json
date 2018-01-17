@@ -25,7 +25,8 @@
     "eject": "react-scripts-ts eject",
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
     "generate-repo": "./scripts/generate_repository.sh $1 $2",
-    "test:debug": "react-scripts-ts --inspect-brk test --runInBand --env=jsdom"
+    "test:debug": "react-scripts-ts --inspect-brk test --runInBand --env=jsdom",
+    "contracts:debug": "react-scripts-ts --inspect-brk test --runInBand  --env=jsdom --testMatch='<rootDir>/src/**/?(*.)contract.ts?(x)'"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.3",

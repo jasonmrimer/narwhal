@@ -1,3 +1,5 @@
+require 'date'
+
 class TrackerPage
   include Capybara::DSL
   include RSpec::Matchers
@@ -24,16 +26,22 @@ class TrackerPage
     has_filter('30 IS')
   end
 
-  def assert_populate_flights
-    filter_by_squadron('30 IS')
-    has_filter_options(@@expected_flights)
-  end
-
   def assert_filters_by_flight
     filter_by_squadron('30 IS')
     has_filter('All Flights')
     filter_by_flight('SUPER FLIGHT')
     has_filter('SUPER FLIGHT')
+  end
+
+  def assert_filters_by_certification
+    has_filter('Filter Certifications')
+    filter_by_certification('Super Speed')
+    has_filter('Super Speed')
+  end
+
+  def assert_populate_flights
+    filter_by_squadron('30 IS')
+    has_filter_options(@@expected_flights)
   end
 
   def assert_shows_availability
@@ -49,30 +57,27 @@ class TrackerPage
     has_currency
   end
 
-  def assert_filters_by_certification
-    has_filter('Filter Certifications')
-    filter_by_certification('Super Speed')
-    has_filter('Super Speed')
-  end
+  def assert_can_create_and_view_an_event
+    event_start = DateTime.now
+    event_end = event_start + 1.0/24.0
 
-  def assert_show_events
     click_on_airman('LastName2')
+
     page.within('.side-panel') do
-      expect(page).to have_content('10 JAN 18')
-      expect(page).to have_content('Sleep')
-      expect(page).to have_content('1232Z - 1632Z')
+      click_link_or_button '+ Add Event'
+      fill_in 'title', with: 'Dentist'
+      fill_in 'startDate', with: event_start.strftime('%m/%d/%Y')
+      fill_in 'startTime', with: event_start.strftime('%H:%M')
+      fill_in 'endDate', with: event_end.strftime('%m/%d/%Y')
+      fill_in 'endTime', with: event_end.strftime('%H:%M')
+      find('input[type="submit"]').click
     end
-  end
 
-  def assert_shows_highlevel_availability
-    firstRow = page.first('tbody tr')
-    expect(firstRow).to have_content('LastName1')
+    check_for_event(event_start, event_end)
 
-    page.within(firstRow) do
-      expect(page).to have_selector('span', :text => '', count: 7)
-      expect(page).to have_css('span.unavailable', count: 1)
-      expect(page).to have_css('span.available', count: 6)
-    end
+    find('button.close').click
+
+    has_highlevel_availability
   end
 
   private
@@ -92,6 +97,14 @@ class TrackerPage
   def has_filter_options(options = [])
     options.each do |option_text|
       expect(page).to have_css('option', text: option_text)
+    end
+  end
+
+  def check_for_event(event_start, event_end)
+    page.within('.side-panel') do
+      expect(page).to have_content(event_start.strftime('%d %^b %y'))
+      expect(page).to have_content('Dentist')
+      expect(page).to have_content(event_start.strftime('%H%MZ') + ' - ' + event_end.strftime('%H%MZ'))
     end
   end
 
@@ -141,9 +154,18 @@ class TrackerPage
     page.within('.side-panel') do
       expect(page).to have_content('LastName1, FirstName1')
       expect(page).to have_content('AVAILABILITY')
-      expect(page).to have_content('No Events Scheduled', count: 6)
-      expect(page).to have_content('dentist', count: 1)
       @@expected_availability_days.each {|day_name| expect(page).to have_content(day_name)}
+    end
+  end
+
+  def has_highlevel_availability
+    second_row = page.all('tbody tr')[1]
+    expect(second_row).to have_content('LastName2')
+
+    page.within(second_row) do
+      expect(page).to have_selector('span', :text => '', count: 7)
+      expect(page).to have_css('span.unavailable', minimum: 1)
+      expect(page).to have_css('span.available', maximum: 6)
     end
   end
 end

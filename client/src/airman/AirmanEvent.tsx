@@ -10,11 +10,11 @@ interface Props {
 export const AirmanEvent = (props: Props) => {
   return (
     <div className={props.className}>
-      <div className="event_title">
+      <div className="event-title">
         <span>{props.event.startTime.format('DD MMM YY').toUpperCase()}</span>
         <span>{props.event.title}</span>
       </div>
-      <div className="event_description">
+      <div className="event-description">
         <span>{`${props.event.startTime.format('HHmm')}Z - ${props.event.endTime.format('HHmm')}Z`}</span>
         <span>{props.event.description}</span>
       </div>
@@ -33,7 +33,7 @@ export default styled(AirmanEvent)`
     padding: 0.35rem;
   }
   
-  .event_description {
+  .event-description {
     background: ${props => props.theme.lighter};
     font-size: 12px;
   }

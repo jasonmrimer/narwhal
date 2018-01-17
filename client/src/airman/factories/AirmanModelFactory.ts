@@ -14,7 +14,7 @@ export default class AirmanModelFactory {
       randomText(5),
       QualificationModelFactory.buildList(2),
       certifications,
-      [new EventModel(1, '', '', moment('2017-11-27T05:00:00.000Z'), moment('2017-11-27T10:00:00.000Z'))]
+      [new EventModel('Fake Event', '', moment('2017-11-27T05:00:00.000Z'), moment('2017-11-27T10:00:00.000Z'), id)]
     );
   }
 }

@@ -19,10 +19,6 @@ describe 'Tracker page', type: :feature do
     tracker_page.assert_populate_flights
   end
 
-  xit "shows an airman's availability in the sidebar" do
-    tracker_page.assert_shows_availability
-  end
-
   it 'can filter the Roster by flight' do
     tracker_page.assert_filters_by_flight
   end
@@ -31,15 +27,15 @@ describe 'Tracker page', type: :feature do
     tracker_page.assert_shows_currency
   end
 
-  xit "shows a high level view of airmen's availability" do
-    tracker_page.assert_shows_highlevel_availability
-  end
-
   it 'can filter the Roster by certification' do
     tracker_page.assert_filters_by_certification
   end
 
-  xit "show's an airman's scheduled events" do
-    tracker_page.assert_show_events
+  it "shows an airman's availability in the sidebar" do
+    tracker_page.assert_shows_availability
+  end
+
+  it "create and view an event for a selected airman" do
+    tracker_page.assert_can_create_and_view_an_event
   end
 end
