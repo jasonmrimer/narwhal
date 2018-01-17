@@ -7,19 +7,34 @@ import PlannerServiceStub from '../services/doubles/PlannerServiceStub';
 import Currency from './Currency';
 import Availability from './Availability';
 import Tab from './Tab';
+import SquadronRepositoryStub from '../../squadron/repositories/doubles/SquadronRepositoryStub';
+import CertificationRepositoryStub from '../../airman/repositories/doubles/CertificationRepositoryStub';
+import { AirmanStore } from '../../airman/AirmanStore';
+import { FlightStore } from '../../flight/FlightStore';
+import { SquadronStore } from '../../squadron/SquadronStore';
+import { CertificationStore } from '../../airman/CertificationStore';
+import AirmanRepositoryStub from '../../airman/repositories/doubles/AirmanRepositoryStub';
 
-const clickSpy = jest.fn();
 const plannerServiceStub = new PlannerServiceStub();
 let airman: AirmanModel;
 let subject: ShallowWrapper;
+let airmanStore: AirmanStore;
 
 describe('SidePanel', () => {
   beforeEach(() => {
     airman = AirmanModelFactory.build();
+
+    const squadronStore = new SquadronStore(new SquadronRepositoryStub());
+    airmanStore = new AirmanStore(
+      new AirmanRepositoryStub(),
+      squadronStore,
+      new FlightStore(squadronStore),
+      new CertificationStore(new CertificationRepositoryStub()));
+
+    airmanStore.setAirman(airman);
     subject = shallow(
       <SidePanel
-        airman={airman}
-        closeCallback={clickSpy}
+        airmanStore={airmanStore}
         week={plannerServiceStub.getCurrentWeek()}
       />);
   });
@@ -55,8 +70,8 @@ describe('SidePanel', () => {
     expect(subject.find(Tab).at(1).prop('isActive')).toBeTruthy();
   });
 
-  it('calls the click callback', () => {
+  it('calls the callback', () => {
     subject.find('button').simulate('click');
-    expect(clickSpy).toHaveBeenCalled();
+    expect(airmanStore.getSelectedAirman.id).toBe(-1);
   });
 });

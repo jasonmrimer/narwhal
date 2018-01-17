@@ -1,60 +1,31 @@
 import * as React from 'react';
-import MissionRepository from '../mission/repositories/MissionRepository';
 import { MissionModel } from '../mission/models/MissionModel';
 import Mission from '../mission/Mission';
 import styled from 'styled-components';
 import TopBar from '../widgets/TopBar';
 import { TopLevelFilter } from '../widgets/Filter';
-import FilterOption from '../widgets/models/FilterOptionModel';
-import SiteRepository from '../site/repositories/SiteRepository';
-import SiteModel from '../site/models/SiteModel';
-import { default as createDefaultOption, DefaultValue } from '../utils/createDefaultOption';
+import {default as createDefaultOption, DefaultValue } from '../utils/createDefaultOption';
+import { SiteStore } from '../site/SiteStore';
+import { observer } from 'mobx-react';
+import { MissionStore } from '../mission/MissionStore';
 
 interface Props {
-  missionRepository: MissionRepository;
-  siteRepository: SiteRepository;
+  siteStore: SiteStore;
+  missionStore: MissionStore;
   username: string;
   className?: string;
 }
 
-interface State {
-  missions: MissionModel[];
-  sites: SiteModel[];
-  selectedSiteId: number;
-}
-
-export class Dashboard extends React.Component<Props, State> {
+@observer
+export class Dashboard extends React.Component<Props> {
   readonly unfilteredSiteOption: DefaultValue = createDefaultOption('All Sites');
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      missions: [],
-      sites: [],
-      selectedSiteId: this.unfilteredSiteOption.value
-    };
-  }
-
   async componentDidMount() {
-    const missions = await this.props.missionRepository.findAll();
-    const sites = await this.props.siteRepository.findAll();
-
-    this.setState({missions, sites});
-  }
-
-  setSelectedSiteId = async (option: FilterOption) => {
-    const updatedDashboard = (option.value === this.unfilteredSiteOption.value) ?
-      await this.props.missionRepository.findAll() :
-      await this.props.missionRepository.findBySite(option.value);
-
-    this.setState({selectedSiteId: option.value, missions: updatedDashboard});
+    this.props.siteStore.fetchAllSites();
+    this.props.missionStore.fetchAllMissions();
   }
 
   render() {
-    const options = this.state.sites.map((site: SiteModel) => {
-      return {value: site.id, label: site.name};
-    });
-
     return (
       [
         <TopBar key="0" username={this.props.username} pageTitle="MPS DASHBOARD"/>,
@@ -63,17 +34,16 @@ export class Dashboard extends React.Component<Props, State> {
             <div className="filter">
               <TopLevelFilter
                 id="site-filter"
-                value={this.state.selectedSiteId}
+                store={this.props.siteStore}
                 unfilteredOption={this.unfilteredSiteOption}
-                options={options}
-                callback={this.setSelectedSiteId}
+                callback={this.props.missionStore.fetchBySiteId}
                 label={'SITE'}
               />
             </div>
           </div>),
         (
           <div key="2" className={`${this.props.className} missions`}>
-            {this.state.missions.map((mission: MissionModel, index) => {
+            {this.props.missionStore.missions.map((mission: MissionModel, index) => {
               return <Mission mission={mission} key={index}/>;
             })}
           </div>)

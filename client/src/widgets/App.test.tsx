@@ -9,28 +9,42 @@ import { MemoryRouter, Route } from 'react-router-dom';
 import MissionRepositoryStub from '../mission/repositories/doubles/MissionRepositoryStub';
 import { Tracker } from '../tracker/Tracker';
 import Dashboard from '../dashboard/Dashboard';
-import SiteRepositoryStub from '../site/repositories/doubles/SiteRepositoryStub';
 import CertificationRepositoryStub from '../airman/repositories/doubles/CertificationRepositoryStub';
+import { AirmanStore } from '../airman/AirmanStore';
+import { FlightStore } from '../flight/FlightStore';
+import { CertificationStore } from '../airman/CertificationStore';
+import { SquadronStore } from '../squadron/SquadronStore';
+import { MissionStore } from '../mission/MissionStore';
+import { SiteStore } from '../site/SiteStore';
+import SiteRepositoryStub from '../site/repositories/doubles/SiteRepositoryStub';
 
 describe('App', () => {
-  const airmanRepository = new AirmanRepositoryStub();
-  const certificationRepository = new CertificationRepositoryStub();
-  const squadronRepository = new SquadronRepositoryStub();
+  const certificationStore: CertificationStore = new CertificationStore(new CertificationRepositoryStub());
+  const squadronStore: SquadronStore = new SquadronStore(new SquadronRepositoryStub());
   const profileRepository = new ProfileRepositoryStub();
-  const missionRepositoryStub = new MissionRepositoryStub();
-  const siteRepositoryStub = new SiteRepositoryStub();
+  const flightStore: FlightStore = new FlightStore(squadronStore);
+  const siteStore = new SiteStore(new SiteRepositoryStub());
+  const missionStore = new MissionStore(new MissionRepositoryStub(), siteStore);
+  const airmanStore: AirmanStore = new AirmanStore(
+    new AirmanRepositoryStub(),
+    squadronStore,
+    flightStore,
+    certificationStore
+  );
+
   let subject: ShallowWrapper;
   let mountedSubject: ReactWrapper;
 
   it('renders a route for the dashboard and roster', () => {
     subject = shallow(
       <App
-        airmanRepository={airmanRepository}
-        certificationRepository={certificationRepository}
-        squadronRepository={squadronRepository}
+        airmanStore={airmanStore}
+        certificationStore={certificationStore}
+        squadronStore={squadronStore}
         profileRepository={profileRepository}
-        missionRepository={missionRepositoryStub}
-        siteRepository={siteRepositoryStub}
+        flightStore={flightStore}
+        missionStore={missionStore}
+        siteStore={siteStore}
       />
     );
     const routes = subject.find(Route);
@@ -44,12 +58,13 @@ describe('App', () => {
     mountedSubject = mount(
       <MemoryRouter initialEntries={['/']}>
         <App
-          airmanRepository={airmanRepository}
-          certificationRepository={certificationRepository}
-          squadronRepository={squadronRepository}
+          airmanStore={airmanStore}
+          certificationStore={certificationStore}
+          squadronStore={squadronStore}
           profileRepository={profileRepository}
-          missionRepository={missionRepositoryStub}
-          siteRepository={siteRepositoryStub}
+          flightStore={flightStore}
+          missionStore={missionStore}
+          siteStore={siteStore}
         />
       </MemoryRouter>
     );
@@ -61,12 +76,13 @@ describe('App', () => {
     mountedSubject = mount(
       <MemoryRouter initialEntries={['/dashboard']}>
         <App
-          airmanRepository={airmanRepository}
-          certificationRepository={certificationRepository}
-          squadronRepository={squadronRepository}
+          airmanStore={airmanStore}
+          certificationStore={certificationStore}
+          squadronStore={squadronStore}
           profileRepository={profileRepository}
-          missionRepository={missionRepositoryStub}
-          siteRepository={siteRepositoryStub}
+          flightStore={flightStore}
+          missionStore={missionStore}
+          siteStore={siteStore}
         />
       </MemoryRouter>
     );

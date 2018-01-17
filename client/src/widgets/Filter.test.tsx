@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { Filter } from './Filter';
+import { FilterableStore } from '../stores/FilterableStore';
 import Mock = jest.Mock;
 
 const expectedOptions = [
@@ -9,7 +10,28 @@ const expectedOptions = [
   {label: 'C-label', value: 3}
 ];
 
-let subject: ShallowWrapper, callbackSpy: Mock;
+let subject: ShallowWrapper;
+let callbackSpy: Mock;
+
+class FakeFilterableStore implements FilterableStore {
+  private disabled: boolean = false;
+
+  get options() {
+    return expectedOptions.slice(1);
+  }
+
+  get currentOptionId() {
+    return 1;
+  }
+
+  get isDisabled() {
+    return this.disabled;
+  }
+
+  setIsDisabled(value: boolean) {
+    this.disabled = value;
+  }
+}
 
 describe('Filter', () => {
   beforeEach(() => {
@@ -18,10 +40,9 @@ describe('Filter', () => {
       <Filter
         id="filter"
         label="foo"
-        value={expectedOptions[0].value}
         unfilteredOption={expectedOptions[0]}
-        options={expectedOptions.slice(1)}
         callback={callbackSpy}
+        store={new FakeFilterableStore()}
       />
     );
   });
@@ -41,24 +62,25 @@ describe('Filter', () => {
 
   it('calls a callback when a the default option is selected', () => {
     subject.find('select').simulate('change', {target: {value: expectedOptions[0].value}});
-    expect(callbackSpy).toBeCalledWith(expectedOptions[0]);
+    expect(callbackSpy).toBeCalledWith(expectedOptions[0].value);
   });
 
   it('calls a callback when an option is selected', () => {
     subject.find('select').simulate('change', {target: {value: 2}});
-    expect(callbackSpy).toBeCalledWith(expectedOptions[1]);
+    expect(callbackSpy).toBeCalledWith(expectedOptions[1].value);
   });
 
   it('disables the select if disabled is true', () => {
+    const store = new FakeFilterableStore();
+    store.setIsDisabled(true);
+
     subject = shallow(
       <Filter
         id="filter"
-        disabled={true}
+        label="foo"
         unfilteredOption={expectedOptions[0]}
-        options={[]}
-        value={expectedOptions[0].value}
         callback={callbackSpy}
-        label="Filter"
+        store={store}
       />
     );
 

@@ -1,112 +1,40 @@
 import * as React from 'react';
-import AirmanRepository from '../airman/repositories/AirmanRepository';
 import Roster from '../roster/Roster';
 import { TopLevelFilter } from '../widgets/Filter';
-import SquadronRepository from '../squadron/repositories/SquadronRepository';
-import SquadronModel from '../squadron/models/SquadronModel';
-import FilterOption from '../widgets/models/FilterOptionModel';
 import styled from 'styled-components';
-import AirmanModel from '../airman/models/AirmanModel';
 import SideBar from './SidePanel/SidePanel';
 import PlannerService from './services/PlannerService';
 import TopBar from '../widgets/TopBar';
 import createDefaultOption, { DefaultValue } from '../utils/createDefaultOption';
-import CertificationModel from '../airman/models/CertificationModel';
-import CertificationRepository from '../airman/repositories/CertificationRepository';
+import { observer } from 'mobx-react';
+import { SquadronStore } from '../squadron/SquadronStore';
+import { AirmanStore } from '../airman/AirmanStore';
+import { CertificationStore } from '../airman/CertificationStore';
+import { FlightStore } from '../flight/FlightStore';
 
 interface Props {
-  airmanRepository: AirmanRepository;
-  certificationRepository: CertificationRepository;
-  squadronRepository: SquadronRepository;
   plannerService: PlannerService;
   username: string;
+  squadronStore: SquadronStore;
+  flightStore: FlightStore;
+  airmanStore: AirmanStore;
+  certificationStore: CertificationStore;
   className?: string;
 }
 
-interface State {
-  airmen: AirmanModel[];
-  certifications: CertificationModel[];
-  squadrons: SquadronModel[];
-  selectedAirman: AirmanModel;
-  selectedSquadronId: number;
-  selectedFlightId: number;
-  selectedCertificationIds: number[];
-  showSidePanel: boolean;
-}
-
-export class Tracker extends React.Component<Props, State> {
+@observer
+export class Tracker extends React.Component<Props> {
   readonly unfilteredSquadronOption: DefaultValue = createDefaultOption('All Squadrons');
   readonly unfilteredFlightOption: DefaultValue = createDefaultOption('All Flights');
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      airmen: [],
-      certifications: [],
-      squadrons: [],
-      selectedAirman: AirmanModel.empty(),
-      selectedSquadronId: this.unfilteredSquadronOption.value,
-      selectedFlightId: this.unfilteredFlightOption.value,
-      selectedCertificationIds: [],
-      showSidePanel: false,
-    };
-  }
-
-  async componentDidMount() {
-    const airmen = await this.props.airmanRepository.findAll();
-    const certifications = await this.props.certificationRepository.findAll();
-    const squadrons = await this.props.squadronRepository.findAll();
-    this.setState({airmen, squadrons, certifications});
-  }
-
-  setSelectedSquadronId = async (option: FilterOption) => {
-    const updatedRoster = (option.value === this.unfilteredSquadronOption.value) ?
-      await this.props.airmanRepository.findAll() :
-      await this.props.airmanRepository.findBySquadron(option.value);
-    this.setState({
-      airmen: updatedRoster,
-      selectedSquadronId: option.value,
-      selectedFlightId: this.unfilteredFlightOption.value
-    });
-  }
-
-  setSelectedFlightId = async (option: FilterOption) => {
-    const updatedRoster = (option.value === this.unfilteredFlightOption.value) ?
-      await this.props.airmanRepository.findBySquadron(this.state.selectedSquadronId) :
-      await this.props.airmanRepository.findByFlight(option.value);
-    this.setState({
-      airmen: updatedRoster,
-      selectedFlightId: option.value
-    });
-  }
-
-  setSelectedAirman = (airman: AirmanModel) => {
-    this.setState({selectedAirman: airman, showSidePanel: true});
-  }
-
-  setSelectedCertificationIds = (options: FilterOption[]) => {
-    this.setState({selectedCertificationIds: options.map(option => option.value)});
-  }
-
-  closeSidePanel = () => {
-    this.setState({selectedAirman: AirmanModel.empty(), showSidePanel: false});
+  componentDidMount() {
+    this.props.squadronStore.fetchAllSquadrons();
+    this.props.airmanStore.fetchAllAirman();
+    this.props.certificationStore.fetchAllCertifications();
   }
 
   render() {
     const {username, className, plannerService} = this.props;
-    const {
-      selectedSquadronId,
-      selectedFlightId,
-      certifications,
-      selectedAirman,
-      showSidePanel,
-      selectedCertificationIds
-    } = this.state;
-
-    const squadronOptions = this.getSquadronFilterOptions();
-    const flightOptions = this.getFlightFilterOptions();
-    const filteredAirmen = this.getFilteredAirmen();
-
     return (
       [
         <TopBar key="0" username={username} pageTitle="AVAILABILITY ROSTER"/>,
@@ -115,19 +43,16 @@ export class Tracker extends React.Component<Props, State> {
             <div className="main">
               <TopLevelFilter
                 id="squadron-filter"
-                value={selectedSquadronId}
                 unfilteredOption={this.unfilteredSquadronOption}
-                options={squadronOptions}
-                callback={this.setSelectedSquadronId}
+                callback={this.props.airmanStore.fetchBySquadronId}
+                store={this.props.squadronStore}
                 label="SQUADRON"
               />
               <TopLevelFilter
                 id="flight-filter"
-                value={selectedFlightId}
-                disabled={selectedSquadronId === this.unfilteredSquadronOption.value}
                 unfilteredOption={this.unfilteredFlightOption}
-                options={flightOptions}
-                callback={this.setSelectedFlightId}
+                store={this.props.flightStore}
+                callback={this.props.airmanStore.fetchByFlight}
                 label="FLIGHT"
               />
               <div style={{display: 'flex'}}>
@@ -135,55 +60,25 @@ export class Tracker extends React.Component<Props, State> {
               </div>
               <div style={{display: 'flex'}}>
                 <Roster
-                  airmen={filteredAirmen}
-                  certifications={certifications}
+                  certifications={this.props.certificationStore.certifications}
                   week={plannerService.getCurrentWeek()}
-                  selectedAirmanId={selectedAirman.id}
-                  selectAirman={this.setSelectedAirman}
-                  selectedCertificationIds={selectedCertificationIds}
-                  setSelectedCertifications={this.setSelectedCertificationIds}
+                  selectedCertificationIds={this.props.certificationStore.selectedCertificationIds}
+                  setSelectedCertifications={this.props.certificationStore.setCertificationIds}
+                  airmanStore={this.props.airmanStore}
                 />
               </div>
             </div>
             {
-              showSidePanel
+              this.props.airmanStore.isSelectedAirmanFilled
                 ? <SideBar
-                  airman={selectedAirman}
-                  closeCallback={this.closeSidePanel}
+                  airmanStore={this.props.airmanStore}
                   week={plannerService.getCurrentWeek()}
                 />
                 : null
             }
           </div>
-        )
-      ]
+        )]
     );
-  }
-
-  private getSquadronFilterOptions() {
-    return this.state.squadrons.map((squadron: SquadronModel) => {
-      return {value: squadron.id, label: squadron.name};
-    });
-  }
-
-  private getFlightFilterOptions() {
-    const {squadrons, selectedSquadronId} = this.state;
-    const selectedSquadron = squadrons.find(squadron => squadron.id === selectedSquadronId);
-    if (selectedSquadron) {
-      return selectedSquadron.flights.map((flight) => ({value: flight.id, label: flight.name}));
-    }
-    return [];
-  }
-
-  private getFilteredAirmen() {
-    const {airmen, selectedCertificationIds} = this.state;
-    if (selectedCertificationIds.length > 0) {
-      return airmen.filter(airman => {
-        const airmanCertificationIds = airman.certifications.map(cert => cert.id);
-        return !selectedCertificationIds.some(val => airmanCertificationIds.indexOf(val) === -1);
-      });
-    }
-    return airmen;
   }
 }
 
@@ -192,8 +87,8 @@ export default styled(Tracker)`
   margin: 0 auto;
   padding: 0.5rem;
   display: flex;
-  
+  color: white;
   .main {
     width: 100%;
   }
-  `;
+ `;

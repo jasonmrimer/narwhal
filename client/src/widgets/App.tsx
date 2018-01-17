@@ -1,22 +1,24 @@
 import * as React from 'react';
 import Tracker from '../tracker/Tracker';
 import ProfileRepository from '../profile/repositories/ProfileRepository';
-import AirmanRepository from '../airman/repositories/AirmanRepository';
-import SquadronRepository from '../squadron/repositories/SquadronRepository';
 import { MomentPlannerService } from '../tracker/services/MomentPlannerService';
 import Dashboard from '../dashboard/Dashboard';
 import { Route, Switch } from 'react-router-dom';
-import MissionRepository from '../mission/repositories/MissionRepository';
-import SiteRepository from '../site/repositories/SiteRepository';
-import CertificationRepository from '../airman/repositories/CertificationRepository';
+import { SquadronStore } from '../squadron/SquadronStore';
+import { AirmanStore } from '../airman/AirmanStore';
+import { CertificationStore } from '../airman/CertificationStore';
+import { FlightStore } from '../flight/FlightStore';
+import { SiteStore } from '../site/SiteStore';
+import { MissionStore } from '../mission/MissionStore';
 
 interface Props {
+  airmanStore: AirmanStore;
+  certificationStore: CertificationStore;
+  squadronStore: SquadronStore;
   profileRepository: ProfileRepository;
-  airmanRepository: AirmanRepository;
-  certificationRepository: CertificationRepository;
-  squadronRepository: SquadronRepository;
-  missionRepository: MissionRepository;
-  siteRepository: SiteRepository;
+  flightStore: FlightStore;
+  missionStore: MissionStore;
+  siteStore: SiteStore;
 }
 
 interface State {
@@ -37,33 +39,34 @@ export default class App extends React.Component<Props, State> {
     return (
       <div>
         <Switch>
-        <Route
-          path="/dashboard"
-          render={() => {
-          return (
-            <Dashboard
-              username={this.state.username}
-              missionRepository={this.props.missionRepository}
-              siteRepository={this.props.siteRepository}
-            />
-          );
-        }}
-        />
-
-        <Route
-          path="/"
-          render={() => {
-            return (
-                <Tracker
-                    username={this.state.username}
-                    airmanRepository={this.props.airmanRepository}
-                    certificationRepository={this.props.certificationRepository}
-                    squadronRepository={this.props.squadronRepository}
-                    plannerService={new MomentPlannerService()}
+          <Route
+            path="/dashboard"
+            render={() => {
+              return (
+                <Dashboard
+                  username={this.state.username}
+                  missionStore={this.props.missionStore}
+                  siteStore={this.props.siteStore}
                 />
-            );
-          }}
-        />
+              );
+            }}
+          />
+
+          <Route
+            path="/"
+            render={() => {
+              return (
+                <Tracker
+                  username={this.state.username}
+                  airmanStore={this.props.airmanStore}
+                  squadronStore={this.props.squadronStore}
+                  certificationStore={this.props.certificationStore}
+                  plannerService={new MomentPlannerService()}
+                  flightStore={this.props.flightStore}
+                />
+              );
+            }}
+          />
         </Switch>
       </div>
     );

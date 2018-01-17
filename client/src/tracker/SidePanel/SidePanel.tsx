@@ -1,15 +1,15 @@
 import * as React from 'react';
-import AirmanModel from '../../airman/models/AirmanModel';
 import styled from 'styled-components';
 import CloseIcon from '../../icons/CloseIcon';
 import { Moment } from 'moment';
 import Availability from './Availability';
 import Currency from './Currency';
 import Tab from './Tab';
+import { AirmanStore } from '../../airman/AirmanStore';
+import { observer } from 'mobx-react';
 
 interface Props {
-  airman: AirmanModel;
-  closeCallback: () => void;
+  airmanStore: AirmanStore;
   week: Moment[];
   className?: string;
 }
@@ -18,6 +18,7 @@ interface State {
   selectedTab: number;
 }
 
+@observer
 export class SidePanel extends React.Component<Props, State> {
   state = {
     selectedTab: 1
@@ -28,10 +29,10 @@ export class SidePanel extends React.Component<Props, State> {
   }
 
   renderSelectedTab = () => {
-    const {airman} = this.props;
+    const airman = this.props.airmanStore.getSelectedAirman;
     switch (this.state.selectedTab) {
       case 0:
-        return <Currency airman={this.props.airman}/>;
+        return <Currency airman={airman}/>;
       case 1:
       default:
         return <Availability week={this.props.week} events={airman.events}/>;
@@ -39,16 +40,16 @@ export class SidePanel extends React.Component<Props, State> {
   }
 
   render() {
-    const {airman, className, closeCallback} = this.props;
+    const {airmanStore, className} = this.props;
 
     return (
       <div className={`${className} side-panel`}>
         <div className={'header'}>
-          <button onClick={closeCallback}>
+          <button onClick={() => airmanStore.setAirman()}>
             <CloseIcon/>
           </button>
           <h2>
-            {airman.lastName}, {airman.firstName}
+            {airmanStore.getSelectedAirman.lastName}, {airmanStore.getSelectedAirman.firstName}
           </h2>
         </div>
         <div className="tabs">

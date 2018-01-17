@@ -1,23 +1,19 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import AirmanModel from '../airman/models/AirmanModel';
 import { Moment } from 'moment';
 import AvailabilityOverview from './AvailabilityOverview';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import CertificationModel from '../airman/models/CertificationModel';
 import FilterOptionModel from '../widgets/models/FilterOptionModel';
+import { AirmanStore } from '../airman/AirmanStore';
+import { observer } from 'mobx-react';
 
 interface Props {
-  airmen: AirmanModel[];
   certifications: CertificationModel[];
-
-  selectAirman: (airman: AirmanModel) => void;
-  selectedAirmanId: number | null;
-
-  setSelectedCertifications: (certifications: FilterOptionModel[]) => void;
+  airmanStore: AirmanStore;
+  setSelectedCertifications: (option: FilterOptionModel[]) => void;
   selectedCertificationIds: number[];
-
   week: Moment[];
 
   className?: string;
@@ -25,6 +21,7 @@ interface Props {
 
 const formatAttributes = (objArray: object[], key: string) => objArray.map((object: object) => object[key]).join(' / ');
 
+@observer
 export class Roster extends React.Component<Props> {
   render() {
     return (
@@ -56,14 +53,14 @@ export class Roster extends React.Component<Props> {
   }
 
   private renderAirmen() {
-    const {airmen, selectedAirmanId} = this.props;
-    return airmen.map((airman, index) => {
-      const className = airman.id === selectedAirmanId ? 'selected' : '';
+    const selectedAirman = this.props.airmanStore.getSelectedAirman;
+    return this.props.airmanStore.airmen.map((airman, index) => {
+      const className = airman.id === selectedAirman.id ? 'selected' : '';
       return (
         <tr
           key={index}
           className={className}
-          onClick={() => this.props.selectAirman(airman)}
+          onClick={() => this.props.airmanStore.setAirman(airman)}
         >
           <td>{airman.lastName}</td>
           <td>{formatAttributes(airman.qualifications, 'acronym')}</td>

@@ -9,6 +9,13 @@ import PlannerServiceStub from '../tracker/services/doubles/PlannerServiceStub';
 import CertificationModelFactory from '../airman/factories/CertificationModelFactory';
 import CertificationModel from '../airman/models/CertificationModel';
 import FilterOptionModel from '../widgets/models/FilterOptionModel';
+import { AirmanStore } from '../airman/AirmanStore';
+import AirmanRepositoryStub from '../airman/repositories/doubles/AirmanRepositoryStub';
+import { SquadronStore } from '../squadron/SquadronStore';
+import SquadronRepositoryStub from '../squadron/repositories/doubles/SquadronRepositoryStub';
+import { FlightStore } from '../flight/FlightStore';
+import { CertificationStore } from '../airman/CertificationStore';
+import CertificationRepositoryStub from '../airman/repositories/doubles/CertificationRepositoryStub';
 
 let airmen: AirmanModel[];
 let certifications: CertificationModel[];
@@ -16,6 +23,7 @@ let selectAirmanSpy: (airman: AirmanModel) => void;
 let setSelectedCertificationsSpy: (certifications: FilterOptionModel[]) => void;
 let table: Table;
 let subject: ReactWrapper;
+let airmanStore: AirmanStore;
 
 describe('Roster', () => {
   beforeEach(async () => {
@@ -30,14 +38,20 @@ describe('Roster', () => {
     selectAirmanSpy = jest.fn();
     setSelectedCertificationsSpy = jest.fn();
 
+    const squadronStore = new SquadronStore(new SquadronRepositoryStub());
+    airmanStore = new AirmanStore(
+      new AirmanRepositoryStub(),
+      squadronStore,
+      new FlightStore(squadronStore),
+      new CertificationStore(new CertificationRepositoryStub()));
+
+    airmanStore.setAirmen(airmen);
     subject = mount(
       <Roster
-        airmen={airmen}
         certifications={certifications}
-        selectedAirmanId={null}
-        selectAirman={selectAirmanSpy}
-        selectedCertificationIds={[]}
+        airmanStore={airmanStore}
         setSelectedCertifications={setSelectedCertificationsSpy}
+        selectedCertificationIds={[]}
         week={new PlannerServiceStub().getCurrentWeek()}
       />
     );
@@ -56,6 +70,7 @@ describe('Roster', () => {
 
   it('render airmen last names', async () => {
     const expectedLastNames = airmen.map(airman => airman.lastName);
+
     expect(table.getRowCount()).toEqual(airmen.length);
     expect(table.getTextForRowAndCol(0, 'NAME')).toBe(expectedLastNames[0]);
     expect(table.getTextForRowAndCol(1, 'NAME')).toBe(expectedLastNames[1]);
@@ -74,7 +89,7 @@ describe('Roster', () => {
 
   it('calls the selectAirman when clicking on an airman', () => {
     table.getRows().at(0).simulate('click');
-    expect(selectAirmanSpy).toBeCalledWith(airmen[0]);
+    expect(airmanStore.getSelectedAirman).toEqual(airmen[0]);
   });
 
   describe('multiselect', () => {

@@ -9,14 +9,22 @@ import SidePanel from './SidePanel/SidePanel';
 import AirmanModel from '../airman/models/AirmanModel';
 import PlannerServiceStub from './services/doubles/PlannerServiceStub';
 import TopBar from '../widgets/TopBar';
-import createDefaultOption from '../utils/createDefaultOption';
-import SquadronModelFactory from '../squadron/factories/SquadronModelFactory';
 import CertificationRepositoryStub from '../airman/repositories/doubles/CertificationRepositoryStub';
+import { AirmanStore } from '../airman/AirmanStore';
+import { SquadronStore } from '../squadron/SquadronStore';
+import { CertificationStore } from '../airman/CertificationStore';
+import { FlightStore } from '../flight/FlightStore';
+import createDefaultOption from '../utils/createDefaultOption';
 
 const airmanRepositoryStub = new AirmanRepositoryStub();
 const certificationRepositoryStub = new CertificationRepositoryStub();
 const squadronRepositoryStub = new SquadronRepositoryStub();
 const plannerServiceStub = new PlannerServiceStub();
+const squadronStore = new SquadronStore(squadronRepositoryStub);
+const flightStore = new FlightStore(squadronStore);
+const certificationStore = new CertificationStore(certificationRepositoryStub);
+const airmanStore = new AirmanStore(airmanRepositoryStub, squadronStore, flightStore, certificationStore);
+
 let subject: ReactWrapper, airmen: AirmanModel[];
 
 describe('Tracker', () => {
@@ -24,9 +32,10 @@ describe('Tracker', () => {
     subject = mount(
       <Tracker
         username="Tytus"
-        airmanRepository={airmanRepositoryStub}
-        certificationRepository={certificationRepositoryStub}
-        squadronRepository={squadronRepositoryStub}
+        airmanStore={airmanStore}
+        certificationStore={certificationStore}
+        squadronStore={squadronStore}
+        flightStore={flightStore}
         plannerService={plannerServiceStub}
       />
     );
@@ -34,10 +43,6 @@ describe('Tracker', () => {
     subject.update();
 
     airmen = await airmanRepositoryStub.findAll();
-  });
-
-  it('renders a Roster with all squadrons and all flight', async () => {
-    expect(subject.find(Roster).prop('airmen')).toEqual(airmen);
   });
 
   it('renders a Roster with the current week', async () => {
@@ -49,14 +54,18 @@ describe('Tracker', () => {
     expect(subject.find(TopBar).prop('pageTitle')).toBe('AVAILABILITY ROSTER');
   });
 
-  describe('the side panel', () => {
+  describe('the side panelStore', () => {
     it('does not render by default', () => {
       expect(subject.find(SidePanel).exists()).toBeFalsy();
     });
 
-    it('populates the side panel with the selected airman', () => {
+    it('populates the side panelStore with the selected airman', () => {
       subject.find(Roster).find('tbody tr').at(0).simulate('click');
-      expect(subject.find(SidePanel).prop('airman')).toEqual(airmen[0]);
+
+      const sidePanel = subject.find(SidePanel);
+      expect(sidePanel.exists()).toBeTruthy();
+      expect(sidePanel.text()).toContain(airmen[0].lastName);
+      expect(sidePanel.text()).toContain(airmen[0].firstName);
     });
 
     it('closes the sidepanel', () => {
@@ -79,27 +88,21 @@ describe('Tracker', () => {
         await selectOption(subject, filter, squadronId);
       });
 
-      it('selecting a squadron sets the selectedSquadronId', () => {
-        expect(subject.state('selectedSquadronId')).toBe(squadronId);
-      });
-
       it('limits the flight filter options', () => {
-        const selectedSquadron = SquadronModelFactory.build(squadronId);
-        const flightOptions = selectedSquadron.flights.map((flight) => {
-          return {value: flight.id, label: flight.name};
-        });
-        let flightFilter = findFilterById(subject, 'flight-filter');
-        expect(flightFilter.prop('options')).toMatchObject(flightOptions);
+        const selectValue = squadronStore.options[0].value;
+        filter.simulate('change', {target: {value: selectValue}});
+        const flightOptions = findFilterById(subject, 'flight-filter').find('option');
+        expect(flightOptions.length).toBe(2);
       });
 
       it('shows the airmen for the selected squadron', async () => {
         const filteredRoster = await airmanRepositoryStub.findBySquadron(squadronId);
-        expect(subject.find(Roster).prop('airmen')).toEqual(filteredRoster);
+        expect(subject.find(Roster).find('tbody tr').length).toEqual(filteredRoster.length);
       });
 
       it('shows all airmen for the default filter', async () => {
         await selectOption(subject, filter, defaultFilterValue);
-        expect(subject.find(Roster).prop('airmen')).toEqual(airmen);
+        expect(subject.find(Roster).find('tbody tr').length).toEqual(airmen.length);
       });
     });
 
@@ -114,42 +117,37 @@ describe('Tracker', () => {
 
       it('shows airmen for the selected flight', async () => {
         const filteredRoster = await airmanRepositoryStub.findByFlight(flightId);
-        expect(subject.find(Roster).prop('airmen')).toEqual(filteredRoster);
+        const roster = subject.find(Roster).find('tbody tr');
+        expect(roster.length).toBe(filteredRoster.length);
       });
 
-      it('shows all airmen for the default filter', async () => {
+      it('shows all airmen in squadron after reset flight filter to the default filter', async () => {
         await selectOption(subject, filter, defaultFilterValue);
         const filteredRoster = await airmanRepositoryStub.findBySquadron(squadronId);
-        expect(subject.find(Roster).prop('airmen')).toEqual(filteredRoster);
+        expect(subject.find(Roster).find('tbody tr').length).toBe(filteredRoster.length);
       });
     });
 
     describe('by certification', () => {
       it('shows airmen for the selected certification', async () => {
-        (subject.instance() as Tracker).setSelectedCertificationIds([
-          {value: 1, label: '1'}
-        ]);
+        certificationStore.setCertificationIds([{value: 1, label: '1'}]);
         subject.update();
-
-        expect(subject.find(Roster).prop('airmen').map(a => a.id))
-          .toEqual([airmen[0].id, airmen[3].id, airmen[6].id, airmen[9].id]);
+        expect(subject.find(Roster).find('tbody tr').length).toBe(4);
       });
 
       it('shows airmen for many certification selections', () => {
-        (subject.instance() as Tracker).setSelectedCertificationIds([
+        certificationStore.setCertificationIds([
           {value: 1, label: '1'},
           {value: 2, label: '2'},
         ]);
         subject.update();
-
-        expect(subject.find(Roster).prop('airmen').map(a => a.id))
-          .toEqual([airmen[3].id, airmen[9].id]);
+        expect(subject.find(Roster).find('tbody tr').length).toBe(2);
       });
 
       it('shows all airmen for the default filter', async () => {
-        (subject.instance() as Tracker).setSelectedCertificationIds([]);
+        certificationStore.setCertificationIds([]);
         subject.update();
-        expect(subject.find(Roster).prop('airmen')).toEqual(airmen);
+        expect(subject.find(Roster).find('tbody tr').length).toBe(airmen.length);
       });
     });
   });
