@@ -5,10 +5,10 @@ nss determination: Yes
 system name: Crew Management Tool
 
 # Shortname or abbreviation. Ref. [NIST SP800-37] (required)
-short name: *NEEDED*
+short name: Narwhal
 
 # System unique identifier. Ref. [NIST SP800-37] (required)
-uniqueID: <SPID ID>
+uniqueID: 50235
 
 # System version or release number. Ref. [NIST SP800-37] (required)
 version: 1.0
@@ -28,9 +28,9 @@ review date: ~
 # Security Categorization. Ref. [NIST SP800-37] [CNSSI 1253] (required)
 # http://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-60v1r1.pdf
 information-types: D3 Intelligence Operations
-confidentiality: *NEEDED*
-integrity: *NEEDED*
-availability: *NEEDED*
+confidentiality: medium
+integrity: low
+availability: low
 overlay: none
 system-type: minor
 
@@ -42,7 +42,7 @@ system user categories: Organization Personnel
 level-of-identity-assurance: 0
 
 #Securiy Controls: List and provide a short descrition of how controls are met. Ref. [CNSSI 1254, #16] [NIST SP800-37, NIST SP800-53, CNSSI 1253] (required)
-controls: https://gitlab.diux.io/kessel-run/kr-wiki/blob/master/ato-examples/FISMA%20Moderate%20SP800-53%20Controls.xlsx
+controls: https://gitlab.devops.geointservices.io/rimerjm/narwhal/tree/master/ato-docs/FISMA%20Moderate%20SP800-53%20Controls.xlsx
 
 # Mission criticality / Critical Functions.  Identify if there are critical functions.  Yes/No. Ref. [CNSSI 1254, #12] [FIPS Pub 199, NIST SP800-53]
 mission critical: no
@@ -58,41 +58,40 @@ role identification:
     org: NGA
     email: Johnathon.E.Murray@nga.mil
   system-owner:
-    name: Enrique Oti
+    name: Ryan Hatfield
     title: Project Manager
-    org: DIUx
-    email: enrique@diux.mil
-    phone: 916-662-3571
+    org: 480 ISRW
+    email: ryan.hatfield.6@us.af.mil
+    phone: 757-764-8506
   system-management:
-    name: Wayne Starr
+    name: Jason Rimer
     title: Technical Lead
-    org: DIUx
-    email: starr@diux.mil
-    phone: 650-447-4633
+    org: 480 ISRW
+    email: jason.rimer@us.af.mil
+    phone: 859-640-2989
   system-security-officer:
-    name: Andrew Altizer
+    name: Ben Foster
     title: System Security Officer
-    org: AFLCMC
-    email: andrew.altizer@us.af.mil
-    phone: 781-225-9049
+    org: NGA
+    email: Benjamin.D.Foster1@nga.mil
   technical-lead:
-    name: Wayne Starr
+    name: Jason Rimer
     title: Technical Lead
-    org: DIUx
-    email: starr@diux.mil
-    phone: 650-447-4633
+    org: 480 ISRW
+    email: jason.rimer@us.af.mil
+    phone: 859-640-2989
 
 leveraged-authorizations:
 - https://www.fedramp.gov/marketplace/compliant-systems/amazon-web-services-aws-eastwest-us-public-cloud/
 
 # Provide link to about.yml
-purpose: https://gitlab.diux.io/kessel-run/kr-wiki/blob/master/ato-examples/about.yml
-components: https://gitlab.diux.io/kessel-run/kr-wiki/blob/master/ato-examples/about.yml
+purpose: https://gitlab.devops.geointservices.io/rimerjm/narwhal/blob/master/about.yml
+components: https://gitlab.devops.geointservices.io/rimerjm/narwhal/blob/master/about.yml
 
 # authorization boundary diagram. Ref. [CNSSI 1254, #1, 11] [NIST SP800-53] (required)
-system-diagram: https://gitlab.diux.io/kessel-run/kr-wiki/blob/master/ato-examples/
-network-diagram: https://gitlab.diux.io/kessel-run/kr-wiki/blob/master/ato-examples/
-internal and external system interfaces: https://gitlab.diux.io/kessel-run/kr-wiki/blob/master/ato-examples/
+system-diagram: https://gitlab.devops.geointservices.io/rimerjm/narwhal/blob/master/ato-docs/system-network-interface-diagram.png
+network-diagram: https://gitlab.devops.geointservices.io/rimerjm/narwhal/blob/master/ato-docs/system-network-interface-diagram.png
+internal and external system interfaces: https://gitlab.devops.geointservices.io/rimerjm/narwhal/blob/master/ato-docs
 
 environments:
 - geoaxis.nga.smil.mil
@@ -109,31 +108,35 @@ key management: N/A
 privacy impact assessment: no
 
 # External security services/ Network connection rules. List the 1) provider(s), 2) component(s), 3) description. Ref. [CNSSI 1254, #6] [NIST SP800-37] (required)
-interconnections: N/A
-system dependencies: N/A
+interconnections:
+- UNICORN
+provider: 480 ISRW
+protocol: https
+port: 443
+description: UNICORN is an application / database tool used to aggregate, prioritize, and disseminate intelligence requirements. We will connect to it over an API service provided by the UNICORN server.
+
+system dependencies:
+- UNICORN
+provider: 480 ISRW
+protocol: https
+port: 443
+description: UNICORN is an application / database tool used to aggregate, prioritize, and disseminate intelligence requirements. We will connect to it over an API service provided by the UNICORN server.
+
 
 # Internal System Interfaces.  List application program interfaces (APIs). [CNSSI 1254, #8] [NIST SP800-47] (required)
 interfaces:
-- /api/airspaces (GET,POST,DELETE)
-- /api/aocoi (GET)
-- /api/ato-date-data-bundle (GET)
-- /api/base (POST,DELETE)
-- /api/configured-tanker (POST)
-- /api/configured-tanker/{id}/compatibilities (POST)
-- /api/current-contracts (GET,POST,DELETE)
-- /api/drag-requests (POST, DELETE)
-- /api/flight-times (GET,PUT)
-- /api/fuel-requests (GET,POST,PUT,DELETE)
-- /api/initial-load-data-bundle (GET)
-- /api/notifications (GET,PUT)
-- /api/notifications-data-bundle (GET)
-- /api/receivers/{id} (PUT, POST)
-- /api/receivers/{id}/compatibilities (POST)
-- /api/pairable-sorties (GET,POST,PUT,DELETE)
-- /api/compatibility-modal-bundle (GET)
+- /api/airmen (GET)
+- /api/certifications (GET)
+- /api/missions (GET)
+- /api/profiles (GET)
+- /api/sites (GET)
+- /api/squadrons (GET)
+- /api/events (POST)
+
+
 
 # Hardware  / Sofware inventory. Ref. [CNSSI 1254, #7] [NIST SP800-37, CNSSP 11] (required)
-hw/sw inventory: https://gitlab.diux.io/kessel-run/kr-wiki/blob/master/ato-examples/about.yml
+hw/sw inventory: https://gitlab.devops.geointservices.io/rimerjm/narwhal/blob/master/about.yml
 
 # Information Type. List type of information processed, stored, and transmited by the system. Ref. [CNSSI 1254, #10] [NIST SP800-60] (required)
-information type: D26 Military Operations
+information type: D.3 Intelligence Planning
