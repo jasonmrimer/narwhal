@@ -4,7 +4,7 @@ import { Moment } from 'moment';
 
 export class MomentPlannerService implements PlannerService {
   getCurrentWeek(): Moment[] {
-    const sunday = moment().startOf('week');
+    const sunday = moment.utc().startOf('week');
     return [
       sunday,
       sunday.clone().add(1, 'day'),

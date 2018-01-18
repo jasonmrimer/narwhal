@@ -64,11 +64,25 @@ export class EventForm extends React.Component<Props, State> {
         />
         <div className="date-time-row">
           <input type="date" value={this.state.startDate} name="startDate" onChange={this.handleChange}/>
-          <input type="time" value={this.state.startTime} name="startTime" onChange={this.handleChange}/>
+          <input
+            className="time-input"
+            type="text"
+            placeholder="hh:mm"
+            value={this.state.startTime}
+            name="startTime"
+            onChange={this.handleChange}
+          />
         </div>
         <div className="date-time-row">
           <input type="date" value={this.state.endDate} name="endDate" onChange={this.handleChange}/>
-          <input type="time" value={this.state.endTime} name="endTime" onChange={this.handleChange}/>
+          <input
+            className="time-input"
+            type="text"
+            placeholder="hh:mm"
+            value={this.state.endTime}
+            name="endTime"
+            onChange={this.handleChange}
+          />
         </div>
         <input type="submit" value="CONFIRM"/>
       </form>
@@ -94,18 +108,24 @@ export default styled(EventForm)`
   input[type="text"] {
     border-bottom: 1px solid ${props => props.theme.graySteel};
   }
-
+  
+  .time-input::placeholder {
+    color: ${props => props.theme.fontColor};
+  }
+  
   .date-time-row {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     
-    input[type="date"], input[type="time"] {
+    input[type="date"] {
       border-bottom: 1px solid ${props => props.theme.graySteel};
       
       &::-webkit-inner-spin-button {
         display: none;
-      } 
+      }
+      
+      
     }
   }
   

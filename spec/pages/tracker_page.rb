@@ -67,9 +67,9 @@ class TrackerPage
       click_link_or_button '+ Add Event'
       fill_in 'title', with: 'Dentist'
       fill_in 'startDate', with: event_start.strftime('%m/%d/%Y')
-      fill_in 'startTime', with: event_start.strftime('%H:%M%p')
+      fill_in 'startTime', with: event_start.strftime('%H:%M')
       fill_in 'endDate', with: event_end.strftime('%m/%d/%Y')
-      fill_in 'endTime', with: event_end.strftime('%H:%M%p')
+      fill_in 'endTime', with: event_end.strftime('%H:%M')
       find('input[type="submit"]').click
     end
 
@@ -102,6 +102,10 @@ class TrackerPage
 
   def check_for_event(event_start, event_end)
     page.within('.side-panel') do
+      puts '----------------------------------------------------'
+      puts page.html
+      puts page.text
+      puts '----------------------------------------------------'
       expect(page).to have_content(event_start.strftime('%d %^b %y'))
       expect(page).to have_content('Dentist')
       expect(page).to have_content(event_start.strftime('%H%MZ') + ' - ' + event_end.strftime('%H%MZ'))
