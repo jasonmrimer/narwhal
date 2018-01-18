@@ -61,17 +61,20 @@ describe('Tracker', () => {
 
   it('successfully submits an event', async () => {
     const airman = airmen[0];
+    airmanStore.setAirman(airman);
     const event = new EventModel('Dentist', '', moment(), moment(), airman.id);
 
     await (subject.instance() as Tracker).submitEvent(event);
     subject.update();
 
-    const updatedAirman = subject.find(Roster).prop('airmen').find(a => a.id === airman.id);
+    const updatedAirman = airmanStore.airmen.find(a => a.id === airman.id);
     expect(updatedAirman!.events).toContainEqual(event);
   });
 
   describe('the side panelStore', () => {
-    it('does not render by default', () => {
+    it('does not render without a selected airman', () => {
+      airmanStore.setAirman();
+      subject.update();
       expect(subject.find(SidePanel).exists()).toBeFalsy();
     });
 

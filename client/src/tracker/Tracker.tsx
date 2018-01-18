@@ -2,7 +2,6 @@ import * as React from 'react';
 import Roster from '../roster/Roster';
 import { TopLevelFilter } from '../widgets/Filter';
 import styled from 'styled-components';
-import AirmanModel from '../airman/models/AirmanModel';
 import SidePanel from './SidePanel/SidePanel';
 import PlannerService from './services/PlannerService';
 import TopBar from '../widgets/TopBar';
@@ -16,9 +15,6 @@ import EventModel from '../event/EventModel';
 import EventRepository from '../event/repositories/EventRepository';
 
 interface Props {
-  airmanRepository: AirmanRepository;
-  certificationRepository: CertificationRepository;
-  squadronRepository: SquadronRepository;
   eventRepository: EventRepository;
   plannerService: PlannerService;
   username: string;
@@ -43,14 +39,12 @@ export class Tracker extends React.Component<Props> {
     submitEvent = async (event: EventModel) => {
         const savedEvent = await this.props.eventRepository.save(event);
 
-        const index = this.state.airmen.findIndex(a => event.airmanId === a.id);
-        if (index === -1) {
+        const airman = this.props.airmanStore.getSelectedAirman;
+        if (airman.id === -1) {
             return;
         }
 
-        const airman = this.state.airmen[index];
         airman.events.push(savedEvent);
-        this.setState({airmen: this.state.airmen});
     }
 
     render() {
@@ -90,7 +84,7 @@ export class Tracker extends React.Component<Props> {
             </div>
             {
               this.props.airmanStore.isSelectedAirmanFilled
-                ? <SideBar
+                ? <SidePanel
                   airmanStore={this.props.airmanStore}
                   week={plannerService.getCurrentWeek()}
                   submitEvent={this.submitEvent}

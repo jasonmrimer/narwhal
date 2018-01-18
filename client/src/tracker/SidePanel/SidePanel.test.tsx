@@ -15,7 +15,6 @@ import { SquadronStore } from '../../squadron/SquadronStore';
 import { CertificationStore } from '../../airman/CertificationStore';
 import AirmanRepositoryStub from '../../airman/repositories/doubles/AirmanRepositoryStub';
 
-const clickSpy = jest.fn();
 const submitEventSpy = jest.fn();
 const plannerServiceStub = new PlannerServiceStub();
 let airman: AirmanModel;

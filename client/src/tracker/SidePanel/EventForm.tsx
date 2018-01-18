@@ -64,7 +64,7 @@ export class EventForm extends React.Component<Props, State> {
         />
         <div className="date-time-row">
           <input type="date" value={this.state.startDate} name="startDate" onChange={this.handleChange}/>
-          <input type="time" value={this.state.startTime} name="startTime" onChange={this.handleChange}/>
+          <input type="time" value={this.state.startTime} name="startTime" pattern="([1]?[0-9]|2[0-3]):[0-5][0-9]" onChange={this.handleChange}/>
         </div>
         <div className="date-time-row">
           <input type="date" value={this.state.endDate} name="endDate" onChange={this.handleChange}/>
