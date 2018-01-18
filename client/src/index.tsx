@@ -29,7 +29,13 @@ document.body.style.backgroundColor = theme.dark;
 const squadronStore = new SquadronStore(new WebSquadronRepository());
 const flightStore = new FlightStore(squadronStore);
 const certificationStore = new CertificationStore(new WebCertificationRepository());
-const airmanStore = new AirmanStore(new WebAirmanRepository(), squadronStore, flightStore, certificationStore);
+const airmanStore = new AirmanStore(
+  new WebAirmanRepository(),
+  squadronStore,
+  flightStore,
+  certificationStore,
+  new WebEventRepository()
+);
 const siteStore = new SiteStore(new WebSiteRepository());
 const missionStore = new MissionStore(new WebMissionRepository(), siteStore);
 
@@ -44,7 +50,6 @@ ReactDOM.render(
         flightStore={flightStore}
         missionStore={missionStore}
         siteStore={siteStore}
-        eventRepository={new WebEventRepository()}
       />
     </BrowserRouter>
   </ThemeProvider>,

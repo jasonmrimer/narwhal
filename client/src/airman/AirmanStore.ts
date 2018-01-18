@@ -5,16 +5,17 @@ import { SquadronStore } from '../squadron/SquadronStore';
 import { FlightStore } from '../flight/FlightStore';
 import { CertificationStore } from './CertificationStore';
 import EventModel from '../event/EventModel';
+import EventRepository from '../event/repositories/EventRepository';
 
 export class AirmanStore {
   @observable private _airmen: AirmanModel[] = [];
-  @observable private selectedAirman: AirmanModel = AirmanModel.empty();
-  @observable private _selectedAirmanEvents: EventModel[] = this.selectedAirman.events;
-
+  @observable private _selectedAirman: AirmanModel = AirmanModel.empty();
+  @observable private _selectedAirmanEvents: EventModel[] = this._selectedAirman.events;
   constructor(private repository: AirmanRepository,
               private squadronStore: SquadronStore,
               private flightStore: FlightStore,
-              private certificationStore: CertificationStore) {
+              private certificationStore: CertificationStore,
+              private eventRepository: EventRepository) {
   }
 
   @action
@@ -44,8 +45,14 @@ export class AirmanStore {
   }
 
   @action
-  addEvent(event: EventModel) {
-    this.selectedAirman.events.push(event);
+  async addEvent(event: EventModel) {
+    const savedEvent = await this.eventRepository.save(event);
+
+    if (this._selectedAirman.id === -1) {
+      return;
+    }
+
+    this._selectedAirman.events.push(savedEvent);
     this._selectedAirmanEvents.push(event);
   }
 
@@ -56,8 +63,8 @@ export class AirmanStore {
 
   @action
   setAirman(airman?: AirmanModel) {
-    this.selectedAirman = airman ? airman : AirmanModel.empty();
-    this._selectedAirmanEvents = this.selectedAirman.events;
+    this._selectedAirman = airman ? airman : AirmanModel.empty();
+    this._selectedAirmanEvents = this._selectedAirman.events;
   }
 
   @computed
@@ -76,7 +83,7 @@ export class AirmanStore {
 
   @computed
   get getSelectedAirman() {
-    return this.selectedAirman;
+    return this._selectedAirman;
   }
 
   @computed
@@ -86,6 +93,6 @@ export class AirmanStore {
 
   @computed
   get isSelectedAirmanFilled() {
-    return this.selectedAirman.id > -1;
+    return this._selectedAirman.id > -1;
   }
 }

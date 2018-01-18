@@ -15,8 +15,6 @@ import { SquadronStore } from '../squadron/SquadronStore';
 import { CertificationStore } from '../airman/CertificationStore';
 import { FlightStore } from '../flight/FlightStore';
 import createDefaultOption from '../utils/createDefaultOption';
-import * as moment from 'moment';
-import EventModel from '../event/EventModel';
 import EventRepositoryStub from '../event/repositories/doubles/EventRepositoryStub';
 
 const airmanRepositoryStub = new AirmanRepositoryStub();
@@ -27,7 +25,7 @@ const plannerServiceStub = new PlannerServiceStub();
 const squadronStore = new SquadronStore(squadronRepositoryStub);
 const flightStore = new FlightStore(squadronStore);
 const certificationStore = new CertificationStore(certificationRepositoryStub);
-const airmanStore = new AirmanStore(airmanRepositoryStub, squadronStore, flightStore, certificationStore);
+const airmanStore = new AirmanStore(airmanRepositoryStub, squadronStore, flightStore, certificationStore, eventRepositoryStub);
 
 let subject: ReactWrapper, airmen: AirmanModel[];
 
@@ -40,7 +38,6 @@ describe('Tracker', () => {
         certificationStore={certificationStore}
         squadronStore={squadronStore}
         flightStore={flightStore}
-        eventRepository={eventRepositoryStub}
         plannerService={plannerServiceStub}
       />
     );
@@ -57,18 +54,6 @@ describe('Tracker', () => {
   it('renders the TopBar with a username and pageTitle', async () => {
     expect(subject.find(TopBar).prop('username')).toBe('Tytus');
     expect(subject.find(TopBar).prop('pageTitle')).toBe('AVAILABILITY ROSTER');
-  });
-
-  it('successfully submits an event', async () => {
-    const airman = airmen[0];
-    airmanStore.setAirman(airman);
-    const event = new EventModel('Dentist', '', moment(), moment(), airman.id);
-
-    await (subject.instance() as Tracker).submitEvent(event);
-    subject.update();
-
-    const updatedAirman = airmanStore.airmen.find(a => a.id === airman.id);
-    expect(updatedAirman!.events).toContainEqual(event);
   });
 
   describe('the side panelStore', () => {

@@ -10,7 +10,6 @@ import { AirmanStore } from '../../airman/AirmanStore';
 interface Props {
   week: Moment[];
   airmanStore: AirmanStore;
-  submitEvent: (event: EventModel) => void;
   className?: string;
 }
 
@@ -34,8 +33,7 @@ export class Availability extends React.Component<Props, State> {
   }
 
   submitEvent = (event: EventModel) => {
-    const {submitEvent} = this.props;
-    submitEvent(event);
+    this.props.airmanStore.addEvent(event);
     this.setState({showEventForm: false});
   }
 

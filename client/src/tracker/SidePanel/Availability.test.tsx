@@ -14,6 +14,7 @@ import SquadronRepositoryStub from '../../squadron/repositories/doubles/Squadron
 import CertificationRepositoryStub from '../../airman/repositories/doubles/CertificationRepositoryStub';
 import { AirmanStore } from '../../airman/AirmanStore';
 import { CertificationStore } from '../../airman/CertificationStore';
+import EventRepositoryStub from '../../event/repositories/doubles/EventRepositoryStub';
 
 
 describe('Availability', () => {
@@ -22,7 +23,9 @@ describe('Availability', () => {
     new AirmanRepositoryStub(),
     squadronStore,
     new FlightStore(squadronStore),
-    new CertificationStore(new CertificationRepositoryStub()));
+    new CertificationStore(new CertificationRepositoryStub()),
+    new EventRepositoryStub(),
+  );
 
   const airman = AirmanModelFactory.build();
   const eventOne = new EventModel(
@@ -47,8 +50,6 @@ describe('Availability', () => {
     <Availability
       week={week}
       airmanStore={airmanStore}
-      submitEvent={() => {
-      }}
     />
   );
 

@@ -31,7 +31,8 @@ describe('App', () => {
     new AirmanRepositoryStub(),
     squadronStore,
     flightStore,
-    certificationStore
+    certificationStore,
+    eventRepositoryStub
   );
 
   let subject: ShallowWrapper;
@@ -44,7 +45,6 @@ describe('App', () => {
         certificationStore={certificationStore}
         squadronStore={squadronStore}
         profileRepository={profileRepository}
-        eventRepository={eventRepositoryStub}
         flightStore={flightStore}
         missionStore={missionStore}
         siteStore={siteStore}
@@ -65,7 +65,6 @@ describe('App', () => {
           certificationStore={certificationStore}
           squadronStore={squadronStore}
           profileRepository={profileRepository}
-          eventRepository={eventRepositoryStub}
           flightStore={flightStore}
           missionStore={missionStore}
           siteStore={siteStore}
@@ -84,7 +83,6 @@ describe('App', () => {
           certificationStore={certificationStore}
           squadronStore={squadronStore}
           profileRepository={profileRepository}
-          eventRepository={eventRepositoryStub}
           flightStore={flightStore}
           missionStore={missionStore}
           siteStore={siteStore}

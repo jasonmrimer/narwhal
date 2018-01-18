@@ -4,7 +4,6 @@ import ProfileRepository from '../profile/repositories/ProfileRepository';
 import { MomentPlannerService } from '../tracker/services/MomentPlannerService';
 import Dashboard from '../dashboard/Dashboard';
 import { Route, Switch } from 'react-router-dom';
-import EventRepository from '../event/repositories/EventRepository';
 import { SquadronStore } from '../squadron/SquadronStore';
 import { AirmanStore } from '../airman/AirmanStore';
 import { CertificationStore } from '../airman/CertificationStore';
@@ -20,7 +19,6 @@ interface Props {
     flightStore: FlightStore;
     missionStore: MissionStore;
     siteStore: SiteStore;
-    eventRepository: EventRepository;
 }
 
 interface State {
@@ -63,7 +61,6 @@ export default class App extends React.Component<Props, State> {
                   airmanStore={this.props.airmanStore}
                   squadronStore={this.props.squadronStore}
                   certificationStore={this.props.certificationStore}
-                  eventRepository={this.props.eventRepository}
                   plannerService={new MomentPlannerService()}
                   flightStore={this.props.flightStore}
                 />

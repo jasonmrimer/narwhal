@@ -11,11 +11,8 @@ import { SquadronStore } from '../squadron/SquadronStore';
 import { AirmanStore } from '../airman/AirmanStore';
 import { CertificationStore } from '../airman/CertificationStore';
 import { FlightStore } from '../flight/FlightStore';
-import EventModel from '../event/EventModel';
-import EventRepository from '../event/repositories/EventRepository';
 
 interface Props {
-  eventRepository: EventRepository;
   plannerService: PlannerService;
   username: string;
   squadronStore: SquadronStore;
@@ -36,18 +33,7 @@ export class Tracker extends React.Component<Props> {
     this.props.certificationStore.fetchAllCertifications();
   }
 
-  submitEvent = async (event: EventModel) => {
-    const savedEvent = await this.props.eventRepository.save(event);
-
-    const airman = this.props.airmanStore.getSelectedAirman;
-    if (airman.id === -1) {
-      return;
-    }
-
-    this.props.airmanStore.addEvent(savedEvent);
-  }
-
-    render() {
+  render() {
     const {username, className, plannerService} = this.props;
     return (
       [
@@ -87,7 +73,6 @@ export class Tracker extends React.Component<Props> {
                 ? <SidePanel
                   airmanStore={this.props.airmanStore}
                   week={plannerService.getCurrentWeek()}
-                  submitEvent={this.submitEvent}
                 />
                 : null
             }

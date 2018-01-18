@@ -16,10 +16,10 @@ import SquadronRepositoryStub from '../squadron/repositories/doubles/SquadronRep
 import { FlightStore } from '../flight/FlightStore';
 import { CertificationStore } from '../airman/CertificationStore';
 import CertificationRepositoryStub from '../airman/repositories/doubles/CertificationRepositoryStub';
+import EventRepositoryStub from '../event/repositories/doubles/EventRepositoryStub';
 
 let airmen: AirmanModel[];
 let certifications: CertificationModel[];
-let selectAirmanSpy: (airman: AirmanModel) => void;
 let setSelectedCertificationsSpy: (certifications: FilterOptionModel[]) => void;
 let table: Table;
 let subject: ReactWrapper;
@@ -35,7 +35,6 @@ describe('Roster', () => {
       AirmanModelFactory.build(3, 1, certifications.slice(0, 2))
     ];
 
-    selectAirmanSpy = jest.fn();
     setSelectedCertificationsSpy = jest.fn();
 
     const squadronStore = new SquadronStore(new SquadronRepositoryStub());
@@ -43,7 +42,9 @@ describe('Roster', () => {
       new AirmanRepositoryStub(),
       squadronStore,
       new FlightStore(squadronStore),
-      new CertificationStore(new CertificationRepositoryStub()));
+      new CertificationStore(new CertificationRepositoryStub()),
+      new EventRepositoryStub()
+      );
 
     airmanStore.setAirmen(airmen);
     subject = mount(

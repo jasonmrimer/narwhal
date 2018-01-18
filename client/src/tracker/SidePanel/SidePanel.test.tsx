@@ -14,8 +14,8 @@ import { FlightStore } from '../../flight/FlightStore';
 import { SquadronStore } from '../../squadron/SquadronStore';
 import { CertificationStore } from '../../airman/CertificationStore';
 import AirmanRepositoryStub from '../../airman/repositories/doubles/AirmanRepositoryStub';
+import EventRepositoryStub from '../../event/repositories/doubles/EventRepositoryStub';
 
-const submitEventSpy = jest.fn();
 const plannerServiceStub = new PlannerServiceStub();
 let airman: AirmanModel;
 let subject: ShallowWrapper;
@@ -30,14 +30,14 @@ describe('SidePanel', () => {
       new AirmanRepositoryStub(),
       squadronStore,
       new FlightStore(squadronStore),
-      new CertificationStore(new CertificationRepositoryStub()));
+      new CertificationStore(new CertificationRepositoryStub()),
+      new EventRepositoryStub());
 
     airmanStore.setAirman(airman);
     subject = shallow(
       <SidePanel
         airmanStore={airmanStore}
         week={plannerServiceStub.getCurrentWeek()}
-        submitEvent={submitEventSpy}
       />);
   });
 
@@ -54,7 +54,6 @@ describe('SidePanel', () => {
   it('renders the availability for a selected airman', () => {
     const availability = subject.find(Availability);
     expect(availability.exists()).toBeTruthy();
-    expect(availability.prop('submitEvent')).toEqual(submitEventSpy);
   });
 
   it('renders the currency for a selected airman', () => {
