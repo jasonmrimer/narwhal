@@ -213,6 +213,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/test/java/mil/af/us/narwhal/OAuth2SecurityConfigTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/test/java/mil/af/us/narwhal/airman/AirmanControllerTest.java">
           <value>
             <set />
