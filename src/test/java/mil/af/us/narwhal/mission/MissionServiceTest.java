@@ -139,4 +139,48 @@ public class MissionServiceTest {
     verify(missionRepository).save(captor.capture());
     Assertions.assertThat(captor.getValue().get(0).getSite()).isNull();
   }
+
+  @Test
+  public void refreshMissions_handlesNullEndDates() {
+    //language=XML
+    String xml = "<GetMissionMetaDataResponse xmlns=\"Unicorn\">\n" +
+      "  <GetMissionMetaDataResult>\n" +
+      "    <results xmlns=\"\">\n" +
+      "      <missionMetaData>\n" +
+      "        <missionid>70497d73-a7e4-4000-879a-feaf9099bfa1</missionid>\n" +
+      "        <description>U2 over</description>\n" +
+      "        <missionStatus>CLOSED</missionStatus>\n" +
+      "        <classification>Unclassified</classification>\n" +
+      "        <distrocontrol>FOUO</distrocontrol>\n" +
+      "        <atomissionnumber>HGZ3W09</atomissionnumber>\n" +
+      "        <atoday>aaa</atoday>\n" +
+      "        <startdttime>12-12-2017T04:29:00.0Z</startdttime>\n" +
+      "        <enddttime />\n" +
+      "        <primaryorg>XBOW</primaryorg>\n" +
+      "        <callsign>Spaceman</callsign>\n" +
+      "        <platform>U2</platform>\n" +
+      "        <tailnumber>NW1</tailnumber>\n" +
+      "        <missionstatickmllink>\n" +
+      "          http://codweb1.leidoshost.com/UNICORN.NET/webservices/googleearth.asmx/getkmzformissionbyato?ato=HGZ3W09&amp;streaming=false\n" +
+      "        </missionstatickmllink>\n" +
+      "        <missiondynamickmllink>\n" +
+      "          http://codweb1.leidoshost.com/UNICORN.NET/webservices/googleearth.asmx/getkmzformissionbyato?ato=HGZ3W09&amp;streaming=true\n" +
+      "        </missiondynamickmllink>\n" +
+      "        <unicornmissiondataurl>\n" +
+      "          http://codweb1.leidoshost.com/UNICORN.NET/pages/public/publiccustomerreport.aspx?strATO=HGZ3W09\n" +
+      "        </unicornmissiondataurl>\n" +
+      "      </missionMetaData>\n" +
+      "    </results>\n" +
+      "  </GetMissionMetaDataResult>\n" +
+      "</GetMissionMetaDataResponse>";
+
+    getMissionMetaDataResponse = JAXB.unmarshal(new StringSource(xml), GetMissionMetaDataResponse.class);
+    when(missionClient.getMissionMetaData()).thenReturn(getMissionMetaDataResponse.getGetMissionMetaDataResult().getResults().getMissionMetaData());
+
+    subject = new MissionService(missionRepository, missionClient, siteRepository);
+    subject.refreshMissions();
+
+    verify(missionRepository).save(captor.capture());
+    Assertions.assertThat(captor.getValue().get(0).getSite()).isNull();
+  }
 }

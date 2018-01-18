@@ -10,6 +10,7 @@ export class AirmanStore {
   @observable private _airmen: AirmanModel[] = [];
   @observable private selectedAirman: AirmanModel = AirmanModel.empty();
   @observable private _selectedAirmanEvents: EventModel[] = this.selectedAirman.events;
+
   constructor(private repository: AirmanRepository,
               private squadronStore: SquadronStore,
               private flightStore: FlightStore,

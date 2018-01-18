@@ -3,6 +3,11 @@
   <component name="issues">
     <option name="index">
       <map>
+        <entry key="/Dummy.txt">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="/JSON Fragment (AirmanControllerTest.java:4357).json">
           <value>
             <set />
@@ -98,12 +103,12 @@
             <set />
           </value>
         </entry>
-        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/ApplicationLogListener.java">
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/Application.java">
           <value>
             <set />
           </value>
         </entry>
-        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/Application.java">
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/ApplicationLogListener.java">
           <value>
             <set />
           </value>
@@ -259,6 +264,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/test/java/mil/af/us/narwhal/ApplicationLogListenerTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/test/java/mil/af/us/narwhal/CsrfTest.java">
           <value>
             <set />
           </value>

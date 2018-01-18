@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 import java.util.Collections;
 
@@ -23,7 +24,7 @@ public class CloudWebSecurityConfig extends WebSecurityConfigurerAdapter {
       .authenticated()
       .and()
       .csrf()
-      .disable();
+      .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
   }
 
 

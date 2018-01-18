@@ -20,7 +20,7 @@ public class MissionService {
     this.siteRepository = siteRepository;
   }
 
-  public void refreshMissions()  {
+  public void refreshMissions() {
     List<Results.MissionMetaData> missionMetaData = client.getMissionMetaData();
 
     List<Mission> missions = missionMetaData
@@ -34,12 +34,16 @@ public class MissionService {
     final Site site = siteRepository.findOneByName(metaData.getPrimaryorg());
 
 
-    return new Mission.Builder()
+    Mission.Builder builder = new Mission.Builder()
       .missionId(metaData.getMissionid())
       .atoMissionNumber(metaData.getAtomissionnumber())
       .startDateTime(metaData.getStartdttime().toGregorianCalendar().getTime().toInstant())
-      .endDateTime(metaData.getEnddttime().toGregorianCalendar().getTime().toInstant())
-      .site(site)
-      .build();
+      .site(site);
+
+    if (metaData.getEnddttime() != null) {
+      builder.endDateTime(metaData.getEnddttime().toGregorianCalendar().getTime().toInstant());
+    }
+
+    return builder.build();
   }
 }

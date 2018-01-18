@@ -20,72 +20,36 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.*;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
-import java.util.logging.StreamHandler;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ActiveProfiles(profiles = "cloud")
 @SpringBootTest
 @RunWith(SpringRunner.class)
-public class ApplicationLogListenerTest {
-  private static Logger logger = Logger.getLogger(ApplicationLogListener.class.getName());
-  private static OutputStream logCapturingStream;
-  private static StreamHandler captureHandler;
-
+public class CsrfTest {
   @Autowired private WebApplicationContext webAppContext;
   private MockMvc mockMvc;
 
   @Before
-  public void attachLogCaptureHandler() {
-    logCapturingStream = new ByteArrayOutputStream();
-    captureHandler = new StreamHandler(logCapturingStream, new SimpleFormatter());
-    logger.addHandler(captureHandler);
+  public void setUp() {
     mockMvc = MockMvcBuilders
       .webAppContextSetup(webAppContext)
       .apply(springSecurity())
       .build();
   }
 
-  public String getTestCapturedLog() throws IOException {
-    captureHandler.flush();
-    return logCapturingStream.toString();
-  }
-
   @Test
-  public void onApplicationEvent_logsAuthorizationFailureAndAuditApplicationEventsToConsole() throws Exception {
-    final String expectedAuthFailure = "Event Occurred : org.springframework.security.access.event.AuthorizationFailureEvent";
-    final String expectedAuditEvent = "Event Occurred : org.springframework.boot.actuate.audit.listener.AuditApplicationEvent";
-
-    mockMvc.perform(MockMvcRequestBuilders.get("/api/initial-load-data-bundle"));
-
-    String capturedLog = getTestCapturedLog();
-
-    assertThat(capturedLog.contains(expectedAuthFailure)).isEqualTo(true);
-    assertThat(capturedLog.contains(expectedAuditEvent)).isEqualTo(true);
-  }
-
-  @Test
-  public void onApplicationEvent_logsServletRequestHandledEventToConsole() throws Exception {
-    final String expectedRequestEvent = "Event Occurred : ServletRequestHandledEvent";
-
-    mockMvc.perform(MockMvcRequestBuilders.get("/api/initial-load-data-bundle")
+  public void testSuccessfulCsrfProtection() throws Exception {
+    mockMvc.perform(MockMvcRequestBuilders.post("/api/events")
       .with(authentication(getOauthGoodTestAuthentication()))
-      .sessionAttr("scopedTarget.oauth2ClientContext", getOauth2ClientContext()));
-
-    String capturedLog = getTestCapturedLog();
-
-    assertThat(capturedLog.contains(expectedRequestEvent)).isEqualTo(true);
+      .sessionAttr("scopedTarget.oauth2ClientContext", getOauth2ClientContext()))
+      .andExpect(status().isForbidden());
   }
 
   private Authentication getOauthGoodTestAuthentication() {
