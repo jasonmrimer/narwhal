@@ -15,10 +15,3 @@ applications:
 #    SSO_SERVICE_URL: ${vcap.services.narwhal-sso.credentials.auth_domain}
 #    SECURITY_OAUTH2_CLIENT_CLIENT_ID: ${vcap.services.narwhal-sso.credentials.client_id}
 #    SECURITY_OAUTH2_CLIENT_CLIENT_SECRET: ${vcap.services.narwhal-sso.credentials.client_secret}
-- name: admin
-  buildpack: https://github.com/cloudfoundry/ruby-buildpack
-  memory: 1GB
-  instances: 1
-  path: admin
-  services:
-    - narwhal-db
