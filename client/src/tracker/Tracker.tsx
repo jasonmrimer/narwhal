@@ -36,16 +36,16 @@ export class Tracker extends React.Component<Props> {
     this.props.certificationStore.fetchAllCertifications();
   }
 
-    submitEvent = async (event: EventModel) => {
-        const savedEvent = await this.props.eventRepository.save(event);
+  submitEvent = async (event: EventModel) => {
+    const savedEvent = await this.props.eventRepository.save(event);
 
-        const airman = this.props.airmanStore.getSelectedAirman;
-        if (airman.id === -1) {
-            return;
-        }
-
-        airman.events.push(savedEvent);
+    const airman = this.props.airmanStore.getSelectedAirman;
+    if (airman.id === -1) {
+      return;
     }
+
+    this.props.airmanStore.addEvent(savedEvent);
+  }
 
     render() {
     const {username, className, plannerService} = this.props;

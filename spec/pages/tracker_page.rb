@@ -67,9 +67,9 @@ class TrackerPage
       click_link_or_button '+ Add Event'
       fill_in 'title', with: 'Dentist'
       fill_in 'startDate', with: event_start.strftime('%m/%d/%Y')
-      fill_in 'startTime', with: event_start.strftime('%H:%M')
+      fill_in 'startTime', with: event_start.strftime('%H:%M%p')
       fill_in 'endDate', with: event_end.strftime('%m/%d/%Y')
-      fill_in 'endTime', with: event_end.strftime('%H:%M')
+      fill_in 'endTime', with: event_end.strftime('%H:%M%p')
       find('input[type="submit"]').click
     end
 

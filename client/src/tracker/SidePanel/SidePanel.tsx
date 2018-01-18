@@ -41,7 +41,7 @@ export class SidePanel extends React.Component<Props, State> {
         return (
           <Availability
             week={this.props.week}
-            airman={airman}
+            airmanStore={this.props.airmanStore}
             submitEvent={submitEvent}
           />
         );

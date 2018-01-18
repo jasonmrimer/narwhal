@@ -4,11 +4,12 @@ import AirmanModel from './models/AirmanModel';
 import { SquadronStore } from '../squadron/SquadronStore';
 import { FlightStore } from '../flight/FlightStore';
 import { CertificationStore } from './CertificationStore';
+import EventModel from '../event/EventModel';
 
 export class AirmanStore {
   @observable private _airmen: AirmanModel[] = [];
   @observable private selectedAirman: AirmanModel = AirmanModel.empty();
-
+  @observable private _selectedAirmanEvents: EventModel[] = this.selectedAirman.events;
   constructor(private repository: AirmanRepository,
               private squadronStore: SquadronStore,
               private flightStore: FlightStore,
@@ -42,6 +43,12 @@ export class AirmanStore {
   }
 
   @action
+  addEvent(event: EventModel) {
+    this.selectedAirman.events.push(event);
+    this._selectedAirmanEvents.push(event);
+  }
+
+  @action
   setAirmen(airmen: AirmanModel[]) {
     this._airmen = airmen;
   }
@@ -49,6 +56,7 @@ export class AirmanStore {
   @action
   setAirman(airman?: AirmanModel) {
     this.selectedAirman = airman ? airman : AirmanModel.empty();
+    this._selectedAirmanEvents = this.selectedAirman.events;
   }
 
   @computed
@@ -68,6 +76,11 @@ export class AirmanStore {
   @computed
   get getSelectedAirman() {
     return this.selectedAirman;
+  }
+
+  @computed
+  get selectedAirmanEvents() {
+    return this._selectedAirmanEvents;
   }
 
   @computed

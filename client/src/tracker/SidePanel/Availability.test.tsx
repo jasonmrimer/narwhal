@@ -7,8 +7,23 @@ import EventModel from '../../event/EventModel';
 import * as moment from 'moment';
 import EventForm from './EventForm';
 import AirmanModelFactory from '../../airman/factories/AirmanModelFactory';
+import AirmanRepositoryStub from '../../airman/repositories/doubles/AirmanRepositoryStub';
+import { SquadronStore } from '../../squadron/SquadronStore';
+import { FlightStore } from '../../flight/FlightStore';
+import SquadronRepositoryStub from '../../squadron/repositories/doubles/SquadronRepositoryStub';
+import CertificationRepositoryStub from '../../airman/repositories/doubles/CertificationRepositoryStub';
+import { AirmanStore } from '../../airman/AirmanStore';
+import { CertificationStore } from '../../airman/CertificationStore';
+
 
 describe('Availability', () => {
+  const squadronStore = new SquadronStore(new SquadronRepositoryStub());
+  const airmanStore: AirmanStore = new AirmanStore(
+    new AirmanRepositoryStub(),
+    squadronStore,
+    new FlightStore(squadronStore),
+    new CertificationStore(new CertificationRepositoryStub()));
+
   const airman = AirmanModelFactory.build();
   const eventOne = new EventModel(
     'Event One',
@@ -31,7 +46,7 @@ describe('Availability', () => {
   const subject = shallow(
     <Availability
       week={week}
-      airman={airman}
+      airmanStore={airmanStore}
       submitEvent={() => {
       }}
     />
@@ -49,7 +64,9 @@ describe('Availability', () => {
   });
 
   it('renders a list of events', () => {
-    expect(subject.find(AirmanEvent).length).toBe(airman.events.length);
+    airmanStore.setAirman(airman);
+    subject.update();
+    expect(subject.find(AirmanEvent).length).toBe(2);
   });
 
   it('renders all the scheduled events for the given day', () => {

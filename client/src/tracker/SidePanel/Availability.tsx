@@ -4,11 +4,12 @@ import styled from 'styled-components';
 import EventModel from '../../event/EventModel';
 import AirmanEvent from '../../airman/AirmanEvent';
 import EventForm from './EventForm';
-import AirmanModel from '../../airman/models/AirmanModel';
+import { observer } from 'mobx-react';
+import { AirmanStore } from '../../airman/AirmanStore';
 
 interface Props {
   week: Moment[];
-  airman: AirmanModel;
+  airmanStore: AirmanStore;
   submitEvent: (event: EventModel) => void;
   className?: string;
 }
@@ -17,6 +18,7 @@ interface State {
   showEventForm: boolean;
 }
 
+@observer
 export class Availability extends React.Component<Props, State> {
   state: State = {showEventForm: false};
 
@@ -38,12 +40,11 @@ export class Availability extends React.Component<Props, State> {
   }
 
   renderEventForm = () => {
-    return <EventForm airmanId={this.props.airman.id} handleSubmit={this.submitEvent}/>;
+    return <EventForm airmanId={this.props.airmanStore.getSelectedAirman.id} handleSubmit={this.submitEvent}/>;
   }
 
   renderAvailability = () => {
-    const {week, airman} = this.props;
-
+    const {week, airmanStore} = this.props;
     return (
       <div>
         <div id="event-control-row">
@@ -58,7 +59,7 @@ export class Availability extends React.Component<Props, State> {
               return (
                 <div key={`day-${index}`}>
                   <div className="event-date">{day.format('ddd, DD MMM YY').toUpperCase()}</div>
-                  {this.scheduledEventsForDate(day.utc(), airman.events)}
+                  {this.scheduledEventsForDate(day.utc(), airmanStore.selectedAirmanEvents)}
                 </div>
               );
             })
