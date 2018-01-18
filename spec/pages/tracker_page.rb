@@ -58,8 +58,8 @@ class TrackerPage
   end
 
   def assert_can_create_and_view_an_event
-    event_start = DateTime.now
-    event_end = event_start + 1.0/24.0
+    event_start = Time.now.utc
+    event_end = event_start + 3600
 
     click_on_airman('LastName2')
 
