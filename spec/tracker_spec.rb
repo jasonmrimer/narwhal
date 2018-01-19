@@ -35,7 +35,7 @@ describe 'Tracker page', type: :feature do
     tracker_page.assert_shows_availability
   end
 
-  it "create and view an event for a selected airman" do
-    tracker_page.assert_can_create_and_view_an_event
+  it "creates, views, deletes an event for a selected airman" do
+    tracker_page.assert_can_create_and_view_and_delete_event
   end
 end

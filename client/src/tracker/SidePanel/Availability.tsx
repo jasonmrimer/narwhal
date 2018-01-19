@@ -25,7 +25,15 @@ export class Availability extends React.Component<Props, State> {
     const eventsForDay = events.filter((event) => day.isSame(event.startTime, 'day'));
     return eventsForDay.length === 0
       ? <div className="event-name">No Events Scheduled</div>
-      : eventsForDay.map((event, index) => <AirmanEvent key={index} event={event}/>);
+      : eventsForDay.map((event, index) => {
+        return (
+          <AirmanEvent
+            key={index}
+            event={event}
+            deleteEvent={this.props.airmanStore.deleteEvent}
+          />
+        );
+      });
   }
 
   setShowEventForm = () => {

@@ -12,6 +12,9 @@ class TrackerPage
     page.driver.browser.manage.window.resize_to(4096, 4096)
     expect(page).to have_content('All Squadrons')
     @@all_airmen = page.find_all('tbody tr').count
+    @event_start = Time.now.utc
+    @event_end = @event_start + 3600
+    @event_title = 'Test Dentist'
   end
 
   def assert_shows_tracker
@@ -57,27 +60,29 @@ class TrackerPage
     has_currency
   end
 
-  def assert_can_create_and_view_an_event
-    event_start = Time.now.utc
-    event_end = event_start + 3600
-
+  def assert_can_create_and_view_and_delete_event
     click_on_airman('LastName2')
 
     page.within('.side-panel') do
       click_link_or_button '+ Add Event'
-      fill_in 'title', with: 'Dentist'
-      fill_in 'startDate', with: event_start.strftime('%m/%d/%Y')
-      fill_in 'startTime', with: event_start.strftime('%H:%M')
-      fill_in 'endDate', with: event_end.strftime('%m/%d/%Y')
-      fill_in 'endTime', with: event_end.strftime('%H:%M')
+      fill_in 'title', with: @event_title
+      fill_in 'startDate', with: @event_start.strftime('%m/%d/%Y')
+      fill_in 'startTime', with: @event_start.strftime('%H:%M')
+      fill_in 'endDate', with: @event_end.strftime('%m/%d/%Y')
+      fill_in 'endTime', with: @event_end.strftime('%H:%M')
       find('input[type="submit"]').click
     end
 
-    check_for_event(event_start, event_end)
+    expect(has_event).to be_truthy
 
     find('button.close').click
 
     has_highlevel_availability
+
+    click_on_airman('LastName2')
+    page.find('.event-title', text: @event_title).find('button.delete').click
+    expect(has_event).to be_falsey
+    find('button.close').click
   end
 
   private
@@ -100,15 +105,11 @@ class TrackerPage
     end
   end
 
-  def check_for_event(event_start, event_end)
+  def has_event
     page.within('.side-panel') do
-      puts '----------------------------------------------------'
-      puts page.html
-      puts page.text
-      puts '----------------------------------------------------'
-      expect(page).to have_content(event_start.strftime('%d %^b %y'))
-      expect(page).to have_content('Dentist')
-      expect(page).to have_content(event_start.strftime('%H%MZ') + ' - ' + event_end.strftime('%H%MZ'))
+      page.has_content?(@event_start.strftime('%d %^b %y')) &&
+      page.has_content?(@event_title) &&
+      page.has_content?(@event_start.strftime('%H%MZ') + ' - ' + @event_end.strftime('%H%MZ'))
     end
   end
 

@@ -53,7 +53,22 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/client/src/airman/repositories/AirmanRepositoryContract.ts">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/client/src/event/EventModel.ts">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/client/src/event/repositories/doubles/EventRepositoryStub.ts">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/client/src/event/repositories/web/WebEventRepository.ts">
           <value>
             <set />
           </value>

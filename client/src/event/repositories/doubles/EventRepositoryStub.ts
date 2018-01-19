@@ -8,4 +8,8 @@ export default class EventRepositoryStub implements EventRepository {
     event.id = ++EventRepositoryStub.counter;
     return Promise.resolve(event);
   }
+
+  delete(id: number): Promise<{ status: number }> {
+    return Promise.resolve({status: 200});
+  }
 }

@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, ShallowWrapper } from 'enzyme';
 import PlannerServiceStub from '../services/doubles/PlannerServiceStub';
 import { Availability } from './Availability';
-import AirmanEvent from '../../airman/AirmanEvent';
 import EventModel from '../../event/EventModel';
 import * as moment from 'moment';
 import EventForm from './EventForm';
@@ -15,7 +14,7 @@ import CertificationRepositoryStub from '../../airman/repositories/doubles/Certi
 import { AirmanStore } from '../../airman/AirmanStore';
 import { CertificationStore } from '../../airman/CertificationStore';
 import EventRepositoryStub from '../../event/repositories/doubles/EventRepositoryStub';
-
+import AirmanEvent from '../../airman/AirmanEvent';
 
 describe('Availability', () => {
   const squadronStore = new SquadronStore(new SquadronRepositoryStub());
@@ -44,14 +43,18 @@ describe('Availability', () => {
   );
   airman.events = [eventOne, eventTwo];
   const week = new PlannerServiceStub().getCurrentWeek();
+  let subject: ShallowWrapper;
 
-  /*tslint:disable:no-empty*/
-  const subject = shallow(
-    <Availability
-      week={week}
-      airmanStore={airmanStore}
-    />
-  );
+  beforeEach(() => {
+    airmanStore.setAirman(airman);
+
+    subject = shallow(
+      <Availability
+        week={week}
+        airmanStore={airmanStore}
+      />
+    );
+  });
 
   it('renders the availability for an airman', () => {
     expect(subject.text()).toContain('26 NOV - 02 DEC');
@@ -65,8 +68,6 @@ describe('Availability', () => {
   });
 
   it('renders a list of events', () => {
-    airmanStore.setAirman(airman);
-    subject.update();
     expect(subject.find(AirmanEvent).length).toBe(2);
   });
 

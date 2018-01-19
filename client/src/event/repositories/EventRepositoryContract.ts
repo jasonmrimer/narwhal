@@ -18,4 +18,18 @@ export default function EventRepositoryContract(subject: EventRepository) {
       expect(savedEvent1.id).not.toBe(savedEvent2.id);
     });
   });
+
+  describe('delete', () => {
+    it('deletes an event using its ID', async () => {
+      const dateTime = moment().subtract(1, 'year');
+
+      const event1 = new EventModel('title1', 'description1', dateTime, dateTime, 1);
+      const savedEvent1 = await subject.save(event1);
+
+      if (savedEvent1.id) {
+        const resp = await subject.delete(savedEvent1.id);
+        expect(resp.status).toBe(200);
+      }
+    });
+  });
 }

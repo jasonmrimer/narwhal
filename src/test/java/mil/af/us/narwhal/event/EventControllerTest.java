@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -14,9 +16,12 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.Instant;
 
+import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -27,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class EventControllerTest {
   @Autowired private MockMvc mockMvc;
   @MockBean private EventRepository repository;
+  @Captor private ArgumentCaptor<Long> eventCaptor;
 
   @Test
   public void createTest() throws Exception {
@@ -58,5 +64,16 @@ public class EventControllerTest {
         .with(httpBasic("tytus", "password")))
       .andExpect(status().isCreated())
       .andExpect(jsonPath("$.id").value(123L));
+  }
+
+  @Test
+  public void deleteTest() throws Exception {
+    mockMvc.perform(delete(EventController.URI + "/1")
+      .contentType(MediaType.APPLICATION_JSON)
+      .with(httpBasic("tytus", "password")))
+      .andExpect(status().is(200));
+
+    verify(repository).delete(eventCaptor.capture());
+    assertThat(eventCaptor.getValue()).isEqualTo(1);
   }
 }

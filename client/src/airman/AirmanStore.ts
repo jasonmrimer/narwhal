@@ -53,7 +53,7 @@ export class AirmanStore {
     }
 
     this._selectedAirman.events.push(savedEvent);
-    this._selectedAirmanEvents.push(event);
+    this._selectedAirmanEvents.push(savedEvent);
   }
 
   @action
@@ -65,6 +65,16 @@ export class AirmanStore {
   setAirman(airman?: AirmanModel) {
     this._selectedAirman = airman ? airman : AirmanModel.empty();
     this._selectedAirmanEvents = this._selectedAirman.events;
+  }
+
+  @action.bound
+  async deleteEvent(id: number) {
+    const resp = await this.eventRepository.delete(id);
+    if (resp.status === 200) {
+      const eventIndex = this._selectedAirman.events.findIndex((event) => event.id === id);
+      this._selectedAirman.events.splice(eventIndex, 1);
+      this._selectedAirmanEvents.splice(eventIndex, 1);
+    }
   }
 
   @computed
