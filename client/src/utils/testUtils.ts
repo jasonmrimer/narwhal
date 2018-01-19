@@ -1,5 +1,21 @@
 import { Filter } from '../widgets/Filter';
 import AvailabilityOverview from '../roster/AvailabilityOverview';
+import TrackerStore from '../tracker/stores/TrackerStore';
+import AirmanRepositoryStub from '../airman/repositories/doubles/AirmanRepositoryStub';
+import SiteRepositoryStub from '../site/repositories/doubles/SiteRepositoryStub';
+import CertificationRepositoryStub from '../airman/repositories/doubles/CertificationRepositoryStub';
+import EventRepositoryStub from '../event/repositories/doubles/EventRepositoryStub';
+
+export async function makeFakeTrackerStore() {
+  const store = new TrackerStore(
+    new AirmanRepositoryStub(),
+    new SiteRepositoryStub(),
+    new CertificationRepositoryStub(),
+    new EventRepositoryStub()
+  );
+  await store.hydrate();
+  return store;
+}
 
 export function forIt(wait: number = 0): Promise<{}> {
   return new Promise((resolve) => {

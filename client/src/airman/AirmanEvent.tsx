@@ -6,7 +6,7 @@ import DeleteIcon from '../icons/DeleteIcon';
 
 interface Props {
   event: EventModel;
-  deleteEvent: (id: number) => void;
+  deleteEvent: (event: EventModel) => void;
   className?: string;
 }
 
@@ -16,7 +16,7 @@ export const AirmanEvent = observer((props: Props) => {
       <div className="event-title">
         <span>{props.event.startTime.format('DD MMM YY').toUpperCase()}</span>
         <span>{props.event.title}</span>
-        <button className="delete" onClick={() => props.deleteEvent(props.event.id || -1)}>
+        <button className="delete" onClick={() => props.deleteEvent(props.event)}>
           <DeleteIcon />
         </button>
       </div>

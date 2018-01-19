@@ -15,4 +15,8 @@ export default class AirmanModel {
               public certifications: CertificationModel[],
               public events: EventModel[]) {
   }
+
+  isEmpty() {
+    return this.id === -1;
+  }
 }

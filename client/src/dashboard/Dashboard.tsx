@@ -3,26 +3,20 @@ import { MissionModel } from '../mission/models/MissionModel';
 import Mission from '../mission/Mission';
 import styled from 'styled-components';
 import TopBar from '../widgets/TopBar';
-import { TopLevelFilter } from '../widgets/Filter';
-import {default as createDefaultOption, DefaultValue } from '../utils/createDefaultOption';
-import { SiteStore } from '../site/SiteStore';
 import { observer } from 'mobx-react';
-import { MissionStore } from '../mission/MissionStore';
+import DashboardStore from './stores/DashboardStore';
+import { TopLevelFilter } from '../widgets/Filter';
 
 interface Props {
-  siteStore: SiteStore;
-  missionStore: MissionStore;
+  dashboardStore: DashboardStore;
   username: string;
   className?: string;
 }
 
 @observer
 export class Dashboard extends React.Component<Props> {
-  readonly unfilteredSiteOption: DefaultValue = createDefaultOption('All Sites');
-
   async componentDidMount() {
-    this.props.siteStore.fetchAllSites();
-    this.props.missionStore.fetchAllMissions();
+    await this.props.dashboardStore.hydrate();
   }
 
   render() {
@@ -34,16 +28,17 @@ export class Dashboard extends React.Component<Props> {
             <div className="filter">
               <TopLevelFilter
                 id="site-filter"
-                store={this.props.siteStore}
-                unfilteredOption={this.unfilteredSiteOption}
-                callback={this.props.missionStore.fetchBySiteId}
-                label={'SITE'}
+                label="SITE"
+                unfilteredOptionLabel="All Sites"
+                value={this.props.dashboardStore.siteId}
+                callback={this.props.dashboardStore.setSiteId}
+                options={this.props.dashboardStore.siteOptions}
               />
             </div>
           </div>),
         (
           <div key="2" className={`${this.props.className} missions`}>
-            {this.props.missionStore.missions.map((mission: MissionModel, index) => {
+            {this.props.dashboardStore.missions.map((mission: MissionModel, index) => {
               return <Mission mission={mission} key={index}/>;
             })}
           </div>)

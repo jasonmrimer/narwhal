@@ -2,14 +2,15 @@ import * as React from 'react';
 import styled from 'styled-components';
 import CloseIcon from '../../icons/CloseIcon';
 import { Moment } from 'moment';
-import Availability from './Availability';
 import Currency from './Currency';
 import Tab from './Tab';
-import { AirmanStore } from '../../airman/AirmanStore';
 import { observer } from 'mobx-react';
+import TrackerStore from '../stores/TrackerStore';
+import AirmanModel from '../../airman/models/AirmanModel';
+import Availability from './Availability';
 
 interface Props {
-  airmanStore: AirmanStore;
+  trackerStore: TrackerStore;
   week: Moment[];
   className?: string;
 }
@@ -29,7 +30,7 @@ export class SidePanel extends React.Component<Props, State> {
   }
 
   renderSelectedTab = () => {
-    const airman = this.props.airmanStore.getSelectedAirman;
+    const airman = this.props.trackerStore.selectedAirman;
     switch (this.state.selectedTab) {
       case 0:
         return <Currency airman={airman}/>;
@@ -37,27 +38,27 @@ export class SidePanel extends React.Component<Props, State> {
       default:
         return (
           <Availability
+            trackerStore={this.props.trackerStore}
             week={this.props.week}
-            airmanStore={this.props.airmanStore}
           />
         );
     }
   }
 
   render() {
-    const {airmanStore, className} = this.props;
+    const {trackerStore, className} = this.props;
 
     return (
       <div className={`${className} side-panel`}>
         <div className={'header'}>
           <button
-              className="close"
-              onClick={() => airmanStore.setAirman()}
+            className="close"
+            onClick={() => trackerStore.setSelectedAirman(AirmanModel.empty())}
           >
             <CloseIcon/>
           </button>
           <h2>
-            {airmanStore.getSelectedAirman.lastName}, {airmanStore.getSelectedAirman.firstName}
+            {trackerStore.selectedAirman.lastName}, {trackerStore.selectedAirman.firstName}
           </h2>
         </div>
         <div className="tabs">

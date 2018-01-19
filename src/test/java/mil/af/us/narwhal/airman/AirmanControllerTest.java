@@ -40,7 +40,7 @@ public class AirmanControllerTest {
 
   @Before
   public void setUp() {
-    squadron = new Squadron(1L, "1", null);
+    squadron = new Squadron(1L, 1L, "1", null);
     event = new Event(1L, "Dentist", "", Instant.parse("2007-12-03T10:15:30.00Z"), Instant.parse("2007-12-03T10:15:30.00Z"), 1L);
     Qualification qualification1 = new Qualification(1L, "Qual1", "qualification1");
     final AirmanQualification airQual = new AirmanQualification(1L, qualification1.getId(), new Date(), qualification1);

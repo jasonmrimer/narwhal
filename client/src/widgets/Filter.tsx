@@ -3,38 +3,40 @@ import { ChangeEvent } from 'react';
 import styled from 'styled-components';
 import FilterOption from './models/FilterOptionModel';
 import { observer } from 'mobx-react/custom';
-import { FilterableStore } from '../stores/FilterableStore';
 
 interface Props {
   id: string;
   label: string;
-  unfilteredOption: FilterOption;
+  unfilteredOptionLabel: string;
+  value: number;
+  options: FilterOption[];
   callback: (id: number) => void;
-  store: FilterableStore;
   className?: string;
 }
 
-const handleChange = (event: ChangeEvent<HTMLSelectElement>, {callback, unfilteredOption, store}: Props) => {
-  const {value} = event.target;
-  const option = [unfilteredOption, ...store.options]
-    .find((opt) => opt.value === Number(value))!;
-  callback(option.value);
+const handleChange = (event: ChangeEvent<HTMLSelectElement>, {callback}: Props) => {
+  callback(Number(event.target.value));
+};
+
+const renderOptions = (unfilteredOptionLabel: string, options: FilterOption[]) => {
+  return [{value: -1, label: unfilteredOptionLabel}, ...options].map((opt, i) => {
+    return <option key={i} value={opt.value}>{opt.label}</option>;
+  });
 };
 
 export const Filter = observer((props: Props) => {
-  const {store} = props;
-  const options = store.isDisabled ? [] : [props.unfilteredOption, ...store.options];
+  const {options, value, unfilteredOptionLabel} = props;
   return (
     <div className={props.className}>
       <label htmlFor={props.id}>{props.label}</label>
       <br/>
       <select
         id={props.id}
-        disabled={store.isDisabled}
-        value={store.currentOptionId}
+        disabled={options.length === 0}
+        value={value}
         onChange={(event) => handleChange(event, props)}
       >
-        {options.map((opt, i) => <option key={i} value={opt.value}>{opt.label}</option>)}
+        {renderOptions(unfilteredOptionLabel, options)}
       </select>
     </div>
   );

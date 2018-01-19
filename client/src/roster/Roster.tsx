@@ -4,18 +4,12 @@ import { Moment } from 'moment';
 import AvailabilityOverview from './AvailabilityOverview';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
-import CertificationModel from '../airman/models/CertificationModel';
-import FilterOptionModel from '../widgets/models/FilterOptionModel';
-import { AirmanStore } from '../airman/AirmanStore';
 import { observer } from 'mobx-react';
+import TrackerStore from '../tracker/stores/TrackerStore';
 
 interface Props {
-  certifications: CertificationModel[];
-  airmanStore: AirmanStore;
-  setSelectedCertifications: (option: FilterOptionModel[]) => void;
-  selectedCertificationIds: number[];
+  trackerStore: TrackerStore;
   week: Moment[];
-
   className?: string;
 }
 
@@ -53,14 +47,17 @@ export class Roster extends React.Component<Props> {
   }
 
   private renderAirmen() {
-    const selectedAirman = this.props.airmanStore.getSelectedAirman;
-    return this.props.airmanStore.airmen.map((airman, index) => {
+    const selectedAirman = this.props.trackerStore.selectedAirman;
+
+    return this.props.trackerStore.airmen.map((airman, index) => {
       const className = airman.id === selectedAirman.id ? 'selected' : '';
       return (
         <tr
           key={index}
           className={className}
-          onClick={() => this.props.airmanStore.setAirman(airman)}
+          onClick={() => {
+            this.props.trackerStore.setSelectedAirman(airman);
+          }}
         >
           <td>{airman.lastName}</td>
           <td>{formatAttributes(airman.qualifications, 'acronym')}</td>
@@ -87,17 +84,14 @@ export class Roster extends React.Component<Props> {
   }
 
   private renderCertificationFilter() {
-    const selectOptions = this.props.certifications.map(certification => {
-      return {value: certification.id, label: certification.title};
-    });
     return (
       <Select
         inputProps={{id: 'certification-filter'}}
         placeholder="Filter Certifications"
         multi={true}
-        value={this.props.selectedCertificationIds}
-        options={selectOptions}
-        onChange={this.props.setSelectedCertifications}
+        value={this.props.trackerStore.certificationIds}
+        options={this.props.trackerStore.certificationOptions}
+        onChange={this.props.trackerStore.setCertificationIds}
       />
     );
   }

@@ -11,14 +11,14 @@ describe 'Tracker page', type: :feature do
     tracker_page.assert_shows_tracker
   end
 
+  it 'can filter the Roster by site' do
+    tracker_page.assert_filters_by_site
+  end
+
   it 'can filter the Roster by squadron' do
     tracker_page.assert_filters_by_squadron
   end
   
-  it 'filtering by squadron populates the flight options' do
-    tracker_page.assert_populate_flights
-  end
-
   it 'can filter the Roster by flight' do
     tracker_page.assert_filters_by_flight
   end

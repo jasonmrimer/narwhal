@@ -1,36 +1,24 @@
 import * as React from 'react';
 import Roster from '../roster/Roster';
-import { TopLevelFilter } from '../widgets/Filter';
 import styled from 'styled-components';
-import SidePanel from './SidePanel/SidePanel';
 import PlannerService from './services/PlannerService';
 import TopBar from '../widgets/TopBar';
-import createDefaultOption, { DefaultValue } from '../utils/createDefaultOption';
 import { observer } from 'mobx-react';
-import { SquadronStore } from '../squadron/SquadronStore';
-import { AirmanStore } from '../airman/AirmanStore';
-import { CertificationStore } from '../airman/CertificationStore';
-import { FlightStore } from '../flight/FlightStore';
+import TrackerStore from './stores/TrackerStore';
+import { TopLevelFilter } from '../widgets/Filter';
+import SidePanel from './SidePanel/SidePanel';
 
 interface Props {
   plannerService: PlannerService;
+  trackerStore: TrackerStore;
   username: string;
-  squadronStore: SquadronStore;
-  flightStore: FlightStore;
-  airmanStore: AirmanStore;
-  certificationStore: CertificationStore;
   className?: string;
 }
 
 @observer
 export class Tracker extends React.Component<Props> {
-  readonly unfilteredSquadronOption: DefaultValue = createDefaultOption('All Squadrons');
-  readonly unfilteredFlightOption: DefaultValue = createDefaultOption('All Flights');
-
   componentDidMount() {
-    this.props.squadronStore.fetchAllSquadrons();
-    this.props.airmanStore.fetchAllAirman();
-    this.props.certificationStore.fetchAllCertifications();
+    this.props.trackerStore.hydrate();
   }
 
   render() {
@@ -42,36 +30,43 @@ export class Tracker extends React.Component<Props> {
           <div key="1" className={className}>
             <div className="main">
               <TopLevelFilter
+                id="site-filter"
+                label="SITE"
+                unfilteredOptionLabel="All Sites"
+                value={this.props.trackerStore.siteId}
+                callback={this.props.trackerStore.setSiteId}
+                options={this.props.trackerStore.siteOptions}
+              />
+              <TopLevelFilter
                 id="squadron-filter"
-                unfilteredOption={this.unfilteredSquadronOption}
-                callback={this.props.airmanStore.fetchBySquadronId}
-                store={this.props.squadronStore}
                 label="SQUADRON"
+                unfilteredOptionLabel="All Squadrons"
+                value={this.props.trackerStore.squadronId}
+                callback={this.props.trackerStore.setSquadronId}
+                options={this.props.trackerStore.squadronOptions}
               />
               <TopLevelFilter
                 id="flight-filter"
-                unfilteredOption={this.unfilteredFlightOption}
-                store={this.props.flightStore}
-                callback={this.props.airmanStore.fetchByFlight}
                 label="FLIGHT"
+                unfilteredOptionLabel="All Flights"
+                value={this.props.trackerStore.flightId}
+                callback={this.props.trackerStore.setFlightId}
+                options={this.props.trackerStore.flightOptions}
               />
               <div style={{display: 'flex'}}>
                 <span style={{marginLeft: 'auto', fontSize: '0.75rem'}}>Empty = Available, Filled = Unavailable</span>
               </div>
               <div style={{display: 'flex'}}>
                 <Roster
-                  certifications={this.props.certificationStore.certifications}
                   week={plannerService.getCurrentWeek()}
-                  selectedCertificationIds={this.props.certificationStore.selectedCertificationIds}
-                  setSelectedCertifications={this.props.certificationStore.setCertificationIds}
-                  airmanStore={this.props.airmanStore}
+                  trackerStore={this.props.trackerStore}
                 />
               </div>
             </div>
             {
-              this.props.airmanStore.isSelectedAirmanFilled
+              !this.props.trackerStore.selectedAirman.isEmpty()
                 ? <SidePanel
-                  airmanStore={this.props.airmanStore}
+                  trackerStore={this.props.trackerStore}
                   week={plannerService.getCurrentWeek()}
                 />
                 : null

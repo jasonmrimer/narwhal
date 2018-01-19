@@ -2,56 +2,45 @@ import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import PlannerServiceStub from '../services/doubles/PlannerServiceStub';
 import { Availability } from './Availability';
+import AirmanEvent from '../../airman/AirmanEvent';
 import EventModel from '../../event/EventModel';
 import * as moment from 'moment';
 import EventForm from './EventForm';
 import AirmanModelFactory from '../../airman/factories/AirmanModelFactory';
-import AirmanRepositoryStub from '../../airman/repositories/doubles/AirmanRepositoryStub';
-import { SquadronStore } from '../../squadron/SquadronStore';
-import { FlightStore } from '../../flight/FlightStore';
-import SquadronRepositoryStub from '../../squadron/repositories/doubles/SquadronRepositoryStub';
-import CertificationRepositoryStub from '../../airman/repositories/doubles/CertificationRepositoryStub';
-import { AirmanStore } from '../../airman/AirmanStore';
-import { CertificationStore } from '../../airman/CertificationStore';
-import EventRepositoryStub from '../../event/repositories/doubles/EventRepositoryStub';
-import AirmanEvent from '../../airman/AirmanEvent';
+import { makeFakeTrackerStore } from '../../utils/testUtils';
+import TrackerStore from '../stores/TrackerStore';
+import AirmanModel from '../../airman/models/AirmanModel';
+
+let trackerStore: TrackerStore;
+let airman: AirmanModel;
+let subject: ShallowWrapper;
 
 describe('Availability', () => {
-  const squadronStore = new SquadronStore(new SquadronRepositoryStub());
-  const airmanStore: AirmanStore = new AirmanStore(
-    new AirmanRepositoryStub(),
-    squadronStore,
-    new FlightStore(squadronStore),
-    new CertificationStore(new CertificationRepositoryStub()),
-    new EventRepositoryStub(),
-  );
+  beforeEach(async () => {
+    airman = AirmanModelFactory.build();
+    const eventOne = new EventModel(
+      'Event One',
+      '',
+      moment('2017-11-27T05:00:00.000Z'),
+      moment('2017-11-27T10:00:00.000Z'),
+      1
+    );
+    const eventTwo = new EventModel(
+      'Event Two',
+      '',
+      moment('2017-11-27T12:00:00.000Z'),
+      moment('2017-11-27T15:00:00.000Z'),
+      1
+    );
+    airman.events = [eventOne, eventTwo];
 
-  const airman = AirmanModelFactory.build();
-  const eventOne = new EventModel(
-    'Event One',
-    '',
-    moment('2017-11-27T05:00:00.000Z'),
-    moment('2017-11-27T10:00:00.000Z'),
-    1
-  );
-  const eventTwo = new EventModel(
-    'Event Two',
-    '',
-    moment('2017-11-27T12:00:00.000Z'),
-    moment('2017-11-27T15:00:00.000Z'),
-    1
-  );
-  airman.events = [eventOne, eventTwo];
-  const week = new PlannerServiceStub().getCurrentWeek();
-  let subject: ShallowWrapper;
-
-  beforeEach(() => {
-    airmanStore.setAirman(airman);
+    trackerStore = await makeFakeTrackerStore();
+    trackerStore.setSelectedAirman(airman);
 
     subject = shallow(
       <Availability
-        week={week}
-        airmanStore={airmanStore}
+        trackerStore={trackerStore}
+        week={new PlannerServiceStub().getCurrentWeek()}
       />
     );
   });

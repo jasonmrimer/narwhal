@@ -7,38 +7,28 @@ import PlannerServiceStub from '../services/doubles/PlannerServiceStub';
 import Currency from './Currency';
 import Availability from './Availability';
 import Tab from './Tab';
-import SquadronRepositoryStub from '../../squadron/repositories/doubles/SquadronRepositoryStub';
-import CertificationRepositoryStub from '../../airman/repositories/doubles/CertificationRepositoryStub';
-import { AirmanStore } from '../../airman/AirmanStore';
-import { FlightStore } from '../../flight/FlightStore';
-import { SquadronStore } from '../../squadron/SquadronStore';
-import { CertificationStore } from '../../airman/CertificationStore';
-import AirmanRepositoryStub from '../../airman/repositories/doubles/AirmanRepositoryStub';
-import EventRepositoryStub from '../../event/repositories/doubles/EventRepositoryStub';
+import TrackerStore from '../stores/TrackerStore';
+import { makeFakeTrackerStore } from '../../utils/testUtils';
 
 const plannerServiceStub = new PlannerServiceStub();
+
 let airman: AirmanModel;
+let trackerStore: TrackerStore;
 let subject: ShallowWrapper;
-let airmanStore: AirmanStore;
 
 describe('SidePanel', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     airman = AirmanModelFactory.build();
 
-    const squadronStore = new SquadronStore(new SquadronRepositoryStub());
-    airmanStore = new AirmanStore(
-      new AirmanRepositoryStub(),
-      squadronStore,
-      new FlightStore(squadronStore),
-      new CertificationStore(new CertificationRepositoryStub()),
-      new EventRepositoryStub());
+    trackerStore = await makeFakeTrackerStore();
+    trackerStore.setSelectedAirman(airman);
 
-    airmanStore.setAirman(airman);
     subject = shallow(
       <SidePanel
-        airmanStore={airmanStore}
+        trackerStore={trackerStore}
         week={plannerServiceStub.getCurrentWeek()}
-      />);
+      />
+    );
   });
 
   it('shows the airmans name', () => {
@@ -74,6 +64,6 @@ describe('SidePanel', () => {
 
   it('calls the callback', () => {
     subject.find('button').simulate('click');
-    expect(airmanStore.getSelectedAirman.id).toBe(-1);
+    expect(trackerStore.selectedAirman.id).toBe(-1);
   });
 });

@@ -1,58 +1,28 @@
 import { mount, ReactWrapper } from 'enzyme';
 import * as React from 'react';
 
-import { Table } from '../utils/testUtils';
+import { makeFakeTrackerStore, Table } from '../utils/testUtils';
 import { Roster } from './Roster';
 import AirmanModel from '../airman/models/AirmanModel';
-import AirmanModelFactory from '../airman/factories/AirmanModelFactory';
 import PlannerServiceStub from '../tracker/services/doubles/PlannerServiceStub';
-import CertificationModelFactory from '../airman/factories/CertificationModelFactory';
 import CertificationModel from '../airman/models/CertificationModel';
-import FilterOptionModel from '../widgets/models/FilterOptionModel';
-import { AirmanStore } from '../airman/AirmanStore';
-import AirmanRepositoryStub from '../airman/repositories/doubles/AirmanRepositoryStub';
-import { SquadronStore } from '../squadron/SquadronStore';
-import SquadronRepositoryStub from '../squadron/repositories/doubles/SquadronRepositoryStub';
-import { FlightStore } from '../flight/FlightStore';
-import { CertificationStore } from '../airman/CertificationStore';
-import CertificationRepositoryStub from '../airman/repositories/doubles/CertificationRepositoryStub';
-import EventRepositoryStub from '../event/repositories/doubles/EventRepositoryStub';
+import TrackerStore from '../tracker/stores/TrackerStore';
 
 let airmen: AirmanModel[];
 let certifications: CertificationModel[];
-let setSelectedCertificationsSpy: (certifications: FilterOptionModel[]) => void;
 let table: Table;
+let trackerStore: TrackerStore;
 let subject: ReactWrapper;
-let airmanStore: AirmanStore;
 
 describe('Roster', () => {
   beforeEach(async () => {
-    certifications = CertificationModelFactory.buildList(3);
+    trackerStore = await makeFakeTrackerStore();
+    airmen = trackerStore.airmen;
+    certifications = trackerStore.certifications;
 
-    airmen = [
-      AirmanModelFactory.build(1, 1, certifications.slice(0, 1)),
-      AirmanModelFactory.build(2, 1, certifications.slice(1, 2)),
-      AirmanModelFactory.build(3, 1, certifications.slice(0, 2))
-    ];
-
-    setSelectedCertificationsSpy = jest.fn();
-
-    const squadronStore = new SquadronStore(new SquadronRepositoryStub());
-    airmanStore = new AirmanStore(
-      new AirmanRepositoryStub(),
-      squadronStore,
-      new FlightStore(squadronStore),
-      new CertificationStore(new CertificationRepositoryStub()),
-      new EventRepositoryStub()
-      );
-
-    airmanStore.setAirmen(airmen);
     subject = mount(
       <Roster
-        certifications={certifications}
-        airmanStore={airmanStore}
-        setSelectedCertifications={setSelectedCertificationsSpy}
-        selectedCertificationIds={[]}
+        trackerStore={trackerStore}
         week={new PlannerServiceStub().getCurrentWeek()}
       />
     );
@@ -73,9 +43,9 @@ describe('Roster', () => {
     const expectedLastNames = airmen.map(airman => airman.lastName);
 
     expect(table.getRowCount()).toEqual(airmen.length);
-    expect(table.getTextForRowAndCol(0, 'NAME')).toBe(expectedLastNames[0]);
-    expect(table.getTextForRowAndCol(1, 'NAME')).toBe(expectedLastNames[1]);
-    expect(table.getTextForRowAndCol(2, 'NAME')).toBe(expectedLastNames[2]);
+    for (let i = 0; i < table.getRowCount(); i++) {
+      expect(table.getTextForRowAndCol(i, 'NAME')).toBe(expectedLastNames[i]);
+    }
   });
 
   it('renders airmen qualification', () => {
@@ -90,7 +60,7 @@ describe('Roster', () => {
 
   it('calls the selectAirman when clicking on an airman', () => {
     table.getRows().at(0).simulate('click');
-    expect(airmanStore.getSelectedAirman).toEqual(airmen[0]);
+    expect(trackerStore.selectedAirman).toEqual(airmen[0]);
   });
 
   describe('multiselect', () => {
@@ -113,11 +83,11 @@ describe('Roster', () => {
       input.simulate('keyDown', {keyCode: 13});
       subject.update();
 
-      expect(setSelectedCertificationsSpy).toHaveBeenCalledWith([{label: '0', value: 0}]);
+      expect(trackerStore.certificationIds).toEqual([0]);
     });
   });
 
   it('renders an AvailabilityOverview for every airman', () => {
-    expect(table.getAvailabilityOverview().length).toBe(3);
+    expect(table.getAvailabilityOverview().length).toBe(airmen.length);
   });
 });

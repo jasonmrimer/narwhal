@@ -7,8 +7,7 @@ import { findFilterById, forIt, selectOption } from '../utils/testUtils';
 import TopBar from '../widgets/TopBar';
 import SiteRepositoryStub from '../site/repositories/doubles/SiteRepositoryStub';
 import { MissionModel } from '../mission/models/MissionModel';
-import { SiteStore } from '../site/SiteStore';
-import { MissionStore } from '../mission/MissionStore';
+import DashboardStore from './stores/DashboardStore';
 
 const missionRepositoryStub = new MissionRepositoryStub();
 
@@ -17,19 +16,21 @@ describe('Dashboard', () => {
   let subject: ReactWrapper;
 
   beforeEach(async () => {
-    const siteStore = new SiteStore(new SiteRepositoryStub());
-    const missionStore = new MissionStore(new MissionRepositoryStub(), siteStore);
+    missions = await missionRepositoryStub.findAll();
+
+    const dashboardStore = new DashboardStore(
+      new MissionRepositoryStub(),
+      new SiteRepositoryStub()
+    );
+
     subject = mount(
       <Dashboard
         username="Tytus"
-        siteStore={siteStore}
-        missionStore={missionStore}
+        dashboardStore={dashboardStore}
       />
     );
     await forIt();
     subject.update();
-
-    missions = await missionRepositoryStub.findAll();
   });
 
   it('renders a Dashboard with all missions', () => {

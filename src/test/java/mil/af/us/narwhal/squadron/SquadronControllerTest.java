@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -21,7 +22,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(SquadronController.class)
 @RunWith(SpringRunner.class)
 public class SquadronControllerTest {
-  @Autowired MockMvc mockMvc;
+  @Autowired
+  MockMvc mockMvc;
   @MockBean
   SquadronRepository squadronRepository;
 
@@ -29,8 +31,8 @@ public class SquadronControllerTest {
   public void index() throws Exception {
     Flight flight1 = new Flight(1L, 1L, "F1");
     Flight flight2 = new Flight(2L, 1L, "F2");
-    Squadron squadron1 = new Squadron(1L, "1", asList(flight1, flight2));
-    Squadron squadron2 = new Squadron(2L, "2", null);
+    Squadron squadron1 = new Squadron(1L, 1L, "1", asList(flight1, flight2));
+    Squadron squadron2 = new Squadron(2L, 1L, "2", null);
 
     when(squadronRepository.findAll()).thenReturn(asList(squadron1, squadron2));
 

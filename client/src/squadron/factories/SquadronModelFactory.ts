@@ -4,7 +4,7 @@ import FlightModel from '../../flight/model/FlightModel';
 export default class SquadronModelFactory {
   static build(id: number) {
     return new SquadronModel(id, 'A', [
-      new FlightModel(1, id, 'DOA')
+      new FlightModel(1, 'DOA')
     ]);
   }
 }

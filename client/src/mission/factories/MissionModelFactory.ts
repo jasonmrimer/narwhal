@@ -1,11 +1,12 @@
 import * as moment from 'moment';
+import SiteModel from '../../site/models/SiteModel';
 
 const missionOne = {
   missionId: 'missionId1',
   atoMissionNumber: 'ato1',
   startDateTime: moment.utc('2018-01-01T01:00:00Z'),
   endDateTime: moment.utc('2018-01-01T11:00:00Z'),
-  site: {id: 1, name: 'Site 1'}
+  site: new SiteModel(1, 'Site 1', [])
 };
 
 const missionTwo = {
@@ -13,7 +14,7 @@ const missionTwo = {
   atoMissionNumber: 'ato2',
   startDateTime: moment.utc('2018-02-02T02:00:00Z'),
   endDateTime: moment.utc('2018-02-02T14:00:00Z'),
-  site: {id: 1, name: 'Site 1'}
+  site: new SiteModel(1, 'Site 1', [])
 };
 
 const missionThree = {
@@ -21,7 +22,7 @@ const missionThree = {
   atoMissionNumber: 'ato3',
   startDateTime: moment.utc('2018-03-03T03:00:00Z'),
   endDateTime: moment.utc('2018-03-04T03:00:00Z'),
-  site: {id: 2, name: 'Site 2'}
+  site: new SiteModel(2, 'Site 2', [])
 };
 
 const missions = [missionOne, missionTwo, missionThree];

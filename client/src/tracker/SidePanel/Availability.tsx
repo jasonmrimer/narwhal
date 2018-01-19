@@ -5,11 +5,11 @@ import EventModel from '../../event/EventModel';
 import AirmanEvent from '../../airman/AirmanEvent';
 import EventForm from './EventForm';
 import { observer } from 'mobx-react';
-import { AirmanStore } from '../../airman/AirmanStore';
+import TrackerStore from '../stores/TrackerStore';
 
 interface Props {
+  trackerStore: TrackerStore;
   week: Moment[];
-  airmanStore: AirmanStore;
   className?: string;
 }
 
@@ -30,7 +30,7 @@ export class Availability extends React.Component<Props, State> {
           <AirmanEvent
             key={index}
             event={event}
-            deleteEvent={this.props.airmanStore.deleteEvent}
+            deleteEvent={this.props.trackerStore.deleteEvent}
           />
         );
       });
@@ -40,17 +40,17 @@ export class Availability extends React.Component<Props, State> {
     this.setState({showEventForm: true});
   }
 
-  submitEvent = (event: EventModel) => {
-    this.props.airmanStore.addEvent(event);
+  submitEvent = async (event: EventModel) => {
+    await this.props.trackerStore.addEvent(event);
     this.setState({showEventForm: false});
   }
 
   renderEventForm = () => {
-    return <EventForm airmanId={this.props.airmanStore.getSelectedAirman.id} handleSubmit={this.submitEvent}/>;
+    return <EventForm airmanId={this.props.trackerStore.selectedAirman.id} handleSubmit={this.submitEvent}/>;
   }
 
   renderAvailability = () => {
-    const {week, airmanStore} = this.props;
+    const {week, trackerStore} = this.props;
     return (
       <div>
         <div id="event-control-row">
@@ -65,7 +65,7 @@ export class Availability extends React.Component<Props, State> {
               return (
                 <div key={`day-${index}`}>
                   <div className="event-date">{day.format('ddd, DD MMM YY').toUpperCase()}</div>
-                  {this.scheduledEventsForDate(day.utc(), airmanStore.selectedAirmanEvents)}
+                  {this.scheduledEventsForDate(day.utc(), trackerStore.selectedAirman.events)}
                 </div>
               );
             })
@@ -92,17 +92,17 @@ export default styled(Availability)`
     font-size: 0.875rem;
     font-weight: 500;
   }
-  
+
   #event-control-row {
     display: flex;
     justify-content: flex-end;
-  
+
     #add-event {
       margin: 0.5rem 1rem;
-      color: ${props => props.theme.fontColor}; 
+      color: ${props => props.theme.fontColor};
     }
   }
-  
+
   .event-date {
     text-align: left;
     font-size: 0.75rem;

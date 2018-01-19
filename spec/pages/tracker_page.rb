@@ -14,7 +14,7 @@ class TrackerPage
     @@all_airmen = page.find_all('tbody tr').count
     @event_start = Time.now.utc
     @event_end = @event_start + 3600
-    @event_title = 'Test Dentist'
+    @event_title = "Test Dentist #{Time.now}"
   end
 
   def assert_shows_tracker
@@ -23,15 +23,23 @@ class TrackerPage
     has_no_side_panel
   end
 
+  def assert_filters_by_site
+    expect(page).to have_content('All Sites')
+    filter_by_site('DGS-1')
+    has_filter('DGS-1')
+  end
+
   def assert_filters_by_squadron
+    filter_by_site('DGS-1')
     expect(page).to have_content('All Squadron')
     filter_by_squadron('30 IS')
     has_filter('30 IS')
   end
 
   def assert_filters_by_flight
+    filter_by_site('DGS-1')
     filter_by_squadron('30 IS')
-    has_filter('All Flights')
+    expect(page).to have_content('All Flights')
     filter_by_flight('SUPER FLIGHT')
     has_filter('SUPER FLIGHT')
   end
@@ -40,11 +48,6 @@ class TrackerPage
     has_filter('Filter Certifications')
     filter_by_certification('Super Speed')
     has_filter('Super Speed')
-  end
-
-  def assert_populate_flights
-    filter_by_squadron('30 IS')
-    has_filter_options(@@expected_flights)
   end
 
   def assert_shows_availability
@@ -81,7 +84,9 @@ class TrackerPage
 
     click_on_airman('LastName2')
     page.find('.event-title', text: @event_title).find('button.delete').click
+
     expect(has_event).to be_falsey
+
     find('button.close').click
   end
 
@@ -115,14 +120,21 @@ class TrackerPage
 
   def has_filter(filter)
     case filter
-    when 'All Squadrons'
+    when 'All Sites'
       return has_airmen_in_roster
+    when 'All Squadrons'
+      @@all_airmen_in_site = page.find_all('tbody tr').count
+      return expect(page).to have_css('tbody tr', maximum: @@all_airmen - 1)
     when 'All Flights'
       @@all_airmen_in_squadron = page.find_all('tbody tr').count
       return expect(page).to have_css('tbody tr', maximum: @@all_airmen - 1)
     default
-      expect(page).to have_css('tbody tr', maximum: @@all_airmen_in_squadron - 1)
+      expect(page).to have_css('tbody tr', maximum: @@all_airmen - 1)
     end
+  end
+
+  def filter_by_site(site)
+    page.find("#site-filter").find(:option, text: site).select_option
   end
 
   def filter_by_squadron(squadron)

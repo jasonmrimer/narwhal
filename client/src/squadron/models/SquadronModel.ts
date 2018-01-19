@@ -5,4 +5,8 @@ export default class SquadronModel {
               public name: string,
               public flights: FlightModel[]) {
   }
+
+  getAllFlightIds(): number[] {
+    return this.flights.map(flight => flight.id);
+  }
 }

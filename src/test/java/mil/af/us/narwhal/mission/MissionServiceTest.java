@@ -17,6 +17,7 @@ import javax.xml.bind.JAXB;
 import java.time.Instant;
 import java.util.List;
 
+import static java.util.Collections.emptyList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -24,8 +25,8 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MissionServiceTest {
-  private final Site site1 = new Site(1L, "DGS-1");
-  private final Site site2 = new Site(2L, "DGS-2");
+  private final Site site1 = new Site(1L, "DGS-1", emptyList());
+  private final Site site2 = new Site(2L, "DGS-2", emptyList());
   private GetMissionMetaDataResponse getMissionMetaDataResponse;
 
   @Mock private MissionRepository missionRepository;

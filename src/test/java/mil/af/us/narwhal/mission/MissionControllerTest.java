@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.Instant;
 import java.util.List;
 
+import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -32,7 +33,7 @@ public class MissionControllerTest {
 
   @Before
   public void setUp() {
-    site = new Site(1L, "Site-1");
+    site = new Site(1L, "Site-1", emptyList());
     missions = singletonList(
       new Mission(
         "mission-id-1",

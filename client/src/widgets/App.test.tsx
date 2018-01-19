@@ -3,51 +3,29 @@ import * as React from 'react';
 
 import App from './App';
 import ProfileRepositoryStub from '../profile/repositories/doubles/ProfileRepositoryStub';
-import AirmanRepositoryStub from '../airman/repositories/doubles/AirmanRepositoryStub';
-import SquadronRepositoryStub from '../squadron/repositories/doubles/SquadronRepositoryStub';
 import { MemoryRouter, Route } from 'react-router-dom';
 import MissionRepositoryStub from '../mission/repositories/doubles/MissionRepositoryStub';
 import { Tracker } from '../tracker/Tracker';
 import Dashboard from '../dashboard/Dashboard';
-import CertificationRepositoryStub from '../airman/repositories/doubles/CertificationRepositoryStub';
-import EventRepositoryStub from '../event/repositories/doubles/EventRepositoryStub';
-import { AirmanStore } from '../airman/AirmanStore';
-import { FlightStore } from '../flight/FlightStore';
-import { CertificationStore } from '../airman/CertificationStore';
-import { SquadronStore } from '../squadron/SquadronStore';
-import { MissionStore } from '../mission/MissionStore';
-import { SiteStore } from '../site/SiteStore';
 import SiteRepositoryStub from '../site/repositories/doubles/SiteRepositoryStub';
+import { makeFakeTrackerStore } from '../utils/testUtils';
+import DashboardStore from '../dashboard/stores/DashboardStore';
+
+const profileRepository = new ProfileRepositoryStub();
+const siteRepository = new SiteRepositoryStub();
+const dashboardStore = new DashboardStore(new MissionRepositoryStub(), siteRepository);
+
+let subject: ShallowWrapper;
+let mountedSubject: ReactWrapper;
 
 describe('App', () => {
-  const certificationStore: CertificationStore = new CertificationStore(new CertificationRepositoryStub());
-  const squadronStore: SquadronStore = new SquadronStore(new SquadronRepositoryStub());
-  const profileRepository = new ProfileRepositoryStub();
-  const eventRepositoryStub = new EventRepositoryStub();
-  const flightStore: FlightStore = new FlightStore(squadronStore);
-  const siteStore = new SiteStore(new SiteRepositoryStub());
-  const missionStore = new MissionStore(new MissionRepositoryStub(), siteStore);
-  const airmanStore: AirmanStore = new AirmanStore(
-    new AirmanRepositoryStub(),
-    squadronStore,
-    flightStore,
-    certificationStore,
-    eventRepositoryStub
-  );
-
-  let subject: ShallowWrapper;
-  let mountedSubject: ReactWrapper;
-
-  it('renders a route for the dashboard and roster', () => {
+  it('renders a route for the dashboard and roster', async () => {
+    const trackerStore = await makeFakeTrackerStore();
     subject = shallow(
       <App
-        airmanStore={airmanStore}
-        certificationStore={certificationStore}
-        squadronStore={squadronStore}
+        trackerStore={trackerStore}
         profileRepository={profileRepository}
-        flightStore={flightStore}
-        missionStore={missionStore}
-        siteStore={siteStore}
+        dashboardStore={dashboardStore}
       />
     );
     const routes = subject.find(Route);
@@ -57,17 +35,14 @@ describe('App', () => {
     expect(routes.at(1).prop('path')).toBe('/');
   });
 
-  it('renders the Tracker component when the route is /', () => {
+  it('renders the Tracker component when the route is /', async () => {
+    const trackerStore = await makeFakeTrackerStore();
     mountedSubject = mount(
       <MemoryRouter initialEntries={['/']}>
         <App
-          airmanStore={airmanStore}
-          certificationStore={certificationStore}
-          squadronStore={squadronStore}
+          trackerStore={trackerStore}
           profileRepository={profileRepository}
-          flightStore={flightStore}
-          missionStore={missionStore}
-          siteStore={siteStore}
+          dashboardStore={dashboardStore}
         />
       </MemoryRouter>
     );
@@ -75,17 +50,14 @@ describe('App', () => {
     expect(mountedSubject.find(Tracker).exists()).toBeTruthy();
   });
 
-  it('renders the Dashboard component when the route is /dashboard', () => {
+  it('renders the Dashboard component when the route is /dashboard', async () => {
+    const trackerStore = await makeFakeTrackerStore();
     mountedSubject = mount(
       <MemoryRouter initialEntries={['/dashboard']}>
         <App
-          airmanStore={airmanStore}
-          certificationStore={certificationStore}
-          squadronStore={squadronStore}
+          trackerStore={trackerStore}
           profileRepository={profileRepository}
-          flightStore={flightStore}
-          missionStore={missionStore}
-          siteStore={siteStore}
+          dashboardStore={dashboardStore}
         />
       </MemoryRouter>
     );

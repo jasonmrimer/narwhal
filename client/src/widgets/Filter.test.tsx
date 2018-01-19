@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { Filter } from './Filter';
-import { FilterableStore } from '../stores/FilterableStore';
 import Mock = jest.Mock;
 
 const expectedOptions = [
@@ -13,26 +12,6 @@ const expectedOptions = [
 let subject: ShallowWrapper;
 let callbackSpy: Mock;
 
-class FakeFilterableStore implements FilterableStore {
-  private disabled: boolean = false;
-
-  get options() {
-    return expectedOptions.slice(1);
-  }
-
-  get currentOptionId() {
-    return 1;
-  }
-
-  get isDisabled() {
-    return this.disabled;
-  }
-
-  setIsDisabled(value: boolean) {
-    this.disabled = value;
-  }
-}
-
 describe('Filter', () => {
   beforeEach(() => {
     callbackSpy = jest.fn();
@@ -40,9 +19,10 @@ describe('Filter', () => {
       <Filter
         id="filter"
         label="foo"
-        unfilteredOption={expectedOptions[0]}
+        options={expectedOptions.slice(1)}
+        value={expectedOptions[0].value}
+        unfilteredOptionLabel={expectedOptions[0].label}
         callback={callbackSpy}
-        store={new FakeFilterableStore()}
       />
     );
   });
@@ -71,16 +51,14 @@ describe('Filter', () => {
   });
 
   it('disables the select if disabled is true', () => {
-    const store = new FakeFilterableStore();
-    store.setIsDisabled(true);
-
     subject = shallow(
       <Filter
         id="filter"
         label="foo"
-        unfilteredOption={expectedOptions[0]}
+        options={[]}
+        value={-1}
+        unfilteredOptionLabel="What LOL"
         callback={callbackSpy}
-        store={store}
       />
     );
 

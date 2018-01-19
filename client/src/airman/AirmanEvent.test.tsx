@@ -23,6 +23,6 @@ describe('AirmanEvent', () => {
 
   it('has an actionable delete button', () => {
     subject.find('button').simulate('click');
-    expect(deleteSpy).toHaveBeenCalledWith(event.id);
+    expect(deleteSpy).toHaveBeenCalledWith(event);
   });
 });

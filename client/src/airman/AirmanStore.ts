@@ -68,10 +68,10 @@ export class AirmanStore {
   }
 
   @action.bound
-  async deleteEvent(id: number) {
-    const resp = await this.eventRepository.delete(id);
+  async deleteEvent(event: EventModel) {
+    const resp = await this.eventRepository.delete(event);
     if (resp.status === 200) {
-      const eventIndex = this._selectedAirman.events.findIndex((event) => event.id === id);
+      const eventIndex = this._selectedAirman.events.findIndex((e) => e.id === event.id);
       this._selectedAirman.events.splice(eventIndex, 1);
       this._selectedAirmanEvents.splice(eventIndex, 1);
     }

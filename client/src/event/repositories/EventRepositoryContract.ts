@@ -26,8 +26,8 @@ export default function EventRepositoryContract(subject: EventRepository) {
       const event1 = new EventModel('title1', 'description1', dateTime, dateTime, 1);
       const savedEvent1 = await subject.save(event1);
 
-      if (savedEvent1.id) {
-        const resp = await subject.delete(savedEvent1.id);
+      if (savedEvent1) {
+        const resp = await subject.delete(savedEvent1);
         expect(resp.status).toBe(200);
       }
     });

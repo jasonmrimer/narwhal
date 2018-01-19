@@ -25,9 +25,9 @@ export default class WebEventRepository implements EventRepository {
     return Promise.resolve(this.serializer.deserialize(json));
   }
 
-  async delete(id: number): Promise<{ status: number }> {
+  async delete(event: EventModel): Promise<{ status: number }> {
     const resp = await fetch(
-      `${this.baseUrl}/api/events/${id}`,
+      `${this.baseUrl}/api/events/${event.id}`,
       {
         method: 'DELETE',
         headers: [['Content-Type', 'application/json'], ['X-XSRF-TOKEN', this.csrfToken]],
