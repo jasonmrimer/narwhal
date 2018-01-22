@@ -9,13 +9,16 @@ describe('EventForm', () => {
   const airmanId = 123;
   let handleSubmitSpy: Mock;
   let subject: ShallowWrapper;
+  let hideEventFormMock: Mock;
 
   beforeEach(() => {
+    hideEventFormMock = jest.fn();
     handleSubmitSpy = jest.fn();
     subject = shallow(
       <EventForm
         airmanId={airmanId}
         handleSubmit={handleSubmitSpy}
+        hideEventForm={hideEventFormMock}
       />
     );
   });
@@ -41,5 +44,10 @@ describe('EventForm', () => {
       airmanId
     );
     expect(handleSubmitSpy).toHaveBeenCalledWith(expectedEvent);
+  });
+
+  it('calls the hideEventForm when clicking back', () => {
+    subject.find('a.back').simulate('click');
+    expect(hideEventFormMock).toBeCalled();
   });
 });

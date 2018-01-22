@@ -37,7 +37,7 @@ export class Availability extends React.Component<Props, State> {
   }
 
   setShowEventForm = () => {
-    this.setState({showEventForm: true});
+    this.setState({showEventForm: !this.state.showEventForm});
   }
 
   submitEvent = async (event: EventModel) => {
@@ -46,7 +46,13 @@ export class Availability extends React.Component<Props, State> {
   }
 
   renderEventForm = () => {
-    return <EventForm airmanId={this.props.trackerStore.selectedAirman.id} handleSubmit={this.submitEvent}/>;
+    return (
+      <EventForm
+        airmanId={this.props.trackerStore.selectedAirman.id}
+        hideEventForm={this.setShowEventForm}
+        handleSubmit={this.submitEvent}
+      />
+    );
   }
 
   renderAvailability = () => {
@@ -54,7 +60,7 @@ export class Availability extends React.Component<Props, State> {
     const week = trackerStore.week;
     return (
       <div>
-        <div id="event-control-row">
+        <div className="event-control-row">
           <button className="add-event" onClick={this.setShowEventForm}>
             + Add Event
           </button>
@@ -102,11 +108,11 @@ export default styled(Availability)`
     margin: 0;
   }
 
-  #event-control-row {
+  .event-control-row {
     display: flex;
     justify-content: flex-end;
 
-    #add-event {
+    .add-event {
       margin: 0.5rem 1rem;
       color: ${props => props.theme.fontColor};
     }

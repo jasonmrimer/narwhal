@@ -2,10 +2,12 @@ import * as React from 'react';
 import EventModel from '../../event/EventModel';
 import * as moment from 'moment';
 import styled from 'styled-components';
+import BackIcon from '../../icons/BackIcon';
 
 interface Props {
   airmanId: number;
   handleSubmit: (event: EventModel) => void;
+  hideEventForm: () => void;
   className?: string;
 }
 
@@ -54,6 +56,9 @@ export class EventForm extends React.Component<Props, State> {
   render() {
     return (
       <form className={this.props.className} onSubmit={this.handleSubmit}>
+        <a className="back" onClick={this.props.hideEventForm}>
+          <BackIcon/>
+        </a>
         <input type="text" placeholder="Title" value={this.state.title} name="title" onChange={this.handleChange}/>
         <input
           type="text"
@@ -143,4 +148,8 @@ export default styled(EventForm)`
     outline: inherit !important;
   }
   
+  .back{
+    cursor: pointer;
+    padding-top: 1rem;
+  }
 `;
