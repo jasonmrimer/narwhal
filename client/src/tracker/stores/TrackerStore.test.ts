@@ -7,6 +7,7 @@ import EventModel from '../../event/EventModel';
 import * as moment from 'moment';
 import EventRepositoryStub from '../../event/repositories/doubles/EventRepositoryStub';
 import { toJS } from 'mobx';
+import { UnfilteredValue } from '../../widgets/models/FilterOptionModel';
 
 describe('TrackerStore', () => {
   const airmenRepository = new AirmanRepositoryStub();
@@ -84,8 +85,8 @@ describe('TrackerStore', () => {
       subject.setSquadronId(2);
       subject.setFlightId(1);
       subject.setSiteId(2);
-      expect(subject.squadronId).toBe(-1);
-      expect(subject.flightId).toBe(-1);
+      expect(subject.squadronId).toBe(UnfilteredValue);
+      expect(subject.flightId).toBe(UnfilteredValue);
     });
   });
 
@@ -112,7 +113,7 @@ describe('TrackerStore', () => {
     it('resets the flight', () => {
       subject.setFlightId(1);
       subject.setSquadronId(2);
-      expect(subject.flightId).toBe(-1);
+      expect(subject.flightId).toBe(UnfilteredValue);
     });
   });
 
@@ -158,7 +159,6 @@ describe('TrackerStore', () => {
       expect(updatedAirman.events.length).toBeGreaterThan(originalEventCount);
       expect(updatedAirman.events).toContain(event);
     });
-
 
     it('should delete an airman\'s event', async () => {
       const savedEvent = await subject.addEvent(event);

@@ -3,6 +3,7 @@ import SiteRepository from '../../site/repositories/SiteRepository';
 import { MissionModel } from '../../mission/models/MissionModel';
 import { action, computed, observable } from 'mobx';
 import SiteModel from '../../site/models/SiteModel';
+import { UnfilteredValue } from '../../widgets/models/FilterOptionModel';
 
 export default class DashboardStore {
   private missionRepository: MissionRepository;
@@ -11,7 +12,7 @@ export default class DashboardStore {
   @observable private _missions: MissionModel[] = [];
   @observable private _sites: SiteModel[] = [];
 
-  @observable private _siteId: number = -1;
+  @observable private _siteId: number = UnfilteredValue;
 
   constructor(missionRepository: MissionRepository, siteRepository: SiteRepository) {
     this.missionRepository = missionRepository;
@@ -25,7 +26,7 @@ export default class DashboardStore {
 
   @computed
   get missions() {
-    if (this._siteId === -1) {
+    if (this._siteId === UnfilteredValue) {
       return this._missions;
     }
     return this._missions

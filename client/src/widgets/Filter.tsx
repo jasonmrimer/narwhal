@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ChangeEvent } from 'react';
 import styled from 'styled-components';
-import FilterOption from './models/FilterOptionModel';
+import FilterOption, { UnfilteredValue } from './models/FilterOptionModel';
 import { observer } from 'mobx-react/custom';
 
 interface Props {
@@ -19,7 +19,7 @@ const handleChange = (event: ChangeEvent<HTMLSelectElement>, {callback}: Props) 
 };
 
 const renderOptions = (unfilteredOptionLabel: string, options: FilterOption[]) => {
-  return [{value: -1, label: unfilteredOptionLabel}, ...options].map((opt, i) => {
+  return [{value: UnfilteredValue, label: unfilteredOptionLabel}, ...options].map((opt, i) => {
     return <option key={i} value={opt.value}>{opt.label}</option>;
   });
 };

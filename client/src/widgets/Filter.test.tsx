@@ -2,9 +2,10 @@ import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { Filter } from './Filter';
 import Mock = jest.Mock;
+import { UnfilteredValue } from './models/FilterOptionModel';
 
 const expectedOptions = [
-  {label: 'A-label', value: -1},
+  {label: 'A-label', value: UnfilteredValue},
   {label: 'B-label', value: 2},
   {label: 'C-label', value: 3}
 ];
@@ -56,8 +57,8 @@ describe('Filter', () => {
         id="filter"
         label="foo"
         options={[]}
-        value={-1}
-        unfilteredOptionLabel="What LOL"
+        value={UnfilteredValue}
+        unfilteredOptionLabel="Unfiltered"
         callback={callbackSpy}
       />
     );

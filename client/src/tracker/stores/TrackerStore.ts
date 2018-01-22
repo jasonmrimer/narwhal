@@ -5,7 +5,7 @@ import SiteRepository from '../../site/repositories/SiteRepository';
 import CertificationRepository from '../../airman/repositories/CertificationRepository';
 import CertificationModel from '../../airman/models/CertificationModel';
 import { action, computed, observable, toJS } from 'mobx';
-import FilterOption from '../../widgets/models/FilterOptionModel';
+import FilterOption, { UnfilteredValue } from '../../widgets/models/FilterOptionModel';
 import EventModel from '../../event/EventModel';
 import EventRepository from '../../event/repositories/EventRepository';
 
@@ -19,9 +19,9 @@ export default class TrackerStore {
   @observable private _sites: SiteModel[] = [];
   @observable private _certifications: CertificationModel[] = [];
 
-  @observable private _siteId: number = -1;
-  @observable private _squadronId: number = -1;
-  @observable private _flightId: number = -1;
+  @observable private _siteId: number = UnfilteredValue;
+  @observable private _squadronId: number = UnfilteredValue;
+  @observable private _flightId: number = UnfilteredValue;
   @observable private _certificationIds: number[] = [];
   @observable private _selectedAirman: AirmanModel = AirmanModel.empty();
 
@@ -51,17 +51,17 @@ export default class TrackerStore {
       });
     }
 
-    if (this._siteId === -1) {
+    if (this._siteId === UnfilteredValue) {
       return airmen;
     }
 
     const site = this._sites.find(s => s.id === this._siteId)!;
-    if (this._squadronId === -1) {
+    if (this._squadronId === UnfilteredValue) {
       return airmen.filter(airman => site.getAllFlightIds().includes(airman.flightId));
     }
 
     const squadron = site.squadrons.find(s => s.id === this._squadronId)!;
-    if (this._flightId === -1) {
+    if (this._flightId === UnfilteredValue) {
       return airmen.filter(airman => squadron.getAllFlightIds().includes(airman.flightId));
     }
 
@@ -82,7 +82,7 @@ export default class TrackerStore {
 
   @computed
   get squadronOptions() {
-    if (this._siteId === -1) {
+    if (this._siteId === UnfilteredValue) {
       return [];
     }
     const site = this._sites.find(s => s.id === this._siteId)!;
@@ -93,7 +93,7 @@ export default class TrackerStore {
 
   @computed
   get flightOptions() {
-    if (this._siteId === -1 || this._squadronId === -1) {
+    if (this._siteId === UnfilteredValue || this._squadronId === UnfilteredValue) {
       return [];
     }
     const site = this._sites.find(s => s.id === this._siteId)!;
@@ -143,13 +143,13 @@ export default class TrackerStore {
   @action.bound
   setSiteId(id: number) {
     this._siteId = id;
-    this.setSquadronId(-1);
+    this.setSquadronId(UnfilteredValue);
   }
 
   @action.bound
   setSquadronId(id: number) {
     this._squadronId = id;
-    this.setFlightId(-1);
+    this.setFlightId(UnfilteredValue);
   }
 
   @action.bound

@@ -9,12 +9,12 @@ export default class SiteSerializer implements Serializer<SiteModel> {
     throw new Error('Not Implemented');
   }
 
-  /* ts-lint:disable:no-any */
+  /* tslint:disable:no-any */
   deserialize(item: any): SiteModel {
     return new SiteModel(
       item.id,
       item.name,
-      item.squadrons.map((squad: {}) => this.squadronSerializer.deserialize(squad))
+      item.squadrons.map((squad: any) => this.squadronSerializer.deserialize(squad))
     );
   }
 }

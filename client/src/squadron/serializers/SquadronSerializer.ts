@@ -9,7 +9,7 @@ export default class SquadronSerializer implements Serializer<SquadronModel> {
     throw new Error('Not Implemented');
   }
 
-  /* ts-lint:disable:no-any */
+  /* tslint:disable:no-any */
   deserialize(item: any): SquadronModel {
     return new SquadronModel(
       item.id,
