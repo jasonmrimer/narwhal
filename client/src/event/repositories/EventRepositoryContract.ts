@@ -20,16 +20,21 @@ export default function EventRepositoryContract(subject: EventRepository) {
   });
 
   describe('delete', () => {
-    it('deletes an event using its ID', async () => {
-      const dateTime = moment().subtract(1, 'year');
+    it('deletes an event without exception', async () => {
+      const event = new EventModel('title1', 'description1', moment.utc(), moment.utc(), 1);
+      const savedEvent = await subject.save(event);
+      await subject.delete(savedEvent);
+    });
 
-      const event1 = new EventModel('title1', 'description1', dateTime, dateTime, 1);
-      const savedEvent1 = await subject.save(event1);
-
-      if (savedEvent1) {
-        const resp = await subject.delete(savedEvent1);
-        expect(resp.status).toBe(200);
+    it('does not delete event with an exception', async () => {
+      try {
+        const event = new EventModel('title1', 'description1', moment.utc(), moment.utc(), 1, -1);
+        await subject.delete(event);
+      } catch (e) {
+        expect(e).toBeDefined();
+        return;
       }
+      throw new Error('Should have failed to delete the event');
     });
   });
 }

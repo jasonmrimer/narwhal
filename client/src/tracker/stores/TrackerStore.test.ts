@@ -150,20 +150,14 @@ describe('TrackerStore', () => {
     const event = new EventModel('Title', 'Description', moment.utc(), moment.utc(), 1);
 
     it('should add an event to an airman', async () => {
-      const originalAirman = subject.airmen.find(airman => airman.id === 1)!;
-      const originalEventCount = originalAirman.events.length;
-
-      await subject.addEvent(event);
-
-      const updatedAirman = subject.airmen.find(airman => airman.id === 1)!;
-      expect(updatedAirman.events.length).toBeGreaterThan(originalEventCount);
-      expect(updatedAirman.events).toContain(event);
+      const savedEvent = await subject.addEvent(event);
+      expect(eventRepository.hasEvent(savedEvent)).toBeTruthy();
     });
 
     it('should delete an airman\'s event', async () => {
       const savedEvent = await subject.addEvent(event);
       await subject.deleteEvent(savedEvent);
-      expect(eventRepository.deletedEvents).toContain(savedEvent.id);
+      expect(eventRepository.hasEvent(savedEvent)).toBeFalsy();
     });
   });
 });

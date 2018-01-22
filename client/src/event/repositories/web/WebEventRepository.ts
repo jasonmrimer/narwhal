@@ -25,16 +25,18 @@ export default class WebEventRepository implements EventRepository {
     return Promise.resolve(this.serializer.deserialize(json));
   }
 
-  async delete(event: EventModel): Promise<{ status: number }> {
-    const resp = await fetch(
+  async delete(event: EventModel): Promise<void> {
+    return await fetch(
       `${this.baseUrl}/api/events/${event.id}`,
       {
         method: 'DELETE',
         headers: [['Content-Type', 'application/json'], ['X-XSRF-TOKEN', this.csrfToken]],
         credentials: 'include'
       }
-    );
-
-    return Promise.resolve(resp);
+    ).then(resp => {
+      if (resp.status < 200 || resp.status >= 300) {
+        throw new Error(`Unable to delete event with ID: ${event.id}`);
+      }
+    });
   }
 }

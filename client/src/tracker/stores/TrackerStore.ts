@@ -170,20 +170,19 @@ export default class TrackerStore {
   @action.bound
   async addEvent(event: EventModel) {
     const savedEvent = await this.eventRepository.save(event);
-    const airmenCopy = this._airmen.slice();
-    const airman = airmenCopy.find(a => a.id === savedEvent.airmanId)!;
-    airman.events.push(savedEvent);
-    this._airmen = airmenCopy;
-    this._selectedAirman = airman;
+    this._airmen = await this.airmanRepository.findAll();
+    this._selectedAirman = this._airmen.find(a => a.id === event.airmanId)!;
     return savedEvent;
   }
 
   @action.bound
   async deleteEvent(event: EventModel) {
-    const resp = await this.eventRepository.delete(event);
-    if (resp.status === 200) {
+    try {
+      await this.eventRepository.delete(event);
       this._airmen = await this.airmanRepository.findAll();
       this._selectedAirman = this._airmen.find(a => a.id === event.airmanId)!;
+    } catch (e) {
+      // TODO : handle me!
     }
   }
 }
