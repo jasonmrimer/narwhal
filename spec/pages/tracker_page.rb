@@ -53,6 +53,7 @@ class TrackerPage
   def assert_shows_availability
     click_on_airman('LastName1')
     has_availability
+    can_forward_to_next_week
   end
 
   def assert_shows_currency
@@ -172,6 +173,16 @@ class TrackerPage
       expect(page).to have_content('LastName1, FirstName1')
       expect(page).to have_content('AVAILABILITY')
       @@expected_availability_days.each {|day_name| expect(page).to have_content(day_name)}
+    end
+  end
+
+  def can_forward_to_next_week
+    page.within('.side-panel') do
+      find('button.next-week').click
+      now = Date.today
+      nextweek = now + (now.wday + 6)
+      startofnextweek = nextweek - nextweek.wday
+      expect(page).to have_content(startofnextweek.strftime('%d %^b'))
     end
   end
 

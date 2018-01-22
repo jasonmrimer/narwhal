@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import CloseIcon from '../../icons/CloseIcon';
-import { Moment } from 'moment';
 import Currency from './Currency';
 import Tab from './Tab';
 import { observer } from 'mobx-react';
@@ -11,7 +10,6 @@ import Availability from './Availability';
 
 interface Props {
   trackerStore: TrackerStore;
-  week: Moment[];
   className?: string;
 }
 
@@ -39,7 +37,6 @@ export class SidePanel extends React.Component<Props, State> {
         return (
           <Availability
             trackerStore={this.props.trackerStore}
-            week={this.props.week}
           />
         );
     }

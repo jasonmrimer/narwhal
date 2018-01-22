@@ -6,10 +6,10 @@ import AirmanEvent from '../../airman/AirmanEvent';
 import EventForm from './EventForm';
 import { observer } from 'mobx-react';
 import TrackerStore from '../stores/TrackerStore';
+import NextIcon from '../../icons/NextIcon';
 
 interface Props {
   trackerStore: TrackerStore;
-  week: Moment[];
   className?: string;
 }
 
@@ -50,18 +50,26 @@ export class Availability extends React.Component<Props, State> {
   }
 
   renderAvailability = () => {
-    const {week, trackerStore} = this.props;
+    const {trackerStore} = this.props;
+    const week = trackerStore.week;
     return (
       <div>
         <div id="event-control-row">
-          <button id="add-event" onClick={this.setShowEventForm}>
+          <button className="add-event" onClick={this.setShowEventForm}>
             + Add Event
           </button>
         </div>
-        <h3> {week[0].format('DD MMM').toUpperCase()} - {week[6].format('DD MMM').toUpperCase()}</h3>
+        <div className="nav-row">
+          <h3>
+            {week[0].format('DD MMM').toUpperCase()} - {week[6].format('DD MMM').toUpperCase()}
+          </h3>
+          <button className="next-week" onClick={trackerStore.incrementWeek}>
+            <NextIcon/>
+          </button>
+        </div>
         <div className="availability">
           {
-            week.map((day, index) => {
+            trackerStore.week.map((day, index) => {
               return (
                 <div key={`day-${index}`}>
                   <div className="event-date">{day.format('ddd, DD MMM YY').toUpperCase()}</div>
@@ -91,6 +99,7 @@ export default styled(Availability)`
   h3 {
     font-size: 0.875rem;
     font-weight: 500;
+    margin: 0;
   }
 
   #event-control-row {
@@ -113,5 +122,10 @@ export default styled(Availability)`
     color: ${props => props.theme.graySteel};
     border-bottom: ${props => props.theme.graySteel} 1px solid;
     margin: 1.5rem 20%;
+  }
+  .nav-row {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
   }
   `;

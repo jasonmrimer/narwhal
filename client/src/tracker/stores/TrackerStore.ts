@@ -8,12 +8,15 @@ import { action, computed, observable, toJS } from 'mobx';
 import FilterOption, { UnfilteredValue } from '../../widgets/models/FilterOptionModel';
 import EventModel from '../../event/EventModel';
 import EventRepository from '../../event/repositories/EventRepository';
+import PlannerService from '../services/PlannerService';
+import { Moment } from 'moment';
 
 export default class TrackerStore {
   private airmanRepository: AirmanRepository;
   private siteRepository: SiteRepository;
   private certificationRepository: CertificationRepository;
   private eventRepository: EventRepository;
+  private plannerService: PlannerService;
 
   @observable private _airmen: AirmanModel[] = [];
   @observable private _sites: SiteModel[] = [];
@@ -24,15 +27,19 @@ export default class TrackerStore {
   @observable private _flightId: number = UnfilteredValue;
   @observable private _certificationIds: number[] = [];
   @observable private _selectedAirman: AirmanModel = AirmanModel.empty();
+  @observable private _week: Moment[] = [];
 
   constructor(airmanRepository: AirmanRepository,
               siteRepository: SiteRepository,
               certificationRepository: CertificationRepository,
-              eventRepository: EventRepository) {
+              eventRepository: EventRepository,
+              plannerService: PlannerService) {
     this.airmanRepository = airmanRepository;
     this.siteRepository = siteRepository;
     this.certificationRepository = certificationRepository;
     this.eventRepository = eventRepository;
+    this.plannerService = plannerService;
+    this._week = this.plannerService.getCurrentWeek();
   }
 
   async hydrate() {
@@ -140,6 +147,11 @@ export default class TrackerStore {
     return this._selectedAirman;
   }
 
+  @computed
+  get week() {
+    return this._week;
+  }
+
   @action.bound
   setSiteId(id: number) {
     this._siteId = id;
@@ -184,5 +196,11 @@ export default class TrackerStore {
     } catch (e) {
       // TODO : handle me!
     }
+  }
+
+  @action.bound
+  incrementWeek() {
+    this.plannerService.incrementWeek();
+    this._week = this.plannerService.getCurrentWeek();
   }
 }

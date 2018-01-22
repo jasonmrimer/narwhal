@@ -16,6 +16,7 @@ import WebMissionRepository from './mission/repositories/web/WebMissionRepositor
 import TrackerStore from './tracker/stores/TrackerStore';
 import WebEventRepository from './event/repositories/web/WebEventRepository';
 import DashboardStore from './dashboard/stores/DashboardStore';
+import { MomentPlannerService } from './tracker/services/MomentPlannerService';
 
 document.body.style.fontFamily = theme.fontFamily;
 document.body.style.color = theme.fontColor;
@@ -32,7 +33,8 @@ const trackerStore = new TrackerStore(
   new WebAirmanRepository(),
   siteRepository,
   new WebCertificationRepository(),
-  new WebEventRepository()
+  new WebEventRepository(),
+  new MomentPlannerService()
 );
 
 ReactDOM.render(

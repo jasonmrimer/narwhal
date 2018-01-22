@@ -3,6 +3,7 @@ import * as moment from 'moment';
 import { Moment } from 'moment';
 
 export class MomentPlannerService implements PlannerService {
+  private _weeksInAdvance: number = 0;
   getCurrentWeek(): Moment[] {
     const sunday = moment.utc().startOf('week');
     return [
@@ -13,6 +14,10 @@ export class MomentPlannerService implements PlannerService {
       sunday.clone().add(4, 'day'),
       sunday.clone().add(5, 'day'),
       sunday.clone().add(6, 'day')
-    ];
+    ].map(day => day.add(7 * this._weeksInAdvance, 'day'));
+  }
+
+  incrementWeek(): void {
+    this._weeksInAdvance += 1;
   }
 }

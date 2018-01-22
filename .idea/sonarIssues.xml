@@ -83,6 +83,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/client/src/tracker/SidePanel/Availability.test.tsx">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/client/src/tracker/SidePanel/EventForm.tsx">
           <value>
             <set />
@@ -94,6 +99,16 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/client/src/tracker/Tracker.tsx">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/client/src/tracker/services/doubles/PlannerServiceStub.ts">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/client/src/tracker/stores/TrackerStore.test.ts">
           <value>
             <set />
           </value>

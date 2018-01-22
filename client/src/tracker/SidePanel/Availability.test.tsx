@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
-import PlannerServiceStub from '../services/doubles/PlannerServiceStub';
 import { Availability } from './Availability';
 import AirmanEvent from '../../airman/AirmanEvent';
 import EventModel from '../../event/EventModel';
@@ -40,7 +39,6 @@ describe('Availability', () => {
     subject = shallow(
       <Availability
         trackerStore={trackerStore}
-        week={new PlannerServiceStub().getCurrentWeek()}
       />
     );
   });
@@ -67,12 +65,17 @@ describe('Availability', () => {
   });
 
   it('renders an Add Event button', () => {
-    expect(subject.find('button').exists()).toBeTruthy();
-    expect(subject.find('button').text()).toBe('+ Add Event');
+    expect(subject.find('button.add-event').exists()).toBeTruthy();
+    expect(subject.find('button.add-event').text()).toBe('+ Add Event');
   });
 
   it('opens a New Event form after clicking Add Event', () => {
-    subject.find('button').simulate('click');
+    subject.find('button.add-event').simulate('click');
     expect(subject.find(EventForm).exists()).toBeTruthy();
+  });
+
+  it('forwards availability to next week', () => {
+    subject.find('button.next-week').simulate('click');
+    expect(subject.text()).toContain('03 DEC - 09 DEC');
   });
 });

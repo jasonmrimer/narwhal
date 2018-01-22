@@ -67,7 +67,6 @@ export class Tracker extends React.Component<Props> {
               !this.props.trackerStore.selectedAirman.isEmpty()
                 ? <SidePanel
                   trackerStore={this.props.trackerStore}
-                  week={plannerService.getCurrentWeek()}
                 />
                 : null
             }

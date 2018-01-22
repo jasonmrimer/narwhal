@@ -5,13 +5,15 @@ import AirmanRepositoryStub from '../airman/repositories/doubles/AirmanRepositor
 import SiteRepositoryStub from '../site/repositories/doubles/SiteRepositoryStub';
 import CertificationRepositoryStub from '../airman/repositories/doubles/CertificationRepositoryStub';
 import EventRepositoryStub from '../event/repositories/doubles/EventRepositoryStub';
+import PlannerServiceStub from '../tracker/services/doubles/PlannerServiceStub';
 
 export async function makeFakeTrackerStore() {
   const store = new TrackerStore(
     new AirmanRepositoryStub(),
     new SiteRepositoryStub(),
     new CertificationRepositoryStub(),
-    new EventRepositoryStub()
+    new EventRepositoryStub(),
+    new PlannerServiceStub(),
   );
   await store.hydrate();
   return store;

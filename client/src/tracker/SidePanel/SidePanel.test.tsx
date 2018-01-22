@@ -3,14 +3,11 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import { SidePanel } from './SidePanel';
 import AirmanModelFactory from '../../airman/factories/AirmanModelFactory';
 import AirmanModel from '../../airman/models/AirmanModel';
-import PlannerServiceStub from '../services/doubles/PlannerServiceStub';
 import Currency from './Currency';
 import Availability from './Availability';
 import Tab from './Tab';
 import TrackerStore from '../stores/TrackerStore';
 import { makeFakeTrackerStore } from '../../utils/testUtils';
-
-const plannerServiceStub = new PlannerServiceStub();
 
 let airman: AirmanModel;
 let trackerStore: TrackerStore;
@@ -26,7 +23,6 @@ describe('SidePanel', () => {
     subject = shallow(
       <SidePanel
         trackerStore={trackerStore}
-        week={plannerServiceStub.getCurrentWeek()}
       />
     );
   });

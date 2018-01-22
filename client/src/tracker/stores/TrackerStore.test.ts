@@ -8,12 +8,14 @@ import * as moment from 'moment';
 import EventRepositoryStub from '../../event/repositories/doubles/EventRepositoryStub';
 import { toJS } from 'mobx';
 import { UnfilteredValue } from '../../widgets/models/FilterOptionModel';
+import PlannerServiceStub from '../services/doubles/PlannerServiceStub';
 
 describe('TrackerStore', () => {
   const airmenRepository = new AirmanRepositoryStub();
   const siteRepository = new SiteRepositoryStub();
   const certificationRepository = new CertificationRepositoryStub();
   const eventRepository = new EventRepositoryStub();
+  const plannerServiceStub = new PlannerServiceStub();
   let allAirmen: AirmanModel[];
   let subject: TrackerStore;
 
@@ -23,7 +25,8 @@ describe('TrackerStore', () => {
       airmenRepository,
       siteRepository,
       certificationRepository,
-      eventRepository
+      eventRepository,
+      plannerServiceStub,
     );
     await subject.hydrate();
   });
@@ -158,6 +161,12 @@ describe('TrackerStore', () => {
       const savedEvent = await subject.addEvent(event);
       await subject.deleteEvent(savedEvent);
       expect(eventRepository.hasEvent(savedEvent)).toBeFalsy();
+    });
+
+    it('it will return the week for the selected weeks in advance', () => {
+      expect(subject.week[0].isSame(moment.utc('2017-11-26T05:00:00.000Z'))).toBeTruthy();
+      subject.incrementWeek();
+      expect(subject.week[0].isSame(moment.utc('2017-12-03T05:00:00.000Z'))).toBeTruthy();
     });
   });
 });
