@@ -27,4 +27,5 @@ export default styled(Mission)`
   margin-right: calc(2% / 3);
   margin-bottom: calc(4% / 3);
   margin-left: calc(2% / 3);
+  
 `;

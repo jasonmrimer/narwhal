@@ -77,7 +77,6 @@ export default styled(SidePanel)`
   position: absolute;
   right: 0;
   height: 100%;
-
   .header{
     justify-content: baseline;
   }

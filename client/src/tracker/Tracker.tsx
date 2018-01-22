@@ -82,6 +82,7 @@ export default styled(Tracker)`
   padding: 0.5rem;
   display: flex;
   color: white;
+ 
   .main {
     width: 100%;
   }

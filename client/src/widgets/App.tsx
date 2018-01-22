@@ -30,6 +30,12 @@ export default class App extends React.Component<Props, State> {
   render() {
     return (
       <div>
+        <div
+          className="classification-banner"
+          style={classificationBanner}
+        >
+          Not Actual Classification. Prototype Only
+        </div>
         <Switch>
           <Route
             path="/dashboard"
@@ -60,3 +66,9 @@ export default class App extends React.Component<Props, State> {
     );
   }
 }
+
+const classificationBanner = {
+  background: 'red',
+  textAlign: 'center',
+  paddingBottom: '0.25rem',
+};
