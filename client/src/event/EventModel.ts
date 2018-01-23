@@ -6,6 +6,6 @@ export default class EventModel {
                 public startTime: Moment,
                 public endTime: Moment,
                 public airmanId: number,
-                public id?: number) {
+                public id: number | null = null) {
     }
 }

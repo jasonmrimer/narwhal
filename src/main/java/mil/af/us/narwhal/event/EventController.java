@@ -17,6 +17,11 @@ public class EventController {
     return new ResponseEntity<>(repository.save(event), HttpStatus.CREATED);
   }
 
+  @PutMapping(value = "{id}")
+  public Event update(@PathVariable Long id,  @RequestBody Event event) {
+    return repository.save(event);
+  }
+
   @DeleteMapping(value = "{id}")
   public void delete(@PathVariable Long id) {
     repository.delete(id);

@@ -25,8 +25,15 @@ export function forIt(wait: number = 0): Promise<{}> {
   });
 }
 
-/* tslint:disable:no-any*/
+/* tslint:disable:no-empty */
+export const eventStub = {
+  preventDefault: () => {
+  },
+  stopPropagation: () => {
+  }
+};
 
+/* tslint:disable:no-any*/
 export class Table {
   private wrapper: any;
 

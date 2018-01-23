@@ -7,17 +7,23 @@ import DeleteIcon from '../icons/DeleteIcon';
 interface Props {
   event: EventModel;
   deleteEvent: (event: EventModel) => void;
+  editEvent: (event: EventModel) => void;
   className?: string;
 }
 
+const handleDelete = (e: React.MouseEvent<HTMLButtonElement>, props: Props) => {
+  e.stopPropagation();
+  props.deleteEvent(props.event);
+};
+
 export const AirmanEvent = observer((props: Props) => {
   return (
-    <div className={props.className}>
+    <div className={props.className} onClick={() => props.editEvent(props.event)}>
       <div className="event-title">
         <span>{props.event.startTime.format('DD MMM YY').toUpperCase()}</span>
         <span>{props.event.title}</span>
-        <button className="delete" onClick={() => props.deleteEvent(props.event)}>
-          <DeleteIcon />
+        <button className="delete" onClick={(e) => handleDelete(e, props)}>
+          <DeleteIcon/>
         </button>
       </div>
       <div className="event-description">
@@ -32,11 +38,17 @@ export default styled(AirmanEvent)`
   background: ${props => props.theme.blueSteel};
   padding: 1px;
   margin: 0.5rem 0;
+  cursor: pointer;
   
   & > div {
     display: flex;
     justify-content: space-between;
     padding: 0.35rem;
+  }
+  
+    
+  &:hover {
+    background-color: ${props => props.theme.darkSteel};
   }
   
   .event-description {
@@ -45,6 +57,6 @@ export default styled(AirmanEvent)`
   }
   
   .delete {
-    background: ${props => props.theme.blueSteel};
+    background: transparent;
   }
 `;

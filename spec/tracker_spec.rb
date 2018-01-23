@@ -40,8 +40,8 @@ describe 'Tracker page', type: :feature do
   end
 
   describe 'events' do
-    it "can create, view, and delete an event for a selected airman" do
-      tracker_page.assert_can_create_and_view_and_delete_event
+    it 'can create, update, and delete an event for a selected airman' do
+      tracker_page.assert_create_update_delete_event
     end
   end
 end

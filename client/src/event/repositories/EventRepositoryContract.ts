@@ -4,11 +4,15 @@ import * as moment from 'moment';
 
 export default function EventRepositoryContract(subject: EventRepository) {
   describe('save', () => {
-    it('returns an event with a unique id', async () => {
-      const dateTime = moment().subtract(1, 'year');
+    let savedEvent1: EventModel;
+    const dateTime = moment().subtract(1, 'year');
 
+    beforeEach(async () => {
       const event1 = new EventModel('title1', 'description1', dateTime, dateTime, 1);
-      const savedEvent1 = await subject.save(event1);
+      savedEvent1 = await subject.save(event1);
+    });
+
+    it('returns an event with a unique id', async () => {
       expect(savedEvent1.id).toBeDefined();
 
       const event2 = new EventModel('title2', 'description2', dateTime, dateTime, 1);
@@ -16,6 +20,13 @@ export default function EventRepositoryContract(subject: EventRepository) {
       expect(savedEvent2.id).toBeDefined();
 
       expect(savedEvent1.id).not.toBe(savedEvent2.id);
+    });
+
+    it('updates an event that has an existing id', async () => {
+      savedEvent1.title = 'Updated Title';
+      const updatedEvent1 = await subject.save(savedEvent1);
+      expect(savedEvent1.id).toBe(updatedEvent1.id);
+      expect(updatedEvent1.title).toBe('Updated Title');
     });
   });
 

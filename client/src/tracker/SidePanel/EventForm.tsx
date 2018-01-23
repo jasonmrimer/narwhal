@@ -8,6 +8,7 @@ interface Props {
   airmanId: number;
   handleSubmit: (event: EventModel) => void;
   hideEventForm: () => void;
+  event: EventModel | null;
   className?: string;
 }
 
@@ -21,24 +22,31 @@ interface State {
 }
 
 export class EventForm extends React.Component<Props, State> {
-  state = {
-    title: '',
-    description: '',
-    startDate: '',
-    startTime: '',
-    endDate: '',
-    endTime: '',
-  };
+  readonly monthFormat = 'YYYY-MM-DD';
+  readonly timeFormat = 'HH:mm';
+
+  constructor(props: Props) {
+    super(props);
+    const {event} = this.props;
+    this.state = {
+      title: event ? event.title : '',
+      description: event ? event.description : '',
+      startDate: event ? event.startTime.format(this.monthFormat) : '',
+      startTime: event ? event.startTime.format(this.timeFormat) : '',
+      endDate: event ? event.endTime.format(this.monthFormat) : '',
+      endTime: event ? event.endTime.format(this.timeFormat) : '',
+    };
+  }
 
   /* tslint:disable:no-any*/
   handleChange = (event: any) => {
     this.setState({[event.target.name]: event.target.value});
   }
 
-  handleSubmit = (event: any) => {
-    event.preventDefault();
+  handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-    const {airmanId} = this.props;
+    const {airmanId, event} = this.props;
     const {title, description, startDate, startTime, endDate, endTime} = this.state;
 
     const startDateTime = moment.utc(`${startDate} ${startTime}`, 'YYYY-MM-DD HH:mm');
@@ -49,7 +57,8 @@ export class EventForm extends React.Component<Props, State> {
       description,
       startDateTime,
       endDateTime,
-      airmanId
+      airmanId,
+      event ? event.id : null,
     ));
   }
 

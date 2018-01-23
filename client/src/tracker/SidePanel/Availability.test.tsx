@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { shallow, ShallowWrapper } from 'enzyme';
+import { mount, ReactWrapper } from 'enzyme';
 import { Availability } from './Availability';
-import AirmanEvent from '../../airman/AirmanEvent';
+import { AirmanEvent } from '../../airman/AirmanEvent';
 import EventModel from '../../event/EventModel';
 import * as moment from 'moment';
-import StyledEventForm, { EventForm }  from './EventForm';
+import StyledEventForm, { EventForm } from './EventForm';
 import AirmanModelFactory from '../../airman/factories/AirmanModelFactory';
 import { makeFakeTrackerStore } from '../../utils/testUtils';
 import TrackerStore from '../stores/TrackerStore';
@@ -12,19 +12,21 @@ import AirmanModel from '../../airman/models/AirmanModel';
 
 let trackerStore: TrackerStore;
 let airman: AirmanModel;
-let subject: ShallowWrapper;
+let subject: ReactWrapper;
+let eventOne: EventModel;
+let eventTwo: EventModel;
 
 describe('Availability', () => {
   beforeEach(async () => {
     airman = AirmanModelFactory.build();
-    const eventOne = new EventModel(
+    eventOne = new EventModel(
       'Event One',
       '',
       moment('2017-11-27T05:00:00.000Z'),
       moment('2017-11-27T10:00:00.000Z'),
       1
     );
-    const eventTwo = new EventModel(
+    eventTwo = new EventModel(
       'Event Two',
       '',
       moment('2017-11-27T12:00:00.000Z'),
@@ -36,11 +38,7 @@ describe('Availability', () => {
     trackerStore = await makeFakeTrackerStore();
     trackerStore.setSelectedAirman(airman);
 
-    subject = shallow(
-      <Availability
-        trackerStore={trackerStore}
-      />
-    );
+    subject = mount(<Availability trackerStore={trackerStore}/>);
   });
 
   it('renders the availability for an airman', () => {
@@ -59,7 +57,7 @@ describe('Availability', () => {
   });
 
   it('renders all the scheduled events for the given day', () => {
-    const dateWrapper = subject.findWhere((s) => s.key() === 'day-1');
+    const dateWrapper = subject.find('#day-1');
     expect(dateWrapper.find(AirmanEvent).length).toBe(2);
     expect(dateWrapper.find('.event-date').text()).toContain('MON, 27 NOV 17');
   });
@@ -79,12 +77,14 @@ describe('Availability', () => {
     expect(subject.text()).toContain('03 DEC - 09 DEC');
   });
 
+  it('opens an Edit Event form when clicking on an existing Event Card', () => {
+    subject.find(AirmanEvent).at(0).simulate('click');
+    expect(subject.find(StyledEventForm).prop('event')).toEqual(eventOne);
+  });
+
   it('can exit out of an event form', () => {
     subject.find('button.add-event').simulate('click');
-    const eventFormWrapper = subject.find(StyledEventForm);
-    expect(eventFormWrapper.exists()).toBeTruthy();
-
-    eventFormWrapper.dive().find(EventForm).dive().find('a.back').simulate('click');
+    subject.find(EventForm).find('a.back').simulate('click');
     subject.update();
     expect(subject.state('showEventForm')).toBeFalsy();
     expect(subject.find(StyledEventForm).exists()).toBeFalsy();

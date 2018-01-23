@@ -15,11 +15,12 @@ interface Props {
 
 interface State {
   showEventForm: boolean;
+  selectedEvent: EventModel | null;
 }
 
 @observer
 export class Availability extends React.Component<Props, State> {
-  state: State = {showEventForm: false};
+  state: State = {showEventForm: false, selectedEvent: null};
 
   scheduledEventsForDate = (day: Moment, events: EventModel[]) => {
     const eventsForDay = events.filter((event) => day.isSame(event.startTime, 'day'));
@@ -31,12 +32,17 @@ export class Availability extends React.Component<Props, State> {
             key={index}
             event={event}
             deleteEvent={this.props.trackerStore.deleteEvent}
+            editEvent={this.editEvent}
           />
         );
       });
   }
 
-  setShowEventForm = () => {
+  editEvent = (event: EventModel) => {
+    this.setState({showEventForm: !this.state.showEventForm, selectedEvent: event});
+  }
+
+  toggleEventForm = () => {
     this.setState({showEventForm: !this.state.showEventForm});
   }
 
@@ -49,8 +55,9 @@ export class Availability extends React.Component<Props, State> {
     return (
       <EventForm
         airmanId={this.props.trackerStore.selectedAirman.id}
-        hideEventForm={this.setShowEventForm}
+        hideEventForm={this.toggleEventForm}
         handleSubmit={this.submitEvent}
+        event={this.state.selectedEvent}
       />
     );
   }
@@ -61,7 +68,7 @@ export class Availability extends React.Component<Props, State> {
     return (
       <div>
         <div className="event-control-row">
-          <button className="add-event" onClick={this.setShowEventForm}>
+          <button className="add-event" onClick={this.toggleEventForm}>
             + Add Event
           </button>
         </div>
@@ -77,7 +84,7 @@ export class Availability extends React.Component<Props, State> {
           {
             trackerStore.week.map((day, index) => {
               return (
-                <div key={`day-${index}`}>
+                <div id={`day-${index}`} key={index}>
                   <div className="event-date">{day.format('ddd, DD MMM YY').toUpperCase()}</div>
                   {this.scheduledEventsForDate(day.utc(), trackerStore.selectedAirman.events)}
                 </div>

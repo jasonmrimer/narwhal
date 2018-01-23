@@ -12,15 +12,7 @@ export default class WebEventRepository implements EventRepository {
   }
 
   async save(event: EventModel): Promise<EventModel> {
-    const resp = await fetch(
-      `${this.baseUrl}/api/events`,
-      {
-        method: 'POST',
-        headers: [['Content-Type', 'application/json'], ['X-XSRF-TOKEN', this.csrfToken]],
-        body: this.serializer.serialize(event),
-        credentials: 'include'
-      }
-    );
+    const resp = event.id ? await this.updateEvent(event) : await this.createEvent(event);
     const json = await resp.json();
     return Promise.resolve(this.serializer.deserialize(json));
   }
@@ -38,5 +30,29 @@ export default class WebEventRepository implements EventRepository {
         throw new Error(`Unable to delete event with ID: ${event.id}`);
       }
     });
+  }
+
+  private createEvent(event: EventModel) {
+    return fetch(
+      `${this.baseUrl}/api/events`,
+      {
+        method: 'POST',
+        headers: [['Content-Type', 'application/json'], ['X-XSRF-TOKEN', this.csrfToken]],
+        body: this.serializer.serialize(event),
+        credentials: 'include'
+      }
+    );
+  }
+
+  private updateEvent(event: EventModel) {
+    return fetch(
+      `${this.baseUrl}/api/events/${event.id}`,
+      {
+        method: 'PUT',
+        headers: [['Content-Type', 'application/json'], ['X-XSRF-TOKEN', this.csrfToken]],
+        body: this.serializer.serialize(event),
+        credentials: 'include'
+      }
+    );
   }
 }

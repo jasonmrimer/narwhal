@@ -157,6 +157,17 @@ describe('TrackerStore', () => {
       expect(eventRepository.hasEvent(savedEvent)).toBeTruthy();
     });
 
+    it('should edit an existing event on an airman', async () => {
+      const savedEvent = await subject.addEvent(event);
+      const eventCount = eventRepository.count;
+
+      savedEvent.title = 'Changed Title';
+      const updatedEvent = await subject.addEvent(savedEvent);
+
+      expect(eventRepository.count).toBe(eventCount);
+      expect(eventRepository.hasEvent(updatedEvent)).toBeTruthy();
+    });
+
     it('should delete an airman\'s event', async () => {
       const savedEvent = await subject.addEvent(event);
       await subject.deleteEvent(savedEvent);

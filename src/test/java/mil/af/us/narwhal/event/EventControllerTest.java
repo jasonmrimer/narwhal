@@ -21,8 +21,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -30,9 +29,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(EventController.class)
 @RunWith(SpringRunner.class)
 public class EventControllerTest {
-  @Autowired private MockMvc mockMvc;
-  @MockBean private EventRepository repository;
-  @Captor private ArgumentCaptor<Long> eventCaptor;
+  private final static ObjectMapper objectMapper = new ObjectMapper();
+  private final static JavaTimeModule module = new JavaTimeModule();
+  @Autowired
+  private MockMvc mockMvc;
+  @MockBean
+  private EventRepository repository;
+  @Captor
+  private ArgumentCaptor<Long> eventCaptor;
+
+  static {
+    objectMapper.registerModule(module);
+  }
 
   @Test
   public void createTest() throws Exception {
@@ -52,9 +60,6 @@ public class EventControllerTest {
       20L
     );
 
-    final ObjectMapper objectMapper = new ObjectMapper();
-    final JavaTimeModule module = new JavaTimeModule();
-    objectMapper.registerModule(module);
     final String json = objectMapper.writeValueAsString(event);
 
     mockMvc.perform(
@@ -64,6 +69,21 @@ public class EventControllerTest {
         .with(httpBasic("tytus", "password")))
       .andExpect(status().isCreated())
       .andExpect(jsonPath("$.id").value(123L));
+  }
+
+  @Test
+  public void updateTest() throws Exception {
+    Event existingEvent = new Event(1L, "Event", "", Instant.now(), Instant.now(), 1L);
+    when(repository.save(any(Event.class))).thenReturn(existingEvent);
+
+    final String json = objectMapper.writeValueAsString(existingEvent);
+    mockMvc.perform(
+      put(EventController.URI + "/1")
+        .content(json)
+        .contentType(MediaType.APPLICATION_JSON)
+        .with(httpBasic("tytus", "password")))
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$.id").value(1L));
   }
 
   @Test

@@ -10,5 +10,5 @@ export default Object.freeze({
   graySteel: '#ADADAD',
   darker: '#1D1D1D',
   darkSteel: '#9CA9B9',
-  blueSteel: '#5C6977'
+  blueSteel: '#5C6977',
  });
