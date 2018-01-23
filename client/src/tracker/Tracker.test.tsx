@@ -5,11 +5,8 @@ import { Tracker } from './Tracker';
 import { makeFakeTrackerStore } from '../utils/testUtils';
 import SidePanel from './SidePanel/SidePanel';
 import AirmanModel from '../airman/models/AirmanModel';
-import PlannerServiceStub from './services/doubles/PlannerServiceStub';
 import TopBar from '../widgets/TopBar';
 import TrackerStore from './stores/TrackerStore';
-
-const plannerServiceStub = new PlannerServiceStub();
 
 let trackerStore: TrackerStore;
 let subject: ReactWrapper;
@@ -21,13 +18,12 @@ describe('Tracker', () => {
       <Tracker
         username="Tytus"
         trackerStore={trackerStore}
-        plannerService={plannerServiceStub}
       />
     );
   });
 
   it('renders a Roster with the current week', async () => {
-    expect(subject.find(Roster).prop('week')).toEqual(plannerServiceStub.getCurrentWeek());
+    expect(subject.find(Roster).prop('trackerStore').week).toEqual(trackerStore.week);
   });
 
   it('renders the TopBar with a username and pageTitle', async () => {

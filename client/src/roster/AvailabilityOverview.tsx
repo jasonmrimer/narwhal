@@ -20,11 +20,13 @@ export const AvailabilityOverview = (props: Props) => {
   const {airman, week} = props;
   return (
     <td className={classNames(props.className, 'planner-row')}>
+      <div/>
       {week.map((day, dayIndex) => {
         return dayHasEvent(day, airman.events) ?
           <span className="unavailable" key={dayIndex}>&nbsp;</span> :
           <span key={dayIndex} className="available">&nbsp;</span>;
       })}
+      <div/>
     </td>
   );
 };

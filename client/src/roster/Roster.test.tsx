@@ -4,7 +4,6 @@ import * as React from 'react';
 import { makeFakeTrackerStore, Table } from '../utils/testUtils';
 import { Roster } from './Roster';
 import AirmanModel from '../airman/models/AirmanModel';
-import PlannerServiceStub from '../tracker/services/doubles/PlannerServiceStub';
 import CertificationModel from '../airman/models/CertificationModel';
 import TrackerStore from '../tracker/stores/TrackerStore';
 
@@ -23,7 +22,6 @@ describe('Roster', () => {
     subject = mount(
       <Roster
         trackerStore={trackerStore}
-        week={new PlannerServiceStub().getCurrentWeek()}
       />
     );
     table = new Table(subject);
@@ -37,6 +35,7 @@ describe('Roster', () => {
       'NOVEMBER 2017'
     ]);
     expect(table.getColumnSubHeaders(3)).toEqual('26SUN27MON28TUE29WED30THU01FRI02SAT');
+    expect(subject.find('button.next-week').exists()).toBeTruthy();
   });
 
   it('render airmen last names', async () => {
@@ -87,7 +86,14 @@ describe('Roster', () => {
     });
   });
 
-  it('renders an AvailabilityOverview for every airman', () => {
-    expect(table.getAvailabilityOverview().length).toBe(airmen.length);
+  describe('planner', () => {
+    it('renders an AvailabilityOverview for every airman', () => {
+      expect(table.getAvailabilityOverview().length).toBe(airmen.length);
+    });
+
+    it('advances to next week on button click', () => {
+      subject.find('button.next-week').simulate('click');
+      expect(table.getColumnSubHeaders(3)).toEqual('03SUN04MON05TUE06WED07THU08FRI09SAT');
+    });
   });
 });

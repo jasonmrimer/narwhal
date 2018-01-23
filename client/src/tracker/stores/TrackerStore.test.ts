@@ -173,11 +173,21 @@ describe('TrackerStore', () => {
       await subject.deleteEvent(savedEvent);
       expect(eventRepository.hasEvent(savedEvent)).toBeFalsy();
     });
+  });
 
-    it('it will return the week for the selected weeks in advance', () => {
-      expect(subject.week[0].isSame(moment.utc('2017-11-26T05:00:00.000Z'))).toBeTruthy();
-      subject.incrementWeek();
-      expect(subject.week[0].isSame(moment.utc('2017-12-03T05:00:00.000Z'))).toBeTruthy();
+  describe('changing time', () => {
+    it('will increment the planner week and change the side panel week', () => {
+      expect(subject.week[0].isSame(moment.utc('2017-11-26T00:00:00.000Z'))).toBeTruthy();
+      subject.incrementWeekPlanner();
+      expect(subject.week[0].isSame(moment.utc('2017-12-03T00:00:00.000Z'))).toBeTruthy();
+      expect(subject.sidePanelWeek[0].isSame(moment.utc('2017-12-03T00:00:00.000Z'))).toBeTruthy();
+    });
+
+    it('will increment the side panel week but not change the planner week', () => {
+      expect(subject.week[0].isSame(moment.utc('2017-11-26T00:00:00.000Z'))).toBeTruthy();
+      subject.incrementWeekSidePanel();
+      expect(subject.week[0].isSame(moment.utc('2017-11-26T00:00:00.000Z'))).toBeTruthy();
+      expect(subject.sidePanelWeek[0].isSame(moment.utc('2017-12-03T00:00:00.000Z'))).toBeTruthy();
     });
   });
 });

@@ -64,7 +64,7 @@ export class Availability extends React.Component<Props, State> {
 
   renderAvailability = () => {
     const {trackerStore} = this.props;
-    const week = trackerStore.week;
+    const week = trackerStore.sidePanelWeek;
     return (
       <div>
         <div className="event-control-row">
@@ -76,13 +76,13 @@ export class Availability extends React.Component<Props, State> {
           <h3>
             {week[0].format('DD MMM').toUpperCase()} - {week[6].format('DD MMM').toUpperCase()}
           </h3>
-          <button className="next-week" onClick={trackerStore.incrementWeek}>
+          <button className="next-week" onClick={trackerStore.incrementWeekSidePanel}>
             <NextIcon/>
           </button>
         </div>
         <div className="availability">
           {
-            trackerStore.week.map((day, index) => {
+            trackerStore.sidePanelWeek.map((day, index) => {
               return (
                 <div id={`day-${index}`} key={index}>
                   <div className="event-date">{day.format('ddd, DD MMM YY').toUpperCase()}</div>

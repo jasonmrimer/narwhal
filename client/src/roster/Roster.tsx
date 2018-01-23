@@ -1,15 +1,14 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Moment } from 'moment';
 import AvailabilityOverview from './AvailabilityOverview';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import { observer } from 'mobx-react';
 import TrackerStore from '../tracker/stores/TrackerStore';
+import NextIcon from '../icons/NextIcon';
 
 interface Props {
   trackerStore: TrackerStore;
-  week: Moment[];
   className?: string;
 }
 
@@ -34,7 +33,7 @@ export class Roster extends React.Component<Props> {
             {this.renderCertificationFilter()}
           </th>
           <th>
-            <div>{this.props.week[0].format('MMMM YYYY').toUpperCase()}</div>
+            <div className="month-header">{this.props.trackerStore.week[0].format('MMMM YYYY').toUpperCase()}</div>
             {this.renderWeek()}
           </th>
         </tr>
@@ -59,10 +58,10 @@ export class Roster extends React.Component<Props> {
             this.props.trackerStore.setSelectedAirman(airman);
           }}
         >
-          <td>{airman.lastName}</td>
+          <td>{airman.lastName}, {airman.firstName}</td>
           <td>{formatAttributes(airman.qualifications, 'acronym')}</td>
           <td>{formatAttributes(airman.certifications, 'title')}</td>
-          <AvailabilityOverview week={this.props.week} airman={airman}/>
+          <AvailabilityOverview week={this.props.trackerStore.week} airman={airman}/>
         </tr>
       );
     });
@@ -71,16 +70,23 @@ export class Roster extends React.Component<Props> {
   private renderWeek() {
     return (
       <div className="planner-header">
+        <div/>
         {
-          this.props.week.map((day, index) =>
+          this.props.trackerStore.week.map((day, index) =>
             <span key={index}>
               <div>{day.format('DD')}</div>
               <div>{day.format('ddd').toUpperCase()}</div>
             </span>
           )
         }
+        <span className="button-header">
+          <button className="next-week" onClick={this.props.trackerStore.incrementWeekPlanner}>
+            <NextIcon/>
+          </button>
+        </span>
       </div>
     );
+
   }
 
   private renderCertificationFilter() {
@@ -104,6 +110,7 @@ export default styled(Roster)`
   width: 100%;
   margin-top: 0.5rem;
   
+   
   caption {
     display: none;
   }
@@ -193,7 +200,7 @@ export default styled(Roster)`
     color: white;
     font-weight: 300;
     padding: 0.25rem 0.5rem;
-    
+   
     &.is-focused {
       background: ${props => props.theme.light}
     }
@@ -254,4 +261,20 @@ export default styled(Roster)`
       color: white;
     }
    }
+   
+   .next-week {
+    background: none;
+    border: none;
+    padding: 0;
+   }
+   
+  .button-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center
+  }
+  
+  .month-header {
+  margin-left: 2.5rem;
+  }
 `;

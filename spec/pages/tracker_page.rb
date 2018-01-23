@@ -23,6 +23,14 @@ class TrackerPage
     expect(page).to have_css('tbody tr', count: @@all_airmen_count)
   end
 
+  def assert_advances_week
+      find('button.next-week').click
+      now = Date.today
+      next_week = now + (now.wday + 6)
+      start_of_next_week = next_week - next_week.wday
+      expect(page).to have_content(start_of_next_week.strftime('%d %^a'))
+  end
+
   def assert_filters_by_site
     expect(page).to have_content('All Sites')
     filter('site', 'DGS-1')

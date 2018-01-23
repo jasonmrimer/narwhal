@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Tracker from '../tracker/Tracker';
 import ProfileRepository from '../profile/repositories/ProfileRepository';
-import { MomentPlannerService } from '../tracker/services/MomentPlannerService';
 import Dashboard from '../dashboard/Dashboard';
 import { Route, Switch } from 'react-router-dom';
 import TrackerStore from '../tracker/stores/TrackerStore';
@@ -56,7 +55,6 @@ export default class App extends React.Component<Props, State> {
                 <Tracker
                   username={this.state.username}
                   trackerStore={this.props.trackerStore}
-                  plannerService={new MomentPlannerService()}
                 />
               );
             }}

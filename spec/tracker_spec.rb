@@ -44,4 +44,10 @@ describe 'Tracker page', type: :feature do
       tracker_page.assert_create_update_delete_event
     end
   end
+
+ describe 'roster' do
+  it 'can move forward weeks on the planner' do
+    tracker_page.assert_advances_week
+  end
+ end
 end

@@ -28,6 +28,7 @@ export default class TrackerStore {
   @observable private _certificationIds: number[] = [];
   @observable private _selectedAirman: AirmanModel = AirmanModel.empty();
   @observable private _week: Moment[] = [];
+  @observable private _sidePanelWeek: Moment[] = [];
 
   constructor(airmanRepository: AirmanRepository,
               siteRepository: SiteRepository,
@@ -40,6 +41,7 @@ export default class TrackerStore {
     this.eventRepository = eventRepository;
     this.plannerService = plannerService;
     this._week = this.plannerService.getCurrentWeek();
+    this._sidePanelWeek = this.plannerService.getCurrentWeek();
   }
 
   async hydrate() {
@@ -152,6 +154,11 @@ export default class TrackerStore {
     return this._week;
   }
 
+  @computed
+  get sidePanelWeek() {
+    return this._sidePanelWeek;
+  }
+
   @action.bound
   setSiteId(id: number) {
     this._siteId = id;
@@ -177,6 +184,7 @@ export default class TrackerStore {
   @action.bound
   setSelectedAirman(airman: AirmanModel) {
     this._selectedAirman = airman;
+    this._sidePanelWeek = airman.isEmpty() ? this._week : this._sidePanelWeek;
   }
 
   @action.bound
@@ -199,8 +207,13 @@ export default class TrackerStore {
   }
 
   @action.bound
-  incrementWeek() {
-    this.plannerService.incrementWeek();
-    this._week = this.plannerService.getCurrentWeek();
+  incrementWeekPlanner() {
+    this._week = this.plannerService.incrementWeek(this.week);
+    this._sidePanelWeek = this.plannerService.incrementWeek(this.sidePanelWeek);
+  }
+
+  @action.bound
+  incrementWeekSidePanel() {
+    this._sidePanelWeek = this.plannerService.incrementWeek(this._sidePanelWeek);
   }
 }

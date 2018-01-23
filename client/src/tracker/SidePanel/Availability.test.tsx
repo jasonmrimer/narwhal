@@ -75,6 +75,8 @@ describe('Availability', () => {
   it('forwards availability to next week', () => {
     subject.find('button.next-week').simulate('click');
     expect(subject.text()).toContain('03 DEC - 09 DEC');
+    const dateWrapper = subject.find('#day-1');
+    expect(dateWrapper.find('.event-date').text()).toContain('MON, 04 DEC 17');
   });
 
   it('opens an Edit Event form when clicking on an existing Event Card', () => {

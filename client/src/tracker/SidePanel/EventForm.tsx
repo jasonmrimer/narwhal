@@ -65,8 +65,14 @@ export class EventForm extends React.Component<Props, State> {
   render() {
     return (
       <form className={this.props.className} onSubmit={this.handleSubmit}>
-        <a className="back" onClick={this.props.hideEventForm}>
+        <a
+          className="back"
+          onClick={this.props.hideEventForm}
+        >
           <BackIcon/>
+          <span>
+            Back to Week View
+          </span>
         </a>
         <input type="text" placeholder="Title" value={this.state.title} name="title" onChange={this.handleChange}/>
         <input
@@ -160,5 +166,9 @@ export default styled(EventForm)`
   .back{
     cursor: pointer;
     padding-top: 1rem;
+    fill: ${props => props.theme.graySteel};
+    background: none;
+    color: ${props => props.theme.graySteel};
+    font-size: 0.875rem;
   }
 `;

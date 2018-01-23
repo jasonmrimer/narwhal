@@ -1,7 +1,6 @@
 import * as React from 'react';
 import Roster from '../roster/Roster';
 import styled from 'styled-components';
-import PlannerService from './services/PlannerService';
 import TopBar from '../widgets/TopBar';
 import { observer } from 'mobx-react';
 import TrackerStore from './stores/TrackerStore';
@@ -9,7 +8,6 @@ import { TopLevelFilter } from '../widgets/Filter';
 import SidePanel from './SidePanel/SidePanel';
 
 interface Props {
-  plannerService: PlannerService;
   trackerStore: TrackerStore;
   username: string;
   className?: string;
@@ -22,7 +20,7 @@ export class Tracker extends React.Component<Props> {
   }
 
   render() {
-    const {username, className, plannerService} = this.props;
+    const {username, className} = this.props;
     return (
       [
         <TopBar key="0" username={username} pageTitle="AVAILABILITY ROSTER"/>,
@@ -58,7 +56,6 @@ export class Tracker extends React.Component<Props> {
               </div>
               <div style={{display: 'flex'}}>
                 <Roster
-                  week={plannerService.getCurrentWeek()}
                   trackerStore={this.props.trackerStore}
                 />
               </div>
@@ -82,7 +79,6 @@ export default styled(Tracker)`
   padding: 0.5rem;
   display: flex;
   color: white;
- 
   .main {
     width: 100%;
   }
