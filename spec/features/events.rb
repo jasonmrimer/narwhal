@@ -10,6 +10,8 @@ class Event
   def create
     page.within('.side-panel') do
       click_link_or_button '+ Add Event'
+      find('label', text: 'Appointment').click
+
       fill_in 'title', with: @title
       fill_in 'startDate', with: @start.strftime('%m/%d/%Y')
       fill_in 'startTime', with: @start.strftime('%H:%M')
@@ -23,6 +25,7 @@ class Event
     page.within('.side-panel') do
       find('.event-title', text: @title).click
       expect(find_field('title').value).to eq @title
+      find_field("Appointment", visible: false).should be_checked
 
       set_attrs
 

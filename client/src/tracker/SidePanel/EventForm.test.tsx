@@ -27,6 +27,8 @@ describe('EventForm', () => {
         event={null}
       />
     );
+
+    subject.find('input[value="APPOINTMENT"]').simulate('change', {target: {name: 'eventType', value: 'APPOINTMENT'}});
     findInputByName(subject, 'title').simulate('change', {target: {name: 'title', value: 'Title'}});
     findInputByName(subject, 'description').simulate('change', {target: {name: 'description', value: 'Description'}});
     findInputByName(subject, 'startDate').simulate('change', {target: {name: 'startDate', value: '2018-01-10'}});
@@ -41,7 +43,7 @@ describe('EventForm', () => {
       moment.utc('2018-01-10 00:00', 'YYYY-MM-DD HH:mm'),
       moment.utc('2018-01-10 12:34', 'YYYY-MM-DD HH:mm'),
       airmanId,
-      EventType.Mission
+      EventType.Appointment
     );
     expect(handleSubmitSpy).toHaveBeenCalledWith(expectedEvent);
   });
@@ -61,7 +63,7 @@ describe('EventForm', () => {
 
   it('populates the form when given an existing Event', () => {
     const dateTime = moment.utc('2018-01-10 00:00', 'YYYY-MM-DD HH:mm');
-    const event = new EventModel('Title', 'Description', dateTime, dateTime, airmanId, EventType.Mission, 1);
+    const event = new EventModel('Title', 'Description', dateTime, dateTime, airmanId, EventType.Leave, 1);
     subject = shallow(
       <EventForm
         airmanId={airmanId}
@@ -71,6 +73,9 @@ describe('EventForm', () => {
       />
     );
 
+    expect(subject.find('input[value="LEAVE"]').prop('checked')).toBeTruthy();
+    expect(subject.find('input[value="APPOINTMENT"]').prop('checked')).toBeFalsy();
+    expect(subject.find('input[value="MISSION"]').prop('checked')).toBeFalsy();
     expect(findInputByName(subject, 'title').prop('value')).toEqual(event.title);
     expect(findInputByName(subject, 'description').prop('value')).toEqual(event.description);
     expect(findInputByName(subject, 'startDate').prop('value')).toEqual('2018-01-10');

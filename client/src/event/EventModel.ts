@@ -1,9 +1,9 @@
 import { Moment } from 'moment';
 
 export enum EventType {
+  Mission = 'MISSION',
   Appointment = 'APPOINTMENT',
   Leave = 'LEAVE',
-  Mission = 'MISSION',
 }
 
 export default class EventModel {

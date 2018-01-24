@@ -4,6 +4,7 @@ import * as moment from 'moment';
 import styled from 'styled-components';
 import BackIcon from '../../icons/BackIcon';
 import theme from '../../themes/default';
+import * as classNames from 'classnames';
 
 interface Props {
   airmanId: number;
@@ -20,6 +21,7 @@ interface State {
   startTime: string;
   endDate: string;
   endTime: string;
+  eventType: EventType;
 }
 
 export class EventForm extends React.Component<Props, State> {
@@ -34,6 +36,7 @@ export class EventForm extends React.Component<Props, State> {
       startTime: event ? event.startTime.format(EventForm.TIME_FORMAT) : '',
       endDate: event ? event.endTime.format(EventForm.MONTH_FORMAT) : '',
       endTime: event ? event.endTime.format(EventForm.TIME_FORMAT) : '',
+      eventType: event ? event.type : EventType.Mission,
     };
   }
 
@@ -55,7 +58,7 @@ export class EventForm extends React.Component<Props, State> {
     e.preventDefault();
 
     const {airmanId, event} = this.props;
-    const {title, description, startDate, startTime, endDate, endTime} = this.state;
+    const {title, description, startDate, startTime, endDate, endTime, eventType} = this.state;
 
     const startDateTime = moment.utc(`${startDate} ${startTime}`, 'YYYY-MM-DD HH:mm');
     const endDateTime = moment.utc(`${endDate} ${endTime}`, 'YYYY-MM-DD HH:mm');
@@ -66,9 +69,27 @@ export class EventForm extends React.Component<Props, State> {
       startDateTime,
       endDateTime,
       airmanId,
-      EventType.Mission,
+      eventType,
       event ? event.id : null,
     ));
+  }
+
+  renderEventTypeRadios() {
+    return Object.keys(EventType).map((type, key) => {
+      const isChecked = this.state.eventType === EventType[type];
+      return (
+        <label key={key} className={classNames({checked: isChecked})}>
+          <input
+            type="radio"
+            name="eventType"
+            value={EventType[type]}
+            onChange={this.handleChange}
+            checked={isChecked}
+          />
+          {type}
+        </label>
+      );
+    });
   }
 
   render() {
@@ -78,6 +99,8 @@ export class EventForm extends React.Component<Props, State> {
           <BackIcon color={theme.graySteel}/>
           <span>Back to Week View</span>
         </a>
+        <div>Select Event Type:</div>
+        {this.renderEventTypeRadios()}
         <input type="text" placeholder="Title" value={this.state.title} name="title" onChange={this.handleChange}/>
         <input
           type="text"
@@ -115,8 +138,10 @@ export class EventForm extends React.Component<Props, State> {
 }
 
 export default styled(EventForm)`
+  text-align: left;
   display: flex;
   flex-direction: column;
+  color: ${props => props.theme.graySteel};
   
   input {
     margin: 1rem 1rem 0rem 1rem;
@@ -131,6 +156,14 @@ export default styled(EventForm)`
 
   input[type="text"] {
     border-bottom: 1px solid ${props => props.theme.graySteel};
+  }
+  
+  label {
+    color: ${props => props.theme.fontColor};
+  }
+  
+  label.checked {
+    color: ${props => props.theme.yellow}
   }
   
   .time-input::placeholder {
@@ -157,19 +190,37 @@ export default styled(EventForm)`
     margin-top: 2rem;
     width: fit-content;
     margin-left: auto;
-    background: none !important;
+    background: none;
     color: inherit;
     border: 1px solid ${props => props.theme.fontColor};
     padding: 0.5rem 1rem;
     font: inherit;
     font-size: 0.75rem;
     cursor: pointer;
-    outline: inherit !important;
+    outline: inherit;
+  }
+  
+  input[type='radio'] {
+    visibility: hidden;
+  }
+  
+  input[type='radio']:before {
+    content: ' ';
+    visibility: visible;
+    border: 1px solid ${props => props.theme.graySteel};
+    width: 1rem;
+    height: 1rem;
+    display: inline-block;
+    border-radius: 50%;
+    transition: all .25s ease-in-out;
+  }
+  
+  input[type='radio']:checked:before {
+   background: ${props => props.theme.graySteel};
   }
   
   .back{
     cursor: pointer;
-    padding-top: 1rem;
     fill: ${props => props.theme.graySteel};
     background: none;
     color: ${props => props.theme.graySteel};
@@ -177,7 +228,7 @@ export default styled(EventForm)`
     display: flex;
     justify-content: center;
     align-items: center;
-        
+    margin: 1.5rem 0;
     span {
       margin-left: 0.5rem;
     }
