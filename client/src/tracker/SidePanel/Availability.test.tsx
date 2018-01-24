@@ -2,7 +2,7 @@ import * as React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import { Availability } from './Availability';
 import { AirmanEvent } from '../../airman/AirmanEvent';
-import EventModel from '../../event/EventModel';
+import EventModel, { EventType } from '../../event/EventModel';
 import * as moment from 'moment';
 import StyledEventForm, { EventForm } from './EventForm';
 import AirmanModelFactory from '../../airman/factories/AirmanModelFactory';
@@ -24,14 +24,16 @@ describe('Availability', () => {
       '',
       moment('2017-11-27T05:00:00.000Z'),
       moment('2017-11-27T10:00:00.000Z'),
-      1
+      1,
+      EventType.Mission
     );
     eventTwo = new EventModel(
       'Event Two',
       '',
       moment('2017-11-27T12:00:00.000Z'),
       moment('2017-11-27T15:00:00.000Z'),
-      1
+      1,
+      EventType.Mission
     );
     airman.events = [eventOne, eventTwo];
 

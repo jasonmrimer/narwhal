@@ -1,9 +1,6 @@
 package mil.af.us.narwhal.event;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.Instant;
 
 @Entity
@@ -19,6 +16,9 @@ public class Event {
   private Instant startTime;
 
   private Instant endTime;
+
+  @Enumerated(EnumType.STRING)
+  private EventType type;
 
   @Column(name = "airman_id")
   private Long airmanId;
@@ -75,6 +75,14 @@ public class Event {
 
   public void setEndTime(Instant endTime) {
     this.endTime = endTime;
+  }
+
+  public EventType getType() {
+    return type;
+  }
+
+  public void setType(EventType type) {
+    this.type = type;
   }
 
   public Long getAirmanId() {

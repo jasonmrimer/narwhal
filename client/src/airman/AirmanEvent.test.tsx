@@ -1,4 +1,4 @@
-import EventModel from '../event/EventModel';
+import EventModel, { EventType } from '../event/EventModel';
 import * as moment from 'moment';
 import { shallow, ShallowWrapper } from 'enzyme';
 import * as React from 'react';
@@ -11,7 +11,7 @@ describe('AirmanEvent', () => {
   const editEventSpy = jest.fn();
   const startTime = moment('2017-11-22T08:00:00.000Z').utc();
   const endTime = moment('2017-11-22T09:00:00.000Z').utc();
-  const event = new EventModel('Dentist', '', startTime, endTime, 1, 1);
+  const event = new EventModel('Dentist', '', startTime, endTime, 1, EventType.Mission, 1);
 
   beforeEach(() => {
     subject = shallow(<AirmanEvent event={event} deleteEvent={deleteEventSpy} editEvent={editEventSpy}/>);

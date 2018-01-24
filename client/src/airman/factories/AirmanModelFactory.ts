@@ -2,7 +2,7 @@ import AirmanModel from '../models/AirmanModel';
 import QualificationModelFactory from './QualificationModelFactory';
 import { randomText } from '../../utils/randomizer';
 import * as moment from 'moment';
-import EventModel from '../../event/EventModel';
+import EventModel, { EventType } from '../../event/EventModel';
 import CertificationModel from '../models/CertificationModel';
 
 export default class AirmanModelFactory {
@@ -14,7 +14,13 @@ export default class AirmanModelFactory {
       randomText(5),
       QualificationModelFactory.buildList(2),
       certifications,
-      [new EventModel('Fake Event', '', moment('2017-11-27T05:00:00.000Z'), moment('2017-11-27T10:00:00.000Z'), id)]
+      [new EventModel(
+        'Fake Event',
+        '',
+        moment('2017-11-27T05:00:00.000Z'),
+        moment('2017-11-27T10:00:00.000Z'),
+        id,
+        EventType.Mission)]
     );
   }
 }

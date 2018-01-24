@@ -6,6 +6,7 @@ import { observer } from 'mobx-react';
 import TrackerStore from './stores/TrackerStore';
 import { TopLevelFilter } from '../widgets/Filter';
 import SidePanel from './SidePanel/SidePanel';
+import Legend from '../roster/Legend';
 
 interface Props {
   trackerStore: TrackerStore;
@@ -51,10 +52,10 @@ export class Tracker extends React.Component<Props> {
                 callback={this.props.trackerStore.setFlightId}
                 options={this.props.trackerStore.flightOptions}
               />
-              <div style={{display: 'flex'}}>
-                <span style={{marginLeft: 'auto', fontSize: '0.75rem'}}>Empty = Available, Filled = Unavailable</span>
+              <div>
+                <Legend/>
               </div>
-              <div style={{display: 'flex'}}>
+              <div className="roster">
                 <Roster
                   trackerStore={this.props.trackerStore}
                 />
@@ -81,5 +82,9 @@ export default styled(Tracker)`
   color: white;
   .main {
     width: 100%;
+  }
+  
+  .roster {
+    display: flex;
   }
  `;

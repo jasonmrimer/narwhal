@@ -3,7 +3,7 @@ import AirmanRepositoryStub from '../../airman/repositories/doubles/AirmanReposi
 import SiteRepositoryStub from '../../site/repositories/doubles/SiteRepositoryStub';
 import AirmanModel from '../../airman/models/AirmanModel';
 import CertificationRepositoryStub from '../../airman/repositories/doubles/CertificationRepositoryStub';
-import EventModel from '../../event/EventModel';
+import EventModel, { EventType } from '../../event/EventModel';
 import * as moment from 'moment';
 import EventRepositoryStub from '../../event/repositories/doubles/EventRepositoryStub';
 import { toJS } from 'mobx';
@@ -151,7 +151,7 @@ describe('TrackerStore', () => {
   });
 
   describe('events', () => {
-    const event = new EventModel('Title', 'Description', moment.utc(), moment.utc(), 1);
+    const event = new EventModel('Title', 'Description', moment.utc(), moment.utc(), 1, EventType.Mission);
 
     it('should add an event to an airman', async () => {
       const savedEvent = await subject.addEvent(event);

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import AvailabilityOverview from './AvailabilityOverview';
+import Planner from './Planner';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import { observer } from 'mobx-react';
@@ -32,7 +32,7 @@ export class Roster extends React.Component<Props> {
             <div>CERTIFICATION</div>
             {this.renderCertificationFilter()}
           </th>
-          <th>
+          <th className="planner-header">
             <div className="month-header">{this.props.trackerStore.week[0].format('MMMM YYYY').toUpperCase()}</div>
             {this.renderWeek()}
           </th>
@@ -61,7 +61,7 @@ export class Roster extends React.Component<Props> {
           <td>{airman.lastName}, {airman.firstName}</td>
           <td>{formatAttributes(airman.qualifications, 'acronym')}</td>
           <td>{formatAttributes(airman.certifications, 'title')}</td>
-          <AvailabilityOverview week={this.props.trackerStore.week} airman={airman}/>
+          <Planner events={airman.events} week={this.props.trackerStore.week}/>
         </tr>
       );
     });
@@ -69,7 +69,7 @@ export class Roster extends React.Component<Props> {
 
   private renderWeek() {
     return (
-      <div className="planner-header">
+      <div className="planner-day-header">
         <div/>
         {
           this.props.trackerStore.week.map((day, index) =>
@@ -106,9 +106,9 @@ export class Roster extends React.Component<Props> {
 export default styled(Roster)`
   border-collapse: collapse;
   background-color: ${props => props.theme.dark};
-  border: 1px solid ${props => props.theme.lighter};
+  border: 1px solid ${props => props.theme.graySteel};
+  border-top: none;
   width: 100%;
-  margin-top: 0.5rem;
   
    
   caption {
@@ -148,13 +148,20 @@ export default styled(Roster)`
     padding: 0.75rem;
   }
   
+  .planner-header {
+    border-left: 1px solid ${props => props.theme.graySteel};
+  }
   
-  .planner-header, .planner-row {
+  .planner-day-header, .planner-row {
     display: flex;
     justify-content: space-between;
   }
   
-  .planner-header span {
+  .planner-row {
+    border-left: 1px solid ${props => props.theme.graySteel};
+  }
+  
+  .planner-day-header span {
     display: flex;
     flex-direction: column;
     align-items: center;

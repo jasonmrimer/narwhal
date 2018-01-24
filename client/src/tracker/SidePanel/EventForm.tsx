@@ -1,5 +1,5 @@
 import * as React from 'react';
-import EventModel from '../../event/EventModel';
+import EventModel, { EventType } from '../../event/EventModel';
 import * as moment from 'moment';
 import styled from 'styled-components';
 import BackIcon from '../../icons/BackIcon';
@@ -66,6 +66,7 @@ export class EventForm extends React.Component<Props, State> {
       startDateTime,
       endDateTime,
       airmanId,
+      EventType.Mission,
       event ? event.id : null,
     ));
   }

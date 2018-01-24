@@ -7,6 +7,7 @@ import SidePanel from './SidePanel/SidePanel';
 import AirmanModel from '../airman/models/AirmanModel';
 import TopBar from '../widgets/TopBar';
 import TrackerStore from './stores/TrackerStore';
+import Legend from '../roster/Legend';
 
 let trackerStore: TrackerStore;
 let subject: ReactWrapper;
@@ -20,6 +21,10 @@ describe('Tracker', () => {
         trackerStore={trackerStore}
       />
     );
+  });
+
+  it('renders legend above headers', () => {
+    expect(subject.find(Legend).exists()).toBeTruthy();
   });
 
   it('renders a Roster with the current week', async () => {

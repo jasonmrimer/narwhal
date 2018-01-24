@@ -87,8 +87,8 @@ describe('Roster', () => {
   });
 
   describe('planner', () => {
-    it('renders an AvailabilityOverview for every airman', () => {
-      expect(table.getAvailabilityOverview().length).toBe(airmen.length);
+    it('renders an Planner for every airman', () => {
+      expect(table.getPlanner().length).toBe(airmen.length);
     });
 
     it('advances to next week on button click', () => {

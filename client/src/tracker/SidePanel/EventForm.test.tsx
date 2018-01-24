@@ -1,7 +1,7 @@
 import { shallow, ShallowWrapper } from 'enzyme';
 import * as React from 'react';
 import { EventForm } from './EventForm';
-import EventModel from '../../event/EventModel';
+import EventModel, { EventType } from '../../event/EventModel';
 import * as moment from 'moment';
 import { eventStub } from '../../utils/testUtils';
 import Mock = jest.Mock;
@@ -40,7 +40,8 @@ describe('EventForm', () => {
       'Description',
       moment.utc('2018-01-10 00:00', 'YYYY-MM-DD HH:mm'),
       moment.utc('2018-01-10 12:34', 'YYYY-MM-DD HH:mm'),
-      airmanId
+      airmanId,
+      EventType.Mission
     );
     expect(handleSubmitSpy).toHaveBeenCalledWith(expectedEvent);
   });
@@ -60,7 +61,7 @@ describe('EventForm', () => {
 
   it('populates the form when given an existing Event', () => {
     const dateTime = moment.utc('2018-01-10 00:00', 'YYYY-MM-DD HH:mm');
-    const event = new EventModel('Title', 'Description', dateTime, dateTime, airmanId, 1);
+    const event = new EventModel('Title', 'Description', dateTime, dateTime, airmanId, EventType.Mission, 1);
     subject = shallow(
       <EventForm
         airmanId={airmanId}

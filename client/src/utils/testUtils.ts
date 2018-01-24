@@ -1,5 +1,5 @@
 import { Filter } from '../widgets/Filter';
-import AvailabilityOverview from '../roster/AvailabilityOverview';
+import Planner from '../roster/Planner';
 import TrackerStore from '../tracker/stores/TrackerStore';
 import AirmanRepositoryStub from '../airman/repositories/doubles/AirmanRepositoryStub';
 import SiteRepositoryStub from '../site/repositories/doubles/SiteRepositoryStub';
@@ -60,8 +60,8 @@ export class Table {
     return this.getRows().length;
   }
 
-  getAvailabilityOverview() {
-    return this.wrapper.find(AvailabilityOverview);
+  getPlanner() {
+    return this.wrapper.find(Planner);
   }
 
   getColumnSubHeaders(columnIndex: number) {
