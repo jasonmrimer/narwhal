@@ -178,16 +178,16 @@ describe('TrackerStore', () => {
 
   describe('changing time', () => {
     it('will increment the planner week and change the side panel week', () => {
-      expect(subject.week[0].isSame(moment.utc('2017-11-26T00:00:00.000Z'))).toBeTruthy();
-      subject.incrementWeekPlanner();
-      expect(subject.week[0].isSame(moment.utc('2017-12-03T00:00:00.000Z'))).toBeTruthy();
+      expect(subject.plannerWeek[0].isSame(moment.utc('2017-11-26T00:00:00.000Z'))).toBeTruthy();
+      subject.incrementPlannerWeek();
+      expect(subject.plannerWeek[0].isSame(moment.utc('2017-12-03T00:00:00.000Z'))).toBeTruthy();
       expect(subject.sidePanelWeek[0].isSame(moment.utc('2017-12-03T00:00:00.000Z'))).toBeTruthy();
     });
 
     it('will increment the side panel week but not change the planner week', () => {
-      expect(subject.week[0].isSame(moment.utc('2017-11-26T00:00:00.000Z'))).toBeTruthy();
-      subject.incrementWeekSidePanel();
-      expect(subject.week[0].isSame(moment.utc('2017-11-26T00:00:00.000Z'))).toBeTruthy();
+      expect(subject.plannerWeek[0].isSame(moment.utc('2017-11-26T00:00:00.000Z'))).toBeTruthy();
+      subject.incrementSidePanelWeek();
+      expect(subject.plannerWeek[0].isSame(moment.utc('2017-11-26T00:00:00.000Z'))).toBeTruthy();
       expect(subject.sidePanelWeek[0].isSame(moment.utc('2017-12-03T00:00:00.000Z'))).toBeTruthy();
     });
   });
@@ -200,12 +200,12 @@ describe('TrackerStore', () => {
     });
 
     it('resets the side panel week', () => {
-      expect(subject.sidePanelWeek[0].isSame(subject.week[0])).toBeTruthy();
-      subject.incrementWeekSidePanel();
-      expect(subject.sidePanelWeek[0].isSame(subject.week[0])).toBeFalsy();
+      expect(subject.sidePanelWeek[0].isSame(subject.plannerWeek[0])).toBeTruthy();
+      subject.incrementSidePanelWeek();
+      expect(subject.sidePanelWeek[0].isSame(subject.plannerWeek[0])).toBeFalsy();
 
-      subject.setSelectedAirman(AirmanModel.empty());
-      expect(subject.sidePanelWeek[0].isSame(subject.week[0])).toBeTruthy();
+      subject.clearSelectedAirman();
+      expect(subject.sidePanelWeek[0].isSame(subject.plannerWeek[0])).toBeTruthy();
     });
   });
 });

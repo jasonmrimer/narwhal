@@ -70,7 +70,7 @@ export class Availability extends React.Component<Props, State> {
           <h3>
             {week[0].format('DD MMM').toUpperCase()} - {week[6].format('DD MMM').toUpperCase()}
           </h3>
-          <button className="next-week" onClick={trackerStore.incrementWeekSidePanel}>
+          <button className="next-week" onClick={trackerStore.incrementSidePanelWeek}>
             <NextIcon width={12} height={12}/>
           </button>
         </div>

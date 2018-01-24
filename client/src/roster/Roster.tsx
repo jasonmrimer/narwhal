@@ -33,7 +33,7 @@ export class Roster extends React.Component<Props> {
             {this.renderCertificationFilter()}
           </th>
           <th className="planner-header">
-            <div className="month-header">{this.props.trackerStore.week[0].format('MMMM YYYY').toUpperCase()}</div>
+            <div className="month-header">{this.props.trackerStore.plannerWeek[0].format('MMMM YYYY').toUpperCase()}</div>
             {this.renderWeek()}
           </th>
         </tr>
@@ -61,7 +61,7 @@ export class Roster extends React.Component<Props> {
           <td>{airman.lastName}, {airman.firstName}</td>
           <td>{formatAttributes(airman.qualifications, 'acronym')}</td>
           <td>{formatAttributes(airman.certifications, 'title')}</td>
-          <Planner events={airman.events} week={this.props.trackerStore.week}/>
+          <Planner events={airman.events} week={this.props.trackerStore.plannerWeek}/>
         </tr>
       );
     });
@@ -72,7 +72,7 @@ export class Roster extends React.Component<Props> {
       <div className="planner-day-header">
         <div/>
         {
-          this.props.trackerStore.week.map((day, index) =>
+          this.props.trackerStore.plannerWeek.map((day, index) =>
             <span key={index}>
               <div>{day.format('DD')}</div>
               <div>{day.format('ddd').toUpperCase()}</div>
@@ -80,7 +80,7 @@ export class Roster extends React.Component<Props> {
           )
         }
         <span className="button-header">
-          <button className="next-week" onClick={this.props.trackerStore.incrementWeekPlanner}>
+          <button className="next-week" onClick={this.props.trackerStore.incrementPlannerWeek}>
             <NextIcon height={14} width={14}/>
           </button>
         </span>

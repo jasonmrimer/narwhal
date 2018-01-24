@@ -30,7 +30,7 @@ export default class TrackerStore {
   @observable private _selectedAirman: AirmanModel = AirmanModel.empty();
   @observable private _selectedEvent: EventModel | null = null;
 
-  @observable private _week: Moment[] = [];
+  @observable private _plannerWeek: Moment[] = [];
   @observable private _sidePanelWeek: Moment[] = [];
 
   constructor(airmanRepository: AirmanRepository,
@@ -43,7 +43,7 @@ export default class TrackerStore {
     this.certificationRepository = certificationRepository;
     this.eventRepository = eventRepository;
     this.TimeService = timeService;
-    this._week = this.TimeService.getCurrentWeek();
+    this._plannerWeek = this.TimeService.getCurrentWeek();
     this._sidePanelWeek = this.TimeService.getCurrentWeek();
   }
 
@@ -93,6 +93,17 @@ export default class TrackerStore {
   }
 
   @computed
+  get siteId() {
+    return this._siteId;
+  }
+
+  @action.bound
+  setSiteId(id: number) {
+    this._siteId = id;
+    this.setSquadronId(UnfilteredValue);
+  }
+
+  @computed
   get squadronOptions() {
     if (this._siteId === UnfilteredValue) {
       return [];
@@ -101,6 +112,17 @@ export default class TrackerStore {
     return site.squadrons.map(squad => {
       return {value: squad.id, label: squad.name};
     });
+  }
+
+  @computed
+  get squadronId() {
+    return this._squadronId;
+  }
+
+  @action.bound
+  setSquadronId(id: number) {
+    this._squadronId = id;
+    this.setFlightId(UnfilteredValue);
   }
 
   @computed
@@ -116,25 +138,30 @@ export default class TrackerStore {
   }
 
   @computed
-  get certificationOptions() {
-    return this._certifications.map(cert => {
-      return {value: cert.id, label: cert.title};
-    });
-  }
-
-  @computed
   get flightId() {
     return this._flightId;
   }
 
-  @computed
-  get squadronId() {
-    return this._squadronId;
+  @action.bound
+  setFlightId(id: number) {
+    this._flightId = id;
   }
 
   @computed
-  get siteId() {
-    return this._siteId;
+  get certifications() {
+    return this._certifications;
+  }
+
+  @action.bound
+  setCertificationIds(options: FilterOption[]) {
+    this._certificationIds = options.map(option => option.value);
+  }
+
+  @computed
+  get certificationOptions() {
+    return this._certifications.map(cert => {
+      return {value: cert.id, label: cert.title};
+    });
   }
 
   @computed
@@ -143,57 +170,25 @@ export default class TrackerStore {
   }
 
   @computed
-  get certifications() {
-    return this._certifications;
-  }
-
-  @computed
   get selectedAirman() {
     return this._selectedAirman;
-  }
-
-  @computed
-  get selectedEvent() {
-    return this._selectedEvent;
-  }
-
-  @computed
-  get week() {
-    return this._week;
-  }
-
-  @computed
-  get sidePanelWeek() {
-    return this._sidePanelWeek;
-  }
-
-  @action.bound
-  setSiteId(id: number) {
-    this._siteId = id;
-    this.setSquadronId(UnfilteredValue);
-  }
-
-  @action.bound
-  setSquadronId(id: number) {
-    this._squadronId = id;
-    this.setFlightId(UnfilteredValue);
-  }
-
-  @action.bound
-  setFlightId(id: number) {
-    this._flightId = id;
-  }
-
-  @action.bound
-  setCertificationIds(options: FilterOption[]) {
-    this._certificationIds = options.map(option => option.value);
   }
 
   @action.bound
   setSelectedAirman(airman: AirmanModel) {
     this._selectedAirman = airman;
-    this._sidePanelWeek = airman.isEmpty() ? this._week : this._sidePanelWeek;
+    this._sidePanelWeek = airman.isEmpty() ? this._plannerWeek : this._sidePanelWeek;
     this._selectedEvent = null;
+  }
+
+  @action.bound
+  clearSelectedAirman() {
+    this.setSelectedAirman(AirmanModel.empty());
+  }
+  
+  @computed
+  get selectedEvent() {
+    return this._selectedEvent;
   }
 
   @action.bound
@@ -225,14 +220,24 @@ export default class TrackerStore {
     }
   }
 
-  @action.bound
-  incrementWeekPlanner() {
-    this._week = this.TimeService.incrementWeek(this.week);
-    this._sidePanelWeek = this.TimeService.incrementWeek(this.sidePanelWeek);
+  @computed
+  get plannerWeek() {
+    return this._plannerWeek;
   }
 
   @action.bound
-  incrementWeekSidePanel() {
+  incrementPlannerWeek() {
+    this._plannerWeek = this.TimeService.incrementWeek(this.plannerWeek);
+    this._sidePanelWeek = this.TimeService.incrementWeek(this.sidePanelWeek);
+  }
+
+  @computed
+  get sidePanelWeek() {
+    return this._sidePanelWeek;
+  }
+
+  @action.bound
+  incrementSidePanelWeek() {
     this._sidePanelWeek = this.TimeService.incrementWeek(this._sidePanelWeek);
   }
 }

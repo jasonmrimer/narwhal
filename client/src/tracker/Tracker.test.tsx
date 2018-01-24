@@ -4,7 +4,6 @@ import Roster from '../roster/Roster';
 import { Tracker } from './Tracker';
 import { makeFakeTrackerStore } from '../utils/testUtils';
 import SidePanel from './SidePanel/SidePanel';
-import AirmanModel from '../airman/models/AirmanModel';
 import TopBar from '../widgets/TopBar';
 import TrackerStore from './stores/TrackerStore';
 import Legend from '../roster/Legend';
@@ -28,7 +27,7 @@ describe('Tracker', () => {
   });
 
   it('renders a Roster with the current week', async () => {
-    expect(subject.find(Roster).prop('trackerStore').week).toEqual(trackerStore.week);
+    expect(subject.find(Roster).prop('trackerStore').plannerWeek).toEqual(trackerStore.plannerWeek);
   });
 
   it('renders the TopBar with a username and pageTitle', async () => {
@@ -38,7 +37,7 @@ describe('Tracker', () => {
 
   describe('the side panelStore', () => {
     it('does not render without a selected airman', () => {
-      trackerStore.setSelectedAirman(AirmanModel.empty());
+      trackerStore.clearSelectedAirman();
       subject.update();
       expect(subject.find(SidePanel).exists()).toBeFalsy();
     });

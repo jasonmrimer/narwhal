@@ -5,7 +5,6 @@ import Currency from './Currency';
 import Tab from './Tab';
 import { observer } from 'mobx-react';
 import TrackerStore from '../stores/TrackerStore';
-import AirmanModel from '../../airman/models/AirmanModel';
 import Availability from './Availability';
 
 interface Props {
@@ -44,10 +43,7 @@ export class SidePanel extends React.Component<Props, State> {
     return (
       <div className={`${className} side-panel`}>
         <div className={'header'}>
-          <button
-            className="close"
-            onClick={() => trackerStore.setSelectedAirman(AirmanModel.empty())}
-          >
+          <button className="close" onClick={trackerStore.clearSelectedAirman}>
             <CloseIcon/>
           </button>
           <h2>
