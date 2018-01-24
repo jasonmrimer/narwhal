@@ -39,11 +39,11 @@ describe('Roster', () => {
   });
 
   it('render airmen last names', async () => {
-    const expectedLastNames = airmen.map(airman => airman.lastName);
+    const expectedFullNames = airmen.map(airman => `${airman.lastName}, ${airman.firstName}`);
 
     expect(table.getRowCount()).toEqual(airmen.length);
     for (let i = 0; i < table.getRowCount(); i++) {
-      expect(table.getTextForRowAndCol(i, 'NAME')).toBe(expectedLastNames[i]);
+      expect(table.getTextForRowAndCol(i, 'NAME')).toBe(expectedFullNames[i]);
     }
   });
 
