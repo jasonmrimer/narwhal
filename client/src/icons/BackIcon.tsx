@@ -1,19 +1,17 @@
 import * as React from 'react';
 
-export default () => {
+interface Props {
+  color: string;
+}
+
+export default (props: Props) => {
   /* tslint:disable:max-line-length*/
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      xmlnsXlink="http://www.w3.org/1999/xlink"
-      width="1rem"
-      height="1rem"
-    >
+    <svg width="0.875rem" height="0.875rem" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">
       <path
-        id="a"
-        d="M2.51 4.3h8.19a.3.3 0 0 1 .3.3v.8a.3.3 0 0 1-.3.3H2.486l3.26 3.26a.318.318 0 0 1 0 .462l-.503.502a.318.318 0 0 1-.462 0l-4.68-4.68a.318.318 0 0 1 0-.463L4.78.101a.318.318 0 0 1 .462 0l.503.502a.318.318 0 0 1 0 .462L2.51 4.3z"
+        d="M1664 896v128q0 53-32.5 90.5t-84.5 37.5h-704l293 294q38 36 38 90t-38 90l-75 76q-37 37-90 37-52 0-91-37l-651-652q-37-37-37-90 0-52 37-91l651-650q38-38 91-38 52 0 90 38l75 74q38 38 38 91t-38 91l-293 293h704q52 0 84.5 37.5t32.5 90.5z"
+        fill={props.color}
       />
     </svg>
-
   );
 };

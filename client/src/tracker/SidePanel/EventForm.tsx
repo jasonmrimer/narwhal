@@ -3,6 +3,7 @@ import EventModel from '../../event/EventModel';
 import * as moment from 'moment';
 import styled from 'styled-components';
 import BackIcon from '../../icons/BackIcon';
+import theme from '../../themes/default';
 
 interface Props {
   airmanId: number;
@@ -69,7 +70,7 @@ export class EventForm extends React.Component<Props, State> {
           className="back"
           onClick={this.props.hideEventForm}
         >
-          <BackIcon/>
+          <BackIcon color={theme.graySteel} />
           <span>
             Back to Week View
           </span>
@@ -170,5 +171,12 @@ export default styled(EventForm)`
     background: none;
     color: ${props => props.theme.graySteel};
     font-size: 0.875rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+        
+    span {
+      margin-left: 0.5rem;
+    }
   }
 `;
