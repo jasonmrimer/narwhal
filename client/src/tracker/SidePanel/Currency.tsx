@@ -11,8 +11,8 @@ interface Props {
 const list = (label: string, expiration: Moment, index: number) => {
   return (
     <div key={index}>
-      <span>{label}</span>
-      <span>{expiration.format('DD MMM YY')}</span>
+      <div className="currency-title">{label}</div>
+      <div className="currency-description"> {expiration.format('DD MMM YY')}</div>
     </div>
   );
 };
@@ -35,9 +35,20 @@ export const Currency = (props: Props) => {
 
 export default styled(Currency)`
   width: 100%;
-  div {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 0.25rem;  
+  
+  & > div {
+    background: ${props => props.theme.blueSteel};
+    margin: 0.5rem 0;
+    padding: 1px;
+  }
+  
+  .currency-title {
+    padding: 0.35rem;
+  }
+  
+  .currency-description {
+    background: ${props => props.theme.lighter};
+    font-size: 12px;
+    padding: 0.35rem;
   }
 `;
