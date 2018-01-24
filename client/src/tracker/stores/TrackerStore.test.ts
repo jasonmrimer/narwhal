@@ -8,14 +8,14 @@ import * as moment from 'moment';
 import EventRepositoryStub from '../../event/repositories/doubles/EventRepositoryStub';
 import { toJS } from 'mobx';
 import { UnfilteredValue } from '../../widgets/models/FilterOptionModel';
-import PlannerServiceStub from '../services/doubles/PlannerServiceStub';
+import TimeServiceStub from '../services/doubles/TimeServiceStub';
 
 describe('TrackerStore', () => {
   const airmenRepository = new AirmanRepositoryStub();
   const siteRepository = new SiteRepositoryStub();
   const certificationRepository = new CertificationRepositoryStub();
   const eventRepository = new EventRepositoryStub();
-  const plannerServiceStub = new PlannerServiceStub();
+  const timeServiceStub = new TimeServiceStub();
   let allAirmen: AirmanModel[];
   let subject: TrackerStore;
 
@@ -26,7 +26,7 @@ describe('TrackerStore', () => {
       siteRepository,
       certificationRepository,
       eventRepository,
-      plannerServiceStub,
+      timeServiceStub,
     );
     await subject.hydrate();
   });

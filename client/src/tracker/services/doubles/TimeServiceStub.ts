@@ -1,8 +1,8 @@
 import * as moment from 'moment';
 import { Moment } from 'moment';
-import PlannerService from '../PlannerService';
+import TimeService from '../TimeService';
 
-export default class PlannerServiceStub implements PlannerService {
+export default class TimeServiceStub implements TimeService {
    getCurrentWeek(): Moment[] {
     return [
       moment.utc('2017-11-26T00:00:00.000Z'),

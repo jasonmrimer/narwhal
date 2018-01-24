@@ -2,12 +2,12 @@ import * as React from 'react';
 import { shallow } from 'enzyme';
 import { AvailabilityOverview } from './AvailabilityOverview';
 import AirmanModelFactory from '../airman/factories/AirmanModelFactory';
-import PlannerServiceStub from '../tracker/services/doubles/PlannerServiceStub';
+import TimeServiceStub from '../tracker/services/doubles/TimeServiceStub';
 
 describe('AvailabilityOverview', () => {
   it('renders airmen high-level availability', () => {
     const airman = AirmanModelFactory.build(1);
-    const week = new PlannerServiceStub().getCurrentWeek();
+    const week = new TimeServiceStub().getCurrentWeek();
     const subject = shallow(
       <AvailabilityOverview
         airman={airman}

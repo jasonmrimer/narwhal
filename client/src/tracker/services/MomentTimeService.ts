@@ -1,8 +1,8 @@
-import PlannerService from './PlannerService';
+import TimeService from './TimeService';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 
-export class MomentPlannerService implements PlannerService {
+export class MomentTimeService implements TimeService {
   getCurrentWeek(): Moment[] {
     const sunday = moment.utc().startOf('week');
     return [

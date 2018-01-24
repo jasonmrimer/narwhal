@@ -8,7 +8,7 @@ import { action, computed, observable, toJS } from 'mobx';
 import FilterOption, { UnfilteredValue } from '../../widgets/models/FilterOptionModel';
 import EventModel from '../../event/EventModel';
 import EventRepository from '../../event/repositories/EventRepository';
-import PlannerService from '../services/PlannerService';
+import TimeService from '../services/TimeService';
 import { Moment } from 'moment';
 
 export default class TrackerStore {
@@ -16,7 +16,7 @@ export default class TrackerStore {
   private siteRepository: SiteRepository;
   private certificationRepository: CertificationRepository;
   private eventRepository: EventRepository;
-  private plannerService: PlannerService;
+  private TimeService: TimeService;
 
   @observable private _airmen: AirmanModel[] = [];
   @observable private _sites: SiteModel[] = [];
@@ -34,14 +34,14 @@ export default class TrackerStore {
               siteRepository: SiteRepository,
               certificationRepository: CertificationRepository,
               eventRepository: EventRepository,
-              plannerService: PlannerService) {
+              timeService: TimeService) {
     this.airmanRepository = airmanRepository;
     this.siteRepository = siteRepository;
     this.certificationRepository = certificationRepository;
     this.eventRepository = eventRepository;
-    this.plannerService = plannerService;
-    this._week = this.plannerService.getCurrentWeek();
-    this._sidePanelWeek = this.plannerService.getCurrentWeek();
+    this.TimeService = timeService;
+    this._week = this.TimeService.getCurrentWeek();
+    this._sidePanelWeek = this.TimeService.getCurrentWeek();
   }
 
   async hydrate() {
@@ -208,12 +208,12 @@ export default class TrackerStore {
 
   @action.bound
   incrementWeekPlanner() {
-    this._week = this.plannerService.incrementWeek(this.week);
-    this._sidePanelWeek = this.plannerService.incrementWeek(this.sidePanelWeek);
+    this._week = this.TimeService.incrementWeek(this.week);
+    this._sidePanelWeek = this.TimeService.incrementWeek(this.sidePanelWeek);
   }
 
   @action.bound
   incrementWeekSidePanel() {
-    this._sidePanelWeek = this.plannerService.incrementWeek(this._sidePanelWeek);
+    this._sidePanelWeek = this.TimeService.incrementWeek(this._sidePanelWeek);
   }
 }
