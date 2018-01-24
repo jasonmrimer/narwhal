@@ -34,11 +34,7 @@ export class SidePanel extends React.Component<Props, State> {
         return <Currency airman={airman}/>;
       case 1:
       default:
-        return (
-          <Availability
-            trackerStore={this.props.trackerStore}
-          />
-        );
+        return <Availability trackerStore={this.props.trackerStore}/>;
     }
   }
 

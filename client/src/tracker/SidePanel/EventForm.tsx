@@ -23,20 +23,27 @@ interface State {
 }
 
 export class EventForm extends React.Component<Props, State> {
-  readonly monthFormat = 'YYYY-MM-DD';
-  readonly timeFormat = 'HH:mm';
+  static readonly MONTH_FORMAT = 'YYYY-MM-DD';
+  static readonly TIME_FORMAT = 'HH:mm';
+
+  static hydrate(event: EventModel | null) {
+    return {
+      title: event ? event.title : '',
+      description: event ? event.description : '',
+      startDate: event ? event.startTime.format(EventForm.MONTH_FORMAT) : '',
+      startTime: event ? event.startTime.format(EventForm.TIME_FORMAT) : '',
+      endDate: event ? event.endTime.format(EventForm.MONTH_FORMAT) : '',
+      endTime: event ? event.endTime.format(EventForm.TIME_FORMAT) : '',
+    };
+  }
 
   constructor(props: Props) {
     super(props);
-    const {event} = this.props;
-    this.state = {
-      title: event ? event.title : '',
-      description: event ? event.description : '',
-      startDate: event ? event.startTime.format(this.monthFormat) : '',
-      startTime: event ? event.startTime.format(this.timeFormat) : '',
-      endDate: event ? event.endTime.format(this.monthFormat) : '',
-      endTime: event ? event.endTime.format(this.timeFormat) : '',
-    };
+    this.state = EventForm.hydrate(this.props.event);
+  }
+
+  componentWillReceiveProps(nextProps: Props) {
+    this.setState(EventForm.hydrate(nextProps.event));
   }
 
   /* tslint:disable:no-any*/
@@ -66,14 +73,9 @@ export class EventForm extends React.Component<Props, State> {
   render() {
     return (
       <form className={this.props.className} onSubmit={this.handleSubmit}>
-        <a
-          className="back"
-          onClick={this.props.hideEventForm}
-        >
-          <BackIcon color={theme.graySteel} />
-          <span>
-            Back to Week View
-          </span>
+        <a className="back" onClick={this.props.hideEventForm}>
+          <BackIcon color={theme.graySteel}/>
+          <span>Back to Week View</span>
         </a>
         <input type="text" placeholder="Title" value={this.state.title} name="title" onChange={this.handleChange}/>
         <input

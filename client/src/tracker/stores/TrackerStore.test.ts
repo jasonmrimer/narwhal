@@ -9,6 +9,7 @@ import EventRepositoryStub from '../../event/repositories/doubles/EventRepositor
 import { toJS } from 'mobx';
 import { UnfilteredValue } from '../../widgets/models/FilterOptionModel';
 import TimeServiceStub from '../services/doubles/TimeServiceStub';
+import AirmanModelFactory from '../../airman/factories/AirmanModelFactory';
 
 describe('TrackerStore', () => {
   const airmenRepository = new AirmanRepositoryStub();
@@ -188,6 +189,23 @@ describe('TrackerStore', () => {
       subject.incrementWeekSidePanel();
       expect(subject.week[0].isSame(moment.utc('2017-11-26T00:00:00.000Z'))).toBeTruthy();
       expect(subject.sidePanelWeek[0].isSame(moment.utc('2017-12-03T00:00:00.000Z'))).toBeTruthy();
+    });
+  });
+
+  describe('selecting an airman', () => {
+    it('clears the selected event', () => {
+      subject.setSelectedEvent(new EventModel('', '', moment.utc(), moment.utc(), 1));
+      subject.setSelectedAirman(AirmanModelFactory.build());
+      expect(subject.selectedEvent).toBeNull();
+    });
+
+    it('resets the side panel week', () => {
+      expect(subject.sidePanelWeek[0].isSame(subject.week[0])).toBeTruthy();
+      subject.incrementWeekSidePanel();
+      expect(subject.sidePanelWeek[0].isSame(subject.week[0])).toBeFalsy();
+
+      subject.setSelectedAirman(AirmanModel.empty());
+      expect(subject.sidePanelWeek[0].isSame(subject.week[0])).toBeTruthy();
     });
   });
 });

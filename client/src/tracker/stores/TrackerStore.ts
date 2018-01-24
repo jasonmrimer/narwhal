@@ -26,7 +26,10 @@ export default class TrackerStore {
   @observable private _squadronId: number = UnfilteredValue;
   @observable private _flightId: number = UnfilteredValue;
   @observable private _certificationIds: number[] = [];
+
   @observable private _selectedAirman: AirmanModel = AirmanModel.empty();
+  @observable private _selectedEvent: EventModel | null = null;
+
   @observable private _week: Moment[] = [];
   @observable private _sidePanelWeek: Moment[] = [];
 
@@ -150,6 +153,11 @@ export default class TrackerStore {
   }
 
   @computed
+  get selectedEvent() {
+    return this._selectedEvent;
+  }
+
+  @computed
   get week() {
     return this._week;
   }
@@ -185,6 +193,17 @@ export default class TrackerStore {
   setSelectedAirman(airman: AirmanModel) {
     this._selectedAirman = airman;
     this._sidePanelWeek = airman.isEmpty() ? this._week : this._sidePanelWeek;
+    this._selectedEvent = null;
+  }
+
+  @action.bound
+  setSelectedEvent(event: EventModel) {
+    this._selectedEvent = event;
+  }
+
+  @action.bound
+  clearSelectedEvent() {
+    this._selectedEvent = null;
   }
 
   @action.bound

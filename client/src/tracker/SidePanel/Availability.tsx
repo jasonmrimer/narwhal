@@ -15,60 +15,54 @@ interface Props {
 
 interface State {
   showEventForm: boolean;
-  selectedEvent: EventModel | null;
 }
 
 @observer
 export class Availability extends React.Component<Props, State> {
-  state: State = {showEventForm: false, selectedEvent: null};
+  state: State = {showEventForm: false};
 
-  scheduledEventsForDate = (day: Moment, events: EventModel[]) => {
-    const eventsForDay = events.filter((event) => day.isSame(event.startTime, 'day'));
-    return eventsForDay.length === 0
-      ? <div className="event-name">No Events Scheduled</div>
-      : eventsForDay.map((event, index) => {
-        return (
-          <AirmanEvent
-            key={index}
-            event={event}
-            deleteEvent={this.props.trackerStore.deleteEvent}
-            editEvent={this.editEvent}
-          />
-        );
-      });
+  componentWillReceiveProps() {
+    if (this.props.trackerStore.selectedEvent == null) {
+      this.setState({showEventForm: false});
+    }
   }
 
-  editEvent = (event: EventModel) => {
-    this.setState({showEventForm: !this.state.showEventForm, selectedEvent: event});
+  render() {
+    return (
+      <div className={this.props.className}>
+        {this.state.showEventForm ? this.renderEventForm() : this.renderAvailability()}
+      </div>
+    );
   }
 
-  toggleEventForm = () => {
-    this.setState({showEventForm: !this.state.showEventForm});
-  }
-
-  submitEvent = async (event: EventModel) => {
-    await this.props.trackerStore.addEvent(event);
-    this.setState({showEventForm: false});
-  }
-
-  renderEventForm = () => {
+  private renderEventForm = () => {
     return (
       <EventForm
         airmanId={this.props.trackerStore.selectedAirman.id}
-        hideEventForm={this.toggleEventForm}
-        handleSubmit={this.submitEvent}
-        event={this.state.selectedEvent}
+        hideEventForm={this.closeEventForm}
+        handleSubmit={this.submitAndCloseEventForm}
+        event={this.props.trackerStore.selectedEvent}
       />
     );
   }
 
-  renderAvailability = () => {
+  private submitAndCloseEventForm = async (event: EventModel) => {
+    await this.props.trackerStore.addEvent(event);
+    this.closeEventForm();
+  }
+
+  private closeEventForm = () => {
+    this.props.trackerStore.clearSelectedEvent();
+    this.setState({showEventForm: false});
+  }
+
+  private renderAvailability = () => {
     const {trackerStore} = this.props;
     const week = trackerStore.sidePanelWeek;
     return (
       <div>
         <div className="event-control-row">
-          <button className="add-event" onClick={this.toggleEventForm}>
+          <button className="add-event" onClick={this.openEventFormForCreate}>
             + Add Event
           </button>
         </div>
@@ -96,12 +90,30 @@ export class Availability extends React.Component<Props, State> {
     );
   }
 
-  render() {
-    return (
-      <div className={this.props.className}>
-        {this.state.showEventForm ? this.renderEventForm() : this.renderAvailability()}
-      </div>
-    );
+  private scheduledEventsForDate = (day: Moment, events: EventModel[]) => {
+    const eventsForDay = events.filter((event) => day.isSame(event.startTime, 'day'));
+    return eventsForDay.length === 0
+      ? <div className="event-name">No Events Scheduled</div>
+      : eventsForDay.map((event, index) => {
+        return (
+          <AirmanEvent
+            key={index}
+            event={event}
+            deleteEvent={this.props.trackerStore.deleteEvent}
+            editEvent={this.openEventFormForEdit}
+          />
+        );
+      });
+  }
+
+  private openEventFormForCreate = () => {
+    this.props.trackerStore.clearSelectedEvent();
+    this.setState({showEventForm: true});
+  }
+
+  private openEventFormForEdit = (event: EventModel) => {
+    this.props.trackerStore.setSelectedEvent(event);
+    this.setState({showEventForm: true});
   }
 }
 

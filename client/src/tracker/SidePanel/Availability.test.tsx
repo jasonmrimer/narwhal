@@ -91,4 +91,11 @@ describe('Availability', () => {
     expect(subject.state('showEventForm')).toBeFalsy();
     expect(subject.find(StyledEventForm).exists()).toBeFalsy();
   });
+
+  it('closes the event form when event is cleared', () => {
+    subject.find('button.add-event').simulate('click');
+    trackerStore.clearSelectedEvent();
+    subject.setProps({trackerStore: trackerStore});
+    expect(subject.state('showEventForm')).toBeFalsy();
+  });
 });
