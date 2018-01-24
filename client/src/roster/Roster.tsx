@@ -81,7 +81,7 @@ export class Roster extends React.Component<Props> {
         }
         <span className="button-header">
           <button className="next-week" onClick={this.props.trackerStore.incrementWeekPlanner}>
-            <NextIcon/>
+            <NextIcon height={14} width={14}/>
           </button>
         </span>
       </div>

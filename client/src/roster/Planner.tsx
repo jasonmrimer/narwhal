@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { Moment } from 'moment';
-import styled from 'styled-components';
 import * as classNames from 'classnames';
 import EventModel, { EventType } from '../event/EventModel';
 import AppointmentIcon from '../icons/AppointmentIcon';
@@ -36,24 +35,13 @@ const renderEvents = (day: Moment, events: EventModel[], key: number) => {
   }
 };
 
-export const Planner = (props: Props) => {
+export default (props: Props) => {
   const {events, week} = props;
   return (
     <td className={classNames(props.className, 'planner-row')}>
+      <span/>
       {week.map((day, index) => renderEvents(day, events, index))}
+      <span/>
     </td>
   );
 };
-
-export default styled(Planner)`
-  span {
-    border: 1px solid ${props => props.theme.graySteel};
-    border-radius: 50%;
-    width: 1rem;
-    height: 1rem;
-    
-    &.unavailable {
-      background: ${props => props.theme.graySteel};
-    }
-  }
-`;
