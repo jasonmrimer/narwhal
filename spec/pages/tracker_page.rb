@@ -25,10 +25,7 @@ class TrackerPage
 
   def assert_advances_week
       find('button.next-week').click
-      now = Date.today
-      next_week = now + (now.wday + 6)
-      start_of_next_week = next_week - next_week.wday
-      expect(page).to have_content(start_of_next_week.strftime('%d %^a'))
+      expect(page).to have_content(get_start_of_next_week.strftime('%d %^a'))
   end
 
   def assert_filters_by_site
@@ -144,10 +141,12 @@ class TrackerPage
   def can_forward_to_next_week
     page.within('.side-panel') do
       find('button.next-week').click
-      now = Date.today
-      next_week = now + (now.wday + 6)
-      start_of_next_week = next_week - next_week.wday
-      expect(page).to have_content(start_of_next_week.strftime('%d %^b'))
+      expect(page).to have_content(get_start_of_next_week.strftime('%d %^b'))
     end
+  end
+
+  def get_start_of_next_week
+    now = Date.today
+    (now - now.wday) + 7
   end
 end

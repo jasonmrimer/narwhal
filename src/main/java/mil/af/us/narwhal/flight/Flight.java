@@ -2,11 +2,13 @@ package mil.af.us.narwhal.flight;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
 public class Flight {
   @Id
+  @GeneratedValue
   private Long id;
 
   private String name;
@@ -23,6 +25,11 @@ public class Flight {
     this.id = id;
     this.squadronId = squadronId;
     this.name = name;
+  }
+
+  public Flight(Long squadronId, String name) {
+    this.name = name;
+    this.squadronId = squadronId;
   }
 
   public Long getId() {

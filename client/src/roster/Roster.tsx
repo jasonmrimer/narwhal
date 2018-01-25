@@ -33,7 +33,11 @@ export class Roster extends React.Component<Props> {
             {this.renderCertificationFilter()}
           </th>
           <th className="planner-header">
-            <div className="month-header">{this.props.trackerStore.plannerWeek[0].format('MMMM YYYY').toUpperCase()}</div>
+            <div
+              className="month-header"
+            >
+              {this.props.trackerStore.plannerWeek[0].format('MMMM YYYY').toUpperCase()}
+            </div>
             {this.renderWeek()}
           </th>
         </tr>

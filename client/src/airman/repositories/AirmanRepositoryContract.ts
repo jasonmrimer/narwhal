@@ -1,5 +1,4 @@
 import AirmanRepository from './AirmanRepository';
-import * as moment from 'moment';
 
 export default function airmenRepositoryContract(subject: AirmanRepository) {
   describe('findAll', () => {
@@ -7,14 +6,15 @@ export default function airmenRepositoryContract(subject: AirmanRepository) {
       const airmen = await subject.findAll();
       expect(airmen).toBeDefined();
 
+      debugger;
+
       expect(airmen.length).toBeGreaterThan(0);
 
       const uniqueIds = airmen.map(airman => airman.id).filter((el, i, a) => i === a.indexOf(el));
       expect(uniqueIds.length).toEqual(airmen.length);
 
       airmen.forEach(({qualifications}) => {
-        expect(qualifications.length).toBeGreaterThan(0);
-        expect(moment.isMoment(qualifications[0].expirationDate)).toBeTruthy();
+        expect(Array.isArray(qualifications)).toBeTruthy();
       });
 
       airmen.forEach(({certifications}) => {

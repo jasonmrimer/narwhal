@@ -30,9 +30,10 @@ describe('App', () => {
     );
     const routes = subject.find(Route);
 
-    expect(routes.length).toBe(2);
-    expect(routes.at(0).prop('path')).toBe('/dashboard');
-    expect(routes.at(1).prop('path')).toBe('/');
+    expect(routes.length).toBe(3);
+    expect(routes.at(0).prop('path')).toBe('/upload');
+    expect(routes.at(1).prop('path')).toBe('/dashboard');
+    expect(routes.at(2).prop('path')).toBe('/');
   });
 
   it('renders the Tracker component when the route is /', async () => {

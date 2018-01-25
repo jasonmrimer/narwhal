@@ -31,12 +31,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class EventControllerTest {
   private final static ObjectMapper objectMapper = new ObjectMapper();
   private final static JavaTimeModule module = new JavaTimeModule();
-  @Autowired
-  private MockMvc mockMvc;
-  @MockBean
-  private EventRepository repository;
-  @Captor
-  private ArgumentCaptor<Long> eventCaptor;
+
+  @Autowired private MockMvc mockMvc;
+  @MockBean private EventRepository repository;
+  @Captor private ArgumentCaptor<Long> eventCaptor;
 
   static {
     objectMapper.registerModule(module);

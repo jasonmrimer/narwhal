@@ -84,6 +84,7 @@ dependencies {
             'com.fasterxml.jackson.datatype:jackson-datatype-jsr310',
             'org.springframework.security.oauth:spring-security-oauth2',
             'org.hibernate:hibernate-java8',
+            'com.opencsv:opencsv:4.0',
             files(genJaxb.classesDir).builtBy(genJaxb)
     )
 

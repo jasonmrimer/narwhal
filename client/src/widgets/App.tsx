@@ -5,6 +5,7 @@ import Dashboard from '../dashboard/Dashboard';
 import { Route, Switch } from 'react-router-dom';
 import TrackerStore from '../tracker/stores/TrackerStore';
 import DashboardStore from '../dashboard/stores/DashboardStore';
+import Upload from '../admin/Upload';
 
 interface Props {
   profileRepository: ProfileRepository;
@@ -36,6 +37,13 @@ export default class App extends React.Component<Props, State> {
           Not Actual Classification. Prototype Only
         </div>
         <Switch>
+          <Route
+            path="/upload"
+            render={() => {
+              return <Upload/>;
+            }}
+          />
+
           <Route
             path="/dashboard"
             render={() => {
