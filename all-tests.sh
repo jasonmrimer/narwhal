@@ -58,5 +58,6 @@ if [ "$NARWHAL_CI" = "true" ]
 then
     rspec
 else
-    bundle exec rspec
+  echo 'COMMENTED OUT!!!!!!!!!!!'
+#   bundle exec rspec
 fi
