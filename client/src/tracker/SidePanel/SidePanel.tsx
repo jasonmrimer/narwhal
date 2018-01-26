@@ -66,9 +66,11 @@ export default styled(SidePanel)`
   background-color: ${props => props.theme.lighter};
   min-width: 380px;
   padding: 0 1rem;
-  position: absolute;
+  position: fixed;
   right: 0;
   height: 100%;
+  overflow: auto;
+  
   .header{
     justify-content: baseline;
   }

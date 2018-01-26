@@ -132,9 +132,14 @@ export default styled(Availability)`
     justify-content: flex-end;
 
     .add-event {
+      font-size: 12px;
       margin: 0.5rem 1rem;
       color: ${props => props.theme.fontColor};
-    }
+      :hover{
+      background: ${props => props.theme.fontColor};
+      color: ${props => props.theme.darkest};
+      }
+     }
   }
 
   .event-date {

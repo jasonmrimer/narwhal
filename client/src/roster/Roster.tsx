@@ -22,13 +22,13 @@ export class Roster extends React.Component<Props> {
         <caption>Roster</caption>
         <thead>
         <tr>
-          <th>
+          <th className="name">
             <div>NAME</div>
           </th>
-          <th>
+          <th className="qualification">
             <div>QUALIFICATION</div>
           </th>
-          <th>
+          <th className="certification">
             <div>CERTIFICATION</div>
             {this.renderCertificationFilter()}
           </th>
@@ -40,7 +40,12 @@ export class Roster extends React.Component<Props> {
             </div>
             {this.renderWeek()}
           </th>
-        </tr>
+            <div className="button-header">
+              <button className="next-week" onClick={this.props.trackerStore.incrementPlannerWeek}>
+                <NextIcon height={14} width={14}/>
+              </button>
+            </div>
+          </tr>
         </thead>
         <tbody>
         {this.renderAirmen()}
@@ -64,8 +69,9 @@ export class Roster extends React.Component<Props> {
         >
           <td>{airman.lastName}, {airman.firstName}</td>
           <td>{formatAttributes(airman.qualifications, 'acronym')}</td>
-          <td>{formatAttributes(airman.certifications, 'title')}</td>
+          <td className="certification-row">{formatAttributes(airman.certifications, 'title')}</td>
           <Planner events={airman.events} week={this.props.trackerStore.plannerWeek}/>
+          <td/>
         </tr>
       );
     });
@@ -74,7 +80,6 @@ export class Roster extends React.Component<Props> {
   private renderWeek() {
     return (
       <div className="planner-day-header">
-        <div/>
         {
           this.props.trackerStore.plannerWeek.map((day, index) =>
             <span key={index}>
@@ -83,11 +88,6 @@ export class Roster extends React.Component<Props> {
             </span>
           )
         }
-        <span className="button-header">
-          <button className="next-week" onClick={this.props.trackerStore.incrementPlannerWeek}>
-            <NextIcon height={14} width={14}/>
-          </button>
-        </span>
       </div>
     );
 
@@ -152,23 +152,37 @@ export default styled(Roster)`
     padding: 0.75rem;
   }
   
+  .name{
+  width: 16%;
+  }
+  
+  .qualification{
+  width: 14%;
+  }
+  
+  .certification{
+  width: 24%;
+  }
+  
   .planner-header {
     border-left: 1px solid ${props => props.theme.graySteel};
+    width: 45%;
   }
   
   .planner-day-header, .planner-row {
     display: flex;
     justify-content: space-between;
   }
-  
-  .planner-row {
-    border-left: 1px solid ${props => props.theme.graySteel};
+
+  .certification-row {
+    border-right: 1px solid ${props => props.theme.graySteel};
   }
   
   .planner-day-header span {
     display: flex;
     flex-direction: column;
     align-items: center;
+      
     
     div:first-child{
       padding-top: 0.5rem;
@@ -282,10 +296,8 @@ export default styled(Roster)`
   .button-header {
     display: flex;
     flex-direction: column;
-    justify-content: center
-  }
-  
-  .month-header {
-  margin-left: 2.5rem;
-  }
+    justify-content: center;
+    margin-top: 48px;
+    width: 1%;    
+  }   
 `;

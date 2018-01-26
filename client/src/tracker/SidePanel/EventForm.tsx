@@ -110,7 +110,13 @@ export class EventForm extends React.Component<Props, State> {
           onChange={this.handleChange}
         />
         <div className="date-time-row">
-          <input type="date" value={this.state.startDate} name="startDate" onChange={this.handleChange}/>
+          <input
+            type="date"
+            id="datetimepicker"
+            value={this.state.startDate}
+            name="startDate"
+            onChange={this.handleChange}
+          />
           <input
             className="time-input"
             type="text"
@@ -191,13 +197,18 @@ export default styled(EventForm)`
     width: fit-content;
     margin-left: auto;
     background: none;
-    color: inherit;
+    color: ${props => props.theme.fontColor};
     border: 1px solid ${props => props.theme.fontColor};
     padding: 0.5rem 1rem;
     font: inherit;
     font-size: 0.75rem;
+    font-weight: 400;
     cursor: pointer;
     outline: inherit;
+    :hover {
+      background: ${props => props.theme.fontColor};
+      color: ${props => props.theme.darkest};
+    }
   }
   
   input[type='radio'] {
@@ -233,4 +244,6 @@ export default styled(EventForm)`
       margin-left: 0.5rem;
     }
   }
+  
+  
 `;

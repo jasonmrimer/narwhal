@@ -39,9 +39,7 @@ export default (props: Props) => {
   const {events, week} = props;
   return (
     <td className={classNames(props.className, 'planner-row')}>
-      <span/>
       {week.map((day, index) => renderEvents(day, events, index))}
-      <span/>
     </td>
   );
 };

@@ -10,8 +10,6 @@ class TrackerPage
   @@expected_flights = ['DOA', 'DOM', 'DOP'].freeze
 
   def initialize
-    page.driver.browser.manage.window.resize_to(4096, 4096)
-
     expect(page).to have_content('All Sites')
 
     @@all_airmen_count = page.find_all('tbody tr').count
