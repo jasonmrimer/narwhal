@@ -18,6 +18,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$APPLICATION_CONFIG_DIR$/consoles/db/724c8c86-da39-40ec-8e37-d03f2ed20a12/console.sql">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$APPLICATION_CONFIG_DIR$/scratches/buffer1">
           <value>
             <set />
@@ -343,6 +348,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/resources/db/migration/V11__Create_and_populate_flight.sql">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/resources/db/migration/V10__Add_auto_increment_to_all_tables.sql">
           <value>
             <set />
@@ -359,6 +369,36 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/resources/db/migration/V13__Create_event_table.sql">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/resources/db/migration/V15__Add_more_airmen_data.sql">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/resources/db/migration/V1__Create_and_populate_airman.sql">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/resources/db/migration/V2__Create_and_populate_qualification.sql">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/resources/db/migration/V3__Create_and_populate_unit.sql">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/resources/db/migration/V4__Create_and_populate_certification.sql">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/resources/db/migration/V5__Add_expiration_date_to_qualifications_and_certifications.sql">
           <value>
             <set />
           </value>

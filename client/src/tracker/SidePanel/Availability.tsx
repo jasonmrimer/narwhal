@@ -99,7 +99,7 @@ export class Availability extends React.Component<Props, State> {
           <AirmanEvent
             key={index}
             event={event}
-            deleteEvent={this.props.trackerStore.deleteEvent}
+            deleteEvent={this.props.trackerStore.setPendingDeleteEvent}
             editEvent={this.openEventFormForEdit}
           />
         );

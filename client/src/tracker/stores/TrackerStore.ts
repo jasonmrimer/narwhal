@@ -33,6 +33,8 @@ export default class TrackerStore {
   @observable private _plannerWeek: Moment[] = [];
   @observable private _sidePanelWeek: Moment[] = [];
 
+  @observable private _pendingDeleteEvent: EventModel | null = null;
+
   constructor(airmanRepository: AirmanRepository,
               siteRepository: SiteRepository,
               certificationRepository: CertificationRepository,
@@ -185,7 +187,7 @@ export default class TrackerStore {
   clearSelectedAirman() {
     this.setSelectedAirman(AirmanModel.empty());
   }
-  
+
   @computed
   get selectedEvent() {
     return this._selectedEvent;
@@ -210,11 +212,23 @@ export default class TrackerStore {
   }
 
   @action.bound
-  async deleteEvent(event: EventModel) {
+  setPendingDeleteEvent(event: EventModel | null = null) {
+    this._pendingDeleteEvent = event;
+  }
+
+  @computed
+  get pendingDeleteEvent() {
+    return this._pendingDeleteEvent;
+  }
+
+  @action.bound
+  async deleteEvent() {
     try {
+      const event = this._pendingDeleteEvent!;
       await this.eventRepository.delete(event);
       this._airmen = await this.airmanRepository.findAll();
       this._selectedAirman = this._airmen.find(a => a.id === event.airmanId)!;
+      this.setPendingDeleteEvent(null);
     } catch (e) {
       // TODO : handle me!
     }

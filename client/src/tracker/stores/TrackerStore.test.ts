@@ -169,10 +169,27 @@ describe('TrackerStore', () => {
       expect(eventRepository.hasEvent(updatedEvent)).toBeTruthy();
     });
 
-    it('should delete an airman\'s event', async () => {
-      const savedEvent = await subject.addEvent(event);
-      await subject.deleteEvent(savedEvent);
-      expect(eventRepository.hasEvent(savedEvent)).toBeFalsy();
+    describe('delete', async () => {
+
+      it('should set pending delete event', async () => {
+        const savedEvent = await subject.addEvent(event);
+        expect(subject.pendingDeleteEvent).toBeNull();
+        subject.setPendingDeleteEvent(savedEvent);
+        expect(subject.pendingDeleteEvent).toEqual(savedEvent);
+      });
+
+      it('should cancel pending delete event', () => {
+        subject.setPendingDeleteEvent(null);
+        expect(subject.pendingDeleteEvent).toBeNull();
+      });
+
+      it('should delete an airman\'s event', async () => {
+        const savedEvent = await subject.addEvent(event);
+        subject.setPendingDeleteEvent(savedEvent);
+        await subject.deleteEvent();
+        expect(eventRepository.hasEvent(savedEvent)).toBeFalsy();
+        expect(subject.pendingDeleteEvent).toBeNull();
+      });
     });
   });
 

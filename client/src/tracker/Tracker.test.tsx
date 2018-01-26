@@ -7,6 +7,9 @@ import SidePanel from './SidePanel/SidePanel';
 import TopBar from '../widgets/TopBar';
 import TrackerStore from './stores/TrackerStore';
 import Legend from '../roster/Legend';
+import * as moment from 'moment';
+import EventModel, { EventType } from '../event/EventModel';
+import DeleteEventPopup from '../roster/DeleteEventPopup';
 
 let trackerStore: TrackerStore;
 let subject: ReactWrapper;
@@ -56,6 +59,13 @@ describe('Tracker', () => {
       subject.find(SidePanel).find('button').at(0).simulate('click');
       expect(subject.find(SidePanel).exists()).toBeFalsy();
     });
+  });
 
+  it('renders a delete popup when there is a pending delete event', () => {
+    const event = new EventModel('Title', 'Description', moment.utc(), moment.utc(), 1, EventType.Mission);
+    expect(subject.find(DeleteEventPopup).exists()).toBeFalsy();
+    trackerStore.setPendingDeleteEvent(event);
+    subject.update();
+    expect(subject.find(DeleteEventPopup).exists()).toBeTruthy();
   });
 });

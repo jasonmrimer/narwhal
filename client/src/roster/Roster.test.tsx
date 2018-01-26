@@ -32,7 +32,8 @@ describe('Roster', () => {
       'NAME',
       'QUALIFICATION',
       'CERTIFICATION',
-      'NOVEMBER 2017'
+      'NOVEMBER 2017',
+      '',
     ]);
     expect(table.getColumnSubHeaders(3)).toEqual('26SUN27MON28TUE29WED30THU01FRI02SAT');
     expect(subject.find('button.next-week').exists()).toBeTruthy();

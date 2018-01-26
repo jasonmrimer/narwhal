@@ -40,12 +40,12 @@ export class Roster extends React.Component<Props> {
             </div>
             {this.renderWeek()}
           </th>
-            <div className="button-header">
-              <button className="next-week" onClick={this.props.trackerStore.incrementPlannerWeek}>
-                <NextIcon height={14} width={14}/>
-              </button>
-            </div>
-          </tr>
+          <th className="button-header">
+            <button className="next-week" onClick={this.props.trackerStore.incrementPlannerWeek}>
+              <NextIcon height={14} width={14}/>
+            </button>
+          </th>
+        </tr>
         </thead>
         <tbody>
         {this.renderAirmen()}
@@ -114,7 +114,6 @@ export default styled(Roster)`
   border-top: none;
   width: 100%;
   
-   
   caption {
     display: none;
   }
@@ -133,7 +132,6 @@ export default styled(Roster)`
    
   tbody tr:hover {
     background-color: ${props => props.theme.darker}
-
   }
   
   tbody tr {
@@ -153,15 +151,15 @@ export default styled(Roster)`
   }
   
   .name{
-  width: 16%;
+    width: 16%;
   }
   
   .qualification{
-  width: 14%;
+    width: 14%;
   }
   
   .certification{
-  width: 24%;
+    width: 24%;
   }
   
   .planner-header {
@@ -182,7 +180,7 @@ export default styled(Roster)`
     display: flex;
     flex-direction: column;
     align-items: center;
-      
+    justify-content: center;  
     
     div:first-child{
       padding-top: 0.5rem;
@@ -297,7 +295,7 @@ export default styled(Roster)`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-top: 48px;
+    margin-top: 27px;
     width: 1%;    
   }   
 `;

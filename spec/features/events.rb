@@ -40,6 +40,16 @@ class Event
 
   def delete
     page.find('.event-title', text: @title).find('button.delete').click
+    expect(page.has_content?('REMOVE EVENT')).to be true
+
+    page.find('button.cancel', text: 'CANCEL').click
+    expect(page.has_content?('REMOVE EVENT')).to be false
+    expect(exists?).to be true
+    
+    page.find('.event-title', text: @title).find('button.delete').click
+    expect(page.has_content?('REMOVE EVENT')).to be true
+    
+    page.find('button.confirm', text: 'REMOVE').click
   end
   
   def exists?
