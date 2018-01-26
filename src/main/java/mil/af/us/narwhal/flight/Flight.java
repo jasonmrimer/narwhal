@@ -32,6 +32,10 @@ public class Flight {
     this.squadronId = squadronId;
   }
 
+  public Flight(String name) {
+    this.name = name;
+  }
+
   public Long getId() {
     return id;
   }

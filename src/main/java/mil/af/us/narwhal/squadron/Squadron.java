@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -28,11 +29,18 @@ public class Squadron {
     // no-arg contructor
   }
 
+  public Squadron(Long id, Long siteId, String name) {
+    this.id = id;
+    this.siteId = siteId;
+    this.name = name;
+    this.flights = new ArrayList<>();
+  }
+
   public Squadron(Long id, Long siteId, String name, List<Flight> flights) {
     this.id = id;
     this.siteId = siteId;
     this.name = name;
-    this.flights = flights;
+    this.flights = new ArrayList<>(flights);
   }
 
   public Long getId() {
@@ -65,6 +73,11 @@ public class Squadron {
 
   public void setFlights(List<Flight> flights) {
     this.flights = flights;
+  }
+
+  public void addFlight(Flight flight) {
+    flight.setSquadronId(this.id);
+    this.flights.add(flight);
   }
 
   @Override

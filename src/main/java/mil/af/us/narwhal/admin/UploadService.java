@@ -62,6 +62,10 @@ public class UploadService {
       .stream()
       .filter(f -> f.getName().equals(row.getFlight()))
       .findFirst()
-      .orElseGet(() -> flightRepository.save(new Flight(squadron.getId(), row.getFlight())));
+      .orElseGet(() -> {
+        Flight flight = new Flight(row.getFlight());
+        squadron.addFlight(flight);
+        return flightRepository.save(flight);
+      });
   }
 }

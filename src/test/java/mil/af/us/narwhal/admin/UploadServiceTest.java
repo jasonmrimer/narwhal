@@ -27,9 +27,10 @@ import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class UploadServiceTest {
+  private final Long flightId = 123L;
   private final Flight flight = new Flight(1L, 1L, "FLIGHT1");
-  private final Squadron squadron = new Squadron(1L, 1L, "SQUAD1", singletonList(flight));
-  private final Site site = new Site(1L, "SITE1", singletonList(squadron));
+  private final Squadron squadron = new Squadron(1L, 1L, "SQUAD1", asList(flight));
+  private final Site site = new Site(1L, "SITE1", asList(squadron));
   @Mock private AirmanRepository airmanRepository;
   @Mock private SiteRepository siteRepository;
   @Mock private FlightRepository flightRepository;
@@ -39,6 +40,14 @@ public class UploadServiceTest {
   @Before
   public void setUp() {
     when(siteRepository.findOneByName(site.getName())).thenReturn(site);
+
+    when(flightRepository.save(any(Flight.class)))
+      .thenAnswer((Answer<Flight>) invocation -> {
+        Flight flight = invocation.getArgumentAt(0, Flight.class);
+        flight.setId(flightId);
+        return flight;
+      });
+
     subject = new UploadService(airmanRepository, siteRepository, flightRepository);
   }
 
@@ -60,21 +69,22 @@ public class UploadServiceTest {
 
   @Test
   public void testImportToDatabase_createsUnknownFlights() {
-    final Long flightId = 123L;
-    when(flightRepository.save(any(Flight.class)))
-      .thenAnswer((Answer<Flight>) invocation -> {
-        Flight flight = invocation.getArgumentAt(0, Flight.class);
-        flight.setId(flightId);
-        return flight;
-      });
-
-    final List<UploadCSVRow> rows = singletonList(
+    subject.importToDatabase(singletonList(
       new UploadCSVRow("first1", "last1", site.getName(), squadron.getName(), "FLIGHT2")
-    );
-    subject.importToDatabase(rows);
+    ));
 
     verify(airmanRepository).save(airmenCaptor.capture());
     assertThat(airmenCaptor.getValue()).containsExactlyInAnyOrder(new Airman(flightId, "first1", "last1"));
+  }
+
+  @Test
+  public void testImportToDatabase_doesNotDuplicateFlights_whenTheFlightAppearsTwice() {
+    subject.importToDatabase(asList(
+      new UploadCSVRow("first1", "last1", site.getName(), squadron.getName(), "NEW FLIGHT NAME"),
+      new UploadCSVRow("first2", "last2", site.getName(), squadron.getName(), "NEW FLIGHT NAME")
+    ));
+
+    verify(flightRepository, times(1)).save(any(Flight.class));
   }
 
   @Test
