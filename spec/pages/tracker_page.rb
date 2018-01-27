@@ -86,13 +86,13 @@ class TrackerPage
     click_on_airman('Keeter')
 
     event = Event.new
-
+    
     event.create
     expect(event).to exist
-
+    
     event.update
     expect(event).to exist
-
+    
     event.delete
     expect(event).not_to exist
   end
@@ -117,14 +117,6 @@ class TrackerPage
 
   def delete_event(event)
     page.find('.event-title', text: event.title).find('button.delete').click
-  end
-
-  def has_event(event)
-    page.within('.side-panel') do
-      page.has_content?(event.start.strftime('%d %^b %y')) &&
-      page.has_content?(event.title) &&
-      page.has_content?(event.start.strftime('%H%MZ') + ' - ' + event.end.strftime('%H%MZ'))
-    end
   end
 
   def filter(item, value)

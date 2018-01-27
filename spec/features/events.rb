@@ -41,15 +41,16 @@ class Event
   def delete
     page.find('.event-title', text: @title).find('button.delete').click
   end
-
+  
   def exists?
     page.within('.side-panel') do
+      page.has_content?('AVAILABILITY') && 
       page.has_content?(@start.strftime('%d %^b %y')) &&
       page.has_content?(@title) &&
       page.has_content?(@start.strftime('%H%MZ') + ' - ' + @end.strftime('%H%MZ'))
     end
   end
-
+  
   private
 
   def set_attrs
