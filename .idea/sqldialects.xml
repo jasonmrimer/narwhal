@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="SqlDialectMappings">
-    <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V13__Create_event_table.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V1__Create_and_populate_airman.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V2__Create_and_populate_qualification.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V3__Create_and_populate_unit.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V3__Create_and_populate_squadron.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V4__Create_and_populate_certification.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V5__Add_expiration_date_to_qualifications_and_certifications.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V6__Add_mission_table.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V7__Add_dates_to_mission_table.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V8__Create_and_populate_site.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V5__Add_mission_table.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V6__Create_and_populate_site.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V8__Create_event_table.sql" dialect="MySQL" />
     <file url="PROJECT" dialect="PostgreSQL" />
   </component>
 </project>

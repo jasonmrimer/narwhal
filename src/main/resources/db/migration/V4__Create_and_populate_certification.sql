@@ -1,5 +1,5 @@
 CREATE TABLE certification (
-  id      INT         NOT NULL,
+  id      INT         NOT NULL AUTO_INCREMENT,
   title   VARCHAR(64) NOT NULL,
   PRIMARY KEY (id)
 );

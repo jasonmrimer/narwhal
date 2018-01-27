@@ -25,7 +25,7 @@ class Event
     page.within('.side-panel') do
       find('.event-title', text: @title).click
       expect(find_field('title').value).to eq @title
-      find_field("Appointment", visible: false).should be_checked
+      expect(find_field("Appointment", visible: false)).to be_checked
 
       set_attrs
 

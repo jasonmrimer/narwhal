@@ -7,7 +7,7 @@ class TrackerPage
 
   @@expected_columns = %w(NAME QUALIFICATION CERTIFICATION SUN MON TUE WED THU FRI SAT).freeze
   @@expected_availability_days = %w(SUN MON TUE WED THU FRI SAT).freeze
-  @@expected_flights = ['SUPER FLIGHT'].freeze
+  @@expected_flights = ['DOA', 'DOM', 'DOP'].freeze
 
   def initialize
     page.driver.browser.manage.window.resize_to(4096, 4096)
@@ -38,7 +38,7 @@ class TrackerPage
     filter('site', 'DGS-1')
     site_count = page.find_all('tbody tr').count
 
-    expect(page).to have_content('All Squadron')
+    expect(page).to have_content('All Squadrons')
     filter('squadron', '30 IS')
     expect(page).to have_css('tbody tr', maximum: site_count - 1)
   end
@@ -49,7 +49,7 @@ class TrackerPage
     squadron_count = page.find_all('tbody tr').count
 
     expect(page).to have_content('All Flights')
-    filter('flight', 'SUPER FLIGHT')
+    filter('flight', 'DOA')
     expect(page).to have_css('tbody tr', maximum: squadron_count - 1)
   end
 
@@ -60,30 +60,30 @@ class TrackerPage
   end
 
   def assert_shows_availability
-    click_on_airman('LastName1')
+    click_on_airman('Spaceman')
     page.within('.side-panel') do
       expect(page).to have_content('AVAILABILITY')
-      expect(page).to have_content('LastName1, FirstName1')
+      expect(page).to have_content('Spaceman, Corey')
       @@expected_availability_days.each { |day_name| expect(page).to have_content(day_name) }
     end
     can_forward_to_next_week
   end
 
   def assert_shows_currency
-    click_on_airman('LastName1')
+    click_on_airman('Spaceman')
     page.within('.side-panel') do
       find('a', text: 'CURRENCY').click
       expect(page).to have_content('CURRENCY')
-      expect(page).to have_content('LastName1, FirstName1')
-      expect(page).to have_content('MMS')
-      expect(page).to have_content('25 Jan 18')
+      expect(page).to have_content('Spaceman, Corey')
+      expect(page).to have_content('QB')
+      expect(page).to have_content('25 Jan 19')
       expect(page).to have_content('Laser Vision')
-      expect(page).to have_content('18 Jan 18')
+      expect(page).to have_content('25 Jan 19')
     end
   end
 
   def assert_create_update_delete_event
-    click_on_airman('LastName2')
+    click_on_airman('Keeter')
 
     event = Event.new
 
