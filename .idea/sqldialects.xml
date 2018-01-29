@@ -3,11 +3,7 @@
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V1__Create_and_populate_airman.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V2__Create_and_populate_qualification.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V3__Create_and_populate_squadron.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V4__Create_and_populate_certification.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V5__Add_mission_table.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V6__Create_and_populate_site.sql" dialect="MySQL" />
-    <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V8__Create_event_table.sql" dialect="MySQL" />
     <file url="PROJECT" dialect="PostgreSQL" />
   </component>
 </project>

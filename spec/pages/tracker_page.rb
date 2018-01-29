@@ -30,27 +30,27 @@ class TrackerPage
 
   def assert_filters_by_site
     expect(page).to have_content('All Sites')
-    filter('site', 'DGS-1')
-    expect(page).to have_css('tbody tr', maximum: @@all_airmen_count - 1)
+    filter('site', 'DMS-MD')
+    expect(page).to have_css('tbody tr', maximum: @@all_airmen_count)
   end
 
   def assert_filters_by_squadron
-    filter('site', 'DGS-1')
+    filter('site', 'DMS-MD')
     site_count = page.find_all('tbody tr').count
 
     expect(page).to have_content('All Squadrons')
-    filter('squadron', '30 IS')
-    expect(page).to have_css('tbody tr', maximum: site_count - 1)
+    filter('squadron', '94 IS')
+    expect(page).to have_css('tbody tr', maximum: site_count)
   end
 
   def assert_filters_by_flight
-    filter('site', 'DGS-1')
-    filter('squadron', '30 IS')
+    filter('site', 'DMS-MD')
+    filter('squadron', '94 IS')
     squadron_count = page.find_all('tbody tr').count
 
     expect(page).to have_content('All Flights')
-    filter('flight', 'DOA')
-    expect(page).to have_css('tbody tr', maximum: squadron_count - 1)
+    filter('flight', 'DOB')
+    expect(page).to have_css('tbody tr', maximum: squadron_count)
   end
 
   def assert_filters_by_certification

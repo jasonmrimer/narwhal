@@ -8,20 +8,20 @@ CREATE TABLE qualification (
 INSERT INTO
   qualification (id, acronym, title)
 VALUES
-  (1, 'QB', 'Quarterback'),
-  (2, 'WR', 'Wide Receiver'),
-  (3, 'RB', 'Running Back'),
-  (4, 'TE', 'Tight End'),
-  (5, 'C', 'Center'),
-  (6, 'OG', 'Offensive Guard'),
-  (7, 'OT', 'Offensive Tackle'),
-  (8, 'DT', 'Defensive Tackle'),
-  (9, 'DE', 'Defensive End'),
-  (10, 'MLB', 'Middle Linebacker'),
-  (11, 'LB', 'Outside Linebacker'),
-  (12, 'CB', 'Cornerback'),
-  (13, 'S', 'Safety'),
-  (14, 'K', 'Kicker');
+  (1, 'QB', 'My Mission Supervisor'),
+  (2, 'WR', 'Multi Source Analyst'),
+  (3, 'RB', 'Mission Operations Commander'),
+  (4, 'CB', 'Imagery Mission Supervisor'),
+  (5, 'HB', 'Geospatial Reports Editor'),
+  (6, 'FB', 'Screener'),
+  (7, 'C', 'Geospatial Analyst'),
+  (8, 'TE', 'Ground Mission Supervisor'),
+  (9, 'K', 'Special Signals Operator'),
+  (10, 'SP', 'Cryptologic Mission Supervisor'),
+  (11, 'WB', 'Cryptologic Operator with Language'),
+  (12, 'JK', 'Cryptologic Operator W/O Language'),
+  (13, 'HT', 'Instructor'),
+  (14, 'XW', 'Evaluator');
 
 CREATE TABLE join_airman_qualification (
   airman_id        INT NOT NULL,

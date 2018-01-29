@@ -23,6 +23,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/Dockerfile">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/all-tests.sh">
           <value>
             <set />
@@ -354,6 +359,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/resources/db/migration/V13__Create_event_table.sql">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/resources/db/migration/V15__Add_more_airmen_data.sql">
           <value>
             <set />
           </value>

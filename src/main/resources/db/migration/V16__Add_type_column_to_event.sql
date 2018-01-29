@@ -1,0 +1,2 @@
+ALTER TABLE event
+ADD type varchar(65) NOT NULL DEFAULT 'MISSION';
