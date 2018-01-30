@@ -2,9 +2,11 @@
 
 set -e
 
+BASE_DIR=`pwd`
+
 function cleanup {
-    cat ./tmp/narwhal.pid | xargs kill -9
-    rm ./tmp/narwhal.pid
+    cat ${BASE_DIR}/tmp/narwhal.pid | xargs kill -9
+    rm ${BASE_DIR}/tmp/narwhal.pid
 }
 trap cleanup EXIT
 
@@ -49,6 +51,8 @@ until curl http://localhost:9090 &>/dev/null; do
         echo "Attempting to connect to the app server..."
     fi
 done
+
+./scripts/seed_db.sh
 
 pushd client
     CI=true yarn contracts

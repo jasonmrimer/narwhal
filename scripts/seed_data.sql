@@ -149,3 +149,9 @@ INSERT INTO join_airman_qualification VALUES
 (37, 12, '2019-01-25'),
 (38, 13, '2019-02-25'),
 (39, 14, '2019-03-25');
+
+INSERT INTO mission VALUES
+  (1, 'XXX-FAKE-MISSION-1', NOW(), NOW(), 1),
+  (2, 'YYY-FAKE-MISSION-2', NOW(), NOW(), 1),
+  (3, 'ZZZ-FAKE-MISSION-3', NOW(), NOW(), 2),
+  (4, 'AAA-FAKE-MISSION-4', NOW(), NOW(), 2);
