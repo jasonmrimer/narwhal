@@ -18,7 +18,7 @@ Set the following environment variables:
 - `NARWHAL_DB_PASSWORD`
 
 ### Setup the Database
-* `./setup_db.sh`
+* `./scripts/setup_db.sh`
 
 ## Build
 ### Client
@@ -28,6 +28,9 @@ Set the following environment variables:
 * `./gradlew assemble`
 
 ## Develop
+### Seed the Development Database
+* `./scripts/seed_db.sh`
+
 ### Client Development Server
 * `cd client && yarn start`
 
