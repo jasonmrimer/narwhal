@@ -15,6 +15,7 @@ let airman: AirmanModel;
 let subject: ReactWrapper;
 let eventOne: EventModel;
 let eventTwo: EventModel;
+let eventThree: EventModel;
 
 describe('Availability', () => {
   beforeEach(async () => {
@@ -35,7 +36,16 @@ describe('Availability', () => {
       1,
       EventType.Mission
     );
-    airman.events = [eventOne, eventTwo];
+    eventThree = new EventModel(
+      'Event Three',
+      '',
+      moment('2017-11-27T12:00:00.000Z'),
+      moment('2017-11-30T15:00:00.000Z'),
+      1,
+      EventType.Leave
+    );
+
+    airman.events = [eventOne, eventTwo, eventThree];
 
     trackerStore = await makeFakeTrackerStore();
     trackerStore.setSelectedAirman(airman);
@@ -55,12 +65,12 @@ describe('Availability', () => {
   });
 
   it('renders a list of events', () => {
-    expect(subject.find(AirmanEvent).length).toBe(2);
+    expect(subject.find(AirmanEvent).length).toBe(6);
   });
 
   it('renders all the scheduled events for the given day', () => {
     const dateWrapper = subject.find('#day-1');
-    expect(dateWrapper.find(AirmanEvent).length).toBe(2);
+    expect(dateWrapper.find(AirmanEvent).length).toBe(3);
     expect(dateWrapper.find('.event-date').text()).toContain('MON, 27 NOV 17');
   });
 

@@ -6,6 +6,7 @@ import AppointmentIcon from '../icons/AppointmentIcon';
 import LeaveIcon from '../icons/LeaveIcon';
 import MissionIcon from '../icons/MissionIcon';
 import AvailableIcon from '../icons/AvailableIcon';
+import { doesDayHaveEvent } from '../utils/eventUtil';
 
 interface Props {
   events: EventModel[];
@@ -27,7 +28,7 @@ const renderEventType = (type: EventType, key: number) => {
 };
 
 const renderEvents = (day: Moment, events: EventModel[], key: number) => {
-  const matchedEvents = events.filter(event => day.isSame(event.startTime, 'day'));
+  const matchedEvents = events.filter(event => doesDayHaveEvent(day, event));
   if (matchedEvents.length > 0) {
     return renderEventType(matchedEvents[0].type, key);
   } else {

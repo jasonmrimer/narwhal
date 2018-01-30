@@ -20,7 +20,6 @@ describe('AirmanEvent', () => {
   it('renders the event attributes', () => {
     expect(subject.text()).toContain('Dentist');
     expect(subject.text()).toContain('0800Z - 0900Z');
-    expect(subject.text()).toContain('22 NOV 17');
   });
 
   it('has an actionable delete button', () => {

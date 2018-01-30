@@ -18,7 +18,8 @@ describe('Planner', () => {
       moment.utc('2017-11-26T06:00:00.000Z'),
       1,
       EventType.Appointment,
-      1);
+      1
+    );
 
     const mission = new EventModel(
       'Mission',
@@ -26,16 +27,19 @@ describe('Planner', () => {
       moment.utc('2017-11-27T05:00:00.000Z'),
       moment.utc('2017-11-27T06:00:00.000Z'),
       1,
-      EventType.Mission, 2);
+      EventType.Mission,
+      2
+    );
 
     const leave = new EventModel(
       'Leave',
       '',
       moment.utc('2017-11-28T05:00:00.000Z'),
-      moment.utc('2017-11-28T05:00:00.000Z'),
+      moment.utc('2017-11-30T05:00:00.000Z'),
       1,
       EventType.Leave,
-      3);
+      3
+    );
 
     const events = [
       appointment,
@@ -47,7 +51,7 @@ describe('Planner', () => {
 
     expect(subject.find(AppointmentIcon).length).toBe(1);
     expect(subject.find(MissionIcon).length).toBe(1);
-    expect(subject.find(LeaveIcon).length).toBe(1);
-    expect(subject.find(AvailableIcon).length).toBe(4);
+    expect(subject.find(LeaveIcon).length).toBe(3);
+    expect(subject.find(AvailableIcon).length).toBe(2);
   });
 });

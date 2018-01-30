@@ -7,6 +7,7 @@ import EventForm from './EventForm';
 import { observer } from 'mobx-react';
 import TrackerStore from '../stores/TrackerStore';
 import NextIcon from '../../icons/NextIcon';
+import { doesDayHaveEvent } from '../../utils/eventUtil';
 
 interface Props {
   trackerStore: TrackerStore;
@@ -91,7 +92,7 @@ export class Availability extends React.Component<Props, State> {
   }
 
   private scheduledEventsForDate = (day: Moment, events: EventModel[]) => {
-    const eventsForDay = events.filter((event) => day.isSame(event.startTime, 'day'));
+    const eventsForDay = events.filter(event => doesDayHaveEvent(day, event));
     return eventsForDay.length === 0
       ? <div className="event-name">No Events Scheduled</div>
       : eventsForDay.map((event, index) => {

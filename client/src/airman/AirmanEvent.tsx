@@ -20,7 +20,6 @@ export const AirmanEvent = observer((props: Props) => {
   return (
     <div className={props.className} onClick={() => props.editEvent(props.event)}>
       <div className="event-title">
-        <span>{props.event.startTime.format('DD MMM YY').toUpperCase()}</span>
         <span>{props.event.title}</span>
         <button className="delete" onClick={(e) => handleDelete(e, props)}>
           <DeleteIcon/>
