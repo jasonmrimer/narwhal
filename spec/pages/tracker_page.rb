@@ -84,7 +84,7 @@ class TrackerPage
     click_on_airman('Keeter')
 
     event = Event.new
-    
+
     event.create
     expect(event).to exist
     
@@ -122,7 +122,9 @@ class TrackerPage
   end
 
   def delete_event(event)
-    page.find('.event-title', text: event.title).find('button.delete').click
+    page.within('.side-panel') do
+      page.find('.event-title', text: event.title).find('button.delete').click
+    end
   end
 
   def filter(item, value)

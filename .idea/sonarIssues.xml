@@ -68,6 +68,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/client/src/airman/AirmanEvent.tsx">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/client/src/airman/factories/AirmanModelFactory.ts">
           <value>
             <set />
@@ -184,6 +189,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/spec/pages/tracker_page.rb">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/spec/spec_helper.rb">
           <value>
             <set />
           </value>

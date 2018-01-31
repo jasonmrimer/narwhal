@@ -3,8 +3,8 @@ import styled from 'styled-components';
 
 interface Props {
   username: string;
-  className?: string;
   pageTitle: string;
+  className?: string;
 }
 
 export const TopBar = (props: Props) => {

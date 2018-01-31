@@ -4,7 +4,10 @@ import * as moment from 'moment';
 import styled from 'styled-components';
 import BackIcon from '../../icons/BackIcon';
 import theme from '../../themes/default';
-import * as classNames from 'classnames';
+import DatePicker from '../../widgets/DatePicker';
+import FieldValidation from '../../widgets/FieldValidation';
+import TextInput from '../../widgets/TextInput';
+import RadioButtons from '../../widgets/RadioButtons';
 
 interface Props {
   airmanId: number;
@@ -74,91 +77,58 @@ export class EventForm extends React.Component<Props, State> {
     ));
   }
 
-  renderEventTypeRadios() {
-    return Object.keys(EventType).map((type, key) => {
-      const isChecked = this.state.eventType === EventType[type];
-      return (
-        <label key={key} className={classNames('input-wrapper', {checked: isChecked})}>
-          <input
-            type="radio"
-            name="eventType"
-            value={EventType[type]}
-            onChange={this.handleChange}
-            checked={isChecked}
-          />
-          {type}
-        </label>
-      );
-    });
-  }
-
-  fieldHasError(field: string) {
-    if (this.props.event && this.props.event.errors) {
-      return this.props.event.errors.findIndex(error => error.hasOwnProperty(field)) > -1;
-    }
-    return false;
-  }
-
-  renderErrorMsg() {
-    return <div className="error-msg">This field is required.</div>;
-  }
-
   render() {
     return (
       <form className={this.props.className} onSubmit={this.handleSubmit}>
+
         <a className="back" onClick={this.props.hideEventForm}>
           <BackIcon color={theme.graySteel}/>
           <span>Back to Week View</span>
         </a>
+
         <div>Select Event Type:</div>
-        {this.renderEventTypeRadios()}
-        <div className={classNames('input-wrapper', {error: this.fieldHasError('title')})}>
-          <input type="text" placeholder="Title" value={this.state.title} name="title" onChange={this.handleChange}/>
-          {this.fieldHasError('title') && this.renderErrorMsg()}
-        </div>
-        <div className="input-wrapper">
-          <input
-            type="text"
+        <RadioButtons
+          options={Object.keys(EventType).map(key => EventType[key])}
+          value={this.state.eventType}
+          onChange={this.handleChange}
+        />
+
+        <FieldValidation name="title" errors={this.props.event ? this.props.event.errors : null}>
+          <TextInput
+            placeholder="Title"
+            value={this.state.title}
+            name="title"
+            onChange={this.handleChange}
+          />
+        </FieldValidation>
+
+        <div>
+          <TextInput
             placeholder="Description"
             value={this.state.description}
             name="description"
             onChange={this.handleChange}
           />
         </div>
-        <div className={classNames('input-wrapper', {error: this.fieldHasError('startTime')})}>
-          <div className="date-time-row">
-            <input
-              type="date"
-              id="datetimepicker"
-              value={this.state.startDate}
-              name="startDate"
-              onChange={this.handleChange}
-            />
-            <input
-              className="time-input"
-              type="text"
-              placeholder="hh:mm"
-              value={this.state.startTime}
-              name="startTime"
-              onChange={this.handleChange}
-            />
-          </div>
-          {this.fieldHasError('startTime') && this.renderErrorMsg()}
-        </div>
-        <div className={classNames('input-wrapper', {error: this.fieldHasError('endTime')})}>
-          <div className="date-time-row">
-            <input type="date" value={this.state.endDate} name="endDate" onChange={this.handleChange}/>
-            <input
-              className="time-input"
-              type="text"
-              placeholder="hh:mm"
-              value={this.state.endTime}
-              name="endTime"
-              onChange={this.handleChange}
-            />
-          </div>
-          {this.fieldHasError('endTime') && this.renderErrorMsg()}
-        </div>
+
+        <FieldValidation name="startTime" errors={this.props.event ? this.props.event.errors : null}>
+          <DatePicker
+            dateValue={this.state.startDate}
+            timeValue={this.state.startTime}
+            onChange={this.handleChange}
+            name="start"
+          />
+        </FieldValidation>
+
+        <FieldValidation name="endTime" errors={this.props.event ? this.props.event.errors : null}>
+          <DatePicker
+            dateValue={this.state.endDate}
+            timeValue={this.state.endTime}
+            onChange={this.handleChange}
+            name="end"
+          />
+        </FieldValidation>
+
         <input type="submit" value="CONFIRM"/>
       </form>
     );
@@ -170,56 +140,7 @@ export default styled(EventForm)`
   display: flex;
   flex-direction: column;
   color: ${props => props.theme.graySteel};
-  
-  .input-wrapper {
-    margin: 1rem 1rem 0rem 1rem;
-  
-    input {
-      background: none;
-      color: inherit;
-      border: none;
-      padding: 0;
-      font: inherit;
-      cursor: pointer;
-      outline: inherit;
-    }
-    
-    &.error {
-      input[type="text"], input[type="date"] {
-        border-bottom: 1px solid ${props => props.theme.yellow};
-      } 
-      .error-msg{
-      margin-top: 0.5rem;
-      width:fit-content;
-      background: ${props => props.theme.yellow};
-      color: ${props => props.theme.darkest};
-      font-weight: 600;
-      }
-    }
-  }
-
-  input[type="text"], input[type="date"] {
-    border-bottom: 1px solid ${props => props.theme.graySteel};
-  }
-  
-  label, .time-input::placeholder {
-    color: ${props => props.theme.fontColor};
-  }
-  
-  label.checked {
-    color: ${props => props.theme.yellow}
-  }
-  
-  .date-time-row {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    
-    &::-webkit-inner-spin-button {
-      display: none;
-    }
-  }
-  
+      
   input[type="submit"] {
     margin-top: 2rem;
     width: fit-content;
@@ -238,27 +159,7 @@ export default styled(EventForm)`
       color: ${props => props.theme.darkest};
     }
   }
-  
-  input[type='radio'] {
-    visibility: hidden;
-    margin: 0 1rem 0 0;
-  }
-  
-  input[type='radio']:before {
-    content: ' ';
-    visibility: visible;
-    border: 1px solid ${props => props.theme.graySteel};
-    width: 1rem;
-    height: 1rem;
-    display: inline-block;
-    border-radius: 50%;
-    transition: all .25s ease-in-out;
-  }
-  
-  input[type='radio']:checked:before {
-   background: ${props => props.theme.graySteel};
-  }
-  
+
   .back{
     cursor: pointer;
     fill: ${props => props.theme.graySteel};

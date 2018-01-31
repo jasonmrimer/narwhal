@@ -10,7 +10,7 @@ class Event
   def create_invalid
     page.within('.side-panel') do
       click_link_or_button '+ Add Event'
-      find('label', text: 'Appointment').click
+      find('label', text: 'APPOINTMENT').click
       
       fill_in 'description', with: "invalid event"
       find('input[type="submit"]').click
@@ -20,7 +20,7 @@ class Event
   def create
     page.within('.side-panel') do
       click_link_or_button '+ Add Event'
-      find('label', text: 'Appointment').click
+      find('label', text: 'APPOINTMENT').click
 
       fill_in 'title', with: @title
       fill_in 'startDate', with: @start.strftime('%m/%d/%Y')
@@ -33,9 +33,10 @@ class Event
 
   def update
     page.within('.side-panel') do
-      find('.event-title', text: @title).click
+      scroll_to(page.find('.event-title', text: @title))
+      page.find('.event-title', text: @title).click
       expect(find_field('title').value).to eq @title
-      expect(find_field("Appointment", visible: false)).to be_checked
+      expect(find_field('APPOINTMENT', visible: false)).to be_checked
 
       set_attrs
 
@@ -49,6 +50,7 @@ class Event
   end
 
   def delete
+    scroll_to(page.find('.event-title', text: @title).find('button.delete'))
     page.find('.event-title', text: @title).find('button.delete').click
     expect(page.has_content?('REMOVE EVENT')).to be true
 
@@ -77,5 +79,13 @@ class Event
     @start = Time.now.utc
     @end = @start + 3600
     @title = "Test Event #{Time.now}"
+  end
+
+  def scroll_to(element)
+    script = <<-JS
+      arguments[0].scrollIntoView(true);
+    JS
+
+    Capybara.current_session.driver.browser.execute_script(script, element.native)
   end
 end
