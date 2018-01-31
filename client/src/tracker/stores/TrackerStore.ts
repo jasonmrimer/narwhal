@@ -205,10 +205,14 @@ export default class TrackerStore {
 
   @action.bound
   async addEvent(event: EventModel) {
-    const savedEvent = await this.eventRepository.save(event);
-    this._airmen = await this.airmanRepository.findAll();
-    this._selectedAirman = this._airmen.find(a => a.id === event.airmanId)!;
-    return savedEvent;
+    const pendingEvent = await this.eventRepository.save(event);
+    if (pendingEvent.errors) {
+      this._selectedEvent = pendingEvent;
+    } else {
+      this._airmen = await this.airmanRepository.findAll();
+      this._selectedAirman = this._airmen.find(a => a.id === event.airmanId)!;
+    }
+    return pendingEvent;
   }
 
   @action.bound

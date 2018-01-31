@@ -86,6 +86,22 @@ describe('EventForm', () => {
 
     expect(handleSubmitSpy).toHaveBeenCalledWith(event);
   });
+
+  it('renders a form with validation errors', () => {
+    const dateTime = moment.utc('2018-01-10 00:00', 'YYYY-MM-DD HH:mm');
+    const errors = [{title: 'Field is required'}];
+    const event = new EventModel('Title', 'Description', dateTime, dateTime, airmanId, EventType.Leave, 1, errors);
+    subject = shallow(
+      <EventForm
+        airmanId={airmanId}
+        handleSubmit={handleSubmitSpy}
+        hideEventForm={hideEventFormMock}
+        event={event}
+      />
+    );
+
+    expect(subject.text()).toContain('This field is required.');
+  });
 });
 
 function findInputByName(wrapper: ShallowWrapper, name: string) {

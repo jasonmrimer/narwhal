@@ -28,6 +28,13 @@ export default function EventRepositoryContract(subject: EventRepository) {
       expect(savedEvent1.id).toBe(updatedEvent1.id);
       expect(updatedEvent1.title).toBe('Updated Title');
     });
+    describe('validation', () => {
+      it('correctly handles validations from the server', async () => {
+        const event = new EventModel('', 'description1', moment.utc(), moment.utc(), 1, EventType.Leave);
+        const response = await subject.save(event);
+        expect(response.errors).toBeDefined();
+      });
+    });
   });
 
   describe('delete', () => {
@@ -56,4 +63,5 @@ export default function EventRepositoryContract(subject: EventRepository) {
       throw new Error('Should have failed to delete the event');
     });
   });
+
 }

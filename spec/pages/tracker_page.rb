@@ -95,6 +95,14 @@ class TrackerPage
     expect(event).not_to exist
   end
 
+  def assert_create_event_validation
+    click_on_airman('Keeter')
+    event = Event.new
+
+    event.create_invalid
+    expect(page.has_content?('This field is required.')).to be true
+  end
+
   private
 
   def click_on_airman(name)

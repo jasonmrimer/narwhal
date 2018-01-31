@@ -169,7 +169,7 @@ export default styled(Roster)`
   
   .planner-day-header, .planner-row {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
   }
 
   .certification-row {

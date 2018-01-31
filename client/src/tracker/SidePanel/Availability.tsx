@@ -48,8 +48,10 @@ export class Availability extends React.Component<Props, State> {
   }
 
   private submitAndCloseEventForm = async (event: EventModel) => {
-    await this.props.trackerStore.addEvent(event);
-    this.closeEventForm();
+    const response = await this.props.trackerStore.addEvent(event);
+    if (!response.errors) {
+      this.closeEventForm();
+    }
   }
 
   private closeEventForm = () => {

@@ -78,7 +78,7 @@ export class EventForm extends React.Component<Props, State> {
     return Object.keys(EventType).map((type, key) => {
       const isChecked = this.state.eventType === EventType[type];
       return (
-        <label key={key} className={classNames({checked: isChecked})}>
+        <label key={key} className={classNames('input-wrapper', {checked: isChecked})}>
           <input
             type="radio"
             name="eventType"
@@ -92,6 +92,17 @@ export class EventForm extends React.Component<Props, State> {
     });
   }
 
+  fieldHasError(field: string) {
+    if (this.props.event && this.props.event.errors) {
+      return this.props.event.errors.findIndex(error => error.hasOwnProperty(field)) > -1;
+    }
+    return false;
+  }
+
+  renderErrorMsg() {
+    return <div className="error-msg">This field is required.</div>;
+  }
+
   render() {
     return (
       <form className={this.props.className} onSubmit={this.handleSubmit}>
@@ -101,41 +112,52 @@ export class EventForm extends React.Component<Props, State> {
         </a>
         <div>Select Event Type:</div>
         {this.renderEventTypeRadios()}
-        <input type="text" placeholder="Title" value={this.state.title} name="title" onChange={this.handleChange}/>
-        <input
-          type="text"
-          placeholder="Description"
-          value={this.state.description}
-          name="description"
-          onChange={this.handleChange}
-        />
-        <div className="date-time-row">
+        <div className={classNames('input-wrapper', {error: this.fieldHasError('title')})}>
+          <input type="text" placeholder="Title" value={this.state.title} name="title" onChange={this.handleChange}/>
+          {this.fieldHasError('title') && this.renderErrorMsg()}
+        </div>
+        <div className="input-wrapper">
           <input
-            type="date"
-            id="datetimepicker"
-            value={this.state.startDate}
-            name="startDate"
-            onChange={this.handleChange}
-          />
-          <input
-            className="time-input"
             type="text"
-            placeholder="hh:mm"
-            value={this.state.startTime}
-            name="startTime"
+            placeholder="Description"
+            value={this.state.description}
+            name="description"
             onChange={this.handleChange}
           />
         </div>
-        <div className="date-time-row">
-          <input type="date" value={this.state.endDate} name="endDate" onChange={this.handleChange}/>
-          <input
-            className="time-input"
-            type="text"
-            placeholder="hh:mm"
-            value={this.state.endTime}
-            name="endTime"
-            onChange={this.handleChange}
-          />
+        <div className={classNames('input-wrapper', {error: this.fieldHasError('startTime')})}>
+          <div className="date-time-row">
+            <input
+              type="date"
+              id="datetimepicker"
+              value={this.state.startDate}
+              name="startDate"
+              onChange={this.handleChange}
+            />
+            <input
+              className="time-input"
+              type="text"
+              placeholder="hh:mm"
+              value={this.state.startTime}
+              name="startTime"
+              onChange={this.handleChange}
+            />
+          </div>
+          {this.fieldHasError('startTime') && this.renderErrorMsg()}
+        </div>
+        <div className={classNames('input-wrapper', {error: this.fieldHasError('endTime')})}>
+          <div className="date-time-row">
+            <input type="date" value={this.state.endDate} name="endDate" onChange={this.handleChange}/>
+            <input
+              className="time-input"
+              type="text"
+              placeholder="hh:mm"
+              value={this.state.endTime}
+              name="endTime"
+              onChange={this.handleChange}
+            />
+          </div>
+          {this.fieldHasError('endTime') && this.renderErrorMsg()}
         </div>
         <input type="submit" value="CONFIRM"/>
       </form>
@@ -149,22 +171,38 @@ export default styled(EventForm)`
   flex-direction: column;
   color: ${props => props.theme.graySteel};
   
-  input {
+  .input-wrapper {
     margin: 1rem 1rem 0rem 1rem;
-    background: none;
-    color: inherit;
-    border: none;
-    padding: 0;
-    font: inherit;
-    cursor: pointer;
-    outline: inherit;
+  
+    input {
+      background: none;
+      color: inherit;
+      border: none;
+      padding: 0;
+      font: inherit;
+      cursor: pointer;
+      outline: inherit;
+    }
+    
+    &.error {
+      input[type="text"], input[type="date"] {
+        border-bottom: 1px solid ${props => props.theme.yellow};
+      } 
+      .error-msg{
+      margin-top: 0.5rem;
+      width:fit-content;
+      background: ${props => props.theme.yellow};
+      color: ${props => props.theme.darkest};
+      font-weight: 600;
+      }
+    }
   }
 
-  input[type="text"] {
+  input[type="text"], input[type="date"] {
     border-bottom: 1px solid ${props => props.theme.graySteel};
   }
   
-  label {
+  label, .time-input::placeholder {
     color: ${props => props.theme.fontColor};
   }
   
@@ -172,23 +210,13 @@ export default styled(EventForm)`
     color: ${props => props.theme.yellow}
   }
   
-  .time-input::placeholder {
-    color: ${props => props.theme.fontColor};
-  }
-  
   .date-time-row {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     
-    input[type="date"] {
-      border-bottom: 1px solid ${props => props.theme.graySteel};
-      
-      &::-webkit-inner-spin-button {
-        display: none;
-      }
-      
-      
+    &::-webkit-inner-spin-button {
+      display: none;
     }
   }
   
@@ -213,6 +241,7 @@ export default styled(EventForm)`
   
   input[type='radio'] {
     visibility: hidden;
+    margin: 0 1rem 0 0;
   }
   
   input[type='radio']:before {

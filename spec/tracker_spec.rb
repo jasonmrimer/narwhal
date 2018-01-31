@@ -40,6 +40,10 @@ describe 'Tracker page', type: :feature do
   end
 
   describe 'events' do
+    it 'validates an event title, start date, and end date' do
+      tracker_page.assert_create_event_validation
+    end
+
     it 'can create, update, and delete an event for a selected airman' do
       tracker_page.assert_create_update_delete_event
     end

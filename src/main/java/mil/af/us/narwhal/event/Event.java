@@ -1,6 +1,8 @@
 package mil.af.us.narwhal.event;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.Instant;
 
 @Entity
@@ -9,12 +11,16 @@ public class Event {
   @GeneratedValue
   private Long id;
 
+  @NotNull
+  @Size(min = 1)
   private String title;
 
   private String description;
 
+  @NotNull
   private Instant startTime;
 
+  @NotNull
   private Instant endTime;
 
   @Enumerated(EnumType.STRING)

@@ -7,6 +7,16 @@ class Event
     set_attrs
   end
 
+  def create_invalid
+    page.within('.side-panel') do
+      click_link_or_button '+ Add Event'
+      find('label', text: 'Appointment').click
+      
+      fill_in 'description', with: "invalid event"
+      find('input[type="submit"]').click
+    end
+  end
+
   def create
     page.within('.side-panel') do
       click_link_or_button '+ Add Event'

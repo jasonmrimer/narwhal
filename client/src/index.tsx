@@ -14,9 +14,9 @@ import WebCertificationRepository from './airman/repositories/web/WebCertificati
 import WebSiteRepository from './site/repositories/web/WebSiteRepository';
 import WebMissionRepository from './mission/repositories/web/WebMissionRepository';
 import TrackerStore from './tracker/stores/TrackerStore';
-import WebEventRepository from './event/repositories/web/WebEventRepository';
 import DashboardStore from './dashboard/stores/DashboardStore';
 import { MomentTimeService } from './tracker/services/MomentTimeService';
+import WebEventRepository from './event/repositories/web/WebEventRepository';
 
 document.body.style.fontFamily = theme.fontFamily;
 document.body.style.color = theme.fontColor;

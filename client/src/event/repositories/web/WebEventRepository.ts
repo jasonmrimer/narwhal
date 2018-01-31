@@ -13,7 +13,11 @@ export default class WebEventRepository implements EventRepository {
 
   async save(event: EventModel): Promise<EventModel> {
     const resp = event.id ? await this.updateEvent(event) : await this.createEvent(event);
-    const json = await resp.json();
+    let json = await resp.json();
+
+    if (json.status === 400) {
+      json = this.handleError(json, event);
+    }
     return Promise.resolve(this.serializer.deserialize(json));
   }
 
@@ -30,6 +34,15 @@ export default class WebEventRepository implements EventRepository {
         throw new Error(`Unable to delete event with ID: ${event.id}`);
       }
     });
+  }
+
+  handleError(response: {errors: object[]}, event: EventModel): EventModel {
+    const errors = response.errors.map((error: {field: string}) => {
+      return {[error.field]: 'Field is required'};
+    });
+    event.errors = errors;
+
+    return event;
   }
 
   private createEvent(event: EventModel) {

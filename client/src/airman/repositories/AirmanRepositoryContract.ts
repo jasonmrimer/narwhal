@@ -6,8 +6,6 @@ export default function airmenRepositoryContract(subject: AirmanRepository) {
       const airmen = await subject.findAll();
       expect(airmen).toBeDefined();
 
-      debugger;
-
       expect(airmen.length).toBeGreaterThan(0);
 
       const uniqueIds = airmen.map(airman => airman.id).filter((el, i, a) => i === a.indexOf(el));

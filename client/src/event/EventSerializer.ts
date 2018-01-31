@@ -16,7 +16,8 @@ export default class EventSerializer implements Serializer<EventModel> {
       moment.utc(item.endTime),
       item.airmanId,
       item.type,
-      item.id
+      item.id,
+      item.errors,
     );
   }
 }
