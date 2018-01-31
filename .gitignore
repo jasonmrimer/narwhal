@@ -17,6 +17,8 @@
 *.tgz
 *.iws
 
+!artifacts/*.jar
+
 # Created by .ignore support plugin (hsz.mobi)
 ### Ruby template
 /.config
