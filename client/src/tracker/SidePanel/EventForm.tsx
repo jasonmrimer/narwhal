@@ -8,6 +8,8 @@ import DatePicker from '../../widgets/DatePicker';
 import FieldValidation from '../../widgets/FieldValidation';
 import TextInput from '../../widgets/TextInput';
 import RadioButtons from '../../widgets/RadioButtons';
+import TimeInput from '../../widgets/TimeInput';
+import SubmitButton from '../../widgets/SubmitButton';
 
 interface Props {
   airmanId: number;
@@ -112,24 +114,35 @@ export class EventForm extends React.Component<Props, State> {
         </div>
 
         <FieldValidation name="startTime" errors={this.props.event ? this.props.event.errors : null}>
-          <DatePicker
-            dateValue={this.state.startDate}
-            timeValue={this.state.startTime}
-            onChange={this.handleChange}
-            name="start"
-          />
+          <div className="date-time-input-row">
+            <DatePicker
+              dateValue={this.state.startDate}
+              onChange={this.handleChange}
+              name="start"
+            />
+            <TimeInput
+              timeValue={this.state.startTime}
+              onChange={this.handleChange}
+              name="start"
+            />
+          </div>
         </FieldValidation>
 
         <FieldValidation name="endTime" errors={this.props.event ? this.props.event.errors : null}>
-          <DatePicker
-            dateValue={this.state.endDate}
-            timeValue={this.state.endTime}
-            onChange={this.handleChange}
-            name="end"
-          />
+          <div className="date-time-input-row">
+            <DatePicker
+              dateValue={this.state.endDate}
+              onChange={this.handleChange}
+              name="end"
+            />
+            <TimeInput
+              timeValue={this.state.endTime}
+              onChange={this.handleChange}
+              name="end"
+            />
+          </div>
         </FieldValidation>
-
-        <input type="submit" value="CONFIRM"/>
+        <SubmitButton text="CONFIRM"/>
       </form>
     );
   }
@@ -140,24 +153,12 @@ export default styled(EventForm)`
   display: flex;
   flex-direction: column;
   color: ${props => props.theme.graySteel};
-      
-  input[type="submit"] {
-    margin-top: 2rem;
-    width: fit-content;
-    margin-left: auto;
-    background: none;
-    color: ${props => props.theme.fontColor};
-    border: 1px solid ${props => props.theme.fontColor};
-    padding: 0.5rem 1rem;
-    font: inherit;
-    font-size: 0.75rem;
-    font-weight: 400;
-    cursor: pointer;
-    outline: inherit;
-    :hover {
-      background: ${props => props.theme.fontColor};
-      color: ${props => props.theme.darkest};
-    }
+ 
+  .date-time-input-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 1rem 1rem 0rem 1rem;
   }
 
   .back{

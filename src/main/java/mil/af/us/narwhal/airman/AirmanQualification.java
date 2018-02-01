@@ -1,7 +1,5 @@
 package mil.af.us.narwhal.airman;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,24 +12,38 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "join_airman_qualification")
-@IdClass(AirmanQualificationId.class)
+@Table(
+  name = "join_airman_qualification",
+  uniqueConstraints = {@UniqueConstraint(columnNames = {"airman_id", "qualification_id"})}
+)
 public class AirmanQualification {
   @Id
-  @JsonIgnore
-  @Column(name="airman_id")
-  private long airmanId;
+  @GeneratedValue
+  private Long Id;
 
-  @Id
-  @JsonIgnore
-  @Column(name="qualification_id")
-  private long qualificationId;
+  @Column(name = "airman_id", nullable = false)
+  private Long airmanId;
+
+  @ManyToOne
+  @JoinColumn(name = "qualification_id", referencedColumnName = "id", nullable = false)
+  private Qualification qualification;
+
+  @Column(name = "earn_date")
+  private Date earnDate;
 
   @Column(name = "expiration_date")
   private Date expirationDate;
 
-  @ManyToOne
-  @JoinColumn(name = "qualification_id", updatable = false, insertable = false, referencedColumnName = "id")
-  @JsonUnwrapped
-  private Qualification qualification;
+  public AirmanQualification(Long airmanId, Qualification qualification, Date earnDate, Date expirationDate) {
+    this.airmanId = airmanId;
+    this.qualification = qualification;
+    this.earnDate = earnDate;
+    this.expirationDate = expirationDate;
+  }
+
+  public AirmanQualification(Qualification qualification, Date earnDate, Date expirationDate) {
+    this.qualification = qualification;
+    this.earnDate = earnDate;
+    this.expirationDate = expirationDate;
+  }
 }

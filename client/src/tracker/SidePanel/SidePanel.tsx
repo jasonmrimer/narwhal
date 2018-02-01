@@ -27,10 +27,9 @@ export class SidePanel extends React.Component<Props, State> {
   }
 
   renderSelectedTab = () => {
-    const airman = this.props.trackerStore.selectedAirman;
     switch (this.state.selectedTab) {
       case 0:
-        return <Currency airman={airman}/>;
+        return <Currency trackerStore={this.props.trackerStore}/>;
       case 1:
       default:
         return <Availability trackerStore={this.props.trackerStore}/>;

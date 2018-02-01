@@ -1,11 +1,19 @@
 import AirmanRepository from './AirmanRepository';
+import AirmanModel from '../models/AirmanModel';
+import AirmanQualificationModel from '../models/AirmanQualificationModel';
+import QualificationModel from '../../qualifications/models/QualificationModel';
+import * as moment from 'moment';
 
 export default function airmenRepositoryContract(subject: AirmanRepository) {
-  describe('findAll', () => {
-    it('returns airmen', async () => {
-      const airmen = await subject.findAll();
-      expect(airmen).toBeDefined();
+  let airmen: AirmanModel[];
 
+  beforeEach(async () => {
+    airmen = await subject.findAll();
+    expect(airmen).toBeDefined();
+  });
+
+  describe('findAll', () => {
+    it('returns airmen', () => {
       expect(airmen.length).toBeGreaterThan(0);
 
       const uniqueIds = airmen.map(airman => airman.id).filter((el, i, a) => i === a.indexOf(el));
@@ -27,9 +35,6 @@ export default function airmenRepositoryContract(subject: AirmanRepository) {
 
   describe('findBySquadron', () => {
     it('returns airmen filtered by squadron', async () => {
-      const airmen = await subject.findAll();
-      expect(airmen).toBeDefined();
-
       const filteredAirmen = await subject.findBySquadron(1);
       expect(filteredAirmen).toBeDefined();
 
@@ -42,9 +47,6 @@ export default function airmenRepositoryContract(subject: AirmanRepository) {
 
   describe('findByFlight', () => {
     it('returns airmen filtered by flight', async () => {
-      const airmen = await subject.findAll();
-      expect(airmen).toBeDefined();
-
       const filteredAirmen = await subject.findByFlight(1);
 
       const uniqueIds = filteredAirmen.map(airman => airman.id).filter((el, i, a) => i === a.indexOf(el));
@@ -55,6 +57,20 @@ export default function airmenRepositoryContract(subject: AirmanRepository) {
       filteredAirmen.forEach(airman => {
         expect(airman.flightId).toEqual(1);
       });
+    });
+  });
+
+  describe('saveQualification', () => {
+    it('saves a qualification with a unique id', async () => {
+      const qualId = 3;
+      const qualification = new AirmanQualificationModel(
+        airmen[0].id,
+        new QualificationModel(qualId, 'A', 'A'),
+        moment.utc(),
+        moment.utc()
+      );
+      const airman = await subject.saveQualification(qualification);
+      expect(airman.qualifications.find(q => q.qualification.id === qualId)!.id).toBeDefined();
     });
   });
 }

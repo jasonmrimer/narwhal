@@ -1,9 +1,8 @@
 package mil.af.us.narwhal.airman;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -12,24 +11,35 @@ import java.util.List;
 public class AirmanController {
   public static final String URI = "/api/airmen";
 
-  private AirmanRepository airmanRepository;
+  private AirmanRepository repository;
 
-  public AirmanController(AirmanRepository airmanRepository) {
-    this.airmanRepository = airmanRepository;
+  public AirmanController(AirmanRepository repository) {
+    this.repository = repository;
   }
 
   @GetMapping
   public List<Airman> index() {
-    return airmanRepository.findAll();
+    return repository.findAll();
   }
 
   @GetMapping(params = {"squadron"})
   public List<Airman> indexSquadronId(@RequestParam("squadron") Long squadronId) {
-    return airmanRepository.findBySquadronId(squadronId);
+    return repository.findBySquadronId(squadronId);
   }
 
   @GetMapping(params = {"flight"})
   public List<Airman> indexByFlightId(@RequestParam("flight") Long flightId) {
-    return airmanRepository.findByFlightId(flightId);
+    return repository.findByFlightId(flightId);
+  }
+
+  @PostMapping(path = "/{id}/qualifications")
+  public ResponseEntity<Airman> createAirmanQualification(
+    @PathVariable("id") Long id,
+    @RequestBody AirmanQualification qualification
+  ) {
+    final Airman airman = repository.findOne(id);
+    return airman.addQualification(qualification) ?
+      new ResponseEntity<>(repository.save(airman), HttpStatus.CREATED) :
+      new ResponseEntity<>(airman, HttpStatus.OK);
   }
 }

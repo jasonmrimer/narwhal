@@ -9,6 +9,7 @@ import DatePicker from '../../widgets/DatePicker';
 import TextInput from '../../widgets/TextInput';
 import RadioButtons from '../../widgets/RadioButtons';
 import FieldValidation from '../../widgets/FieldValidation';
+import TimeInput from '../../widgets/TimeInput';
 
 let subject: ShallowWrapper;
 describe('EventForm', () => {
@@ -36,9 +37,9 @@ describe('EventForm', () => {
     subject.find(TextInput).at(0).simulate('change', {target: {name: 'title', value: 'Title'}});
     subject.find(TextInput).at(1).simulate('change', {target: {name: 'description', value: 'Description'}});
     subject.find(DatePicker).at(0).simulate('change', {target: {name: 'startDate', value: '2018-01-10'}});
-    subject.find(DatePicker).at(0).simulate('change', {target: {name: 'startTime', value: '00:00'}});
+    subject.find(TimeInput).at(0).simulate('change', {target: {name: 'startTime', value: '00:00'}});
     subject.find(DatePicker).at(1).simulate('change', {target: {name: 'endDate', value: '2018-01-10'}});
-    subject.find(DatePicker).at(1).simulate('change', {target: {name: 'endTime', value: '12:34'}});
+    subject.find(TimeInput).at(1).simulate('change', {target: {name: 'endTime', value: '12:34'}});
     subject.find('form').simulate('submit', eventStub);
 
     const expectedEvent = new EventModel(
@@ -80,9 +81,9 @@ describe('EventForm', () => {
     expect(subject.find(TextInput).at(0).prop('value')).toBe(event.title);
     expect(subject.find(TextInput).at(1).prop('value')).toBe(event.description);
     expect(subject.find(DatePicker).at(0).prop('dateValue')).toEqual('2018-01-10');
-    expect(subject.find(DatePicker).at(0).prop('timeValue')).toEqual('00:00');
+    expect(subject.find(TimeInput).at(0).prop('timeValue')).toEqual('00:00');
     expect(subject.find(DatePicker).at(1).prop('dateValue')).toEqual('2018-01-10');
-    expect(subject.find(DatePicker).at(1).prop('timeValue')).toEqual('00:00');
+    expect(subject.find(TimeInput).at(1).prop('timeValue')).toEqual('00:00');
     subject.find('form').simulate('submit', eventStub);
 
     expect(handleSubmitSpy).toHaveBeenCalledWith(event);

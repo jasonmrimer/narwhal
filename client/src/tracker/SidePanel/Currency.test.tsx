@@ -1,11 +1,21 @@
 import * as React from 'react';
-import { shallow } from 'enzyme';
-import AirmanModelFactory from '../../airman/factories/AirmanModelFactory';
+import { mount, ReactWrapper } from 'enzyme';
 import { Currency } from './Currency';
+import { findSelectorWithText, makeFakeTrackerStore } from '../../utils/testUtils';
+import TrackerStore from '../stores/TrackerStore';
+import AirmanModelFactory from '../../airman/factories/AirmanModelFactory';
 
 describe('Currency', () => {
   const airman = AirmanModelFactory.build();
-  const subject = shallow(<Currency airman={airman}/>);
+
+  let trackerStore: TrackerStore;
+  let subject: ReactWrapper;
+
+  beforeEach(async () => {
+    trackerStore = await makeFakeTrackerStore();
+    trackerStore.setSelectedAirman(airman);
+    subject = mount(<Currency trackerStore={trackerStore}/>);
+  });
 
   it('renders the currency of an airman', () => {
     airman.qualifications.forEach((qualification) => {
@@ -17,5 +27,10 @@ describe('Currency', () => {
       expect(subject.text()).toContain(certification.title);
       expect(subject.text()).toContain(certification.expirationDate.format('DD MMM YY'));
     });
+  });
+
+  it('opens skill form on + Add Skill click', () => {
+    findSelectorWithText(subject, 'button', '+ Add Skill').simulate('click');
+    expect(subject.find('form').exists()).toBeTruthy();
   });
 });

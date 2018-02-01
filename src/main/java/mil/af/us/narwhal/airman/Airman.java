@@ -1,14 +1,12 @@
 package mil.af.us.narwhal.airman;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import mil.af.us.narwhal.event.Event;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import static java.util.Collections.emptyList;
 
 @Entity
 public class Airman {
@@ -23,49 +21,38 @@ public class Airman {
 
   private String lastName;
 
-  @OneToMany(mappedBy = "airmanId")
+  @OneToMany(mappedBy = "airmanId", cascade = CascadeType.ALL)
   @JsonManagedReference
-  @JsonProperty("qualifications")
-  private List<AirmanQualification> airmanQualifications;
+  private List<AirmanQualification> qualifications = new ArrayList<>();
 
   @OneToMany(mappedBy = "airmanId")
   @JsonManagedReference
-  @JsonProperty("certifications")
-  private List<AirmanCertification> certifications;
+  private List<AirmanCertification> certifications = new ArrayList<>();
 
   @OneToMany(mappedBy = "airmanId")
   @JsonManagedReference
-  List<Event> events;
+  List<Event> events = new ArrayList<>();
 
   public Airman() {
   }
 
-  public Airman(Long id, Long flightId, String firstName, String lastName, List<AirmanQualification> airmanQualifications, List<AirmanCertification> certifications, List<Event> events) {
+  public Airman(Long id, Long flightId, String firstName, String lastName, List<AirmanQualification> qualifications, List<AirmanCertification> certifications, List<Event> events) {
     this.id = id;
     this.flightId = flightId;
     this.firstName = firstName;
     this.lastName = lastName;
-    this.airmanQualifications = airmanQualifications;
-    this.certifications = certifications;
-    this.events = events;
-  }
-
-  public Airman(Long flightId, String firstName, String lastName, List<AirmanQualification> airmanQualifications, List<AirmanCertification> certifications, List<Event> events) {
-    this.flightId = flightId;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.airmanQualifications = airmanQualifications;
-    this.certifications = certifications;
-    this.events = events;
+    this.qualifications = new ArrayList<>(qualifications);
+    this.certifications = new ArrayList<>(certifications);
+    this.events = new ArrayList<>(events);
   }
 
   public Airman(Long flightId, String firstName, String lastName) {
     this.flightId = flightId;
     this.firstName = firstName;
     this.lastName = lastName;
-    this.airmanQualifications = emptyList();
-    this.certifications = emptyList();
-    this.events = emptyList();
+    this.qualifications = new ArrayList<>();
+    this.certifications = new ArrayList<>();
+    this.events = new ArrayList<>();
   }
 
   public Long getId() {
@@ -100,12 +87,12 @@ public class Airman {
     this.lastName = lastName;
   }
 
-  public List<AirmanQualification> getAirmanQualifications() {
-    return airmanQualifications;
+  public List<AirmanQualification> getQualifications() {
+    return qualifications;
   }
 
-  public void setAirmanQualifications(List<AirmanQualification> airmanQualifications) {
-    this.airmanQualifications = airmanQualifications;
+  public void setQualifications(List<AirmanQualification> qualifications) {
+    this.qualifications = qualifications;
   }
 
   public List<AirmanCertification> getCertifications() {
@@ -131,7 +118,7 @@ public class Airman {
       ", flightId=" + flightId +
       ", firstName='" + firstName + '\'' +
       ", lastName='" + lastName + '\'' +
-      ", airmanQualifications=" + airmanQualifications +
+      ", qualifications=" + qualifications +
       ", certifications=" + certifications +
       ", events=" + events +
       '}';
@@ -146,13 +133,24 @@ public class Airman {
       Objects.equals(flightId, airman.flightId) &&
       Objects.equals(firstName, airman.firstName) &&
       Objects.equals(lastName, airman.lastName) &&
-      Objects.equals(airmanQualifications, airman.airmanQualifications) &&
+      Objects.equals(qualifications, airman.qualifications) &&
       Objects.equals(certifications, airman.certifications) &&
       Objects.equals(events, airman.events);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, flightId, firstName, lastName, airmanQualifications, certifications, events);
+    return Objects.hash(id, flightId, firstName, lastName, qualifications, certifications, events);
+  }
+
+  public boolean addQualification(AirmanQualification airmanQualification) {
+    for (AirmanQualification qual : qualifications) {
+      if (qual.getQualification().getId().equals(airmanQualification.getQualification().getId())) {
+        return false;
+      }
+    }
+    airmanQualification.setAirmanId(this.id);
+    qualifications.add(airmanQualification);
+    return true;
   }
 }

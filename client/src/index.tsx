@@ -17,6 +17,7 @@ import TrackerStore from './tracker/stores/TrackerStore';
 import DashboardStore from './dashboard/stores/DashboardStore';
 import { MomentTimeService } from './tracker/services/MomentTimeService';
 import WebEventRepository from './event/repositories/web/WebEventRepository';
+import WebQualificationRepository from './qualifications/repositories/web/WebQualificationRepository';
 
 document.body.style.fontFamily = theme.fontFamily;
 document.body.style.color = theme.fontColor;
@@ -33,6 +34,7 @@ const trackerStore = new TrackerStore(
   new WebAirmanRepository(),
   siteRepository,
   new WebCertificationRepository(),
+  new WebQualificationRepository(),
   new WebEventRepository(),
   new MomentTimeService()
 );

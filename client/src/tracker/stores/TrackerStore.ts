@@ -10,6 +10,9 @@ import EventModel from '../../event/EventModel';
 import EventRepository from '../../event/repositories/EventRepository';
 import TimeService from '../services/TimeService';
 import { Moment } from 'moment';
+import QualificationRepository from '../../qualifications/repositories/QualificationRepository';
+import QualificationModel from '../../qualifications/models/QualificationModel';
+import AirmanQualificationModel from '../../airman/models/AirmanQualificationModel';
 
 export default class TrackerStore {
   private airmanRepository: AirmanRepository;
@@ -17,10 +20,12 @@ export default class TrackerStore {
   private certificationRepository: CertificationRepository;
   private eventRepository: EventRepository;
   private TimeService: TimeService;
+  private qualificationRepository: QualificationRepository;
 
   @observable private _airmen: AirmanModel[] = [];
   @observable private _sites: SiteModel[] = [];
   @observable private _certifications: CertificationModel[] = [];
+  @observable private _qualifications: QualificationModel[] = [];
 
   @observable private _siteId: number = UnfilteredValue;
   @observable private _squadronId: number = UnfilteredValue;
@@ -38,11 +43,13 @@ export default class TrackerStore {
   constructor(airmanRepository: AirmanRepository,
               siteRepository: SiteRepository,
               certificationRepository: CertificationRepository,
+              qualificationRepository: QualificationRepository,
               eventRepository: EventRepository,
               timeService: TimeService) {
     this.airmanRepository = airmanRepository;
     this.siteRepository = siteRepository;
     this.certificationRepository = certificationRepository;
+    this.qualificationRepository = qualificationRepository;
     this.eventRepository = eventRepository;
     this.TimeService = timeService;
     this._plannerWeek = this.TimeService.getCurrentWeek();
@@ -53,6 +60,7 @@ export default class TrackerStore {
     this._airmen = await this.airmanRepository.findAll();
     this._sites = await this.siteRepository.findAll();
     this._certifications = await this.certificationRepository.findAll();
+    this._qualifications = await this.qualificationRepository.findAll();
   }
 
   @computed
@@ -172,6 +180,11 @@ export default class TrackerStore {
   }
 
   @computed
+  get qualifications() {
+    return this._qualifications;
+  }
+
+  @computed
   get selectedAirman() {
     return this._selectedAirman;
   }
@@ -257,5 +270,12 @@ export default class TrackerStore {
   @action.bound
   incrementSidePanelWeek() {
     this._sidePanelWeek = this.TimeService.incrementWeek(this._sidePanelWeek);
+  }
+
+  @action.bound
+  async addAirmanQualification(airmanQualification: AirmanQualificationModel) {
+    await this.airmanRepository.saveQualification(airmanQualification);
+    this._airmen = await this.airmanRepository.findAll();
+    this._selectedAirman = this._airmen.find(a => a.id === airmanQualification.airmanId)!;
   }
 }

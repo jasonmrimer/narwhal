@@ -1,4 +1,4 @@
-import QualificationModel from './QualificationModel';
+import AirmanQualificationModel from './AirmanQualificationModel';
 import CertificationModel from './CertificationModel';
 import EventModel from '../../event/EventModel';
 
@@ -11,7 +11,7 @@ export default class AirmanModel {
               public flightId: number,
               public firstName: string,
               public lastName: string,
-              public qualifications: QualificationModel[],
+              public qualifications: AirmanQualificationModel[],
               public certifications: CertificationModel[],
               public events: EventModel[]) {
   }

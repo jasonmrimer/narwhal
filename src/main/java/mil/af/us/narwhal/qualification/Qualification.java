@@ -5,7 +5,6 @@ import javax.persistence.Id;
 
 @Entity
 public class Qualification {
-
   @Id
   private Long id;
 

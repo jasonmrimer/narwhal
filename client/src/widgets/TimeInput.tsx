@@ -3,30 +3,30 @@ import styled from 'styled-components';
 
 /* tslint:disable:no-any*/
 interface Props {
-  id?: string;
-  dateValue: string;
+  timeValue: string;
   onChange: (e: any) => void;
   name: string;
   className?: string;
 }
 
-export const DatePicker = (props: Props) => {
+export const TimeInput = (props: Props) => {
   return (
     <input
-      id={props.id}
       className={props.className}
-      type="date"
-      value={props.dateValue}
-      name={`${props.name}Date`}
+      type="text"
+      placeholder="hh:mm"
+      value={props.timeValue}
+      name={`${props.name}Time`}
       onChange={props.onChange}
     />
+
   );
 };
 
-export default styled(DatePicker)`  
-  &::-webkit-inner-spin-button {
-    display: none;
-  }  
+export default styled(TimeInput)`  
+  &::placeholder {
+    color: ${props => props.theme.graySteel};
+  }
   
   background: none;
   color: ${props => props.theme.graySteel};

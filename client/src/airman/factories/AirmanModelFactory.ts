@@ -1,5 +1,5 @@
 import AirmanModel from '../models/AirmanModel';
-import QualificationModelFactory from './QualificationModelFactory';
+import AirmanQualificationModelFactory from './AirmanQualificationModelFactory';
 import { randomText } from '../../utils/randomizer';
 import * as moment from 'moment';
 import EventModel, { EventType } from '../../event/EventModel';
@@ -12,7 +12,7 @@ export default class AirmanModelFactory {
       flightId,
       randomText(5),
       randomText(5),
-      QualificationModelFactory.buildList(2),
+      AirmanQualificationModelFactory.buildList(2),
       certifications,
       [new EventModel(
         'Fake Event',

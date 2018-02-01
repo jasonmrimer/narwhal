@@ -1,11 +1,11 @@
 import AirmanModel from '../models/AirmanModel';
 import { Serializer } from '../../utils/serializer';
-import { QualificationSerializer } from './QualificationSerializer';
+import { AirmanQualificationSerializer } from './AirmanQualificationSerializer';
 import { CertificationSerializer } from './CertificationSerializer';
 import EventSerializer from '../../event/EventSerializer';
 
 export class AirmanSerializer implements Serializer<AirmanModel> {
-  private qualSerializer = new QualificationSerializer();
+  private qualSerializer = new AirmanQualificationSerializer();
   private certSerializer = new CertificationSerializer();
   private eventSerializer = new EventSerializer();
 

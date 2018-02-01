@@ -10,11 +10,15 @@ import { toJS } from 'mobx';
 import { UnfilteredValue } from '../../widgets/models/FilterOptionModel';
 import TimeServiceStub from '../services/doubles/TimeServiceStub';
 import AirmanModelFactory from '../../airman/factories/AirmanModelFactory';
+import QualificationRepositoryStub from '../../qualifications/repositories/doubles/QualificationRepositoryStub';
+import QualificationModel from '../../qualifications/models/QualificationModel';
+import AirmanQualificationModel from '../../airman/models/AirmanQualificationModel';
 
 describe('TrackerStore', () => {
   const airmenRepository = new AirmanRepositoryStub();
   const siteRepository = new SiteRepositoryStub();
   const certificationRepository = new CertificationRepositoryStub();
+  const qualificationRepository = new QualificationRepositoryStub();
   const eventRepository = new EventRepositoryStub();
   const timeServiceStub = new TimeServiceStub();
   let allAirmen: AirmanModel[];
@@ -26,6 +30,7 @@ describe('TrackerStore', () => {
       airmenRepository,
       siteRepository,
       certificationRepository,
+      qualificationRepository,
       eventRepository,
       timeServiceStub,
     );
@@ -223,6 +228,22 @@ describe('TrackerStore', () => {
 
       subject.clearSelectedAirman();
       expect(subject.sidePanelWeek[0].isSame(subject.plannerWeek[0])).toBeTruthy();
+    });
+  });
+
+  describe('qualifications', () => {
+    it('should add a qualification to an airman', async () => {
+      const airman = allAirmen[0];
+      const qualification = new AirmanQualificationModel(
+        airman.id,
+        new QualificationModel(100, 'A', 'A'),
+        moment.utc(),
+        moment.utc()
+      );
+      const qualLength = airman.qualifications.length;
+      await subject.addAirmanQualification(qualification);
+      const updatedAirman = (await airmenRepository.findAll())[0];
+      expect(updatedAirman.qualifications.length).toBeGreaterThan(qualLength);
     });
   });
 });
