@@ -21,7 +21,7 @@
   },
   "scripts": {
     "start": "react-scripts-ts start",
-    "build": "react-scripts-ts build && rm -rf ../src/main/resources/static && cp -r build ../src/main/resources/static",
+    "build": "react-scripts-ts build && rm -rf ../src/main/resources/static && cp -r build ../src/main/resources/static && yarn run build-storybook",
     "test": "react-scripts-ts test --env=jsdom",
     "contracts": "react-scripts-ts test --env=jsdom --testMatch='<rootDir>/src/**/?(*.)contract.ts?(x)'",
     "eject": "react-scripts-ts eject",
@@ -30,7 +30,7 @@
     "test:debug": "react-scripts-ts --inspect-brk test --runInBand --env=jsdom",
     "contracts:debug": "react-scripts-ts --inspect-brk test --runInBand  --env=jsdom --testMatch='<rootDir>/src/**/?(*.)contract.ts?(x)'",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook && mv storybook-static/index.html storybook-static/storybook.html && rsync -a storybook-static/ ../src/main/resources/static/"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^3.3.11",

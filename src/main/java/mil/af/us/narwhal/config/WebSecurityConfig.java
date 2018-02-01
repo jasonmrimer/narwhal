@@ -5,9 +5,8 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
-@Profile("!cloud")
+@Profile({"!cloud", "storybook"})
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -25,5 +24,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
       .and()
       .csrf()
       .disable();
+
+    http
+      .headers()
+      .frameOptions().sameOrigin();
   }
 }
