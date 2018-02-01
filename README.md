@@ -16,6 +16,9 @@ Set the following environment variables:
 - `NARWHAL_DB_URL`  
 - `NARWHAL_DB_USERNAME`
 - `NARWHAL_DB_PASSWORD`
+- `SSO_SERVICE_URL`
+- `SSO_CLIENT_ID`
+- `SSO_CLIENT_SECRET`
 
 ### Setup the Database
 * `./scripts/setup_db.sh`

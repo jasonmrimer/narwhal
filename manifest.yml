@@ -12,6 +12,6 @@ applications:
     GRANT_TYPE: authorization_code
     SSO_IDENTITY_PROVIDERS: uaa
     SSO_SCOPES: openid
-#    SSO_SERVICE_URL: ${vcap.services.narwhal-sso.credentials.auth_domain}
-#    SECURITY_OAUTH2_CLIENT_CLIENT_ID: ${vcap.services.narwhal-sso.credentials.client_id}
-#    SECURITY_OAUTH2_CLIENT_CLIENT_SECRET: ${vcap.services.narwhal-sso.credentials.client_secret}
+    SSO_SERVICE_URL: ${vcap.services.narwhal-sso.credentials.auth_domain}
+    SSO_CLIENT_ID: ${vcap.services.narwhal-sso.credentials.client_id}
+    SSO_CLIENT_SECRET: ${vcap.services.narwhal-sso.credentials.client_secret}
