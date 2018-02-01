@@ -6,8 +6,6 @@ spring:
   jackson:
     serialization:
       WRITE_DATES_AS_TIMESTAMPS: false
-  profiles:
-    active: storybook
 flyway:
   baseline-on-migrate: true
   baseline-version: 0

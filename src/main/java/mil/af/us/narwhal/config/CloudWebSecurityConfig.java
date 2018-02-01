@@ -25,6 +25,10 @@ public class CloudWebSecurityConfig extends WebSecurityConfigurerAdapter {
       .and()
       .csrf()
       .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
+
+    http
+      .headers()
+      .frameOptions().sameOrigin();
   }
 
 
