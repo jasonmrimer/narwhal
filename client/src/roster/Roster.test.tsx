@@ -33,7 +33,6 @@ describe('Roster', () => {
       'QUALIFICATION',
       'CERTIFICATION',
       'NOVEMBER 2017',
-      '',
     ]);
     expect(table.getColumnSubHeaders(3)).toEqual('26SUN27MON28TUE29WED30THU01FRI02SAT');
     expect(subject.find('button.next-week').exists()).toBeTruthy();
@@ -95,6 +94,11 @@ describe('Roster', () => {
     it('advances to next week on button click', () => {
       subject.find('button.next-week').simulate('click');
       expect(table.getColumnSubHeaders(3)).toEqual('03SUN04MON05TUE06WED07THU08FRI09SAT');
+    });
+
+    it('advances to last week on button click', () => {
+      subject.find('button.last-week').simulate('click');
+      expect(table.getColumnSubHeaders(3)).toEqual('19SUN20MON21TUE22WED23THU24FRI25SAT');
     });
   });
 });

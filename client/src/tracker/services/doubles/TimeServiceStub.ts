@@ -27,4 +27,17 @@ export default class TimeServiceStub implements TimeService {
       sunday.clone().add(6, 'day')
     ];
   }
+
+  decrementWeek(week: Moment[]): Moment[] {
+    const sunday = week[0].utc().startOf('week').subtract(7, 'day');
+    return [
+      sunday,
+      sunday.clone().add(1, 'day'),
+      sunday.clone().add(2, 'day'),
+      sunday.clone().add(3, 'day'),
+      sunday.clone().add(4, 'day'),
+      sunday.clone().add(5, 'day'),
+      sunday.clone().add(6, 'day')
+    ];
+  }
 }

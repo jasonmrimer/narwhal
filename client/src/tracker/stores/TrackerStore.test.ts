@@ -212,6 +212,12 @@ describe('TrackerStore', () => {
       expect(subject.plannerWeek[0].isSame(moment.utc('2017-11-26T00:00:00.000Z'))).toBeTruthy();
       expect(subject.sidePanelWeek[0].isSame(moment.utc('2017-12-03T00:00:00.000Z'))).toBeTruthy();
     });
+
+    it('will decrement the planner week', () => {
+      expect(subject.plannerWeek[0].isSame(moment.utc('2017-11-26T00:00:00.000Z'))).toBeTruthy();
+      subject.decrementPlannerWeek();
+      expect(subject.plannerWeek[0].isSame(moment.utc('2017-11-19T00:00:00.000Z'))).toBeTruthy();
+    });
   });
 
   describe('selecting an airman', () => {

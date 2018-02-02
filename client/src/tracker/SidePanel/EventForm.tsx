@@ -2,7 +2,7 @@ import * as React from 'react';
 import EventModel, { EventType } from '../../event/EventModel';
 import * as moment from 'moment';
 import styled from 'styled-components';
-import BackIcon from '../../icons/BackIcon';
+import BackIcon from '../../icons/BackArrow';
 import theme from '../../themes/default';
 import DatePicker from '../../widgets/DatePicker';
 import FieldValidation from '../../widgets/FieldValidation';

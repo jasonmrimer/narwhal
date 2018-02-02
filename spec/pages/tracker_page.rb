@@ -21,9 +21,13 @@ class TrackerPage
     expect(page).to have_css('tbody tr', count: @@all_airmen_count)
   end
 
-  def assert_advances_week
+  def assert_navigates_week
       find('button.next-week').click
       expect(page).to have_content(get_start_of_next_week.strftime('%d %^a'))
+
+      find('button.last-week').click
+      find('button.last-week').click
+      expect(page).to have_content(get_start_of_last_week.strftime('%d %^a'))
   end
 
   def assert_filters_by_site
@@ -148,5 +152,10 @@ class TrackerPage
   def get_start_of_next_week
     now = Date.today
     (now - now.wday) + 7
+  end
+
+  def get_start_of_last_week
+    now = Date.today
+    (now - now.wday) - 7
   end
 end

@@ -51,7 +51,7 @@ describe 'Tracker page', type: :feature do
 
  describe 'roster' do
   it 'can move forward weeks on the planner' do
-    tracker_page.assert_advances_week
+    tracker_page.assert_navigates_week
   end
  end
 end

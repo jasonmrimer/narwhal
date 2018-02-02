@@ -5,7 +5,7 @@ import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 import { observer } from 'mobx-react';
 import TrackerStore from '../tracker/stores/TrackerStore';
-import NextIcon from '../icons/NextIcon';
+import PlannerHeader from '../widgets/PlannerHeader';
 
 interface Props {
   trackerStore: TrackerStore;
@@ -32,19 +32,11 @@ export class Roster extends React.Component<Props> {
             <div>CERTIFICATION</div>
             {this.renderCertificationFilter()}
           </th>
-          <th className="planner-header">
-            <div
-              className="month-header"
-            >
-              {this.props.trackerStore.plannerWeek[0].format('MMMM YYYY').toUpperCase()}
-            </div>
-            {this.renderWeek()}
-          </th>
-          <th className="button-header">
-            <button className="next-week" onClick={this.props.trackerStore.incrementPlannerWeek}>
-              <NextIcon height={14} width={14}/>
-            </button>
-          </th>
+          <PlannerHeader
+            plannerWeek={this.props.trackerStore.plannerWeek}
+            incrementPlannerWeek={this.props.trackerStore.incrementPlannerWeek}
+            decrementPlannerWeek={this.props.trackerStore.decrementPlannerWeek}
+          />
         </tr>
         </thead>
         <tbody>
@@ -70,27 +62,11 @@ export class Roster extends React.Component<Props> {
           <td>{airman.lastName}, {airman.firstName}</td>
           <td>{formatAttributes(airman.qualifications, 'acronym')}</td>
           <td className="certification-row">{formatAttributes(airman.certifications, 'title')}</td>
+
           <Planner events={airman.events} week={this.props.trackerStore.plannerWeek}/>
-          <td/>
         </tr>
       );
     });
-  }
-
-  private renderWeek() {
-    return (
-      <div className="planner-day-header">
-        {
-          this.props.trackerStore.plannerWeek.map((day, index) =>
-            <span key={index}>
-              <div>{day.format('DD')}</div>
-              <div>{day.format('ddd').toUpperCase()}</div>
-            </span>
-          )
-        }
-      </div>
-    );
-
   }
 
   private renderCertificationFilter() {
@@ -162,35 +138,13 @@ export default styled(Roster)`
     width: 24%;
   }
   
-  .planner-header {
-    border-left: 1px solid ${props => props.theme.graySteel};
-    width: 45%;
-  }
-  
-  .planner-day-header, .planner-row {
+  .planner-row {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
   }
 
   .certification-row {
     border-right: 1px solid ${props => props.theme.graySteel};
-  }
-  
-  .planner-day-header span {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;  
-    
-    div:first-child{
-      padding-top: 0.5rem;
-      padding-bottom: 0.25rem;
-    }
-    
-    div:last-child {
-      font-size: 0.625rem;
-      font-weight: 100;
-    }
   }
   
   .selected {
@@ -284,18 +238,4 @@ export default styled(Roster)`
       color: white;
     }
    }
-   
-   .next-week {
-    background: none;
-    border: none;
-    padding: 0;
-   }
-   
-  .button-header {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    margin-top: 27px;
-    width: 1%;    
-  }   
 `;

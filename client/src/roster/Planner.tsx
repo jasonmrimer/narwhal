@@ -7,6 +7,7 @@ import LeaveIcon from '../icons/LeaveIcon';
 import MissionIcon from '../icons/MissionIcon';
 import AvailableIcon from '../icons/AvailableIcon';
 import { doesDayHaveEvent } from '../utils/eventUtil';
+import styled from 'styled-components';
 
 interface Props {
   events: EventModel[];
@@ -36,11 +37,26 @@ const renderEvents = (day: Moment, events: EventModel[], key: number) => {
   }
 };
 
-export default (props: Props) => {
+export const Planner = (props: Props) => {
   const {events, week} = props;
   return (
     <td className={classNames(props.className, 'planner-row')}>
-      {week.map((day, index) => renderEvents(day, events, index))}
+      <span className="blank"/>
+      <div>
+       {week.map((day, index) => renderEvents(day, events, index))}
+      </div>
+      <span className="blank"/>
     </td>
   );
 };
+
+export default styled(Planner)`
+  div {
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 2;
+  }
+  .blank {
+    width: 1.8rem;
+  }
+`;

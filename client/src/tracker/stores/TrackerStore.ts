@@ -262,6 +262,12 @@ export default class TrackerStore {
     this._sidePanelWeek = this.TimeService.incrementWeek(this.sidePanelWeek);
   }
 
+  @action.bound
+  decrementPlannerWeek() {
+    this._plannerWeek = this.TimeService.decrementWeek(this.plannerWeek);
+    this._sidePanelWeek = this.TimeService.decrementWeek(this.sidePanelWeek);
+  }
+
   @computed
   get sidePanelWeek() {
     return this._sidePanelWeek;
