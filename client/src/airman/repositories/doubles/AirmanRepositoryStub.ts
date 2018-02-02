@@ -1,22 +1,22 @@
 import AirmanRepository from '../AirmanRepository';
 import AirmanModelFactory from '../../factories/AirmanModelFactory';
 import AirmanModel from '../../models/AirmanModel';
-import CertificationModelFactory from '../../factories/CertificationModelFactory';
 import AirmanQualificationModel from '../../models/AirmanQualificationModel';
+import AirmanCertificationModelFactory from '../../factories/AirmanCertificationModelFactory';
 
 const airmen = [
-  AirmanModelFactory.build(1, 1, [CertificationModelFactory.build(1)]),
-  AirmanModelFactory.build(2, 1, [CertificationModelFactory.build(2)]),
-  AirmanModelFactory.build(3, 1, [CertificationModelFactory.build(3)]),
-  AirmanModelFactory.build(4, 2, [CertificationModelFactory.build(1), CertificationModelFactory.build(2)]),
-  AirmanModelFactory.build(5, 2, [CertificationModelFactory.build(2)]),
-  AirmanModelFactory.build(6, 2, [CertificationModelFactory.build(3)]),
-  AirmanModelFactory.build(7, 3, [CertificationModelFactory.build(1)]),
-  AirmanModelFactory.build(8, 3, [CertificationModelFactory.build(2)]),
-  AirmanModelFactory.build(9, 3, [CertificationModelFactory.build(3)]),
-  AirmanModelFactory.build(10, 4, [CertificationModelFactory.build(1), CertificationModelFactory.build(2)]),
-  AirmanModelFactory.build(11, 5, [CertificationModelFactory.build(2)]),
-  AirmanModelFactory.build(12, 6, [CertificationModelFactory.build(3)])
+  AirmanModelFactory.build(1, 1, [AirmanCertificationModelFactory.build(1)]),
+  AirmanModelFactory.build(2, 1, [AirmanCertificationModelFactory.build(2)]),
+  AirmanModelFactory.build(3, 1, [AirmanCertificationModelFactory.build(3)]),
+  AirmanModelFactory.build(4, 2, [AirmanCertificationModelFactory.build(1), AirmanCertificationModelFactory.build(2)]),
+  AirmanModelFactory.build(5, 2, [AirmanCertificationModelFactory.build(2)]),
+  AirmanModelFactory.build(6, 2, [AirmanCertificationModelFactory.build(3)]),
+  AirmanModelFactory.build(7, 3, [AirmanCertificationModelFactory.build(1)]),
+  AirmanModelFactory.build(8, 3, [AirmanCertificationModelFactory.build(2)]),
+  AirmanModelFactory.build(9, 3, [AirmanCertificationModelFactory.build(3)]),
+  AirmanModelFactory.build(10, 4, [AirmanCertificationModelFactory.build(1), AirmanCertificationModelFactory.build(2)]),
+  AirmanModelFactory.build(11, 5, [AirmanCertificationModelFactory.build(2)]),
+  AirmanModelFactory.build(12, 6, [AirmanCertificationModelFactory.build(3)])
 ];
 
 const squadrons = {'1': airmen.slice(0, 6), '2': airmen.slice(6, 12)};
@@ -37,7 +37,7 @@ export default class AirmanRepositoryStub implements AirmanRepository {
 
   saveQualification(airmanQual: AirmanQualificationModel): Promise<AirmanModel> {
     const airman = airmen.find(a => a.id === airmanQual.airmanId)!;
-    const qual = airman.qualifications.find(q => q.id === airmanQual.qualification.id);
+    const qual = airman.qualifications.find((q: AirmanQualificationModel) => q.id === airmanQual.qualification.id);
     if (qual == null) {
       airmanQual.id = Math.round(Math.random() * 0xFFFFFF);
       airman.qualifications.push(airmanQual);

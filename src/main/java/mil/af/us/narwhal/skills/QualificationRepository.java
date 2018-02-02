@@ -1,4 +1,4 @@
-package mil.af.us.narwhal.qualification;
+package mil.af.us.narwhal.skills;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

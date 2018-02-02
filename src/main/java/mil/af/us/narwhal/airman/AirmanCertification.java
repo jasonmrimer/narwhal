@@ -1,11 +1,9 @@
 package mil.af.us.narwhal.airman;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import mil.af.us.narwhal.certification.Certification;
+import mil.af.us.narwhal.skills.Certification;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -14,24 +12,39 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "join_airman_certification")
-@IdClass(AirmanCertificationId.class)
+@Table(
+  name = "join_airman_certification",
+  uniqueConstraints = {@UniqueConstraint(columnNames = {"airman_id", "certification_id"})}
+)
 public class AirmanCertification {
   @Id
-  @JsonIgnore
-  @Column(name="airman_id")
-  private long airmanId;
+  @GeneratedValue
+  private Long Id;
 
-  @Id
-  @JsonIgnore
-  @Column(name="certification_id")
-  private long certificationId;
+  @Column(name = "airman_id", nullable = false)
+  private Long airmanId;
+
+  @ManyToOne
+  @JoinColumn(name = "certification_id", referencedColumnName = "id", nullable = false)
+  private Certification certification;
+
+
+  @Column(name = "earn_date")
+  private Date earnDate;
 
   @Column(name = "expiration_date")
   private Date expirationDate;
 
-  @ManyToOne
-  @JoinColumn(name = "certification_id", updatable = false, insertable = false, referencedColumnName = "id")
-  @JsonUnwrapped
-  private Certification certification;
+  public AirmanCertification(Long airmanId, Certification certification, Date earnDate, Date expirationDate) {
+    this.airmanId = airmanId;
+    this.certification = certification;
+    this.earnDate = earnDate;
+    this.expirationDate = expirationDate;
+  }
+
+  public AirmanCertification(Certification certification, Date earnDate, Date expirationDate) {
+    this.certification = certification;
+    this.earnDate = earnDate;
+    this.expirationDate = expirationDate;
+  }
 }

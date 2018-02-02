@@ -1,6 +1,6 @@
 import AirmanQualificationModel from './AirmanQualificationModel';
-import CertificationModel from './CertificationModel';
 import EventModel from '../../event/EventModel';
+import AirmanCertificationModel from './AirmanCertificationModel';
 
 export default class AirmanModel {
   static empty(): AirmanModel {
@@ -12,7 +12,7 @@ export default class AirmanModel {
               public firstName: string,
               public lastName: string,
               public qualifications: AirmanQualificationModel[],
-              public certifications: CertificationModel[],
+              public certifications: AirmanCertificationModel[],
               public events: EventModel[]) {
   }
 

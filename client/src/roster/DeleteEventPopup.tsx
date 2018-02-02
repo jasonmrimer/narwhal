@@ -29,7 +29,7 @@ export const DeleteEventPopup = observer((props: Props) => {
 });
 
 export default styled(DeleteEventPopup)`
-  position: absolute;
+  position: fixed;
   background: rgba(0, 0, 0, 0.5);
   top: 0;
   left: 0;

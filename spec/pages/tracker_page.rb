@@ -22,8 +22,8 @@ class TrackerPage
   end
 
   def assert_navigates_week
-      find('button.next-week').click
-      expect(page).to have_content(get_start_of_next_week.strftime('%d %^a'))
+    find('button.next-week').click
+    expect(page).to have_content(get_start_of_next_week.strftime('%d %^a'))
 
       find('button.last-week').click
       find('button.last-week').click
@@ -68,7 +68,7 @@ class TrackerPage
       expect(page).to have_content('Spaceman, Corey')
       @@expected_availability_days.each { |day_name| expect(page).to have_content(day_name) }
     end
-    can_forward_to_next_week
+    can_advance_to_next_week
   end
 
   def assert_shows_currency
@@ -91,10 +91,10 @@ class TrackerPage
 
     event.create
     expect(event).to exist
-    
+
     event.update
     expect(event).to exist
-    
+
     event.delete
     expect(event).not_to exist
   end
@@ -113,24 +113,6 @@ class TrackerPage
     page.find(:xpath, "//*[text()='#{name}']").click
   end
 
-  def create_event(event)
-    page.within('.side-panel') do
-      click_link_or_button '+ Add Event'
-      fill_in 'title', with: event.title
-      fill_in 'startDate', with: event.start.strftime('%m/%d/%Y')
-      fill_in 'startTime', with: event.start.strftime('%H:%M')
-      fill_in 'endDate', with: event.end.strftime('%m/%d/%Y')
-      fill_in 'endTime', with: event.end.strftime('%H:%M')
-      find('input[type="submit"]').click
-    end
-  end
-
-  def delete_event(event)
-    page.within('.side-panel') do
-      page.find('.event-title', text: event.title).find('button.delete').click
-    end
-  end
-
   def filter(item, value)
     page.find("##{item}-filter").find(:option, text: value).select_option
   end
@@ -142,7 +124,7 @@ class TrackerPage
     end
   end
 
-  def can_forward_to_next_week
+  def can_advance_to_next_week
     page.within('.side-panel') do
       find('button.next-week').click
       expect(page).to have_content(get_start_of_next_week.strftime('%d %^b'))

@@ -10,14 +10,13 @@ import theme from './themes/default';
 import WebProfileRepository from './profile/repositories/web/WebProfileRepository';
 import { BrowserRouter } from 'react-router-dom';
 import WebAirmanRepository from './airman/repositories/web/WebAirmanRepository';
-import WebCertificationRepository from './airman/repositories/web/WebCertificationRepository';
 import WebSiteRepository from './site/repositories/web/WebSiteRepository';
 import WebMissionRepository from './mission/repositories/web/WebMissionRepository';
 import TrackerStore from './tracker/stores/TrackerStore';
 import DashboardStore from './dashboard/stores/DashboardStore';
 import { MomentTimeService } from './tracker/services/MomentTimeService';
 import WebEventRepository from './event/repositories/web/WebEventRepository';
-import WebQualificationRepository from './qualifications/repositories/web/WebQualificationRepository';
+import { default as WebSkillRepository } from './skills/repositories/web/WebSkillRepository';
 
 document.body.style.fontFamily = theme.fontFamily;
 document.body.style.color = theme.fontColor;
@@ -33,8 +32,7 @@ const dashboardStore = new DashboardStore(
 const trackerStore = new TrackerStore(
   new WebAirmanRepository(),
   siteRepository,
-  new WebCertificationRepository(),
-  new WebQualificationRepository(),
+  new WebSkillRepository(),
   new WebEventRepository(),
   new MomentTimeService()
 );

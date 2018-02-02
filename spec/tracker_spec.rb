@@ -19,7 +19,7 @@ describe 'Tracker page', type: :feature do
     it 'can filter the Roster by squadron' do
       tracker_page.assert_filters_by_squadron
     end
-    
+
     it 'can filter the Roster by flight' do
       tracker_page.assert_filters_by_flight
     end
@@ -49,9 +49,17 @@ describe 'Tracker page', type: :feature do
     end
   end
 
- describe 'roster' do
-  it 'can move forward weeks on the planner' do
-    tracker_page.assert_navigates_week
+  describe 'skills' do
+    xit 'can create and delete a qualification' do
+    end
+
+    xit 'can create and delete a certification' do
+    end
   end
- end
+
+  describe 'roster' do
+    it 'can move forward weeks on the planner' do
+      tracker_page.assert_navigates_week
+    end
+  end
 end

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import { eventStub } from '../../utils/testUtils';
 import { CurrencyForm } from './CurrencyForm';
-import QualificationModel from '../../qualifications/models/QualificationModel';
+import QualificationModel from '../../skills/models/QualificationModel';
 import AirmanQualificationModel from '../../airman/models/AirmanQualificationModel';
 import * as moment from 'moment';
 import DatePicker from '../../widgets/DatePicker';

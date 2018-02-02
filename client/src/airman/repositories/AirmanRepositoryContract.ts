@@ -1,7 +1,7 @@
 import AirmanRepository from './AirmanRepository';
 import AirmanModel from '../models/AirmanModel';
 import AirmanQualificationModel from '../models/AirmanQualificationModel';
-import QualificationModel from '../../qualifications/models/QualificationModel';
+import QualificationModel from '../../skills/models/QualificationModel';
 import * as moment from 'moment';
 
 export default function airmenRepositoryContract(subject: AirmanRepository) {

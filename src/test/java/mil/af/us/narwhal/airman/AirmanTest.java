@@ -1,6 +1,7 @@
 package mil.af.us.narwhal.airman;
 
-import mil.af.us.narwhal.qualification.Qualification;
+import mil.af.us.narwhal.skills.Certification;
+import mil.af.us.narwhal.skills.Qualification;
 import org.junit.Test;
 
 import java.util.Date;
@@ -19,5 +20,18 @@ public class AirmanTest {
 
     assertThat(airman.addQualification(airmanQualification)).isFalse();
     assertThat(airman.getQualifications().size()).isEqualTo(1);
+  }
+
+  @Test
+  public void addCertification_doesNotDuplicateCerts() throws Exception {
+    final Certification certification = new Certification(1L, "A");
+    final AirmanCertification airmanCertification = new AirmanCertification(certification, new Date(), new Date());
+    final Airman airman = new Airman();
+
+    assertThat(airman.addCertification(airmanCertification)).isTrue();
+    assertThat(airman.getCertifications().size()).isEqualTo(1);
+
+    assertThat(airman.addCertification(airmanCertification)).isFalse();
+    assertThat(airman.getCertifications().size()).isEqualTo(1);
   }
 }

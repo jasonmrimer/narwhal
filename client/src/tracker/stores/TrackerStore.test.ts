@@ -2,7 +2,6 @@ import TrackerStore from './TrackerStore';
 import AirmanRepositoryStub from '../../airman/repositories/doubles/AirmanRepositoryStub';
 import SiteRepositoryStub from '../../site/repositories/doubles/SiteRepositoryStub';
 import AirmanModel from '../../airman/models/AirmanModel';
-import CertificationRepositoryStub from '../../airman/repositories/doubles/CertificationRepositoryStub';
 import EventModel, { EventType } from '../../event/EventModel';
 import * as moment from 'moment';
 import EventRepositoryStub from '../../event/repositories/doubles/EventRepositoryStub';
@@ -10,15 +9,14 @@ import { toJS } from 'mobx';
 import { UnfilteredValue } from '../../widgets/models/FilterOptionModel';
 import TimeServiceStub from '../services/doubles/TimeServiceStub';
 import AirmanModelFactory from '../../airman/factories/AirmanModelFactory';
-import QualificationRepositoryStub from '../../qualifications/repositories/doubles/QualificationRepositoryStub';
-import QualificationModel from '../../qualifications/models/QualificationModel';
+import { default as SkillRepositoryStub } from '../../skills/repositories/doubles/SkillRepositoryStub';
+import QualificationModel from '../../skills/models/QualificationModel';
 import AirmanQualificationModel from '../../airman/models/AirmanQualificationModel';
 
 describe('TrackerStore', () => {
   const airmenRepository = new AirmanRepositoryStub();
   const siteRepository = new SiteRepositoryStub();
-  const certificationRepository = new CertificationRepositoryStub();
-  const qualificationRepository = new QualificationRepositoryStub();
+  const skillRepository = new SkillRepositoryStub();
   const eventRepository = new EventRepositoryStub();
   const timeServiceStub = new TimeServiceStub();
   let allAirmen: AirmanModel[];
@@ -29,8 +27,7 @@ describe('TrackerStore', () => {
     subject = new TrackerStore(
       airmenRepository,
       siteRepository,
-      certificationRepository,
-      qualificationRepository,
+      skillRepository,
       eventRepository,
       timeServiceStub,
     );

@@ -25,13 +25,13 @@ public class Airman {
   @JsonManagedReference
   private List<AirmanQualification> qualifications = new ArrayList<>();
 
-  @OneToMany(mappedBy = "airmanId")
+  @OneToMany(mappedBy = "airmanId",  cascade = CascadeType.ALL)
   @JsonManagedReference
   private List<AirmanCertification> certifications = new ArrayList<>();
 
   @OneToMany(mappedBy = "airmanId")
   @JsonManagedReference
-  List<Event> events = new ArrayList<>();
+  private List<Event> events = new ArrayList<>();
 
   public Airman() {
   }
@@ -151,6 +151,17 @@ public class Airman {
     }
     airmanQualification.setAirmanId(this.id);
     qualifications.add(airmanQualification);
+    return true;
+  }
+
+  public boolean addCertification(AirmanCertification airmanCertification) {
+    for (AirmanCertification cert : certifications) {
+      if (cert.getCertification().getId().equals(airmanCertification.getCertification().getId())) {
+        return false;
+      }
+    }
+    airmanCertification.setAirmanId(this.id);
+    certifications.add(airmanCertification);
     return true;
   }
 }

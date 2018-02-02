@@ -42,4 +42,15 @@ public class AirmanController {
       new ResponseEntity<>(repository.save(airman), HttpStatus.CREATED) :
       new ResponseEntity<>(airman, HttpStatus.OK);
   }
+
+  @PostMapping(path = "/{id}/certifications")
+  public ResponseEntity<Airman> createAirmanCertification(
+    @PathVariable("id") Long id,
+    @RequestBody AirmanCertification certification
+  ) {
+    final Airman airman = repository.findOne(id);
+    return airman.addCertification(certification) ?
+      new ResponseEntity<>(repository.save(airman), HttpStatus.CREATED) :
+      new ResponseEntity<>(airman, HttpStatus.OK);
+  }
 }

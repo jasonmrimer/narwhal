@@ -2,25 +2,23 @@ import AirmanModel from '../../airman/models/AirmanModel';
 import SiteModel from '../../site/models/SiteModel';
 import AirmanRepository from '../../airman/repositories/AirmanRepository';
 import SiteRepository from '../../site/repositories/SiteRepository';
-import CertificationRepository from '../../airman/repositories/CertificationRepository';
-import CertificationModel from '../../airman/models/CertificationModel';
+import CertificationModel from '../../skills/models/CertificationModel';
 import { action, computed, observable, toJS } from 'mobx';
 import FilterOption, { UnfilteredValue } from '../../widgets/models/FilterOptionModel';
 import EventModel from '../../event/EventModel';
 import EventRepository from '../../event/repositories/EventRepository';
 import TimeService from '../services/TimeService';
 import { Moment } from 'moment';
-import QualificationRepository from '../../qualifications/repositories/QualificationRepository';
-import QualificationModel from '../../qualifications/models/QualificationModel';
+import QualificationModel from '../../skills/models/QualificationModel';
 import AirmanQualificationModel from '../../airman/models/AirmanQualificationModel';
+import SkillRepository from '../../skills/repositories/SkillRepository';
 
 export default class TrackerStore {
   private airmanRepository: AirmanRepository;
   private siteRepository: SiteRepository;
-  private certificationRepository: CertificationRepository;
+  private skillRepository: SkillRepository;
   private eventRepository: EventRepository;
   private TimeService: TimeService;
-  private qualificationRepository: QualificationRepository;
 
   @observable private _airmen: AirmanModel[] = [];
   @observable private _sites: SiteModel[] = [];
@@ -42,14 +40,12 @@ export default class TrackerStore {
 
   constructor(airmanRepository: AirmanRepository,
               siteRepository: SiteRepository,
-              certificationRepository: CertificationRepository,
-              qualificationRepository: QualificationRepository,
+              skillRepository: SkillRepository,
               eventRepository: EventRepository,
               timeService: TimeService) {
     this.airmanRepository = airmanRepository;
     this.siteRepository = siteRepository;
-    this.certificationRepository = certificationRepository;
-    this.qualificationRepository = qualificationRepository;
+    this.skillRepository = skillRepository;
     this.eventRepository = eventRepository;
     this.TimeService = timeService;
     this._plannerWeek = this.TimeService.getCurrentWeek();
@@ -59,8 +55,8 @@ export default class TrackerStore {
   async hydrate() {
     this._airmen = await this.airmanRepository.findAll();
     this._sites = await this.siteRepository.findAll();
-    this._certifications = await this.certificationRepository.findAll();
-    this._qualifications = await this.qualificationRepository.findAll();
+    this._certifications = await this.skillRepository.findAllCertifications();
+    this._qualifications = await this.skillRepository.findAllQualifications();
   }
 
   @computed
@@ -68,7 +64,7 @@ export default class TrackerStore {
     let airmen = this._airmen;
     if (this._certificationIds.length !== 0) {
       airmen = airmen.filter(airman => {
-        const airmanCertificationIds = airman.certifications.map(cert => cert.id);
+        const airmanCertificationIds = airman.certifications.map(cert => cert.certification.id);
         return !this._certificationIds.some(val => airmanCertificationIds.indexOf(val) === -1);
       });
     }

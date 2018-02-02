@@ -1,7 +1,7 @@
 import * as React from 'react';
 import AirmanQualificationModel from '../../airman/models/AirmanQualificationModel';
 import styled from 'styled-components';
-import QualificationModel from '../../qualifications/models/QualificationModel';
+import QualificationModel from '../../skills/models/QualificationModel';
 import * as moment from 'moment';
 import DatePicker from '../../widgets/DatePicker';
 import SubmitButton from '../../widgets/SubmitButton';

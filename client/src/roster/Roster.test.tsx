@@ -4,7 +4,7 @@ import * as React from 'react';
 import { makeFakeTrackerStore, Table } from '../utils/testUtils';
 import { Roster } from './Roster';
 import AirmanModel from '../airman/models/AirmanModel';
-import CertificationModel from '../airman/models/CertificationModel';
+import CertificationModel from '../skills/models/CertificationModel';
 import TrackerStore from '../tracker/stores/TrackerStore';
 
 let airmen: AirmanModel[];

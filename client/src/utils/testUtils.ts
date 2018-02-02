@@ -3,17 +3,15 @@ import Planner from '../roster/Planner';
 import TrackerStore from '../tracker/stores/TrackerStore';
 import AirmanRepositoryStub from '../airman/repositories/doubles/AirmanRepositoryStub';
 import SiteRepositoryStub from '../site/repositories/doubles/SiteRepositoryStub';
-import CertificationRepositoryStub from '../airman/repositories/doubles/CertificationRepositoryStub';
 import EventRepositoryStub from '../event/repositories/doubles/EventRepositoryStub';
 import TimeServiceStub from '../tracker/services/doubles/TimeServiceStub';
-import QualificationRepositoryStub from '../qualifications/repositories/doubles/QualificationRepositoryStub';
+import { default as SkillRepositoryStub } from '../skills/repositories/doubles/SkillRepositoryStub';
 
 export async function makeFakeTrackerStore() {
   const store = new TrackerStore(
     new AirmanRepositoryStub(),
     new SiteRepositoryStub(),
-    new CertificationRepositoryStub(),
-    new QualificationRepositoryStub(),
+    new SkillRepositoryStub(),
     new EventRepositoryStub(),
     new TimeServiceStub(),
   );
@@ -99,4 +97,3 @@ export function selectOptionByValue(wrapper: any, value: number) {
 export function findSelectorWithText(wrapper: any, selector: string, text: string): any {
   return wrapper.find(selector).filterWhere((x: any) => x.text().includes(text));
 }
-

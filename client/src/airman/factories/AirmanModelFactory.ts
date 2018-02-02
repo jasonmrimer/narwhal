@@ -3,10 +3,10 @@ import AirmanQualificationModelFactory from './AirmanQualificationModelFactory';
 import { randomText } from '../../utils/randomizer';
 import * as moment from 'moment';
 import EventModel, { EventType } from '../../event/EventModel';
-import CertificationModel from '../models/CertificationModel';
+import AirmanCertificationModel from '../models/AirmanCertificationModel';
 
 export default class AirmanModelFactory {
-  static build(id: number = 1, flightId: number = 1, certifications: CertificationModel[] = []) {
+  static build(id: number = 1, flightId: number = 1, certifications: AirmanCertificationModel[] = []) {
     return new AirmanModel(
       id,
       flightId,

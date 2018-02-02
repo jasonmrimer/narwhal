@@ -1,9 +1,8 @@
 import CertificationModel from '../models/CertificationModel';
-import * as moment from 'moment';
 
 export default class CertificationModelFactory {
   static build(id: number) {
-    return new CertificationModel(id, `${id}`, moment(0).add(id, 'd'));
+    return new CertificationModel(id, `${id}`);
   }
 
   static buildList(amount: number) {

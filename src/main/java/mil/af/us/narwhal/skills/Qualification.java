@@ -1,4 +1,4 @@
-package mil.af.us.narwhal.qualification;
+package mil.af.us.narwhal.skills;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
