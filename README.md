@@ -7,9 +7,11 @@ Crew management is currently done leveraging several tools depending on the loca
 ### Dependencies
 * `mysql stable 5.7.20+`
 * `java 1.8`
+    * `gradle 3.5.1+`
 * `ruby 2.4.2+`
+    * `bundler 1.16.1+`
 * `node v8.9.0+`
-* `yarn 1.3.2+`
+    * `yarn 1.3.2+`
 
 ### Environment Variables
 Set the following environment variables:
@@ -19,6 +21,10 @@ Set the following environment variables:
 - `SSO_SERVICE_URL`
 - `SSO_CLIENT_ID`
 - `SSO_CLIENT_SECRET`
+- `UNICORN_URL`
+
+Source the following script to set the environment variables for local development:
+* `source ./scripts/setup_env.sh`
 
 ### Setup the Database
 * `./scripts/setup_db.sh`
@@ -51,7 +57,7 @@ Set the following environment variables:
 * `./gradlew test`
 
 #### Contract Tests
-* Ensure that the app is running locally.
+* Ensure that the app is running locally with `./gradlew bootrun`.
 * `cd client && yarn contracts`
 
 #### Acceptance Tests

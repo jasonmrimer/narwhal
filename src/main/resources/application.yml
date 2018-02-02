@@ -20,5 +20,3 @@ security:
     name: tytus
     password: password
     role: USER
-# TODO : should be an env var
-unicorn-uri: http://codweb1.leidoshost.com/UNICORN.NET/WebServices/UnicornMissionWebservicesV2.asmx

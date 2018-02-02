@@ -11,9 +11,7 @@ function cleanup {
 trap cleanup EXIT
 
 export REACT_APP_HOST=http://localhost:9090
-export SSO_SERVICE_URL=https://ssotest.login.system.dev.east.paas.geointservices.io
-export SSO_CLIENT_ID=5cc09048-0068-41fe-9191-958b2925080e
-export SSO_CLIENT_SECRET=a0ccc407-8529-4188-aed5-7e721697be91
+source ./scripts/setup_env.sh
 
 mkdir -p tmp
 

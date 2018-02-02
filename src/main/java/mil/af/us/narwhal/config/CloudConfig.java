@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 public class CloudConfig {
   @Bean
-  public MissionClient missionClient(@Value("${unicorn-uri}") String uri) {
+  public MissionClient missionClient(@Value("${unicorn-url}") String uri) {
     return new UnicornMissionClient(uri);
   }
 }
