@@ -7,20 +7,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static java.util.Arrays.asList;
-
 @RestController
-  @RequestMapping(SkillController.URI)
+@RequestMapping(SkillController.URI)
 public class SkillController {
   public static final String URI = "/api/skills";
 
   @Autowired private QualificationRepository qualificationRepository;
   @Autowired private CertificationRepository certificationRepository;
-
-  @GetMapping
-  public List<String> indexSkills() {
-    return asList("Qualification", "Certification");
-  }
 
   @GetMapping(path = "/qualifications")
   public List<Qualification> indexQualifications() {

@@ -12,6 +12,8 @@ import AirmanModelFactory from '../../airman/factories/AirmanModelFactory';
 import { default as SkillRepositoryStub } from '../../skills/repositories/doubles/SkillRepositoryStub';
 import QualificationModel from '../../skills/models/QualificationModel';
 import AirmanQualificationModel from '../../airman/models/AirmanQualificationModel';
+import AirmanCertificationModel from '../../airman/models/AirmanCertificationModel';
+import CertificationModel from '../../skills/models/CertificationModel';
 
 describe('TrackerStore', () => {
   const airmenRepository = new AirmanRepositoryStub();
@@ -234,7 +236,7 @@ describe('TrackerStore', () => {
     });
   });
 
-  describe('qualifications', () => {
+  describe('skills', () => {
     it('should add a qualification to an airman', async () => {
       const airman = allAirmen[0];
       const qualification = new AirmanQualificationModel(
@@ -244,9 +246,23 @@ describe('TrackerStore', () => {
         moment.utc()
       );
       const qualLength = airman.qualifications.length;
-      await subject.addAirmanQualification(qualification);
+      await subject.addAirmanSkill(qualification);
       const updatedAirman = (await airmenRepository.findAll())[0];
       expect(updatedAirman.qualifications.length).toBeGreaterThan(qualLength);
+    });
+
+    it('should add a certification to an airman', async () => {
+      const airman = allAirmen[0];
+      const certification = new AirmanCertificationModel(
+        airman.id,
+        new CertificationModel(100, 'A'),
+        moment.utc(),
+        moment.utc()
+      );
+      const certLength = airman.certifications.length;
+      await subject.addAirmanSkill(certification);
+      const updatedAirman = (await airmenRepository.findAll())[0];
+      expect(updatedAirman.certifications.length).toBeGreaterThan(certLength);
     });
   });
 });

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
+/* tslint:disable:no-any */
 interface Props {
   placeholder: string;
   value: string;

@@ -12,6 +12,7 @@ import { Moment } from 'moment';
 import QualificationModel from '../../skills/models/QualificationModel';
 import AirmanQualificationModel from '../../airman/models/AirmanQualificationModel';
 import SkillRepository from '../../skills/repositories/SkillRepository';
+import AirmanCertificationModel from '../../airman/models/AirmanCertificationModel';
 
 export default class TrackerStore {
   private airmanRepository: AirmanRepository;
@@ -275,9 +276,13 @@ export default class TrackerStore {
   }
 
   @action.bound
-  async addAirmanQualification(airmanQualification: AirmanQualificationModel) {
-    await this.airmanRepository.saveQualification(airmanQualification);
+  async addAirmanSkill(skill: AirmanQualificationModel | AirmanCertificationModel) {
+    if (skill instanceof AirmanQualificationModel) {
+      await this.airmanRepository.saveQualification(skill);
+    } else {
+      await this.airmanRepository.saveCertification(skill);
+    }
     this._airmen = await this.airmanRepository.findAll();
-    this._selectedAirman = this._airmen.find(a => a.id === airmanQualification.airmanId)!;
+    this._selectedAirman = this._airmen.find(a => a.id === skill.airmanId)!;
   }
 }

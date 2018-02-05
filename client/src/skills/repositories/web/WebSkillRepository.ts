@@ -3,6 +3,7 @@ import QualificationModel from '../../models/QualificationModel';
 import SkillRepository from '../SkillRepository';
 import CertificationModel from '../../models/CertificationModel';
 
+/* tslint:disable:no-any */
 export default class WebSkillRepository implements SkillRepository {
   constructor(private baseUrl: string = '') {}
 

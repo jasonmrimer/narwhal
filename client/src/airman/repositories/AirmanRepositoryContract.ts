@@ -3,6 +3,8 @@ import AirmanModel from '../models/AirmanModel';
 import AirmanQualificationModel from '../models/AirmanQualificationModel';
 import QualificationModel from '../../skills/models/QualificationModel';
 import * as moment from 'moment';
+import AirmanCertificationModel from '../models/AirmanCertificationModel';
+import CertificationModel from '../../skills/models/CertificationModel';
 
 export default function airmenRepositoryContract(subject: AirmanRepository) {
   let airmen: AirmanModel[];
@@ -71,6 +73,20 @@ export default function airmenRepositoryContract(subject: AirmanRepository) {
       );
       const airman = await subject.saveQualification(qualification);
       expect(airman.qualifications.find(q => q.qualification.id === qualId)!.id).toBeDefined();
+    });
+  });
+
+  describe('saveCertification', () => {
+    it('saves a certification with a unique id', async () => {
+      const certId = 3;
+      const certification = new AirmanCertificationModel(
+        airmen[0].id,
+        new CertificationModel(certId, 'A'),
+        moment.utc(),
+        moment.utc()
+      );
+      const airman = await subject.saveCertification(certification);
+      expect(airman.certifications.find(c => c.certification.id === certId)!.id).toBeDefined();
     });
   });
 }

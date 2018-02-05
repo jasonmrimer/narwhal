@@ -33,6 +33,16 @@ export const eventStub = {
   }
 };
 
+/* tslint:disable:no-any */
+export const eventTargetStub = (name: string, value: any) => {
+  return {
+    target: {
+      name: name,
+      value: value
+    }
+  };
+};
+
 /* tslint:disable:no-any*/
 export class Table {
   private wrapper: any;

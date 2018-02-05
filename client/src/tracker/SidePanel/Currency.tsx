@@ -5,6 +5,7 @@ import TrackerStore from '../stores/TrackerStore';
 import { observer } from 'mobx-react';
 import CurrencyForm from './CurrencyForm';
 import AirmanQualificationModel from '../../airman/models/AirmanQualificationModel';
+import AirmanCertificationModel from '../../airman/models/AirmanCertificationModel';
 
 interface Props {
   trackerStore: TrackerStore;
@@ -34,19 +35,21 @@ export class Currency extends React.Component<Props, State> {
     this.setState({showForm: false});
   }
 
-  createAirmanQualification = async (airmanQual: AirmanQualificationModel) => {
-    await this.props.trackerStore.addAirmanQualification(airmanQual);
+  createAirmanSkill = async (skill: AirmanQualificationModel | AirmanCertificationModel) => {
+    await this.props.trackerStore.addAirmanSkill(skill);
     this.setState({showForm: false});
   }
 
   renderCurrencyForm = () => {
     const airman = this.props.trackerStore.selectedAirman;
     const qualifications = this.props.trackerStore.qualifications;
+    const certifications = this.props.trackerStore.certifications;
     return (
       <CurrencyForm
         airmanId={airman.id}
         qualifications={qualifications}
-        createAirmanQualification={this.createAirmanQualification}
+        certifications={certifications}
+        createAirmanSkill={this.createAirmanSkill}
       />
     );
   }

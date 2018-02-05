@@ -2,6 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import * as classNames from 'classnames';
 
+/* tslint:disable:no-any */
 interface Props {
   options: string[];
   value: string;

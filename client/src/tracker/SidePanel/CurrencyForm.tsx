@@ -5,16 +5,22 @@ import QualificationModel from '../../skills/models/QualificationModel';
 import * as moment from 'moment';
 import DatePicker from '../../widgets/DatePicker';
 import SubmitButton from '../../widgets/SubmitButton';
+import CertificationModel from '../../skills/models/CertificationModel';
+import AirmanCertificationModel from '../../airman/models/AirmanCertificationModel';
+import { allSkills, SkillType } from '../../skills/models/SkillType';
+import SkillBuilder from '../../skills/models/SkillBuilder';
 
 interface Props {
   airmanId: number;
   qualifications: QualificationModel[];
-  createAirmanQualification: (airmanQual: AirmanQualificationModel) => void;
+  certifications: CertificationModel[];
+  createAirmanSkill: (skill: AirmanQualificationModel | AirmanCertificationModel) => void;
   className?: string;
 }
 
 interface State {
-  qualificationIndex: string;
+  skillTypeIndex: string;
+  skillNameIndex: string;
   earnDate: string;
   expirationDate: string;
 }
@@ -22,7 +28,8 @@ interface State {
 export class CurrencyForm extends React.Component<Props, State> {
   static hydrate() {
     return {
-      qualificationIndex: '',
+      skillTypeIndex: '',
+      skillNameIndex: '',
       earnDate: '',
       expirationDate: ''
     };
@@ -32,7 +39,7 @@ export class CurrencyForm extends React.Component<Props, State> {
     super(props);
     this.state = CurrencyForm.hydrate();
   }
-  
+
   render() {
     return (
       <form className={this.props.className} onSubmit={this.handleSubmit}>
@@ -40,22 +47,29 @@ export class CurrencyForm extends React.Component<Props, State> {
           Add Skill:
         </div>
         <div className="form-row">
-          <label>Type:</label>
-          <span>Qualification</span>
-        </div>
-        <div className="form-row">
-          <label htmlFor="qualification-select">Name:</label>
+          <label htmlFor="skill-type-select">Type:</label>
           <select
-            id="qualification-select"
-            name="qualificationIndex"
-            value={this.state.qualificationIndex}
+            id="skill-type-select"
+            name="skillTypeIndex"
+            value={this.state.skillTypeIndex}
             onChange={this.handleChange}
           >
             {
-              this.props.qualifications.map((qual, index) => {
-                return <option key={index} value={index}>{qual.acronym}</option>;
+              allSkills().map((skill, index) => {
+                return <option key={index} value={index}>{skill}</option>;
               })
             }
+          </select>
+        </div>
+        <div className="form-row">
+          <label htmlFor="skill-name-select">Name:</label>
+          <select
+            id="skill-name-select"
+            name="skillNameIndex"
+            value={this.state.skillNameIndex}
+            onChange={this.handleChange}
+          >
+            {this.renderSkillNameOptions()}
           </select>
         </div>
         <div className="form-row">
@@ -81,19 +95,48 @@ export class CurrencyForm extends React.Component<Props, State> {
     );
   }
 
-  handleChange = (e: any) => {
+  private renderSkillNameOptions = () => {
+    switch (this.selectedSkill) {
+      case SkillType.Certification:
+        return this.props.certifications.map((cert, index) => {
+          return <option key={index} value={index}>{cert.title}</option>;
+        });
+      case SkillType.Qualification:
+      default:
+        return this.props.qualifications.map((qual, index) => {
+          return <option key={index} value={index}>{`${qual.acronym} - ${qual.title}`}</option>;
+        });
+    }
+  }
+
+  private get selectedSkill() {
+    return allSkills()[Number(this.state.skillTypeIndex)];
+  }
+
+  /* tslint:disable:no-any */
+  private handleChange = (e: any) => {
     this.setState({[e.target.name]: e.target.value});
   }
 
-  handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  private handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const airmanQual = new AirmanQualificationModel(
-      this.props.airmanId,
-      this.props.qualifications[Number(this.state.qualificationIndex)],
-      moment.utc(this.state.earnDate),
-      moment.utc(this.state.expirationDate)
-    );
-    this.props.createAirmanQualification(airmanQual);
+
+    const builder = new SkillBuilder();
+    builder.airmanId = this.props.airmanId;
+    builder.earnDate = moment.utc(this.state.earnDate);
+    builder.expirationDate = moment.utc(this.state.expirationDate);
+
+    switch (this.selectedSkill) {
+      case SkillType.Certification:
+        builder.skill = this.props.certifications[Number(this.state.skillNameIndex)];
+        break;
+      case SkillType.Qualification:
+      default:
+        builder.skill = this.props.qualifications[Number(this.state.skillNameIndex)];
+        break;
+    }
+
+    this.props.createAirmanSkill(builder.build());
   }
 }
 
@@ -114,7 +157,13 @@ export default styled(CurrencyForm)`
   .form-row {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin: 1rem 1rem 0;
+    
+    label {
+      margin-right: 1rem;
+      width: 25%;
+    }
   }
   
   select {
@@ -129,6 +178,6 @@ export default styled(CurrencyForm)`
     border-bottom: 1px solid ${props => props.theme.fontColor};
     -webkit-appearance: none;
     -webkit-border-radius: 0;
-    min-width: 9.75rem;
+    width: 75%;
   }
 `;

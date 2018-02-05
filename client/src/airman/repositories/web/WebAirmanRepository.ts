@@ -4,10 +4,13 @@ import AirmanQualificationModel from '../../models/AirmanQualificationModel';
 import AirmanModel from '../../models/AirmanModel';
 import * as Cookie from 'js-cookie';
 import { AirmanQualificationSerializer } from '../../serializers/AirmanQualificationSerializer';
+import AirmanCertificationModel from '../../models/AirmanCertificationModel';
+import { AirmanCertificationSerializer } from '../../serializers/AirmanCertificationSerializer';
 
 export default class WebAirmanRepository implements AirmanRepository {
   private serializer = new AirmanSerializer();
   private airmanQualSerializer = new AirmanQualificationSerializer();
+  private airmanCertSerializer = new AirmanCertificationSerializer();
   private csrfToken: string;
 
   constructor(private baseUrl: string = '') {
@@ -51,4 +54,19 @@ export default class WebAirmanRepository implements AirmanRepository {
     const json = await resp.json();
     return this.serializer.deserialize(json);
   }
+
+  async saveCertification(airmanCert: AirmanCertificationModel): Promise<AirmanModel> {
+    const resp = await fetch(
+      `${this.baseUrl}/api/airmen/${airmanCert.airmanId}/certifications`,
+      {
+        method: 'post',
+        headers: [['Content-Type', 'application/json'], ['X-XSRF-TOKEN', this.csrfToken]],
+        body: this.airmanCertSerializer.serialize(airmanCert),
+        credentials: 'include'
+      }
+    );
+    const json = await resp.json();
+    return this.serializer.deserialize(json);
+  }
+
 }
