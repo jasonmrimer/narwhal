@@ -7,7 +7,6 @@ import mil.af.us.narwhal.flight.FlightRepository;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
 import mil.af.us.narwhal.squadron.Squadron;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -15,13 +14,12 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class UploadService {
+public class AirmanUploadService {
   private AirmanRepository airmanRepository;
   private SiteRepository siteRepository;
   private FlightRepository flightRepository;
 
-  @Autowired
-  public UploadService(
+  public AirmanUploadService(
     AirmanRepository airmanRepository,
     SiteRepository siteRepository,
     FlightRepository flightRepository
@@ -31,10 +29,10 @@ public class UploadService {
     this.flightRepository = flightRepository;
   }
 
-  public void importToDatabase(List<UploadCSVRow> rows) {
+  public void importToDatabase(List<AirmanUploadCSVRow> rows) {
     Set<Airman> airmen = new HashSet<>();
 
-    for (UploadCSVRow row : rows) {
+    for (AirmanUploadCSVRow row : rows) {
       Site site = siteRepository.findOneByName(row.getSite());
       if (site == null) continue;
 
@@ -49,7 +47,7 @@ public class UploadService {
     if (!airmen.isEmpty()) airmanRepository.save(airmen);
   }
 
-  private Squadron getSquadron(UploadCSVRow row, Site site) {
+  private Squadron getSquadron(AirmanUploadCSVRow row, Site site) {
     return site.getSquadrons()
       .stream()
       .filter(s -> s.getName().equals(row.getSquadron()))
@@ -57,7 +55,7 @@ public class UploadService {
       .orElse(null);
   }
 
-  private Flight getFlight(UploadCSVRow row, Squadron squadron) {
+  private Flight getFlight(AirmanUploadCSVRow row, Squadron squadron) {
     return squadron.getFlights()
       .stream()
       .filter(f -> f.getName().equals(row.getFlight()))

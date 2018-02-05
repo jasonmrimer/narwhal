@@ -26,7 +26,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class UploadServiceTest {
+public class AirmanUploadServiceTest {
   private final Long flightId = 123L;
   private final Flight flight = new Flight(1L, 1L, "FLIGHT1");
   private final Squadron squadron = new Squadron(1L, 1L, "SQUAD1", asList(flight));
@@ -35,7 +35,7 @@ public class UploadServiceTest {
   @Mock private SiteRepository siteRepository;
   @Mock private FlightRepository flightRepository;
   @Captor private ArgumentCaptor<Set<Airman>> airmenCaptor;
-  private UploadService subject;
+  private AirmanUploadService subject;
 
   @Before
   public void setUp() {
@@ -48,15 +48,15 @@ public class UploadServiceTest {
         return flight;
       });
 
-    subject = new UploadService(airmanRepository, siteRepository, flightRepository);
+    subject = new AirmanUploadService(airmanRepository, siteRepository, flightRepository);
   }
 
   @Test
   public void testImportToDatabase() {
-    final List<UploadCSVRow> rows = asList(
-      new UploadCSVRow("first1", "last1", site.getName(), squadron.getName(), flight.getName()),
-      new UploadCSVRow("first2", "last2", site.getName(), squadron.getName(), flight.getName()),
-      new UploadCSVRow("first3", "last3", site.getName(), squadron.getName(), flight.getName())
+    final List<AirmanUploadCSVRow> rows = asList(
+      new AirmanUploadCSVRow("first1", "last1", site.getName(), squadron.getName(), flight.getName()),
+      new AirmanUploadCSVRow("first2", "last2", site.getName(), squadron.getName(), flight.getName()),
+      new AirmanUploadCSVRow("first3", "last3", site.getName(), squadron.getName(), flight.getName())
     );
     subject.importToDatabase(rows);
     verify(airmanRepository).save(airmenCaptor.capture());
@@ -70,7 +70,7 @@ public class UploadServiceTest {
   @Test
   public void testImportToDatabase_createsUnknownFlights() {
     subject.importToDatabase(singletonList(
-      new UploadCSVRow("first1", "last1", site.getName(), squadron.getName(), "FLIGHT2")
+      new AirmanUploadCSVRow("first1", "last1", site.getName(), squadron.getName(), "FLIGHT2")
     ));
 
     verify(airmanRepository).save(airmenCaptor.capture());
@@ -80,8 +80,8 @@ public class UploadServiceTest {
   @Test
   public void testImportToDatabase_doesNotDuplicateFlights_whenTheFlightAppearsTwice() {
     subject.importToDatabase(asList(
-      new UploadCSVRow("first1", "last1", site.getName(), squadron.getName(), "NEW FLIGHT NAME"),
-      new UploadCSVRow("first2", "last2", site.getName(), squadron.getName(), "NEW FLIGHT NAME")
+      new AirmanUploadCSVRow("first1", "last1", site.getName(), squadron.getName(), "NEW FLIGHT NAME"),
+      new AirmanUploadCSVRow("first2", "last2", site.getName(), squadron.getName(), "NEW FLIGHT NAME")
     ));
 
     verify(flightRepository, times(1)).save(any(Flight.class));
@@ -89,14 +89,14 @@ public class UploadServiceTest {
 
   @Test
   public void testImportToDatabase_doesNotCreateUnknownSites() {
-    subject.importToDatabase(singletonList(new UploadCSVRow("first1", "last1", "unknown-site", "", "")));
+    subject.importToDatabase(singletonList(new AirmanUploadCSVRow("first1", "last1", "unknown-site", "", "")));
     verifyZeroInteractions(airmanRepository);
     verifyZeroInteractions(flightRepository);
   }
 
   @Test
   public void testImportToDatabase_doesNotCreateUnknownSquadrons() {
-    subject.importToDatabase(singletonList(new UploadCSVRow("first1", "last1", site.getName(), "unknown-squadron", "")));
+    subject.importToDatabase(singletonList(new AirmanUploadCSVRow("first1", "last1", site.getName(), "unknown-squadron", "")));
     verifyZeroInteractions(airmanRepository);
     verifyZeroInteractions(flightRepository);
   }

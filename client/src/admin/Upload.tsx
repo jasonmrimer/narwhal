@@ -4,12 +4,27 @@ import * as Cookie from 'js-cookie';
 export default class Upload extends React.Component {
   render() {
     const csrfToken = Cookie.get('XSRF-TOKEN') || '';
-    return (
-      <form encType="multipart/form-data" method="post" action="/api/upload">
-        <input type="file" name="file"/>
-        <input type="submit" value="Upload CSV"/>
-        <input type="hidden" name="_csrf" value={csrfToken}/>
-      </form>
-    );
+    return [
+      (
+        <div key="0">
+          <h3>Upload airmen: </h3>
+          <form encType="multipart/form-data" method="post" action="/api/upload/airman">
+            <input type="file" name="file"/>
+            <input type="submit" value="Upload CSV"/>
+            <input type="hidden" name="_csrf" value={csrfToken}/>
+          </form>
+        </div>
+      ),
+      (
+        <div key="1">
+          <h3>Upload qualifications: </h3>
+          <form encType="multipart/form-data" method="post" action="/api/upload/qualification">
+            <input type="file" name="file"/>
+            <input type="submit" value="Upload CSV"/>
+            <input type="hidden" name="_csrf" value={csrfToken}/>
+          </form>
+        </div>
+      ),
+    ];
   }
 }

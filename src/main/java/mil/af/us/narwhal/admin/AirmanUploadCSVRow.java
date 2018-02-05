@@ -4,7 +4,7 @@ import com.opencsv.bean.CsvBindByName;
 
 import java.util.Objects;
 
-public class UploadCSVRow {
+public class AirmanUploadCSVRow {
   @CsvBindByName
   private String firstName;
 
@@ -20,10 +20,10 @@ public class UploadCSVRow {
   @CsvBindByName
   private String flight;
 
-  public UploadCSVRow() {
+  public AirmanUploadCSVRow() {
   }
 
-  public UploadCSVRow(
+  public AirmanUploadCSVRow(
     String firstName,
     String lastName,
     String site,
@@ -81,7 +81,7 @@ public class UploadCSVRow {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    UploadCSVRow that = (UploadCSVRow) o;
+    AirmanUploadCSVRow that = (AirmanUploadCSVRow) o;
     return Objects.equals(firstName, that.firstName) &&
       Objects.equals(lastName, that.lastName) &&
       Objects.equals(site, that.site) &&

@@ -17,17 +17,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(UploadController.class)
 @RunWith(SpringRunner.class)
-public class UploadControllerTest {
+public class AirmanUploadControllerTest {
   @Autowired private MockMvc mockMvc;
-  @MockBean private UploadService uploadService;
+  @MockBean private AirmanUploadService airmanUploadService;
+  @MockBean private QualificationUploadService qualificationUploadService;
 
   @Test
-  public void testImportCSV() throws Exception {
+  public void testImportAirmanCSV() throws Exception {
     final MockMultipartFile multipartFile = new MockMultipartFile(
       "file",
       "lastName,firstName,site,squadron,flight\nLast,First,SITE,SQUADRON,FLIGHT".getBytes()
     );
-    final UploadCSVRow row = new UploadCSVRow(
+    final AirmanUploadCSVRow row = new AirmanUploadCSVRow(
       "First",
       "Last",
       "SITE",
@@ -36,10 +37,10 @@ public class UploadControllerTest {
     );
 
     mockMvc.perform(
-      fileUpload(UploadController.URI).file(multipartFile)
+      fileUpload(UploadController.URI + "/airman").file(multipartFile)
         .with(httpBasic("tytus", "password")))
       .andExpect(status().is3xxRedirection());
 
-    verify(uploadService).importToDatabase(singletonList(row));
+    verify(airmanUploadService).importToDatabase(singletonList(row));
   }
 }
