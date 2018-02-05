@@ -91,6 +91,13 @@ describe('Availability', () => {
     expect(dateWrapper.find('.event-date').text()).toContain('MON, 04 DEC 17');
   });
 
+  it('advanced to previous weeks', () => {
+    subject.find('button.last-week').simulate('click');
+    expect(subject.text()).toContain('19 NOV - 25 NOV');
+    const dateWrapper = subject.find('#day-1');
+    expect(dateWrapper.find('.event-date').text()).toContain('MON, 20 NOV 17');
+  });
+
   it('opens an Edit Event form when clicking on an existing Event Card', () => {
     subject.find(AirmanEvent).at(0).simulate('click');
     expect(subject.find(StyledEventForm).prop('event')).toEqual(eventOne);

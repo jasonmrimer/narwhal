@@ -276,6 +276,11 @@ export default class TrackerStore {
   }
 
   @action.bound
+  decrementSidePanelWeek() {
+    this._sidePanelWeek = this.TimeService.decrementWeek(this._sidePanelWeek);
+  }
+
+  @action.bound
   async addAirmanSkill(skill: AirmanQualificationModel | AirmanCertificationModel) {
     if (skill instanceof AirmanQualificationModel) {
       await this.airmanRepository.saveQualification(skill);

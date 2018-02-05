@@ -8,6 +8,7 @@ import { observer } from 'mobx-react';
 import TrackerStore from '../stores/TrackerStore';
 import NextIcon from '../../icons/NextIcon';
 import { doesDayHaveEvent } from '../../utils/eventUtil';
+import BackIcon from '../../icons/BackIcon';
 
 interface Props {
   trackerStore: TrackerStore;
@@ -70,6 +71,9 @@ export class Availability extends React.Component<Props, State> {
           </button>
         </div>
         <div className="nav-row">
+          <button className="last-week" onClick={trackerStore.decrementSidePanelWeek}>
+            <BackIcon width={12} height={12}/>
+          </button>
           <h3>
             {week[0].format('DD MMM').toUpperCase()} - {week[6].format('DD MMM').toUpperCase()}
           </h3>
