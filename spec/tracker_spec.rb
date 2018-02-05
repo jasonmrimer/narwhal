@@ -27,6 +27,10 @@ describe 'Tracker page', type: :feature do
     it 'can filter the Roster by certification' do
       tracker_page.assert_filters_by_certification
     end
+
+    it 'can filter the Roster by qualification' do
+      tracker_page.assert_filters_by_qualification
+    end
   end
 
   describe 'the side panel' do

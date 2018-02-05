@@ -1,18 +1,21 @@
 import AirmanModel from '../models/AirmanModel';
-import AirmanQualificationModelFactory from './AirmanQualificationModelFactory';
 import { randomText } from '../../utils/randomizer';
 import * as moment from 'moment';
 import EventModel, { EventType } from '../../event/EventModel';
 import AirmanCertificationModel from '../models/AirmanCertificationModel';
+import AirmanQualificationModel from '../models/AirmanQualificationModel';
 
 export default class AirmanModelFactory {
-  static build(id: number = 1, flightId: number = 1, certifications: AirmanCertificationModel[] = []) {
+  static build(id: number = 1,
+               flightId: number = 1,
+               qualifications: AirmanQualificationModel[] = [],
+               certifications: AirmanCertificationModel[] = []) {
     return new AirmanModel(
       id,
       flightId,
       randomText(5),
       randomText(5),
-      AirmanQualificationModelFactory.buildList(2),
+      qualifications,
       certifications,
       [new EventModel(
         'Fake Event',

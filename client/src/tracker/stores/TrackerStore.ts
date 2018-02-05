@@ -30,6 +30,7 @@ export default class TrackerStore {
   @observable private _squadronId: number = UnfilteredValue;
   @observable private _flightId: number = UnfilteredValue;
   @observable private _certificationIds: number[] = [];
+  @observable private _qualificationIds: number[] = [];
 
   @observable private _selectedAirman: AirmanModel = AirmanModel.empty();
   @observable private _selectedEvent: EventModel | null = null;
@@ -63,6 +64,14 @@ export default class TrackerStore {
   @computed
   get airmen() {
     let airmen = this._airmen;
+
+    if (this._qualificationIds.length !== 0) {
+      airmen = airmen.filter(airman => {
+        const airmanQualificationIds = airman.qualifications.map(qual => qual.qualification.id);
+        return !this._qualificationIds.some(val => airmanQualificationIds.indexOf(val) === -1);
+      });
+    }
+
     if (this._certificationIds.length !== 0) {
       airmen = airmen.filter(airman => {
         const airmanCertificationIds = airman.certifications.map(cert => cert.certification.id);
@@ -169,6 +178,22 @@ export default class TrackerStore {
     return this._certifications.map(cert => {
       return {value: cert.id, label: cert.title};
     });
+  }
+
+  @computed
+  get qualificationOptions() {
+    return this._qualifications.map(qual => {
+      return {value: qual.id, label: qual.acronym};
+    });
+  }
+  @action.bound
+  setQualificationIds(options: FilterOption[]) {
+    this._qualificationIds = options.map(option => option.value);
+  }
+
+  @computed
+  get qualificationIds() {
+    return toJS(this._qualificationIds);
   }
 
   @computed

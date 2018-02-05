@@ -6,9 +6,11 @@ import { Roster } from './Roster';
 import AirmanModel from '../airman/models/AirmanModel';
 import CertificationModel from '../skills/models/CertificationModel';
 import TrackerStore from '../tracker/stores/TrackerStore';
+import QualificationModel from '../skills/models/QualificationModel';
 
 let airmen: AirmanModel[];
 let certifications: CertificationModel[];
+let qualifications: QualificationModel[];
 let table: Table;
 let trackerStore: TrackerStore;
 let subject: ReactWrapper;
@@ -18,6 +20,7 @@ describe('Roster', () => {
     trackerStore = await makeFakeTrackerStore();
     airmen = trackerStore.airmen;
     certifications = trackerStore.certifications;
+    qualifications = trackerStore.qualifications;
 
     subject = mount(
       <Roster
@@ -63,21 +66,39 @@ describe('Roster', () => {
   });
 
   describe('multiselect', () => {
-    let multiSelect: ReactWrapper;
+    let certificationMultiSelect: ReactWrapper;
+    let qualificationMultiSelect: ReactWrapper;
 
     beforeEach(() => {
-      multiSelect = subject.find('Select');
+      qualificationMultiSelect = subject.find('Select#qualification-select');
+      certificationMultiSelect = subject.find('Select#certification-select');
     });
 
-    it('renders multiple certfications', () => {
+    it('renders multiple qualifications', () => {
+      const qualificationOptions = qualifications.map(qualification => {
+        return {value: qualification.id, label: qualification.acronym};
+      });
+      expect(qualificationMultiSelect.prop('options')).toEqual(qualificationOptions);
+    });
+
+    it('calls the setSelectedQualifications when selecting a single qualification', () => {
+      const input = qualificationMultiSelect.find('input');
+      input.simulate('keyDown', {keyCode: 40});
+      input.simulate('keyDown', {keyCode: 13});
+      subject.update();
+
+      expect(trackerStore.qualificationIds).toEqual([0]);
+    });
+
+    it('renders multiple certifications', () => {
       const certificationOptions = certifications.map(certification => {
         return {value: certification.id, label: certification.title};
       });
-      expect(multiSelect.prop('options')).toEqual(certificationOptions);
+      expect(certificationMultiSelect.prop('options')).toEqual(certificationOptions);
     });
 
     it('calls the setSelectedCertifications when selecting a single certification', () => {
-      const input = multiSelect.find('input');
+      const input = certificationMultiSelect.find('input');
       input.simulate('keyDown', {keyCode: 40});
       input.simulate('keyDown', {keyCode: 13});
       subject.update();

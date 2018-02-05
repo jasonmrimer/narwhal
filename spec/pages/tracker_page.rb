@@ -61,6 +61,12 @@ class TrackerPage
     expect(page).to have_css('tbody tr', maximum: @@all_airmen_count - 1)
   end
 
+  def assert_filters_by_qualification
+    expect(page).to have_content('Filter Qualification')
+    multi_filter('qualification', 'QB')
+    expect(page).to have_css('tbody tr', maximum: @@all_airmen_count - 1)
+  end
+
   def assert_shows_availability
     click_on_airman('Spaceman')
     page.within('.side-panel') do

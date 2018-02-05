@@ -27,6 +27,7 @@ export class Roster extends React.Component<Props> {
           </th>
           <th className="qualification">
             <div>QUALIFICATION</div>
+            {this.renderQualificationFilter()}
           </th>
           <th className="certification">
             <div>CERTIFICATION</div>
@@ -69,9 +70,24 @@ export class Roster extends React.Component<Props> {
     });
   }
 
+  private renderQualificationFilter() {
+    return (
+      <Select
+        id="qualification-select"
+        inputProps={{id: 'qualification-filter'}}
+        placeholder="Filter Qualifications"
+        multi={true}
+        value={this.props.trackerStore.qualificationIds}
+        options={this.props.trackerStore.qualificationOptions}
+        onChange={this.props.trackerStore.setQualificationIds}
+      />
+    );
+  }
+
   private renderCertificationFilter() {
     return (
       <Select
+        id="certification-select"
         inputProps={{id: 'certification-filter'}}
         placeholder="Filter Certifications"
         multi={true}

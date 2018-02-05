@@ -47,6 +47,21 @@ describe('TrackerStore', () => {
     ]);
   });
 
+  it('returns a list of qualification options', () => {
+    expect(subject.qualificationOptions).toEqual([
+      {value: 0, label: '0'},
+      {value: 1, label: '1'},
+      {value: 2, label: '2'},
+      {value: 3, label: '3'},
+      {value: 4, label: '4'},
+      {value: 5, label: '5'},
+      {value: 6, label: '6'},
+      {value: 7, label: '7'},
+      {value: 8, label: '8'},
+      {value: 9, label: '9'}
+    ]);
+  });
+
   it('returns a list of certification options', () => {
     expect(subject.certificationOptions).toEqual([
       {value: 0, label: '0'},
@@ -148,6 +163,21 @@ describe('TrackerStore', () => {
     });
 
     it('returns airmen with the selected certifications', () => {
+      const filteredAirmen = subject.airmen;
+      expect(filteredAirmen.length).toBeLessThan(allAirmen.length);
+      expect(filteredAirmen.map(airman => airman.id)).toEqual([4, 10]);
+    });
+  });
+
+  describe('filtering by qualifications', () => {
+    beforeEach(() => {
+      subject.setQualificationIds([
+        {value: 1, label: 'qualification 1'},
+        {value: 2, label: 'qualification 2'}
+      ]);
+    });
+
+    it('returns airmen with the selected qualifications', () => {
       const filteredAirmen = subject.airmen;
       expect(filteredAirmen.length).toBeLessThan(allAirmen.length);
       expect(filteredAirmen.map(airman => airman.id)).toEqual([4, 10]);

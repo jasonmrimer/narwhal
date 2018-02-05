@@ -4,20 +4,24 @@ import AirmanModel from '../../models/AirmanModel';
 import AirmanQualificationModel from '../../models/AirmanQualificationModel';
 import AirmanCertificationModelFactory from '../../factories/AirmanCertificationModelFactory';
 import AirmanCertificationModel from '../../models/AirmanCertificationModel';
+import AirmanQualificationModelFactory from '../../factories/AirmanQualificationModelFactory';
 
+const af = AirmanModelFactory;
 const airmen = [
-  AirmanModelFactory.build(1, 1, [AirmanCertificationModelFactory.build(1)]),
-  AirmanModelFactory.build(2, 1, [AirmanCertificationModelFactory.build(2)]),
-  AirmanModelFactory.build(3, 1, [AirmanCertificationModelFactory.build(3)]),
-  AirmanModelFactory.build(4, 2, [AirmanCertificationModelFactory.build(1), AirmanCertificationModelFactory.build(2)]),
-  AirmanModelFactory.build(5, 2, [AirmanCertificationModelFactory.build(2)]),
-  AirmanModelFactory.build(6, 2, [AirmanCertificationModelFactory.build(3)]),
-  AirmanModelFactory.build(7, 3, [AirmanCertificationModelFactory.build(1)]),
-  AirmanModelFactory.build(8, 3, [AirmanCertificationModelFactory.build(2)]),
-  AirmanModelFactory.build(9, 3, [AirmanCertificationModelFactory.build(3)]),
-  AirmanModelFactory.build(10, 4, [AirmanCertificationModelFactory.build(1), AirmanCertificationModelFactory.build(2)]),
-  AirmanModelFactory.build(11, 5, [AirmanCertificationModelFactory.build(2)]),
-  AirmanModelFactory.build(12, 6, [AirmanCertificationModelFactory.build(3)])
+  af.build(1, 1, [AirmanQualificationModelFactory.build(1)], [AirmanCertificationModelFactory.build(1)]),
+  af.build(2, 1, [AirmanQualificationModelFactory.build(2)], [AirmanCertificationModelFactory.build(2)]),
+  af.build(3, 1, [AirmanQualificationModelFactory.build(3)], [AirmanCertificationModelFactory.build(3)]),
+  af.build(4, 2, [AirmanQualificationModelFactory.build(1), AirmanQualificationModelFactory.build(2)],
+           [AirmanCertificationModelFactory.build(1), AirmanCertificationModelFactory.build(2)]),
+  af.build(5, 2, [AirmanQualificationModelFactory.build(2)], [AirmanCertificationModelFactory.build(2)]),
+  af.build(6, 2, [AirmanQualificationModelFactory.build(3)], [AirmanCertificationModelFactory.build(3)]),
+  af.build(7, 3, [AirmanQualificationModelFactory.build(1)], [AirmanCertificationModelFactory.build(1)]),
+  af.build(8, 3, [AirmanQualificationModelFactory.build(2)], [AirmanCertificationModelFactory.build(2)]),
+  af.build(9, 3, [AirmanQualificationModelFactory.build(3)], [AirmanCertificationModelFactory.build(3)]),
+  af.build(10, 4, [AirmanQualificationModelFactory.build(1), AirmanQualificationModelFactory.build(2)],
+           [AirmanCertificationModelFactory.build(1), AirmanCertificationModelFactory.build(2)]),
+  af.build(11, 5, [AirmanQualificationModelFactory.build(2)], [AirmanCertificationModelFactory.build(2)]),
+  af.build(12, 6, [AirmanQualificationModelFactory.build(3)], [AirmanCertificationModelFactory.build(3)])
 ];
 
 const squadrons = {'1': airmen.slice(0, 6), '2': airmen.slice(6, 12)};
