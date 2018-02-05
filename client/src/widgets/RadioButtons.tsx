@@ -36,11 +36,22 @@ export default styled(RadioButtons)`
   display: flex;
   flex-direction: column;
   
-  
   input {
     visibility: hidden;
-    margin: 0 1rem 0 0;
-
+  }
+  
+  label.checked {
+    color: ${props => props.theme.yellow};
+    
+    &:before{
+      background: ${props => props.theme.graySteel};
+    }
+  }
+  
+  label {
+    margin: 1rem 1rem 0rem 1rem;
+    color: ${props => props.theme.fontColor};
+    
     &:before {
       content: ' ';
       visibility: visible;
@@ -50,19 +61,7 @@ export default styled(RadioButtons)`
       display: inline-block;
       border-radius: 50%;
       transition: all .25s ease-in-out;
+      vertical-align: text-bottom;
     }
-  
-    &:checked:before {
-     background: ${props => props.theme.graySteel};
-    }
-  }
-  
-  label.checked {
-    color: ${props => props.theme.yellow}
-  }
-  
-  label {
-    margin: 1rem 1rem 0rem 1rem;
-    color: ${props => props.theme.fontColor};
   }
 `;

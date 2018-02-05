@@ -29,30 +29,32 @@ export class Tracker extends React.Component<Props> {
         (
           <div key="1" className={className}>
             <div className="main">
-              <TopLevelFilter
-                id="site-filter"
-                label="SITE"
-                unfilteredOptionLabel="All Sites"
-                value={this.props.trackerStore.siteId}
-                callback={this.props.trackerStore.setSiteId}
-                options={this.props.trackerStore.siteOptions}
-              />
-              <TopLevelFilter
-                id="squadron-filter"
-                label="SQUADRON"
-                unfilteredOptionLabel="All Squadrons"
-                value={this.props.trackerStore.squadronId}
-                callback={this.props.trackerStore.setSquadronId}
-                options={this.props.trackerStore.squadronOptions}
-              />
-              <TopLevelFilter
-                id="flight-filter"
-                label="FLIGHT"
-                unfilteredOptionLabel="All Flights"
-                value={this.props.trackerStore.flightId}
-                callback={this.props.trackerStore.setFlightId}
-                options={this.props.trackerStore.flightOptions}
-              />
+              <div className="filters">
+                <TopLevelFilter
+                  id="site-filter"
+                  label="SITE"
+                  unfilteredOptionLabel="All Sites"
+                  value={this.props.trackerStore.siteId}
+                  callback={this.props.trackerStore.setSiteId}
+                  options={this.props.trackerStore.siteOptions}
+                />
+                <TopLevelFilter
+                  id="squadron-filter"
+                  label="SQUADRON"
+                  unfilteredOptionLabel="All Squadrons"
+                  value={this.props.trackerStore.squadronId}
+                  callback={this.props.trackerStore.setSquadronId}
+                  options={this.props.trackerStore.squadronOptions}
+                />
+                <TopLevelFilter
+                  id="flight-filter"
+                  label="FLIGHT"
+                  unfilteredOptionLabel="All Flights"
+                  value={this.props.trackerStore.flightId}
+                  callback={this.props.trackerStore.setFlightId}
+                  options={this.props.trackerStore.flightOptions}
+                />
+              </div>
               <div>
                 <Legend/>
               </div>
@@ -89,6 +91,17 @@ export default styled(Tracker)`
   padding: 0.5rem;
   display: flex;
   color: white;
+  
+  .filters {
+     &:after {
+      content: "."; 
+       visibility: hidden; 
+       display: block; 
+       height: 0; 
+       clear: both;
+     }
+  }
+  
   .main {
     width: 100%;
   }

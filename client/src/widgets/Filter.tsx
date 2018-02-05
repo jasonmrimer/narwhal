@@ -42,44 +42,65 @@ export const Filter = observer((props: Props) => {
   );
 });
 
-const caret = (fillColor: string) => {
+const caret = (props: Props) => {
+  // %23 is base64 encoded for # symbol
+  const fillColor = props.options.length === 0 ? '%23ADADAD' : '%23fff';
   return `url("data:image/svg+xml;utf8,
-    <svg xmlns='http://www.w3.org/2000/svg' width='100' height='50' fill='${fillColor}'>
-        <polygon points='0,0 100,0 50,50'/>
+    <svg xmlns='http://www.w3.org/2000/svg' width='14' height='7' fill='${fillColor}'>
+        <polygon points='0,0 14,0 7,7'/>
     </svg>")
-    no-repeat center right`;
+    no-repeat`;
 };
 
 export const TopLevelFilter = styled(Filter)`
   min-width: 20%;
   display: inline-block;
+  position: relative;
+  float: left;
+  z-index: 9;
+  margin: 0 32px 0 0;
   
-  label {
-    font-weight: 500;
-    font-size: .75rem;
-    color: ${props => props.theme.darkSteel};
+
+  &:after {
+    content: ' ';
+    background: ${props => caret(props)};
+    right: 0;
+    height: 14px;
+    width: 20px;
+    top: 45px;
+    position: absolute;
+    pointer-events: none;
+  }
+  
+  select::-ms-expand {
+    display: none;
   }
   
   select {
-    background-color: ${props => props.theme.dark};
-    background: ${props => caret(props.theme.fontColor)};
-    background-position: 98%;
-    background-size: 0.75rem;
-    color: ${props => props.theme.fontColor};
-    height: 2rem;
-    border: none;
-    font-size: 1rem;
-    border-bottom: 1px solid ${props => props.theme.fontColor};
     -webkit-appearance: none;
-    -webkit-border-radius: 0;
-    min-width: 50%;
+    -moz-appearance: none;
+    appearance: none;
+    background: transparent;
+    
+    display: block;
+    width: 100%;
+    height: 50px;
+    float: right;
+    margin: 5px 0px;
+    font-size: 16px;
+    line-height: 1.75;
+    border: none;
+    border-bottom: 1px solid ${props => props.theme.fontColor};
+    color: ${props => props.theme.fontColor};
+    border-radius: 0;
     
     &:disabled {
       color: ${props => props.theme.graySteel};
-      border-bottom-color: ${props => props.theme.graySteel};
-      background: ${props => caret(props.theme.graySteel)};
-      background-position: 98%;
-      background-size: 0.75rem;
+      border-bottom: 1px solid ${props => props.theme.graySteel};
     }
+  }
+  
+  option {
+  color: black;
   }
 `;

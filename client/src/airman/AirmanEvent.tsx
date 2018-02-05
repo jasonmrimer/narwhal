@@ -47,7 +47,7 @@ export default styled(AirmanEvent)`
   
     
   &:hover {
-    background-color: ${props => props.theme.darkSteel};
+    background: ${props => props.theme.hoverBlueSteel};
   }
   
   .event-description {
