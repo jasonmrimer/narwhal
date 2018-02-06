@@ -3,43 +3,56 @@ import QualificationModel from './QualificationModel';
 import CertificationModel from './CertificationModel';
 import AirmanQualificationModel from '../../airman/models/AirmanQualificationModel';
 import AirmanCertificationModel from '../../airman/models/AirmanCertificationModel';
+import { Skill } from './Skill';
 
 export default class SkillBuilder {
+  private _id?: number;
   private _airmanId: number;
   private _earnDate: Moment;
   private _expirationDate: Moment;
   private _skill: QualificationModel | CertificationModel;
 
-  set airmanId(airmanId: number) {
+  setId(id: number | undefined) {
+    this._id = id;
+    return this;
+  }
+
+  setAirmanId(airmanId: number) {
     this._airmanId = airmanId;
+    return this;
   }
 
-  set earnDate(earnDate: Moment) {
+  setEarnDate(earnDate: Moment) {
     this._earnDate = earnDate;
+    return this;
   }
 
-  set expirationDate(expirationDate: Moment) {
+  setExpirationDate(expirationDate: Moment) {
     this._expirationDate = expirationDate;
+    return this;
   }
 
-  set skill(skill: QualificationModel | CertificationModel) {
+  setSkill(skill: QualificationModel | CertificationModel) {
     this._skill = skill;
+    return this;
   }
 
-  build(): AirmanQualificationModel | AirmanCertificationModel {
+  build(): Skill {
     if (this._skill instanceof QualificationModel) {
       return new AirmanQualificationModel(
         this._airmanId,
         this._skill,
         this._earnDate,
-        this._expirationDate
+        this._expirationDate,
+        this._id
       );
     } else {
       return new AirmanCertificationModel(
         this._airmanId,
         this._skill,
         this._earnDate,
-        this._expirationDate
+        this._expirationDate,
+        this._id
       );
     }
   }

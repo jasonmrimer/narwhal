@@ -81,4 +81,18 @@ public class Airman {
     certifications.add(airmanCertification);
     return true;
   }
+
+  public void updateCertification(AirmanCertification certification) {
+    certifications.stream()
+      .filter(cert -> cert.getId().equals(certification.getId()))
+      .findFirst()
+      .ifPresent(cert -> cert.setExpirationDate(certification.getExpirationDate()));
+  }
+
+  public void updateQualification(AirmanQualification qualification) {
+    qualifications.stream()
+      .filter(qual -> qual.getId().equals(qualification.getId()))
+      .findFirst()
+      .ifPresent(qual -> qual.setExpirationDate(qualification.getExpirationDate()));
+  }
 }

@@ -51,7 +51,7 @@ describe('Roster', () => {
   });
 
   it('renders airmen qualification', () => {
-    const expectedQualifications = airmen[0].qualifications.map(qual => qual.acronym).join(' / ');
+    const expectedQualifications = airmen[0].qualifications.map(qual => qual.qualification.acronym).join(' / ');
     expect(table.getTextForRowAndCol(0, 'QUALIFICATION')).toBe(expectedQualifications);
   });
 

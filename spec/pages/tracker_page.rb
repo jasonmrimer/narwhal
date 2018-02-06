@@ -1,5 +1,6 @@
 require 'date'
 require_relative '../features/events'
+require_relative '../features/skills'
 
 class TrackerPage
   include Capybara::DSL
@@ -25,9 +26,9 @@ class TrackerPage
     find('button.next-week').click
     expect(page).to have_content(get_start_of_next_week.strftime('%d %^a'))
 
-      find('button.last-week').click
-      find('button.last-week').click
-      expect(page).to have_content(get_start_of_last_week.strftime('%d %^a'))
+    find('button.last-week').click
+    find('button.last-week').click
+    expect(page).to have_content(get_start_of_last_week.strftime('%d %^a'))
   end
 
   def assert_filters_by_site
@@ -111,6 +112,44 @@ class TrackerPage
 
     event.create_invalid
     expect(page.has_content?('This field is required.')).to be true
+  end
+
+  def assert_create_update_qualification
+    click_on_airman('Spaceman')
+
+    skill = Skill.new
+
+    if skill.qualification_exists?
+      skill.update_qualification
+      expect(skill.qualification_exists?).to be true
+      expect(skill.qualification_correct_date?).to be true
+    else
+      skill.create_qualification
+      expect(skill.qualification_exists?).to be true
+
+      skill.update_qualification
+      expect(skill.qualification_exists?).to be true
+      expect(skill.qualification_correct_date?).to be true
+    end
+  end
+
+  def assert_create_update_certification
+    click_on_airman('Spaceman')
+
+    skill = Skill.new
+
+    if skill.certification_exists?
+      skill.update_certification
+      expect(skill.certification_exists?).to be true
+      expect(skill.certification_correct_date?).to be true
+    else
+      skill.create_certification
+      expect(skill.certification_exists?).to be true
+
+      skill.update_certification
+      expect(skill.certification_exists?).to be true
+      expect(skill.certification_correct_date?).to be true
+    end
   end
 
   private

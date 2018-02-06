@@ -53,4 +53,24 @@ public class AirmanController {
       new ResponseEntity<>(repository.save(airman), HttpStatus.CREATED) :
       new ResponseEntity<>(airman, HttpStatus.OK);
   }
+
+  @PutMapping(path = "/{id}/qualifications")
+  public Airman updateAirmanQualification(
+    @PathVariable("id") Long id,
+    @RequestBody AirmanQualification qualification
+  ) {
+    final Airman airman = repository.findOne(id);
+    airman.updateQualification(qualification);
+    return repository.save(airman);
+  }
+
+  @PutMapping(path = "/{id}/certifications")
+  public Airman updateAirmanCertification(
+    @PathVariable("id") Long id,
+    @RequestBody AirmanCertification certification
+  ) {
+    final Airman airman = repository.findOne(id);
+    airman.updateCertification(certification);
+    return repository.save(airman);
+  }
 }

@@ -74,6 +74,26 @@ export default function airmenRepositoryContract(subject: AirmanRepository) {
       const airman = await subject.saveQualification(qualification);
       expect(airman.qualifications.find(q => q.qualification.id === qualId)!.id).toBeDefined();
     });
+
+    it('updates expiration date of the qualification', async () => {
+      const qualId = 4;
+      const newQual = new AirmanQualificationModel(
+        airmen[0].id,
+        new QualificationModel(qualId, 'A', 'A'),
+        moment.utc(),
+        moment.utc()
+      );
+
+      let airman = await subject.saveQualification(newQual);
+      const savedQual = airman.qualifications.find(q => q.qualification.id === qualId)!;
+      const newExpirationDate = savedQual.expirationDate.add(1, 'year').utc();
+
+      airman = await subject.saveQualification(savedQual);
+      expect(airman.qualifications
+        .find(q => q.qualification.id === qualId)!
+        .expirationDate.isSame(newExpirationDate))
+        .toBeTruthy();
+    });
   });
 
   describe('saveCertification', () => {
@@ -87,6 +107,26 @@ export default function airmenRepositoryContract(subject: AirmanRepository) {
       );
       const airman = await subject.saveCertification(certification);
       expect(airman.certifications.find(c => c.certification.id === certId)!.id).toBeDefined();
+    });
+
+    it('updates expiration date of the certification', async () => {
+      const certId = 3;
+      const newCert = new AirmanCertificationModel(
+        airmen[0].id,
+        new CertificationModel(certId, 'A'),
+        moment.utc(),
+        moment.utc()
+      );
+
+      let airman = await subject.saveCertification(newCert);
+      const savedCert = airman.certifications.find(c => c.certification.id === certId)!;
+      const newExpirationDate = savedCert.expirationDate.add(1, 'year').utc();
+
+      airman = await subject.saveCertification(savedCert);
+      expect(airman.certifications
+        .find(c => c.certification.id === certId)!
+        .expirationDate.isSame(newExpirationDate))
+        .toBeTruthy();
     });
   });
 }

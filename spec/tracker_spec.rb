@@ -54,10 +54,12 @@ describe 'Tracker page', type: :feature do
   end
 
   describe 'skills' do
-    xit 'can create and delete a qualification' do
+    it 'can create and update a qualification' do
+      tracker_page.assert_create_update_qualification
     end
 
-    xit 'can create and delete a certification' do
+    it 'can create and update a certification' do
+      tracker_page.assert_create_update_certification
     end
   end
 

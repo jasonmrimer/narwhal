@@ -42,31 +42,64 @@ export default class WebAirmanRepository implements AirmanRepository {
   }
 
   async saveQualification(airmanQual: AirmanQualificationModel): Promise<AirmanModel> {
-    const resp = await fetch(
+    const resp = airmanQual.id ? await this.updateQual(airmanQual) : await this.createQual(airmanQual);
+
+    let json = await resp.json();
+    return Promise.resolve(this.serializer.deserialize(json));
+  }
+
+  async saveCertification(airmanCert: AirmanCertificationModel): Promise<AirmanModel> {
+    const resp = airmanCert.id ? await this.updateCert(airmanCert) : await this.createCert(airmanCert);
+
+    let json = await resp.json();
+    return Promise.resolve(this.serializer.deserialize(json));
+  }
+
+  private createQual(airmanQual: AirmanQualificationModel) {
+    return fetch(
       `${this.baseUrl}/api/airmen/${airmanQual.airmanId}/qualifications`,
       {
-        method: 'post',
+        method: 'POST',
         headers: [['Content-Type', 'application/json'], ['X-XSRF-TOKEN', this.csrfToken]],
         body: this.airmanQualSerializer.serialize(airmanQual),
         credentials: 'include'
       }
     );
-    const json = await resp.json();
-    return this.serializer.deserialize(json);
   }
 
-  async saveCertification(airmanCert: AirmanCertificationModel): Promise<AirmanModel> {
-    const resp = await fetch(
+  private updateQual(airmanQual: AirmanQualificationModel) {
+    return fetch(
+      `${this.baseUrl}/api/airmen/${airmanQual.airmanId}/qualifications`,
+      {
+        method: 'PUT',
+        headers: [['Content-Type', 'application/json'], ['X-XSRF-TOKEN', this.csrfToken]],
+        body: this.airmanQualSerializer.serialize(airmanQual),
+        credentials: 'include'
+      }
+    );
+  }
+
+  private createCert(airmanCert: AirmanCertificationModel) {
+    return fetch(
       `${this.baseUrl}/api/airmen/${airmanCert.airmanId}/certifications`,
       {
-        method: 'post',
+        method: 'POST',
         headers: [['Content-Type', 'application/json'], ['X-XSRF-TOKEN', this.csrfToken]],
         body: this.airmanCertSerializer.serialize(airmanCert),
         credentials: 'include'
       }
     );
-    const json = await resp.json();
-    return this.serializer.deserialize(json);
   }
 
+  private updateCert(airmanCert: AirmanCertificationModel) {
+    return fetch(
+      `${this.baseUrl}/api/airmen/${airmanCert.airmanId}/certifications`,
+      {
+        method: 'PUT',
+        headers: [['Content-Type', 'application/json'], ['X-XSRF-TOKEN', this.csrfToken]],
+        body: this.airmanCertSerializer.serialize(airmanCert),
+        credentials: 'include'
+      }
+    );
+  }
 }

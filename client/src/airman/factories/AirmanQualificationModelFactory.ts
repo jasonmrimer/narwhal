@@ -7,8 +7,8 @@ export default class AirmanQualificationModelFactory {
     return new AirmanQualificationModel(
       1,
       new QualificationModel(id, `${id}`, `${id}`),
-      moment(0).add(id, 'days'),
-      moment(0).add(id, 'days'),
+      moment(0).add(id, 'days').utc(),
+      moment(0).add(id, 'days').utc(),
       1
     );
   }

@@ -1,46 +1,47 @@
 import * as React from 'react';
-import AirmanQualificationModel from '../../airman/models/AirmanQualificationModel';
 import styled from 'styled-components';
 import QualificationModel from '../../skills/models/QualificationModel';
 import * as moment from 'moment';
 import DatePicker from '../../widgets/DatePicker';
 import SubmitButton from '../../widgets/SubmitButton';
 import CertificationModel from '../../skills/models/CertificationModel';
-import AirmanCertificationModel from '../../airman/models/AirmanCertificationModel';
 import { allSkills, SkillType } from '../../skills/models/SkillType';
 import SkillBuilder from '../../skills/models/SkillBuilder';
+import { Skill } from '../../skills/models/Skill';
 
 interface Props {
   airmanId: number;
   qualifications: QualificationModel[];
   certifications: CertificationModel[];
-  createAirmanSkill: (skill: AirmanQualificationModel | AirmanCertificationModel) => void;
+  skill: Skill | null;
+  handleSubmit: (skill: Skill) => void;
   className?: string;
 }
 
 interface State {
-  skillTypeIndex: string;
-  skillNameIndex: string;
+  skillType: string;
+  skillNameId: string;
   earnDate: string;
   expirationDate: string;
 }
 
 export class CurrencyForm extends React.Component<Props, State> {
-  static hydrate() {
+  static hydrate(skill: Skill | null, qualifications: QualificationModel[]) {
     return {
-      skillTypeIndex: '',
-      skillNameIndex: '',
-      earnDate: '',
-      expirationDate: ''
+      skillType: skill ? skill.type : SkillType.Qualification,
+      skillNameId: skill ? String(skill.skillId) : String(qualifications[0].id),
+      earnDate: skill ? skill.earnDate.format('YYYY-MM-DD') : '',
+      expirationDate: skill ? skill.expirationDate.format('YYYY-MM-DD') : ''
     };
   }
 
   constructor(props: Props) {
     super(props);
-    this.state = CurrencyForm.hydrate();
+    this.state = CurrencyForm.hydrate(props.skill, props.qualifications);
   }
 
   render() {
+    const disabled = this.props.skill != null;
     return (
       <form className={this.props.className} onSubmit={this.handleSubmit}>
         <div style={{marginTop: '1rem'}}>
@@ -50,13 +51,14 @@ export class CurrencyForm extends React.Component<Props, State> {
           <label htmlFor="skill-type-select">Type:</label>
           <select
             id="skill-type-select"
-            name="skillTypeIndex"
-            value={this.state.skillTypeIndex}
+            name="skillType"
+            value={this.state.skillType}
+            disabled={disabled}
             onChange={this.handleChange}
           >
             {
               allSkills().map((skill, index) => {
-                return <option key={index} value={index}>{skill}</option>;
+                return <option key={index} value={skill}>{skill}</option>;
               })
             }
           </select>
@@ -65,8 +67,9 @@ export class CurrencyForm extends React.Component<Props, State> {
           <label htmlFor="skill-name-select">Name:</label>
           <select
             id="skill-name-select"
-            name="skillNameIndex"
-            value={this.state.skillNameIndex}
+            name="skillNameId"
+            value={this.state.skillNameId}
+            disabled={disabled}
             onChange={this.handleChange}
           >
             {this.renderSkillNameOptions()}
@@ -78,6 +81,7 @@ export class CurrencyForm extends React.Component<Props, State> {
             id="earn-date"
             dateValue={this.state.earnDate}
             onChange={this.handleChange}
+            disabled={disabled}
             name="earn"
           />
         </div>
@@ -96,21 +100,17 @@ export class CurrencyForm extends React.Component<Props, State> {
   }
 
   private renderSkillNameOptions = () => {
-    switch (this.selectedSkill) {
+    switch (this.state.skillType) {
       case SkillType.Certification:
         return this.props.certifications.map((cert, index) => {
-          return <option key={index} value={index}>{cert.title}</option>;
+          return <option key={`cert-${index}`} value={cert.id}>{cert.title}</option>;
         });
       case SkillType.Qualification:
       default:
         return this.props.qualifications.map((qual, index) => {
-          return <option key={index} value={index}>{`${qual.acronym} - ${qual.title}`}</option>;
+          return <option key={`qual-${index}`} value={qual.id}>{qual.acronym} - {qual.title}</option>;
         });
     }
-  }
-
-  private get selectedSkill() {
-    return allSkills()[Number(this.state.skillTypeIndex)];
   }
 
   /* tslint:disable:no-any */
@@ -121,22 +121,28 @@ export class CurrencyForm extends React.Component<Props, State> {
   private handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const builder = new SkillBuilder();
-    builder.airmanId = this.props.airmanId;
-    builder.earnDate = moment.utc(this.state.earnDate);
-    builder.expirationDate = moment.utc(this.state.expirationDate);
+    const builder = new SkillBuilder()
+      .setAirmanId(this.props.airmanId)
+      .setEarnDate(moment.utc(this.state.earnDate))
+      .setExpirationDate(moment.utc(this.state.expirationDate))
+      .setSkill(this.getSkillById());
 
-    switch (this.selectedSkill) {
-      case SkillType.Certification:
-        builder.skill = this.props.certifications[Number(this.state.skillNameIndex)];
-        break;
-      case SkillType.Qualification:
-      default:
-        builder.skill = this.props.qualifications[Number(this.state.skillNameIndex)];
-        break;
+    if (this.props.skill != null) {
+      builder.setId(this.props.skill.id);
     }
 
-    this.props.createAirmanSkill(builder.build());
+    this.props.handleSubmit(builder.build());
+  }
+
+  private getSkillById() {
+    const skillId = Number(this.state.skillNameId);
+    switch (this.state.skillType) {
+      case SkillType.Certification:
+        return this.props.certifications.find(item => item.id === skillId)!;
+      case SkillType.Qualification:
+      default:
+        return this.props.qualifications.find(item => item.id === skillId)!;
+    }
   }
 }
 
@@ -179,5 +185,22 @@ export default styled(CurrencyForm)`
     -webkit-appearance: none;
     -webkit-border-radius: 0;
     width: 75%;
+    
+    &:disabled {
+      color: ${props => props.theme.graySteel};
+      background: none;
+      border-bottom: 1px solid ${props => props.theme.graySteel};
+    }
+  }
+  
+  #earn-date {
+    color: ${props => props.theme.fontColor};
+    
+    &:disabled {
+      color: ${props => props.theme.graySteel};
+    }
+  }
+  #expiration-date {
+    color: ${props => props.theme.fontColor};
   }
 `;

@@ -7,6 +7,7 @@ interface Props {
   dateValue: string;
   onChange: (e: any) => void;
   name: string;
+  disabled?: boolean;
   className?: string;
 }
 
@@ -14,6 +15,7 @@ export const DatePicker = (props: Props) => {
   return (
     <input
       id={props.id}
+      disabled={props.disabled}
       className={props.className}
       type="date"
       value={props.dateValue}

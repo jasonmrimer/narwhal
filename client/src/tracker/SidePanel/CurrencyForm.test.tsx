@@ -11,7 +11,9 @@ import CertificationModel from '../../skills/models/CertificationModel';
 import QualificationModelFactory from '../../skills/factories/QualificationModelFactory';
 import CertificationModelFactory from '../../skills/factories/CertificationModelFactory';
 import AirmanCertificationModel from '../../airman/models/AirmanCertificationModel';
+import AirmanQualificationModelFactory from '../../airman/factories/AirmanQualificationModelFactory';
 import Mock = jest.Mock;
+import { SkillType } from '../../skills/models/SkillType';
 
 describe('CurrencyForm', () => {
   const earnDate = moment.utc('2018-02-01');
@@ -19,11 +21,11 @@ describe('CurrencyForm', () => {
 
   let quals: QualificationModel[];
   let certs: CertificationModel[];
-  let createAirmanSkillSpy: Mock;
+  let handleSubmitSpy: Mock;
   let subject: ReactWrapper;
 
   beforeEach(() => {
-    createAirmanSkillSpy = jest.fn();
+    handleSubmitSpy = jest.fn();
     quals = QualificationModelFactory.buildList(3);
     certs = CertificationModelFactory.buildList(3);
 
@@ -32,19 +34,20 @@ describe('CurrencyForm', () => {
         airmanId={1}
         qualifications={quals}
         certifications={certs}
-        createAirmanSkill={createAirmanSkillSpy}
+        skill={null}
+        handleSubmit={handleSubmitSpy}
       />
     );
   });
 
-  it('calls createAirmanSkill with a Qualification on submission', () => {
-    selectValueFromDropdown(subject, 'skillTypeIndex', '0');
-    selectValueFromDropdown(subject, 'skillNameIndex', '1');
+  it('calls handleSubmit with a Qualification on submission', () => {
+    selectValueFromDropdown(subject, 'skillType', SkillType.Qualification);
+    selectValueFromDropdown(subject, 'skillNameId', '1');
     inputValueForDatePicker(subject.find(DatePicker).at(0), 'earnDate', earnDate);
     inputValueForDatePicker(subject.find(DatePicker).at(1), 'expirationDate', expirationDate);
     subject.find('form').simulate('submit', eventStub);
 
-    expect(createAirmanSkillSpy).toHaveBeenCalledWith(
+    expect(handleSubmitSpy).toHaveBeenCalledWith(
       new AirmanQualificationModel(
         1,
         quals[1],
@@ -53,20 +56,47 @@ describe('CurrencyForm', () => {
       ));
   });
 
-  it('calls createAirmanSkill with a Certification on submission', () => {
-    selectValueFromDropdown(subject, 'skillTypeIndex', '1');
-    selectValueFromDropdown(subject, 'skillNameIndex', '1');
+  it('calls handleSubmit with a Certification on submission', () => {
+    selectValueFromDropdown(subject, 'skillType', SkillType.Certification);
+    selectValueFromDropdown(subject, 'skillNameId', '1');
     inputValueForDatePicker(subject.find(DatePicker).at(0), 'earnDate', earnDate);
     inputValueForDatePicker(subject.find(DatePicker).at(1), 'expirationDate', expirationDate);
     subject.find('form').simulate('submit', eventStub);
 
-    expect(createAirmanSkillSpy).toHaveBeenCalledWith(
+    expect(handleSubmitSpy).toHaveBeenCalledWith(
       new AirmanCertificationModel(
         1,
         certs[1],
         earnDate,
         expirationDate
       ));
+  });
+
+  it('should only allow the edit of the expiration date', () => {
+    const skill = AirmanQualificationModelFactory.build(1);
+
+    subject = mount(
+      <CurrencyForm
+        airmanId={1}
+        qualifications={quals}
+        certifications={certs}
+        skill={skill}
+        handleSubmit={handleSubmitSpy}
+      />
+    );
+
+    subject.find('select').forEach((elem) => {
+      expect(elem.prop('disabled')).toBeTruthy();
+    });
+
+    expect(subject.find(DatePicker).at(0).prop('disabled')).toBeTruthy();
+    expect(subject.find(DatePicker).at(1).prop('disabled')).toBeFalsy();
+
+    subject.find('form').simulate('submit', eventStub);
+
+    expect(handleSubmitSpy).toHaveBeenCalled();
+    expect(handleSubmitSpy.mock.calls[0][0].id).toBeDefined();
+    expect(handleSubmitSpy.mock.calls[0][0].id).toBe(skill.id);
   });
 });
 
