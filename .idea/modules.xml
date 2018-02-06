@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/acceptance/acceptance.iml" filepath="$PROJECT_DIR$/acceptance/acceptance.iml" />
       <module fileurl="file://$PROJECT_DIR$/narwhal.iml" filepath="$PROJECT_DIR$/narwhal.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/narwhal_main.iml" filepath="$PROJECT_DIR$/.idea/modules/narwhal_main.iml" group="narwhal" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/narwhal_test.iml" filepath="$PROJECT_DIR$/.idea/modules/narwhal_test.iml" group="narwhal" />

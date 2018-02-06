@@ -73,4 +73,24 @@ public class AirmanController {
     airman.updateCertification(certification);
     return repository.save(airman);
   }
+
+  @DeleteMapping(value = "/{airmanId}/qualifications/{id}")
+  public Airman deleteAirmanQualification(
+    @PathVariable("airmanId") Long airmanId,
+    @PathVariable("id") Long id
+  ) {
+    final Airman airman = repository.findOne(airmanId);
+    airman.deleteQualification(id);
+    return repository.save(airman);
+  }
+
+  @DeleteMapping(value = "/{airmanId}/certifications/{id}")
+  public Airman deleteAirmanCertification(
+    @PathVariable("airmanId") Long airmanId,
+    @PathVariable("id") Long id
+  ) {
+    final Airman airman = repository.findOne(airmanId);
+    airman.deleteCertification(id);
+    return repository.save(airman);
+  }
 }

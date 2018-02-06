@@ -294,5 +294,21 @@ describe('TrackerStore', () => {
       const updatedAirman = (await airmenRepository.findAll())[0];
       expect(updatedAirman.certifications.length).toBeGreaterThan(certLength);
     });
+
+    it('should delete a qualification from the airman', async () => {
+      const airman = allAirmen[0];
+      const qualification = new AirmanQualificationModel(
+        airman.id,
+        new QualificationModel(100, 'A', 'A'),
+        moment.utc(),
+        moment.utc()
+      );
+      await subject.addAirmanSkill(qualification);
+      let updatedAirman = (await airmenRepository.findAll())[0];
+      const qualLength = updatedAirman.qualifications.length;
+      await subject.deleteAirmanSkill(qualification);
+      updatedAirman = (await airmenRepository.findAll())[0];
+      expect(updatedAirman.qualifications.length).toBeLessThan(qualLength);
+    });
   });
 });

@@ -66,9 +66,11 @@ pushd client
     CI=true yarn contracts
 popd
 
+pushd acceptance
 if [ "$NARWHAL_CI" = "true" ]
 then
     rspec
 else
    bundle exec rspec
 fi
+popd

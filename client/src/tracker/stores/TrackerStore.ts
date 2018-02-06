@@ -10,7 +10,6 @@ import EventRepository from '../../event/repositories/EventRepository';
 import TimeService from '../services/TimeService';
 import { Moment } from 'moment';
 import QualificationModel from '../../skills/models/QualificationModel';
-import AirmanQualificationModel from '../../airman/models/AirmanQualificationModel';
 import SkillRepository from '../../skills/repositories/SkillRepository';
 import { Skill } from '../../skills/models/Skill';
 
@@ -186,6 +185,7 @@ export default class TrackerStore {
       return {value: qual.id, label: qual.acronym};
     });
   }
+
   @action.bound
   setQualificationIds(options: FilterOption[]) {
     this._qualificationIds = options.map(option => option.value);
@@ -307,11 +307,14 @@ export default class TrackerStore {
 
   @action.bound
   async addAirmanSkill(skill: Skill) {
-    if (skill instanceof AirmanQualificationModel) {
-      await this.airmanRepository.saveQualification(skill);
-    } else {
-      await this.airmanRepository.saveCertification(skill);
-    }
+    await this.airmanRepository.saveSkill(skill);
+    this._airmen = await this.airmanRepository.findAll();
+    this._selectedAirman = this._airmen.find(a => a.id === skill.airmanId)!;
+  }
+
+  @action.bound
+  async deleteAirmanSkill(skill: Skill) {
+    await this.airmanRepository.deleteSkill(skill);
     this._airmen = await this.airmanRepository.findAll();
     this._selectedAirman = this._airmen.find(a => a.id === skill.airmanId)!;
   }

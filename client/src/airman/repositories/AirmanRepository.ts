@@ -1,6 +1,5 @@
 import AirmanModel from '../models/AirmanModel';
-import AirmanQualificationModel from '../models/AirmanQualificationModel';
-import AirmanCertificationModel from '../models/AirmanCertificationModel';
+import { Skill } from '../../skills/models/Skill';
 
 interface AirmanRepository {
   findAll(): Promise<AirmanModel[]>;
@@ -9,9 +8,9 @@ interface AirmanRepository {
 
   findByFlight(id: number): Promise<AirmanModel[]>;
 
-  saveQualification(qualification: AirmanQualificationModel): Promise<AirmanModel>;
+  saveSkill(skill: Skill): Promise<AirmanModel>;
 
-  saveCertification(certification: AirmanCertificationModel): Promise<AirmanModel>;
+  deleteSkill(skill: Skill): Promise<AirmanModel>;
 }
 
 export default AirmanRepository;

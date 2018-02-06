@@ -38,6 +38,31 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/acceptance/spec/features/events.rb">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/acceptance/spec/features/skills.rb">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/acceptance/spec/pages/tracker_page.rb">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/acceptance/spec/spec_helper.rb">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/acceptance/spec/tracker_spec.rb">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/all-tests.sh">
           <value>
             <set />
@@ -174,6 +199,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/schema.sql">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/scripts/build_release.sh">
           <value>
             <set />
           </value>

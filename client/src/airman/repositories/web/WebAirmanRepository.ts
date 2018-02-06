@@ -1,11 +1,11 @@
 import AirmanRepository from '../AirmanRepository';
 import { AirmanSerializer } from '../../serializers/AirmanSerializer';
-import AirmanQualificationModel from '../../models/AirmanQualificationModel';
 import AirmanModel from '../../models/AirmanModel';
 import * as Cookie from 'js-cookie';
 import { AirmanQualificationSerializer } from '../../serializers/AirmanQualificationSerializer';
-import AirmanCertificationModel from '../../models/AirmanCertificationModel';
 import { AirmanCertificationSerializer } from '../../serializers/AirmanCertificationSerializer';
+import { Skill } from '../../../skills/models/Skill';
+import { SkillType } from '../../../skills/models/SkillType';
 
 export default class WebAirmanRepository implements AirmanRepository {
   private serializer = new AirmanSerializer();
@@ -41,65 +41,65 @@ export default class WebAirmanRepository implements AirmanRepository {
     });
   }
 
-  async saveQualification(airmanQual: AirmanQualificationModel): Promise<AirmanModel> {
-    const resp = airmanQual.id ? await this.updateQual(airmanQual) : await this.createQual(airmanQual);
-
-    let json = await resp.json();
+  async saveSkill(skill: Skill): Promise<AirmanModel> {
+    const resp = skill.id ? await this.updateSkill(skill) : await this.createSkill(skill);
+    const json = await resp.json();
     return Promise.resolve(this.serializer.deserialize(json));
   }
 
-  async saveCertification(airmanCert: AirmanCertificationModel): Promise<AirmanModel> {
-    const resp = airmanCert.id ? await this.updateCert(airmanCert) : await this.createCert(airmanCert);
+  async deleteSkill(skill: Skill): Promise<AirmanModel> {
+    const resp = await fetch(
+      `${this.baseUrl}/api/airmen/${skill.airmanId}/${this.getResourceForSkill(skill)}/${skill.id}`,
+      {
+        method: 'DELETE',
+        headers: [['X-XSRF-TOKEN', this.csrfToken]],
+        credentials: 'include'
+      }
+    );
 
-    let json = await resp.json();
+    if (resp.status < 200 || resp.status >= 300) {
+      throw new Error(`Unable to delete skill with ID: ${skill.id}`);
+    }
+
+    const json = await resp.json();
     return Promise.resolve(this.serializer.deserialize(json));
   }
 
-  private createQual(airmanQual: AirmanQualificationModel) {
+  private createSkill(skill: Skill) {
     return fetch(
-      `${this.baseUrl}/api/airmen/${airmanQual.airmanId}/qualifications`,
+      `${this.baseUrl}/api/airmen/${skill.airmanId}/${this.getResourceForSkill(skill)}`,
       {
         method: 'POST',
         headers: [['Content-Type', 'application/json'], ['X-XSRF-TOKEN', this.csrfToken]],
-        body: this.airmanQualSerializer.serialize(airmanQual),
+        body: this.getBodyForSkill(skill),
         credentials: 'include'
       }
     );
   }
 
-  private updateQual(airmanQual: AirmanQualificationModel) {
+  private updateSkill(skill: Skill) {
     return fetch(
-      `${this.baseUrl}/api/airmen/${airmanQual.airmanId}/qualifications`,
+      `${this.baseUrl}/api/airmen/${skill.airmanId}/${this.getResourceForSkill(skill)}`,
       {
         method: 'PUT',
         headers: [['Content-Type', 'application/json'], ['X-XSRF-TOKEN', this.csrfToken]],
-        body: this.airmanQualSerializer.serialize(airmanQual),
+        body: this.getBodyForSkill(skill),
         credentials: 'include'
       }
     );
   }
 
-  private createCert(airmanCert: AirmanCertificationModel) {
-    return fetch(
-      `${this.baseUrl}/api/airmen/${airmanCert.airmanId}/certifications`,
-      {
-        method: 'POST',
-        headers: [['Content-Type', 'application/json'], ['X-XSRF-TOKEN', this.csrfToken]],
-        body: this.airmanCertSerializer.serialize(airmanCert),
-        credentials: 'include'
-      }
-    );
+  private getResourceForSkill(skill: Skill): string {
+    return {
+      [SkillType.Qualification]: 'qualifications',
+      [SkillType.Certification]: 'certifications'
+    }[skill.type];
   }
 
-  private updateCert(airmanCert: AirmanCertificationModel) {
-    return fetch(
-      `${this.baseUrl}/api/airmen/${airmanCert.airmanId}/certifications`,
-      {
-        method: 'PUT',
-        headers: [['Content-Type', 'application/json'], ['X-XSRF-TOKEN', this.csrfToken]],
-        body: this.airmanCertSerializer.serialize(airmanCert),
-        credentials: 'include'
-      }
-    );
+  private getBodyForSkill(skill: Skill): {} {
+    return {
+      [SkillType.Qualification]: (s: any) => this.airmanQualSerializer.serialize(s),
+      [SkillType.Certification]: (s: any) => this.airmanCertSerializer.serialize(s)
+    }[skill.type](skill);
   }
 }

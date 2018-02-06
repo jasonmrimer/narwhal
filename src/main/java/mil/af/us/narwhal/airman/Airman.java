@@ -24,11 +24,11 @@ public class Airman {
 
   private String lastName;
 
-  @OneToMany(mappedBy = "airmanId", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "airmanId", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonManagedReference
   private List<AirmanQualification> qualifications = new ArrayList<>();
 
-  @OneToMany(mappedBy = "airmanId", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "airmanId", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonManagedReference
   private List<AirmanCertification> certifications = new ArrayList<>();
 
@@ -94,5 +94,13 @@ public class Airman {
       .filter(qual -> qual.getId().equals(qualification.getId()))
       .findFirst()
       .ifPresent(qual -> qual.setExpirationDate(qualification.getExpirationDate()));
+  }
+
+  public void deleteQualification(Long id) {
+    qualifications.removeIf(qualification -> qualification.getId().equals(id));
+  }
+
+  public void deleteCertification(Long id) {
+    certifications.removeIf(certification -> certification.getId().equals(id));
   }
 }

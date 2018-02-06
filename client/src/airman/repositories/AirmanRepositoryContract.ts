@@ -62,41 +62,7 @@ export default function airmenRepositoryContract(subject: AirmanRepository) {
     });
   });
 
-  describe('saveQualification', () => {
-    it('saves a qualification with a unique id', async () => {
-      const qualId = 3;
-      const qualification = new AirmanQualificationModel(
-        airmen[0].id,
-        new QualificationModel(qualId, 'A', 'A'),
-        moment.utc(),
-        moment.utc()
-      );
-      const airman = await subject.saveQualification(qualification);
-      expect(airman.qualifications.find(q => q.qualification.id === qualId)!.id).toBeDefined();
-    });
-
-    it('updates expiration date of the qualification', async () => {
-      const qualId = 4;
-      const newQual = new AirmanQualificationModel(
-        airmen[0].id,
-        new QualificationModel(qualId, 'A', 'A'),
-        moment.utc(),
-        moment.utc()
-      );
-
-      let airman = await subject.saveQualification(newQual);
-      const savedQual = airman.qualifications.find(q => q.qualification.id === qualId)!;
-      const newExpirationDate = savedQual.expirationDate.add(1, 'year').utc();
-
-      airman = await subject.saveQualification(savedQual);
-      expect(airman.qualifications
-        .find(q => q.qualification.id === qualId)!
-        .expirationDate.isSame(newExpirationDate))
-        .toBeTruthy();
-    });
-  });
-
-  describe('saveCertification', () => {
+  describe('save', () => {
     it('saves a certification with a unique id', async () => {
       const certId = 3;
       const certification = new AirmanCertificationModel(
@@ -105,7 +71,7 @@ export default function airmenRepositoryContract(subject: AirmanRepository) {
         moment.utc(),
         moment.utc()
       );
-      const airman = await subject.saveCertification(certification);
+      const airman = await subject.saveSkill(certification);
       expect(airman.certifications.find(c => c.certification.id === certId)!.id).toBeDefined();
     });
 
@@ -118,15 +84,81 @@ export default function airmenRepositoryContract(subject: AirmanRepository) {
         moment.utc()
       );
 
-      let airman = await subject.saveCertification(newCert);
+      let airman = await subject.saveSkill(newCert);
       const savedCert = airman.certifications.find(c => c.certification.id === certId)!;
       const newExpirationDate = savedCert.expirationDate.add(1, 'year').utc();
 
-      airman = await subject.saveCertification(savedCert);
+      airman = await subject.saveSkill(savedCert);
       expect(airman.certifications
         .find(c => c.certification.id === certId)!
         .expirationDate.isSame(newExpirationDate))
         .toBeTruthy();
+    });
+
+    it('saves a qualification with a unique id', async () => {
+      const qualId = 3;
+      const qualification = new AirmanQualificationModel(
+        airmen[0].id,
+        new QualificationModel(qualId, 'A', 'A'),
+        moment.utc(),
+        moment.utc()
+      );
+      const airman = await subject.saveSkill(qualification);
+      expect(airman.qualifications.find(q => q.qualification.id === qualId)!.id).toBeDefined();
+    });
+
+    it('updates expiration date of the qualification', async () => {
+      const qualId = 4;
+      const newQual = new AirmanQualificationModel(
+        airmen[0].id,
+        new QualificationModel(qualId, 'A', 'A'),
+        moment.utc(),
+        moment.utc()
+      );
+
+      let airman = await subject.saveSkill(newQual);
+      const savedQual = airman.qualifications.find(q => q.qualification.id === qualId)!;
+      const newExpirationDate = savedQual.expirationDate.add(1, 'year').utc();
+
+      airman = await subject.saveSkill(savedQual);
+      expect(airman.qualifications
+        .find(q => q.qualification.id === qualId)!
+        .expirationDate.isSame(newExpirationDate))
+        .toBeTruthy();
+    });
+  });
+
+  describe('delete', () => {
+    it('deletes the selected qualification from the airman', async () => {
+      let airman = airmen[0];
+      const skill = new AirmanQualificationModel(
+        airman.id,
+        new QualificationModel(1, 'A', 'A'),
+        moment.utc(),
+        moment.utc()
+      );
+
+      airman = await subject.saveSkill(skill);
+      const savedSkill = airman.qualifications.find(q => q.skillId === skill.skillId)!;
+
+      const updatedAirman = await subject.deleteSkill(savedSkill);
+      expect(updatedAirman.qualifications.find(q => q.id === skill.id)).toBeUndefined();
+    });
+
+    it('deletes the selected certification from the airman', async () => {
+      let airman = airmen[0];
+      const skill = new AirmanCertificationModel(
+        airman.id,
+        new CertificationModel(1, 'A'),
+        moment.utc(),
+        moment.utc()
+      );
+
+      airman = await subject.saveSkill(skill);
+      const savedSkill = airman.certifications.find(q => q.skillId === skill.skillId)!;
+
+      const updatedAirman = await subject.deleteSkill(savedSkill);
+      expect(updatedAirman.certifications.find(c => c.id === skill.id)).toBeUndefined();
     });
   });
 }

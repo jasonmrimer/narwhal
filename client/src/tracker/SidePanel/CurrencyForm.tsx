@@ -8,6 +8,7 @@ import CertificationModel from '../../skills/models/CertificationModel';
 import { allSkills, SkillType } from '../../skills/models/SkillType';
 import SkillBuilder from '../../skills/models/SkillBuilder';
 import { Skill } from '../../skills/models/Skill';
+import DeleteIcon from '../../icons/DeleteIcon';
 
 interface Props {
   airmanId: number;
@@ -15,6 +16,7 @@ interface Props {
   certifications: CertificationModel[];
   skill: Skill | null;
   handleSubmit: (skill: Skill) => void;
+  handleDelete: (skill: Skill) => void;
   className?: string;
 }
 
@@ -94,7 +96,15 @@ export class CurrencyForm extends React.Component<Props, State> {
             name="expiration"
           />
         </div>
+        <div className="form-row">
+        {
+          this.props.skill &&
+          <button className="delete" onClick={this.handleDelete}>
+            <DeleteIcon/> DELETE
+          </button>
+        }
         <SubmitButton text="CONFIRM"/>
+        </div>
       </form>
     );
   }
@@ -111,6 +121,14 @@ export class CurrencyForm extends React.Component<Props, State> {
           return <option key={`qual-${index}`} value={qual.id}>{qual.acronym} - {qual.title}</option>;
         });
     }
+  }
+
+  private handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    if (this.props.skill == null) {
+      return;
+    }
+    this.props.handleDelete(this.props.skill);
   }
 
   /* tslint:disable:no-any */
@@ -166,6 +184,10 @@ export default styled(CurrencyForm)`
     align-items: center;
     margin: 1rem 1rem 0;
     
+    &:last-of-type {
+      align-items: baseline;
+    };
+    
     label {
       margin-right: 1rem;
       width: 25%;
@@ -191,6 +213,11 @@ export default styled(CurrencyForm)`
       background: none;
       border-bottom: 1px solid ${props => props.theme.graySteel};
     }
+  }
+  
+  .delete {
+    color: ${props => props.theme.fontColor};
+    font-size: 0.875rem;
   }
   
   #earn-date {

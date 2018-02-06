@@ -12,8 +12,9 @@ import QualificationModelFactory from '../../skills/factories/QualificationModel
 import CertificationModelFactory from '../../skills/factories/CertificationModelFactory';
 import AirmanCertificationModel from '../../airman/models/AirmanCertificationModel';
 import AirmanQualificationModelFactory from '../../airman/factories/AirmanQualificationModelFactory';
-import Mock = jest.Mock;
+
 import { SkillType } from '../../skills/models/SkillType';
+import Mock = jest.Mock;
 
 describe('CurrencyForm', () => {
   const earnDate = moment.utc('2018-02-01');
@@ -22,13 +23,15 @@ describe('CurrencyForm', () => {
   let quals: QualificationModel[];
   let certs: CertificationModel[];
   let handleSubmitSpy: Mock;
+  let handleDeleteSpy: Mock;
   let subject: ReactWrapper;
 
   beforeEach(() => {
     handleSubmitSpy = jest.fn();
+    handleDeleteSpy = jest.fn();
     quals = QualificationModelFactory.buildList(3);
-    certs = CertificationModelFactory.buildList(3);
 
+    certs = CertificationModelFactory.buildList(3);
     subject = mount(
       <CurrencyForm
         airmanId={1}
@@ -36,6 +39,7 @@ describe('CurrencyForm', () => {
         certifications={certs}
         skill={null}
         handleSubmit={handleSubmitSpy}
+        handleDelete={handleDeleteSpy}
       />
     );
   });
@@ -72,35 +76,44 @@ describe('CurrencyForm', () => {
       ));
   });
 
-  it('should only allow the edit of the expiration date', () => {
+  describe('rendering with an existing skill', () => {
     const skill = AirmanQualificationModelFactory.build(1);
 
-    subject = mount(
-      <CurrencyForm
-        airmanId={1}
-        qualifications={quals}
-        certifications={certs}
-        skill={skill}
-        handleSubmit={handleSubmitSpy}
-      />
-    );
-
-    subject.find('select').forEach((elem) => {
-      expect(elem.prop('disabled')).toBeTruthy();
+    beforeEach(() => {
+      subject = mount(
+        <CurrencyForm
+          airmanId={1}
+          qualifications={quals}
+          certifications={certs}
+          skill={skill}
+          handleSubmit={handleSubmitSpy}
+          handleDelete={handleDeleteSpy}
+        />
+      );
     });
 
-    expect(subject.find(DatePicker).at(0).prop('disabled')).toBeTruthy();
-    expect(subject.find(DatePicker).at(1).prop('disabled')).toBeFalsy();
+    it('should only allow the edit of the expiration date', () => {
+      subject.find('select').forEach((elem) => {
+        expect(elem.prop('disabled')).toBeTruthy();
+      });
 
-    subject.find('form').simulate('submit', eventStub);
+      expect(subject.find(DatePicker).at(0).prop('disabled')).toBeTruthy();
+      expect(subject.find(DatePicker).at(1).prop('disabled')).toBeFalsy();
 
-    expect(handleSubmitSpy).toHaveBeenCalled();
-    expect(handleSubmitSpy.mock.calls[0][0].id).toBeDefined();
-    expect(handleSubmitSpy.mock.calls[0][0].id).toBe(skill.id);
+      subject.find('form').simulate('submit', eventStub);
+
+      expect(handleSubmitSpy).toHaveBeenCalled();
+      expect(handleSubmitSpy.mock.calls[0][0].id).toBeDefined();
+      expect(handleSubmitSpy.mock.calls[0][0].id).toBe(skill.id);
+    });
+
+    it('calls handleDelete when clicking the delete button', () => {
+      subject.find('button').simulate('click');
+      expect(handleDeleteSpy).toHaveBeenCalledWith(skill);
+    });
   });
 });
 
-/* tslint:disable:no-any */
 function selectValueFromDropdown(wrapper: any, name: string, value: any) {
   wrapper.find(`select[name="${name}"]`).simulate('change', eventTargetStub(name, value));
 }

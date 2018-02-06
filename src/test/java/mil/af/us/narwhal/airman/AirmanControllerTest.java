@@ -54,6 +54,9 @@ public class AirmanControllerTest {
     objectMapper.registerModule(module);
   }
 
+  private AirmanQualification airQual;
+  private AirmanCertification airCert;
+
   @Before
   public void setUp() {
     squadron = new Squadron(1L, 1L, "1");
@@ -62,10 +65,10 @@ public class AirmanControllerTest {
     final Event event = new Event(1L, "Dentist", "", Instant.now(), Instant.now(), EventType.APPOINTMENT, 1L);
 
     final Qualification qualification = new Qualification(1L, "Qual1", "qualification");
-    final AirmanQualification airQual = new AirmanQualification(100L, 1L, qualification, new Date(), new Date());
+    airQual = new AirmanQualification(100L, 1L, qualification, new Date(), new Date());
 
     final Certification certification = new Certification(1L, "Certification 1");
-    final AirmanCertification airCert = new AirmanCertification(200L, 1L, certification, new Date(), new Date());
+    airCert = new AirmanCertification(200L, 1L, certification, new Date(), new Date());
 
     airmen = singletonList(new Airman(
       1L,
@@ -190,4 +193,31 @@ public class AirmanControllerTest {
     assertThat(captor.getValue().getCertifications().get(0).getExpirationDate()).isEqualTo(newExpirationDate);
   }
 
+  @Test
+  public void deleteQualificationTest() throws Exception {
+    final Airman airman = airmen.get(0);
+    when(repository.findOne(airman.getId())).thenReturn(airman);
+
+    mockMvc.perform(
+      delete(AirmanController.URI + "/" + airman.getId() + "/qualifications/" + airQual.getId())
+        .with(httpBasic("tytus", "password")))
+      .andExpect(status().is(200));
+
+    verify(repository).save(captor.capture());
+    assertThat(captor.getValue().getQualifications()).doesNotContain(airQual);
+  }
+
+  @Test
+  public void deleteCertificationTest() throws Exception {
+    final Airman airman = airmen.get(0);
+    when(repository.findOne(airman.getId())).thenReturn(airman);
+
+    mockMvc.perform(
+      delete(AirmanController.URI + "/" + airman.getId() + "/certifications/" + airCert.getId())
+        .with(httpBasic("tytus", "password")))
+      .andExpect(status().is(200));
+
+    verify(repository).save(captor.capture());
+    assertThat(captor.getValue().getCertifications()).doesNotContain(airCert);
+  }
 }

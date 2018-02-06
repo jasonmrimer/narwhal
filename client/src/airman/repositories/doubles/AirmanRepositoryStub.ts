@@ -1,10 +1,10 @@
 import AirmanRepository from '../AirmanRepository';
 import AirmanModelFactory from '../../factories/AirmanModelFactory';
 import AirmanModel from '../../models/AirmanModel';
-import AirmanQualificationModel from '../../models/AirmanQualificationModel';
 import AirmanCertificationModelFactory from '../../factories/AirmanCertificationModelFactory';
-import AirmanCertificationModel from '../../models/AirmanCertificationModel';
 import AirmanQualificationModelFactory from '../../factories/AirmanQualificationModelFactory';
+import { Skill } from '../../../skills/models/Skill';
+import AirmanQualificationModel from '../../models/AirmanQualificationModel';
 
 const af = AirmanModelFactory;
 const airmen = [
@@ -12,14 +12,14 @@ const airmen = [
   af.build(2, 1, [AirmanQualificationModelFactory.build(2)], [AirmanCertificationModelFactory.build(2)]),
   af.build(3, 1, [AirmanQualificationModelFactory.build(3)], [AirmanCertificationModelFactory.build(3)]),
   af.build(4, 2, [AirmanQualificationModelFactory.build(1), AirmanQualificationModelFactory.build(2)],
-           [AirmanCertificationModelFactory.build(1), AirmanCertificationModelFactory.build(2)]),
+    [AirmanCertificationModelFactory.build(1), AirmanCertificationModelFactory.build(2)]),
   af.build(5, 2, [AirmanQualificationModelFactory.build(2)], [AirmanCertificationModelFactory.build(2)]),
   af.build(6, 2, [AirmanQualificationModelFactory.build(3)], [AirmanCertificationModelFactory.build(3)]),
   af.build(7, 3, [AirmanQualificationModelFactory.build(1)], [AirmanCertificationModelFactory.build(1)]),
   af.build(8, 3, [AirmanQualificationModelFactory.build(2)], [AirmanCertificationModelFactory.build(2)]),
   af.build(9, 3, [AirmanQualificationModelFactory.build(3)], [AirmanCertificationModelFactory.build(3)]),
   af.build(10, 4, [AirmanQualificationModelFactory.build(1), AirmanQualificationModelFactory.build(2)],
-           [AirmanCertificationModelFactory.build(1), AirmanCertificationModelFactory.build(2)]),
+    [AirmanCertificationModelFactory.build(1), AirmanCertificationModelFactory.build(2)]),
   af.build(11, 5, [AirmanQualificationModelFactory.build(2)], [AirmanCertificationModelFactory.build(2)]),
   af.build(12, 6, [AirmanQualificationModelFactory.build(3)], [AirmanCertificationModelFactory.build(3)])
 ];
@@ -40,23 +40,38 @@ export default class AirmanRepositoryStub implements AirmanRepository {
     return Promise.resolve(airmenForFlight);
   }
 
-  saveQualification(airmanQual: AirmanQualificationModel): Promise<AirmanModel> {
-    const airman = airmen.find(a => a.id === airmanQual.airmanId)!;
-    const qual = airman.qualifications.find((q: AirmanQualificationModel) => q.id === airmanQual.qualification.id);
-    if (qual == null) {
-      airmanQual.id = Math.round(Math.random() * 0xFFFFFF);
-      airman.qualifications.push(airmanQual);
+  saveSkill(skill: Skill): Promise<AirmanModel> {
+    const airman = airmen.find(a => a.id === skill.airmanId)!;
+    if (skill instanceof AirmanQualificationModel) {
+      this.save(airman.qualifications, skill);
+    } else {
+      this.save(airman.certifications, skill);
     }
     return Promise.resolve(airman);
   }
 
-  saveCertification(airmanCert: AirmanCertificationModel): Promise<AirmanModel> {
-    const airman = airmen.find(a => a.id === airmanCert.airmanId)!;
-    const cert = airman.certifications.find((c: AirmanCertificationModel) => c.id === airmanCert.certification.id);
-    if (cert == null) {
-      airmanCert.id = Math.round(Math.random() * 0xFFFFFF);
-      airman.certifications.push(airmanCert);
+  deleteSkill(skill: Skill): Promise<AirmanModel> {
+    const airman = airmen.find(a => a.id === skill.airmanId)!;
+    if (skill instanceof AirmanQualificationModel) {
+      this.delete(airman.qualifications, skill);
+    } else {
+      this.delete(airman.certifications, skill);
     }
     return Promise.resolve(airman);
+  }
+
+  private save(skills: Skill[], skillToSave: Skill) {
+    const existingSkill = skills.find((s: any) => s.id === skillToSave.skillId);
+    if (!existingSkill) {
+      skillToSave.id = Math.round(Math.random() * 0xFFFFFF);
+      skills.push(skillToSave);
+    }
+  }
+
+  private delete(skills: Skill[], skillToDelete: Skill) {
+    const index = skills.indexOf(skillToDelete, 0);
+    if (index > -1) {
+      skills.splice(index, 1);
+    }
   }
 }

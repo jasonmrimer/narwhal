@@ -32,7 +32,7 @@ export default styled(CurrencyTile)`
     padding: 0.35rem;
     
     &:hover {
-      background-color: ${props => props.theme.darker};
+      background-color: ${props => props.theme.hoverBlueSteel};
       cursor: pointer;
     }
   }
