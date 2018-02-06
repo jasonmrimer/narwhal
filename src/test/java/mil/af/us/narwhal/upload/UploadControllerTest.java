@@ -1,5 +1,9 @@
-package mil.af.us.narwhal.admin;
+package mil.af.us.narwhal.upload;
 
+import mil.af.us.narwhal.upload.airman.AirmanUploadCSVRow;
+import mil.af.us.narwhal.upload.airman.AirmanUploadService;
+import mil.af.us.narwhal.upload.certification.CertificationUploadService;
+import mil.af.us.narwhal.upload.qualification.QualificationUploadService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +21,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(UploadController.class)
 @RunWith(SpringRunner.class)
-public class AirmanUploadControllerTest {
+public class UploadControllerTest {
   @Autowired private MockMvc mockMvc;
   @MockBean private AirmanUploadService airmanUploadService;
   @MockBean private QualificationUploadService qualificationUploadService;
+  @MockBean private CertificationUploadService certificationUploadService;
 
   @Test
   public void testImportAirmanCSV() throws Exception {

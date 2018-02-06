@@ -1,7 +1,13 @@
-package mil.af.us.narwhal.admin;
+package mil.af.us.narwhal.upload;
 
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
+import mil.af.us.narwhal.upload.airman.AirmanUploadCSVRow;
+import mil.af.us.narwhal.upload.airman.AirmanUploadService;
+import mil.af.us.narwhal.upload.certification.CertificationUploadCSVRow;
+import mil.af.us.narwhal.upload.certification.CertificationUploadService;
+import mil.af.us.narwhal.upload.qualification.QualificationUploadCSVRow;
+import mil.af.us.narwhal.upload.qualification.QualificationUploadService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,10 +25,12 @@ public class UploadController {
 
   private AirmanUploadService airmanUploadService;
   private QualificationUploadService qualificationUploadService;
+  private CertificationUploadService certificationUploadService;
 
-  public UploadController(AirmanUploadService airmanUploadService, QualificationUploadService qualificationUploadService) {
+  public UploadController(AirmanUploadService airmanUploadService, QualificationUploadService qualificationUploadService, CertificationUploadService certificationUploadService) {
     this.airmanUploadService = airmanUploadService;
     this.qualificationUploadService = qualificationUploadService;
+    this.certificationUploadService = certificationUploadService;
   }
 
   @PostMapping("/airman")
@@ -46,6 +54,18 @@ public class UploadController {
         .withIgnoreLeadingWhiteSpace(true)
         .build();
       qualificationUploadService.importToDatabase(csvToBean.parse());
+      return "redirect:/";
+    }
+  }
+
+  @PostMapping("/certification")
+  public String importCertificationCSV(@RequestParam("file") MultipartFile file) throws IOException {
+    try (Reader reader = new InputStreamReader(file.getInputStream())) {
+      CsvToBean csvToBean = new CsvToBeanBuilder<CertificationUploadCSVRow>(reader)
+        .withType(CertificationUploadCSVRow.class)
+        .withIgnoreLeadingWhiteSpace(true)
+        .build();
+      certificationUploadService.importToDatabase(csvToBean.parse());
       return "redirect:/";
     }
   }

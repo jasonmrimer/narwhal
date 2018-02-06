@@ -1,4 +1,4 @@
-package mil.af.us.narwhal.admin;
+package mil.af.us.narwhal.upload.airman;
 
 import mil.af.us.narwhal.airman.Airman;
 import mil.af.us.narwhal.airman.AirmanRepository;

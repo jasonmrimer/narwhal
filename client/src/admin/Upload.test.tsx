@@ -6,7 +6,7 @@ import Upload from './Upload';
 describe('Upload', () => {
   it('renders two forms', () => {
     const subject = mount(<Upload/>);
-    expect(subject.find('form').length).toBe(2);
+    expect(subject.find('form').length).toBe(3);
   });
 
   it('renders with a hidden csrf token', () => {

@@ -1,8 +1,7 @@
-package mil.af.us.narwhal.admin;
+package mil.af.us.narwhal.upload.qualification;
 
 import mil.af.us.narwhal.skills.Qualification;
 import mil.af.us.narwhal.skills.QualificationRepository;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -21,8 +20,8 @@ public class QualificationUploadService {
     Set<Qualification> qualifications = new HashSet<>();
 
     for(QualificationUploadCSVRow row : rows) {
-      List<Qualification> existingQuals = qualificationRepository.findByTitle(row.getTitle());
-      if (existingQuals.isEmpty()) {
+      Qualification existingQual = qualificationRepository.findOneByTitle(row.getTitle());
+      if (existingQual == null) {
         Qualification qualification = new Qualification();
         qualification.setAcronym(row.getAcronym());
         qualification.setTitle(row.getTitle());

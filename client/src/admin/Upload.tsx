@@ -25,6 +25,16 @@ export default class Upload extends React.Component {
           </form>
         </div>
       ),
+      (
+        <div key="2">
+          <h3>Upload certifications: </h3>
+          <form encType="multipart/form-data" method="post" action="/api/upload/certification">
+            <input type="file" name="file"/>
+            <input type="submit" value="Upload CSV"/>
+            <input type="hidden" name="_csrf" value={csrfToken}/>
+          </form>
+        </div>
+      ),
     ];
   }
 }

@@ -1,5 +1,7 @@
-package mil.af.us.narwhal.admin;
+package mil.af.us.narwhal.upload;
 
+import mil.af.us.narwhal.upload.airman.AirmanUploadCSVRow;
+import mil.af.us.narwhal.upload.airman.AirmanUploadService;
 import mil.af.us.narwhal.airman.Airman;
 import mil.af.us.narwhal.airman.AirmanRepository;
 import mil.af.us.narwhal.flight.Flight;

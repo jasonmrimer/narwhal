@@ -1,5 +1,6 @@
-package mil.af.us.narwhal.admin;
+package mil.af.us.narwhal.upload;
 
+import mil.af.us.narwhal.upload.airman.AirmanUploadCSVRow;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
