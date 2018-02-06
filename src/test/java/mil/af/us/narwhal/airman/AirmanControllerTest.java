@@ -3,6 +3,7 @@ package mil.af.us.narwhal.airman;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import mil.af.us.narwhal.event.Event;
+import mil.af.us.narwhal.event.EventType;
 import mil.af.us.narwhal.flight.Flight;
 import mil.af.us.narwhal.skills.Certification;
 import mil.af.us.narwhal.skills.Qualification;
@@ -55,7 +56,7 @@ public class AirmanControllerTest {
     squadron = new Squadron(1L, 1L, "1");
     flight = new Flight(1L, squadron.getId(), "SUPER FLIGHT");
 
-    final Event event = new Event(1L, "Dentist", "", Instant.now(), Instant.now(), 1L);
+    final Event event = new Event(1L, "Dentist", "", Instant.now(), Instant.now(), EventType.APPOINTMENT, 1L);
 
     final Qualification qualification = new Qualification(1L, "Qual1", "qualification");
     final AirmanQualification airQual = new AirmanQualification(1L, qualification, new Date(), new Date());

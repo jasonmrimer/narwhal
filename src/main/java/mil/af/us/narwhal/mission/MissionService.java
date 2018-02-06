@@ -33,7 +33,7 @@ public class MissionService {
   private Mission mapMetaDataToMission(Results.MissionMetaData metaData) {
     final Site site = siteRepository.findOneByName(metaData.getPrimaryorg());
 
-    Mission.Builder builder = new Mission.Builder()
+    Mission.MissionBuilder builder = new Mission.MissionBuilder()
       .missionId(metaData.getMissionid())
       .atoMissionNumber(metaData.getAtomissionnumber())
       .startDateTime(metaData.getStartdttime().toGregorianCalendar().getTime().toInstant())

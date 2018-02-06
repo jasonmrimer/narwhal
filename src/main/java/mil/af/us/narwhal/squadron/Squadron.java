@@ -1,6 +1,9 @@
 package mil.af.us.narwhal.squadron;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import mil.af.us.narwhal.flight.Flight;
 
 import javax.persistence.Column;
@@ -11,29 +14,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Data
+@NoArgsConstructor
 public class Squadron {
   @Id
   private Long id;
 
-  private String name;
-
   @Column(name = "site_id")
   private Long siteId;
 
+  private String name;
+
   @OneToMany(mappedBy = "squadronId")
   @JsonManagedReference
-  List<Flight> flights;
-
-  // Compliant
-  public Squadron() {
-    // no-arg contructor
-  }
+  List<Flight> flights = new ArrayList<>();
 
   public Squadron(Long id, Long siteId, String name) {
     this.id = id;
     this.siteId = siteId;
     this.name = name;
-    this.flights = new ArrayList<>();
   }
 
   public Squadron(Long id, Long siteId, String name, List<Flight> flights) {
@@ -43,62 +42,8 @@ public class Squadron {
     this.flights = new ArrayList<>(flights);
   }
 
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  public Long getSiteId() {
-    return siteId;
-  }
-
-  public void setSiteId(Long siteId) {
-    this.siteId = siteId;
-  }
-
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public List<Flight> getFlights() {
-    return flights;
-  }
-
-  public void setFlights(List<Flight> flights) {
-    this.flights = flights;
-  }
-
   public void addFlight(Flight flight) {
     flight.setSquadronId(this.id);
     this.flights.add(flight);
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-
-    Squadron squadron = (Squadron) o;
-
-    if (id != null ? !id.equals(squadron.id) : squadron.id != null) return false;
-    if (name != null ? !name.equals(squadron.name) : squadron.name != null) return false;
-    if (siteId != null ? !siteId.equals(squadron.siteId) : squadron.siteId != null) return false;
-    return flights != null ? flights.equals(squadron.flights) : squadron.flights == null;
-  }
-
-  @Override
-  public int hashCode() {
-    int result = id != null ? id.hashCode() : 0;
-    result = 31 * result + (name != null ? name.hashCode() : 0);
-    result = 31 * result + (siteId != null ? siteId.hashCode() : 0);
-    result = 31 * result + (flights != null ? flights.hashCode() : 0);
-    return result;
   }
 }

@@ -55,6 +55,7 @@ public class EventControllerTest {
       "New Description",
       Instant.now(),
       Instant.now(),
+      EventType.APPOINTMENT,
       20L
     );
 
@@ -71,7 +72,7 @@ public class EventControllerTest {
 
   @Test
   public void updateTest() throws Exception {
-    Event existingEvent = new Event(1L, "Event", "", Instant.now(), Instant.now(), 1L);
+    Event existingEvent = new Event(1L, "Event", "", Instant.now(), Instant.now(), EventType.APPOINTMENT, 1L);
     when(repository.save(any(Event.class))).thenReturn(existingEvent);
 
     final String json = objectMapper.writeValueAsString(existingEvent);
