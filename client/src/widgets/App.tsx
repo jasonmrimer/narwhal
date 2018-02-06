@@ -84,6 +84,7 @@ const classificationBanner = {
   textAlign: 'center',
   paddingBottom: '0.25rem',
 };
+
 const authorizationBanner = {
   background: '#5C6977',
   textAlign: 'center',

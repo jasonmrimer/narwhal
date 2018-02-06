@@ -14,6 +14,7 @@ class Event
       find('label', text: 'APPOINTMENT').click
 
       fill_in 'description', with: "invalid event"
+      scroll_to(find('input[type="submit"]'))
       find('input[type="submit"]').click
     end
   end
@@ -29,6 +30,7 @@ class Event
       fill_in 'startTime', with: @start.strftime('%H:%M')
       fill_in 'endDate', with: @end.strftime('%m/%d/%Y')
       fill_in 'endTime', with: @end.strftime('%H:%M')
+      scroll_to(find('input[type="submit"]'))
       find('input[type="submit"]').click
     end
   end

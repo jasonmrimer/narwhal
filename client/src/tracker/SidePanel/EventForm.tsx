@@ -143,6 +143,7 @@ export class EventForm extends React.Component<Props, State> {
           </div>
         </FieldValidation>
         <SubmitButton text="CONFIRM"/>
+        <div style={{minHeight: 150}}/>
       </form>
     );
   }
