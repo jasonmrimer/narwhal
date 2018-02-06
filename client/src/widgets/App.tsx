@@ -36,6 +36,12 @@ export default class App extends React.Component<Props, State> {
         >
           Not Actual Classification. Prototype Only
         </div>
+        <div
+          className="authorization-banner"
+          style={authorizationBanner}
+        >
+          Authorized Personnel Only
+        </div>
         <Switch>
           <Route
             path="/upload"
@@ -75,6 +81,11 @@ export default class App extends React.Component<Props, State> {
 
 const classificationBanner = {
   background: 'red',
+  textAlign: 'center',
+  paddingBottom: '0.25rem',
+};
+const authorizationBanner = {
+  background: '#5C6977',
   textAlign: 'center',
   paddingBottom: '0.25rem',
 };
