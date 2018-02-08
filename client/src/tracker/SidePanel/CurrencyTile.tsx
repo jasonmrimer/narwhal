@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Skill } from '../../skills/models/Skill';
+import ExpirationAlert from '../../icons/ExpirationAlert';
 
 interface Props {
   skill: Skill;
@@ -17,7 +18,10 @@ export const CurrencyTile = (props: Props) => {
       key={props.key}
       onClick={() => props.handleClick(skill)}
     >
-      <div className="currency-title">{skill.title}</div>
+      <div className="currency-title">
+        <span>{skill.title}</span>
+        {skill.isExpired && <ExpirationAlert />}
+      </div>
       <div className="currency-description"> {skill.expirationDate.format('DD MMM YY')}</div>
     </div>
   );
@@ -30,6 +34,9 @@ export default styled(CurrencyTile)`
   
   .currency-title {
     padding: 0.35rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     
     &:hover {
       background-color: ${props => props.theme.hoverBlueSteel};

@@ -221,7 +221,7 @@ export default class TrackerStore {
   @action.bound
   setSelectedAirman(airman: AirmanModel) {
     this._selectedAirman = airman;
-    this._sidePanelWeek = airman.isEmpty() ? this._plannerWeek : this._sidePanelWeek;
+    this._sidePanelWeek = airman.isEmpty ? this._plannerWeek : this._sidePanelWeek;
     this._selectedEvent = null;
   }
 

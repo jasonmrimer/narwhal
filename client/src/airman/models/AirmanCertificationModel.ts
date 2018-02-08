@@ -1,6 +1,7 @@
-import { Moment } from 'moment';
+import * as moment from 'moment';
 import CertificationModel from '../../skills/models/CertificationModel';
 import { SkillType } from '../../skills/models/SkillType';
+import { Moment } from 'moment';
 
 export default class AirmanCertificationModel {
   constructor(public airmanId: number,
@@ -20,5 +21,9 @@ export default class AirmanCertificationModel {
 
   get skillId() {
     return this.certification.id;
+  }
+
+  get isExpired() {
+    return this.expirationDate.isBefore(moment.utc().add(14, 'days'));
   }
 }

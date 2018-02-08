@@ -8,6 +8,10 @@ import Availability from './Availability';
 import Tab from './Tab';
 import TrackerStore from '../stores/TrackerStore';
 import { makeFakeTrackerStore } from '../../utils/testUtils';
+import AirmanCertificationModel from '../../airman/models/AirmanCertificationModel';
+import CertificationModelFactory from '../../skills/factories/CertificationModelFactory';
+import * as moment from 'moment';
+import TabAlert from '../../icons/TabAlert';
 
 let airman: AirmanModel;
 let trackerStore: TrackerStore;
@@ -16,6 +20,13 @@ let subject: ShallowWrapper;
 describe('SidePanel', () => {
   beforeEach(async () => {
     airman = AirmanModelFactory.build();
+    const certification = new AirmanCertificationModel(
+      airman.id,
+      CertificationModelFactory.build(1),
+      moment.utc(),
+      moment.utc().subtract(3, 'year')
+    );
+    airman.certifications.push(certification);
 
     trackerStore = await makeFakeTrackerStore();
     trackerStore.setSelectedAirman(airman);
@@ -56,6 +67,10 @@ describe('SidePanel', () => {
     subject.find(Tab).at(1).simulate('click');
     expect(subject.find(Tab).at(0).prop('isActive')).toBeFalsy();
     expect(subject.find(Tab).at(1).prop('isActive')).toBeTruthy();
+  });
+
+  it('shows a tab alert when the airman has an expired skill', () => {
+    expect(subject.find(TabAlert).exists()).toBeTruthy();
   });
 
   it('calls the callback', () => {

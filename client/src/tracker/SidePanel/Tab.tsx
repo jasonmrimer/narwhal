@@ -8,23 +8,33 @@ interface Props {
   className?: string;
 }
 
-export const Tab = (props: Props) => {
+export const Tab: React.SFC<Props> = props => {
   return (
     <div className={props.className}>
       {props.isActive
-        ? <ActiveBorder>{props.title}</ActiveBorder>
-        : <a onClick={props.onClick}>{props.title}</a>
+        ? <ActiveBorder>{props.title}{props.children}</ActiveBorder>
+        : <InactiveBorder onClick={props.onClick}>{props.title}{props.children}</InactiveBorder>
       }
     </div>
   );
 };
 
 export const ActiveBorder = styled.a`
-  border-bottom: 2px solid ${props => props.theme.yellow};
+  border-bottom: 3px solid ${props => props.theme.yellow};
+`;
+
+export const InactiveBorder = styled.a`
+  border-bottom: 1px solid ${props => props.theme.graySteel};
 `;
 
 export default styled(Tab)`
-  padding: 1rem;
-  padding-bottom: 0;
   cursor: pointer;
+  width: 100%;
+  
+  a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 0;
+  }
 `;

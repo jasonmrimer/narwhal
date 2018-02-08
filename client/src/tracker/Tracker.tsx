@@ -65,7 +65,7 @@ export class Tracker extends React.Component<Props> {
               </div>
             </div>
             {
-              !this.props.trackerStore.selectedAirman.isEmpty()
+              !this.props.trackerStore.selectedAirman.isEmpty
                 ? <SidePanel
                   trackerStore={this.props.trackerStore}
                 />

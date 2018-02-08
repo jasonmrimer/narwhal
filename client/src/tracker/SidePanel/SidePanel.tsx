@@ -6,6 +6,7 @@ import Tab from './Tab';
 import { observer } from 'mobx-react';
 import TrackerStore from '../stores/TrackerStore';
 import Availability from './Availability';
+import TabAlert from '../../icons/TabAlert';
 
 interface Props {
   trackerStore: TrackerStore;
@@ -50,8 +51,10 @@ export class SidePanel extends React.Component<Props, State> {
           </h2>
         </div>
         <div className="tabs">
-          <Tab onClick={() => this.setSelectedTab(0)} title={'CURRENCY'} isActive={this.state.selectedTab === 0}/>
-          <Tab onClick={() => this.setSelectedTab(1)} title={'AVAILABILITY'} isActive={this.state.selectedTab === 1}/>
+          <Tab onClick={() => this.setSelectedTab(0)} title="CURRENCY" isActive={this.state.selectedTab === 0}>
+            {trackerStore.selectedAirman.hasExpiredSkills && <TabAlert/>}
+          </Tab>
+          <Tab onClick={() => this.setSelectedTab(1)} title="AVAILABILITY" isActive={this.state.selectedTab === 1}/>
         </div>
         <div>
           {this.renderSelectedTab()}
@@ -94,6 +97,5 @@ export default styled(SidePanel)`
   .tabs {
     display: flex;
     justify-content: center;
-    border-bottom: 1px solid ${props => props.theme.graySteel};
   }
 `;

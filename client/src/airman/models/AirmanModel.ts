@@ -16,7 +16,12 @@ export default class AirmanModel {
               public events: EventModel[]) {
   }
 
-  isEmpty() {
+  get isEmpty() {
     return this.id === -1;
+  }
+
+  get hasExpiredSkills() {
+    return this.qualifications.map(qualification => qualification.isExpired).some(exp => exp) ||
+      this.certifications.map(certification => certification.isExpired).some(exp => exp);
   }
 }
