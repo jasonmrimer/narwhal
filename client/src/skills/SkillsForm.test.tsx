@@ -1,20 +1,20 @@
 import * as React from 'react';
-import {mount, ReactWrapper} from 'enzyme';
-import {eventStub, inputValueForDatePicker, selectValueFromDropdown} from '../../utils/testUtils';
-import {CurrencyForm} from './CurrencyForm';
-import QualificationModel from '../../skills/models/QualificationModel';
-import AirmanQualificationModel from '../../airman/models/AirmanQualificationModel';
+import { mount, ReactWrapper } from 'enzyme';
+import { eventStub, inputValueForDatePicker, selectValueFromDropdown } from '../utils/testUtils';
+import { SkillsForm } from './SkillsForm';
+import QualificationModel from './models/QualificationModel';
+import AirmanQualificationModel from '../airman/models/AirmanQualificationModel';
 import * as moment from 'moment';
-import DatePicker from '../../widgets/DatePicker';
-import CertificationModel from '../../skills/models/CertificationModel';
-import QualificationModelFactory from '../../skills/factories/QualificationModelFactory';
-import CertificationModelFactory from '../../skills/factories/CertificationModelFactory';
-import AirmanCertificationModel from '../../airman/models/AirmanCertificationModel';
-import AirmanQualificationModelFactory from '../../airman/factories/AirmanQualificationModelFactory';
-import {SkillType} from '../../skills/models/SkillType';
+import DatePicker from '../widgets/DatePicker';
+import CertificationModel from './models/CertificationModel';
+import QualificationModelFactory from './factories/QualificationModelFactory';
+import CertificationModelFactory from './factories/CertificationModelFactory';
+import AirmanCertificationModel from '../airman/models/AirmanCertificationModel';
+import AirmanQualificationModelFactory from '../airman/factories/AirmanQualificationModelFactory';
+import { SkillType } from './models/SkillType';
 import Mock = jest.Mock;
 
-describe('CurrencyForm', () => {
+describe('SkillsForm', () => {
     const earnDate = moment.utc('2018-02-01');
     const expirationDate = moment.utc('2019-02-01');
 
@@ -31,7 +31,7 @@ describe('CurrencyForm', () => {
 
         certs = CertificationModelFactory.buildList(3);
         subject = mount(
-            <CurrencyForm
+            <SkillsForm
                 airmanId={1}
                 qualifications={quals}
                 certifications={certs}
@@ -79,7 +79,7 @@ describe('CurrencyForm', () => {
 
         beforeEach(() => {
             subject = mount(
-                <CurrencyForm
+                <SkillsForm
                     airmanId={1}
                     qualifications={quals}
                     certifications={certs}

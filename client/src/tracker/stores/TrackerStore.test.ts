@@ -2,7 +2,7 @@ import TrackerStore from './TrackerStore';
 import AirmanRepositoryStub from '../../airman/repositories/doubles/AirmanRepositoryStub';
 import SiteRepositoryStub from '../../site/repositories/doubles/SiteRepositoryStub';
 import AirmanModel from '../../airman/models/AirmanModel';
-import EventModel, { EventType } from '../../event/EventModel';
+import EventModel, { EventType } from '../../event/models/EventModel';
 import * as moment from 'moment';
 import EventRepositoryStub from '../../event/repositories/doubles/EventRepositoryStub';
 import { toJS } from 'mobx';

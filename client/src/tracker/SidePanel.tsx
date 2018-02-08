@@ -1,12 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import CloseIcon from '../../icons/CloseIcon';
-import Currency from './Currency';
+import CloseIcon from '../icons/CloseIcon';
+import Currency from '../currency/Currency';
 import Tab from './Tab';
 import { observer } from 'mobx-react';
-import TrackerStore from '../stores/TrackerStore';
-import Availability from './Availability';
-import TabAlert from '../../icons/TabAlert';
+import TrackerStore from './stores/TrackerStore';
+import Availability from '../availability/Availability';
+import TabAlert from '../icons/TabAlert';
 
 interface Props {
   trackerStore: TrackerStore;

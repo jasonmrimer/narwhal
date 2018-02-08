@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import { Availability } from './Availability';
-import { AirmanEvent } from '../../airman/AirmanEvent';
-import EventModel, { EventType } from '../../event/EventModel';
+import { AirmanEvent } from './AvailabilityTile';
+import EventModel, { EventType } from '../event/models/EventModel';
 import * as moment from 'moment';
-import StyledEventForm, { EventForm } from './EventForm';
-import AirmanModelFactory from '../../airman/factories/AirmanModelFactory';
-import { makeFakeTrackerStore } from '../../utils/testUtils';
-import TrackerStore from '../stores/TrackerStore';
-import AirmanModel from '../../airman/models/AirmanModel';
+import StyledEventForm, { EventForm } from '../event/EventForm';
+import AirmanModelFactory from '../airman/factories/AirmanModelFactory';
+import { makeFakeTrackerStore } from '../utils/testUtils';
+import TrackerStore from '../tracker/stores/TrackerStore';
+import AirmanModel from '../airman/models/AirmanModel';
 
 let trackerStore: TrackerStore;
 let airman: AirmanModel;

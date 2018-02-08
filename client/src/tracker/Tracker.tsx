@@ -5,7 +5,7 @@ import TopBar from '../widgets/TopBar';
 import { observer } from 'mobx-react';
 import TrackerStore from './stores/TrackerStore';
 import { TopLevelFilter } from '../widgets/Filter';
-import SidePanel from './SidePanel/SidePanel';
+import SidePanel from './SidePanel';
 import Legend from '../roster/Legend';
 import DeleteEventPopup from '../roster/DeleteEventPopup';
 

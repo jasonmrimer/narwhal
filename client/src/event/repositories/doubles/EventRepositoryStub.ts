@@ -1,5 +1,5 @@
 import EventRepository from '../EventRepository';
-import EventModel from '../../EventModel';
+import EventModel from '../../models/EventModel';
 
 export default class EventRepositoryStub implements EventRepository {
   private static counter: number = 0;

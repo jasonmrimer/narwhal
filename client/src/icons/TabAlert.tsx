@@ -6,4 +6,4 @@ export default () => {
       <circle cx="100" cy="100" r="40" fill="#E9A90F"/>
     </svg>
   );
-}
+};

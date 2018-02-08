@@ -1,14 +1,14 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import QualificationModel from '../../skills/models/QualificationModel';
+import QualificationModel from './models/QualificationModel';
 import * as moment from 'moment';
-import DatePicker from '../../widgets/DatePicker';
-import SubmitButton from '../../widgets/SubmitButton';
-import CertificationModel from '../../skills/models/CertificationModel';
-import { allSkills, SkillType } from '../../skills/models/SkillType';
-import SkillBuilder from '../../skills/models/SkillBuilder';
-import { Skill } from '../../skills/models/Skill';
-import DeleteIcon from '../../icons/DeleteIcon';
+import DatePicker from '../widgets/DatePicker';
+import SubmitButton from '../widgets/SubmitButton';
+import CertificationModel from './models/CertificationModel';
+import { allSkills, SkillType } from './models/SkillType';
+import SkillBuilder from './models/SkillBuilder';
+import { Skill } from './models/Skill';
+import DeleteIcon from '../icons/DeleteIcon';
 
 interface Props {
   airmanId: number;
@@ -27,7 +27,7 @@ interface State {
   expirationDate: string;
 }
 
-export class CurrencyForm extends React.Component<Props, State> {
+export class SkillsForm extends React.Component<Props, State> {
   static hydrate(skill: Skill | null, qualifications: QualificationModel[]) {
     return {
       skillType: skill ? skill.type : SkillType.Qualification,
@@ -39,7 +39,7 @@ export class CurrencyForm extends React.Component<Props, State> {
 
   constructor(props: Props) {
     super(props);
-    this.state = CurrencyForm.hydrate(props.skill, props.qualifications);
+    this.state = SkillsForm.hydrate(props.skill, props.qualifications);
   }
 
   render() {
@@ -172,7 +172,7 @@ const caret = (fillColor: string) => {
     no-repeat center right`;
 };
 
-export default styled(CurrencyForm)`
+export default styled(SkillsForm)`
   text-align: left;
   display: flex;
   flex-direction: column;

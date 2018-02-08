@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import { Currency } from './Currency';
-import { findSelectorWithText, makeFakeTrackerStore } from '../../utils/testUtils';
-import TrackerStore from '../stores/TrackerStore';
-import AirmanModelFactory from '../../airman/factories/AirmanModelFactory';
-import AirmanQualificationModel from '../../airman/models/AirmanQualificationModel';
-import AirmanCertificationModel from '../../airman/models/AirmanCertificationModel';
-import { CurrencyForm } from './CurrencyForm';
-import { CurrencyTile } from './CurrencyTile';
-import AirmanQualificationModelFactory from '../../airman/factories/AirmanQualificationModelFactory';
-import AirmanCertificationModelFactory from '../../airman/factories/AirmanCertificationModelFactory';
+import { findSelectorWithText, makeFakeTrackerStore } from '../utils/testUtils';
+import TrackerStore from '../tracker/stores/TrackerStore';
+import AirmanModelFactory from '../airman/factories/AirmanModelFactory';
+import AirmanQualificationModel from '../airman/models/AirmanQualificationModel';
+import AirmanCertificationModel from '../airman/models/AirmanCertificationModel';
+import { SkillsForm } from '../skills/SkillsForm';
+import { SkillTile } from '../skills/SkillTile';
+import AirmanQualificationModelFactory from '../airman/factories/AirmanQualificationModelFactory';
+import AirmanCertificationModelFactory from '../airman/factories/AirmanCertificationModelFactory';
 
 describe('Currency', () => {
   const airman = AirmanModelFactory.build(
@@ -42,11 +42,11 @@ describe('Currency', () => {
 
   it('opens skill form on + Add Skill click', () => {
     findSelectorWithText(subject, 'button', '+ Add Skill').simulate('click');
-    expect(subject.find(CurrencyForm).exists()).toBeTruthy();
+    expect(subject.find(SkillsForm).exists()).toBeTruthy();
   });
 
   it('opens an Currency Form when clicking on an existing Currency Tile', () => {
-    subject.find(CurrencyTile).at(0).simulate('click');
-    expect(subject.find(CurrencyForm).prop('skill')).toEqual(airman.qualifications[0]);
+    subject.find(SkillTile).at(0).simulate('click');
+    expect(subject.find(SkillsForm).prop('skill')).toEqual(airman.qualifications[0]);
   });
 });

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Moment } from 'moment';
 import * as classNames from 'classnames';
-import EventModel, { EventType } from '../event/EventModel';
+import EventModel, { EventType } from '../event/models/EventModel';
 import AppointmentIcon from '../icons/AppointmentIcon';
 import LeaveIcon from '../icons/LeaveIcon';
 import MissionIcon from '../icons/MissionIcon';

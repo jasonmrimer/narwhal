@@ -1,6 +1,6 @@
 import * as moment from 'moment';
 import { Moment } from 'moment';
-import { EventForm, EventFormState } from '../tracker/SidePanel/EventForm';
+import { EventForm, EventFormState } from '../EventForm';
 
 export enum EventType {
   Mission = 'MISSION',

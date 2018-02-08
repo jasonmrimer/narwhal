@@ -2,7 +2,7 @@ import * as React from 'react';
 import { makeFakeTrackerStore } from '../utils/testUtils';
 import { DeleteEventPopup } from './DeleteEventPopup';
 import * as moment from 'moment';
-import EventModel, { EventType } from '../event/EventModel';
+import EventModel, { EventType } from '../event/models/EventModel';
 import { shallow, ShallowWrapper } from 'enzyme';
 
 const cancelPendingDeleteEvent = jest.fn();

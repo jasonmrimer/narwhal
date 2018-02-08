@@ -1,5 +1,5 @@
-import { Serializer } from '../utils/serializer';
-import EventModel from './EventModel';
+import { Serializer } from '../../utils/serializer';
+import EventModel from '../models/EventModel';
 import * as moment from 'moment';
 
 export default class EventSerializer implements Serializer<EventModel> {

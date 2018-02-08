@@ -1,6 +1,6 @@
 import EventRepository from '../EventRepository';
-import EventModel from '../../EventModel';
-import EventSerializer from '../../EventSerializer';
+import EventModel from '../../models/EventModel';
+import EventSerializer from '../../serializers/EventSerializer';
 import * as Cookie from 'js-cookie';
 
 export default class WebEventRepository implements EventRepository {

@@ -1,4 +1,4 @@
-import EventModel from '../EventModel';
+import EventModel from '../models/EventModel';
 
 interface EventRepository {
   save(event: EventModel): Promise<EventModel>;

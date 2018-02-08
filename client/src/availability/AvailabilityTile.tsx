@@ -1,5 +1,5 @@
 import * as React from 'react';
-import EventModel from '../event/EventModel';
+import EventModel from '../event/models/EventModel';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import DeleteIcon from '../icons/DeleteIcon';

@@ -1,11 +1,11 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import TrackerStore from '../stores/TrackerStore';
+import TrackerStore from '../tracker/stores/TrackerStore';
 import { observer } from 'mobx-react';
-import CurrencyForm from './CurrencyForm';
-import AirmanModel from '../../airman/models/AirmanModel';
-import CurrencyTile from './CurrencyTile';
-import { Skill } from '../../skills/models/Skill';
+import SkillsForm from '../skills/SkillsForm';
+import AirmanModel from '../airman/models/AirmanModel';
+import SkillTile from '../skills/SkillTile';
+import { Skill } from '../skills/models/Skill';
 
 interface Props {
   trackerStore: TrackerStore;
@@ -31,17 +31,17 @@ export class Currency extends React.Component<Props, State> {
   render() {
     return (
       <div className={this.props.className}>
-        {this.state.showForm ? this.renderCurrencyForm() : this.renderCurrencyList()}
+        {this.state.showForm ? this.renderSkillsForm() : this.renderSkillsList()}
       </div>
     );
   }
 
-  private renderCurrencyForm = () => {
+  private renderSkillsForm = () => {
     const airman = this.props.trackerStore.selectedAirman;
     const qualifications = this.props.trackerStore.qualifications;
     const certifications = this.props.trackerStore.certifications;
     return (
-      <CurrencyForm
+      <SkillsForm
         airmanId={airman.id}
         qualifications={qualifications}
         certifications={certifications}
@@ -62,12 +62,12 @@ export class Currency extends React.Component<Props, State> {
     this.setState({showForm: false, selectedSkill: null});
   }
 
-  private renderCurrencyList = () => {
+  private renderSkillsList = () => {
     const airman = this.props.trackerStore.selectedAirman;
     return (
       <div>
         <div className="skill-control-row">
-          <button className="add-skill" onClick={this.openCurrencyFormForCreate}>
+          <button className="add-skill" onClick={this.openSkillFormForCreate}>
             + Add Skill
           </button>
         </div>
@@ -79,29 +79,29 @@ export class Currency extends React.Component<Props, State> {
 
   private renderQualifications = (airman: AirmanModel) => {
     return airman.qualifications.map((qual, index) => (
-      <CurrencyTile
+      <SkillTile
         key={index}
         skill={qual}
-        handleClick={() => this.openCurrencyFormForEdit(qual)}
+        handleClick={() => this.openSkillFormForEdit(qual)}
       />
     ));
   }
 
   private renderCertifications = (airman: AirmanModel) => {
     return airman.certifications.map((cert, index) => (
-      <CurrencyTile
+      <SkillTile
         key={index}
         skill={cert}
-        handleClick={() => this.openCurrencyFormForEdit(cert)}
+        handleClick={() => this.openSkillFormForEdit(cert)}
       />
     ));
   }
 
-  private openCurrencyFormForCreate = () => {
+  private openSkillFormForCreate = () => {
     this.setState({showForm: true, selectedSkill: null});
   }
 
-  private openCurrencyFormForEdit = (skill: Skill) => {
+  private openSkillFormForEdit = (skill: Skill) => {
     this.setState({showForm: true, selectedSkill: skill});
   }
 }

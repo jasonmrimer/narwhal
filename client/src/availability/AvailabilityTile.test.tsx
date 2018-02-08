@@ -1,8 +1,8 @@
-import EventModel, { EventType } from '../event/EventModel';
+import EventModel, { EventType } from '../event/models/EventModel';
 import * as moment from 'moment';
 import { shallow, ShallowWrapper } from 'enzyme';
 import * as React from 'react';
-import { AirmanEvent } from './AirmanEvent';
+import { AirmanEvent } from './AvailabilityTile';
 import { eventStub } from '../utils/testUtils';
 
 describe('AirmanEvent', () => {

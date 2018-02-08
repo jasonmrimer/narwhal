@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { Moment } from 'moment';
 import styled from 'styled-components';
-import EventModel from '../../event/EventModel';
-import AirmanEvent from '../../airman/AirmanEvent';
-import EventForm from './EventForm';
+import EventModel from '../event/models/EventModel';
+import AvailabilityTile from './AvailabilityTile';
+import EventForm from '../event/EventForm';
 import { observer } from 'mobx-react';
-import TrackerStore from '../stores/TrackerStore';
-import NextIcon from '../../icons/NextIcon';
-import { doesDayHaveEvent } from '../../utils/eventUtil';
-import BackIcon from '../../icons/BackIcon';
+import TrackerStore from '../tracker/stores/TrackerStore';
+import NextIcon from '../icons/NextIcon';
+import { doesDayHaveEvent } from '../utils/eventUtil';
+import BackIcon from '../icons/BackIcon';
 
 interface Props {
   trackerStore: TrackerStore;
@@ -105,7 +105,7 @@ export class Availability extends React.Component<Props, State> {
       ? <div className="event-name">No Events Scheduled</div>
       : eventsForDay.map((event, index) => {
         return (
-          <AirmanEvent
+          <AvailabilityTile
             key={index}
             event={event}
             deleteEvent={this.props.trackerStore.setPendingDeleteEvent}

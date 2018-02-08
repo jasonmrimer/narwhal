@@ -1,9 +1,9 @@
 import * as React from 'react';
 import Downshift from 'downshift';
-import FilterOption from './widgets/models/FilterOptionModel';
+import FilterOption from './models/FilterOptionModel';
 import styled from 'styled-components';
 import * as classNames from 'classnames';
-import { caret } from './utils/StyleUtils';
+import { caret } from '../utils/StyleUtils';
 
 interface Props {
   onChange: (e: FilterOption) => void;

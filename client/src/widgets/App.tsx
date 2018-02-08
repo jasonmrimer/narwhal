@@ -5,7 +5,7 @@ import Dashboard from '../dashboard/Dashboard';
 import { Route, Switch } from 'react-router-dom';
 import TrackerStore from '../tracker/stores/TrackerStore';
 import DashboardStore from '../dashboard/stores/DashboardStore';
-import Upload from '../admin/Upload';
+import Upload from '../upload/Upload';
 
 interface Props {
   profileRepository: ProfileRepository;

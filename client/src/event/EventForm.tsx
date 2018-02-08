@@ -1,17 +1,17 @@
 import * as React from 'react';
-import EventModel, { EventType } from '../../event/EventModel';
+import EventModel, { EventType } from './models/EventModel';
 import styled from 'styled-components';
-import BackIcon from '../../icons/BackArrow';
-import theme from '../../themes/default';
-import DatePicker from '../../widgets/DatePicker';
-import FieldValidation from '../../widgets/FieldValidation';
-import TextInput from '../../widgets/TextInput';
-import TimeInput from '../../widgets/TimeInput';
-import SubmitButton from '../../widgets/SubmitButton';
-import RadioButtons from '../../widgets/RadioButtons';
-import { MissionModel } from '../../mission/models/MissionModel';
-import TypeAheadInput from '../../TypeAheadInput';
-import FilterOption from '../../widgets/models/FilterOptionModel';
+import BackIcon from '../icons/BackArrow';
+import theme from '../themes/default';
+import DatePicker from '../widgets/DatePicker';
+import FieldValidation from '../widgets/FieldValidation';
+import TextInput from '../widgets/TextInput';
+import TimeInput from '../widgets/TimeInput';
+import SubmitButton from '../widgets/SubmitButton';
+import RadioButtons from '../widgets/RadioButtons';
+import { MissionModel } from '../mission/models/MissionModel';
+import TypeAheadInput from '../widgets/TypeAheadInput';
+import FilterOption from '../widgets/models/FilterOptionModel';
 
 interface Props {
   airmanId: number;

@@ -1,5 +1,5 @@
 import AirmanQualificationModel from './AirmanQualificationModel';
-import EventModel from '../../event/EventModel';
+import EventModel from '../../event/models/EventModel';
 import AirmanCertificationModel from './AirmanCertificationModel';
 
 export default class AirmanModel {

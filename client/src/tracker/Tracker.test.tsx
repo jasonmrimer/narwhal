@@ -3,12 +3,12 @@ import { mount, ReactWrapper } from 'enzyme';
 import Roster from '../roster/Roster';
 import { Tracker } from './Tracker';
 import { makeFakeTrackerStore } from '../utils/testUtils';
-import SidePanel from './SidePanel/SidePanel';
+import SidePanel from './SidePanel';
 import TopBar from '../widgets/TopBar';
 import TrackerStore from './stores/TrackerStore';
 import Legend from '../roster/Legend';
 import * as moment from 'moment';
-import EventModel, { EventType } from '../event/EventModel';
+import EventModel, { EventType } from '../event/models/EventModel';
 import DeleteEventPopup from '../roster/DeleteEventPopup';
 
 let trackerStore: TrackerStore;

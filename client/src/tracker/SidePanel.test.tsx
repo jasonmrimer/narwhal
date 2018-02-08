@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { SidePanel } from './SidePanel';
-import AirmanModelFactory from '../../airman/factories/AirmanModelFactory';
-import AirmanModel from '../../airman/models/AirmanModel';
-import Currency from './Currency';
-import Availability from './Availability';
+import AirmanModelFactory from '../airman/factories/AirmanModelFactory';
+import AirmanModel from '../airman/models/AirmanModel';
+import Currency from '../currency/Currency';
+import Availability from '../availability/Availability';
 import Tab from './Tab';
-import TrackerStore from '../stores/TrackerStore';
-import { makeFakeTrackerStore } from '../../utils/testUtils';
-import AirmanCertificationModel from '../../airman/models/AirmanCertificationModel';
-import CertificationModelFactory from '../../skills/factories/CertificationModelFactory';
+import TrackerStore from './stores/TrackerStore';
+import { makeFakeTrackerStore } from '../utils/testUtils';
+import AirmanCertificationModel from '../airman/models/AirmanCertificationModel';
+import CertificationModelFactory from '../skills/factories/CertificationModelFactory';
 import * as moment from 'moment';
-import TabAlert from '../../icons/TabAlert';
+import TabAlert from '../icons/TabAlert';
 
 let airman: AirmanModel;
 let trackerStore: TrackerStore;

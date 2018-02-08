@@ -5,7 +5,7 @@ import SiteRepository from '../../site/repositories/SiteRepository';
 import CertificationModel from '../../skills/models/CertificationModel';
 import { action, computed, observable, toJS } from 'mobx';
 import FilterOption, { UnfilteredValue } from '../../widgets/models/FilterOptionModel';
-import EventModel from '../../event/EventModel';
+import EventModel from '../../event/models/EventModel';
 import EventRepository from '../../event/repositories/EventRepository';
 import TimeService from '../services/TimeService';
 import { Moment } from 'moment';

@@ -1,5 +1,5 @@
 import EventRepository from './EventRepository';
-import EventModel, { EventType } from '../EventModel';
+import EventModel, { EventType } from '../models/EventModel';
 import * as moment from 'moment';
 
 export default function EventRepositoryContract(subject: EventRepository) {

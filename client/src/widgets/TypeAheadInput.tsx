@@ -1,7 +1,7 @@
 import * as React from 'react';
 import 'react-select/dist/react-select.css';
 import StyledSelect from './StyledSelect';
-import FilterOption from './widgets/models/FilterOptionModel';
+import FilterOption from './models/FilterOptionModel';
 
 const emptyOption = {
   value: '',

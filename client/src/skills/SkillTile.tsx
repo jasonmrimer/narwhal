@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Skill } from '../../skills/models/Skill';
-import ExpirationAlert from '../../icons/ExpirationAlert';
+import { Skill } from './models/Skill';
+import ExpirationAlert from '../icons/ExpirationAlert';
 
 interface Props {
   skill: Skill;
@@ -10,7 +10,7 @@ interface Props {
   className?: string;
 }
 
-export const CurrencyTile = (props: Props) => {
+export const SkillTile = (props: Props) => {
   const {skill} = props;
   return (
     <div
@@ -27,7 +27,7 @@ export const CurrencyTile = (props: Props) => {
   );
 };
 
-export default styled(CurrencyTile)`
+export default styled(SkillTile)`
   background: ${props => props.theme.blueSteel};
   margin: 0.5rem 0;
   padding: 1px;

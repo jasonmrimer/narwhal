@@ -1,9 +1,9 @@
 import * as React from 'react';
 import theme from "../themes/default";
-import EventForm from "../tracker/SidePanel/EventForm";
+import EventForm from "../event/EventForm";
 import {storiesOf} from '@storybook/react';
 import {action} from '@storybook/addon-actions';
-import EventModel, {EventType} from "../event/EventModel";
+import EventModel, {EventType} from "../event/models/EventModel";
 import moment from "moment";
 import DatePicker from '../widgets/DatePicker';
 import FieldValidation from '../widgets/FieldValidation';
@@ -11,8 +11,8 @@ import {ThemeProvider} from "styled-components";
 import RadioButtons from '../widgets/RadioButtons';
 import TextInput from "../widgets/TextInput";
 import TimeInput from "../widgets/TimeInput";
-import CurrencyForm from "../tracker/SidePanel/CurrencyForm";
-import StyledSelect from "../StyledSelect";
+import SkillForm from "../skills/SkillsForm";
+import StyledSelect from "../widgets/StyledSelect";
 
 const event = new EventModel('Pizza Party', '', moment(), moment(), 1, EventType.Appointment);
 const failedEvent = new EventModel('', '', moment(), moment(), 1, EventType.Appointment, null, [{title: "This is required."}]);
@@ -63,11 +63,11 @@ export function FormStory() {
       );
     });
 
-  storiesOf('CurrencyForm', module)
+  storiesOf('SkillForm', module)
     .addDecorator(story => wrapper(story))
     .add('new qualification', () => {
       return (
-        <CurrencyForm
+        <SkillForm
           airmanId={1}
           createAirmanQualification={action('created')}
           qualifications={[
