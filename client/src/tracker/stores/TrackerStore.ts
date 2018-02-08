@@ -176,7 +176,7 @@ export default class TrackerStore {
 
   @action.bound
   setCertificationIds(options: FilterOption[]) {
-    this._certificationIds = options.map(option => option.value);
+    this._certificationIds = options.map(option => Number(option.value));
   }
 
   @computed
@@ -195,7 +195,7 @@ export default class TrackerStore {
 
   @action.bound
   setQualificationIds(options: FilterOption[]) {
-    this._qualificationIds = options.map(option => option.value);
+    this._qualificationIds = options.map(option => Number(option.value));
   }
 
   @computed

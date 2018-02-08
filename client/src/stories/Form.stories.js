@@ -12,6 +12,7 @@ import RadioButtons from '../widgets/RadioButtons';
 import TextInput from "../widgets/TextInput";
 import TimeInput from "../widgets/TimeInput";
 import CurrencyForm from "../tracker/SidePanel/CurrencyForm";
+import StyledSelect from "../StyledSelect";
 
 const event = new EventModel('Pizza Party', '', moment(), moment(), 1, EventType.Appointment);
 const failedEvent = new EventModel('', '', moment(), moment(), 1, EventType.Appointment, null, [{title: "This is required."}]);
@@ -165,6 +166,21 @@ export function FormStory() {
         </FieldValidation>
       );
     });
+
+  storiesOf('StyledSelect', module)
+    .addDecorator(story => wrapper(story))
+    .add('default', () => {
+      return (
+        <StyledSelect
+          items={[
+            {label: 'apple', value: 0},
+            {label: 'orange', value: 1},
+            {label: 'banana', value: 2}
+            ]}
+          onChange={action('change!!')}
+        />
+      )
+    })
 }
 
 

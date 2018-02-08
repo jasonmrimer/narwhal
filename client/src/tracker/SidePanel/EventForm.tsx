@@ -11,6 +11,7 @@ import SubmitButton from '../../widgets/SubmitButton';
 import RadioButtons from '../../widgets/RadioButtons';
 import { MissionModel } from '../../mission/models/MissionModel';
 import TypeAheadInput from '../../TypeAheadInput';
+import FilterOption from '../../widgets/models/FilterOptionModel';
 
 interface Props {
   airmanId: number;
@@ -18,7 +19,7 @@ interface Props {
   handleSubmit: (event: EventModel) => void;
   event: EventModel | null;
   missions: MissionModel[];
-  missionOptions: any[];
+  missionOptions: FilterOption[];
   className?: string;
 }
 
@@ -74,16 +75,19 @@ export class EventForm extends React.Component<Props, EventFormState> {
     this.props.handleSubmit(updateEvent);
   }
 
-  handleMissionSelect = (missionId: string) => {
-    const selectedMission = this.props.missions.find(mission => mission.missionId === missionId)!;
+  handleMissionSelect = (item: FilterOption) => {
+    const selectedMission = this.props.missions.find(mission => mission.missionId === item.value)!;
+    const endDateAndTime = selectedMission.endDateTime;
+
     const attrs = {
       title: selectedMission.atoMissionNumber,
       startDate: selectedMission.startDateTime.format(EventForm.MONTH_FORMAT),
       startTime: selectedMission.startDateTime.format(EventForm.TIME_FORMAT),
-      endDate: selectedMission.endDateTime!.format(EventForm.MONTH_FORMAT),
-      endTime: selectedMission.endDateTime!.format(EventForm.TIME_FORMAT),
+      endDate: endDateAndTime ? endDateAndTime.format(EventForm.MONTH_FORMAT) : '',
+      endTime: endDateAndTime ? endDateAndTime.format(EventForm.TIME_FORMAT) : '',
       eventType: EventType.Mission
     };
+
     const eventFormState = Object.assign(emptyEventFormState(), attrs);
     this.setState(eventFormState);
   }
@@ -108,6 +112,7 @@ export class EventForm extends React.Component<Props, EventFormState> {
           <TypeAheadInput
             options={this.props.missionOptions}
             handleChange={this.handleMissionSelect}
+            placeholder={'Mission ID'}
           />
         }
         <FieldValidation name="title" errors={this.props.event ? this.props.event.errors : null}>
@@ -174,6 +179,10 @@ export default styled(EventForm)`
     flex-direction: row;
     justify-content: space-between;
     margin: 1rem 1rem 0rem 1rem;
+  }
+  
+  .styled-select {
+    margin: 1rem 1rem 0;
   }
 
   .back{

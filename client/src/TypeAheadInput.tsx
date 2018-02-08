@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Option, OptionValues } from 'react-select';
 import 'react-select/dist/react-select.css';
 import StyledSelect from './StyledSelect';
+import FilterOption from './widgets/models/FilterOptionModel';
 
 const emptyOption = {
   value: '',
@@ -11,10 +11,11 @@ const emptyOption = {
 interface Props {
   options: any;
   handleChange: (value: any) => void;
+  placeholder: string;
 }
 
 interface State {
-  selectedOption: Option<OptionValues>;
+  selectedOption: FilterOption;
 }
 
 export default class TypeAheadInput extends React.Component<Props, State> {
@@ -25,18 +26,16 @@ export default class TypeAheadInput extends React.Component<Props, State> {
   render() {
     return (
       <StyledSelect
-        options={this.props.options}
+        items={this.props.options}
         onChange={this.setSelectedValue}
-        value={this.state.selectedOption}
+        placeholder={this.props.placeholder}
       />
-
     );
   }
 
-  private setSelectedValue = (selectedOption: Option<OptionValues>) => {
-    this.setState({selectedOption});
-    if (selectedOption) {
-      this.props.handleChange(selectedOption!.value);
+  private setSelectedValue = (item: FilterOption) => {
+    if (item) {
+      this.props.handleChange(item);
     }
   }
 }
