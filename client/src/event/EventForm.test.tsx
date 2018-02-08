@@ -80,7 +80,7 @@ describe('EventForm', () => {
   });
 
   it('populates the form with a selected mission attributes', () => {
-    (subject.instance() as EventForm).handleMissionSelect({value: 'mission1', label: 'mission1 label'});
+    (subject.instance() as EventForm).handleMissionSelect([{value: 'mission1', label: 'mission1 label'}]);
     subject.update();
 
     expect(subject.find(TextInput).at(0).prop('value')).toBe('mission1');

@@ -17,6 +17,7 @@ import SubmitButton from "../widgets/SubmitButton";
 import DeleteButton from "../widgets/DeleteButton";
 import QualificationModel from "../skills/models/QualificationModel";
 import AirmanQualificationModel from "../airman/models/AirmanQualificationModel";
+import TypeAheadInput from "../widgets/TypeAheadInput";
 
 const event = new EventModel('Pizza Party', '', moment(), moment(), 1, EventType.Appointment);
 const failedEvent = new EventModel('', '', moment(), moment(), 1, EventType.Appointment, null, [{title: "This is required."}]);
@@ -32,7 +33,7 @@ const wrapper = (story) => {
       </div>
     </ThemeProvider>
   );
-}
+};
 
 export function FormStory() {
   storiesOf('EventForm', module)
@@ -205,13 +206,32 @@ export function FormStory() {
     .addDecorator(story => wrapper(story))
     .add('default', () => {
       return (
-        <StyledSelect
-          items={[
-            {label: 'apple', value: 0},
-            {label: 'orange', value: 1},
-            {label: 'banana', value: 2}
-            ]}
-          onChange={action('change!!')}
+        <TypeAheadInput
+          selectHintOnEnter={true}
+          onChange={action("CHANGED!!!")}
+          options={[
+            {value: "1", label: "banana"},
+            {value: "2", label: "bagel"},
+            {value: "3", label: "pretzel"},
+            {value: "4", label: "donut"},
+            {value: "5", label: "pizza"}]}
+          placeholder="Favorite Food?"
+        />
+      )
+    })
+    .add('multi select', () => {
+      return (
+        <TypeAheadInput
+          multiple
+          selectHintOnEnter={true}
+          onChange={action("CHANGED!!!")}
+          options={[
+            {value: "1", label: "banana"},
+            {value: "2", label: "bagel"},
+            {value: "3", label: "pretzel"},
+            {value: "4", label: "donut"},
+            {value: "5", label: "pizza"}]}
+          placeholder="Favorite Food?"
         />
       )
     });

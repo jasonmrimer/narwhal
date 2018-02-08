@@ -14,32 +14,29 @@ class Event
       find('label', text: 'APPOINTMENT').click
 
       fill_in 'description', with: "invalid event"
-      scroll_to(find('input[type="submit"]'))
-      find('input[type="submit"]').click
+      click(find('input[type="submit"]'))
     end
   end
 
-    def create
-      page.within('.side-panel') do
-        find('a', text: 'AVAILABILITY').click
-        click_link_or_button '+ Add Event'
-        find('label', text: 'APPOINTMENT').click
+  def create
+    page.within('.side-panel') do
+      find('a', text: 'AVAILABILITY').click
+      click_link_or_button '+ Add Event'
+      find('label', text: 'APPOINTMENT').click
 
-        fill_in 'title', with: @title
-        fill_in 'startDate', with: @start.strftime('%m/%d/%Y')
-        fill_in 'startTime', with: @start.strftime('%H:%M')
-        fill_in 'endDate', with: @end.strftime('%m/%d/%Y')
-        fill_in 'endTime', with: @end.strftime('%H:%M')
-        scroll_to(find('input[type="submit"]'))
-        find('input[type="submit"]').click
-      end
+      fill_in 'title', with: @title
+      fill_in 'startDate', with: @start.strftime('%m/%d/%Y')
+      fill_in 'startTime', with: @start.strftime('%H:%M')
+      fill_in 'endDate', with: @end.strftime('%m/%d/%Y')
+      fill_in 'endTime', with: @end.strftime('%H:%M')
+      click(find('input[type="submit"]'))
     end
+  end
 
   def update
     page.within('.side-panel') do
       find('a', text: 'AVAILABILITY').click
-      scroll_to(page.find('.event-title', text: @title))
-      page.find('.event-title', text: @title).click
+      click(page.all('.event-title', text: @title)[0])
       expect(find_field('title').value).to eq @title
       expect(find_field('APPOINTMENT', visible: false)).to be_checked
 
@@ -50,15 +47,14 @@ class Event
       fill_in 'endDate', with: @end.strftime('%m/%d/%Y')
       fill_in 'startTime', with: @start.strftime('%H:%M')
       fill_in 'endTime', with: @end.strftime('%H:%M')
-      find('input[type="submit"]').click
+      click(find('input[type="submit"]'))
     end
   end
 
   def delete
     page.within('.side-panel') do
       find('a', text: 'AVAILABILITY').click
-      scroll_to(page.find('.event-title', text: @title).find('button.delete'))
-      page.find('.event-title', text: @title).find('button.delete').click
+      click(page.all('.event-title', text: @title)[0].find('button.delete'))
     end
 
     expect(page.has_content?('REMOVE EVENT')).to be true
@@ -69,8 +65,7 @@ class Event
 
     page.within('.side-panel') do
       find('a', text: 'AVAILABILITY').click
-      scroll_to(page.find('.event-title', text: @title).find('button.delete'))
-      page.find('.event-title', text: @title).find('button.delete').click
+      click(page.all('.event-title', text: @title)[0].find('button.delete'))
     end
 
     expect(page.has_content?('REMOVE EVENT')).to be true
@@ -80,9 +75,9 @@ class Event
   def exists?
     page.within('.side-panel') do
       page.has_content?('AVAILABILITY') &&
-      page.has_content?(@start.strftime('%d %^b %y')) &&
-      page.has_content?(@title) &&
-      page.has_content?(@start.strftime('%H%MZ') + ' - ' + @end.strftime('%H%MZ'))
+          page.has_content?(@start.strftime('%d %^b %y')) &&
+          page.has_content?(@title) &&
+          page.has_content?(@start.strftime('%H%MZ') + ' - ' + @end.strftime('%H%MZ'))
     end
   end
 
@@ -90,13 +85,13 @@ class Event
 
   def set_attrs
     @start = Time.now.utc
-    @end = @start + 3600
+    @end = @start + (60 * 60 * 36)
     @title = "Test Event #{Time.now}"
   end
 
-  def scroll_to(element)
+  def click(element)
     script = <<-JS
-      arguments[0].scrollIntoView(true);
+      arguments[0].click();
     JS
 
     Capybara.current_session.driver.browser.execute_script(script, element.native)

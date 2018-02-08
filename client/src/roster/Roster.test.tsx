@@ -1,6 +1,5 @@
 import { mount, ReactWrapper } from 'enzyme';
 import * as React from 'react';
-
 import { makeFakeTrackerStore, Table } from '../utils/testUtils';
 import { Roster } from './Roster';
 import AirmanModel from '../airman/models/AirmanModel';
@@ -70,40 +69,40 @@ describe('Roster', () => {
     let qualificationMultiSelect: ReactWrapper;
 
     beforeEach(() => {
-      qualificationMultiSelect = subject.find('Select#qualification-select');
-      certificationMultiSelect = subject.find('Select#certification-select');
+      qualificationMultiSelect = subject.find('div.qualifications-multiselect');
+      certificationMultiSelect = subject.find('div.certifications-multiselect');
     });
 
     it('renders multiple qualifications', () => {
       const qualificationOptions = qualifications.map(qualification => {
         return {value: qualification.id, label: qualification.acronym};
       });
-      expect(qualificationMultiSelect.prop('options')).toEqual(qualificationOptions);
+      expect(qualificationMultiSelect.children().prop('options')).toEqual(qualificationOptions);
     });
 
     it('calls the setSelectedQualifications when selecting a single qualification', () => {
       const input = qualificationMultiSelect.find('input');
+      input.simulate('click');
       input.simulate('keyDown', {keyCode: 40});
       input.simulate('keyDown', {keyCode: 13});
-      subject.update();
-
-      expect(trackerStore.qualificationIds).toEqual([0]);
+      const tokens = subject.find('.rbt-token');
+      expect(tokens.length).toBe(1);
     });
 
     it('renders multiple certifications', () => {
       const certificationOptions = certifications.map(certification => {
         return {value: certification.id, label: certification.title};
       });
-      expect(certificationMultiSelect.prop('options')).toEqual(certificationOptions);
+      expect(certificationMultiSelect.children().prop('options')).toEqual(certificationOptions);
     });
 
     it('calls the setSelectedCertifications when selecting a single certification', () => {
       const input = certificationMultiSelect.find('input');
+      input.simulate('click');
       input.simulate('keyDown', {keyCode: 40});
       input.simulate('keyDown', {keyCode: 13});
-      subject.update();
-
-      expect(trackerStore.certificationIds).toEqual([0]);
+      const tokens = subject.find('.rbt-token');
+      expect(tokens.length).toBe(1);
     });
   });
 

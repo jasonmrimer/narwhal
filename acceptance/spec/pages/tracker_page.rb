@@ -23,11 +23,10 @@ class TrackerPage
   end
 
   def assert_navigates_week
-    find('button.next-week').click
+    click(page.find('button.next-week'))
     expect(page).to have_content(get_start_of_next_week.strftime('%d %^a'))
-
-    find('button.last-week').click
-    find('button.last-week').click
+    click(page.find('button.last-week'))
+    click(page.find('button.last-week'))
     expect(page).to have_content(get_start_of_last_week.strftime('%d %^a'))
   end
 
@@ -57,14 +56,12 @@ class TrackerPage
   end
 
   def assert_filters_by_certification
-    expect(page).to have_content('Filter Certifications')
-    multi_filter('certification', 'Super Speed')
+    typeahead('Filter Certifications', 'Super Speed')
     expect(page).to have_css('tbody tr', maximum: @@all_airmen_count - 1)
   end
 
   def assert_filters_by_qualification
-    expect(page).to have_content('Filter Qualification')
-    multi_filter('qualification', 'QB')
+    typeahead('Filter Qualifications', 'QB')
     expect(page).to have_css('tbody tr', maximum: @@all_airmen_count - 1)
   end
 
@@ -166,10 +163,10 @@ class TrackerPage
     page.find("##{item}-filter").find(:option, text: value).select_option
   end
 
-  def multi_filter(item, value)
+  def typeahead(item, value)
     page.within('table') do
-      find("##{item}-filter").send_keys(value)
-      find("##{item}-filter").send_keys(:enter)
+      fill_in(item, with: value)
+      click_link(value)
     end
   end
 
@@ -189,4 +186,13 @@ class TrackerPage
     now = Date.today
     (now - now.wday) - 7
   end
+
+  def click(element)
+    script = <<-JS
+      arguments[0].click();
+    JS
+
+    Capybara.current_session.driver.browser.execute_script(script, element.native)
+  end
 end
+

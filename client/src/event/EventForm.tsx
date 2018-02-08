@@ -75,21 +75,24 @@ export class EventForm extends React.Component<Props, EventFormState> {
     this.props.handleSubmit(updateEvent);
   }
 
-  handleMissionSelect = (item: FilterOption) => {
-    const selectedMission = this.props.missions.find(mission => mission.missionId === item.value)!;
-    const endDateAndTime = selectedMission.endDateTime;
+  handleMissionSelect = (item: FilterOption[]) => {
+    if (item.length > 0) {
+      const selectedMission = this.props.missions.find(mission => mission.missionId === item[0].value)!;
+      const endDateAndTime = selectedMission.endDateTime;
 
-    const attrs = {
-      title: selectedMission.atoMissionNumber,
-      startDate: selectedMission.startDateTime.format(EventForm.MONTH_FORMAT),
-      startTime: selectedMission.startDateTime.format(EventForm.TIME_FORMAT),
-      endDate: endDateAndTime ? endDateAndTime.format(EventForm.MONTH_FORMAT) : '',
-      endTime: endDateAndTime ? endDateAndTime.format(EventForm.TIME_FORMAT) : '',
-      eventType: EventType.Mission
-    };
-
-    const eventFormState = Object.assign(emptyEventFormState(), attrs);
-    this.setState(eventFormState);
+      const attrs = {
+        title: selectedMission.atoMissionNumber,
+        startDate: selectedMission.startDateTime.format(EventForm.MONTH_FORMAT),
+        startTime: selectedMission.startDateTime.format(EventForm.TIME_FORMAT),
+        endDate: endDateAndTime ? endDateAndTime.format(EventForm.MONTH_FORMAT) : '',
+        endTime: endDateAndTime ? endDateAndTime.format(EventForm.TIME_FORMAT) : '',
+        eventType: EventType.Mission
+      };
+      const eventFormState = Object.assign(emptyEventFormState(), attrs);
+      this.setState(eventFormState);
+    } else {
+      this.setState(emptyEventFormState());
+    }
   }
 
   render() {
@@ -101,6 +104,8 @@ export class EventForm extends React.Component<Props, EventFormState> {
           <span>Back to Week View</span>
         </a>
         <div>Select Event Type:</div>
+        <div className="form-wrapper">
+
         <RadioButtons
           name="eventType"
           options={Object.keys(EventType).map(key => EventType[key])}
@@ -110,9 +115,10 @@ export class EventForm extends React.Component<Props, EventFormState> {
         {
           this.state.eventType === EventType.Mission &&
           <TypeAheadInput
-            options={this.props.missionOptions}
-            handleChange={this.handleMissionSelect}
-            placeholder={'Mission ID'}
+              multiple={false}
+              options={this.props.missionOptions}
+              onChange={this.handleMissionSelect}
+              placeholder="Mission ID"
           />
         }
         <FieldValidation name="title" errors={this.props.event ? this.props.event.errors : null}>
@@ -165,6 +171,7 @@ export class EventForm extends React.Component<Props, EventFormState> {
           <SubmitButton text="CONFIRM"/>
         </div>
         <div style={{minHeight: 150}}/>
+        </div>
       </form>
     );
   }
@@ -176,10 +183,15 @@ export default styled(EventForm)`
   flex-direction: column;
   color: ${props => props.theme.graySteel};
  
+ .form-wrapper {
+    margin: 0 1rem;
+ }
+  .date-time-input-row {
   .input-row {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    margin: 1rem 0rem;
     margin: 1rem 1rem 0rem 1rem; 
   }
   

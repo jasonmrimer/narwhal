@@ -108,6 +108,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/client/src/event/EventForm.tsx">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/client/src/event/EventModel.ts">
           <value>
             <set />
@@ -194,6 +199,16 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/client/src/widgets/RadioButtons.tsx">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/client/src/widgets/StyledSelect.tsx">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/client/src/widgets/TextInput.tsx">
           <value>
             <set />
           </value>

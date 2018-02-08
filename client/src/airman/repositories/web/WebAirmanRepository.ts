@@ -7,6 +7,7 @@ import { AirmanCertificationSerializer } from '../../serializers/AirmanCertifica
 import { Skill } from '../../../skills/models/Skill';
 import { SkillType } from '../../../skills/models/SkillType';
 
+/* tslint:disable:no-any*/
 export default class WebAirmanRepository implements AirmanRepository {
   private serializer = new AirmanSerializer();
   private airmanQualSerializer = new AirmanQualificationSerializer();
