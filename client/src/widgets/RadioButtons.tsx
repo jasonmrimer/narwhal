@@ -7,6 +7,7 @@ interface Props {
   options: string[];
   value: string;
   onChange: (e: any) => void;
+  name?: string;
   className?: string;
 }
 
@@ -19,7 +20,7 @@ const RadioButtons = (props: Props) => {
           <label key={option} className={classNames('input-wrapper', {checked: isChecked})}>
             <input
               type="radio"
-              name="eventType"
+              name={props.name}
               value={option}
               onChange={props.onChange}
               checked={isChecked}

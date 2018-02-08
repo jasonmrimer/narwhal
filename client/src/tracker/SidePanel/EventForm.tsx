@@ -1,48 +1,55 @@
 import * as React from 'react';
 import EventModel, { EventType } from '../../event/EventModel';
-import * as moment from 'moment';
 import styled from 'styled-components';
 import BackIcon from '../../icons/BackArrow';
 import theme from '../../themes/default';
 import DatePicker from '../../widgets/DatePicker';
 import FieldValidation from '../../widgets/FieldValidation';
 import TextInput from '../../widgets/TextInput';
-import RadioButtons from '../../widgets/RadioButtons';
 import TimeInput from '../../widgets/TimeInput';
 import SubmitButton from '../../widgets/SubmitButton';
+import RadioButtons from '../../widgets/RadioButtons';
+import { MissionModel } from '../../mission/models/MissionModel';
+import TypeAheadInput from '../../TypeAheadInput';
 
 interface Props {
   airmanId: number;
-  handleSubmit: (event: EventModel) => void;
   hideEventForm: () => void;
+  handleSubmit: (event: EventModel) => void;
   event: EventModel | null;
+  missions: MissionModel[];
+  missionOptions: any[];
   className?: string;
 }
 
-interface State {
+export interface EventFormState {
   title: string;
   description: string;
   startDate: string;
   startTime: string;
   endDate: string;
   endTime: string;
-  eventType: EventType;
+  eventType: string;
 }
 
-export class EventForm extends React.Component<Props, State> {
+export function emptyEventFormState() {
+  return {
+    title: '',
+    description: '',
+    startDate: '',
+    startTime: '',
+    endDate: '',
+    endTime: '',
+    eventType: ''
+  };
+}
+
+export class EventForm extends React.Component<Props, EventFormState> {
   static readonly MONTH_FORMAT = 'YYYY-MM-DD';
   static readonly TIME_FORMAT = 'HH:mm';
 
   static hydrate(event: EventModel | null) {
-    return {
-      title: event ? event.title : '',
-      description: event ? event.description : '',
-      startDate: event ? event.startTime.format(EventForm.MONTH_FORMAT) : '',
-      startTime: event ? event.startTime.format(EventForm.TIME_FORMAT) : '',
-      endDate: event ? event.endTime.format(EventForm.MONTH_FORMAT) : '',
-      endTime: event ? event.endTime.format(EventForm.TIME_FORMAT) : '',
-      eventType: event ? event.type : EventType.Mission,
-    };
+    return event ? event.toEventFormState() : emptyEventFormState();
   }
 
   constructor(props: Props) {
@@ -63,20 +70,22 @@ export class EventForm extends React.Component<Props, State> {
     e.preventDefault();
 
     const {airmanId, event} = this.props;
-    const {title, description, startDate, startTime, endDate, endTime, eventType} = this.state;
+    const updateEvent = EventModel.fromEventFormState(airmanId, this.state, event ? event.id : null);
+    this.props.handleSubmit(updateEvent);
+  }
 
-    const startDateTime = moment.utc(`${startDate} ${startTime}`, 'YYYY-MM-DD HH:mm');
-    const endDateTime = moment.utc(`${endDate} ${endTime}`, 'YYYY-MM-DD HH:mm');
-
-    this.props.handleSubmit(new EventModel(
-      title,
-      description,
-      startDateTime,
-      endDateTime,
-      airmanId,
-      eventType,
-      event ? event.id : null,
-    ));
+  handleMissionSelect = (missionId: string) => {
+    const selectedMission = this.props.missions.find(mission => mission.missionId === missionId)!;
+    const attrs = {
+      title: selectedMission.atoMissionNumber,
+      startDate: selectedMission.startDateTime.format(EventForm.MONTH_FORMAT),
+      startTime: selectedMission.startDateTime.format(EventForm.TIME_FORMAT),
+      endDate: selectedMission.endDateTime!.format(EventForm.MONTH_FORMAT),
+      endTime: selectedMission.endDateTime!.format(EventForm.TIME_FORMAT),
+      eventType: EventType.Mission
+    };
+    const eventFormState = Object.assign(emptyEventFormState(), attrs);
+    this.setState(eventFormState);
   }
 
   render() {
@@ -87,14 +96,20 @@ export class EventForm extends React.Component<Props, State> {
           <BackIcon color={theme.graySteel}/>
           <span>Back to Week View</span>
         </a>
-
         <div>Select Event Type:</div>
         <RadioButtons
+          name="eventType"
           options={Object.keys(EventType).map(key => EventType[key])}
           value={this.state.eventType}
           onChange={this.handleChange}
         />
-
+        {
+          this.state.eventType === EventType.Mission &&
+          <TypeAheadInput
+            options={this.props.missionOptions}
+            handleChange={this.handleMissionSelect}
+          />
+        }
         <FieldValidation name="title" errors={this.props.event ? this.props.event.errors : null}>
           <TextInput
             placeholder="Title"
@@ -103,7 +118,6 @@ export class EventForm extends React.Component<Props, State> {
             onChange={this.handleChange}
           />
         </FieldValidation>
-
         <div>
           <TextInput
             placeholder="Description"
@@ -176,6 +190,4 @@ export default styled(EventForm)`
       margin-left: 0.5rem;
     }
   }
-  
-  
 `;

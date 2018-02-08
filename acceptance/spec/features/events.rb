@@ -19,21 +19,21 @@ class Event
     end
   end
 
-  def create
-    page.within('.side-panel') do
-      find('a', text: 'AVAILABILITY').click
-      click_link_or_button '+ Add Event'
-      find('label', text: 'APPOINTMENT').click
+    def create
+      page.within('.side-panel') do
+        find('a', text: 'AVAILABILITY').click
+        click_link_or_button '+ Add Event'
+        find('label', text: 'APPOINTMENT').click
 
-      fill_in 'title', with: @title
-      fill_in 'startDate', with: @start.strftime('%m/%d/%Y')
-      fill_in 'startTime', with: @start.strftime('%H:%M')
-      fill_in 'endDate', with: @end.strftime('%m/%d/%Y')
-      fill_in 'endTime', with: @end.strftime('%H:%M')
-      scroll_to(find('input[type="submit"]'))
-      find('input[type="submit"]').click
+        fill_in 'title', with: @title
+        fill_in 'startDate', with: @start.strftime('%m/%d/%Y')
+        fill_in 'startTime', with: @start.strftime('%H:%M')
+        fill_in 'endDate', with: @end.strftime('%m/%d/%Y')
+        fill_in 'endTime', with: @end.strftime('%H:%M')
+        scroll_to(find('input[type="submit"]'))
+        find('input[type="submit"]').click
+      end
     end
-  end
 
   def update
     page.within('.side-panel') do

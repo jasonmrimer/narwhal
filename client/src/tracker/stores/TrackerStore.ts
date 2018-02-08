@@ -12,18 +12,22 @@ import { Moment } from 'moment';
 import QualificationModel from '../../skills/models/QualificationModel';
 import SkillRepository from '../../skills/repositories/SkillRepository';
 import { Skill } from '../../skills/models/Skill';
+import { MissionModel } from '../../mission/models/MissionModel';
+import MissionRepository from '../../mission/repositories/MissionRepository';
 
 export default class TrackerStore {
   private airmanRepository: AirmanRepository;
   private siteRepository: SiteRepository;
   private skillRepository: SkillRepository;
   private eventRepository: EventRepository;
+  private missionRepository: MissionRepository;
   private TimeService: TimeService;
 
   @observable private _airmen: AirmanModel[] = [];
   @observable private _sites: SiteModel[] = [];
   @observable private _certifications: CertificationModel[] = [];
   @observable private _qualifications: QualificationModel[] = [];
+  @observable private _missions: MissionModel[] = [];
 
   @observable private _siteId: number = UnfilteredValue;
   @observable private _squadronId: number = UnfilteredValue;
@@ -43,11 +47,13 @@ export default class TrackerStore {
               siteRepository: SiteRepository,
               skillRepository: SkillRepository,
               eventRepository: EventRepository,
+              missionRepository: MissionRepository,
               timeService: TimeService) {
     this.airmanRepository = airmanRepository;
     this.siteRepository = siteRepository;
     this.skillRepository = skillRepository;
     this.eventRepository = eventRepository;
+    this.missionRepository = missionRepository;
     this.TimeService = timeService;
     this._plannerWeek = this.TimeService.getCurrentWeek();
     this._sidePanelWeek = this.TimeService.getCurrentWeek();
@@ -58,6 +64,7 @@ export default class TrackerStore {
     this._sites = await this.siteRepository.findAll();
     this._certifications = await this.skillRepository.findAllCertifications();
     this._qualifications = await this.skillRepository.findAllQualifications();
+    this._missions = await this.missionRepository.findAll();
   }
 
   @computed
@@ -317,5 +324,17 @@ export default class TrackerStore {
     await this.airmanRepository.deleteSkill(skill);
     this._airmen = await this.airmanRepository.findAll();
     this._selectedAirman = this._airmen.find(a => a.id === skill.airmanId)!;
+  }
+
+  @computed
+  get missions() {
+    return this._missions;
+  }
+
+  @computed
+  get missionOptions() {
+    return this._missions.map(msn => {
+      return {value: msn.missionId, label: msn.atoMissionNumber};
+    });
   }
 }

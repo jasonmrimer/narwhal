@@ -44,6 +44,8 @@ export class Availability extends React.Component<Props, State> {
         hideEventForm={this.closeEventForm}
         handleSubmit={this.submitAndCloseEventForm}
         event={this.props.trackerStore.selectedEvent}
+        missions={this.props.trackerStore.missions}
+        missionOptions={this.props.trackerStore.missionOptions}
       />
     );
   }

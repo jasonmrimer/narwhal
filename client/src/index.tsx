@@ -34,6 +34,7 @@ const trackerStore = new TrackerStore(
   siteRepository,
   new WebSkillRepository(),
   new WebEventRepository(),
+  new WebMissionRepository(),
   new MomentTimeService()
 );
 

@@ -6,6 +6,8 @@ import SiteRepositoryStub from '../site/repositories/doubles/SiteRepositoryStub'
 import EventRepositoryStub from '../event/repositories/doubles/EventRepositoryStub';
 import TimeServiceStub from '../tracker/services/doubles/TimeServiceStub';
 import { default as SkillRepositoryStub } from '../skills/repositories/doubles/SkillRepositoryStub';
+import { Moment } from 'moment';
+import MissionRepositoryStub from '../mission/repositories/doubles/MissionRepositoryStub';
 
 export async function makeFakeTrackerStore() {
   const store = new TrackerStore(
@@ -13,6 +15,7 @@ export async function makeFakeTrackerStore() {
     new SiteRepositoryStub(),
     new SkillRepositoryStub(),
     new EventRepositoryStub(),
+    new MissionRepositoryStub(),
     new TimeServiceStub(),
   );
   await store.hydrate();
@@ -42,6 +45,15 @@ export const eventTargetStub = (name: string, value: any) => {
     }
   };
 };
+
+/* tslint:disable:no-any */
+export function selectValueFromDropdown(wrapper: any, name: string, value: any) {
+  wrapper.find(`select[name="${name}"]`).simulate('change', eventTargetStub(name, value));
+}
+
+export function inputValueForDatePicker(wrapper: any, name: string, value: Moment) {
+  wrapper.find(`input[name="${name}"]`).simulate('change', eventTargetStub(name, value.format('YYYY-MM-DD')));
+}
 
 /* tslint:disable:no-any*/
 export class Table {

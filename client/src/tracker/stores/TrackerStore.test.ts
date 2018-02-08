@@ -14,12 +14,14 @@ import QualificationModel from '../../skills/models/QualificationModel';
 import AirmanQualificationModel from '../../airman/models/AirmanQualificationModel';
 import AirmanCertificationModel from '../../airman/models/AirmanCertificationModel';
 import CertificationModel from '../../skills/models/CertificationModel';
+import MissionRepositoryStub from '../../mission/repositories/doubles/MissionRepositoryStub';
 
 describe('TrackerStore', () => {
   const airmenRepository = new AirmanRepositoryStub();
   const siteRepository = new SiteRepositoryStub();
   const skillRepository = new SkillRepositoryStub();
   const eventRepository = new EventRepositoryStub();
+  const missionRepository = new MissionRepositoryStub();
   const timeServiceStub = new TimeServiceStub();
   let allAirmen: AirmanModel[];
   let subject: TrackerStore;
@@ -31,6 +33,7 @@ describe('TrackerStore', () => {
       siteRepository,
       skillRepository,
       eventRepository,
+      missionRepository,
       timeServiceStub,
     );
     await subject.hydrate();
@@ -83,6 +86,14 @@ describe('TrackerStore', () => {
 
   it('returns an empty list of flight options', () => {
     expect(subject.flightOptions).toEqual([]);
+  });
+
+  it('returns a list of mission options', () => {
+    expect(subject.missionOptions).toEqual([
+      {value: 'missionId1', label: 'ato1'},
+      {value: 'missionId2', label: 'ato2'},
+      {value: 'missionId3', label: 'ato3'}
+    ]);
   });
 
   describe('filtering by site', () => {

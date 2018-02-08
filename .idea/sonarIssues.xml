@@ -133,12 +133,22 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/client/src/stories/Form.stories.js">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/client/src/tracker/SidePanel/Availability.test.tsx">
           <value>
             <set />
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/client/src/tracker/SidePanel/Availability.tsx">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/client/src/tracker/SidePanel/CurrencyForm.test.tsx">
           <value>
             <set />
           </value>
