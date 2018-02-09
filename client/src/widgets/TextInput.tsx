@@ -33,5 +33,4 @@ export default styled(TextInput)`
   font-weight: 300;
   cursor: pointer;
   outline: inherit;
-  margin: 1rem 1rem 0rem 1rem;
 `;

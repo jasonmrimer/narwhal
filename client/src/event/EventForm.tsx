@@ -116,14 +116,16 @@ export class EventForm extends React.Component<Props, EventFormState> {
           />
         }
         <FieldValidation name="title" errors={this.props.event ? this.props.event.errors : null}>
-          <TextInput
-            placeholder="Title"
-            value={this.state.title}
-            name="title"
-            onChange={this.handleChange}
-          />
+          <div className="input-row">
+            <TextInput
+              placeholder="Title"
+              value={this.state.title}
+              name="title"
+              onChange={this.handleChange}
+            />
+          </div>
         </FieldValidation>
-        <div>
+        <div className="input-row">
           <TextInput
             placeholder="Description"
             value={this.state.description}
@@ -131,9 +133,8 @@ export class EventForm extends React.Component<Props, EventFormState> {
             onChange={this.handleChange}
           />
         </div>
-
         <FieldValidation name="startTime" errors={this.props.event ? this.props.event.errors : null}>
-          <div className="date-time-input-row">
+          <div className="input-row">
             <DatePicker
               dateValue={this.state.startDate}
               onChange={this.handleChange}
@@ -146,9 +147,8 @@ export class EventForm extends React.Component<Props, EventFormState> {
             />
           </div>
         </FieldValidation>
-
         <FieldValidation name="endTime" errors={this.props.event ? this.props.event.errors : null}>
-          <div className="date-time-input-row">
+          <div className="input-row">
             <DatePicker
               dateValue={this.state.endDate}
               onChange={this.handleChange}
@@ -161,7 +161,9 @@ export class EventForm extends React.Component<Props, EventFormState> {
             />
           </div>
         </FieldValidation>
-        <SubmitButton text="CONFIRM"/>
+        <div className="form-row">
+          <SubmitButton text="CONFIRM"/>
+        </div>
         <div style={{minHeight: 150}}/>
       </form>
     );
@@ -174,17 +176,24 @@ export default styled(EventForm)`
   flex-direction: column;
   color: ${props => props.theme.graySteel};
  
-  .date-time-input-row {
+  .input-row {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin: 1rem 1rem 0rem 1rem;
+    margin: 1rem 1rem 0rem 1rem; 
   }
+  
+  .form-row {
+      display: flex;
+      flex-direction: row-reverse;
+      margin-top: 2rem;
+      align-items: baseline;
+  };
   
   .styled-select {
     margin: 1rem 1rem 0;
   }
-
+  
   .back{
     cursor: pointer;
     fill: ${props => props.theme.graySteel};

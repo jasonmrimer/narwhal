@@ -77,7 +77,7 @@ export default styled(SidePanel)`
     justify-content: baseline;
   }
 
-  button {
+  .close {
     background-color: ${props => props.theme.lighter};
     border: none;
     cursor: pointer;

@@ -117,6 +117,9 @@ export default styled(Currency)`
       font-size: 12px;
       margin: 0.5rem 1rem;
       color: ${props => props.theme.fontColor};
+      background-color: ${props => props.theme.lighter};
+      border: none;
+      cursor: pointer;
       
       :hover{
         background: ${props => props.theme.fontColor};

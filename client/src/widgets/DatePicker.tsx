@@ -25,13 +25,9 @@ export const DatePicker = (props: Props) => {
   );
 };
 
-export default styled(DatePicker)`  
-  &::-webkit-inner-spin-button {
-    display: none;
-  }  
-  
+export default styled(DatePicker)`      
   background: none;
-  color: ${props => props.theme.graySteel};
+  color: ${props => props.theme.fontColor};
   border: none;
   border-bottom: 1px solid green;
   border-bottom: 1px solid ${props => props.theme.graySteel};
@@ -40,4 +36,14 @@ export default styled(DatePicker)`
   font-weight: 300;
   cursor: pointer;
   outline: inherit;
+  
+  &::-webkit-inner-spin-button {
+    display: none;
+  }
+  
+  &:disabled {
+    cursor: initial;
+    color: ${props => props.theme.graySteel};
+  }
+ 
 `;

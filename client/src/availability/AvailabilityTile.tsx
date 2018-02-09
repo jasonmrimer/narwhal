@@ -45,6 +45,11 @@ export default styled(AirmanEvent)`
     padding: 0.35rem;
   }
   
+  .delete {
+    background-color: ${props => props.theme.lighter};
+    border: none;
+    cursor: pointer;
+  }
     
   &:hover {
     background: ${props => props.theme.hoverBlueSteel};

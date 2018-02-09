@@ -13,6 +13,10 @@ import TextInput from "../widgets/TextInput";
 import TimeInput from "../widgets/TimeInput";
 import SkillForm from "../skills/SkillsForm";
 import StyledSelect from "../widgets/StyledSelect";
+import SubmitButton from "../widgets/SubmitButton";
+import DeleteButton from "../widgets/DeleteButton";
+import QualificationModel from "../skills/models/QualificationModel";
+import AirmanQualificationModel from "../airman/models/AirmanQualificationModel";
 
 const event = new EventModel('Pizza Party', '', moment(), moment(), 1, EventType.Appointment);
 const failedEvent = new EventModel('', '', moment(), moment(), 1, EventType.Appointment, null, [{title: "This is required."}]);
@@ -65,19 +69,40 @@ export function FormStory() {
 
   storiesOf('SkillForm', module)
     .addDecorator(story => wrapper(story))
-    .add('new qualification', () => {
+    .add('new skill', () => {
+        return (
+            <SkillForm
+                airmanId={1}
+                createAirmanQualification={action('created')}
+                qualifications={[
+                    {id: 1, acronym: 'A', title: 'AAA'},
+                    {id: 2, acronym: 'B', title: 'BBB'},
+                    {id: 3, acronym: 'C', title: 'CCC'}
+                ]}
+            />
+        )
+    })
+  .add('edit skill', () => {
       return (
-        <SkillForm
-          airmanId={1}
-          createAirmanQualification={action('created')}
-          qualifications={[
-            {id: 1, acronym: 'A', title: 'AAA'},
-            {id: 2, acronym: 'B', title: 'BBB'},
-            {id: 3, acronym: 'C', title: 'CCC'}
-          ]}
-        />
-      );
-    });
+          <SkillForm
+                  airmanId={1}
+                  createAirmanQualification={action('created')}
+                  qualifications={[
+                      {id: 1, acronym: 'A', title: 'AAA'},
+                      {id: 2, acronym: 'B', title: 'BBB'},
+                      {id: 3, acronym: 'C', title: 'CCC'}
+                  ]}
+                  skill={
+                      new AirmanQualificationModel(
+                          1,
+                          new QualificationModel(1, 'A', 'A'),
+                          moment.utc(),
+                          moment.utc()
+                      )
+                  }
+              />
+          );
+      });
 
   storiesOf('DatePicker', module)
     .addDecorator(story => wrapper(story))
@@ -90,6 +115,15 @@ export function FormStory() {
         />
       );
     })
+      .add('disabled', () => {
+          return (
+              <DatePicker
+                  disabled={true}
+                  dateValue={moment().format(MONTH_FORMAT)}
+                  onChange={action('input change')}
+              />
+          );
+      })
     .add('invalid value', () => {
       return (
         <FieldValidation
@@ -180,7 +214,17 @@ export function FormStory() {
           onChange={action('change!!')}
         />
       )
-    })
-}
+    });
 
+    storiesOf('SubmitButton', module)
+        .addDecorator(story => wrapper(story))
+        .add('default', () => {
+            return (<SubmitButton text="CONFIRM" />);
+        });
 
+    storiesOf('DeleteButton', module)
+        .addDecorator(story => wrapper(story))
+        .add('default', () => {
+            return (<DeleteButton handleClick={action('delete clicked')}/>);
+        });
+};

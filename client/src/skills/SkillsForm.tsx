@@ -8,7 +8,7 @@ import CertificationModel from './models/CertificationModel';
 import { allSkills, SkillType } from './models/SkillType';
 import SkillBuilder from './models/SkillBuilder';
 import { Skill } from './models/Skill';
-import DeleteIcon from '../icons/DeleteIcon';
+import DeleteButton from '../widgets/DeleteButton';
 
 interface Props {
   airmanId: number;
@@ -97,13 +97,8 @@ export class SkillsForm extends React.Component<Props, State> {
           />
         </div>
         <div className="form-row">
-        {
-          this.props.skill &&
-          <button className="delete" onClick={this.handleDelete}>
-            <DeleteIcon/> DELETE
-          </button>
-        }
-        <SubmitButton text="CONFIRM"/>
+          {this.props.skill && <DeleteButton handleClick={this.handleDelete}/>}
+          <SubmitButton text="CONFIRM"/>
         </div>
       </form>
     );
@@ -121,14 +116,6 @@ export class SkillsForm extends React.Component<Props, State> {
           return <option key={`qual-${index}`} value={qual.id}>{qual.acronym} - {qual.title}</option>;
         });
     }
-  }
-
-  private handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    if (this.props.skill == null) {
-      return;
-    }
-    this.props.handleDelete(this.props.skill);
   }
 
   /* tslint:disable:no-any */
@@ -150,6 +137,14 @@ export class SkillsForm extends React.Component<Props, State> {
     }
 
     this.props.handleSubmit(builder.build());
+  }
+
+  private handleDelete = (clickEvent: React.MouseEvent<HTMLButtonElement>) => {
+    clickEvent.preventDefault();
+    if (this.props.skill == null) {
+      return;
+    }
+    this.props.handleDelete(this.props.skill);
   }
 
   private getSkillById() {
@@ -185,6 +180,7 @@ export default styled(SkillsForm)`
     margin: 1rem 1rem 0;
     
     &:last-of-type {
+      margin-top: 2rem;
       align-items: baseline;
     };
     
@@ -213,21 +209,5 @@ export default styled(SkillsForm)`
       background: none;
       border-bottom: 1px solid ${props => props.theme.graySteel};
     }
-  }
-  
-  .delete {
-    color: ${props => props.theme.fontColor};
-    font-size: 0.875rem;
-  }
-  
-  #earn-date {
-    color: ${props => props.theme.fontColor};
-    
-    &:disabled {
-      color: ${props => props.theme.graySteel};
-    }
-  }
-  #expiration-date {
-    color: ${props => props.theme.fontColor};
   }
 `;

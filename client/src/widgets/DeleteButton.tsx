@@ -1,18 +1,24 @@
 import * as React from 'react';
+import DeleteIcon from '../icons/DeleteIcon';
 import styled from 'styled-components';
 
 interface Props {
-  text: string;
+  handleClick: (clickEvent: React.MouseEvent<HTMLButtonElement>) => void;
   className?: string;
 }
 
-const SubmitButton = (props: Props) => {
+export const DeleteButton = (props: Props) => {
   return (
-    <input className={props.className} type="submit" value={props.text}/>
+    <button type="button" className={`${props.className}`} onClick={props.handleClick}>
+      <DeleteIcon/>
+      <span>DELETE</span>
+    </button>
   );
 };
 
-export default styled(SubmitButton)`
+export default styled(DeleteButton)`
+  display: flex;
+  align-items: unset;
   width: fit-content;
   background: none;
   color: ${props => props.theme.fontColor};
@@ -24,8 +30,16 @@ export default styled(SubmitButton)`
   cursor: pointer;
   outline: inherit;
   
+  span {
+    margin-left: 0.25rem;
+  }
+  
   &:hover {
     background: ${props => props.theme.fontColor};
     color: ${props => props.theme.darkest};
+    
+    svg > path {
+      fill: ${props => props.theme.darkest};
+    }
   }
 `;

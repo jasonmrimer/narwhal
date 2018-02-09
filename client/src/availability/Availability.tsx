@@ -144,9 +144,13 @@ export default styled(Availability)`
       font-size: 12px;
       margin: 0.5rem 1rem;
       color: ${props => props.theme.fontColor};
+      background-color: ${props => props.theme.lighter};
+      border: none;
+      cursor: pointer;
+     
       :hover{
-      background: ${props => props.theme.fontColor};
-      color: ${props => props.theme.darkest};
+        background: ${props => props.theme.fontColor};
+        color: ${props => props.theme.darkest};
       }
      }
   }
@@ -162,9 +166,16 @@ export default styled(Availability)`
     border-bottom: ${props => props.theme.graySteel} 1px solid;
     margin: 1.5rem 20%;
   }
+  
   .nav-row {
     display: flex;
     justify-content: center;
     margin: 1rem 0;
+   
+    button {
+      background-color: ${props => props.theme.lighter};
+      border: none;
+      cursor: pointer;
+    }
   }
   `;

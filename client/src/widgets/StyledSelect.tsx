@@ -41,7 +41,6 @@ export const Select = (props: Props) => {
                    getItemProps,
                    isOpen,
                    inputValue,
-                   selectedItem,
                    highlightedIndex,
                    toggleMenu
                  }) => (
