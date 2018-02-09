@@ -20,7 +20,7 @@ public class EventController {
   }
 
   @PutMapping(value = "{id}")
-  public Event update(@PathVariable Long id,  @RequestBody Event event) {
+  public Event update(@PathVariable Long id, @RequestBody Event event) {
     return repository.save(event);
   }
 

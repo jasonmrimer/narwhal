@@ -1,223 +1,297 @@
 package mil.af.us.narwhal.airman;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import mil.af.us.narwhal.event.Event;
-import mil.af.us.narwhal.event.EventType;
 import mil.af.us.narwhal.flight.Flight;
+import mil.af.us.narwhal.site.Site;
+import mil.af.us.narwhal.site.SiteRepository;
 import mil.af.us.narwhal.skills.Certification;
+import mil.af.us.narwhal.skills.CertificationRepository;
 import mil.af.us.narwhal.skills.Qualification;
+import mil.af.us.narwhal.skills.QualificationRepository;
 import mil.af.us.narwhal.squadron.Squadron;
-import org.hamcrest.Matchers;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
+import org.springframework.boot.context.embedded.LocalServerPort;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.Instant;
 import java.util.Date;
-import java.util.List;
 
-import static java.util.Collections.singletonList;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static io.restassured.RestAssured.given;
+import static java.util.Arrays.asList;
+import static org.hamcrest.Matchers.equalTo;
 
 @ActiveProfiles("test")
-@WebMvcTest(AirmanController.class)
 @RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class AirmanControllerTest {
   private final static ObjectMapper objectMapper = new ObjectMapper();
   private final static JavaTimeModule module = new JavaTimeModule();
-
-  @Autowired private MockMvc mockMvc;
-  @MockBean private AirmanRepository repository;
-  @Captor private ArgumentCaptor<Airman> captor;
-  private Squadron squadron;
-  private Flight flight;
-  private List<Airman> airmen;
 
   static {
     objectMapper.registerModule(module);
   }
 
-  private AirmanQualification airQual;
-  private AirmanCertification airCert;
+  private Airman airman1;
+  private Squadron squadron2;
+  private Flight flight1;
+  private Qualification qualification1;
+  private Certification certification1;
+  @LocalServerPort private int port;
+  @Autowired private SiteRepository siteRepository;
+  @Autowired private AirmanRepository airmanRepository;
+  @Autowired private QualificationRepository qualificationRepository;
+  @Autowired private CertificationRepository certificationRepository;
 
   @Before
   public void setUp() {
-    squadron = new Squadron(1L, 1L, "1");
-    flight = new Flight(1L, squadron.getId(), "SUPER FLIGHT");
+    flight1 = new Flight("flight1");
+    Squadron squadron1 = new Squadron("squadron1");
+    squadron1.addFlight(flight1);
 
-    final Event event = new Event(1L, "Dentist", "", Instant.now(), Instant.now(), EventType.APPOINTMENT, 1L);
+    final Flight flight2 = new Flight("flight2");
+    squadron2 = new Squadron("squadron2");
+    squadron2.addFlight(flight2);
 
-    final Qualification qualification = new Qualification(1L, "Qual1", "qualification");
-    airQual = new AirmanQualification(100L, 1L, qualification, new Date(), new Date());
+    final Site site = new Site("site");
+    site.addSquadron(squadron1);
+    site.addSquadron(squadron2);
 
-    final Certification certification = new Certification(1L, "Certification 1");
-    airCert = new AirmanCertification(200L, 1L, certification, new Date(), new Date());
+    siteRepository.save(site);
 
-    airmen = singletonList(new Airman(
-      1L,
-      flight.getId(),
-      "FirstOne",
-      "LastOne",
-      singletonList(airQual),
-      singletonList(airCert),
-      singletonList(event)
-    ));
+    airman1 = new Airman(flight1.getId(), "first1", "last1");
+    final Airman airman2 = new Airman(flight2.getId(), "first2", "last2");
+    final Airman airman3 = new Airman(flight2.getId(), "first3", "last3");
+
+    airmanRepository.save(asList(airman1, airman2, airman3));
+
+    qualification1 = new Qualification("Q1", "qualification1");
+    qualificationRepository.save(qualification1);
+
+    certification1 = new Certification("certification1");
+    certificationRepository.save(certification1);
   }
 
   @Test
-  public void index() throws Exception {
-    when(repository.findAll()).thenReturn(airmen);
-
-    mockMvc.perform(get(AirmanController.URI))
-      .andExpect(status().isOk())
-      .andExpect(jsonPath("$.size()", Matchers.equalTo(1)))
-      .andExpect(jsonPath("$[0].id").value(airmen.get(0).getId()))
-      .andExpect(jsonPath("$[0].flightId").value(flight.getId()))
-      .andExpect(jsonPath("[0].events", hasSize(1)));
+  public void indexTest() {
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+    .when()
+      .get(AirmanController.URI)
+    .then()
+      .statusCode(200)
+      .body("$.size()", equalTo(3));
+    // @formatter:on
   }
 
   @Test
-  public void indexBySquadronId() throws Exception {
-    when(repository.findBySquadronId(squadron.getId())).thenReturn(airmen);
-
-    mockMvc.perform(get(AirmanController.URI).param("squadron", squadron.getId().toString()))
-      .andExpect(status().isOk())
-      .andExpect(jsonPath("$.size()", Matchers.equalTo(1)))
-      .andExpect(jsonPath("$[0].id").value(airmen.get(0).getId()));
+  public void indexBySquadronIdTest() {
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .queryParam("squadron", squadron2.getId())
+    .when()
+      .get(AirmanController.URI)
+    .then()
+      .statusCode(200)
+      .body("$.size()", equalTo(2));
+    // @formatter:on
   }
 
   @Test
-  public void indexByFlightId() throws Exception {
-    when(repository.findByFlightId(flight.getId())).thenReturn(airmen);
-
-    mockMvc.perform(get(AirmanController.URI).param("flight", flight.getId().toString()))
-      .andExpect(status().isOk())
-      .andExpect(jsonPath("$.size()", Matchers.equalTo(1)))
-      .andExpect(jsonPath("$[0].id").value(airmen.get(0).getId()));
+  public void indexByFlightIdTest() {
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .queryParam("flight", flight1.getId())
+    .when()
+      .get(AirmanController.URI)
+    .then()
+      .statusCode(200)
+      .body("$.size()", equalTo(1));
+    // @formatter:on
   }
 
   @Test
-  public void createAirmanQualification() throws Exception {
-    final Airman airman = airmen.get(0);
-    when(repository.findOne(airman.getId())).thenReturn(airman);
+  public void createAirmanQualificationTest() throws JsonProcessingException {
+    final AirmanQualification airmanQualification = new AirmanQualification(
+      airman1.getId(),
+      qualification1,
+      new Date(),
+      new Date()
+    );
+    final String json = objectMapper.writeValueAsString(airmanQualification);
 
-    final AirmanQualification qualification = new AirmanQualification(1L, new Qualification(), new Date(), new Date());
-    final String json = objectMapper.writeValueAsString(qualification);
-
-    mockMvc.perform(
-      post(AirmanController.URI + "/" + airman.getId() + "/qualifications")
-        .content(json)
-        .contentType(MediaType.APPLICATION_JSON)
-        .with(httpBasic("tytus", "password")))
-      .andExpect(status().isCreated());
-
-    verify(repository).save(airman);
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .body(json)
+      .contentType("application/json")
+    .when()
+      .post(AirmanController.URI + "/" + airman1.getId() + "/qualifications")
+    .then()
+      .statusCode(201)
+      .body("qualifications[0].qualification.id", equalTo(qualification1.getId().intValue()));
+    // @formatter:on
   }
 
   @Test
-  public void createAirmanCertification() throws Exception {
-    final Airman airman = airmen.get(0);
-    when(repository.findOne(airman.getId())).thenReturn(airman);
+  public void createAirmanCertification() throws JsonProcessingException {
+    final AirmanCertification airmanCertification = new AirmanCertification(
+      airman1.getId(),
+      certification1,
+      new Date(),
+      new Date()
+    );
+    final String json = objectMapper.writeValueAsString(airmanCertification);
 
-    final AirmanCertification certification = new AirmanCertification(1L, new Certification(), new Date(), new Date());
-    final String json = objectMapper.writeValueAsString(certification);
-
-    mockMvc.perform(
-      post(AirmanController.URI + "/" + airman.getId() + "/certifications")
-        .content(json)
-        .contentType(MediaType.APPLICATION_JSON)
-        .with(httpBasic("tytus", "password")))
-      .andExpect(status().isCreated());
-
-    verify(repository).save(airman);
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .body(json)
+      .contentType("application/json")
+    .when()
+      .post(AirmanController.URI + "/" + airman1.getId() + "/certifications")
+    .then()
+      .statusCode(201)
+      .body("certifications[0].certification.id", equalTo(certification1.getId().intValue()));
+    // @formatter:on
   }
 
   @Test
-  public void updateAirmanQualification() throws Exception {
-    final Airman airman = airmen.get(0);
-    when(repository.findOne(airman.getId())).thenReturn(airman);
+  public void updateAirmanQualification() throws JsonProcessingException {
+    final AirmanQualification airmanQualification = new AirmanQualification(
+      qualification1,
+      new Date(),
+      new Date()
+    );
+    airman1.addQualification(airmanQualification);
+    final Airman savedAirman1 = airmanRepository.save(airman1);
 
-    final Date newExpirationDate = new Date();
-    final AirmanQualification qualification = airman.getQualifications().get(0);
-    qualification.setExpirationDate(newExpirationDate);
+    final Date newExpirationDate = Date.from(Instant.EPOCH);
+    final AirmanQualification updatedAirmanQualification = savedAirman1.getQualifications().get(0);
+    updatedAirmanQualification.setExpirationDate(newExpirationDate);
 
-    final String json = objectMapper.writeValueAsString(qualification);
+    final String json = objectMapper.writeValueAsString(updatedAirmanQualification);
 
-    mockMvc.perform(
-      put(AirmanController.URI + "/" + airman.getId() + "/qualifications")
-        .content(json)
-        .contentType(MediaType.APPLICATION_JSON)
-        .with(httpBasic("tytus", "password")))
-      .andExpect(status().isOk());
-
-    verify(repository).save(captor.capture());
-    assertThat(captor.getValue().getQualifications().get(0).getExpirationDate()).isEqualTo(newExpirationDate);
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .body(json)
+      .contentType("application/json")
+    .when()
+      .put(AirmanController.URI + "/" + airman1.getId() + "/qualifications")
+    .then()
+      .statusCode(200)
+      .body("qualifications[0].expirationDate", equalTo("1970-01-01T00:00:00.000+0000"));
+    // @formatter:on
   }
 
   @Test
-  public void updateAirmanCertification() throws Exception {
-    final Airman airman = airmen.get(0);
-    when(repository.findOne(airman.getId())).thenReturn(airman);
+  public void updateAirmanCertification() throws JsonProcessingException {
+    final AirmanCertification airmanCertification = new AirmanCertification(
+      certification1,
+      new Date(),
+      new Date()
+    );
+    airman1.addCertification(airmanCertification);
+    final Airman savedAirman1 = airmanRepository.save(airman1);
 
-    final Date newExpirationDate = new Date();
-    final AirmanCertification certification = airman.getCertifications().get(0);
-    certification.setExpirationDate(newExpirationDate);
+    final Date newExpirationDate = Date.from(Instant.EPOCH);
+    final AirmanCertification updatedAirmanCertification = savedAirman1.getCertifications().get(0);
+    updatedAirmanCertification.setExpirationDate(newExpirationDate);
 
-    final String json = objectMapper.writeValueAsString(certification);
+    final String json = objectMapper.writeValueAsString(updatedAirmanCertification);
 
-    mockMvc.perform(
-      put(AirmanController.URI + "/" + airman.getId() + "/certifications")
-        .content(json)
-        .contentType(MediaType.APPLICATION_JSON)
-        .with(httpBasic("tytus", "password")))
-      .andExpect(status().isOk());
-
-    verify(repository).save(captor.capture());
-    assertThat(captor.getValue().getCertifications().get(0).getExpirationDate()).isEqualTo(newExpirationDate);
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .body(json)
+      .contentType("application/json")
+    .when()
+      .put(AirmanController.URI + "/" + airman1.getId() + "/certifications")
+    .then()
+      .statusCode(200)
+      .body("certifications[0].expirationDate", equalTo("1970-01-01T00:00:00.000+0000"));
+    // @formatter:on
   }
 
   @Test
-  public void deleteQualificationTest() throws Exception {
-    final Airman airman = airmen.get(0);
-    when(repository.findOne(airman.getId())).thenReturn(airman);
+  public void deleteQualificationTest() {
+    final AirmanQualification airmanQualification = new AirmanQualification(
+      qualification1,
+      new Date(),
+      new Date()
+    );
+    airman1.addQualification(airmanQualification);
+    final Long airmanQualificationId = airmanRepository.save(airman1).getQualifications().get(0).getId();
 
-    mockMvc.perform(
-      delete(AirmanController.URI + "/" + airman.getId() + "/qualifications/" + airQual.getId())
-        .with(httpBasic("tytus", "password")))
-      .andExpect(status().is(200));
-
-    verify(repository).save(captor.capture());
-    assertThat(captor.getValue().getQualifications()).doesNotContain(airQual);
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+    .when()
+      .delete(AirmanController.URI + "/" + airman1.getId() + "/qualifications/" + airmanQualificationId)
+    .then()
+      .statusCode(200)
+      .body("qualifications.size()", equalTo(0));
+    // @formatter:on
   }
 
   @Test
-  public void deleteCertificationTest() throws Exception {
-    final Airman airman = airmen.get(0);
-    when(repository.findOne(airman.getId())).thenReturn(airman);
+  public void deleteCertificationTest() {
+    final AirmanCertification airmanCertification = new AirmanCertification(
+      certification1,
+      new Date(),
+      new Date()
+    );
+    airman1.addCertification(airmanCertification);
+    final Long airmanCertificationId = airmanRepository.save(airman1).getCertifications().get(0).getId();
 
-    mockMvc.perform(
-      delete(AirmanController.URI + "/" + airman.getId() + "/certifications/" + airCert.getId())
-        .with(httpBasic("tytus", "password")))
-      .andExpect(status().is(200));
-
-    verify(repository).save(captor.capture());
-    assertThat(captor.getValue().getCertifications()).doesNotContain(airCert);
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+    .when()
+      .delete(AirmanController.URI + "/" + airman1.getId() + "/certifications/" + airmanCertificationId)
+    .then()
+      .statusCode(200)
+      .body("certifications.size()", equalTo(0));
+    // @formatter:on
   }
 }

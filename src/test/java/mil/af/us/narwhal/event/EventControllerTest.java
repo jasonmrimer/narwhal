@@ -2,97 +2,145 @@ package mil.af.us.narwhal.event;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import mil.af.us.narwhal.airman.Airman;
+import mil.af.us.narwhal.airman.AirmanRepository;
+import mil.af.us.narwhal.flight.Flight;
+import mil.af.us.narwhal.site.Site;
+import mil.af.us.narwhal.site.SiteRepository;
+import mil.af.us.narwhal.squadron.Squadron;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.stubbing.Answer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
+import org.springframework.boot.context.embedded.LocalServerPort;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.Instant;
 
-import static org.assertj.core.api.Java6Assertions.assertThat;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 
 
-@WebMvcTest(EventController.class)
+@ActiveProfiles("test")
 @RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class EventControllerTest {
   private final static ObjectMapper objectMapper = new ObjectMapper();
   private final static JavaTimeModule module = new JavaTimeModule();
-
-  @Autowired private MockMvc mockMvc;
-  @MockBean private EventRepository repository;
-  @Captor private ArgumentCaptor<Long> eventCaptor;
 
   static {
     objectMapper.registerModule(module);
   }
 
+  private Airman airman;
+  @LocalServerPort private int port;
+  @Autowired private SiteRepository siteRepository;
+  @Autowired private AirmanRepository airmanRepository;
+  @Autowired private EventRepository eventRepository;
+
+  @Before
+  public void setUp() {
+    final Flight flight = new Flight("flight");
+
+    final Squadron squadron = new Squadron("squadron");
+    squadron.addFlight(flight);
+
+    final Site site = new Site("site");
+    site.addSquadron(squadron);
+
+    siteRepository.save(site);
+
+    airman = new Airman(flight.getId(), "first", "last");
+    airman = airmanRepository.save(airman);
+  }
+
   @Test
   public void createTest() throws Exception {
-    when(repository.save(any(Event.class)))
-      .thenAnswer((Answer<Event>) invocation -> {
-        Event event = (Event) invocation.getArguments()[0];
-        event.setId(123L);
-        return event;
-      });
-
     final Event event = new Event(
-      null,
       "New Event",
       "New Description",
       Instant.now(),
       Instant.now(),
       EventType.APPOINTMENT,
-      20L
+      airman.getId()
     );
-
     final String json = objectMapper.writeValueAsString(event);
 
-    mockMvc.perform(
-      post(EventController.URI)
-        .content(json)
-        .contentType(MediaType.APPLICATION_JSON)
-        .with(httpBasic("tytus", "password")))
-      .andExpect(status().isCreated())
-      .andExpect(jsonPath("$.id").value(123L));
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .contentType("application/json")
+      .body(json)
+    .when()
+      .post(EventController.URI)
+    .then()
+      .statusCode(201)
+      .body("id", notNullValue());
+    // @formatter:on
   }
 
   @Test
   public void updateTest() throws Exception {
-    Event existingEvent = new Event(1L, "Event", "", Instant.now(), Instant.now(), EventType.APPOINTMENT, 1L);
-    when(repository.save(any(Event.class))).thenReturn(existingEvent);
-
+    Event existingEvent = new Event(
+      "Existing Event",
+      "Existing Description",
+      Instant.now(),
+      Instant.now(),
+      EventType.APPOINTMENT,
+      airman.getId()
+    );
+    existingEvent = eventRepository.save(existingEvent);
     final String json = objectMapper.writeValueAsString(existingEvent);
-    mockMvc.perform(
-      put(EventController.URI + "/1")
-        .content(json)
-        .contentType(MediaType.APPLICATION_JSON)
-        .with(httpBasic("tytus", "password")))
-      .andExpect(status().isOk())
-      .andExpect(jsonPath("$.id").value(1L));
+
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .contentType("application/json")
+      .body(json)
+    .when()
+      .put(EventController.URI + "/" + existingEvent.getId())
+    .then()
+      .statusCode(200)
+      .body("id", equalTo(existingEvent.getId().intValue()));
+    // @formatter:on
   }
 
   @Test
-  public void deleteTest() throws Exception {
-    mockMvc.perform(delete(EventController.URI + "/1")
-      .contentType(MediaType.APPLICATION_JSON)
-      .with(httpBasic("tytus", "password")))
-      .andExpect(status().is(200));
+  public void deleteTest() {
+    Event event = new Event(
+      "Existing Event",
+      "Existing Description",
+      Instant.now(),
+      Instant.now(),
+      EventType.APPOINTMENT,
+      airman.getId()
+    );
+    event = eventRepository.save(event);
 
-    verify(repository).delete(eventCaptor.capture());
-    assertThat(eventCaptor.getValue()).isEqualTo(1);
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+    .when()
+      .delete(EventController.URI + "/" + event.getId())
+    .then()
+      .statusCode(200);
+    // @formatter:on
+
+    assertThat(eventRepository.findOne(event.getId())).isNull();
   }
 }

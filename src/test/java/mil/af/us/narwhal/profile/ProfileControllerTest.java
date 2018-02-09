@@ -2,25 +2,37 @@ package mil.af.us.narwhal.profile;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.context.embedded.LocalServerPort;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
 
-@WebMvcTest(ProfileController.class)
+
+@ActiveProfiles("test")
 @RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class ProfileControllerTest {
-  @Autowired MockMvc mockMvc;
+  @LocalServerPort
+  private int port;
 
   @Test
-  public void showTest() throws Exception {
-    mockMvc.perform(get(ProfileController.URI).with(httpBasic("tytus", "password")))
-      .andExpect(status().isOk())
-      .andExpect(jsonPath("$.username").value("tytus"));
+  public void showTest() {
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+    .when()
+      .get(ProfileController.URI)
+    .then()
+      .statusCode(200)
+      .body("username", equalTo("tytus"));
+    // @formatter:on
   }
 }

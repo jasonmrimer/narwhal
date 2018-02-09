@@ -79,7 +79,6 @@ public class MissionServiceTest {
 
   @Test
   public void refreshMissions_savesMissions() {
-
     when(missionClient.getMissionMetaData())
       .thenReturn(getMissionMetaDataResponse.getGetMissionMetaDataResult().getResults().getMissionMetaData());
 

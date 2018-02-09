@@ -31,7 +31,6 @@ public class CloudWebSecurityConfig extends WebSecurityConfigurerAdapter {
       .frameOptions().sameOrigin();
   }
 
-
   @Bean
   PrincipalExtractor principalExtractor() {
     return map -> User.withUsername((String) map.get("user_name")).password("").authorities(Collections.emptyList()).build();

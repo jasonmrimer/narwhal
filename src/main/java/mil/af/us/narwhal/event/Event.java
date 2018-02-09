@@ -33,6 +33,18 @@ public class Event {
   @Enumerated(EnumType.STRING)
   private EventType type;
 
+  @NotNull
   @Column(name = "airman_id")
   private Long airmanId;
+
+  public Event(
+    String title,
+    String description,
+    Instant startTime,
+    Instant endTime,
+    EventType eventType,
+    Long airmanId
+  ) {
+    this(null, title, description, startTime, endTime, eventType, airmanId);
+  }
 }

@@ -1,60 +1,76 @@
 package mil.af.us.narwhal.site;
 
-
 import mil.af.us.narwhal.flight.Flight;
 import mil.af.us.narwhal.squadron.Squadron;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.context.embedded.LocalServerPort;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
 
+import static io.restassured.RestAssured.given;
 import static java.util.Arrays.asList;
-import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ActiveProfiles("test")
-@WebMvcTest(SiteController.class)
 @RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class SiteControllerTest {
-  @Autowired
-  private MockMvc mockMvc;
-  @MockBean
-  private SiteRepository siteRepository;
+  @LocalServerPort private int port;
+  @Autowired private SiteRepository siteRepository;
+
+  @Before
+  public void setUp() {
+    final Flight flight1 = new Flight("flight1");
+
+    final Squadron squad1 = new Squadron("squad1");
+    squad1.addFlight(flight1);
+
+    final Site site1 = new Site("site1");
+    site1.addSquadron(squad1);
+
+    final Flight flight2 = new Flight("flight2");
+
+    final Squadron squad2 = new Squadron("squadron2");
+    squad2.addFlight(flight2);
+
+    final Flight flight3 = new Flight("flight3");
+    final Flight flight4 = new Flight("flight4");
+
+    final Squadron squad3 = new Squadron("squadron3");
+    squad3.addFlight(flight3);
+    squad3.addFlight(flight4);
+
+    final Site site2 = new Site("site2");
+    site2.addSquadron(squad2);
+    site2.addSquadron(squad3);
+
+    siteRepository.save(asList(site1, site2));
+  }
 
   @Test
-  public void indexTest() throws Exception {
-    final Site site1 = new Site(1L, "Site 1", singletonList(
-      new Squadron(1L, 1L, "Squadron 1", singletonList(
-        new Flight(1L, 1L, "Flight 1")
-      ))
-    ));
-    final Site site2 = new Site(2L, "Site 2", asList(
-      new Squadron(2L, 2L, "Squadron 2", singletonList(
-        new Flight(2L, 2L, "Flight 2")
-      )),
-      new Squadron(3L, 3L, "Squadron 3", asList(
-        new Flight(3L, 3L, "Flight 3"),
-        new Flight(4L, 3L, "Flight 4")
-      ))
-    ));
-
-    when(siteRepository.findAll()).thenReturn(asList(site1, site2));
-
-    mockMvc.perform(get(SiteController.URI))
-      .andExpect(status().isOk())
-      .andExpect(jsonPath("$.size()", equalTo(2)))
-      .andExpect(jsonPath("$[0].squadrons.size()", equalTo(1)))
-      .andExpect(jsonPath("$[0].squadrons[0].flights.size()", equalTo(1)))
-      .andExpect(jsonPath("$[1].squadrons.size()", equalTo(2)))
-      .andExpect(jsonPath("$[1].squadrons[0].flights.size()", equalTo(1)))
-      .andExpect(jsonPath("$[1].squadrons[1].flights.size()", equalTo(2)));
+  public void indexTest() {
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+    .when()
+      .get(SiteController.URI)
+    .then()
+      .statusCode(200)
+      .body("$.size()", equalTo(2))
+      .body("[0].squadrons.size()", equalTo(1))
+      .body("[0].squadrons[0].flights.size()", equalTo(1))
+      .body("[1].squadrons.size()", equalTo(2))
+      .body("[1].squadrons[0].flights.size()", equalTo(1))
+      .body("[1].squadrons[1].flights.size()", equalTo(2));
+    // @formatter:on
   }
 }

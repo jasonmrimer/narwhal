@@ -27,7 +27,11 @@ public class UploadController {
   private QualificationUploadService qualificationUploadService;
   private CertificationUploadService certificationUploadService;
 
-  public UploadController(AirmanUploadService airmanUploadService, QualificationUploadService qualificationUploadService, CertificationUploadService certificationUploadService) {
+  public UploadController(
+    AirmanUploadService airmanUploadService,
+    QualificationUploadService qualificationUploadService,
+    CertificationUploadService certificationUploadService
+  ) {
     this.airmanUploadService = airmanUploadService;
     this.qualificationUploadService = qualificationUploadService;
     this.certificationUploadService = certificationUploadService;

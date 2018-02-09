@@ -1,13 +1,15 @@
 package mil.af.us.narwhal.flight;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mil.af.us.narwhal.squadron.Squadron;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 @Entity
 @Data
@@ -18,8 +20,9 @@ public class Flight {
   @GeneratedValue
   private Long id;
 
-  @Column(name = "squadron_id")
-  private Long squadronId;
+  @ManyToOne
+  @JsonBackReference
+  private Squadron squadron;
 
   private String name;
 

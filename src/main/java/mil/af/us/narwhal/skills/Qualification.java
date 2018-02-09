@@ -20,4 +20,9 @@ public class Qualification {
   private String acronym;
 
   private String title;
+
+  public Qualification(String acronym, String title) {
+    this.acronym = acronym;
+    this.title = title;
+  }
 }

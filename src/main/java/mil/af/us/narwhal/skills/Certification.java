@@ -18,4 +18,8 @@ public class Certification {
   private Long id;
 
   private String title;
+
+  public Certification(String title) {
+    this.title = title;
+  }
 }

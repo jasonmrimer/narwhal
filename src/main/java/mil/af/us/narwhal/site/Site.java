@@ -1,27 +1,27 @@
 package mil.af.us.narwhal.site;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import mil.af.us.narwhal.squadron.Squadron;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.Collections.emptyList;
 
 @Entity
 @Data
 @NoArgsConstructor
 public class Site {
   @Id
+  @GeneratedValue
   private Long id;
 
   private String name;
 
-  @OneToMany(mappedBy = "siteId")
+  @OneToMany(mappedBy = "site", cascade = CascadeType.ALL)
   @JsonManagedReference
   private List<Squadron> squadrons = new ArrayList<>();
 
@@ -29,5 +29,14 @@ public class Site {
     this.id = id;
     this.name = name;
     this.squadrons = new ArrayList<>(squadrons);
+  }
+
+  public Site(String name) {
+    this(null, name, emptyList());
+  }
+
+  public void addSquadron(Squadron squad) {
+    squad.setSite(this);
+    this.squadrons.add(squad);
   }
 }
