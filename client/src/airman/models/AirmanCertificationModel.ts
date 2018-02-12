@@ -8,7 +8,8 @@ export default class AirmanCertificationModel {
               public certification: CertificationModel,
               public earnDate: Moment,
               public expirationDate: Moment,
-              public id?: number) {
+              public id: number | null = null,
+              public errors?: object[]) {
   }
 
   get type() {

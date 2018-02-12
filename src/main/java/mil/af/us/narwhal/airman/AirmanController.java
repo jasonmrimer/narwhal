@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -35,6 +36,7 @@ public class AirmanController {
   @PostMapping(path = "/{id}/qualifications")
   public ResponseEntity<Airman> createAirmanQualification(
     @PathVariable("id") Long id,
+    @Valid
     @RequestBody AirmanQualification qualification
   ) {
     final Airman airman = repository.findOne(id);
@@ -46,6 +48,7 @@ public class AirmanController {
   @PostMapping(path = "/{id}/certifications")
   public ResponseEntity<Airman> createAirmanCertification(
     @PathVariable("id") Long id,
+    @Valid
     @RequestBody AirmanCertification certification
   ) {
     final Airman airman = repository.findOne(id);

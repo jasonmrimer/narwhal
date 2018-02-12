@@ -5,6 +5,7 @@ export default class AvailabilityStore {
   @observable private _showEventForm: boolean = false;
   @observable private _selectedEvent: EventModel | null = null;
   @observable private _pendingDeleteEvent: EventModel | null = null;
+  @observable private _errors: object[] = [];
 
   @computed
   get selectedEvent() {
@@ -39,5 +40,20 @@ export default class AvailabilityStore {
   @computed
   get pendingDeleteEvent() {
     return this._pendingDeleteEvent;
+  }
+
+  @action.bound
+  setErrors(errors: object[]) {
+    this._errors = errors;
+  }
+
+  @computed
+  get errors() {
+    return this._errors;
+  }
+
+  @computed
+  get hasErrors(): boolean {
+    return this._errors.length > 0;
   }
 }

@@ -110,20 +110,6 @@ export async function selectOption(wrapper: any, filter: any, value: number) {
   wrapper.update();
 }
 
-export function selectOptionByValue(wrapper: any, value: number) {
-  const input = wrapper.find('input');
-  input.simulate('keyDown', {keyCode: 40});
-
-  const options = wrapper.prop('options');
-  for (let i = 0; i < options.length; i++) {
-    if (options[i].value === value) {
-      input.simulate('keyDown', {keyCode: 13});
-      return;
-    }
-    input.simulate('keyDown', {keyCode: 40});
-  }
-}
-
 export function findSelectorWithText(wrapper: any, selector: string, text: string): any {
   return wrapper.find(selector).filterWhere((x: any) => x.text().includes(text));
 }

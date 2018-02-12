@@ -16,7 +16,7 @@ export const TimeInput = (props: Props) => {
       type="text"
       placeholder="hh:mm"
       value={props.timeValue}
-      name={`${props.name}Time`}
+      name={props.name}
       onChange={props.onChange}
     />
 
@@ -38,4 +38,5 @@ export default styled(TimeInput)`
   font-weight: 300;
   cursor: pointer;
   outline: inherit;
+  margin: 1rem 0;
 `;

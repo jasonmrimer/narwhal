@@ -7,6 +7,14 @@ class Skill
     set_attrs
   end
 
+  def create_invalid
+    page.within('.side-panel') do
+      find('a', text: 'CURRENCY').click
+      click_link_or_button '+ Add Skill'
+      find('input[type="submit"]').click
+    end
+  end
+
   def create_qualification
     page.within('.side-panel') do
       find('a', text: 'CURRENCY').click

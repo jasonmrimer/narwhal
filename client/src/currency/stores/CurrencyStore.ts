@@ -4,6 +4,7 @@ import { Skill } from '../../skills/models/Skill';
 export default class CurrencyStore {
   @observable private _showSkillForm: boolean = false;
   @observable private _selectedSkill: Skill | null = null;
+  @observable private _errors: object[] = [];
 
   @computed
   get showSkillForm() {
@@ -28,5 +29,15 @@ export default class CurrencyStore {
   @action.bound
   clearSelectedSkill() {
     this._selectedSkill = null;
+  }
+
+  @action.bound
+  setErrors(errors: object[]) {
+    this._errors = errors;
+  }
+
+  @computed
+  get errors() {
+    return this._errors;
   }
 }

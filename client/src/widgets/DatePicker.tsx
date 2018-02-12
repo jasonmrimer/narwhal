@@ -19,7 +19,7 @@ export const DatePicker = (props: Props) => {
       className={props.className}
       type="date"
       value={props.dateValue}
-      name={`${props.name}Date`}
+      name={props.name}
       onChange={props.onChange}
     />
   );
@@ -36,6 +36,7 @@ export default styled(DatePicker)`
   font-weight: 300;
   cursor: pointer;
   outline: inherit;
+  margin: 1rem 0;
   
   &::-webkit-inner-spin-button {
     display: none;

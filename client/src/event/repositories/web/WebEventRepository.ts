@@ -16,8 +16,9 @@ export default class WebEventRepository implements EventRepository {
     let json = await resp.json();
 
     if (json.status === 400) {
-      json = this.handleError(json, event);
+      throw this.handleError(json);
     }
+
     return Promise.resolve(this.serializer.deserialize(json));
   }
 
@@ -36,13 +37,10 @@ export default class WebEventRepository implements EventRepository {
     }
   }
 
-  handleError(response: { errors: object[] }, event: EventModel): EventModel {
-    const errors = response.errors.map((error: { field: string }) => {
+  private handleError(response: { errors: object[] }): object {
+    return response.errors.map((error: { field: string }) => {
       return {[error.field]: 'Field is required'};
     });
-    event.errors = errors;
-
-    return event;
   }
 
   private createEvent(event: EventModel) {

@@ -51,6 +51,10 @@ describe 'Tracker page', type: :feature do
     it 'can delete, create and update a certification' do
       tracker_page.assert_delete_create_update_certification
     end
+
+    it 'validates a skill type, name, start date, and end date' do
+      tracker_page.assert_create_skill_validation
+    end
   end
 
   describe 'roster' do

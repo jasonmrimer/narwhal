@@ -108,12 +108,32 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/client/src/availability/Availability.tsx">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/client/src/currency/Currency.tsx">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/client/src/event/EventForm.test.tsx">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/client/src/event/EventForm.tsx">
           <value>
             <set />
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/client/src/event/EventModel.ts">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/client/src/event/repositories/EventRepositoryContract.ts">
           <value>
             <set />
           </value>
@@ -189,6 +209,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/client/src/utils/testUtils.ts">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/client/src/widgets/FieldValidation.tsx">
           <value>
             <set />
           </value>
@@ -378,12 +403,22 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/airman/AirmanCertification.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/airman/AirmanCertificationId.java">
           <value>
             <set />
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/airman/AirmanController.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/airman/AirmanQualification.java">
           <value>
             <set />
           </value>
@@ -489,6 +524,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/event/EventRepository.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/event/EventType.java">
           <value>
             <set />
           </value>

@@ -9,6 +9,8 @@ import { allSkills, SkillType } from './models/SkillType';
 import SkillBuilder from './models/SkillBuilder';
 import { Skill } from './models/Skill';
 import DeleteButton from '../widgets/DeleteButton';
+import FieldValidation from '../widgets/FieldValidation';
+import { observer } from 'mobx-react';
 
 interface Props {
   airmanId: number;
@@ -17,6 +19,7 @@ interface Props {
   skill: Skill | null;
   handleSubmit: (skill: Skill) => void;
   handleDelete: (skill: Skill) => void;
+  errors: object[];
   className?: string;
 }
 
@@ -27,6 +30,7 @@ interface State {
   expirationDate: string;
 }
 
+@observer
 export class SkillsForm extends React.Component<Props, State> {
   static hydrate(skill: Skill | null, qualifications: QualificationModel[]) {
     return {
@@ -49,56 +53,67 @@ export class SkillsForm extends React.Component<Props, State> {
         <div style={{marginTop: '1rem'}}>
           Add Skill:
         </div>
-        <div className="form-row">
-          <label htmlFor="skill-type-select">Type:</label>
-          <select
-            id="skill-type-select"
-            name="skillType"
-            value={this.state.skillType}
-            disabled={disabled}
-            onChange={this.handleChange}
-          >
-            {
-              allSkills().map((skill, index) => {
-                return <option key={index} value={skill}>{skill}</option>;
-              })
-            }
-          </select>
-        </div>
-        <div className="form-row">
-          <label htmlFor="skill-name-select">Name:</label>
-          <select
-            id="skill-name-select"
-            name="skillNameId"
-            value={this.state.skillNameId}
-            disabled={disabled}
-            onChange={this.handleChange}
-          >
-            {this.renderSkillNameOptions()}
-          </select>
-        </div>
-        <div className="form-row">
-          <label htmlFor="earn-date">Earn Date:</label>
-          <DatePicker
-            id="earn-date"
-            dateValue={this.state.earnDate}
-            onChange={this.handleChange}
-            disabled={disabled}
-            name="earn"
-          />
-        </div>
-        <div className="form-row">
-          <label htmlFor="expiration-date">Expiration Date:</label>
-          <DatePicker
-            id="expiration-date"
-            dateValue={this.state.expirationDate}
-            onChange={this.handleChange}
-            name="expiration"
-          />
-        </div>
-        <div className="form-row">
-          {this.props.skill && <DeleteButton handleClick={this.handleDelete}/>}
-          <SubmitButton text="CONFIRM"/>
+
+        <div className="input-wrapper">
+          <div className="form-row">
+            <label htmlFor="skill-type-select">Type:</label>
+            <select
+              id="skill-type-select"
+              name="skillType"
+              value={this.state.skillType}
+              disabled={disabled}
+              onChange={this.handleChange}
+            >
+              {
+                allSkills().map((skill, index) => {
+                  return <option key={index} value={skill}>{skill}</option>;
+                })
+              }
+            </select>
+          </div>
+
+          <div className="form-row">
+            <label htmlFor="skill-name-select">Name:</label>
+            <select
+              id="skill-name-select"
+              name="skillNameId"
+              value={this.state.skillNameId}
+              disabled={disabled}
+              onChange={this.handleChange}
+            >
+              {this.renderSkillNameOptions()}
+            </select>
+          </div>
+
+          <FieldValidation name="earnDate" errors={this.props.errors}>
+            <div className="form-row">
+              <label htmlFor="earn-date">Earn Date:</label>
+              <DatePicker
+                id="earn-date"
+                dateValue={this.state.earnDate}
+                onChange={this.handleChange}
+                disabled={disabled}
+                name="earnDate"
+              />
+            </div>
+          </FieldValidation>
+
+          <FieldValidation name="expirationDate" errors={this.props.errors}>
+            <div className="form-row">
+              <label htmlFor="expiration-date">Expiration Date:</label>
+              <DatePicker
+                id="expiration-date"
+                dateValue={this.state.expirationDate}
+                onChange={this.handleChange}
+                name="expirationDate"
+              />
+            </div>
+          </FieldValidation>
+
+          <div className="form-row">
+            {this.props.skill && <DeleteButton handleClick={this.handleDelete}/>}
+            <SubmitButton text="CONFIRM"/>
+          </div>
         </div>
       </form>
     );
@@ -132,7 +147,7 @@ export class SkillsForm extends React.Component<Props, State> {
       .setExpirationDate(moment.utc(this.state.expirationDate))
       .setSkill(this.getSkillById());
 
-    if (this.props.skill != null) {
+    if (this.props.skill != null && this.props.skill.id) {
       builder.setId(this.props.skill.id);
     }
 
@@ -177,17 +192,19 @@ export default styled(SkillsForm)`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 1rem 1rem 0;
     
     &:last-of-type {
-      margin-top: 2rem;
+      margin-top: 1rem;
       align-items: baseline;
     };
     
     label {
       margin-right: 1rem;
-      width: 25%;
     }
+  }
+  
+  .input-wrapper {
+    margin: 1rem ;
   }
   
   select {

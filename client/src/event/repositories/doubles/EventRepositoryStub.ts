@@ -24,7 +24,7 @@ export default class EventRepositoryStub implements EventRepository {
           }
         ],
       };
-      copy = this.handleError(resp, event);
+      throw this.handleError(resp);
     }
 
     return Promise.resolve(copy);
@@ -39,12 +39,10 @@ export default class EventRepositoryStub implements EventRepository {
     return this._events.map(e => e.id).includes(event.id);
   }
 
-  handleError(response: {errors: object[]}, event: EventModel): EventModel {
-    const errors = response.errors.map((error: {field: string}) => {
-      return {[error.field]: 'Field is reqiured'};
+  handleError(response: {errors: object[]}): object[] {
+    return response.errors.map((error: {field: string}) => {
+      return {[error.field]: 'Field is required'};
     });
-    event.errors = errors;
-    return event;
   }
 
   get count() {

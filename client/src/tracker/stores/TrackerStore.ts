@@ -212,14 +212,14 @@ export default class TrackerStore {
 
   @action.bound
   async addEvent(event: EventModel) {
-    const pendingEvent = await this.eventRepository.save(event);
-    if (pendingEvent.errors) {
-      this.availabilityStore.setSelectedEvent(pendingEvent);
-    } else {
+    try {
+      event = await this.eventRepository.save(event);
       this._airmen = await this.airmanRepository.findAll();
       this._selectedAirman = this._airmen.find(a => a.id === event.airmanId)!;
+    } catch (e) {
+      this.availabilityStore.setErrors(e);
     }
-    return pendingEvent;
+    return event;
   }
 
   @action.bound
@@ -237,9 +237,13 @@ export default class TrackerStore {
 
   @action.bound
   async addAirmanSkill(skill: Skill) {
-    await this.airmanRepository.saveSkill(skill);
-    this._airmen = await this.airmanRepository.findAll();
-    this._selectedAirman = this._airmen.find(a => a.id === skill.airmanId)!;
+    try {
+      await this.airmanRepository.saveSkill(skill);
+      this._airmen = await this.airmanRepository.findAll();
+      this._selectedAirman = this._airmen.find(a => a.id === skill.airmanId)!;
+    } catch (e) {
+      this.currencyStore.setErrors(e);
+    }
   }
 
   @action.bound

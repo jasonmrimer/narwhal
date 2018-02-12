@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import mil.af.us.narwhal.skills.Certification;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
@@ -28,10 +29,11 @@ public class AirmanCertification {
   @JoinColumn(name = "certification_id", referencedColumnName = "id", nullable = false)
   private Certification certification;
 
-
+  @NotNull
   @Column(name = "earn_date")
   private Date earnDate;
 
+  @NotNull
   @Column(name = "expiration_date")
   private Date expirationDate;
 

@@ -20,6 +20,7 @@ interface Props {
   event: EventModel | null;
   missionStore: MissionStore;
   className?: string;
+  errors: object[];
 }
 
 export interface EventFormState {
@@ -40,7 +41,7 @@ export function emptyEventFormState() {
     startTime: '',
     endDate: '',
     endTime: '',
-    eventType: ''
+    eventType: EventType.Mission,
   };
 }
 
@@ -103,72 +104,76 @@ export class EventForm extends React.Component<Props, EventFormState> {
         </a>
         <div>Select Event Type:</div>
         <div className="form-wrapper">
-
-        <RadioButtons
-          name="eventType"
-          options={Object.keys(EventType).map(key => EventType[key])}
-          value={this.state.eventType}
-          onChange={this.handleChange}
-        />
-        {
-          this.state.eventType === EventType.Mission &&
-          <TypeAheadInput
+            <RadioButtons
+              name="eventType"
+              options={Object.keys(EventType).map(key => EventType[key])}
+              value={this.state.eventType}
+              onChange={this.handleChange}
+            />
+          {
+            this.state.eventType === EventType.Mission &&
+            <TypeAheadInput
               multiple={false}
               options={this.props.missionStore.missionOptions}
               onChange={this.handleMissionSelect}
               placeholder="Mission ID"
-          />
-        }
-        <FieldValidation name="title" errors={this.props.event ? this.props.event.errors : null}>
+            />
+          }
+
+          <FieldValidation name="title" errors={this.props.errors}>
+            <div className="input-row">
+              <TextInput
+                placeholder="Title"
+                value={this.state.title}
+                name="title"
+                onChange={this.handleChange}
+              />
+            </div>
+          </FieldValidation>
+
           <div className="input-row">
             <TextInput
-              placeholder="Title"
-              value={this.state.title}
-              name="title"
+              placeholder="Description"
+              value={this.state.description}
+              name="description"
               onChange={this.handleChange}
             />
           </div>
-        </FieldValidation>
-        <div className="input-row">
-          <TextInput
-            placeholder="Description"
-            value={this.state.description}
-            name="description"
-            onChange={this.handleChange}
-          />
-        </div>
-        <FieldValidation name="startTime" errors={this.props.event ? this.props.event.errors : null}>
-          <div className="input-row">
-            <DatePicker
-              dateValue={this.state.startDate}
-              onChange={this.handleChange}
-              name="start"
-            />
-            <TimeInput
-              timeValue={this.state.startTime}
-              onChange={this.handleChange}
-              name="start"
-            />
+
+          <FieldValidation name="startTime" errors={this.props.errors}>
+            <div className="input-row">
+              <DatePicker
+                dateValue={this.state.startDate}
+                onChange={this.handleChange}
+                name="startDate"
+              />
+              <TimeInput
+                timeValue={this.state.startTime}
+                onChange={this.handleChange}
+                name="startTime"
+              />
+            </div>
+          </FieldValidation>
+
+          <FieldValidation name="endTime" errors={this.props.errors}>
+            <div className="input-row">
+              <DatePicker
+                dateValue={this.state.endDate}
+                onChange={this.handleChange}
+                name="endDate"
+              />
+              <TimeInput
+                timeValue={this.state.endTime}
+                onChange={this.handleChange}
+                name="endTime"
+              />
+            </div>
+          </FieldValidation>
+
+          <div className="form-row">
+            <SubmitButton text="CONFIRM"/>
           </div>
-        </FieldValidation>
-        <FieldValidation name="endTime" errors={this.props.event ? this.props.event.errors : null}>
-          <div className="input-row">
-            <DatePicker
-              dateValue={this.state.endDate}
-              onChange={this.handleChange}
-              name="end"
-            />
-            <TimeInput
-              timeValue={this.state.endTime}
-              onChange={this.handleChange}
-              name="end"
-            />
-          </div>
-        </FieldValidation>
-        <div className="form-row">
-          <SubmitButton text="CONFIRM"/>
-        </div>
-        <div style={{minHeight: 150}}/>
+          <div style={{minHeight: 150}}/>
         </div>
       </form>
     );
@@ -190,7 +195,6 @@ export default styled(EventForm)`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin: 0.5rem 0;
   }
   
   .form-row {

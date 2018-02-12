@@ -126,6 +126,24 @@ export default function airmenRepositoryContract(subject: AirmanRepository) {
         .expirationDate.isSame(newExpirationDate))
         .toBeTruthy();
     });
+
+    describe('validation', () => {
+      it('correctly handles validations from the server', async () => {
+        const qualId = 5;
+        const errors = [{earnDate: 'Field is required'}, {expirationDate: 'Field is required'}];
+        const skill = new AirmanQualificationModel(
+          airmen[0].id,
+          new QualificationModel(qualId, 'A', 'B'),
+          moment.utc(''),
+          moment.utc('')
+        );
+        try {
+          await subject.saveSkill(skill);
+        } catch (e) {
+          e.forEach((item: any) => expect(errors).toContainEqual(item));
+        }
+      });
+    });
   });
 
   describe('delete', () => {

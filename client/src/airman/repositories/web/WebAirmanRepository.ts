@@ -45,6 +45,9 @@ export default class WebAirmanRepository implements AirmanRepository {
   async saveSkill(skill: Skill): Promise<AirmanModel> {
     const resp = skill.id ? await this.updateSkill(skill) : await this.createSkill(skill);
     const json = await resp.json();
+    if (resp.status === 400) {
+      throw this.handleError(json);
+    }
     return Promise.resolve(this.serializer.deserialize(json));
   }
 
@@ -63,6 +66,7 @@ export default class WebAirmanRepository implements AirmanRepository {
     }
 
     const json = await resp.json();
+
     return Promise.resolve(this.serializer.deserialize(json));
   }
 
@@ -102,5 +106,11 @@ export default class WebAirmanRepository implements AirmanRepository {
       [SkillType.Qualification]: (s: any) => this.airmanQualSerializer.serialize(s),
       [SkillType.Certification]: (s: any) => this.airmanCertSerializer.serialize(s)
     }[skill.type](skill);
+  }
+
+  private handleError(response: { errors: object[] }): object {
+    return response.errors.map((error: { field: string }) => {
+      return {[error.field]: 'Field is required'};
+    });
   }
 }

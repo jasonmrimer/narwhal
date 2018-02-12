@@ -38,14 +38,17 @@ export class Currency extends React.Component<Props> {
         skill={this.props.trackerStore.currencyStore.selectedSkill}
         handleSubmit={this.createAirmanSkill}
         handleDelete={this.deleteAirmanSkill}
+        errors={this.props.trackerStore.currencyStore.errors}
       />
     );
   }
 
   private createAirmanSkill = async (skill: Skill) => {
     await this.props.trackerStore.addAirmanSkill(skill);
-    this.props.trackerStore.currencyStore.clearSelectedSkill();
-    this.props.trackerStore.currencyStore.setShowSkillForm(false);
+    if (this.props.trackerStore.currencyStore.errors == null) {
+        this.props.trackerStore.currencyStore.clearSelectedSkill();
+        this.props.trackerStore.currencyStore.setShowSkillForm(false);
+    }
   }
 
   private deleteAirmanSkill = async (skill: Skill) => {

@@ -1,20 +1,22 @@
 import * as React from 'react';
 import * as classNames from 'classnames';
 import styled from 'styled-components';
+import { observer } from 'mobx-react';
 
 interface Props {
   name: string;
   children: JSX.Element;
-  errors?: object[] | null;
+  errors: object[];
   className?: string;
 }
 
-export class FieldValidation extends React.Component<Props>  {
+@observer
+export class FieldValidation extends React.Component<Props> {
   fieldHasError() {
-    if (this.props.errors) {
-      return this.props.errors.findIndex(error => error.hasOwnProperty(this.props.name)) > -1;
+    if (this.props.errors.length === 0) {
+      return false;
     }
-    return false;
+    return this.props.errors.findIndex(error => error.hasOwnProperty(this.props.name)) > -1;
   }
 
   render() {
@@ -34,7 +36,6 @@ export default styled(FieldValidation)`
     } 
     
     .error-msg{
-      margin: 0.5rem 1rem;
       width:fit-content;
       background: ${props => props.theme.yellow};
       color: ${props => props.theme.darkest};

@@ -32,8 +32,20 @@ export default function EventRepositoryContract(subject: EventRepository) {
     describe('validation', () => {
       it('correctly handles validations from the server', async () => {
         const event = new EventModel('', 'description1', moment.utc(), moment.utc(), 1, EventType.Leave);
-        const response = await subject.save(event);
-        expect(response.errors).toBeDefined();
+        try {
+          await subject.save(event);
+        } catch (errors) {
+          expect(errors).toEqual([{title: 'Field is required'}]);
+        }
+      });
+
+      it('correctly handles blank submissions from the server', async () => {
+        const event = new EventModel('', 'description1', moment.utc(), moment.utc(), 1);
+        try {
+          await subject.save(event);
+        } catch (errors) {
+          expect(errors).toEqual([{title: 'Field is required'}]);
+        }
       });
     });
   });

@@ -30,8 +30,7 @@ export default class EventModel {
               public endTime: Moment,
               public airmanId: number,
               public type: EventType = EventType.Mission,
-              public id: number | null = null,
-              public errors?: object[]) {
+              public id: number | null = null) {
   }
 
   toEventFormState(): EventFormState {

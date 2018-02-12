@@ -1,4 +1,4 @@
-import { shallow, ShallowWrapper } from 'enzyme';
+import { mount, ReactWrapper } from 'enzyme';
 import * as React from 'react';
 import { EventForm } from './EventForm';
 import EventModel, { EventType } from './models/EventModel';
@@ -7,7 +7,6 @@ import { eventStub } from '../utils/testUtils';
 import DatePicker from '../widgets/DatePicker';
 import TextInput from '../widgets/TextInput';
 import RadioButtons from '../widgets/RadioButtons';
-import FieldValidation from '../widgets/FieldValidation';
 import TimeInput from '../widgets/TimeInput';
 import MissionStore from '../mission/stores/MissionStore';
 import MissionRepositoryStub from '../mission/repositories/doubles/MissionRepositoryStub';
@@ -20,27 +19,31 @@ describe('EventForm', () => {
 
   let handleSubmitSpy: Mock;
   let hideEventFormMock: Mock;
-  let subject: ShallowWrapper;
+  let subject: ReactWrapper;
+  let errors: object[];
 
   beforeEach(() => {
     hideEventFormMock = jest.fn();
     handleSubmitSpy = jest.fn();
+    errors = [];
     const missionStore = new MissionStore(new MissionRepositoryStub());
     missionStore.hydrate();
 
-    subject = shallow(
+    subject = mount(
       <EventForm
         airmanId={airmanId}
         handleSubmit={handleSubmitSpy}
         hideEventForm={hideEventFormMock}
         missionStore={missionStore}
         event={null}
+        errors={errors}
       />
     );
   });
 
   it('calls handleSubmit on submission', () => {
-    subject.find(RadioButtons).simulate('change', {target: {name: 'eventType', value: EventType.Appointment}});
+    const appointment = EventType.Appointment;
+    subject.find(`input[value="${appointment}"]`).simulate('change', {target: {name: 'eventType', value: appointment}});
     subject.find(TextInput).at(0).simulate('change', {target: {name: 'title', value: 'Title'}});
     subject.find(TextInput).at(1).simulate('change', {target: {name: 'description', value: 'Description'}});
     subject.find(DatePicker).at(0).simulate('change', {target: {name: 'startDate', value: '2018-01-10'}});
@@ -82,6 +85,10 @@ describe('EventForm', () => {
     expect(handleSubmitSpy).toHaveBeenCalledWith(event);
   });
 
+  it('has the mission type selected by default', () => {
+    expect(subject.find(RadioButtons).prop('value')).toBe(EventType.Mission);
+  });
+
   it('populates the form with a selected mission attributes', () => {
     (subject.instance() as EventForm).handleMissionSelect([{value: 'missionId1', label: 'ato1'}]);
     subject.update();
@@ -94,11 +101,9 @@ describe('EventForm', () => {
   });
 
   it('renders a form field validation', () => {
-    const dateTime = moment.utc('2018-01-10 00:00', 'YYYY-MM-DD HH:mm');
-    const errors = [{title: 'Field is required'}];
-    const event = new EventModel('Title', 'Description', dateTime, dateTime, airmanId, EventType.Leave, 1, errors);
-    subject.setProps({event: event});
-
-    expect(subject.find(FieldValidation).length).toBe(3);
+    errors = [{title: 'Field is required'}];
+    subject.setProps({errors: errors});
+    expect(subject.find('.error-msg').length).toBe(1);
   });
+
 });

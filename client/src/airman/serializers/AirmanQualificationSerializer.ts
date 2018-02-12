@@ -19,7 +19,8 @@ export class AirmanQualificationSerializer implements Serializer<AirmanQualifica
       ),
       moment.utc(item.earnDate),
       moment.utc(item.expirationDate),
-      item.id
+      item.id,
+      item.errors,
     );
   }
 }

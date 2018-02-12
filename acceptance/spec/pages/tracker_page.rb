@@ -141,7 +141,6 @@ class TrackerPage
       skill.delete_certification
       expect(skill.certification_exists?).to be false
     end
-
     skill.create_certification
     expect(skill.certification_exists?).to be true
 
@@ -151,6 +150,14 @@ class TrackerPage
 
     skill.delete_certification
     expect(skill.certification_exists?).to be false
+  end
+
+  def assert_create_skill_validation
+    click_on_airman('Keeter')
+    skill = Skill.new
+
+    skill.create_invalid
+    expect(page.has_content?('This field is required.')).to be true
   end
 
   private

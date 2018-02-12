@@ -17,7 +17,6 @@ export default class EventSerializer implements Serializer<EventModel> {
       item.airmanId,
       item.type,
       item.id,
-      item.errors,
     );
   }
 }
