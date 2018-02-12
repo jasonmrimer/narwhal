@@ -81,8 +81,11 @@ export default styled(MultiSelect)`
     
     li {
       list-style: none;
+      padding: 0.5rem 0;
       a {
         text-decoration: none;
+        display: inline-block;
+        width: 100%;
       }
       
       span {

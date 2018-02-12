@@ -98,7 +98,6 @@ export class EventForm extends React.Component<Props, EventFormState> {
   render() {
     return (
       <form className={this.props.className} onSubmit={this.handleSubmit}>
-
         <a className="back" onClick={this.props.hideEventForm}>
           <BackIcon color={theme.graySteel}/>
           <span>Back to Week View</span>
@@ -178,21 +177,21 @@ export class EventForm extends React.Component<Props, EventFormState> {
 }
 
 export default styled(EventForm)`
+  
   text-align: left;
   display: flex;
   flex-direction: column;
   color: ${props => props.theme.graySteel};
  
- .form-wrapper {
-    margin: 0 1rem;
- }
-  .date-time-input-row {
+   .form-wrapper {
+      margin: 0 1rem;
+   }
+ 
   .input-row {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin: 1rem 0rem;
-    margin: 1rem 1rem 0rem 1rem; 
+    margin: 0.5rem 0;
   }
   
   .form-row {
@@ -200,13 +199,13 @@ export default styled(EventForm)`
       flex-direction: row-reverse;
       margin-top: 2rem;
       align-items: baseline;
-  };
+  }
   
   .styled-select {
     margin: 1rem 1rem 0;
   }
   
-  .back{
+  .back {
     cursor: pointer;
     fill: ${props => props.theme.graySteel};
     background: none;
@@ -216,6 +215,7 @@ export default styled(EventForm)`
     justify-content: center;
     align-items: center;
     margin: 1.5rem 0;
+    
     span {
       margin-left: 0.5rem;
     }
