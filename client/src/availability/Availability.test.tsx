@@ -107,14 +107,7 @@ describe('Availability', () => {
     subject.find('button.add-event').simulate('click');
     subject.find(EventForm).find('a.back').simulate('click');
     subject.update();
-    expect(subject.state('showEventForm')).toBeFalsy();
+    expect(trackerStore.availabilityStore.showEventForm).toBeFalsy();
     expect(subject.find(StyledEventForm).exists()).toBeFalsy();
-  });
-
-  it('closes the event form when event is cleared', () => {
-    subject.find('button.add-event').simulate('click');
-    trackerStore.clearSelectedEvent();
-    subject.setProps({trackerStore: trackerStore});
-    expect(subject.state('showEventForm')).toBeFalsy();
   });
 });

@@ -17,6 +17,8 @@ import DashboardStore from './dashboard/stores/DashboardStore';
 import { MomentTimeService } from './tracker/services/MomentTimeService';
 import WebEventRepository from './event/repositories/web/WebEventRepository';
 import { default as WebSkillRepository } from './skills/repositories/web/WebSkillRepository';
+import AvailabilityStore from './availability/stores/AvailabilityStore';
+import CurrencyStore from './currency/stores/CurrencyStore';
 
 document.body.style.fontFamily = theme.fontFamily;
 document.body.style.color = theme.fontColor;
@@ -35,6 +37,8 @@ const trackerStore = new TrackerStore(
   new WebSkillRepository(),
   new WebEventRepository(),
   new WebMissionRepository(),
+  new CurrencyStore(),
+  new AvailabilityStore(),
   new MomentTimeService()
 );
 

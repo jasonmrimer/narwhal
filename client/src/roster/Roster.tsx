@@ -137,6 +137,10 @@ export default styled(Roster)`
     padding: 0.75rem;
   }
   
+  .selected {
+    box-shadow: inset 0.5rem 0px 0px ${props => props.theme.yellow};
+  }
+  
   .name{
     width: 16%;
   }

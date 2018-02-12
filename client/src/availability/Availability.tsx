@@ -15,24 +15,16 @@ interface Props {
   className?: string;
 }
 
-interface State {
-  showEventForm: boolean;
-}
-
 @observer
-export class Availability extends React.Component<Props, State> {
-  state: State = {showEventForm: false};
-
-  componentWillReceiveProps() {
-    if (this.props.trackerStore.selectedEvent == null) {
-      this.setState({showEventForm: false});
-    }
-  }
-
+export class Availability extends React.Component<Props> {
   render() {
     return (
       <div className={this.props.className}>
-        {this.state.showEventForm ? this.renderEventForm() : this.renderAvailability()}
+        {
+          this.props.trackerStore.availabilityStore.showEventForm ?
+            this.renderEventForm() :
+            this.renderAvailability()
+        }
       </div>
     );
   }
@@ -43,7 +35,7 @@ export class Availability extends React.Component<Props, State> {
         airmanId={this.props.trackerStore.selectedAirman.id}
         hideEventForm={this.closeEventForm}
         handleSubmit={this.submitAndCloseEventForm}
-        event={this.props.trackerStore.selectedEvent}
+        event={this.props.trackerStore.availabilityStore.selectedEvent}
         missions={this.props.trackerStore.missions}
         missionOptions={this.props.trackerStore.missionOptions}
       />
@@ -58,8 +50,8 @@ export class Availability extends React.Component<Props, State> {
   }
 
   private closeEventForm = () => {
-    this.props.trackerStore.clearSelectedEvent();
-    this.setState({showEventForm: false});
+    this.props.trackerStore.availabilityStore.clearSelectedEvent();
+    this.props.trackerStore.availabilityStore.setShowEventForm(false);
   }
 
   private renderAvailability = () => {
@@ -108,7 +100,7 @@ export class Availability extends React.Component<Props, State> {
           <AvailabilityTile
             key={index}
             event={event}
-            deleteEvent={this.props.trackerStore.setPendingDeleteEvent}
+            deleteEvent={this.props.trackerStore.availabilityStore.setPendingDeleteEvent}
             editEvent={this.openEventFormForEdit}
           />
         );
@@ -116,13 +108,13 @@ export class Availability extends React.Component<Props, State> {
   }
 
   private openEventFormForCreate = () => {
-    this.props.trackerStore.clearSelectedEvent();
-    this.setState({showEventForm: true});
+    this.props.trackerStore.availabilityStore.clearSelectedEvent();
+    this.props.trackerStore.availabilityStore.setShowEventForm(true);
   }
 
   private openEventFormForEdit = (event: EventModel) => {
-    this.props.trackerStore.setSelectedEvent(event);
-    this.setState({showEventForm: true});
+    this.props.trackerStore.availabilityStore.setSelectedEvent(event);
+    this.props.trackerStore.availabilityStore.setShowEventForm(true);
   }
 }
 

@@ -9,7 +9,7 @@ import TrackerStore from './stores/TrackerStore';
 import Legend from '../roster/Legend';
 import * as moment from 'moment';
 import EventModel, { EventType } from '../event/models/EventModel';
-import DeleteEventPopup from '../roster/DeleteEventPopup';
+import DeleteEventPopup from '../event/DeleteEventPopup';
 
 let trackerStore: TrackerStore;
 let subject: ReactWrapper;
@@ -64,7 +64,7 @@ describe('Tracker', () => {
   it('renders a delete popup when there is a pending delete event', () => {
     const event = new EventModel('Title', 'Description', moment.utc(), moment.utc(), 1, EventType.Mission);
     expect(subject.find(DeleteEventPopup).exists()).toBeFalsy();
-    trackerStore.setPendingDeleteEvent(event);
+    trackerStore.availabilityStore.setPendingDeleteEvent(event);
     subject.update();
     expect(subject.find(DeleteEventPopup).exists()).toBeTruthy();
   });

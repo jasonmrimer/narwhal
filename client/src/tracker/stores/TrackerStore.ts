@@ -14,8 +14,13 @@ import SkillRepository from '../../skills/repositories/SkillRepository';
 import { Skill } from '../../skills/models/Skill';
 import { MissionModel } from '../../mission/models/MissionModel';
 import MissionRepository from '../../mission/repositories/MissionRepository';
+import CurrencyStore from '../../currency/stores/CurrencyStore';
+import AvailabilityStore from '../../availability/stores/AvailabilityStore';
 
 export default class TrackerStore {
+  public currencyStore: CurrencyStore;
+  public availabilityStore: AvailabilityStore;
+
   private airmanRepository: AirmanRepository;
   private siteRepository: SiteRepository;
   private skillRepository: SkillRepository;
@@ -36,24 +41,25 @@ export default class TrackerStore {
   @observable private _qualificationIds: number[] = [];
 
   @observable private _selectedAirman: AirmanModel = AirmanModel.empty();
-  @observable private _selectedEvent: EventModel | null = null;
 
   @observable private _plannerWeek: Moment[] = [];
   @observable private _sidePanelWeek: Moment[] = [];
-
-  @observable private _pendingDeleteEvent: EventModel | null = null;
 
   constructor(airmanRepository: AirmanRepository,
               siteRepository: SiteRepository,
               skillRepository: SkillRepository,
               eventRepository: EventRepository,
               missionRepository: MissionRepository,
+              currencyStore: CurrencyStore,
+              availabilityStore: AvailabilityStore,
               timeService: TimeService) {
     this.airmanRepository = airmanRepository;
     this.siteRepository = siteRepository;
     this.skillRepository = skillRepository;
     this.eventRepository = eventRepository;
     this.missionRepository = missionRepository;
+    this.currencyStore = currencyStore;
+    this.availabilityStore = availabilityStore;
     this.TimeService = timeService;
     this._plannerWeek = this.TimeService.getCurrentWeek();
     this._sidePanelWeek = this.TimeService.getCurrentWeek();
@@ -221,8 +227,14 @@ export default class TrackerStore {
   @action.bound
   setSelectedAirman(airman: AirmanModel) {
     this._selectedAirman = airman;
+
     this._sidePanelWeek = airman.isEmpty ? this._plannerWeek : this._sidePanelWeek;
-    this._selectedEvent = null;
+
+    this.availabilityStore.clearSelectedEvent();
+    this.availabilityStore.setShowEventForm(false);
+
+    this.currencyStore.clearSelectedSkill();
+    this.currencyStore.setShowSkillForm(false);
   }
 
   @action.bound
@@ -230,26 +242,11 @@ export default class TrackerStore {
     this.setSelectedAirman(AirmanModel.empty());
   }
 
-  @computed
-  get selectedEvent() {
-    return this._selectedEvent;
-  }
-
-  @action.bound
-  setSelectedEvent(event: EventModel) {
-    this._selectedEvent = event;
-  }
-
-  @action.bound
-  clearSelectedEvent() {
-    this._selectedEvent = null;
-  }
-
   @action.bound
   async addEvent(event: EventModel) {
     const pendingEvent = await this.eventRepository.save(event);
     if (pendingEvent.errors) {
-      this._selectedEvent = pendingEvent;
+      this.availabilityStore.setSelectedEvent(pendingEvent);
     } else {
       this._airmen = await this.airmanRepository.findAll();
       this._selectedAirman = this._airmen.find(a => a.id === event.airmanId)!;
@@ -258,23 +255,13 @@ export default class TrackerStore {
   }
 
   @action.bound
-  setPendingDeleteEvent(event: EventModel | null = null) {
-    this._pendingDeleteEvent = event;
-  }
-
-  @computed
-  get pendingDeleteEvent() {
-    return this._pendingDeleteEvent;
-  }
-
-  @action.bound
   async deleteEvent() {
     try {
-      const event = this._pendingDeleteEvent!;
+      const event = this.availabilityStore.pendingDeleteEvent!;
       await this.eventRepository.delete(event);
       this._airmen = await this.airmanRepository.findAll();
       this._selectedAirman = this._airmen.find(a => a.id === event.airmanId)!;
-      this.setPendingDeleteEvent(null);
+      this.availabilityStore.setPendingDeleteEvent(null);
     } catch (e) {
       // TODO : handle me!
     }

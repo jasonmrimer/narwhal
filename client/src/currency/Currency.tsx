@@ -12,26 +12,16 @@ interface Props {
   className?: string;
 }
 
-interface State {
-  showForm: boolean;
-  selectedSkill: Skill | null;
-}
-
 @observer
-export class Currency extends React.Component<Props, State> {
-  state = {
-    showForm: false,
-    selectedSkill: null
-  };
-
-  componentWillReceiveProps() {
-    this.setState({showForm: false});
-  }
-
+export class Currency extends React.Component<Props> {
   render() {
     return (
       <div className={this.props.className}>
-        {this.state.showForm ? this.renderSkillsForm() : this.renderSkillsList()}
+        {
+          this.props.trackerStore.currencyStore.showSkillForm ?
+            this.renderSkillsForm() :
+            this.renderSkillsList()
+        }
       </div>
     );
   }
@@ -45,7 +35,7 @@ export class Currency extends React.Component<Props, State> {
         airmanId={airman.id}
         qualifications={qualifications}
         certifications={certifications}
-        skill={this.state.selectedSkill}
+        skill={this.props.trackerStore.currencyStore.selectedSkill}
         handleSubmit={this.createAirmanSkill}
         handleDelete={this.deleteAirmanSkill}
       />
@@ -54,12 +44,14 @@ export class Currency extends React.Component<Props, State> {
 
   private createAirmanSkill = async (skill: Skill) => {
     await this.props.trackerStore.addAirmanSkill(skill);
-    this.setState({showForm: false, selectedSkill: null});
+    this.props.trackerStore.currencyStore.clearSelectedSkill();
+    this.props.trackerStore.currencyStore.setShowSkillForm(false);
   }
 
   private deleteAirmanSkill = async (skill: Skill) => {
     await this.props.trackerStore.deleteAirmanSkill(skill);
-    this.setState({showForm: false, selectedSkill: null});
+    this.props.trackerStore.currencyStore.clearSelectedSkill();
+    this.props.trackerStore.currencyStore.setShowSkillForm(false);
   }
 
   private renderSkillsList = () => {
@@ -98,11 +90,13 @@ export class Currency extends React.Component<Props, State> {
   }
 
   private openSkillFormForCreate = () => {
-    this.setState({showForm: true, selectedSkill: null});
+    this.props.trackerStore.currencyStore.clearSelectedSkill();
+    this.props.trackerStore.currencyStore.setShowSkillForm(true);
   }
 
   private openSkillFormForEdit = (skill: Skill) => {
-    this.setState({showForm: true, selectedSkill: skill});
+    this.props.trackerStore.currencyStore.setSelectedSkill(skill);
+    this.props.trackerStore.currencyStore.setShowSkillForm(true);
   }
 }
 

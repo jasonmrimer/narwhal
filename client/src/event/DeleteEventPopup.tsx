@@ -1,5 +1,5 @@
 import * as React from 'react';
-import EventModel from '../event/models/EventModel';
+import EventModel from './models/EventModel';
 import { observer } from 'mobx-react/custom';
 import styled from 'styled-components';
 

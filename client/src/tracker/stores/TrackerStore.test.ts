@@ -15,6 +15,9 @@ import AirmanQualificationModel from '../../airman/models/AirmanQualificationMod
 import AirmanCertificationModel from '../../airman/models/AirmanCertificationModel';
 import CertificationModel from '../../skills/models/CertificationModel';
 import MissionRepositoryStub from '../../mission/repositories/doubles/MissionRepositoryStub';
+import AirmanQualificationModelFactory from '../../airman/factories/AirmanQualificationModelFactory';
+import AvailabilityStore from '../../availability/stores/AvailabilityStore';
+import CurrencyStore from '../../currency/stores/CurrencyStore';
 
 describe('TrackerStore', () => {
   const airmenRepository = new AirmanRepositoryStub();
@@ -34,6 +37,8 @@ describe('TrackerStore', () => {
       skillRepository,
       eventRepository,
       missionRepository,
+      new CurrencyStore(),
+      new AvailabilityStore(),
       timeServiceStub,
     );
     await subject.hydrate();
@@ -218,22 +223,22 @@ describe('TrackerStore', () => {
 
       it('should set pending delete event', async () => {
         const savedEvent = await subject.addEvent(event);
-        expect(subject.pendingDeleteEvent).toBeNull();
-        subject.setPendingDeleteEvent(savedEvent);
-        expect(subject.pendingDeleteEvent).toEqual(savedEvent);
+        expect(subject.availabilityStore.pendingDeleteEvent).toBeNull();
+        subject.availabilityStore.setPendingDeleteEvent(savedEvent);
+        expect(subject.availabilityStore.pendingDeleteEvent).toEqual(savedEvent);
       });
 
       it('should cancel pending delete event', () => {
-        subject.setPendingDeleteEvent(null);
-        expect(subject.pendingDeleteEvent).toBeNull();
+        subject.availabilityStore.setPendingDeleteEvent(null);
+        expect(subject.availabilityStore.pendingDeleteEvent).toBeNull();
       });
 
       it('should delete an airman\'s event', async () => {
         const savedEvent = await subject.addEvent(event);
-        subject.setPendingDeleteEvent(savedEvent);
+        subject.availabilityStore.setPendingDeleteEvent(savedEvent);
         await subject.deleteEvent();
         expect(eventRepository.hasEvent(savedEvent)).toBeFalsy();
-        expect(subject.pendingDeleteEvent).toBeNull();
+        expect(subject.availabilityStore.pendingDeleteEvent).toBeNull();
       });
     });
   });
@@ -262,9 +267,27 @@ describe('TrackerStore', () => {
 
   describe('selecting an airman', () => {
     it('clears the selected event', () => {
-      subject.setSelectedEvent(new EventModel('', '', moment.utc(), moment.utc(), 1));
+      subject.availabilityStore.setSelectedEvent(new EventModel('', '', moment.utc(), moment.utc(), 1));
       subject.setSelectedAirman(AirmanModelFactory.build());
-      expect(subject.selectedEvent).toBeNull();
+      expect(subject.availabilityStore.selectedEvent).toBeNull();
+    });
+
+    it('hides the event form', () => {
+      subject.availabilityStore.setShowEventForm(true);
+      subject.setSelectedAirman(AirmanModelFactory.build());
+      expect(subject.availabilityStore.showEventForm).toBeFalsy();
+    });
+
+    it('clears the selected skill', () => {
+      subject.currencyStore.setSelectedSkill(AirmanQualificationModelFactory.build(1));
+      subject.setSelectedAirman(AirmanModelFactory.build());
+      expect(subject.currencyStore.selectedSkill).toBeNull();
+    });
+
+    it('hides the skill form', () => {
+      subject.currencyStore.setShowSkillForm(true);
+      subject.setSelectedAirman(AirmanModelFactory.build());
+      expect(subject.currencyStore.showSkillForm).toBeFalsy();
     });
 
     it('resets the side panel week', () => {

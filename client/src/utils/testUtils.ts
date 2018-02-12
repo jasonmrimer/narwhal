@@ -8,6 +8,8 @@ import TimeServiceStub from '../tracker/services/doubles/TimeServiceStub';
 import { default as SkillRepositoryStub } from '../skills/repositories/doubles/SkillRepositoryStub';
 import { Moment } from 'moment';
 import MissionRepositoryStub from '../mission/repositories/doubles/MissionRepositoryStub';
+import AvailabilityStore from '../availability/stores/AvailabilityStore';
+import CurrencyStore from '../currency/stores/CurrencyStore';
 
 export async function makeFakeTrackerStore() {
   const store = new TrackerStore(
@@ -16,6 +18,8 @@ export async function makeFakeTrackerStore() {
     new SkillRepositoryStub(),
     new EventRepositoryStub(),
     new MissionRepositoryStub(),
+    new CurrencyStore(),
+    new AvailabilityStore(),
     new TimeServiceStub(),
   );
   await store.hydrate();
