@@ -24,4 +24,12 @@ export default class AirmanModel {
     return this.qualifications.map(qualification => qualification.isExpired).some(exp => exp) ||
       this.certifications.map(certification => certification.isExpired).some(exp => exp);
   }
+
+  get qualificationIds() {
+    return this.qualifications.map(qual => qual.qualification.id);
+  }
+
+  get certificationIds() {
+    return this.certifications.map(cert => cert.certification.id);
+  }
 }

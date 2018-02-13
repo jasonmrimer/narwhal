@@ -30,7 +30,9 @@ describe('Tracker', () => {
   });
 
   it('renders a Roster with the current week', async () => {
-    expect(subject.find(Roster).prop('trackerStore').plannerWeek).toEqual(trackerStore.plannerWeek);
+    expect(
+      subject.find(Roster).prop('trackerStore').plannerStore.plannerWeek
+    ).toEqual(trackerStore.plannerStore.plannerWeek);
   });
 
   it('renders the TopBar with a username and pageTitle', async () => {

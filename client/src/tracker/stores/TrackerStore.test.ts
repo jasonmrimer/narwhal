@@ -7,7 +7,6 @@ import * as moment from 'moment';
 import EventRepositoryStub from '../../event/repositories/doubles/EventRepositoryStub';
 import { toJS } from 'mobx';
 import { UnfilteredValue } from '../../widgets/models/FilterOptionModel';
-import TimeServiceStub from '../services/doubles/TimeServiceStub';
 import AirmanModelFactory from '../../airman/factories/AirmanModelFactory';
 import { default as SkillRepositoryStub } from '../../skills/repositories/doubles/SkillRepositoryStub';
 import QualificationModel from '../../skills/models/QualificationModel';
@@ -18,6 +17,9 @@ import MissionRepositoryStub from '../../mission/repositories/doubles/MissionRep
 import AirmanQualificationModelFactory from '../../airman/factories/AirmanQualificationModelFactory';
 import AvailabilityStore from '../../availability/stores/AvailabilityStore';
 import CurrencyStore from '../../currency/stores/CurrencyStore';
+import PlannerStore from '../../roster/planner/stores/PlannerStore';
+import TimeServiceStub from '../services/doubles/TimeServiceStub';
+import MissionStore from '../../mission/stores/MissionStore';
 
 describe('TrackerStore', () => {
   const airmenRepository = new AirmanRepositoryStub();
@@ -36,10 +38,10 @@ describe('TrackerStore', () => {
       siteRepository,
       skillRepository,
       eventRepository,
-      missionRepository,
       new CurrencyStore(),
       new AvailabilityStore(),
-      timeServiceStub,
+      new PlannerStore(timeServiceStub),
+      new MissionStore(missionRepository),
     );
     await subject.hydrate();
   });
@@ -91,14 +93,6 @@ describe('TrackerStore', () => {
 
   it('returns an empty list of flight options', () => {
     expect(subject.flightOptions).toEqual([]);
-  });
-
-  it('returns a list of mission options', () => {
-    expect(subject.missionOptions).toEqual([
-      {value: 'missionId1', label: 'ato1'},
-      {value: 'missionId2', label: 'ato2'},
-      {value: 'missionId3', label: 'ato3'}
-    ]);
   });
 
   describe('filtering by site', () => {
@@ -243,28 +237,6 @@ describe('TrackerStore', () => {
     });
   });
 
-  describe('changing time', () => {
-    it('will increment the planner week and change the side panel week', () => {
-      expect(subject.plannerWeek[0].isSame(moment.utc('2017-11-26T00:00:00.000Z'))).toBeTruthy();
-      subject.incrementPlannerWeek();
-      expect(subject.plannerWeek[0].isSame(moment.utc('2017-12-03T00:00:00.000Z'))).toBeTruthy();
-      expect(subject.sidePanelWeek[0].isSame(moment.utc('2017-12-03T00:00:00.000Z'))).toBeTruthy();
-    });
-
-    it('will increment the side panel week but not change the planner week', () => {
-      expect(subject.plannerWeek[0].isSame(moment.utc('2017-11-26T00:00:00.000Z'))).toBeTruthy();
-      subject.incrementSidePanelWeek();
-      expect(subject.plannerWeek[0].isSame(moment.utc('2017-11-26T00:00:00.000Z'))).toBeTruthy();
-      expect(subject.sidePanelWeek[0].isSame(moment.utc('2017-12-03T00:00:00.000Z'))).toBeTruthy();
-    });
-
-    it('will decrement the planner week', () => {
-      expect(subject.plannerWeek[0].isSame(moment.utc('2017-11-26T00:00:00.000Z'))).toBeTruthy();
-      subject.decrementPlannerWeek();
-      expect(subject.plannerWeek[0].isSame(moment.utc('2017-11-19T00:00:00.000Z'))).toBeTruthy();
-    });
-  });
-
   describe('selecting an airman', () => {
     it('clears the selected event', () => {
       subject.availabilityStore.setSelectedEvent(new EventModel('', '', moment.utc(), moment.utc(), 1));
@@ -291,12 +263,12 @@ describe('TrackerStore', () => {
     });
 
     it('resets the side panel week', () => {
-      expect(subject.sidePanelWeek[0].isSame(subject.plannerWeek[0])).toBeTruthy();
-      subject.incrementSidePanelWeek();
-      expect(subject.sidePanelWeek[0].isSame(subject.plannerWeek[0])).toBeFalsy();
+      expect(subject.plannerStore.sidePanelWeek[0].isSame(subject.plannerStore.plannerWeek[0])).toBeTruthy();
+      subject.plannerStore.incrementSidePanelWeek();
+      expect(subject.plannerStore.sidePanelWeek[0].isSame(subject.plannerStore.plannerWeek[0])).toBeFalsy();
 
       subject.clearSelectedAirman();
-      expect(subject.sidePanelWeek[0].isSame(subject.plannerWeek[0])).toBeTruthy();
+      expect(subject.plannerStore.sidePanelWeek[0].isSame(subject.plannerStore.plannerWeek[0])).toBeTruthy();
     });
   });
 

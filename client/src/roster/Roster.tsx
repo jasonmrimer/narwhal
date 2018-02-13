@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import Planner from './Planner';
+import Planner from './planner/Planner';
 import { observer } from 'mobx-react';
 import TrackerStore from '../tracker/stores/TrackerStore';
 import PlannerHeader from '../widgets/PlannerHeader';
@@ -34,11 +34,7 @@ export class Roster extends React.Component<Props> {
               <div>CERTIFICATION</div>
               {this.renderCertificationFilter()}
             </th>
-            <PlannerHeader
-              plannerWeek={this.props.trackerStore.plannerWeek}
-              incrementPlannerWeek={this.props.trackerStore.incrementPlannerWeek}
-              decrementPlannerWeek={this.props.trackerStore.decrementPlannerWeek}
-            />
+            <PlannerHeader plannerStore={this.props.trackerStore.plannerStore} />
           </tr>
           </thead>
           <tbody>
@@ -69,7 +65,7 @@ export class Roster extends React.Component<Props> {
           <td>{formatAttributes(airman.qualifications, 'acronym')}</td>
           <td className="certification-row">{formatAttributes(airman.certifications, 'title')}</td>
 
-          <Planner events={airman.events} week={this.props.trackerStore.plannerWeek}/>
+          <Planner events={airman.events} week={this.props.trackerStore.plannerStore.plannerWeek}/>
         </tr>
       );
     });

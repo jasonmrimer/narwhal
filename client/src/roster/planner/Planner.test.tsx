@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { shallow } from 'enzyme';
 import { Planner } from './Planner';
-import EventModel, { EventType } from '../event/models/EventModel';
+import EventModel, { EventType } from '../../event/models/EventModel';
 import * as moment from 'moment';
-import AppointmentIcon from '../icons/AppointmentIcon';
-import LeaveIcon from '../icons/LeaveIcon';
-import MissionIcon from '../icons/MissionIcon';
-import AvailableIcon from '../icons/AvailableIcon';
-import TimeServiceStub from '../tracker/services/doubles/TimeServiceStub';
+import AppointmentIcon from '../../icons/AppointmentIcon';
+import LeaveIcon from '../../icons/LeaveIcon';
+import MissionIcon from '../../icons/MissionIcon';
+import AvailableIcon from '../../icons/AvailableIcon';
+import TimeServiceStub from '../../tracker/services/doubles/TimeServiceStub';
 
 describe('Planner', () => {
   it('renders airmen high-level availability', () => {

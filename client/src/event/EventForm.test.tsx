@@ -9,13 +9,14 @@ import TextInput from '../widgets/TextInput';
 import RadioButtons from '../widgets/RadioButtons';
 import FieldValidation from '../widgets/FieldValidation';
 import TimeInput from '../widgets/TimeInput';
-import { MissionModel } from '../mission/models/MissionModel';
+import MissionStore from '../mission/stores/MissionStore';
+import MissionRepositoryStub from '../mission/repositories/doubles/MissionRepositoryStub';
 import Mock = jest.Mock;
 
 describe('EventForm', () => {
   const airmanId = 123;
-  const startTime = moment.utc();
-  const endTime = moment.utc();
+  const startTime = moment.utc('2018-01-01T01:00:00Z');
+  const endTime = moment.utc('2018-01-01T11:00:00Z');
 
   let handleSubmitSpy: Mock;
   let hideEventFormMock: Mock;
@@ -24,13 +25,15 @@ describe('EventForm', () => {
   beforeEach(() => {
     hideEventFormMock = jest.fn();
     handleSubmitSpy = jest.fn();
+    const missionStore = new MissionStore(new MissionRepositoryStub());
+    missionStore.hydrate();
+
     subject = shallow(
       <EventForm
         airmanId={airmanId}
         handleSubmit={handleSubmitSpy}
         hideEventForm={hideEventFormMock}
-        missions={[new MissionModel('mission1', 'mission1', startTime, endTime)]}
-        missionOptions={[{value: 'mission1', label: 'mission1'}]}
+        missionStore={missionStore}
         event={null}
       />
     );
@@ -80,10 +83,10 @@ describe('EventForm', () => {
   });
 
   it('populates the form with a selected mission attributes', () => {
-    (subject.instance() as EventForm).handleMissionSelect([{value: 'mission1', label: 'mission1 label'}]);
+    (subject.instance() as EventForm).handleMissionSelect([{value: 'missionId1', label: 'ato1'}]);
     subject.update();
 
-    expect(subject.find(TextInput).at(0).prop('value')).toBe('mission1');
+    expect(subject.find(TextInput).at(0).prop('value')).toBe('ato1');
     expect(subject.find(DatePicker).at(0).prop('dateValue')).toEqual(startTime.format('YYYY-MM-DD'));
     expect(subject.find(TimeInput).at(0).prop('timeValue')).toEqual(startTime.format('HH:mm'));
     expect(subject.find(DatePicker).at(1).prop('dateValue')).toEqual(endTime.format('YYYY-MM-DD'));

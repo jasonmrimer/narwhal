@@ -36,8 +36,7 @@ export class Availability extends React.Component<Props> {
         hideEventForm={this.closeEventForm}
         handleSubmit={this.submitAndCloseEventForm}
         event={this.props.trackerStore.availabilityStore.selectedEvent}
-        missions={this.props.trackerStore.missions}
-        missionOptions={this.props.trackerStore.missionOptions}
+        missionStore={this.props.trackerStore.missionStore}
       />
     );
   }
@@ -56,7 +55,7 @@ export class Availability extends React.Component<Props> {
 
   private renderAvailability = () => {
     const {trackerStore} = this.props;
-    const week = trackerStore.sidePanelWeek;
+    const week = trackerStore.plannerStore.sidePanelWeek;
     return (
       <div>
         <div className="event-control-row">
@@ -65,19 +64,19 @@ export class Availability extends React.Component<Props> {
           </button>
         </div>
         <div className="nav-row">
-          <button className="last-week" onClick={trackerStore.decrementSidePanelWeek}>
+          <button className="last-week" onClick={trackerStore.plannerStore.decrementSidePanelWeek}>
             <BackIcon width={12} height={12}/>
           </button>
           <h3>
             {week[0].format('DD MMM').toUpperCase()} - {week[6].format('DD MMM').toUpperCase()}
           </h3>
-          <button className="next-week" onClick={trackerStore.incrementSidePanelWeek}>
+          <button className="next-week" onClick={trackerStore.plannerStore.incrementSidePanelWeek}>
             <NextIcon width={12} height={12}/>
           </button>
         </div>
         <div className="availability">
           {
-            trackerStore.sidePanelWeek.map((day, index) => {
+            trackerStore.plannerStore.sidePanelWeek.map((day, index) => {
               return (
                 <div id={`day-${index}`} key={index}>
                   <div className="event-date">{day.format('ddd, DD MMM YY').toUpperCase()}</div>

@@ -4,11 +4,10 @@ import NextIcon from '../icons/NextIcon';
 import { Moment } from 'moment';
 import styled from 'styled-components';
 import * as classNames from 'classnames';
+import PlannerStore from '../roster/planner/stores/PlannerStore';
 
 interface Props {
-  plannerWeek: Moment[];
-  incrementPlannerWeek: () => void;
-  decrementPlannerWeek: () => void;
+  plannerStore: PlannerStore;
   className?: string;
 }
 
@@ -31,18 +30,18 @@ export const PlannerHeader = (props: Props) => {
   return (
     <th className={classNames(props.className, 'planner-header')}>
       <div className="month-header">
-        {props.plannerWeek[0].format('MMMM YYYY').toUpperCase()}
+        {props.plannerStore.plannerWeek[0].format('MMMM YYYY').toUpperCase()}
       </div>
       <span className="planner-day-navigation">
         <span className="button-header">
-          <button className="last-week" onClick={props.decrementPlannerWeek}>
+          <button className="last-week" onClick={props.plannerStore.decrementPlannerWeek}>
             <BackIcon height={14} width={14}/>
           </button>
         </span>
 
-        {renderWeek(props.plannerWeek)}
+        {renderWeek(props.plannerStore.plannerWeek)}
         <span className="button-header">
-          <button className="next-week" onClick={props.incrementPlannerWeek}>
+          <button className="next-week" onClick={props.plannerStore.incrementPlannerWeek}>
             <NextIcon height={14} width={14}/>
           </button>
         </span>

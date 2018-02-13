@@ -9,17 +9,16 @@ import TextInput from '../widgets/TextInput';
 import TimeInput from '../widgets/TimeInput';
 import SubmitButton from '../widgets/SubmitButton';
 import RadioButtons from '../widgets/RadioButtons';
-import { MissionModel } from '../mission/models/MissionModel';
 import TypeAheadInput from '../widgets/TypeAheadInput';
 import FilterOption from '../widgets/models/FilterOptionModel';
+import MissionStore from '../mission/stores/MissionStore';
 
 interface Props {
   airmanId: number;
   hideEventForm: () => void;
   handleSubmit: (event: EventModel) => void;
   event: EventModel | null;
-  missions: MissionModel[];
-  missionOptions: FilterOption[];
+  missionStore: MissionStore;
   className?: string;
 }
 
@@ -77,7 +76,7 @@ export class EventForm extends React.Component<Props, EventFormState> {
 
   handleMissionSelect = (item: FilterOption[]) => {
     if (item.length > 0) {
-      const selectedMission = this.props.missions.find(mission => mission.missionId === item[0].value)!;
+      const selectedMission = this.props.missionStore.missions.find(mission => mission.missionId === item[0].value)!;
       const endDateAndTime = selectedMission.endDateTime;
 
       const attrs = {
@@ -115,7 +114,7 @@ export class EventForm extends React.Component<Props, EventFormState> {
           this.state.eventType === EventType.Mission &&
           <TypeAheadInput
               multiple={false}
-              options={this.props.missionOptions}
+              options={this.props.missionStore.missionOptions}
               onChange={this.handleMissionSelect}
               placeholder="Mission ID"
           />

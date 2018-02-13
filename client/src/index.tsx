@@ -19,6 +19,8 @@ import WebEventRepository from './event/repositories/web/WebEventRepository';
 import { default as WebSkillRepository } from './skills/repositories/web/WebSkillRepository';
 import AvailabilityStore from './availability/stores/AvailabilityStore';
 import CurrencyStore from './currency/stores/CurrencyStore';
+import PlannerStore from './roster/planner/stores/PlannerStore';
+import MissionStore from './mission/stores/MissionStore';
 
 document.body.style.fontFamily = theme.fontFamily;
 document.body.style.color = theme.fontColor;
@@ -36,10 +38,10 @@ const trackerStore = new TrackerStore(
   siteRepository,
   new WebSkillRepository(),
   new WebEventRepository(),
-  new WebMissionRepository(),
   new CurrencyStore(),
   new AvailabilityStore(),
-  new MomentTimeService()
+  new PlannerStore(new MomentTimeService()),
+  new MissionStore(new WebMissionRepository())
 );
 
 ReactDOM.render(

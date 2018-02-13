@@ -1,12 +1,12 @@
 import * as React from 'react';
 import { Moment } from 'moment';
 import * as classNames from 'classnames';
-import EventModel, { EventType } from '../event/models/EventModel';
-import AppointmentIcon from '../icons/AppointmentIcon';
-import LeaveIcon from '../icons/LeaveIcon';
-import MissionIcon from '../icons/MissionIcon';
-import AvailableIcon from '../icons/AvailableIcon';
-import { doesDayHaveEvent } from '../utils/eventUtil';
+import EventModel, { EventType } from '../../event/models/EventModel';
+import AppointmentIcon from '../../icons/AppointmentIcon';
+import LeaveIcon from '../../icons/LeaveIcon';
+import MissionIcon from '../../icons/MissionIcon';
+import AvailableIcon from '../../icons/AvailableIcon';
+import { doesDayHaveEvent } from '../../utils/eventUtil';
 import styled from 'styled-components';
 
 interface Props {
