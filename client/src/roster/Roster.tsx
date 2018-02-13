@@ -5,6 +5,7 @@ import { observer } from 'mobx-react';
 import TrackerStore from '../tracker/stores/TrackerStore';
 import PlannerHeader from '../widgets/PlannerHeader';
 import MultiSelect from '../widgets/TypeAheadInput';
+import Notification from '../widgets/Notification';
 
 interface Props {
   trackerStore: TrackerStore;
@@ -17,40 +18,45 @@ const formatAttributes = (objArray: object[], key: string) => objArray.map((obje
 export class Roster extends React.Component<Props> {
   render() {
     return (
-      <table className={this.props.className}>
-        <caption>Roster</caption>
-        <thead>
-        <tr>
-          <th className="name">
-            <div>NAME</div>
-          </th>
-          <th className="qualification">
-            <div>QUALIFICATION</div>
-            {this.renderQualificationFilter()}
-          </th>
-          <th className="certification">
-            <div>CERTIFICATION</div>
-            {this.renderCertificationFilter()}
-          </th>
-          <PlannerHeader
-            plannerWeek={this.props.trackerStore.plannerWeek}
-            incrementPlannerWeek={this.props.trackerStore.incrementPlannerWeek}
-            decrementPlannerWeek={this.props.trackerStore.decrementPlannerWeek}
-          />
-        </tr>
-        </thead>
-        <tbody>
-        {this.renderAirmen()}
-        </tbody>
-      </table>
+      <div className={this.props.className}>
+        <table>
+          <caption>Roster</caption>
+          <thead>
+          <tr>
+            <th className="name">
+              <div>NAME</div>
+            </th>
+            <th className="qualification">
+              <div>QUALIFICATION</div>
+              {this.renderQualificationFilter()}
+            </th>
+            <th className="certification">
+              <div>CERTIFICATION</div>
+              {this.renderCertificationFilter()}
+            </th>
+            <PlannerHeader
+              plannerWeek={this.props.trackerStore.plannerWeek}
+              incrementPlannerWeek={this.props.trackerStore.incrementPlannerWeek}
+              decrementPlannerWeek={this.props.trackerStore.decrementPlannerWeek}
+            />
+          </tr>
+          </thead>
+          <tbody>
+          {this.renderAirmen()}
+          </tbody>
+        </table>
+        {
+          this.props.trackerStore.airmen.length === 0 &&
+          <Notification>No members at this location match your search.</Notification>
+        }
+      </div>
     );
   }
 
   private renderAirmen() {
-    const selectedAirman = this.props.trackerStore.selectedAirman;
-
+    const selectedAirmanId = this.props.trackerStore.selectedAirman.id;
     return this.props.trackerStore.airmen.map((airman, index) => {
-      const className = airman.id === selectedAirman.id ? 'selected' : '';
+      const className = airman.id === selectedAirmanId ? 'selected' : '';
       return (
         <tr
           key={index}
@@ -95,11 +101,13 @@ export class Roster extends React.Component<Props> {
 }
 
 export default styled(Roster)`
-  border-collapse: collapse;
-  background-color: ${props => props.theme.dark};
   border: 1px solid ${props => props.theme.graySteel};
-  border-top: none;
-  width: 100%;
+  
+  table { 
+    border-collapse: collapse;
+    background-color: ${props => props.theme.dark};
+    width: 100%;
+  }
   
   caption {
     display: none;
@@ -115,7 +123,7 @@ export default styled(Roster)`
       font-weight: 500;
       font-weight: normal;
     }
-  };
+  }
    
   tbody tr:hover {
     background-color: ${props => props.theme.darker}
@@ -133,7 +141,8 @@ export default styled(Roster)`
     }
   }
   
-  td, th {
+  td, 
+  th {
     padding: 0.75rem;
   }
   

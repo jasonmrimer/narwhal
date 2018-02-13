@@ -11,7 +11,7 @@ import MissionRepositoryStub from '../mission/repositories/doubles/MissionReposi
 import AvailabilityStore from '../availability/stores/AvailabilityStore';
 import CurrencyStore from '../currency/stores/CurrencyStore';
 
-export async function makeFakeTrackerStore() {
+export async function makeFakeTrackerStore(shouldHydrateState: boolean = true) {
   const store = new TrackerStore(
     new AirmanRepositoryStub(),
     new SiteRepositoryStub(),
@@ -22,7 +22,9 @@ export async function makeFakeTrackerStore() {
     new AvailabilityStore(),
     new TimeServiceStub(),
   );
-  await store.hydrate();
+  if (shouldHydrateState) {
+    await store.hydrate();
+  }
   return store;
 }
 

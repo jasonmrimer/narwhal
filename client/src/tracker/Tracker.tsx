@@ -58,11 +58,7 @@ export class Tracker extends React.Component<Props> {
               <div>
                 <Legend/>
               </div>
-              <div className="roster">
-                <Roster
-                  trackerStore={this.props.trackerStore}
-                />
-              </div>
+              <Roster trackerStore={this.props.trackerStore}/>
             </div>
             {
               !this.props.trackerStore.selectedAirman.isEmpty &&
@@ -103,9 +99,5 @@ export default styled(Tracker)`
   
   .main {
     width: 100%;
-  }
-  
-  .roster {
-    display: flex;
   }
  `;

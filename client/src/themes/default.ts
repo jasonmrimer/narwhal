@@ -1,15 +1,18 @@
 export default Object.freeze({
-  fontFamily: 'Roboto',
+  fontFamily: 'Roboto, Arial, Helvetica, sans-serif',
   fontSize: '16',
   fontColor: '#fff',
+
   lighter: '#363636',
   light: '#272727',
   dark: '#222',
-  darkest: '#000',
-  yellow: '#E9A90F',
-  graySteel: '#ADADAD',
   darker: '#1D1D1D',
+  darkest: '#000',
+
+  yellow: '#E9A90F',
+
+  graySteel: '#ADADAD',
   darkSteel: '#9CA9B9',
   blueSteel: '#5C6977',
   hoverBlueSteel: '#475767',
- });
+});
