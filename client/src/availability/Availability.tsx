@@ -37,6 +37,7 @@ export class Availability extends React.Component<Props> {
         handleSubmit={this.submitAndCloseEventForm}
         event={this.props.trackerStore.availabilityStore.selectedEvent}
         errors={this.props.trackerStore.availabilityStore.errors}
+        setPendingDelete={this.props.trackerStore.availabilityStore.setPendingDeleteEvent}
         missionStore={this.props.trackerStore.missionStore}
       />
     );
@@ -100,7 +101,6 @@ export class Availability extends React.Component<Props> {
           <StyledAvailabilityTile
             key={index}
             event={event}
-            deleteEvent={this.props.trackerStore.availabilityStore.setPendingDeleteEvent}
             editEvent={this.openEventFormForEdit}
           />
         );

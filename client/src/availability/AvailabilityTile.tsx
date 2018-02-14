@@ -2,28 +2,18 @@ import * as React from 'react';
 import { EventModel } from '../event/models/EventModel';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
-import { DeleteIcon } from '../icons/DeleteIcon';
 
 interface Props {
   event: EventModel;
-  deleteEvent: (event: EventModel) => void;
   editEvent: (event: EventModel) => void;
   className?: string;
 }
-
-const handleDelete = (e: React.MouseEvent<HTMLButtonElement>, props: Props) => {
-  e.stopPropagation();
-  props.deleteEvent(props.event);
-};
 
 export const AvailabilityTile = observer((props: Props) => {
   return (
     <div className={props.className} onClick={() => props.editEvent(props.event)}>
       <div className="event-title">
         <span>{props.event.title}</span>
-        <button className="delete" onClick={(e) => handleDelete(e, props)}>
-          <DeleteIcon/>
-        </button>
       </div>
       <div className="event-description">
         <span>{`${props.event.startTime.format('HHmm')}Z - ${props.event.endTime.format('HHmm')}Z`}</span>
@@ -44,12 +34,6 @@ export const StyledAvailabilityTile = styled(AvailabilityTile)`
     justify-content: space-between;
     padding: 0.35rem;
   }
-  
-  .delete {
-    background-color: ${props => props.theme.lighter};
-    border: none;
-    cursor: pointer;
-  }
     
   &:hover {
     background: ${props => props.theme.hoverBlueSteel};
@@ -58,9 +42,5 @@ export const StyledAvailabilityTile = styled(AvailabilityTile)`
   .event-description {
     background: ${props => props.theme.lighter};
     font-size: 12px;
-  }
-  
-  .delete {
-    background: transparent;
   }
 `;

@@ -111,7 +111,7 @@ export class SkillsForm extends React.Component<Props, State> {
           </StyledFieldValidation>
 
           <div className="form-row">
-            {this.props.skill && <StyledDeleteButton handleClick={this.handleDelete}/>}
+            {this.props.skill && <StyledDeleteButton  className="delete" handleClick={this.handleDelete}/>}
             <StyledSubmitButton text="CONFIRM"/>
           </div>
         </div>

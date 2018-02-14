@@ -12,11 +12,13 @@ import { MissionStore } from '../mission/stores/MissionStore';
 import { EventModel, EventType } from './models/EventModel';
 import { StyledRadioButtons } from '../widgets/RadioButtons';
 import { StyledSubmitButton } from '../widgets/SubmitButton';
+import { StyledDeleteButton } from '../widgets/DeleteButton';
 
 interface Props {
   airmanId: number;
   hideEventForm: () => void;
   handleSubmit: (event: EventModel) => void;
+  setPendingDelete: (event: EventModel) => void;
   event: EventModel | null;
   missionStore: MissionStore;
   className?: string;
@@ -171,12 +173,21 @@ export class EventForm extends React.Component<Props, EventFormState> {
           </StyledFieldValidation>
 
           <div className="form-row">
+            {this.props.event && <StyledDeleteButton className="delete" handleClick={this.handleDelete} />}
             <StyledSubmitButton text="CONFIRM"/>
           </div>
           <div style={{minHeight: 150}}/>
         </div>
       </form>
     );
+  }
+
+  private handleDelete = (clickEvent: React.MouseEvent<HTMLButtonElement>) => {
+    clickEvent.preventDefault();
+    if (this.props.event == null) {
+      return;
+    }
+    this.props.setPendingDelete(this.props.event);
   }
 }
 
@@ -198,10 +209,10 @@ export const StyledEventForm = styled(EventForm)`
   }
   
   .form-row {
-      display: flex;
-      flex-direction: row-reverse;
-      margin-top: 2rem;
-      align-items: baseline;
+    display: flex;
+    margin-top: 2rem;
+    align-items: baseline;
+    justify-content: space-between;
   }
   
   .styled-select {

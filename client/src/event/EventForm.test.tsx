@@ -13,6 +13,7 @@ import { RadioButtons } from '../widgets/RadioButtons';
 import Mock = jest.Mock;
 
 describe('EventForm', () => {
+  const setPendingDeleteSpy = jest.fn();
   const airmanId = 123;
   const startTime = moment.utc('2018-01-01T01:00:00Z');
   const endTime = moment.utc('2018-01-01T11:00:00Z');
@@ -33,6 +34,7 @@ describe('EventForm', () => {
       <EventForm
         airmanId={airmanId}
         handleSubmit={handleSubmitSpy}
+        setPendingDelete={setPendingDeleteSpy}
         hideEventForm={hideEventFormMock}
         missionStore={missionStore}
         event={null}
@@ -104,6 +106,15 @@ describe('EventForm', () => {
     errors = [{title: 'Field is required'}];
     subject.setProps({errors: errors});
     expect(subject.find('.error-msg').length).toBe(1);
+  });
+
+  it('has an actionable delete button', () => {
+    const dateTime = moment.utc('2018-01-10 00:00', 'YYYY-MM-DD HH:mm');
+    const event = new EventModel('Title', 'Description', dateTime, dateTime, airmanId, EventType.Leave, 1);
+    subject.setProps({event: event});
+
+    subject.find('button.delete').simulate('click', eventStub);
+    expect(setPendingDeleteSpy).toHaveBeenCalledWith(event);
   });
 
 });
