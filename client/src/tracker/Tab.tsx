@@ -27,7 +27,7 @@ export const InactiveBorder = styled.a`
   border-bottom: 1px solid ${props => props.theme.graySteel};
 `;
 
-export default styled(Tab)`
+export const StyledTab = styled(Tab)`
   cursor: pointer;
   width: 100%;
   

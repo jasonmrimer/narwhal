@@ -1,16 +1,15 @@
 import { mount, ReactWrapper, shallow, ShallowWrapper } from 'enzyme';
 import * as React from 'react';
 
-import App from './App';
-import ProfileRepositoryStub from '../profile/repositories/doubles/ProfileRepositoryStub';
+import { App } from './App';
+import { ProfileRepositoryStub } from '../profile/repositories/doubles/ProfileRepositoryStub';
 import { MemoryRouter, Route } from 'react-router-dom';
-import MissionRepositoryStub from '../mission/repositories/doubles/MissionRepositoryStub';
+import { MissionRepositoryStub } from '../mission/repositories/doubles/MissionRepositoryStub';
 import { Tracker } from '../tracker/Tracker';
-import Dashboard from '../dashboard/Dashboard';
-import SiteRepositoryStub from '../site/repositories/doubles/SiteRepositoryStub';
+import { Dashboard } from '../dashboard/Dashboard';
+import { SiteRepositoryStub } from '../site/repositories/doubles/SiteRepositoryStub';
 import { makeFakeTrackerStore } from '../utils/testUtils';
-import DashboardStore from '../dashboard/stores/DashboardStore';
-
+import { DashboardStore } from '../dashboard/stores/DashboardStore';
 const profileRepository = new ProfileRepositoryStub();
 const siteRepository = new SiteRepositoryStub();
 const dashboardStore = new DashboardStore(new MissionRepositoryStub(), siteRepository);

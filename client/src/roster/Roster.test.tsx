@@ -2,11 +2,11 @@ import { mount, ReactWrapper } from 'enzyme';
 import * as React from 'react';
 import { makeFakeTrackerStore, Table } from '../utils/testUtils';
 import { Roster } from './Roster';
-import AirmanModel from '../airman/models/AirmanModel';
-import CertificationModel from '../skills/models/CertificationModel';
-import TrackerStore from '../tracker/stores/TrackerStore';
-import QualificationModel from '../skills/models/QualificationModel';
-import Notification from '../widgets/Notification';
+import { AirmanModel } from '../airman/models/AirmanModel';
+import { CertificationModel } from '../skills/models/CertificationModel';
+import { TrackerStore } from '../tracker/stores/TrackerStore';
+import { QualificationModel } from '../skills/models/QualificationModel';
+import { StyledNotification } from '../widgets/Notification';
 
 let airmen: AirmanModel[];
 let certifications: CertificationModel[];
@@ -24,7 +24,7 @@ describe('Roster', () => {
 
     it('should return a message', () => {
       expect(subject.find('tbody tr').length).toEqual(0);
-      const notification = subject.find(Notification);
+      const notification = subject.find(StyledNotification);
       expect(notification.exists()).toBeTruthy();
       expect(notification.text()).toContain('No members at this location match your search.');
     });

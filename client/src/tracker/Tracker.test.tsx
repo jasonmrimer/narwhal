@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
-import Roster from '../roster/Roster';
+import { Roster } from '../roster/Roster';
 import { Tracker } from './Tracker';
 import { makeFakeTrackerStore } from '../utils/testUtils';
-import SidePanel from './SidePanel';
-import TopBar from '../widgets/TopBar';
-import TrackerStore from './stores/TrackerStore';
-import Legend from '../roster/Legend';
+import { SidePanel } from './SidePanel';
+import { TrackerStore } from './stores/TrackerStore';
+import { Legend } from '../roster/Legend';
 import * as moment from 'moment';
-import EventModel, { EventType } from '../event/models/EventModel';
-import DeleteEventPopup from '../event/DeleteEventPopup';
+import { StyledDeleteEventPopup } from '../event/DeleteEventPopup';
+import { EventModel, EventType } from '../event/models/EventModel';
+import { TopBar } from '../widgets/TopBar';
 
 let trackerStore: TrackerStore;
 let subject: ReactWrapper;
@@ -65,9 +65,9 @@ describe('Tracker', () => {
 
   it('renders a delete popup when there is a pending delete event', () => {
     const event = new EventModel('Title', 'Description', moment.utc(), moment.utc(), 1, EventType.Mission);
-    expect(subject.find(DeleteEventPopup).exists()).toBeFalsy();
+    expect(subject.find(StyledDeleteEventPopup).exists()).toBeFalsy();
     trackerStore.availabilityStore.setPendingDeleteEvent(event);
     subject.update();
-    expect(subject.find(DeleteEventPopup).exists()).toBeTruthy();
+    expect(subject.find(StyledDeleteEventPopup).exists()).toBeTruthy();
   });
 });

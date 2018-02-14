@@ -1,6 +1,6 @@
 import * as moment from 'moment';
 import { Moment } from 'moment';
-import SiteModel from '../../site/models/SiteModel';
+import { SiteModel } from '../../site/models/SiteModel';
 
 export class MissionModel {
   static empty(): MissionModel {

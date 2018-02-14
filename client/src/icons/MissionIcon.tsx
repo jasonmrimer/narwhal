@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 /* tslint:disable:max-line-length */
-export default () => {
+export const MissionIcon = () => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

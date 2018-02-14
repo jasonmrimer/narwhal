@@ -1,10 +1,10 @@
-import AvailableIcon from '../icons/AvailableIcon';
+import { AvailableIcon } from '../icons/AvailableIcon';
 import { shallow } from 'enzyme';
 import { Legend } from './Legend';
 import * as React from 'react';
-import AppointmentIcon from '../icons/AppointmentIcon';
-import MissionIcon from '../icons/MissionIcon';
-import LeaveIcon from '../icons/LeaveIcon';
+import { AppointmentIcon } from '../icons/AppointmentIcon';
+import { MissionIcon } from '../icons/MissionIcon';
+import { LeaveIcon } from '../icons/LeaveIcon';
 
 describe('Legend', () => {
   const subject = shallow(<Legend />);

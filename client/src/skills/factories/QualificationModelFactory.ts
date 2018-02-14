@@ -1,6 +1,6 @@
-import QualificationModel from '../models/QualificationModel';
+import { QualificationModel } from '../models/QualificationModel';
 
-export default class QualificationModelFactory {
+export class QualificationModelFactory {
   static build(id: number) {
     return new QualificationModel(id, `${id}`, `${id}`);
   }

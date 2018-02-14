@@ -1,6 +1,6 @@
-import SiteRepositoryContract from '../SiteRepositoryContract';
-import SiteRepositoryStub from './SiteRepositoryStub';
+import { siteRepositoryContract } from '../SiteRepositoryContract';
+import { SiteRepositoryStub } from './SiteRepositoryStub';
 
 describe('SiteRepositoryStub', () => {
-    SiteRepositoryContract(new SiteRepositoryStub());
+    siteRepositoryContract(new SiteRepositoryStub());
 });

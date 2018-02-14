@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export default () => {
+export const ExpirationAlert = () => {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24">
       <g fill="none" fillRule="evenodd">

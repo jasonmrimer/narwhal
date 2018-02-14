@@ -23,7 +23,7 @@ export const TextInput = (props: Props) => {
   );
 };
 
-export default styled(TextInput)`
+export const StyledTextInput = styled(TextInput)`
   background: none;
   color: ${props => props.theme.graySteel};
   border: none;

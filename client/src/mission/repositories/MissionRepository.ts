@@ -1,9 +1,7 @@
 import { MissionModel } from '../models/MissionModel';
 
-interface MissionRepository {
+export interface MissionRepository {
   findAll(): Promise<MissionModel[]>;
 
   findBySite(id: number): Promise<MissionModel[]>;
 }
-
-export default MissionRepository;

@@ -1,6 +1,6 @@
 export const UnfilteredValue = -1;
 
-export default interface FilterOption {
+export interface FilterOption {
   value: string | number;
   label: string;
 }

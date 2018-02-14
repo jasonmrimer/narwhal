@@ -1,11 +1,11 @@
-import EventModel, { EventType } from '../event/models/EventModel';
+import { EventModel, EventType } from '../event/models/EventModel';
 import * as moment from 'moment';
 import { shallow, ShallowWrapper } from 'enzyme';
 import * as React from 'react';
-import { AirmanEvent } from './AvailabilityTile';
+import { AvailabilityTile } from './AvailabilityTile';
 import { eventStub } from '../utils/testUtils';
 
-describe('AirmanEvent', () => {
+describe('AvailabilityTile', () => {
   let subject: ShallowWrapper;
   const deleteEventSpy = jest.fn();
   const editEventSpy = jest.fn();
@@ -14,7 +14,7 @@ describe('AirmanEvent', () => {
   const event = new EventModel('Dentist', '', startTime, endTime, 1, EventType.Mission, 1);
 
   beforeEach(() => {
-    subject = shallow(<AirmanEvent event={event} deleteEvent={deleteEventSpy} editEvent={editEventSpy}/>);
+    subject = shallow(<AvailabilityTile event={event} deleteEvent={deleteEventSpy} editEvent={editEventSpy}/>);
   });
 
   it('renders the event attributes', () => {

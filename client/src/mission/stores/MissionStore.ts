@@ -1,8 +1,8 @@
 import { computed, observable } from 'mobx';
 import { MissionModel } from '../models/MissionModel';
-import MissionRepository from '../repositories/MissionRepository';
+import { MissionRepository } from '../repositories/MissionRepository';
 
-export default class MissionStore {
+export class MissionStore {
   private missionRepository: MissionRepository;
 
   @observable private _missions: MissionModel[] = [];

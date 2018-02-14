@@ -20,7 +20,7 @@ export const TopBar = (props: Props) => {
   );
 };
 
-export default styled(TopBar)`
+export const StyledTopBar = styled(TopBar)`
   border-collapse: collapse;
   background-color: ${props => props.theme.lighter};
   padding: 1rem;

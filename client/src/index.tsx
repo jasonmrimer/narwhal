@@ -4,27 +4,27 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
 import './polyfills';
-import App from './widgets/App';
+import { App } from './widgets/App';
 import { ThemeProvider } from 'styled-components';
-import theme from './themes/default';
-import WebProfileRepository from './profile/repositories/web/WebProfileRepository';
+import { Theme } from './themes/default';
+import { WebProfileRepository } from './profile/repositories/web/WebProfileRepository';
 import { BrowserRouter } from 'react-router-dom';
-import WebAirmanRepository from './airman/repositories/web/WebAirmanRepository';
-import WebSiteRepository from './site/repositories/web/WebSiteRepository';
-import WebMissionRepository from './mission/repositories/web/WebMissionRepository';
-import TrackerStore from './tracker/stores/TrackerStore';
-import DashboardStore from './dashboard/stores/DashboardStore';
+import { WebAirmanRepository } from './airman/repositories/web/WebAirmanRepository';
+import { WebSiteRepository } from './site/repositories/web/WebSiteRepository';
+import { WebMissionRepository } from './mission/repositories/web/WebMissionRepository';
+import { TrackerStore } from './tracker/stores/TrackerStore';
+import { DashboardStore } from './dashboard/stores/DashboardStore';
 import { MomentTimeService } from './tracker/services/MomentTimeService';
-import WebEventRepository from './event/repositories/web/WebEventRepository';
+import { WebEventRepository } from './event/repositories/web/WebEventRepository';
 import { default as WebSkillRepository } from './skills/repositories/web/WebSkillRepository';
-import AvailabilityStore from './availability/stores/AvailabilityStore';
-import CurrencyStore from './currency/stores/CurrencyStore';
-import PlannerStore from './roster/planner/stores/PlannerStore';
-import MissionStore from './mission/stores/MissionStore';
+import { AvailabilityStore } from './availability/stores/AvailabilityStore';
+import { CurrencyStore } from './currency/stores/CurrencyStore';
+import { PlannerStore } from './roster/planner/stores/PlannerStore';
+import { MissionStore } from './mission/stores/MissionStore';
 
-document.body.style.fontFamily = theme.fontFamily;
-document.body.style.color = theme.fontColor;
-document.body.style.backgroundColor = theme.dark;
+document.body.style.fontFamily = Theme.fontFamily;
+document.body.style.color = Theme.fontColor;
+document.body.style.backgroundColor = Theme.dark;
 
 const siteRepository = new WebSiteRepository();
 
@@ -45,7 +45,7 @@ const trackerStore = new TrackerStore(
 );
 
 ReactDOM.render(
-  <ThemeProvider theme={theme}>
+  <ThemeProvider theme={Theme}>
     <BrowserRouter>
       <App
         profileRepository={new WebProfileRepository()}

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import EventModel from './models/EventModel';
+import { EventModel } from './models/EventModel';
 import { observer } from 'mobx-react/custom';
 import styled from 'styled-components';
 
@@ -28,7 +28,7 @@ export const DeleteEventPopup = observer((props: Props) => {
   );
 });
 
-export default styled(DeleteEventPopup)`
+export const StyledDeleteEventPopup = styled(DeleteEventPopup)`
   position: fixed;
   background: rgba(0, 0, 0, 0.5);
   top: 0;

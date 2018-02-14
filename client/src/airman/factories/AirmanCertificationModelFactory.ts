@@ -1,8 +1,8 @@
 import * as moment from 'moment';
-import CertificationModel from '../../skills/models/CertificationModel';
-import AirmanCertificationModel from '../models/AirmanCertificationModel';
+import { CertificationModel } from '../../skills/models/CertificationModel';
+import { AirmanCertificationModel } from '../models/AirmanCertificationModel';
 
-export default class AirmanCertificationModelFactory {
+export class AirmanCertificationModelFactory {
   static build(id: number) {
     return new AirmanCertificationModel(
       1,

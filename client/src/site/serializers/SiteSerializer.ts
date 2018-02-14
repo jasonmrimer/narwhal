@@ -1,8 +1,8 @@
 import { Serializer } from '../../utils/serializer';
-import SiteModel from '../models/SiteModel';
-import SquadronSerializer from '../../squadron/serializers/SquadronSerializer';
+import { SiteModel } from '../models/SiteModel';
+import { SquadronSerializer } from '../../squadron/serializers/SquadronSerializer';
 
-export default class SiteSerializer implements Serializer<SiteModel> {
+export class SiteSerializer implements Serializer<SiteModel> {
   private squadronSerializer: SquadronSerializer = new SquadronSerializer();
 
   serialize(item: SiteModel): {} {

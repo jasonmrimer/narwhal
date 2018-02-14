@@ -1,5 +1,5 @@
 import * as React from 'react';
-import DeleteIcon from '../icons/DeleteIcon';
+import { DeleteIcon } from '../icons/DeleteIcon';
 import styled from 'styled-components';
 
 interface Props {
@@ -16,7 +16,7 @@ export const DeleteButton = (props: Props) => {
   );
 };
 
-export default styled(DeleteButton)`
+export const StyledDeleteButton = styled(DeleteButton)`
   display: flex;
   align-items: unset;
   width: fit-content;

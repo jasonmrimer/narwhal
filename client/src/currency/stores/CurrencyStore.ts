@@ -1,7 +1,7 @@
 import { action, computed, observable } from 'mobx';
 import { Skill } from '../../skills/models/Skill';
 
-export default class CurrencyStore {
+export class CurrencyStore {
   @observable private _showSkillForm: boolean = false;
   @observable private _selectedSkill: Skill | null = null;
   @observable private _errors: object[] = [];

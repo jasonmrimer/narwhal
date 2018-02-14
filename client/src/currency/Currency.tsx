@@ -1,11 +1,11 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import TrackerStore from '../tracker/stores/TrackerStore';
+import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { observer } from 'mobx-react';
-import SkillsForm from '../skills/SkillsForm';
-import AirmanModel from '../airman/models/AirmanModel';
-import SkillTile from '../skills/SkillTile';
+import { AirmanModel } from '../airman/models/AirmanModel';
 import { Skill } from '../skills/models/Skill';
+import { StyledSkillsForm } from '../skills/SkillsForm';
+import { StyledSkillTile } from '../skills/SkillTile';
 
 interface Props {
   trackerStore: TrackerStore;
@@ -31,7 +31,7 @@ export class Currency extends React.Component<Props> {
     const qualifications = this.props.trackerStore.qualifications;
     const certifications = this.props.trackerStore.certifications;
     return (
-      <SkillsForm
+      <StyledSkillsForm
         airmanId={airman.id}
         qualifications={qualifications}
         certifications={certifications}
@@ -74,7 +74,7 @@ export class Currency extends React.Component<Props> {
 
   private renderQualifications = (airman: AirmanModel) => {
     return airman.qualifications.map((qual, index) => (
-      <SkillTile
+      <StyledSkillTile
         key={index}
         skill={qual}
         handleClick={() => this.openSkillFormForEdit(qual)}
@@ -84,7 +84,7 @@ export class Currency extends React.Component<Props> {
 
   private renderCertifications = (airman: AirmanModel) => {
     return airman.certifications.map((cert, index) => (
-      <SkillTile
+      <StyledSkillTile
         key={index}
         skill={cert}
         handleClick={() => this.openSkillFormForEdit(cert)}
@@ -103,7 +103,7 @@ export class Currency extends React.Component<Props> {
   }
 }
 
-export default styled(Currency)`
+export const StyledCurrency = styled(Currency)`
   width: 100%;
   
   .skill-control-row {

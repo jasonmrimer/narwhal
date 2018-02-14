@@ -1,4 +1,4 @@
-import { default as SkillRepositoryContract } from '../SkillRepositoryContract';
+import { SkillRepositoryContract } from '../SkillRepositoryContract';
 import { default as WebSkillRepository } from './WebSkillRepository';
 
 describe('WebSkillRepository', () => {

@@ -1,6 +1,6 @@
-import DashboardStore from './DashboardStore';
-import MissionRepositoryStub from '../../mission/repositories/doubles/MissionRepositoryStub';
-import SiteRepositoryStub from '../../site/repositories/doubles/SiteRepositoryStub';
+import { DashboardStore } from './DashboardStore';
+import { MissionRepositoryStub } from '../../mission/repositories/doubles/MissionRepositoryStub';
+import { SiteRepositoryStub } from '../../site/repositories/doubles/SiteRepositoryStub';
 import { MissionModel } from '../../mission/models/MissionModel';
 import { toJS } from 'mobx';
 

@@ -1,8 +1,8 @@
 import * as React from 'react';
-import EventModel from '../event/models/EventModel';
+import { EventModel } from '../event/models/EventModel';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
-import DeleteIcon from '../icons/DeleteIcon';
+import { DeleteIcon } from '../icons/DeleteIcon';
 
 interface Props {
   event: EventModel;
@@ -16,7 +16,7 @@ const handleDelete = (e: React.MouseEvent<HTMLButtonElement>, props: Props) => {
   props.deleteEvent(props.event);
 };
 
-export const AirmanEvent = observer((props: Props) => {
+export const AvailabilityTile = observer((props: Props) => {
   return (
     <div className={props.className} onClick={() => props.editEvent(props.event)}>
       <div className="event-title">
@@ -33,7 +33,7 @@ export const AirmanEvent = observer((props: Props) => {
   );
 });
 
-export default styled(AirmanEvent)`
+export const StyledAvailabilityTile = styled(AvailabilityTile)`
   background: ${props => props.theme.blueSteel};
   padding: 1px;
   margin: 0.5rem 0;

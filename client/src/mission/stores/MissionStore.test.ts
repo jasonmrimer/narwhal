@@ -1,5 +1,5 @@
-import MissionStore from './MissionStore';
-import MissionRepositoryStub from '../repositories/doubles/MissionRepositoryStub';
+import { MissionStore } from './MissionStore';
+import { MissionRepositoryStub } from '../repositories/doubles/MissionRepositoryStub';
 
 describe('MissionStore', () => {
   let subject: MissionStore;

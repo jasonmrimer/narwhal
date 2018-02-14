@@ -1,7 +1,5 @@
-import SiteModel from '../models/SiteModel';
+import { SiteModel } from '../models/SiteModel';
 
-interface SiteRepository {
+export interface SiteRepository {
   findAll(): Promise<SiteModel[]>;
 }
-
-export default SiteRepository;

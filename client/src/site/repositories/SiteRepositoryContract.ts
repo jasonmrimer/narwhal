@@ -1,4 +1,4 @@
-import SiteRepository from './SiteRepository';
+import { SiteRepository } from './SiteRepository';
 
 interface Uniqueable {
   id: number;
@@ -8,7 +8,7 @@ function getUniqueIds(items: Uniqueable[]) {
   return items.map(item => item.id).filter((el, i, a) => i === a.indexOf(el));
 }
 
-export default function siteRepositoryContract(subject: SiteRepository) {
+export function siteRepositoryContract(subject: SiteRepository) {
   describe('findAll', () => {
     it('returns all sites', async () => {
       const sites = await subject.findAll();

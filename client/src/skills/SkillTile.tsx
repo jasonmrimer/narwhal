@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Skill } from './models/Skill';
-import ExpirationAlert from '../icons/ExpirationAlert';
+import { ExpirationAlert } from '../icons/ExpirationAlert';
 
 interface Props {
   skill: Skill;
@@ -27,7 +27,7 @@ export const SkillTile = (props: Props) => {
   );
 };
 
-export default styled(SkillTile)`
+export const StyledSkillTile = styled(SkillTile)`
   background: ${props => props.theme.blueSteel};
   margin: 0.5rem 0;
   padding: 1px;

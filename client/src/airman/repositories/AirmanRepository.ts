@@ -1,7 +1,7 @@
-import AirmanModel from '../models/AirmanModel';
+import { AirmanModel } from '../models/AirmanModel';
 import { Skill } from '../../skills/models/Skill';
 
-interface AirmanRepository {
+export interface AirmanRepository {
   findAll(): Promise<AirmanModel[]>;
 
   findBySquadron(id: number): Promise<AirmanModel[]>;
@@ -12,5 +12,3 @@ interface AirmanRepository {
 
   deleteSkill(skill: Skill): Promise<AirmanModel>;
 }
-
-export default AirmanRepository;

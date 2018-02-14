@@ -8,7 +8,7 @@ export enum EventType {
   Leave = 'LEAVE',
 }
 
-export default class EventModel {
+export class EventModel {
   static fromEventFormState(airmanId: number, state: EventFormState, id: number | null) {
     const {title, description, startDate, startTime, endDate, endTime, eventType} = state;
     const startDateTime = moment.utc(`${startDate} ${startTime}`, 'YYYY-MM-DD HH:mm');

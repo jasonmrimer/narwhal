@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { ChangeEvent } from 'react';
 import styled from 'styled-components';
-import FilterOption, { UnfilteredValue } from './models/FilterOptionModel';
 import { observer } from 'mobx-react/custom';
 import { caret } from '../utils/StyleUtils';
+import { FilterOption, UnfilteredValue } from './models/FilterOptionModel';
 
 interface Props {
   id: string;

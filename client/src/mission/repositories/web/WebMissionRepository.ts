@@ -1,8 +1,8 @@
-import MissionRepository from '../MissionRepository';
+import { MissionRepository } from '../MissionRepository';
 import { MissionModel } from '../../models/MissionModel';
 import { MissionSerializer } from '../../serializers/MissionSerializer';
 
-export default class WebMissionRepository implements MissionRepository {
+export class WebMissionRepository implements MissionRepository {
   private serializer: MissionSerializer = new MissionSerializer();
 
   constructor(private baseUrl: string = '') {

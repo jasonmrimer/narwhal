@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { mount } from 'enzyme';
 import * as Cookie from 'js-cookie';
-import Upload from './Upload';
+import { Upload } from './Upload';
 
 describe('Upload', () => {
   it('renders two forms', () => {

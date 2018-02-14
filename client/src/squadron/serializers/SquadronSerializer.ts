@@ -1,8 +1,8 @@
 import { Serializer } from '../../utils/serializer';
-import SquadronModel from '../models/SquadronModel';
-import FlightSerializer from '../../flight/serializers/FlightSerializer';
+import { SquadronModel } from '../models/SquadronModel';
+import { FlightSerializer } from '../../flight/serializers/FlightSerializer';
 
-export default class SquadronSerializer implements Serializer<SquadronModel> {
+export class SquadronSerializer implements Serializer<SquadronModel> {
   private flightSerializer: FlightSerializer = new FlightSerializer();
 
   serialize(item: SquadronModel): {} {

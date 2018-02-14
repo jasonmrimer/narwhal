@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import { Availability } from './Availability';
-import { AirmanEvent } from './AvailabilityTile';
-import EventModel, { EventType } from '../event/models/EventModel';
+import { AvailabilityTile } from './AvailabilityTile';
+import { EventModel, EventType } from '../event/models/EventModel';
 import * as moment from 'moment';
-import StyledEventForm, { EventForm } from '../event/EventForm';
-import AirmanModelFactory from '../airman/factories/AirmanModelFactory';
+import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 import { makeFakeTrackerStore } from '../utils/testUtils';
-import TrackerStore from '../tracker/stores/TrackerStore';
-import AirmanModel from '../airman/models/AirmanModel';
+import { TrackerStore } from '../tracker/stores/TrackerStore';
+import { AirmanModel } from '../airman/models/AirmanModel';
+import { EventForm, StyledEventForm } from '../event/EventForm';
 
 let trackerStore: TrackerStore;
 let airman: AirmanModel;
@@ -65,12 +65,12 @@ describe('Availability', () => {
   });
 
   it('renders a list of events', () => {
-    expect(subject.find(AirmanEvent).length).toBe(6);
+    expect(subject.find(AvailabilityTile).length).toBe(6);
   });
 
   it('renders all the scheduled events for the given day', () => {
     const dateWrapper = subject.find('#day-1');
-    expect(dateWrapper.find(AirmanEvent).length).toBe(3);
+    expect(dateWrapper.find(AvailabilityTile).length).toBe(3);
     expect(dateWrapper.find('.event-date').text()).toContain('MON, 27 NOV 17');
   });
 
@@ -99,7 +99,7 @@ describe('Availability', () => {
   });
 
   it('opens an Edit Event form when clicking on an existing Event Card', () => {
-    subject.find(AirmanEvent).at(0).simulate('click');
+    subject.find(AvailabilityTile).at(0).simulate('click');
     expect(subject.find(StyledEventForm).prop('event')).toEqual(eventOne);
   });
 

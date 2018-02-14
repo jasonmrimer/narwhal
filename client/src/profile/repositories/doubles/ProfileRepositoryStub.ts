@@ -1,6 +1,6 @@
 import ProfileRepository from '../ProfileRepository';
 
-export default class ProfileRepositoryStub implements ProfileRepository {
+export class ProfileRepositoryStub implements ProfileRepository {
   findOne(): Promise<{ username: string }> {
     return Promise.resolve({username: 'FooFace'});
   }

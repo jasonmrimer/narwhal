@@ -1,7 +1,7 @@
-import EventModel from '../../event/models/EventModel';
+import { EventModel } from '../../event/models/EventModel';
 import { action, computed, observable } from 'mobx';
 
-export default class AvailabilityStore {
+export class AvailabilityStore {
   @observable private _showEventForm: boolean = false;
   @observable private _selectedEvent: EventModel | null = null;
   @observable private _pendingDeleteEvent: EventModel | null = null;

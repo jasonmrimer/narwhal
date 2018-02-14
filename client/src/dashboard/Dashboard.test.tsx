@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { Dashboard } from './Dashboard';
 import { mount, ReactWrapper } from 'enzyme';
-import MissionRepositoryStub from '../mission/repositories/doubles/MissionRepositoryStub';
-import Mission from '../mission/Mission';
+import { MissionRepositoryStub } from '../mission/repositories/doubles/MissionRepositoryStub';
 import { findFilterById, forIt, selectOption } from '../utils/testUtils';
-import TopBar from '../widgets/TopBar';
-import SiteRepositoryStub from '../site/repositories/doubles/SiteRepositoryStub';
+import { SiteRepositoryStub } from '../site/repositories/doubles/SiteRepositoryStub';
 import { MissionModel } from '../mission/models/MissionModel';
-import DashboardStore from './stores/DashboardStore';
+import { DashboardStore } from './stores/DashboardStore';
+import { StyledMission } from '../mission/Mission';
+import { TopBar } from '../widgets/TopBar';
 
 const missionRepositoryStub = new MissionRepositoryStub();
 
@@ -34,7 +34,7 @@ describe('Dashboard', () => {
   });
 
   it('renders a Dashboard with all missions', () => {
-    expect(subject.find(Mission).length).toBe(3);
+    expect(subject.find(StyledMission).length).toBe(3);
     expect(dashboardMissions(subject)).toEqual(missions);
   });
 
@@ -60,5 +60,5 @@ describe('Dashboard', () => {
 });
 
 function dashboardMissions(wrapper: ReactWrapper) {
-  return wrapper.find(Mission).map(mission => mission.props().mission);
+  return wrapper.find(StyledMission).map(mission => mission.props().mission);
 }

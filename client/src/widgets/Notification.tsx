@@ -11,7 +11,7 @@ const Notification: React.SFC<Props> = (props) => {
   );
 };
 
-export default styled(Notification)`
+export const StyledNotification = styled(Notification)`
   font-weight: 400;
   margin: 2.5rem 0;
   text-align: center;

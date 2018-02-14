@@ -1,17 +1,17 @@
 import * as React from 'react';
-import EventModel, { EventType } from './models/EventModel';
 import styled from 'styled-components';
-import BackIcon from '../icons/BackArrow';
-import theme from '../themes/default';
-import DatePicker from '../widgets/DatePicker';
-import FieldValidation from '../widgets/FieldValidation';
-import TextInput from '../widgets/TextInput';
-import TimeInput from '../widgets/TimeInput';
-import SubmitButton from '../widgets/SubmitButton';
-import RadioButtons from '../widgets/RadioButtons';
-import TypeAheadInput from '../widgets/TypeAheadInput';
-import FilterOption from '../widgets/models/FilterOptionModel';
-import MissionStore from '../mission/stores/MissionStore';
+import { BackArrow } from '../icons/BackArrow';
+import { Theme } from '../themes/default';
+import { StyledDatePicker } from '../widgets/DatePicker';
+import { StyledFieldValidation } from '../widgets/FieldValidation';
+import { StyledTextInput } from '../widgets/TextInput';
+import { StyledTimeInput } from '../widgets/TimeInput';
+import { StyledMultiSelect } from '../widgets/MultiSelect';
+import { FilterOption } from '../widgets/models/FilterOptionModel';
+import { MissionStore } from '../mission/stores/MissionStore';
+import { EventModel, EventType } from './models/EventModel';
+import { StyledRadioButtons } from '../widgets/RadioButtons';
+import { StyledSubmitButton } from '../widgets/SubmitButton';
 
 interface Props {
   airmanId: number;
@@ -99,20 +99,20 @@ export class EventForm extends React.Component<Props, EventFormState> {
     return (
       <form className={this.props.className} onSubmit={this.handleSubmit}>
         <a className="back" onClick={this.props.hideEventForm}>
-          <BackIcon color={theme.graySteel}/>
+          <BackArrow color={Theme.graySteel}/>
           <span>Back to Week View</span>
         </a>
         <div>Select Event Type:</div>
         <div className="form-wrapper">
-            <RadioButtons
-              name="eventType"
-              options={Object.keys(EventType).map(key => EventType[key])}
-              value={this.state.eventType}
-              onChange={this.handleChange}
-            />
+          <StyledRadioButtons
+            name="eventType"
+            options={Object.keys(EventType).map(key => EventType[key])}
+            value={this.state.eventType}
+            onChange={this.handleChange}
+          />
           {
             this.state.eventType === EventType.Mission &&
-            <TypeAheadInput
+            <StyledMultiSelect
               multiple={false}
               options={this.props.missionStore.missionOptions}
               onChange={this.handleMissionSelect}
@@ -120,19 +120,19 @@ export class EventForm extends React.Component<Props, EventFormState> {
             />
           }
 
-          <FieldValidation name="title" errors={this.props.errors}>
+          <StyledFieldValidation name="title" errors={this.props.errors}>
             <div className="input-row">
-              <TextInput
+              <StyledTextInput
                 placeholder="Title"
                 value={this.state.title}
                 name="title"
                 onChange={this.handleChange}
               />
             </div>
-          </FieldValidation>
+          </StyledFieldValidation>
 
           <div className="input-row">
-            <TextInput
+            <StyledTextInput
               placeholder="Description"
               value={this.state.description}
               name="description"
@@ -140,38 +140,38 @@ export class EventForm extends React.Component<Props, EventFormState> {
             />
           </div>
 
-          <FieldValidation name="startTime" errors={this.props.errors}>
+          <StyledFieldValidation name="startTime" errors={this.props.errors}>
             <div className="input-row">
-              <DatePicker
+              <StyledDatePicker
                 dateValue={this.state.startDate}
                 onChange={this.handleChange}
                 name="startDate"
               />
-              <TimeInput
+              <StyledTimeInput
                 timeValue={this.state.startTime}
                 onChange={this.handleChange}
                 name="startTime"
               />
             </div>
-          </FieldValidation>
+          </StyledFieldValidation>
 
-          <FieldValidation name="endTime" errors={this.props.errors}>
+          <StyledFieldValidation name="endTime" errors={this.props.errors}>
             <div className="input-row">
-              <DatePicker
+              <StyledDatePicker
                 dateValue={this.state.endDate}
                 onChange={this.handleChange}
                 name="endDate"
               />
-              <TimeInput
+              <StyledTimeInput
                 timeValue={this.state.endTime}
                 onChange={this.handleChange}
                 name="endTime"
               />
             </div>
-          </FieldValidation>
+          </StyledFieldValidation>
 
           <div className="form-row">
-            <SubmitButton text="CONFIRM"/>
+            <StyledSubmitButton text="CONFIRM"/>
           </div>
           <div style={{minHeight: 150}}/>
         </div>
@@ -180,7 +180,7 @@ export class EventForm extends React.Component<Props, EventFormState> {
   }
 }
 
-export default styled(EventForm)`
+export const StyledEventForm = styled(EventForm)`
   
   text-align: left;
   display: flex;

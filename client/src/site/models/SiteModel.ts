@@ -1,6 +1,6 @@
-import SquadronModel from '../../squadron/models/SquadronModel';
+import { SquadronModel } from '../../squadron/models/SquadronModel';
 
-export default class SiteModel {
+export class SiteModel {
   constructor(public id: number,
               public name: string,
               public squadrons: SquadronModel[]) {

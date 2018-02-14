@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Typeahead } from 'react-bootstrap-typeahead';
-import FilterOption from './models/FilterOptionModel';
+import { FilterOption } from './models/FilterOptionModel';
 import styled from 'styled-components';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { caret } from '../utils/StyleUtils';
@@ -28,7 +28,7 @@ export const MultiSelect =  (props: Props) => {
   );
 };
 
-export default styled(MultiSelect)`
+export const StyledMultiSelect = styled(MultiSelect)`
   .rbt {
     .rbt-sr-status {
       display: none;

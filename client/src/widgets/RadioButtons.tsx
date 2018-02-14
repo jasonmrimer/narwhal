@@ -11,7 +11,7 @@ interface Props {
   className?: string;
 }
 
-const RadioButtons = (props: Props) => {
+export const RadioButtons = (props: Props) => {
   return (
     <div className={props.className}>
       {props.options.map(option => {
@@ -33,7 +33,7 @@ const RadioButtons = (props: Props) => {
   );
 };
 
-export default styled(RadioButtons)`
+export const StyledRadioButtons = styled(RadioButtons)`
   display: flex;
   flex-direction: column;
   

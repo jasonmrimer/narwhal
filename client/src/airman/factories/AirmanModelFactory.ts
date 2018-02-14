@@ -1,11 +1,11 @@
-import AirmanModel from '../models/AirmanModel';
+import { AirmanCertificationModel } from '../models/AirmanCertificationModel';
+import { AirmanQualificationModel } from '../models/AirmanQualificationModel';
+import { AirmanModel } from '../models/AirmanModel';
 import { randomText } from '../../utils/randomizer';
+import { EventModel, EventType } from '../../event/models/EventModel';
 import * as moment from 'moment';
-import EventModel, { EventType } from '../../event/models/EventModel';
-import AirmanCertificationModel from '../models/AirmanCertificationModel';
-import AirmanQualificationModel from '../models/AirmanQualificationModel';
 
-export default class AirmanModelFactory {
+export class AirmanModelFactory {
   static build(id: number = 1,
                flightId: number = 1,
                qualifications: AirmanQualificationModel[] = [],

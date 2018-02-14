@@ -1,7 +1,7 @@
 import * as moment from 'moment';
-import TimeService from './TimeService';
+import { TimeService } from './TimeService';
 
-export default function TimeServiceContract(subject: TimeService) {
+export function TimeServiceContract(subject: TimeService) {
   describe('getCurrentWeek', () => {
     it('returns a 7-day week array', async () => {
       const week = subject.getCurrentWeek();

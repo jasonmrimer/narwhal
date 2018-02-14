@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
-import TopBar from './TopBar';
+import { TopBar } from './TopBar';
 
 describe('TopBar', () => {
   let subject: ReactWrapper;

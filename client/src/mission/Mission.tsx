@@ -19,7 +19,7 @@ export const Mission = (props: Props) => {
   );
 };
 
-export default styled(Mission)`
+export const StyledMission = styled(Mission)`
   background-color: ${props => props.theme.lighter};
   width: calc(31% + 1% / 3);
   min-height:  8rem;

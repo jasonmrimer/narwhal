@@ -1,6 +1,6 @@
 import ProfileRepository from '../ProfileRepository';
 
-export default class WebProfileRepository implements ProfileRepository {
+export class WebProfileRepository implements ProfileRepository {
   constructor(private baseUrl: string = '') {}
 
   findOne(): Promise<{ username: string }> {

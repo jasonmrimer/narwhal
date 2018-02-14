@@ -1,16 +1,16 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import QualificationModel from './models/QualificationModel';
+import { QualificationModel } from './models/QualificationModel';
 import * as moment from 'moment';
-import DatePicker from '../widgets/DatePicker';
-import SubmitButton from '../widgets/SubmitButton';
-import CertificationModel from './models/CertificationModel';
+import { StyledDatePicker } from '../widgets/DatePicker';
+import { CertificationModel } from './models/CertificationModel';
 import { allSkills, SkillType } from './models/SkillType';
-import SkillBuilder from './models/SkillBuilder';
+import { SkillBuilder } from './models/SkillBuilder';
 import { Skill } from './models/Skill';
-import DeleteButton from '../widgets/DeleteButton';
-import FieldValidation from '../widgets/FieldValidation';
+import { StyledDeleteButton } from '../widgets/DeleteButton';
+import { StyledFieldValidation } from '../widgets/FieldValidation';
 import { observer } from 'mobx-react';
+import { StyledSubmitButton } from '../widgets/SubmitButton';
 
 interface Props {
   airmanId: number;
@@ -85,10 +85,10 @@ export class SkillsForm extends React.Component<Props, State> {
             </select>
           </div>
 
-          <FieldValidation name="earnDate" errors={this.props.errors}>
+          <StyledFieldValidation name="earnDate" errors={this.props.errors}>
             <div className="form-row">
               <label htmlFor="earn-date">Earn Date:</label>
-              <DatePicker
+              <StyledDatePicker
                 id="earn-date"
                 dateValue={this.state.earnDate}
                 onChange={this.handleChange}
@@ -96,23 +96,23 @@ export class SkillsForm extends React.Component<Props, State> {
                 name="earnDate"
               />
             </div>
-          </FieldValidation>
+          </StyledFieldValidation>
 
-          <FieldValidation name="expirationDate" errors={this.props.errors}>
+          <StyledFieldValidation name="expirationDate" errors={this.props.errors}>
             <div className="form-row">
               <label htmlFor="expiration-date">Expiration Date:</label>
-              <DatePicker
+              <StyledDatePicker
                 id="expiration-date"
                 dateValue={this.state.expirationDate}
                 onChange={this.handleChange}
                 name="expirationDate"
               />
             </div>
-          </FieldValidation>
+          </StyledFieldValidation>
 
           <div className="form-row">
-            {this.props.skill && <DeleteButton handleClick={this.handleDelete}/>}
-            <SubmitButton text="CONFIRM"/>
+            {this.props.skill && <StyledDeleteButton handleClick={this.handleDelete}/>}
+            <StyledSubmitButton text="CONFIRM"/>
           </div>
         </div>
       </form>
@@ -182,7 +182,7 @@ const caret = (fillColor: string) => {
     no-repeat center right`;
 };
 
-export default styled(SkillsForm)`
+export const StyledSkillsForm = styled(SkillsForm)`
   text-align: left;
   display: flex;
   flex-direction: column;

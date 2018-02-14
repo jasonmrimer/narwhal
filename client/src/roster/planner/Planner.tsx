@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { Moment } from 'moment';
 import * as classNames from 'classnames';
-import EventModel, { EventType } from '../../event/models/EventModel';
-import AppointmentIcon from '../../icons/AppointmentIcon';
-import LeaveIcon from '../../icons/LeaveIcon';
-import MissionIcon from '../../icons/MissionIcon';
-import AvailableIcon from '../../icons/AvailableIcon';
+import { AppointmentIcon } from '../../icons/AppointmentIcon';
+import { LeaveIcon } from '../../icons/LeaveIcon';
+import { MissionIcon } from '../../icons/MissionIcon';
+import { AvailableIcon } from '../../icons/AvailableIcon';
 import { doesDayHaveEvent } from '../../utils/eventUtil';
 import styled from 'styled-components';
+import { EventModel, EventType } from '../../event/models/EventModel';
 
 interface Props {
   events: EventModel[];
@@ -50,7 +50,7 @@ export const Planner = (props: Props) => {
   );
 };
 
-export default styled(Planner)`
+export const StyledPlanner = styled(Planner)`
   div {
     display: flex;
     justify-content: space-between;

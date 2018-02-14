@@ -1,8 +1,8 @@
 import { action, computed, observable } from 'mobx';
-import TimeService from '../../../tracker/services/TimeService';
+import { TimeService } from '../../../tracker/services/TimeService';
 import { Moment } from 'moment';
 
-export default class PlannerStore {
+export class PlannerStore {
   private timeService: TimeService;
 
   @observable private _plannerWeek: Moment[] = [];

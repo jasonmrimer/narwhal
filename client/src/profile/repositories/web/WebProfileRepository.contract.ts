@@ -1,5 +1,5 @@
-import ProfileRepositoryContract from '../ProfileRepositoryContract';
-import WebProfileRepository from './WebProfileRepository';
+import { ProfileRepositoryContract } from '../ProfileRepositoryContract';
+import { WebProfileRepository } from './WebProfileRepository';
 
 describe('WebProfileRepository', () => {
   const HOST = process.env.REACT_APP_HOST || 'http://localhost:8080';

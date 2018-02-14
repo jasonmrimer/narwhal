@@ -1,10 +1,10 @@
-import AirmanRepository from '../AirmanRepository';
-import AirmanModelFactory from '../../factories/AirmanModelFactory';
-import AirmanModel from '../../models/AirmanModel';
-import AirmanCertificationModelFactory from '../../factories/AirmanCertificationModelFactory';
-import AirmanQualificationModelFactory from '../../factories/AirmanQualificationModelFactory';
+import { AirmanRepository } from '../AirmanRepository';
+import { AirmanModelFactory } from '../../factories/AirmanModelFactory';
+import { AirmanModel } from '../../models/AirmanModel';
+import { AirmanCertificationModelFactory } from '../../factories/AirmanCertificationModelFactory';
+import { AirmanQualificationModelFactory } from '../../factories/AirmanQualificationModelFactory';
 import { Skill } from '../../../skills/models/Skill';
-import AirmanQualificationModel from '../../models/AirmanQualificationModel';
+import { AirmanQualificationModel } from '../../models/AirmanQualificationModel';
 
 const af = AirmanModelFactory;
 const airmen = [
@@ -26,7 +26,7 @@ const airmen = [
 
 const squadrons = {'1': airmen.slice(0, 6), '2': airmen.slice(6, 12)};
 
-export default class AirmanRepositoryStub implements AirmanRepository {
+export class AirmanRepositoryStub implements AirmanRepository {
   findAll() {
     return Promise.resolve(airmen);
   }

@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { SidePanel } from './SidePanel';
-import AirmanModelFactory from '../airman/factories/AirmanModelFactory';
-import AirmanModel from '../airman/models/AirmanModel';
-import Currency from '../currency/Currency';
-import Availability from '../availability/Availability';
-import Tab from './Tab';
-import TrackerStore from './stores/TrackerStore';
+import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
+import { AirmanModel } from '../airman/models/AirmanModel';
+import { StyledCurrency } from '../currency/Currency';
+import { TrackerStore } from './stores/TrackerStore';
 import { makeFakeTrackerStore } from '../utils/testUtils';
-import AirmanCertificationModel from '../airman/models/AirmanCertificationModel';
-import CertificationModelFactory from '../skills/factories/CertificationModelFactory';
+import { AirmanCertificationModel } from '../airman/models/AirmanCertificationModel';
+import { CertificationModelFactory } from '../skills/factories/CertificationModelFactory';
 import * as moment from 'moment';
-import TabAlert from '../icons/TabAlert';
+import { TabAlert } from '../icons/TabAlert';
+import { StyledTab } from './Tab';
+import { StyledAvailability } from '../availability/Availability';
 
 let airman: AirmanModel;
 let trackerStore: TrackerStore;
@@ -43,30 +43,30 @@ describe('SidePanel', () => {
   });
 
   it('shows two tabs', () => {
-    expect(subject.find(Tab).length).toBe(2);
-    expect(subject.find(Tab).at(0).prop('title')).toBe('CURRENCY');
-    expect(subject.find(Tab).at(1).prop('title')).toBe('AVAILABILITY');
+    expect(subject.find(StyledTab).length).toBe(2);
+    expect(subject.find(StyledTab).at(0).prop('title')).toBe('CURRENCY');
+    expect(subject.find(StyledTab).at(1).prop('title')).toBe('AVAILABILITY');
   });
 
   it('renders the availability for a selected airman', () => {
-    const availability = subject.find(Availability);
+    const availability = subject.find(StyledAvailability);
     expect(availability.exists()).toBeTruthy();
   });
 
   it('renders the currency for a selected airman', () => {
-    subject.find(Tab).at(0).simulate('click');
-    const currency = subject.find(Currency);
+    subject.find(StyledTab).at(0).simulate('click');
+    const currency = subject.find(StyledCurrency);
     expect(currency.exists()).toBeTruthy();
   });
 
   it('makes the tab active when selected', () => {
-    subject.find(Tab).at(0).simulate('click');
-    expect(subject.find(Tab).at(0).prop('isActive')).toBeTruthy();
-    expect(subject.find(Tab).at(1).prop('isActive')).toBeFalsy();
+    subject.find(StyledTab).at(0).simulate('click');
+    expect(subject.find(StyledTab).at(0).prop('isActive')).toBeTruthy();
+    expect(subject.find(StyledTab).at(1).prop('isActive')).toBeFalsy();
 
-    subject.find(Tab).at(1).simulate('click');
-    expect(subject.find(Tab).at(0).prop('isActive')).toBeFalsy();
-    expect(subject.find(Tab).at(1).prop('isActive')).toBeTruthy();
+    subject.find(StyledTab).at(1).simulate('click');
+    expect(subject.find(StyledTab).at(0).prop('isActive')).toBeFalsy();
+    expect(subject.find(StyledTab).at(1).prop('isActive')).toBeTruthy();
   });
 
   it('shows a tab alert when the airman has an expired skill', () => {

@@ -1,6 +1,6 @@
-import CertificationModel from '../models/CertificationModel';
+import { CertificationModel } from '../models/CertificationModel';
 
-export default class CertificationModelFactory {
+export class CertificationModelFactory {
   static build(id: number) {
     return new CertificationModel(id, `${id}`);
   }

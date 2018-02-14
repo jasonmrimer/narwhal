@@ -1,8 +1,8 @@
-import AirmanQualificationModel from './AirmanQualificationModel';
-import EventModel from '../../event/models/EventModel';
-import AirmanCertificationModel from './AirmanCertificationModel';
+import { AirmanQualificationModel } from './AirmanQualificationModel';
+import { EventModel } from '../../event/models/EventModel';
+import { AirmanCertificationModel } from './AirmanCertificationModel';
 
-export default class AirmanModel {
+export class AirmanModel {
   static empty(): AirmanModel {
     return new AirmanModel(-1, -1, '', '', [], [], []);
   }

@@ -1,4 +1,4 @@
-export default class QualificationModel {
+export class QualificationModel {
   constructor(public id: number,
               public acronym: string,
               public title: string) {

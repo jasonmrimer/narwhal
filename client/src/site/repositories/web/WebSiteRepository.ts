@@ -1,8 +1,8 @@
-import SiteRepository from '../SiteRepository';
-import SiteModel from '../../models/SiteModel';
-import SiteSerializer from '../../serializers/SiteSerializer';
+import { SiteRepository } from '../SiteRepository';
+import { SiteModel } from '../../models/SiteModel';
+import { SiteSerializer } from '../../serializers/SiteSerializer';
 
-export default class WebSiteRepository implements SiteRepository {
+export class WebSiteRepository implements SiteRepository {
   private static siteSerializer: SiteSerializer = new SiteSerializer();
 
   constructor(private baseUrl: string = '') {

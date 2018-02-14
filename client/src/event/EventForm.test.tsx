@@ -1,15 +1,15 @@
 import { mount, ReactWrapper } from 'enzyme';
 import * as React from 'react';
 import { EventForm } from './EventForm';
-import EventModel, { EventType } from './models/EventModel';
 import * as moment from 'moment';
 import { eventStub } from '../utils/testUtils';
-import DatePicker from '../widgets/DatePicker';
-import TextInput from '../widgets/TextInput';
-import RadioButtons from '../widgets/RadioButtons';
-import TimeInput from '../widgets/TimeInput';
-import MissionStore from '../mission/stores/MissionStore';
-import MissionRepositoryStub from '../mission/repositories/doubles/MissionRepositoryStub';
+import { DatePicker } from '../widgets/DatePicker';
+import { TextInput } from '../widgets/TextInput';
+import { TimeInput } from '../widgets/TimeInput';
+import { MissionStore } from '../mission/stores/MissionStore';
+import { MissionRepositoryStub } from '../mission/repositories/doubles/MissionRepositoryStub';
+import { EventModel, EventType } from './models/EventModel';
+import { RadioButtons } from '../widgets/RadioButtons';
 import Mock = jest.Mock;
 
 describe('EventForm', () => {

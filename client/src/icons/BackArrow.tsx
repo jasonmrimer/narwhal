@@ -4,7 +4,7 @@ interface Props {
   color: string;
 }
 
-export default (props: Props) => {
+export const BackArrow = (props: Props) => {
   /* tslint:disable:max-line-length*/
   return (
     <svg width="14" height="14" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg">

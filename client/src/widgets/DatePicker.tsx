@@ -25,7 +25,7 @@ export const DatePicker = (props: Props) => {
   );
 };
 
-export default styled(DatePicker)`      
+export const StyledDatePicker = styled(DatePicker)`      
   background: none;
   color: ${props => props.theme.fontColor};
   border: none;

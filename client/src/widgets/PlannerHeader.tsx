@@ -1,10 +1,10 @@
 import * as React from 'react';
-import BackIcon from '../icons/BackIcon';
-import NextIcon from '../icons/NextIcon';
+import { BackIcon } from '../icons/BackIcon';
+import { NextIcon } from '../icons/NextIcon';
 import { Moment } from 'moment';
 import styled from 'styled-components';
 import * as classNames from 'classnames';
-import PlannerStore from '../roster/planner/stores/PlannerStore';
+import { PlannerStore } from '../roster/planner/stores/PlannerStore';
 
 interface Props {
   plannerStore: PlannerStore;
@@ -50,7 +50,7 @@ export const PlannerHeader = (props: Props) => {
   );
 };
 
-export default styled(PlannerHeader)`
+export const StyledPlannerHeader = styled(PlannerHeader)`
   
   border-left: 1px solid ${props => props.theme.graySteel};
   

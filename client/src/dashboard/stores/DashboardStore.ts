@@ -1,11 +1,11 @@
-import MissionRepository from '../../mission/repositories/MissionRepository';
-import SiteRepository from '../../site/repositories/SiteRepository';
+import { MissionRepository } from '../../mission/repositories/MissionRepository';
+import { SiteRepository } from '../../site/repositories/SiteRepository';
 import { MissionModel } from '../../mission/models/MissionModel';
 import { action, computed, observable } from 'mobx';
-import SiteModel from '../../site/models/SiteModel';
+import { SiteModel } from '../../site/models/SiteModel';
 import { UnfilteredValue } from '../../widgets/models/FilterOptionModel';
 
-export default class DashboardStore {
+export class DashboardStore {
   private missionRepository: MissionRepository;
   private siteRepository: SiteRepository;
 

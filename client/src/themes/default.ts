@@ -1,4 +1,4 @@
-export default Object.freeze({
+export const Theme = Object.freeze({
   fontFamily: 'Roboto, Arial, Helvetica, sans-serif',
   fontSize: '16',
   fontColor: '#fff',

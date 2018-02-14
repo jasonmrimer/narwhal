@@ -1,7 +1,7 @@
-import SiteRepository from '../SiteRepository';
-import SiteModel from '../../models/SiteModel';
-import SquadronModel from '../../../squadron/models/SquadronModel';
-import FlightModel from '../../../flight/model/FlightModel';
+import { SiteRepository } from '../SiteRepository';
+import { SiteModel } from '../../models/SiteModel';
+import { SquadronModel } from '../../../squadron/models/SquadronModel';
+import { FlightModel } from '../../../flight/model/FlightModel';
 
 const sites = [
   new SiteModel(1, 'Site 1', [
@@ -26,7 +26,7 @@ const sites = [
   ])
 ];
 
-export default class SiteRepositoryStub implements SiteRepository {
+export class SiteRepositoryStub implements SiteRepository {
   findAll(): Promise<SiteModel[]> {
     return Promise.resolve(sites);
   }

@@ -1,4 +1,4 @@
-import EventModel from '../event/models/EventModel';
+import { EventModel } from '../event/models/EventModel';
 import { Moment } from 'moment';
 
 export const doesDayHaveEvent = (day: Moment, event: EventModel) => {

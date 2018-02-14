@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 /* tslint:disable:max-line-length */
-export default () => {
+export const AppointmentIcon = () => {
   return (
     <svg
       xmlnsXlink="http://www.w3.org/1999/xlink"

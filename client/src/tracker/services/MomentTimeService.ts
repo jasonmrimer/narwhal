@@ -1,4 +1,4 @@
-import TimeService from './TimeService';
+import { TimeService } from './TimeService';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 

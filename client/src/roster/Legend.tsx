@@ -1,8 +1,8 @@
 import * as React from 'react';
-import AppointmentIcon from '../icons/AppointmentIcon';
-import LeaveIcon from '../icons/LeaveIcon';
-import MissionIcon from '../icons/MissionIcon';
-import AvailableIcon from '../icons/AvailableIcon';
+import { AppointmentIcon } from '../icons/AppointmentIcon';
+import { LeaveIcon } from '../icons/LeaveIcon';
+import { MissionIcon } from '../icons/MissionIcon';
+import { AvailableIcon } from '../icons/AvailableIcon';
 import styled from 'styled-components';
 
 interface Props {
@@ -33,7 +33,7 @@ export const Legend = (props: Props) => {
   );
 };
 
-export default styled(Legend)`
+export const StyledLegend = styled(Legend)`
   display: flex;
   justify-content: flex-end;
   align-items: center;

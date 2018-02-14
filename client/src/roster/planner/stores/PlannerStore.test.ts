@@ -1,6 +1,6 @@
 import * as moment from 'moment';
-import TimeServiceStub from '../../../tracker/services/doubles/TimeServiceStub';
-import PlannerStore from './PlannerStore';
+import { TimeServiceStub } from '../../../tracker/services/doubles/TimeServiceStub';
+import { PlannerStore } from './PlannerStore';
 
 describe('PlannerStore', () => {
   const timeServiceStub = new TimeServiceStub();

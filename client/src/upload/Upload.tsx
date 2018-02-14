@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as Cookie from 'js-cookie';
 
-export default class Upload extends React.Component {
+export class Upload extends React.Component {
   render() {
     const csrfToken = Cookie.get('XSRF-TOKEN') || '';
     return [

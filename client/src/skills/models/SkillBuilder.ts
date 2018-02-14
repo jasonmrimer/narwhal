@@ -1,11 +1,11 @@
 import { Moment } from 'moment';
-import QualificationModel from './QualificationModel';
-import CertificationModel from './CertificationModel';
-import AirmanQualificationModel from '../../airman/models/AirmanQualificationModel';
-import AirmanCertificationModel from '../../airman/models/AirmanCertificationModel';
+import { QualificationModel } from './QualificationModel';
+import { CertificationModel } from './CertificationModel';
+import { AirmanQualificationModel } from '../../airman/models/AirmanQualificationModel';
+import { AirmanCertificationModel } from '../../airman/models/AirmanCertificationModel';
 import { Skill } from './Skill';
 
-export default class SkillBuilder {
+export class SkillBuilder {
   private _id?: number;
   private _airmanId: number;
   private _earnDate: Moment;

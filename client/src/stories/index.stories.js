@@ -1,5 +1,5 @@
 import * as React from 'react';
-import theme from '../themes/default';
+import { Theme } from '../themes/default';
 import '../index.css';
 import {FormStory} from "./Form.stories";
 import {NotificationStory} from "./Notification.stories";

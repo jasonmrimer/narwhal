@@ -1,13 +1,13 @@
 import * as React from 'react';
-import Roster from '../roster/Roster';
+import { StyledRoster } from '../roster/Roster';
 import styled from 'styled-components';
-import TopBar from '../widgets/TopBar';
 import { observer } from 'mobx-react';
-import TrackerStore from './stores/TrackerStore';
+import { TrackerStore } from './stores/TrackerStore';
 import { TopLevelFilter } from '../widgets/Filter';
-import SidePanel from './SidePanel';
-import Legend from '../roster/Legend';
-import DeleteEventPopup from '../event/DeleteEventPopup';
+import { StyledSidePanel } from './SidePanel';
+import { StyledLegend } from '../roster/Legend';
+import { StyledDeleteEventPopup } from '../event/DeleteEventPopup';
+import { StyledTopBar } from '../widgets/TopBar';
 
 interface Props {
   trackerStore: TrackerStore;
@@ -25,7 +25,7 @@ export class Tracker extends React.Component<Props> {
     const {username, className} = this.props;
     return (
       [
-        <TopBar key="0" username={username} pageTitle="AVAILABILITY ROSTER"/>,
+        <StyledTopBar key="0" username={username} pageTitle="AVAILABILITY ROSTER"/>,
         (
           <div key="1" className={className}>
             <div className="main">
@@ -56,19 +56,19 @@ export class Tracker extends React.Component<Props> {
                 />
               </div>
               <div>
-                <Legend/>
+                <StyledLegend/>
               </div>
-              <Roster trackerStore={this.props.trackerStore}/>
+              <StyledRoster trackerStore={this.props.trackerStore}/>
             </div>
             {
               !this.props.trackerStore.selectedAirman.isEmpty &&
-              <SidePanel
+              <StyledSidePanel
                 trackerStore={this.props.trackerStore}
               />
             }
             {
               this.props.trackerStore.availabilityStore.pendingDeleteEvent &&
-              <DeleteEventPopup
+              <StyledDeleteEventPopup
                 event={this.props.trackerStore.availabilityStore.pendingDeleteEvent}
                 cancelPendingDeleteEvent={this.props.trackerStore.availabilityStore.setPendingDeleteEvent}
                 confirmPendingDeleteEvent={this.props.trackerStore.deleteEvent}
@@ -80,7 +80,7 @@ export class Tracker extends React.Component<Props> {
   }
 }
 
-export default styled(Tracker)`
+export const StyledTracker = styled(Tracker)`
   width: 80%;
   margin-left: 48px;
   padding: 0.5rem;

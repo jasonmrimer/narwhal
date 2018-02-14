@@ -1,8 +1,8 @@
-import EventRepository from './EventRepository';
-import EventModel, { EventType } from '../models/EventModel';
+import { EventRepository } from './EventRepository';
 import * as moment from 'moment';
+import { EventModel, EventType } from '../models/EventModel';
 
-export default function EventRepositoryContract(subject: EventRepository) {
+export function EventRepositoryContract(subject: EventRepository) {
   describe('save', () => {
     let savedEvent1: EventModel;
     const dateTime = moment().subtract(1, 'year');

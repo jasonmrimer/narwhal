@@ -1,12 +1,12 @@
-import AirmanRepository from './AirmanRepository';
-import AirmanModel from '../models/AirmanModel';
-import AirmanQualificationModel from '../models/AirmanQualificationModel';
-import QualificationModel from '../../skills/models/QualificationModel';
+import { AirmanRepository } from './AirmanRepository';
+import { AirmanModel } from '../models/AirmanModel';
+import { AirmanQualificationModel } from '../models/AirmanQualificationModel';
+import { QualificationModel } from '../../skills/models/QualificationModel';
 import * as moment from 'moment';
-import AirmanCertificationModel from '../models/AirmanCertificationModel';
-import CertificationModel from '../../skills/models/CertificationModel';
+import { AirmanCertificationModel } from '../models/AirmanCertificationModel';
+import { CertificationModel } from '../../skills/models/CertificationModel';
 
-export default function airmenRepositoryContract(subject: AirmanRepository) {
+export function airmanRepositoryContract(subject: AirmanRepository) {
   let airmen: AirmanModel[];
 
   beforeEach(async () => {

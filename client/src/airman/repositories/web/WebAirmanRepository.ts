@@ -1,6 +1,6 @@
-import AirmanRepository from '../AirmanRepository';
+import { AirmanRepository } from '../AirmanRepository';
 import { AirmanSerializer } from '../../serializers/AirmanSerializer';
-import AirmanModel from '../../models/AirmanModel';
+import { AirmanModel } from '../../models/AirmanModel';
 import * as Cookie from 'js-cookie';
 import { AirmanQualificationSerializer } from '../../serializers/AirmanQualificationSerializer';
 import { AirmanCertificationSerializer } from '../../serializers/AirmanCertificationSerializer';
@@ -8,7 +8,7 @@ import { Skill } from '../../../skills/models/Skill';
 import { SkillType } from '../../../skills/models/SkillType';
 
 /* tslint:disable:no-any*/
-export default class WebAirmanRepository implements AirmanRepository {
+export class WebAirmanRepository implements AirmanRepository {
   private serializer = new AirmanSerializer();
   private airmanQualSerializer = new AirmanQualificationSerializer();
   private airmanCertSerializer = new AirmanCertificationSerializer();

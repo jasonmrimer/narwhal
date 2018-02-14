@@ -1,5 +1,5 @@
-import QualificationModel from '../models/QualificationModel';
-import CertificationModel from '../models/CertificationModel';
+import { QualificationModel } from '../models/QualificationModel';
+import { CertificationModel } from '../models/CertificationModel';
 
 interface SkillRepository {
   findAllCertifications(): Promise<CertificationModel[]>;

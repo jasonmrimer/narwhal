@@ -1,7 +1,7 @@
 import { Serializer } from '../../utils/serializer';
-import AirmanQualificationModel from '../models/AirmanQualificationModel';
+import { AirmanQualificationModel } from '../models/AirmanQualificationModel';
 import * as moment from 'moment';
-import QualificationModel from '../../skills/models/QualificationModel';
+import { QualificationModel } from '../../skills/models/QualificationModel';
 
 export class AirmanQualificationSerializer implements Serializer<AirmanQualificationModel> {
   serialize(item: AirmanQualificationModel): {} {

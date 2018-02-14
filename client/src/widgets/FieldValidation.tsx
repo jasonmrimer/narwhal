@@ -29,7 +29,7 @@ export class FieldValidation extends React.Component<Props> {
   }
 }
 
-export default styled(FieldValidation)`
+export const StyledFieldValidation = styled(FieldValidation)`
   &.error {
     input[type="text"], input[type="date"] {
       border-bottom: 1px solid ${props => props.theme.yellow};

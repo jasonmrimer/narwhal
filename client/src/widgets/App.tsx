@@ -1,11 +1,11 @@
 import * as React from 'react';
-import Tracker from '../tracker/Tracker';
+import { StyledTracker } from '../tracker/Tracker';
 import ProfileRepository from '../profile/repositories/ProfileRepository';
-import Dashboard from '../dashboard/Dashboard';
+import { StyledDashboard } from '../dashboard/Dashboard';
 import { Route, Switch } from 'react-router-dom';
-import TrackerStore from '../tracker/stores/TrackerStore';
-import DashboardStore from '../dashboard/stores/DashboardStore';
-import Upload from '../upload/Upload';
+import { TrackerStore } from '../tracker/stores/TrackerStore';
+import { DashboardStore } from '../dashboard/stores/DashboardStore';
+import { Upload } from '../upload/Upload';
 
 interface Props {
   profileRepository: ProfileRepository;
@@ -17,7 +17,7 @@ interface State {
   username: string;
 }
 
-export default class App extends React.Component<Props, State> {
+export class App extends React.Component<Props, State> {
   state = {
     username: ''
   };
@@ -54,7 +54,7 @@ export default class App extends React.Component<Props, State> {
             path="/dashboard"
             render={() => {
               return (
-                <Dashboard
+                <StyledDashboard
                   username={this.state.username}
                   dashboardStore={this.props.dashboardStore}
                 />
@@ -66,7 +66,7 @@ export default class App extends React.Component<Props, State> {
             path="/"
             render={() => {
               return (
-                <Tracker
+                <StyledTracker
                   username={this.state.username}
                   trackerStore={this.props.trackerStore}
                 />

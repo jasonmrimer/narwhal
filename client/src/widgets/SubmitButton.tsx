@@ -6,13 +6,13 @@ interface Props {
   className?: string;
 }
 
-const SubmitButton = (props: Props) => {
+export const SubmitButton = (props: Props) => {
   return (
     <input className={props.className} type="submit" value={props.text}/>
   );
 };
 
-export default styled(SubmitButton)`
+export const StyledSubmitButton = styled(SubmitButton)`
   width: fit-content;
   background: none;
   color: ${props => props.theme.fontColor};

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import * as moment from 'moment';
-import EventModel, { EventType } from './models/EventModel';
 import { shallow, ShallowWrapper } from 'enzyme';
-import AvailabilityStore from '../availability/stores/AvailabilityStore';
+import { AvailabilityStore } from '../availability/stores/AvailabilityStore';
 import { DeleteEventPopup } from './DeleteEventPopup';
+import { EventModel, EventType } from './models/EventModel';
 
 const cancelPendingDeleteEvent = jest.fn();
 const confirmPendingDeleteEvent = jest.fn();

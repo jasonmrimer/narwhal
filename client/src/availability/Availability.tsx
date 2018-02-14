@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { Moment } from 'moment';
 import styled from 'styled-components';
-import EventModel from '../event/models/EventModel';
-import AvailabilityTile from './AvailabilityTile';
-import EventForm from '../event/EventForm';
+import { EventModel } from '../event/models/EventModel';
+import { StyledEventForm } from '../event/EventForm';
 import { observer } from 'mobx-react';
-import TrackerStore from '../tracker/stores/TrackerStore';
-import NextIcon from '../icons/NextIcon';
+import { TrackerStore } from '../tracker/stores/TrackerStore';
+import { NextIcon } from '../icons/NextIcon';
 import { doesDayHaveEvent } from '../utils/eventUtil';
-import BackIcon from '../icons/BackIcon';
+import { BackIcon } from '../icons/BackIcon';
+import { StyledAvailabilityTile } from './AvailabilityTile';
 
 interface Props {
   trackerStore: TrackerStore;
@@ -31,7 +31,7 @@ export class Availability extends React.Component<Props> {
 
   private renderEventForm = () => {
     return (
-      <EventForm
+      <StyledEventForm
         airmanId={this.props.trackerStore.selectedAirman.id}
         hideEventForm={this.closeEventForm}
         handleSubmit={this.submitAndCloseEventForm}
@@ -97,7 +97,7 @@ export class Availability extends React.Component<Props> {
       ? <div className="event-name">No Events Scheduled</div>
       : eventsForDay.map((event, index) => {
         return (
-          <AvailabilityTile
+          <StyledAvailabilityTile
             key={index}
             event={event}
             deleteEvent={this.props.trackerStore.availabilityStore.setPendingDeleteEvent}
@@ -118,7 +118,7 @@ export class Availability extends React.Component<Props> {
   }
 }
 
-export default styled(Availability)`
+export const StyledAvailability = styled(Availability)`
   width: 100%;
   text-align: center;
 

@@ -1,6 +1,6 @@
-import MissionRepository from './MissionRepository';
+import { MissionRepository } from './MissionRepository';
 
-export default function MissionRepositoryContract(subject: MissionRepository) {
+export function MissionRepositoryContract(subject: MissionRepository) {
 
   describe('findAll', () => {
     it('returns all missions', async () => {

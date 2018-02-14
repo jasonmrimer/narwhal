@@ -1,4 +1,4 @@
-export default class CertificationModel {
+export  class CertificationModel {
   constructor(public id: number,
               public title: string ) {
   }

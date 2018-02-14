@@ -1,12 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import CloseIcon from '../icons/CloseIcon';
-import Currency from '../currency/Currency';
-import Tab from './Tab';
+import { CloseIcon } from '../icons/CloseIcon';
+import { StyledCurrency } from '../currency/Currency';
+import { StyledTab } from './Tab';
 import { observer } from 'mobx-react';
-import TrackerStore from './stores/TrackerStore';
-import Availability from '../availability/Availability';
-import TabAlert from '../icons/TabAlert';
+import { TrackerStore } from './stores/TrackerStore';
+import { StyledAvailability } from '../availability/Availability';
+import { TabAlert } from '../icons/TabAlert';
 
 interface Props {
   trackerStore: TrackerStore;
@@ -31,11 +31,11 @@ export class SidePanel extends React.Component<Props, State> {
     switch (this.state.selectedTab) {
       case 0:
         this.props.trackerStore.currencyStore.setShowSkillForm(false);
-        return (<Currency trackerStore={this.props.trackerStore}/>);
+        return (<StyledCurrency trackerStore={this.props.trackerStore}/>);
       case 1:
       default:
         this.props.trackerStore.availabilityStore.setShowEventForm(false);
-        return (<Availability trackerStore={this.props.trackerStore}/>);
+        return (<StyledAvailability trackerStore={this.props.trackerStore}/>);
     }
   }
 
@@ -53,10 +53,14 @@ export class SidePanel extends React.Component<Props, State> {
           </h2>
         </div>
         <div className="tabs">
-          <Tab onClick={() => this.setSelectedTab(0)} title="CURRENCY" isActive={this.state.selectedTab === 0}>
+          <StyledTab onClick={() => this.setSelectedTab(0)} title="CURRENCY" isActive={this.state.selectedTab === 0}>
             {trackerStore.selectedAirman.hasExpiredSkills && <TabAlert/>}
-          </Tab>
-          <Tab onClick={() => this.setSelectedTab(1)} title="AVAILABILITY" isActive={this.state.selectedTab === 1}/>
+          </StyledTab>
+          <StyledTab
+            onClick={() => this.setSelectedTab(1)}
+            title="AVAILABILITY"
+            isActive={this.state.selectedTab === 1}
+          />
         </div>
         <div>
           {this.renderSelectedTab()}
@@ -66,7 +70,7 @@ export class SidePanel extends React.Component<Props, State> {
   }
 }
 
-export default styled(SidePanel)`
+export const StyledSidePanel = styled(SidePanel)`
   background-color: ${props => props.theme.lighter};
   min-width: 380px;
   padding: 0 1rem;

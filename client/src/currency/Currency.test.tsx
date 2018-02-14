@@ -2,14 +2,14 @@ import * as React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import { Currency } from './Currency';
 import { findSelectorWithText, makeFakeTrackerStore } from '../utils/testUtils';
-import TrackerStore from '../tracker/stores/TrackerStore';
-import AirmanModelFactory from '../airman/factories/AirmanModelFactory';
-import AirmanQualificationModel from '../airman/models/AirmanQualificationModel';
-import AirmanCertificationModel from '../airman/models/AirmanCertificationModel';
+import { TrackerStore } from '../tracker/stores/TrackerStore';
+import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
+import { AirmanQualificationModel } from '../airman/models/AirmanQualificationModel';
+import { AirmanCertificationModel } from '../airman/models/AirmanCertificationModel';
 import { SkillsForm } from '../skills/SkillsForm';
 import { SkillTile } from '../skills/SkillTile';
-import AirmanQualificationModelFactory from '../airman/factories/AirmanQualificationModelFactory';
-import AirmanCertificationModelFactory from '../airman/factories/AirmanCertificationModelFactory';
+import { AirmanQualificationModelFactory } from '../airman/factories/AirmanQualificationModelFactory';
+import { AirmanCertificationModelFactory } from '../airman/factories/AirmanCertificationModelFactory';
 
 describe('Currency', () => {
   const airman = AirmanModelFactory.build(

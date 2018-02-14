@@ -23,7 +23,7 @@ export const TimeInput = (props: Props) => {
   );
 };
 
-export default styled(TimeInput)`  
+export const StyledTimeInput = styled(TimeInput)`  
   &::placeholder {
     color: ${props => props.theme.graySteel};
   }

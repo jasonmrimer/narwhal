@@ -1,6 +1,6 @@
 import QualificationRepository from './SkillRepository';
 
-export default function SkillRepositoryContract(subject: QualificationRepository) {
+export function SkillRepositoryContract(subject: QualificationRepository) {
   describe('findAllQualifications', () => {
     it('returns a list of all qualifications', async () => {
       const qualifications = await subject.findAllQualifications();

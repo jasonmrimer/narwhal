@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import SiteModel from '../../site/models/SiteModel';
+import { SiteModel } from '../../site/models/SiteModel';
 
 const missionOne = {
   missionId: 'missionId1',
@@ -27,7 +27,7 @@ const missionThree = {
 
 const missions = [missionOne, missionTwo, missionThree];
 
-export default class MissionModelFactory {
+export class MissionModelFactory {
   static buildList() {
     return missions;
   }

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { MissionModel } from '../mission/models/MissionModel';
-import Mission from '../mission/Mission';
+import { StyledMission } from '../mission/Mission';
 import styled from 'styled-components';
-import TopBar from '../widgets/TopBar';
+import { StyledTopBar } from '../widgets/TopBar';
 import { observer } from 'mobx-react';
-import DashboardStore from './stores/DashboardStore';
+import { DashboardStore } from './stores/DashboardStore';
 import { TopLevelFilter } from '../widgets/Filter';
 
 interface Props {
@@ -22,7 +22,7 @@ export class Dashboard extends React.Component<Props> {
   render() {
     return (
       [
-        <TopBar key="0" username={this.props.username} pageTitle="MPS DASHBOARD"/>,
+        <StyledTopBar key="0" username={this.props.username} pageTitle="MPS DASHBOARD"/>,
         (
           <div key="1" className={`${this.props.className} filter`}>
             <div className="filter">
@@ -39,7 +39,7 @@ export class Dashboard extends React.Component<Props> {
         (
           <div key="2" className={`${this.props.className} missions`}>
             {this.props.dashboardStore.missions.map((mission: MissionModel, index) => {
-              return <Mission mission={mission} key={index}/>;
+              return <StyledMission mission={mission} key={index}/>;
             })}
           </div>)
       ]
@@ -47,7 +47,7 @@ export class Dashboard extends React.Component<Props> {
   }
 }
 
-export default styled(Dashboard)`
+export const StyledDashboard = styled(Dashboard)`
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;

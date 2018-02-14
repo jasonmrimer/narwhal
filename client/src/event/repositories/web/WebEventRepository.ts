@@ -1,9 +1,9 @@
-import EventRepository from '../EventRepository';
-import EventModel from '../../models/EventModel';
-import EventSerializer from '../../serializers/EventSerializer';
+import { EventRepository } from '../EventRepository';
+import { EventModel } from '../../models/EventModel';
+import { EventSerializer } from '../../serializers/EventSerializer';
 import * as Cookie from 'js-cookie';
 
-export default class WebEventRepository implements EventRepository {
+export class WebEventRepository implements EventRepository {
   private serializer: EventSerializer = new EventSerializer();
   private csrfToken: string;
 

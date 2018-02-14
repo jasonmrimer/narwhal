@@ -1,9 +1,9 @@
 import * as moment from 'moment';
 import { Moment } from 'moment';
-import QualificationModel from '../../skills/models/QualificationModel';
+import { QualificationModel } from '../../skills/models/QualificationModel';
 import { SkillType } from '../../skills/models/SkillType';
 
-export default class AirmanQualificationModel {
+export class AirmanQualificationModel {
   constructor(public airmanId: number,
               public qualification: QualificationModel,
               public earnDate: Moment,

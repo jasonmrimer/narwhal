@@ -1,11 +1,11 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import Planner from './planner/Planner';
+import { StyledPlanner } from './planner/Planner';
 import { observer } from 'mobx-react';
-import TrackerStore from '../tracker/stores/TrackerStore';
-import PlannerHeader from '../widgets/PlannerHeader';
-import MultiSelect from '../widgets/TypeAheadInput';
-import Notification from '../widgets/Notification';
+import { TrackerStore } from '../tracker/stores/TrackerStore';
+import { StyledPlannerHeader } from '../widgets/PlannerHeader';
+import { StyledNotification } from '../widgets/Notification';
+import { StyledMultiSelect } from '../widgets/MultiSelect';
 
 interface Props {
   trackerStore: TrackerStore;
@@ -34,7 +34,7 @@ export class Roster extends React.Component<Props> {
               <div>CERTIFICATION</div>
               {this.renderCertificationFilter()}
             </th>
-            <PlannerHeader plannerStore={this.props.trackerStore.plannerStore} />
+            <StyledPlannerHeader plannerStore={this.props.trackerStore.plannerStore} />
           </tr>
           </thead>
           <tbody>
@@ -43,7 +43,7 @@ export class Roster extends React.Component<Props> {
         </table>
         {
           this.props.trackerStore.airmen.length === 0 &&
-          <Notification>No members at this location match your search.</Notification>
+          <StyledNotification>No members at this location match your search.</StyledNotification>
         }
       </div>
     );
@@ -65,7 +65,7 @@ export class Roster extends React.Component<Props> {
           <td>{formatAttributes(airman.qualifications, 'acronym')}</td>
           <td className="certification-row">{formatAttributes(airman.certifications, 'title')}</td>
 
-          <Planner events={airman.events} week={this.props.trackerStore.plannerStore.plannerWeek}/>
+          <StyledPlanner events={airman.events} week={this.props.trackerStore.plannerStore.plannerWeek}/>
         </tr>
       );
     });
@@ -73,7 +73,7 @@ export class Roster extends React.Component<Props> {
 
   private renderQualificationFilter() {
     return (
-      <MultiSelect
+      <StyledMultiSelect
         multiple={true}
         onChange={this.props.trackerStore.setQualificationIds}
         options={this.props.trackerStore.qualificationOptions}
@@ -85,7 +85,7 @@ export class Roster extends React.Component<Props> {
 
   private renderCertificationFilter() {
     return (
-      <MultiSelect
+      <StyledMultiSelect
         multiple={true}
         onChange={this.props.trackerStore.setCertificationIds}
         options={this.props.trackerStore.certificationOptions}
@@ -96,7 +96,7 @@ export class Roster extends React.Component<Props> {
   }
 }
 
-export default styled(Roster)`
+export const StyledRoster = styled(Roster)`
   border: 1px solid ${props => props.theme.graySteel};
   
   table { 
