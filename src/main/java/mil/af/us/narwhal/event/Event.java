@@ -19,7 +19,6 @@ public class Event {
   private Long id;
 
   @NotNull
-  @Size(min = 1)
   private String title;
 
   private String description;
@@ -30,6 +29,7 @@ public class Event {
   @NotNull
   private Instant endTime;
 
+  @NotNull
   @Enumerated(EnumType.STRING)
   private EventType type;
 
