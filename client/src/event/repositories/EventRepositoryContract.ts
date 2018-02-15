@@ -31,7 +31,7 @@ export function EventRepositoryContract(subject: EventRepository) {
 
     describe('validation', () => {
       it('correctly handles validations from the server', async () => {
-        const event = new EventModel('', 'description1', moment.utc(), moment.utc(), 1, EventType.Leave);
+        const event = new EventModel('', 'description1', moment(), moment(), 1, EventType.Leave);
         try {
           await subject.save(event);
         } catch (errors) {
@@ -40,7 +40,7 @@ export function EventRepositoryContract(subject: EventRepository) {
       });
 
       it('correctly handles blank submissions from the server', async () => {
-        const event = new EventModel('', 'description1', moment.utc(), moment.utc(), 1);
+        const event = new EventModel('', 'description1', moment(), moment(), 1);
         try {
           await subject.save(event);
         } catch (errors) {
@@ -52,7 +52,7 @@ export function EventRepositoryContract(subject: EventRepository) {
 
   describe('delete', () => {
     it('deletes an event without exception', async () => {
-      const event = new EventModel('title1', 'description1', moment.utc(), moment.utc(), 1, EventType.Leave);
+      const event = new EventModel('title1', 'description1', moment(), moment(), 1, EventType.Leave);
       const savedEvent = await subject.save(event);
       await subject.delete(savedEvent);
     });
@@ -62,8 +62,8 @@ export function EventRepositoryContract(subject: EventRepository) {
         const event = new EventModel(
           'title1',
           'description1',
-          moment.utc(),
-          moment.utc(),
+          moment(),
+          moment(),
           1,
           EventType.Appointment,
           -1

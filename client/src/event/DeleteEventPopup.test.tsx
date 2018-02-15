@@ -7,7 +7,7 @@ import { EventModel, EventType } from './models/EventModel';
 
 const cancelPendingDeleteEvent = jest.fn();
 const confirmPendingDeleteEvent = jest.fn();
-const event = new EventModel('Title', 'Description', moment.utc(), moment.utc(), 1, EventType.Mission);
+const event = new EventModel('Title', 'Description', moment(), moment(), 1, EventType.Mission);
 let subject: ShallowWrapper;
 
 describe('DeleteEventPopup', () => {

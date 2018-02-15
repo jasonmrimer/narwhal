@@ -15,8 +15,8 @@ import Mock = jest.Mock;
 describe('EventForm', () => {
   const setPendingDeleteSpy = jest.fn();
   const airmanId = 123;
-  const startTime = moment.utc('2018-01-01T01:00:00Z');
-  const endTime = moment.utc('2018-01-01T11:00:00Z');
+  const startTime = moment('2018-01-01T01:00:00Z');
+  const endTime = moment('2018-01-01T11:00:00Z');
 
   let handleSubmitSpy: Mock;
   let hideEventFormMock: Mock;
@@ -57,8 +57,8 @@ describe('EventForm', () => {
     const expectedEvent = new EventModel(
       'Title',
       'Description',
-      moment.utc('2018-01-10 00:00', 'YYYY-MM-DD HH:mm'),
-      moment.utc('2018-01-10 12:34', 'YYYY-MM-DD HH:mm'),
+      moment('2018-01-10 00:00', 'YYYY-MM-DD HH:mm'),
+      moment('2018-01-10 12:34', 'YYYY-MM-DD HH:mm'),
       airmanId,
       EventType.Appointment
     );
@@ -71,7 +71,7 @@ describe('EventForm', () => {
   });
 
   it('populates the form when given an existing Event', () => {
-    const dateTime = moment.utc('2018-01-10 00:00', 'YYYY-MM-DD HH:mm');
+    const dateTime = moment('2018-01-10 00:00', 'YYYY-MM-DD HH:mm');
     const event = new EventModel('Title', 'Description', dateTime, dateTime, airmanId, EventType.Leave, 1);
     subject.setProps({event: event});
 
@@ -109,7 +109,7 @@ describe('EventForm', () => {
   });
 
   it('has an actionable delete button', () => {
-    const dateTime = moment.utc('2018-01-10 00:00', 'YYYY-MM-DD HH:mm');
+    const dateTime = moment('2018-01-10 00:00', 'YYYY-MM-DD HH:mm');
     const event = new EventModel('Title', 'Description', dateTime, dateTime, airmanId, EventType.Leave, 1);
     subject.setProps({event: event});
 

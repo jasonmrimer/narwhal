@@ -55,14 +55,14 @@ class Event
     page.within('.side-panel') do
       find('a', text: 'AVAILABILITY').click
       click(page.all('.event-title', text: @title)[0])
-      click(page.all('button.delete', text: @delete_button)[0])
+      click(page.all('button.delete', text: 'DELETE')[0])
     end
 
     expect(page.has_content?('REMOVE EVENT')).to be true
     page.find('button.cancel', text: 'CANCEL').click
     expect(page.has_content?('REMOVE EVENT')).to be false
 
-    click(page.all('button.delete', text: @delete_button)[0])
+    click(page.all('button.delete', text: 'DELETE')[0])
 
     expect(page.has_content?('REMOVE EVENT')).to be true
     page.find('button.confirm', text: 'REMOVE').click
@@ -73,17 +73,16 @@ class Event
       page.has_content?('AVAILABILITY') &&
           page.has_content?(@start.strftime('%d %^b %y')) &&
           page.has_content?(@title) &&
-          page.has_content?(@start.strftime('%H%MZ') + ' - ' + @end.strftime('%H%MZ'))
+          page.has_content?(@start.strftime('%H%ML') + ' - ' + @end.strftime('%H%ML'))
     end
   end
 
   private
 
   def set_attrs
-    @start = Time.now.utc
+    @start = Time.now
     @end = @start + (60 * 60 * 36)
     @title = "Test Event #{Time.now}"
-    @delete_button = "DELETE"
   end
 
   def click(element)

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { StyledPlanner } from './planner/Planner';
+import { StyledPlanner } from './Planner';
 import { observer } from 'mobx-react';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { StyledPlannerHeader } from '../widgets/PlannerHeader';

@@ -23,24 +23,24 @@ describe('Availability', () => {
     eventOne = new EventModel(
       'Event One',
       '',
-      moment('2017-11-27T05:00:00.000Z'),
-      moment('2017-11-27T10:00:00.000Z'),
+      moment('2017-11-27'),
+      moment('2017-11-27'),
       1,
       EventType.Mission
     );
     eventTwo = new EventModel(
       'Event Two',
       '',
-      moment('2017-11-27T12:00:00.000Z'),
-      moment('2017-11-27T15:00:00.000Z'),
+      moment('2017-11-27'),
+      moment('2017-11-27'),
       1,
       EventType.Mission
     );
     eventThree = new EventModel(
       'Event Three',
       '',
-      moment('2017-11-27T12:00:00.000Z'),
-      moment('2017-11-30T15:00:00.000Z'),
+      moment('2017-11-27'),
+      moment('2017-11-30'),
       1,
       EventType.Leave
     );

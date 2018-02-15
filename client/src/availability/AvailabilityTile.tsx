@@ -16,7 +16,7 @@ export const AvailabilityTile = observer((props: Props) => {
         <span>{props.event.title}</span>
       </div>
       <div className="event-description">
-        <span>{`${props.event.startTime.format('HHmm')}Z - ${props.event.endTime.format('HHmm')}Z`}</span>
+        <span>{`${props.event.startTime.format('HHmm')}L - ${props.event.endTime.format('HHmm')}L`}</span>
         <span>{props.event.description}</span>
       </div>
     </div>

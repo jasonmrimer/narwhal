@@ -136,8 +136,8 @@ public class AirmanControllerTest {
     final AirmanQualification airmanQualification = new AirmanQualification(
       airman1.getId(),
       qualification1,
-      new Date(),
-      new Date()
+      Instant.now(),
+      Instant.now()
     );
     final String json = objectMapper.writeValueAsString(airmanQualification);
 
@@ -162,8 +162,8 @@ public class AirmanControllerTest {
     final AirmanCertification airmanCertification = new AirmanCertification(
       airman1.getId(),
       certification1,
-      new Date(),
-      new Date()
+      Instant.now(),
+      Instant.now()
     );
     final String json = objectMapper.writeValueAsString(airmanCertification);
 
@@ -187,13 +187,13 @@ public class AirmanControllerTest {
   public void updateAirmanQualification() throws JsonProcessingException {
     final AirmanQualification airmanQualification = new AirmanQualification(
       qualification1,
-      new Date(),
-      new Date()
+      Instant.now(),
+      Instant.now()
     );
     airman1.addQualification(airmanQualification);
     final Airman savedAirman1 = airmanRepository.save(airman1);
 
-    final Date newExpirationDate = Date.from(Instant.EPOCH);
+    final Instant newExpirationDate = Instant.EPOCH;
     final AirmanQualification updatedAirmanQualification = savedAirman1.getQualifications().get(0);
     updatedAirmanQualification.setExpirationDate(newExpirationDate);
 
@@ -211,7 +211,7 @@ public class AirmanControllerTest {
       .put(AirmanController.URI + "/" + airman1.getId() + "/qualifications")
     .then()
       .statusCode(200)
-      .body("qualifications[0].expirationDate", equalTo("1970-01-01T00:00:00.000+0000"));
+      .body("qualifications[0].expirationDate", equalTo("1970-01-01T00:00:00Z"));
     // @formatter:on
   }
 
@@ -219,13 +219,13 @@ public class AirmanControllerTest {
   public void updateAirmanCertification() throws JsonProcessingException {
     final AirmanCertification airmanCertification = new AirmanCertification(
       certification1,
-      new Date(),
-      new Date()
+      Instant.now(),
+      Instant.now()
     );
     airman1.addCertification(airmanCertification);
     final Airman savedAirman1 = airmanRepository.save(airman1);
 
-    final Date newExpirationDate = Date.from(Instant.EPOCH);
+    final Instant newExpirationDate = Instant.EPOCH;
     final AirmanCertification updatedAirmanCertification = savedAirman1.getCertifications().get(0);
     updatedAirmanCertification.setExpirationDate(newExpirationDate);
 
@@ -243,7 +243,7 @@ public class AirmanControllerTest {
       .put(AirmanController.URI + "/" + airman1.getId() + "/certifications")
     .then()
       .statusCode(200)
-      .body("certifications[0].expirationDate", equalTo("1970-01-01T00:00:00.000+0000"));
+      .body("certifications[0].expirationDate", equalTo("1970-01-01T00:00:00Z"));
     // @formatter:on
   }
 
@@ -251,8 +251,8 @@ public class AirmanControllerTest {
   public void deleteQualificationTest() {
     final AirmanQualification airmanQualification = new AirmanQualification(
       qualification1,
-      new Date(),
-      new Date()
+      Instant.now(),
+      Instant.now()
     );
     airman1.addQualification(airmanQualification);
     final Long airmanQualificationId = airmanRepository.save(airman1).getQualifications().get(0).getId();
@@ -275,8 +275,8 @@ public class AirmanControllerTest {
   public void deleteCertificationTest() {
     final AirmanCertification airmanCertification = new AirmanCertification(
       certification1,
-      new Date(),
-      new Date()
+      Instant.now(),
+      Instant.now()
     );
     airman1.addCertification(airmanCertification);
     final Long airmanCertificationId = airmanRepository.save(airman1).getCertifications().get(0).getId();

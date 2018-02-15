@@ -4,7 +4,7 @@ import { NextIcon } from '../icons/NextIcon';
 import { Moment } from 'moment';
 import styled from 'styled-components';
 import * as classNames from 'classnames';
-import { PlannerStore } from '../roster/planner/stores/PlannerStore';
+import { PlannerStore } from '../roster/stores/PlannerStore';
 
 interface Props {
   plannerStore: PlannerStore;

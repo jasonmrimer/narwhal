@@ -15,7 +15,7 @@ import { MissionRepositoryStub } from '../../mission/repositories/doubles/Missio
 import { AirmanQualificationModelFactory } from '../../airman/factories/AirmanQualificationModelFactory';
 import { AvailabilityStore } from '../../availability/stores/AvailabilityStore';
 import { CurrencyStore } from '../../currency/stores/CurrencyStore';
-import { PlannerStore } from '../../roster/planner/stores/PlannerStore';
+import { PlannerStore } from '../../roster/stores/PlannerStore';
 import { TimeServiceStub } from '../services/doubles/TimeServiceStub';
 import { MissionStore } from '../../mission/stores/MissionStore';
 import { EventModel, EventType } from '../../event/models/EventModel';
@@ -195,7 +195,7 @@ describe('TrackerStore', () => {
   });
 
   describe('events', () => {
-    const event = new EventModel('Title', 'Description', moment.utc(), moment.utc(), 1, EventType.Mission);
+    const event = new EventModel('Title', 'Description', moment(), moment(), 1, EventType.Mission);
 
     it('should add an event to an airman', async () => {
       const savedEvent = await subject.addEvent(event);
@@ -239,7 +239,7 @@ describe('TrackerStore', () => {
 
   describe('selecting an airman', () => {
     it('clears the selected event', () => {
-      subject.availabilityStore.setSelectedEvent(new EventModel('', '', moment.utc(), moment.utc(), 1));
+      subject.availabilityStore.setSelectedEvent(new EventModel('', '', moment(), moment(), 1));
       subject.setSelectedAirman(AirmanModelFactory.build());
       expect(subject.availabilityStore.selectedEvent).toBeNull();
     });
@@ -278,8 +278,8 @@ describe('TrackerStore', () => {
       const qualification = new AirmanQualificationModel(
         airman.id,
         new QualificationModel(100, 'A', 'A'),
-        moment.utc(),
-        moment.utc()
+        moment(),
+        moment()
       );
       const qualLength = airman.qualifications.length;
       await subject.addAirmanSkill(qualification);
@@ -292,8 +292,8 @@ describe('TrackerStore', () => {
       const certification = new AirmanCertificationModel(
         airman.id,
         new CertificationModel(100, 'A'),
-        moment.utc(),
-        moment.utc()
+        moment(),
+        moment()
       );
       const certLength = airman.certifications.length;
       await subject.addAirmanSkill(certification);
@@ -306,8 +306,8 @@ describe('TrackerStore', () => {
       const qualification = new AirmanQualificationModel(
         airman.id,
         new QualificationModel(100, 'A', 'A'),
-        moment.utc(),
-        moment.utc()
+        moment(),
+        moment()
       );
       await subject.addAirmanSkill(qualification);
       let updatedAirman = (await airmenRepository.findAll())[0];

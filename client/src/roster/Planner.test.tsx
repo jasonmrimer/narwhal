@@ -2,20 +2,20 @@ import * as React from 'react';
 import { shallow } from 'enzyme';
 import { Planner } from './Planner';
 import * as moment from 'moment';
-import { AppointmentIcon } from '../../icons/AppointmentIcon';
-import { LeaveIcon } from '../../icons/LeaveIcon';
-import { MissionIcon } from '../../icons/MissionIcon';
-import { AvailableIcon } from '../../icons/AvailableIcon';
-import { TimeServiceStub } from '../../tracker/services/doubles/TimeServiceStub';
-import { EventModel, EventType } from '../../event/models/EventModel';
+import { AppointmentIcon } from '../icons/AppointmentIcon';
+import { LeaveIcon } from '../icons/LeaveIcon';
+import { MissionIcon } from '../icons/MissionIcon';
+import { AvailableIcon } from '../icons/AvailableIcon';
+import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
+import { EventModel, EventType } from '../event/models/EventModel';
 
 describe('Planner', () => {
   it('renders airmen high-level availability', () => {
     const appointment = new EventModel(
       'Appointment',
       '',
-      moment.utc('2017-11-26T05:00:00.000Z'),
-      moment.utc('2017-11-26T06:00:00.000Z'),
+      moment('2017-11-26T05:00:00.000Z'),
+      moment('2017-11-26T06:00:00.000Z'),
       1,
       EventType.Appointment,
       1
@@ -24,8 +24,8 @@ describe('Planner', () => {
     const mission = new EventModel(
       'Mission',
       '',
-      moment.utc('2017-11-27T05:00:00.000Z'),
-      moment.utc('2017-11-27T06:00:00.000Z'),
+      moment('2017-11-27T05:00:00.000Z'),
+      moment('2017-11-27T06:00:00.000Z'),
       1,
       EventType.Mission,
       2
@@ -34,8 +34,8 @@ describe('Planner', () => {
     const leave = new EventModel(
       'Leave',
       '',
-      moment.utc('2017-11-28T05:00:00.000Z'),
-      moment.utc('2017-11-30T05:00:00.000Z'),
+      moment('2017-11-28T05:00:00.000Z'),
+      moment('2017-11-30T05:00:00.000Z'),
       1,
       EventType.Leave,
       3

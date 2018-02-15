@@ -1,5 +1,5 @@
 import { action, computed, observable } from 'mobx';
-import { TimeService } from '../../../tracker/services/TimeService';
+import { TimeService } from '../../tracker/services/TimeService';
 import { Moment } from 'moment';
 
 export class PlannerStore {

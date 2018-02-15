@@ -13,8 +13,8 @@ export const Mission = (props: Props) => {
     <span className={`${props.className} mission-card`} >
       <div>{atoMissionNumber}</div>
       <div>MSN DATE: {startDateTime.format('DD MMM YY').toUpperCase()}</div>
-      <div>MSN START: {startDateTime.format('HHmm[Z]')}</div>
-      <div>MSN END: {endDateTime ? endDateTime.format('HHmm[Z]') : 'TBD'}</div>
+      <div>MSN START: {startDateTime.format('HHmm[L]')}</div>
+      <div>MSN END: {endDateTime ? endDateTime.format('HHmm[L]') : 'TBD'}</div>
     </span>
   );
 };

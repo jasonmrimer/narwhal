@@ -8,8 +8,7 @@ export class AirmanCertificationModel {
               public certification: CertificationModel,
               public earnDate: Moment,
               public expirationDate: Moment,
-              public id: number | null = null,
-              public errors?: object[]) {
+              public id: number | null = null) {
   }
 
   get type() {
@@ -25,6 +24,6 @@ export class AirmanCertificationModel {
   }
 
   get isExpired() {
-    return this.expirationDate.isBefore(moment.utc().add(14, 'days'));
+    return this.expirationDate.isBefore(moment().add(14, 'days'));
   }
 }

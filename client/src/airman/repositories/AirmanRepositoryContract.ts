@@ -68,8 +68,8 @@ export function airmanRepositoryContract(subject: AirmanRepository) {
       const certification = new AirmanCertificationModel(
         airmen[0].id,
         new CertificationModel(certId, 'A'),
-        moment.utc(),
-        moment.utc()
+        moment(),
+        moment()
       );
       const airman = await subject.saveSkill(certification);
       expect(airman.certifications.find(c => c.certification.id === certId)!.id).toBeDefined();
@@ -80,19 +80,18 @@ export function airmanRepositoryContract(subject: AirmanRepository) {
       const newCert = new AirmanCertificationModel(
         airmen[0].id,
         new CertificationModel(certId, 'A'),
-        moment.utc(),
-        moment.utc()
+        moment(),
+        moment()
       );
 
       let airman = await subject.saveSkill(newCert);
       const savedCert = airman.certifications.find(c => c.certification.id === certId)!;
-      const newExpirationDate = savedCert.expirationDate.add(1, 'year').utc();
+
+      const newExpirationDate = savedCert.expirationDate.add(1, 'year');
 
       airman = await subject.saveSkill(savedCert);
-      expect(airman.certifications
-        .find(c => c.certification.id === certId)!
-        .expirationDate.isSame(newExpirationDate))
-        .toBeTruthy();
+      expect(airman.certifications.find(c => c.certification.id === certId)!
+        .expirationDate.isSame(newExpirationDate)).toBeTruthy();
     });
 
     it('saves a qualification with a unique id', async () => {
@@ -100,8 +99,8 @@ export function airmanRepositoryContract(subject: AirmanRepository) {
       const qualification = new AirmanQualificationModel(
         airmen[0].id,
         new QualificationModel(qualId, 'A', 'A'),
-        moment.utc(),
-        moment.utc()
+        moment(),
+        moment()
       );
       const airman = await subject.saveSkill(qualification);
       expect(airman.qualifications.find(q => q.qualification.id === qualId)!.id).toBeDefined();
@@ -112,13 +111,13 @@ export function airmanRepositoryContract(subject: AirmanRepository) {
       const newQual = new AirmanQualificationModel(
         airmen[0].id,
         new QualificationModel(qualId, 'A', 'A'),
-        moment.utc(),
-        moment.utc()
+        moment(),
+        moment()
       );
 
       let airman = await subject.saveSkill(newQual);
       const savedQual = airman.qualifications.find(q => q.qualification.id === qualId)!;
-      const newExpirationDate = savedQual.expirationDate.add(1, 'year').utc();
+      const newExpirationDate = savedQual.expirationDate.add(1, 'year');
 
       airman = await subject.saveSkill(savedQual);
       expect(airman.qualifications
@@ -134,8 +133,8 @@ export function airmanRepositoryContract(subject: AirmanRepository) {
         const skill = new AirmanQualificationModel(
           airmen[0].id,
           new QualificationModel(qualId, 'A', 'B'),
-          moment.utc(''),
-          moment.utc('')
+          moment(''),
+          moment('')
         );
         try {
           await subject.saveSkill(skill);
@@ -152,8 +151,8 @@ export function airmanRepositoryContract(subject: AirmanRepository) {
       const skill = new AirmanQualificationModel(
         airman.id,
         new QualificationModel(1, 'A', 'A'),
-        moment.utc(),
-        moment.utc()
+        moment(),
+        moment()
       );
 
       airman = await subject.saveSkill(skill);
@@ -168,8 +167,8 @@ export function airmanRepositoryContract(subject: AirmanRepository) {
       const skill = new AirmanCertificationModel(
         airman.id,
         new CertificationModel(1, 'A'),
-        moment.utc(),
-        moment.utc()
+        moment(),
+        moment()
       );
 
       airman = await subject.saveSkill(skill);

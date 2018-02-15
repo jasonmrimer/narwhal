@@ -82,7 +82,7 @@ export class Availability extends React.Component<Props> {
               return (
                 <div id={`day-${index}`} key={index}>
                   <div className="event-date">{day.format('ddd, DD MMM YY').toUpperCase()}</div>
-                  {this.scheduledEventsForDate(day.utc(), trackerStore.selectedAirman.events)}
+                  {this.scheduledEventsForDate(day, trackerStore.selectedAirman.events)}
                 </div>
               );
             })

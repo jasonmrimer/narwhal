@@ -143,8 +143,8 @@ export class SkillsForm extends React.Component<Props, State> {
 
     const builder = new SkillBuilder()
       .setAirmanId(this.props.airmanId)
-      .setEarnDate(moment.utc(this.state.earnDate))
-      .setExpirationDate(moment.utc(this.state.expirationDate))
+      .setEarnDate(moment(this.state.earnDate))
+      .setExpirationDate(moment(this.state.expirationDate))
       .setSkill(this.getSkillById());
 
     if (this.props.skill != null && this.props.skill.id) {

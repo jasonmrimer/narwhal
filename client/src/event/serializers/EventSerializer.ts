@@ -12,8 +12,8 @@ export class EventSerializer implements Serializer<EventModel> {
     return new EventModel(
       item.title,
       item.description,
-      moment.utc(item.startTime),
-      moment.utc(item.endTime),
+      moment(item.startTime),
+      moment(item.endTime),
       item.airmanId,
       item.type,
       item.id,

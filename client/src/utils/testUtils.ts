@@ -1,5 +1,5 @@
 import { Filter } from '../widgets/Filter';
-import { Planner } from '../roster/planner/Planner';
+import { Planner } from '../roster/Planner';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { AirmanRepositoryStub } from '../airman/repositories/doubles/AirmanRepositoryStub';
 import { SiteRepositoryStub } from '../site/repositories/doubles/SiteRepositoryStub';
@@ -10,7 +10,7 @@ import { Moment } from 'moment';
 import { MissionRepositoryStub } from '../mission/repositories/doubles/MissionRepositoryStub';
 import { AvailabilityStore } from '../availability/stores/AvailabilityStore';
 import { CurrencyStore } from '../currency/stores/CurrencyStore';
-import { PlannerStore } from '../roster/planner/stores/PlannerStore';
+import { PlannerStore } from '../roster/stores/PlannerStore';
 import { MissionStore } from '../mission/stores/MissionStore';
 
 export async function makeFakeTrackerStore(shouldHydrateState: boolean = true) {

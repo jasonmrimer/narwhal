@@ -733,6 +733,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/resources/db/migration/V4__Migrate_date_fields_to_datetime.sql">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/resources/db/migration/V5__Add_expiration_date_to_qualifications_and_certifications.sql">
           <value>
             <set />
@@ -799,6 +804,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/test/java/mil/af/us/narwhal/airman/AirmanControllerTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/test/java/mil/af/us/narwhal/airman/AirmanTest.java">
           <value>
             <set />
           </value>

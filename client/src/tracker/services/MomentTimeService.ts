@@ -4,7 +4,7 @@ import { Moment } from 'moment';
 
 export class MomentTimeService implements TimeService {
   getCurrentWeek(): Moment[] {
-    const sunday = moment.utc().startOf('week');
+    const sunday = moment().startOf('week');
     return [
       sunday,
       sunday.clone().add(1, 'day'),
@@ -16,7 +16,7 @@ export class MomentTimeService implements TimeService {
     ];
   }
   incrementWeek(week: Moment[]): Moment[] {
-    const sunday = week[0].clone().utc().startOf('week').add(7, 'day');
+    const sunday = week[0].clone().startOf('week').add(7, 'day');
     return [
       sunday,
       sunday.clone().add(1, 'day'),
@@ -29,7 +29,7 @@ export class MomentTimeService implements TimeService {
   }
 
   decrementWeek(week: moment.Moment[]): moment.Moment[] {
-    const sunday = week[0].clone().utc().startOf('week').subtract(7, 'day');
+    const sunday = week[0].clone().startOf('week').subtract(7, 'day');
     return [
       sunday,
       sunday.clone().add(1, 'day'),

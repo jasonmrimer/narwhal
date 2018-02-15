@@ -15,8 +15,8 @@ import { SkillType } from './models/SkillType';
 import Mock = jest.Mock;
 
 describe('SkillsForm', () => {
-  const earnDate = moment.utc('2018-02-01');
-  const expirationDate = moment.utc('2019-02-01');
+  const earnDate = moment('2018-02-01');
+  const expirationDate = moment('2019-02-01');
 
   let errors: object[] = [];
   let quals: QualificationModel[];

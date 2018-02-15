@@ -108,8 +108,8 @@ class Skill
   private
 
   def set_attrs
-    @earn = Time.now.utc
-    @expiration = @earn + 36000000
+    @earn = Time.now
+    @expiration = @earn + (60 * 60 * 24 * 365)
     @qual_title = 'HT - Instructor'
     @cert_title = 'X-Ray Vision'
   end

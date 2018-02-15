@@ -10,7 +10,7 @@ export function TimeServiceContract(subject: TimeService) {
       expect(week.length).toBe(7);
       week.forEach((day) => {
         expect(moment.isMoment(day)).toBeTruthy();
-        expect(day.isUTC()).toBeTruthy();
+        expect(day).toBeTruthy();
       });
     });
   });

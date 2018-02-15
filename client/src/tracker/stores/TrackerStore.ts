@@ -11,7 +11,7 @@ import SkillRepository from '../../skills/repositories/SkillRepository';
 import { Skill } from '../../skills/models/Skill';
 import { CurrencyStore } from '../../currency/stores/CurrencyStore';
 import { AvailabilityStore } from '../../availability/stores/AvailabilityStore';
-import { PlannerStore } from '../../roster/planner/stores/PlannerStore';
+import { PlannerStore } from '../../roster/stores/PlannerStore';
 import { MissionStore } from '../../mission/stores/MissionStore';
 import { FilterOption, UnfilteredValue } from '../../widgets/models/FilterOptionModel';
 

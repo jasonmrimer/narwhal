@@ -12,8 +12,8 @@ export class MissionSerializer implements Serializer<MissionModel> {
     return new MissionModel(
       item.missionId,
       item.atoMissionNumber,
-      moment(item.startDateTime, moment.ISO_8601).utc(),
-      item.endDateTime ? moment(item.endDateTime, moment.ISO_8601).utc() : null,
+      moment(item.startDateTime),
+      item.endDateTime ? moment(item.endDateTime) : null,
       item.site
     );
   }

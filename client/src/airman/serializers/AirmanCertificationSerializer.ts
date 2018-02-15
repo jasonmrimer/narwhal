@@ -16,8 +16,8 @@ export class AirmanCertificationSerializer implements Serializer<AirmanCertifica
         item.certification.id,
         item.certification.title
       ),
-      moment.utc(item.earnDate),
-      moment.utc(item.expirationDate),
+      moment(item.earnDate),
+      moment(item.expirationDate),
       item.id
     );
   }

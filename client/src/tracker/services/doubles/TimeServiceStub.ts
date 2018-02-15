@@ -5,18 +5,18 @@ import { TimeService } from '../TimeService';
 export class TimeServiceStub implements TimeService {
    getCurrentWeek(): Moment[] {
     return [
-      moment.utc('2017-11-26T00:00:00.000Z'),
-      moment.utc('2017-11-27T00:00:00.000Z'),
-      moment.utc('2017-11-28T00:00:00.000Z'),
-      moment.utc('2017-11-29T00:00:00.000Z'),
-      moment.utc('2017-11-30T00:00:00.000Z'),
-      moment.utc('2017-12-01T00:00:00.000Z'),
-      moment.utc('2017-12-02T00:00:00.000Z')
+      moment('2017-11-26'),
+      moment('2017-11-27'),
+      moment('2017-11-28'),
+      moment('2017-11-29'),
+      moment('2017-11-30'),
+      moment('2017-12-01'),
+      moment('2017-12-02')
     ];
   }
 
   incrementWeek(week: Moment[]): Moment[] {
-    const sunday = week[0].utc().startOf('week').add(7, 'day');
+    const sunday = week[0].clone().startOf('week').add(7, 'day');
     return [
       sunday,
       sunday.clone().add(1, 'day'),
@@ -29,7 +29,7 @@ export class TimeServiceStub implements TimeService {
   }
 
   decrementWeek(week: Moment[]): Moment[] {
-    const sunday = week[0].utc().startOf('week').subtract(7, 'day');
+    const sunday = week[0].clone().startOf('week').subtract(7, 'day');
     return [
       sunday,
       sunday.clone().add(1, 'day'),

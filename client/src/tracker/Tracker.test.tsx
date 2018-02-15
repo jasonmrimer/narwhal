@@ -64,7 +64,7 @@ describe('Tracker', () => {
   });
 
   it('renders a delete popup when there is a pending delete event', () => {
-    const event = new EventModel('Title', 'Description', moment.utc(), moment.utc(), 1, EventType.Mission);
+    const event = new EventModel('Title', 'Description', moment(), moment(), 1, EventType.Mission);
     expect(subject.find(StyledDeleteEventPopup).exists()).toBeFalsy();
     trackerStore.availabilityStore.setPendingDeleteEvent(event);
     subject.update();

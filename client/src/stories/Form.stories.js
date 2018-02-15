@@ -96,8 +96,8 @@ export function FormStory() {
             new AirmanQualificationModel(
               1,
               new QualificationModel(1, 'A', 'A'),
-              moment.utc(),
-              moment.utc()
+              moment(),
+              moment()
             )
           }
         />

@@ -4,6 +4,7 @@ import mil.af.us.narwhal.skills.Certification;
 import mil.af.us.narwhal.skills.Qualification;
 import org.junit.Test;
 
+import java.time.Instant;
 import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -12,7 +13,7 @@ public class AirmanTest {
   @Test
   public void addQualification_doesNotDuplicateQuals() throws Exception {
     final Qualification qualification = new Qualification(1L, "A", "A");
-    final AirmanQualification airmanQualification = new AirmanQualification(qualification, new Date(), new Date());
+    final AirmanQualification airmanQualification = new AirmanQualification(qualification, Instant.now(), Instant.now());
     final Airman airman = new Airman();
 
     assertThat(airman.addQualification(airmanQualification)).isTrue();
@@ -25,7 +26,7 @@ public class AirmanTest {
   @Test
   public void addCertification_doesNotDuplicateCerts() throws Exception {
     final Certification certification = new Certification(1L, "A");
-    final AirmanCertification airmanCertification = new AirmanCertification(certification, new Date(), new Date());
+    final AirmanCertification airmanCertification = new AirmanCertification(certification, Instant.now(), Instant.now());
     final Airman airman = new Airman();
 
     assertThat(airman.addCertification(airmanCertification)).isTrue();

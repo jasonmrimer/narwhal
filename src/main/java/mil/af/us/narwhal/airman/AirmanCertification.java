@@ -7,6 +7,7 @@ import mil.af.us.narwhal.skills.Certification;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.Instant;
 import java.util.Date;
 
 @Entity
@@ -31,20 +32,20 @@ public class AirmanCertification {
 
   @NotNull
   @Column(name = "earn_date")
-  private Date earnDate;
+  private Instant earnDate;
 
   @NotNull
   @Column(name = "expiration_date")
-  private Date expirationDate;
+  private Instant expirationDate;
 
-  public AirmanCertification(Long airmanId, Certification certification, Date earnDate, Date expirationDate) {
+  public AirmanCertification(Long airmanId, Certification certification, Instant earnDate, Instant expirationDate) {
     this.airmanId = airmanId;
     this.certification = certification;
     this.earnDate = earnDate;
     this.expirationDate = expirationDate;
   }
 
-  public AirmanCertification(Certification certification, Date earnDate, Date expirationDate) {
+  public AirmanCertification(Certification certification, Instant earnDate, Instant expirationDate) {
     this.certification = certification;
     this.earnDate = earnDate;
     this.expirationDate = expirationDate;

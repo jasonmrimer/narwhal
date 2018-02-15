@@ -19,7 +19,7 @@ import { WebEventRepository } from './event/repositories/web/WebEventRepository'
 import { default as WebSkillRepository } from './skills/repositories/web/WebSkillRepository';
 import { AvailabilityStore } from './availability/stores/AvailabilityStore';
 import { CurrencyStore } from './currency/stores/CurrencyStore';
-import { PlannerStore } from './roster/planner/stores/PlannerStore';
+import { PlannerStore } from './roster/stores/PlannerStore';
 import { MissionStore } from './mission/stores/MissionStore';
 
 document.body.style.fontFamily = Theme.fontFamily;
