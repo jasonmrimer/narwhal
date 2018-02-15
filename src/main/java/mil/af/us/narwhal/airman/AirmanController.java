@@ -60,6 +60,7 @@ public class AirmanController {
   @PutMapping(path = "/{id}/qualifications")
   public Airman updateAirmanQualification(
     @PathVariable("id") Long id,
+    @Valid
     @RequestBody AirmanQualification qualification
   ) {
     final Airman airman = repository.findOne(id);
@@ -70,6 +71,7 @@ public class AirmanController {
   @PutMapping(path = "/{id}/certifications")
   public Airman updateAirmanCertification(
     @PathVariable("id") Long id,
+    @Valid
     @RequestBody AirmanCertification certification
   ) {
     final Airman airman = repository.findOne(id);

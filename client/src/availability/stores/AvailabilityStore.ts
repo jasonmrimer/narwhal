@@ -29,6 +29,7 @@ export class AvailabilityStore {
 
   @action.bound
   setShowEventForm(showEventForm: boolean) {
+    this._errors = [];
     this._showEventForm = showEventForm;
   }
 

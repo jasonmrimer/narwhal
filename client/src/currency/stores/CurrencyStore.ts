@@ -13,6 +13,7 @@ export class CurrencyStore {
 
   @action.bound
   setShowSkillForm(showSkillForm: boolean) {
+    this._errors = [];
     this._showSkillForm = showSkillForm;
   }
 
