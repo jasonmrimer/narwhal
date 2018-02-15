@@ -1,0 +1,17 @@
+---
+applications:
+- name: narwhal-staging
+  buildpack: https://github.com/cloudfoundry/java-buildpack.git
+  memory: 1GB
+  instances: 1
+  path: build/libs/narwhal-0.0.1-SNAPSHOT.jar
+  services:
+    - narwhal-db
+    - narwhal-sso
+  env:
+    GRANT_TYPE: authorization_code
+    SSO_IDENTITY_PROVIDERS: uaa
+    SSO_SCOPES: openid
+    SSO_SERVICE_URL: ${vcap.services.narwhal-sso.credentials.auth_domain}
+    SSO_CLIENT_ID: ${vcap.services.narwhal-sso.credentials.client_id}
+    SSO_CLIENT_SECRET: ${vcap.services.narwhal-sso.credentials.client_secret}
