@@ -24,7 +24,7 @@ node ('') {
         withSonarQubeEnv('DevOps Sonar') {
           withCredentials([[$class: 'StringBinding', credentialsId: 'sonarqube', variable: 'SONAR_LOGIN']]) {
             sh "set && ${scannerHome}/bin/sonar-scanner -Dsonar.host.url=${sonarHost} -Dsonar.login=${SONAR_LOGIN}"
-            sh "set && cd server && ./gradlew sonarqube -Dsonar.host.url=${sonarHost} -Dsonar.login=${SONAR_LOGIN} -Dsonar.projectKey=narwhal:narwhal -Dsonar.projectName=narwhal -x test"
+            sh "set && cd server && ./gradlew sonarqube -Dsonar.host.url=${sonarHost} -Dsonar.login=${SONAR_LOGIN} -Dsonar.projectKey=narwhal -Dsonar.projectName=narwhal -x test"
           }
         }
       }
