@@ -8,24 +8,26 @@ import { StyledSidePanel } from './SidePanel';
 import { StyledLegend } from '../roster/Legend';
 import { StyledDeleteEventPopup } from '../event/DeleteEventPopup';
 import { StyledTopBar } from '../widgets/TopBar';
+import { ProfileModel } from '../profile/models/ProfileModel';
 
 interface Props {
   trackerStore: TrackerStore;
-  username: string;
+  profile: ProfileModel;
   className?: string;
 }
 
 @observer
 export class Tracker extends React.Component<Props> {
-  componentDidMount() {
-    this.props.trackerStore.hydrate();
+  async componentDidMount() {
+    await this.props.trackerStore.hydrate();
+    this.props.trackerStore.setSiteId(this.props.profile.siteId);
   }
 
   render() {
-    const {username, className} = this.props;
+    const {profile, className} = this.props;
     return (
       [
-        <StyledTopBar key="0" username={username} pageTitle="AVAILABILITY ROSTER"/>,
+        <StyledTopBar key="0" username={profile.username} pageTitle="AVAILABILITY ROSTER"/>,
         (
           <div key="1" className={className}>
             <div className="main">

@@ -6,6 +6,8 @@ import { Route, Switch } from 'react-router-dom';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { DashboardStore } from '../dashboard/stores/DashboardStore';
 import { Upload } from '../upload/Upload';
+import { UnfilteredValue } from '../widgets/models/FilterOptionModel';
+import { ProfileModel } from '../profile/models/ProfileModel';
 
 interface Props {
   profileRepository: ProfileRepository;
@@ -14,17 +16,17 @@ interface Props {
 }
 
 interface State {
-  username: string;
+  profile: ProfileModel;
 }
 
 export class App extends React.Component<Props, State> {
   state = {
-    username: ''
+    profile: {username: '', siteId: UnfilteredValue}
   };
 
   async componentDidMount() {
-    const {username} = await this.props.profileRepository.findOne();
-    this.setState({username});
+    const profile = await this.props.profileRepository.findOne();
+    this.setState({profile});
   }
 
   render() {
@@ -55,7 +57,7 @@ export class App extends React.Component<Props, State> {
             render={() => {
               return (
                 <StyledDashboard
-                  username={this.state.username}
+                  username={this.state.profile.username}
                   dashboardStore={this.props.dashboardStore}
                 />
               );
@@ -67,7 +69,7 @@ export class App extends React.Component<Props, State> {
             render={() => {
               return (
                 <StyledTracker
-                  username={this.state.username}
+                  profile={this.state.profile}
                   trackerStore={this.props.trackerStore}
                 />
               );

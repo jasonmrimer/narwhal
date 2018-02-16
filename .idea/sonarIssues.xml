@@ -573,7 +573,17 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/profile/Profile.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/profile/ProfileController.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/profile/ProfileRepository.java">
           <value>
             <set />
           </value>
@@ -743,6 +753,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/resources/db/migration/V5__Create_profile_table.sql">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/resources/db/migration/V6__Add_mission_table.sql">
           <value>
             <set />
@@ -834,6 +849,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/test/java/mil/af/us/narwhal/mission/UnicornMissionClientTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/test/java/mil/af/us/narwhal/profile/ProfileControllerTest.java">
           <value>
             <set />
           </value>

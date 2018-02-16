@@ -6,5 +6,6 @@ TRUNCATE TABLE join_airman_certification;
 TRUNCATE TABLE flight;
 TRUNCATE TABLE certification;
 TRUNCATE TABLE airman;
+TRUNCATE TABLE profile;
 
 SET FOREIGN_KEY_CHECKS=1;

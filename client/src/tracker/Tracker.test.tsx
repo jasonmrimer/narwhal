@@ -19,7 +19,7 @@ describe('Tracker', () => {
     trackerStore = await makeFakeTrackerStore();
     subject = mount(
       <Tracker
-        username="Tytus"
+        profile={{username: 'Tytus', siteId: 1}}
         trackerStore={trackerStore}
       />
     );

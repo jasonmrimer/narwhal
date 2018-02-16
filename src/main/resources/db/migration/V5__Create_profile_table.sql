@@ -1,0 +1,7 @@
+CREATE TABLE profile (
+  id INT (11) NOT NULL AUTO_INCREMENT,
+  username VARCHAR (64) NOT NULL UNIQUE,
+  site_id INT (11) DEFAULT NULL,
+  PRIMARY KEY (id),
+  CONSTRAINT profile_ibfk_1 FOREIGN KEY (site_id) REFERENCES site (id)
+);

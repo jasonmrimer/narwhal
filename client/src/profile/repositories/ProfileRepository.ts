@@ -1,5 +1,7 @@
+import { ProfileModel } from '../models/ProfileModel';
+
 interface ProfileRepository {
-  findOne(): Promise<{username: string}>;
+  findOne(): Promise<ProfileModel>;
 }
 
 export default ProfileRepository;

@@ -159,3 +159,6 @@ INSERT INTO mission VALUES
   (2, 'YYY-FAKE-MISSION-2', NOW(), NOW(), 1),
   (3, 'ZZZ-FAKE-MISSION-3', NOW(), NOW(), 2),
   (4, 'AAA-FAKE-MISSION-4', NOW(), NOW(), 2);
+
+INSERT INTO profile (username, site_id) VALUES
+  ('tytus', (SELECT id FROM site WHERE name = 'DMS-MD'));
