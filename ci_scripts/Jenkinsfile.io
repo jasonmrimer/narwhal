@@ -19,15 +19,15 @@ node ('') {
 
     stage ('SonarQube') {
         def sonarXmx = '512m'
-        def sonarHost = 'https://sonar-legacy.geointservices.io'
+        def sonarHost = 'https://sonar.geointservices.io'
         def scannerHome = tool 'SonarQube Runner 2.8';
         withSonarQubeEnv('DevOps Sonar') {
-            // update env var JOB_NAME to replace all non word chars to underscores      
-            def jobname = JOB_NAME.replaceAll(/[^a-zA-Z0-9\_]/, "_")      
-            def jobshortname = JOB_NAME.replaceAll(/^.*\//, "")      
-            sh "JOB_NAME=${jobname} && JOB_SHORT_NAME=${jobshortname} && set && ${scannerHome}/bin/sonar-scanner -Dsonar.host.url=${sonarHost} -Dsonar.projectName=narwhal -Dsonar.projectKey=narwhal:narwhal"  
-        }   
-    }
+          withCredentials([[$class: 'StringBinding', credentialsId: 'sonarqube', variable: 'SONAR_LOGIN']]) {
+            sh "set && ${scannerHome}/bin/sonar-scanner -Dsonar.host.url=${sonarHost} -Dsonar.login=${SONAR_LOGIN}"
+            sh "set && cd server && ./gradlew sonarqube -Dsonar.host.url=${sonarHost} -Dsonar.login=${SONAR_LOGIN} -Dsonar.projectKey=narwhal:narwhal -Dsonar.projectName=narwhal -x test"
+          }
+        }
+      }
     
     stage ('FortifyScan') {
         sh '/opt/hp_fortify_sca/bin/sourceanalyzer -64 -verbose -Xms2G -Xmx10G -b ${BUILD_NUMBER} -clean'
