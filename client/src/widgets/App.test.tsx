@@ -10,9 +10,14 @@ import { Dashboard } from '../dashboard/Dashboard';
 import { SiteRepositoryStub } from '../site/repositories/doubles/SiteRepositoryStub';
 import { makeFakeTrackerStore } from '../utils/testUtils';
 import { DashboardStore } from '../dashboard/stores/DashboardStore';
+import { CrewStore } from '../crew/stores/CrewStore';
+import { CrewRepositoryStub } from '../crew/repositories/doubles/CrewRepositoryStub';
+import { CrewModelFactory } from '../crew/factories/CrewModelFactory';
+
 const profileRepository = new ProfileRepositoryStub();
 const siteRepository = new SiteRepositoryStub();
 const dashboardStore = new DashboardStore(new MissionRepositoryStub(), siteRepository);
+const crewStore = new CrewStore(new CrewRepositoryStub(CrewModelFactory.build()));
 
 let subject: ShallowWrapper;
 let mountedSubject: ReactWrapper;
@@ -25,14 +30,16 @@ describe('App', () => {
         trackerStore={trackerStore}
         profileRepository={profileRepository}
         dashboardStore={dashboardStore}
+        crewStore={crewStore}
       />
     );
     const routes = subject.find(Route);
 
-    expect(routes.length).toBe(3);
+    expect(routes.length).toBe(4);
     expect(routes.at(0).prop('path')).toBe('/upload');
     expect(routes.at(1).prop('path')).toBe('/dashboard');
-    expect(routes.at(2).prop('path')).toBe('/');
+    expect(routes.at(2).prop('path')).toBe('/crew/:id');
+    expect(routes.at(3).prop('path')).toBe('/');
   });
 
   it('renders the Tracker component when the route is /', async () => {
@@ -43,6 +50,7 @@ describe('App', () => {
           trackerStore={trackerStore}
           profileRepository={profileRepository}
           dashboardStore={dashboardStore}
+          crewStore={crewStore}
         />
       </MemoryRouter>
     );
@@ -58,6 +66,7 @@ describe('App', () => {
           trackerStore={trackerStore}
           profileRepository={profileRepository}
           dashboardStore={dashboardStore}
+          crewStore={crewStore}
         />
       </MemoryRouter>
     );

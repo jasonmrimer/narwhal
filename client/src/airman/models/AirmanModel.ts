@@ -11,9 +11,9 @@ export class AirmanModel {
               public flightId: number,
               public firstName: string,
               public lastName: string,
-              public qualifications: AirmanQualificationModel[],
-              public certifications: AirmanCertificationModel[],
-              public events: EventModel[]) {
+              public qualifications: AirmanQualificationModel[] = [],
+              public certifications: AirmanCertificationModel[] = [],
+              public events: EventModel[] = []) {
   }
 
   get isEmpty() {

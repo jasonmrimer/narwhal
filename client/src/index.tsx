@@ -5,22 +5,24 @@ import * as ReactDOM from 'react-dom';
 
 import './polyfills';
 import { App } from './widgets/App';
-import { ThemeProvider } from 'styled-components';
-import { Theme } from './themes/default';
-import { WebProfileRepository } from './profile/repositories/web/WebProfileRepository';
 import { BrowserRouter } from 'react-router-dom';
+import { Theme } from './themes/default';
+import { ThemeProvider } from 'styled-components';
+import { WebProfileRepository } from './profile/repositories/web/WebProfileRepository';
 import { WebAirmanRepository } from './airman/repositories/web/WebAirmanRepository';
 import { WebSiteRepository } from './site/repositories/web/WebSiteRepository';
 import { WebMissionRepository } from './mission/repositories/web/WebMissionRepository';
+import { WebEventRepository } from './event/repositories/web/WebEventRepository';
+import { MomentTimeService } from './tracker/services/MomentTimeService';
 import { TrackerStore } from './tracker/stores/TrackerStore';
 import { DashboardStore } from './dashboard/stores/DashboardStore';
-import { MomentTimeService } from './tracker/services/MomentTimeService';
-import { WebEventRepository } from './event/repositories/web/WebEventRepository';
-import { default as WebSkillRepository } from './skills/repositories/web/WebSkillRepository';
 import { AvailabilityStore } from './availability/stores/AvailabilityStore';
 import { CurrencyStore } from './currency/stores/CurrencyStore';
 import { PlannerStore } from './roster/stores/PlannerStore';
 import { MissionStore } from './mission/stores/MissionStore';
+import { CrewStore } from './crew/stores/CrewStore';
+import { WebSkillRepository } from './skills/repositories/web/WebSkillRepository';
+import { WebCrewRepository } from './crew/repositories/web/WebCrewRepository';
 
 document.body.style.fontFamily = Theme.fontFamily;
 document.body.style.color = Theme.fontColor;
@@ -44,6 +46,8 @@ const trackerStore = new TrackerStore(
   new MissionStore(new WebMissionRepository())
 );
 
+const crewStore = new CrewStore(new WebCrewRepository());
+
 ReactDOM.render(
   <ThemeProvider theme={Theme}>
     <BrowserRouter>
@@ -51,6 +55,7 @@ ReactDOM.render(
         profileRepository={new WebProfileRepository()}
         dashboardStore={dashboardStore}
         trackerStore={trackerStore}
+        crewStore={crewStore}
       />
     </BrowserRouter>
   </ThemeProvider>,

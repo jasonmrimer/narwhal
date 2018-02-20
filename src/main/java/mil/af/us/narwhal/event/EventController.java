@@ -1,8 +1,6 @@
 package mil.af.us.narwhal.event;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import mil.af.us.narwhal.crew.CrewPositionRepository;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -12,20 +10,39 @@ import javax.validation.Valid;
 public class EventController {
   public static final String URI = "/api/events";
 
-  @Autowired private EventRepository repository;
+  private EventRepository eventRepository;
+  private CrewPositionRepository crewPositionRepository;
+  private EventService service;
+
+  public EventController(
+    EventRepository eventRepository,
+    CrewPositionRepository crewPositionRepository,
+    EventService service
+  ) {
+    this.eventRepository = eventRepository;
+    this.crewPositionRepository = crewPositionRepository;
+    this.service = service;
+  }
 
   @PostMapping
-  public ResponseEntity<Event> create(@Valid @RequestBody Event event) {
-    return new ResponseEntity<>(repository.save(event), HttpStatus.CREATED);
+  public Event create(@Valid @RequestBody Event event) {
+    return service.save(event);
   }
 
   @PutMapping(value = "{id}")
   public Event update(@PathVariable Long id, @Valid @RequestBody Event event) {
-    return repository.save(event);
+    if (event.getType() == EventType.MISSION) {
+      return event;
+    }
+    return eventRepository.save(event);
   }
 
   @DeleteMapping(value = "{id}")
-  public void delete(@PathVariable Long id) {
-    repository.delete(id);
+  public void delete(@PathVariable Long id, @RequestBody Event event) {
+    if (event.getType() == EventType.MISSION) {
+      crewPositionRepository.deleteOneByCrewIdAndAirmanId(event.getId(), event.getAirmanId());
+    } else {
+      eventRepository.delete(id);
+    }
   }
 }

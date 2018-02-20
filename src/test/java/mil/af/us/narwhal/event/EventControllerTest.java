@@ -1,10 +1,16 @@
 package mil.af.us.narwhal.event;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import mil.af.us.narwhal.airman.Airman;
 import mil.af.us.narwhal.airman.AirmanRepository;
+import mil.af.us.narwhal.crew.Crew;
+import mil.af.us.narwhal.crew.CrewPosition;
+import mil.af.us.narwhal.crew.CrewRepository;
 import mil.af.us.narwhal.flight.Flight;
+import mil.af.us.narwhal.mission.Mission;
+import mil.af.us.narwhal.mission.MissionRepository;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
 import mil.af.us.narwhal.squadron.Squadron;
@@ -43,6 +49,8 @@ public class EventControllerTest {
   @Autowired private SiteRepository siteRepository;
   @Autowired private AirmanRepository airmanRepository;
   @Autowired private EventRepository eventRepository;
+  @Autowired private MissionRepository missionRepository;
+  @Autowired private CrewRepository crewRepository;
 
   @Before
   public void setUp() {
@@ -53,7 +61,6 @@ public class EventControllerTest {
 
     final Site site = new Site("site");
     site.addSquadron(squadron);
-
     siteRepository.save(site);
 
     airman = new Airman(flight.getId(), "first", "last");
@@ -83,7 +90,7 @@ public class EventControllerTest {
     .when()
       .post(EventController.URI)
     .then()
-      .statusCode(201)
+      .statusCode(200)
       .body("id", notNullValue());
     // @formatter:on
   }
@@ -118,7 +125,7 @@ public class EventControllerTest {
   }
 
   @Test
-  public void deleteTest() {
+  public void deleteTest() throws JsonProcessingException {
     Event event = new Event(
       "Existing Event",
       "Existing Description",
@@ -129,12 +136,56 @@ public class EventControllerTest {
     );
     event = eventRepository.save(event);
 
+    final String json = objectMapper.writeValueAsString(event);
+
     // @formatter:off
     given()
       .port(port)
       .auth()
       .preemptive()
       .basic("tytus", "password")
+      .contentType("application/json")
+      .body(json)
+    .when()
+      .delete(EventController.URI + "/" + event.getId())
+    .then()
+      .statusCode(200);
+    // @formatter:on
+
+    assertThat(eventRepository.findOne(event.getId())).isNull();
+  }
+
+  @Test
+  public void deleteMissionTest() throws JsonProcessingException {
+    final Site site = new Site("site");
+    siteRepository.save(site);
+
+    final Mission mission = new Mission("A", "B", Instant.now(), Instant.now(), site);
+    missionRepository.save(mission);
+
+    final Crew crew = new Crew(mission);
+    crew.addCrewPosition(new CrewPosition(airman));
+    crewRepository.save(crew);
+
+    Event event = new Event(
+      crew.getId(),
+      mission.getMissionId(),
+      "",
+      mission.getStartDateTime(),
+      mission.getEndDateTime(),
+      EventType.MISSION,
+      airman.getId()
+    );
+    final String json = objectMapper.writeValueAsString(event);
+
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .contentType("application/json")
+      .body(json)
     .when()
       .delete(EventController.URI + "/" + event.getId())
     .then()

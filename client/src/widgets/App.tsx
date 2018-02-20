@@ -3,6 +3,8 @@ import { StyledTracker } from '../tracker/Tracker';
 import ProfileRepository from '../profile/repositories/ProfileRepository';
 import { StyledDashboard } from '../dashboard/Dashboard';
 import { Route, Switch } from 'react-router-dom';
+import { StyledCrew } from '../crew/Crew';
+import { CrewStore } from '../crew/stores/CrewStore';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { DashboardStore } from '../dashboard/stores/DashboardStore';
 import { Upload } from '../upload/Upload';
@@ -13,6 +15,7 @@ interface Props {
   profileRepository: ProfileRepository;
   dashboardStore: DashboardStore;
   trackerStore: TrackerStore;
+  crewStore: CrewStore;
 }
 
 interface State {
@@ -59,6 +62,18 @@ export class App extends React.Component<Props, State> {
                 <StyledDashboard
                   username={this.state.profile.username}
                   dashboardStore={this.props.dashboardStore}
+                />
+              );
+            }}
+          />
+
+          <Route
+            path="/crew/:id"
+            render={({match}) => {
+              return (
+                <StyledCrew
+                  crewId={match.params.id}
+                  crewStore={this.props.crewStore}
                 />
               );
             }}

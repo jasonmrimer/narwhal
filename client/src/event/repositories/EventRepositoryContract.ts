@@ -15,7 +15,7 @@ export function EventRepositoryContract(subject: EventRepository) {
     it('returns an event with a unique id', async () => {
       expect(savedEvent1.id).toBeDefined();
 
-      const event2 = new EventModel('title2', 'description2', dateTime, dateTime, 1, EventType.Mission);
+      const event2 = new EventModel('title2', 'description2', dateTime, dateTime, 1, EventType.Leave);
       const savedEvent2 = await subject.save(event2);
       expect(savedEvent2.id).toBeDefined();
 

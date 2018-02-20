@@ -1,7 +1,9 @@
 import * as React from 'react';
-import { EventModel } from '../event/models/EventModel';
+import { EventModel, EventType } from '../event/models/EventModel';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
+import { Link } from 'react-router-dom';
+import { LookingGlass } from '../icons/LookingGlass';
 
 interface Props {
   event: EventModel;
@@ -14,6 +16,12 @@ export const AvailabilityTile = observer((props: Props) => {
     <div className={props.className} onClick={() => props.editEvent(props.event)}>
       <div className="event-title">
         <span>{props.event.title}</span>
+        {
+          props.event.type === EventType.Mission &&
+          <Link to={`/crew/${props.event.id}`}>
+            <LookingGlass/>
+          </Link>
+        }
       </div>
       <div className="event-description">
         <span>{`${props.event.startTime.format('HHmm')}L - ${props.event.endTime.format('HHmm')}L`}</span>

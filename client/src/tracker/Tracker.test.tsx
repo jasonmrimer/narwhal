@@ -10,6 +10,7 @@ import * as moment from 'moment';
 import { StyledDeleteEventPopup } from '../event/DeleteEventPopup';
 import { EventModel, EventType } from '../event/models/EventModel';
 import { TopBar } from '../widgets/TopBar';
+import { MemoryRouter } from 'react-router';
 
 let trackerStore: TrackerStore;
 let subject: ReactWrapper;
@@ -18,10 +19,12 @@ describe('Tracker', () => {
   beforeEach(async () => {
     trackerStore = await makeFakeTrackerStore();
     subject = mount(
-      <Tracker
-        profile={{username: 'Tytus', siteId: 1}}
-        trackerStore={trackerStore}
-      />
+      <MemoryRouter>
+        <Tracker
+          profile={{username: 'Tytus', siteId: 1}}
+          trackerStore={trackerStore}
+        />
+      </MemoryRouter>
     );
   });
 

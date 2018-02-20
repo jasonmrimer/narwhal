@@ -4,7 +4,7 @@ import SkillRepository from '../SkillRepository';
 import { CertificationModel } from '../../models/CertificationModel';
 
 /* tslint:disable:no-any */
-export default class WebSkillRepository implements SkillRepository {
+export class WebSkillRepository implements SkillRepository {
   constructor(private baseUrl: string = '') {}
 
   async findAllQualifications(): Promise<QualificationModel[]> {

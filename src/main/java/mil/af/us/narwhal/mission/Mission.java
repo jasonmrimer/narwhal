@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mil.af.us.narwhal.event.Event;
+import mil.af.us.narwhal.event.EventType;
 import mil.af.us.narwhal.site.Site;
 
 import javax.persistence.Entity;
@@ -28,4 +30,16 @@ public class Mission {
 
   @ManyToOne
   private Site site;
+
+  public Event toEvent(Long crewId, Long airmanId) {
+    return new Event (
+      crewId,
+      this.getAtoMissionNumber(),
+      "",
+      this.getStartDateTime(),
+      this.getEndDateTime(),
+      EventType.MISSION,
+      airmanId
+    );
+  }
 }

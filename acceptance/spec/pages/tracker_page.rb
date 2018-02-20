@@ -1,6 +1,8 @@
 require 'date'
 require_relative '../features/events'
 require_relative '../features/skills'
+require_relative '../features/msn_assignment'
+require_relative './crew_page'
 
 class TrackerPage
   include Capybara::DSL
@@ -161,6 +163,18 @@ class TrackerPage
 
     skill.create_invalid
     expect(page.has_content?('This field is required.')).to be true
+  end
+
+  def assert_create_and_view_crew
+    click_on_airman('Spaceman')
+    MsnAssignment.new.create
+
+    click_on_airman('Keeter')
+    msn_assignment = MsnAssignment.new
+    msn_assignment.create
+
+    crew_page = CrewPage.new(msn_assignment.msn_title)
+    crew_page.assert_has_assigned_airmen('Spaceman', 'Keeter')
   end
 
   private

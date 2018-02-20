@@ -20,7 +20,7 @@ import java.time.Instant;
 public class AirmanQualification {
   @Id
   @GeneratedValue
-  private Long Id;
+  private Long id;
 
   @Column(name = "airman_id", nullable = false)
   private Long airmanId;

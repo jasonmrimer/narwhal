@@ -87,23 +87,25 @@ describe('EventForm', () => {
     expect(handleSubmitSpy).toHaveBeenCalledWith(event);
   });
 
-  it('has the mission type selected by default', () => {
-    expect(subject.find(RadioButtons).prop('value')).toBe(EventType.Mission);
-  });
-
   it('populates the form with a selected mission attributes', () => {
     (subject.instance() as EventForm).handleMissionSelect([{value: 'missionId1', label: 'ato1'}]);
     subject.update();
 
-    expect(subject.find(TextInput).at(0).prop('value')).toBe('ato1');
     expect(subject.find(DatePicker).at(0).prop('dateValue')).toEqual(startTime.format('YYYY-MM-DD'));
+    expect(subject.find(DatePicker).at(0).prop('disabled')).toBeTruthy();
+
     expect(subject.find(TimeInput).at(0).prop('timeValue')).toEqual(startTime.format('HH:mm'));
+    expect(subject.find(TimeInput).at(0).prop('disabled')).toBeTruthy();
+
     expect(subject.find(DatePicker).at(1).prop('dateValue')).toEqual(endTime.format('YYYY-MM-DD'));
+    expect(subject.find(DatePicker).at(1).prop('disabled')).toBeTruthy();
+
     expect(subject.find(TimeInput).at(1).prop('timeValue')).toEqual(endTime.format('HH:mm'));
+    expect(subject.find(TimeInput).at(1).prop('disabled')).toBeTruthy();
   });
 
   it('renders a form field validation', () => {
-    errors = [{title: 'Field is required'}];
+    errors = [{startTime: 'Field is required'}];
     subject.setProps({errors: errors});
     expect(subject.find('.error-msg').length).toBe(1);
   });
@@ -116,5 +118,4 @@ describe('EventForm', () => {
     subject.find('button.delete').simulate('click', eventStub);
     expect(setPendingDeleteSpy).toHaveBeenCalledWith(event);
   });
-
 });

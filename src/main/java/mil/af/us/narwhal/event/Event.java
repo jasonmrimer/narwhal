@@ -3,6 +3,7 @@ package mil.af.us.narwhal.event;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -18,7 +19,7 @@ public class Event {
   @GeneratedValue
   private Long id;
 
-  @NotNull
+  @NotEmpty
   private String title;
 
   private String description;

@@ -9,6 +9,7 @@ import { makeFakeTrackerStore } from '../utils/testUtils';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { AirmanModel } from '../airman/models/AirmanModel';
 import { EventForm, StyledEventForm } from '../event/EventForm';
+import { MemoryRouter } from 'react-router';
 
 let trackerStore: TrackerStore;
 let airman: AirmanModel;
@@ -50,7 +51,11 @@ describe('Availability', () => {
     trackerStore = await makeFakeTrackerStore();
     trackerStore.setSelectedAirman(airman);
 
-    subject = mount(<Availability trackerStore={trackerStore}/>);
+    subject = mount(
+      <MemoryRouter>
+        <Availability trackerStore={trackerStore}/>
+      </MemoryRouter>
+    );
   });
 
   it('renders the availability for an airman', () => {

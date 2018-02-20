@@ -1,13 +1,20 @@
 package mil.af.us.narwhal.airman;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mil.af.us.narwhal.crew.CrewPosition;
 import mil.af.us.narwhal.event.Event;
+import mil.af.us.narwhal.mission.Mission;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Entity
 @Data
@@ -33,8 +40,12 @@ public class Airman {
   private List<AirmanCertification> certifications = new ArrayList<>();
 
   @OneToMany(mappedBy = "airmanId")
-  @JsonManagedReference
+  @JsonIgnore
   private List<Event> events = new ArrayList<>();
+
+  @OneToMany(mappedBy = "airman")
+  @JsonBackReference
+  private List<CrewPosition> crewPositions = new ArrayList<>();
 
   public Airman(Long flightId, String firstName, String lastName) {
     this.flightId = flightId;
@@ -42,22 +53,17 @@ public class Airman {
     this.lastName = lastName;
   }
 
-  public Airman(
-    Long id,
-    Long flightId,
-    String firstName,
-    String lastName,
-    List<AirmanQualification> qualifications,
-    List<AirmanCertification> certifications,
-    List<Event> events
-  ) {
-    this.id = id;
-    this.flightId = flightId;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.qualifications = new ArrayList<>(qualifications);
-    this.certifications = new ArrayList<>(certifications);
-    this.events = new ArrayList<>(events);
+  @JsonProperty("events")
+  public List<Event> getEvents() {
+    return Stream.concat(
+      this.crewPositions.stream()
+        .map(CrewPosition::getCrew)
+        .map(crew -> {
+          final Mission mission = crew.getMission();
+          return mission.toEvent(crew.getId(), this.getId());
+        }),
+      this.events.stream()
+    ).collect(Collectors.toList());
   }
 
   public boolean addQualification(AirmanQualification airmanQualification) {

@@ -62,4 +62,10 @@ describe 'Tracker page', type: :feature do
       tracker_page.assert_navigates_week
     end
   end
+
+  describe 'crew creation' do
+    it 'can add airmen to a mission and then view a created crew' do
+      tracker_page.assert_create_and_view_crew
+    end
+  end
 end

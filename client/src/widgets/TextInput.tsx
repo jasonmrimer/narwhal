@@ -8,6 +8,7 @@ interface Props {
   name: string;
   onChange: (e: any) => void;
   className?: string;
+  disabled?: boolean;
 }
 
 export const TextInput = (props: Props) => {
@@ -19,6 +20,7 @@ export const TextInput = (props: Props) => {
       value={props.value}
       name={props.name}
       onChange={props.onChange}
+      disabled={props.disabled}
     />
   );
 };

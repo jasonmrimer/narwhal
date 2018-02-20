@@ -13,4 +13,21 @@ export class MissionModel {
               public endDateTime: Moment | null = null,
               public site?: SiteModel) {
   }
+
+  get displayDate() {
+    return this.startDateTime
+      .local()
+      .format('DD MMM YY')
+      .toUpperCase();
+  }
+
+  get displayStartTime() {
+    return `${this.startDateTime.local().format('HHmm')}L`;
+  }
+
+  get displayEndTime() {
+    return this.endDateTime != null ?
+      `${this.endDateTime.local().format('HHmm')}L` :
+      'UNKNOWN';
+  }
 }

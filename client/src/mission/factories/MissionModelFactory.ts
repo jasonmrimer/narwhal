@@ -1,29 +1,30 @@
 import * as moment from 'moment';
 import { SiteModel } from '../../site/models/SiteModel';
+import { MissionModel } from '../models/MissionModel';
 
-const missionOne = {
-  missionId: 'missionId1',
-  atoMissionNumber: 'ato1',
-  startDateTime: moment('2018-01-01T01:00:00Z'),
-  endDateTime: moment('2018-01-01T11:00:00Z'),
-  site: new SiteModel(1, 'Site 1', [])
-};
+const missionOne = new MissionModel(
+  'missionId1',
+  'ato1',
+  moment('2018-01-01T01:00:00Z'),
+  moment('2018-01-01T11:00:00Z'),
+  new SiteModel(1, 'Site 1', [])
+);
 
-const missionTwo = {
-  missionId: 'missionId2',
-  atoMissionNumber: 'ato2',
-  startDateTime: moment('2018-02-02T02:00:00Z'),
-  endDateTime: moment('2018-02-02T14:00:00Z'),
-  site: new SiteModel(1, 'Site 1', [])
-};
+const missionTwo = new MissionModel(
+  'missionId2',
+  'ato2',
+  moment('2018-02-02T02:00:00Z'),
+  moment('2018-02-02T14:00:00Z'),
+  new SiteModel(1, 'Site 1', [])
+);
 
-const missionThree = {
-  missionId: 'missionId3',
-  atoMissionNumber: 'ato3',
-  startDateTime: moment('2018-03-03T03:00:00Z'),
-  endDateTime: moment('2018-03-04T03:00:00Z'),
-  site: new SiteModel(2, 'Site 2', [])
-};
+const missionThree = new MissionModel(
+  'missionId3',
+  'ato3',
+  moment('2018-03-03T03:00:00Z'),
+  moment('2018-03-04T03:00:00Z'),
+  new SiteModel(2, 'Site 2', [])
+);
 
 const missions = [missionOne, missionTwo, missionThree];
 
@@ -33,7 +34,7 @@ export class MissionModelFactory {
   }
 
   static buildForSite(siteId: number) {
-    return missions.filter((mission) => mission.site.id === siteId);
+    return missions.filter((mission) => mission.site != null ? mission.site.id === siteId : false);
   }
 
   static build() {

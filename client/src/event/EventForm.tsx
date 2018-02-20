@@ -43,7 +43,7 @@ export function emptyEventFormState() {
     startTime: '',
     endDate: '',
     endTime: '',
-    eventType: EventType.Mission,
+    eventType: ''
   };
 }
 
@@ -83,7 +83,7 @@ export class EventForm extends React.Component<Props, EventFormState> {
       const endDateAndTime = selectedMission.endDateTime;
 
       const attrs = {
-        title: selectedMission.atoMissionNumber,
+        title: selectedMission.missionId,
         startDate: selectedMission.startDateTime.format(EventForm.MONTH_FORMAT),
         startTime: selectedMission.startDateTime.format(EventForm.TIME_FORMAT),
         endDate: endDateAndTime ? endDateAndTime.format(EventForm.MONTH_FORMAT) : '',
@@ -98,6 +98,7 @@ export class EventForm extends React.Component<Props, EventFormState> {
   }
 
   render() {
+    const disabled = this.state.eventType === EventType.Mission;
     return (
       <form className={this.props.className} onSubmit={this.handleSubmit}>
         <a className="back" onClick={this.props.hideEventForm}>
@@ -121,38 +122,45 @@ export class EventForm extends React.Component<Props, EventFormState> {
               placeholder="Mission ID"
             />
           }
-
-          <StyledFieldValidation name="title" errors={this.props.errors}>
+          {
+            this.state.eventType !== EventType.Mission &&
+            <StyledFieldValidation name="title" errors={this.props.errors}>
+              <div className="input-row">
+                <StyledTextInput
+                  placeholder="Title"
+                  value={this.state.title}
+                  name="title"
+                  onChange={this.handleChange}
+                  disabled={disabled}
+                />
+              </div>
+            </StyledFieldValidation>
+          }
+          {
+            this.state.eventType !== EventType.Mission &&
             <div className="input-row">
               <StyledTextInput
-                placeholder="Title"
-                value={this.state.title}
-                name="title"
+                placeholder="Description"
+                value={this.state.description}
+                name="description"
                 onChange={this.handleChange}
+                disabled={disabled}
               />
             </div>
-          </StyledFieldValidation>
-
-          <div className="input-row">
-            <StyledTextInput
-              placeholder="Description"
-              value={this.state.description}
-              name="description"
-              onChange={this.handleChange}
-            />
-          </div>
-
+          }
           <StyledFieldValidation name="startTime" errors={this.props.errors}>
             <div className="input-row">
               <StyledDatePicker
                 dateValue={this.state.startDate}
                 onChange={this.handleChange}
                 name="startDate"
+                disabled={disabled}
               />
               <StyledTimeInput
                 timeValue={this.state.startTime}
                 onChange={this.handleChange}
                 name="startTime"
+                disabled={disabled}
               />
             </div>
           </StyledFieldValidation>
@@ -163,17 +171,19 @@ export class EventForm extends React.Component<Props, EventFormState> {
                 dateValue={this.state.endDate}
                 onChange={this.handleChange}
                 name="endDate"
+                disabled={disabled}
               />
               <StyledTimeInput
                 timeValue={this.state.endTime}
                 onChange={this.handleChange}
                 name="endTime"
+                disabled={disabled}
               />
             </div>
           </StyledFieldValidation>
 
           <div className="form-row">
-            {this.props.event && <StyledDeleteButton className="delete" handleClick={this.handleDelete} />}
+            {this.props.event && <StyledDeleteButton className="delete" handleClick={this.handleDelete}/>}
             <StyledSubmitButton text="CONFIRM"/>
           </div>
           <div style={{minHeight: 150}}/>

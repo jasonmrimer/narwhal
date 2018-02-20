@@ -12,10 +12,12 @@ export class WebEventRepository implements EventRepository {
   }
 
   async save(event: EventModel): Promise<EventModel> {
-    const resp = event.id ? await this.updateEvent(event) : await this.createEvent(event);
-    let json = await resp.json();
+    const resp = event.id ?
+      await this.updateEvent(event) :
+      await this.createEvent(event);
 
-    if (json.status === 400) {
+    const json = await resp.json();
+    if (resp.status < 200 || resp.status >= 300) {
       throw this.handleError(json);
     }
 
@@ -28,6 +30,7 @@ export class WebEventRepository implements EventRepository {
       {
         method: 'DELETE',
         headers: [['Content-Type', 'application/json'], ['X-XSRF-TOKEN', this.csrfToken]],
+        body: this.serializer.serialize(event),
         credentials: 'include'
       }
     );
@@ -38,9 +41,12 @@ export class WebEventRepository implements EventRepository {
   }
 
   private handleError(response: { errors: object[] }): object {
-    return response.errors.map((error: { field: string }) => {
-      return {[error.field]: 'Field is required'};
-    });
+    if (response.errors != null) {
+      return response.errors.map((error: { field: string }) => {
+        return {[error.field]: 'Field is required'};
+      });
+    }
+    return [];
   }
 
   private createEvent(event: EventModel) {

@@ -7,6 +7,7 @@ interface Props {
   onChange: (e: any) => void;
   name: string;
   className?: string;
+  disabled?: boolean;
 }
 
 export const TimeInput = (props: Props) => {
@@ -18,6 +19,7 @@ export const TimeInput = (props: Props) => {
       value={props.timeValue}
       name={props.name}
       onChange={props.onChange}
+      disabled={props.disabled}
     />
 
   );

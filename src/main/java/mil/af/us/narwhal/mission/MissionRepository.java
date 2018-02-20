@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface MissionRepository extends JpaRepository<Mission, String> {
   List<Mission> findBySiteId(Long siteId);
+  Mission findOneByMissionId(String missionId);
 }
