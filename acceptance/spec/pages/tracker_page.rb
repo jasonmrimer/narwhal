@@ -167,7 +167,8 @@ class TrackerPage
 
   def assert_create_and_view_crew
     click_on_airman('Spaceman')
-    MsnAssignment.new.create
+    msn_assignment = MsnAssignment.new
+    msn_assignment.create
 
     click_on_airman('Keeter')
     msn_assignment = MsnAssignment.new
@@ -180,7 +181,13 @@ class TrackerPage
   private
 
   def click_on_airman(name)
+    page.within 'table > tbody' do
+      expect(page).to have_selector('tr', count: 39)
+    end
     page.find(:xpath, "//*[text()='#{name}']").click
+    page.within '.side-panel' do
+      expect(page).to have_content name
+    end
   end
 
   def filter(item, value)
