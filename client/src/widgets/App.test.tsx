@@ -33,8 +33,11 @@ describe('App', () => {
         crewStore={crewStore}
       />
     );
-    const routes = subject.find(Route);
 
+    const profile = await profileRepository.findOne();
+    subject.setState({profile});
+
+    const routes = subject.find(Route);
     expect(routes.length).toBe(4);
     expect(routes.at(0).prop('path')).toBe('/upload');
     expect(routes.at(1).prop('path')).toBe('/dashboard');
@@ -55,6 +58,9 @@ describe('App', () => {
       </MemoryRouter>
     );
 
+    const profile = await profileRepository.findOne();
+    mountedSubject.setState({profile});
+
     expect(mountedSubject.find(Tracker).exists()).toBeTruthy();
   });
 
@@ -70,6 +76,9 @@ describe('App', () => {
         />
       </MemoryRouter>
     );
+
+    const profile = await profileRepository.findOne();
+    mountedSubject.setState({profile});
 
     expect(mountedSubject.find(Dashboard).exists()).toBeTruthy();
   });

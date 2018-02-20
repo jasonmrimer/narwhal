@@ -57,7 +57,8 @@ export class TrackerStore {
     this.missionStore = missionStore;
   }
 
-  async hydrate() {
+  async hydrate(siteId: number = UnfilteredValue) {
+    this._siteId = siteId;
     this._airmen = await this.airmanRepository.findAll();
     this._sites = await this.siteRepository.findAll();
     this._certifications = await this.skillRepository.findAllCertifications();
@@ -103,7 +104,12 @@ export class TrackerStore {
     if (this._siteId === UnfilteredValue) {
       return [];
     }
-    const site = this._sites.find(s => s.id === this._siteId)!;
+
+    const site = this._sites.find(s => s.id === this._siteId);
+    if (site == null) {
+      return [];
+    }
+
     return site.squadrons.map(squad => {
       return {value: squad.id, label: squad.name};
     });
@@ -125,8 +131,17 @@ export class TrackerStore {
     if (this._siteId === UnfilteredValue || this._squadronId === UnfilteredValue) {
       return [];
     }
-    const site = this._sites.find(s => s.id === this._siteId)!;
-    const squadron = site.squadrons.find(s => s.id === this._squadronId)!;
+
+    const site = this._sites.find(s => s.id === this._siteId);
+    if (site == null) {
+      return [];
+    }
+
+    const squadron = site.squadrons.find(s => s.id === this._squadronId);
+    if (squadron == null) {
+      return [];
+    }
+
     return squadron.flights.map(flight => {
       return {value: flight.id, label: flight.name};
     });
@@ -271,7 +286,12 @@ export class TrackerStore {
     if (this._siteId === UnfilteredValue) {
       return true;
     }
-    const site = this._sites.find(s => s.id === this._siteId)!;
+
+    const site = this._sites.find(s => s.id === this._siteId);
+    if (site == null) {
+      return false;
+    }
+
     return site.getAllFlightIds().includes(airman.flightId);
   }
 
@@ -279,8 +299,17 @@ export class TrackerStore {
     if (this._squadronId === UnfilteredValue) {
       return true;
     }
-    const site = this._sites.find(s => s.id === this._siteId)!;
-    const squadron = site.squadrons.find(s => s.id === this._squadronId)!;
+
+    const site = this._sites.find(s => s.id === this._siteId);
+    if (site == null) {
+      return false;
+    }
+
+    const squadron = site.squadrons.find(s => s.id === this._squadronId);
+    if (squadron == null) {
+      return false;
+    }
+
     return squadron.getAllFlightIds().includes(airman.flightId);
   }
 
@@ -290,5 +319,4 @@ export class TrackerStore {
     }
     return airman.flightId === this._flightId;
   }
-
 }

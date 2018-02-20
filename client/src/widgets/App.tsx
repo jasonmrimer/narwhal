@@ -8,7 +8,6 @@ import { CrewStore } from '../crew/stores/CrewStore';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { DashboardStore } from '../dashboard/stores/DashboardStore';
 import { Upload } from '../upload/Upload';
-import { UnfilteredValue } from '../widgets/models/FilterOptionModel';
 import { ProfileModel } from '../profile/models/ProfileModel';
 
 interface Props {
@@ -19,13 +18,16 @@ interface Props {
 }
 
 interface State {
-  profile: ProfileModel;
+  profile: ProfileModel | null;
 }
 
 export class App extends React.Component<Props, State> {
-  state = {
-    profile: {username: '', siteId: UnfilteredValue}
-  };
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      profile: null
+    };
+  }
 
   async componentDidMount() {
     const profile = await this.props.profileRepository.findOne();
@@ -47,50 +49,53 @@ export class App extends React.Component<Props, State> {
         >
           Authorized Personnel Only
         </div>
-        <Switch>
-          <Route
-            path="/upload"
-            render={() => {
-              return <Upload/>;
-            }}
-          />
+        {
+          this.state.profile != null &&
+          <Switch>
+            <Route
+              path="/upload"
+              render={() => {
+                return <Upload/>;
+              }}
+            />
 
-          <Route
-            path="/dashboard"
-            render={() => {
-              return (
-                <StyledDashboard
-                  username={this.state.profile.username}
-                  dashboardStore={this.props.dashboardStore}
-                />
-              );
-            }}
-          />
+            <Route
+              path="/dashboard"
+              render={() => {
+                return (
+                  <StyledDashboard
+                    username={this.state.profile!.username}
+                    dashboardStore={this.props.dashboardStore}
+                  />
+                );
+              }}
+            />
 
-          <Route
-            path="/crew/:id"
-            render={({match}) => {
-              return (
-                <StyledCrew
-                  crewId={match.params.id}
-                  crewStore={this.props.crewStore}
-                />
-              );
-            }}
-          />
+            <Route
+              path="/crew/:id"
+              render={({match}) => {
+                return (
+                  <StyledCrew
+                    crewId={match.params.id}
+                    crewStore={this.props.crewStore}
+                  />
+                );
+              }}
+            />
 
-          <Route
-            path="/"
-            render={() => {
-              return (
-                <StyledTracker
-                  profile={this.state.profile}
-                  trackerStore={this.props.trackerStore}
-                />
-              );
-            }}
-          />
-        </Switch>
+            <Route
+              path="/"
+              render={() => {
+                return (
+                  <StyledTracker
+                    profile={this.state.profile!}
+                    trackerStore={this.props.trackerStore}
+                  />
+                );
+              }}
+            />
+          </Switch>
+        }
       </div>
     );
   }
