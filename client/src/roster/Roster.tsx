@@ -61,7 +61,7 @@ export class Roster extends React.Component<Props> {
             this.props.trackerStore.setSelectedAirman(airman);
           }}
         >
-          <td>{airman.lastName}, {airman.firstName}</td>
+          <td className="airman-name">{airman.lastName}, {airman.firstName}</td>
           <td>{formatAttributes(airman.qualifications, 'acronym')}</td>
           <td className="certification-row">{formatAttributes(airman.certifications, 'title')}</td>
 

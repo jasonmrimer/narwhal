@@ -32,19 +32,19 @@ export class Crew extends React.Component<Props> {
         </div>
         <table>
           <thead>
-            <tr>
-              <td>ASSIGNED CREW MEMBER</td>
-            </tr>
+          <tr>
+            <td>ASSIGNED CREW MEMBER</td>
+          </tr>
           </thead>
           <tbody>
-          {this.renderCrew(crew.crewPositions)}
+            {this.renderCrew(crew.crewPositions)}
           </tbody>
         </table>
       </div>
     );
   }
 
-  private renderCrew(crewPositions: CrewPositionModel[]) {
+  private renderCrew = (crewPositions: CrewPositionModel[]) => {
     return crewPositions.map((crewPosition: CrewPositionModel, index: number) => {
       return (
         <tr key={index}>

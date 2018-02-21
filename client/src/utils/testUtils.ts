@@ -1,5 +1,5 @@
 import { Filter } from '../widgets/Filter';
-import { Planner } from '../roster/Planner';
+import { StyledPlanner } from '../roster/Planner';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { AirmanRepositoryStub } from '../airman/repositories/doubles/AirmanRepositoryStub';
 import { SiteRepositoryStub } from '../site/repositories/doubles/SiteRepositoryStub';
@@ -12,6 +12,7 @@ import { AvailabilityStore } from '../availability/stores/AvailabilityStore';
 import { CurrencyStore } from '../currency/stores/CurrencyStore';
 import { PlannerStore } from '../roster/stores/PlannerStore';
 import { MissionStore } from '../mission/stores/MissionStore';
+import { ReactWrapper } from 'enzyme';
 
 export async function makeFakeTrackerStore(shouldHydrateState: boolean = true) {
   const store = new TrackerStore(
@@ -91,12 +92,7 @@ export class Table {
   }
 
   getPlanner() {
-    return this.wrapper.find(Planner);
-  }
-
-  getColumnSubHeaders(columnIndex: number) {
-    const headers = this.wrapper.find('th');
-    return headers.at(columnIndex).childAt(1).text();
+    return this.wrapper.find(StyledPlanner);
   }
 }
 
@@ -112,4 +108,14 @@ export async function selectOption(wrapper: any, filter: any, value: number) {
 
 export function findSelectorWithText(wrapper: any, selector: string, text: string): any {
   return wrapper.find(selector).filterWhere((x: any) => x.text().includes(text));
+}
+
+export const clickOnFirstAirman = (wrapper: any) => wrapper.find('tbody tr').first().simulate('click');
+
+export function clickButtonByName(wrapper: ReactWrapper, component: any, className: string) {
+  findByClassName(wrapper.find(component).find('button'), className).simulate('click');
+}
+
+export function findByClassName(wrapper: any, className: string) {
+  return wrapper.findWhere((e: any) => e.prop('className') === className);
 }

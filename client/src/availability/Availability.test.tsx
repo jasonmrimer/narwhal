@@ -1,19 +1,18 @@
 import * as React from 'react';
-import { mount, ReactWrapper } from 'enzyme';
-import { Availability } from './Availability';
-import { AvailabilityTile } from './AvailabilityTile';
-import { EventModel, EventType } from '../event/models/EventModel';
 import * as moment from 'moment';
-import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
-import { makeFakeTrackerStore } from '../utils/testUtils';
-import { TrackerStore } from '../tracker/stores/TrackerStore';
+import { Availability } from './Availability';
+import { EventModel, EventType } from '../event/models/EventModel';
 import { AirmanModel } from '../airman/models/AirmanModel';
-import { EventForm, StyledEventForm } from '../event/EventForm';
-import { MemoryRouter } from 'react-router';
+import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
+import { StyledEventForm } from '../event/EventForm';
+import { StyledAvailabilityTile } from './AvailabilityTile';
+import { TrackerStore } from '../tracker/stores/TrackerStore';
+import { makeFakeTrackerStore } from '../utils/testUtils';
+import { shallow, ShallowWrapper } from 'enzyme';
 
 let trackerStore: TrackerStore;
 let airman: AirmanModel;
-let subject: ReactWrapper;
+let subject: ShallowWrapper;
 let eventOne: EventModel;
 let eventTwo: EventModel;
 let eventThree: EventModel;
@@ -51,11 +50,7 @@ describe('Availability', () => {
     trackerStore = await makeFakeTrackerStore();
     trackerStore.setSelectedAirman(airman);
 
-    subject = mount(
-      <MemoryRouter>
-        <Availability trackerStore={trackerStore}/>
-      </MemoryRouter>
-    );
+    subject = shallow(<Availability trackerStore={trackerStore}/>);
   });
 
   it('renders the availability for an airman', () => {
@@ -70,12 +65,12 @@ describe('Availability', () => {
   });
 
   it('renders a list of events', () => {
-    expect(subject.find(AvailabilityTile).length).toBe(6);
+    expect(subject.find(StyledAvailabilityTile).length).toBe(6);
   });
 
   it('renders all the scheduled events for the given day', () => {
     const dateWrapper = subject.find('#day-1');
-    expect(dateWrapper.find(AvailabilityTile).length).toBe(3);
+    expect(dateWrapper.find(StyledAvailabilityTile).length).toBe(3);
     expect(dateWrapper.find('.event-date').text()).toContain('MON, 27 NOV 17');
   });
 
@@ -104,13 +99,15 @@ describe('Availability', () => {
   });
 
   it('opens an Edit Event form when clicking on an existing Event Card', () => {
-    subject.find(AvailabilityTile).at(0).simulate('click');
+    (subject.instance() as Availability).openEventFormForEdit(eventOne);
+    subject.update();
     expect(subject.find(StyledEventForm).prop('event')).toEqual(eventOne);
   });
 
   it('can exit out of an event form', () => {
     subject.find('button.add-event').simulate('click');
-    subject.find(EventForm).find('a.back').simulate('click');
+    expect(trackerStore.availabilityStore.showEventForm).toBeTruthy();
+    (subject.instance() as Availability).closeEventForm();
     subject.update();
     expect(trackerStore.availabilityStore.showEventForm).toBeFalsy();
     expect(subject.find(StyledEventForm).exists()).toBeFalsy();

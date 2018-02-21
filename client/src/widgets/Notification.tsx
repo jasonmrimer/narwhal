@@ -5,7 +5,7 @@ interface Props {
   className?: string;
 }
 
-const Notification: React.SFC<Props> = (props) => {
+export const Notification: React.SFC<Props> = (props) => {
   return (
     <h3 className={props.className}>{props.children}</h3>
   );

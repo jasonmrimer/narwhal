@@ -14,6 +14,11 @@ interface Props {
 
 @observer
 export class Currency extends React.Component<Props> {
+  openSkillFormForEdit = (skill: Skill) => {
+    this.props.trackerStore.currencyStore.setSelectedSkill(skill);
+    this.props.trackerStore.currencyStore.setShowSkillForm(true);
+  }
+
   render() {
     return (
       <div className={this.props.className}>
@@ -46,8 +51,8 @@ export class Currency extends React.Component<Props> {
   private createAirmanSkill = async (skill: Skill) => {
     await this.props.trackerStore.addAirmanSkill(skill);
     if (this.props.trackerStore.currencyStore.errors == null) {
-        this.props.trackerStore.currencyStore.clearSelectedSkill();
-        this.props.trackerStore.currencyStore.setShowSkillForm(false);
+      this.props.trackerStore.currencyStore.clearSelectedSkill();
+      this.props.trackerStore.currencyStore.setShowSkillForm(false);
     }
   }
 
@@ -94,11 +99,6 @@ export class Currency extends React.Component<Props> {
 
   private openSkillFormForCreate = () => {
     this.props.trackerStore.currencyStore.clearSelectedSkill();
-    this.props.trackerStore.currencyStore.setShowSkillForm(true);
-  }
-
-  private openSkillFormForEdit = (skill: Skill) => {
-    this.props.trackerStore.currencyStore.setSelectedSkill(skill);
     this.props.trackerStore.currencyStore.setShowSkillForm(true);
   }
 }

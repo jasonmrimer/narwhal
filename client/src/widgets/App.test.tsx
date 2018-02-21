@@ -13,6 +13,7 @@ import { DashboardStore } from '../dashboard/stores/DashboardStore';
 import { CrewStore } from '../crew/stores/CrewStore';
 import { CrewRepositoryStub } from '../crew/repositories/doubles/CrewRepositoryStub';
 import { CrewModelFactory } from '../crew/factories/CrewModelFactory';
+import { Crew } from '../crew/Crew';
 
 const profileRepository = new ProfileRepositoryStub();
 const siteRepository = new SiteRepositoryStub();
@@ -23,7 +24,7 @@ let subject: ShallowWrapper;
 let mountedSubject: ReactWrapper;
 
 describe('App', () => {
-  it('renders a route for the dashboard and roster', async () => {
+  it('renders a route for the dashboard, roster and crew', async () => {
     const trackerStore = await makeFakeTrackerStore();
     subject = shallow(
       <App
@@ -81,5 +82,24 @@ describe('App', () => {
     mountedSubject.setState({profile});
 
     expect(mountedSubject.find(Dashboard).exists()).toBeTruthy();
+  });
+
+  it('renders the Crew component when the route is /crew', async () => {
+    const trackerStore = await makeFakeTrackerStore();
+    mountedSubject = mount(
+      <MemoryRouter initialEntries={['/crew/1']}>
+        <App
+          trackerStore={trackerStore}
+          profileRepository={profileRepository}
+          dashboardStore={dashboardStore}
+          crewStore={crewStore}
+        />
+      </MemoryRouter>
+    );
+
+    const profile = await profileRepository.findOne();
+    mountedSubject.setState({profile});
+
+    expect(mountedSubject.find(Crew).exists()).toBeTruthy();
   });
 });

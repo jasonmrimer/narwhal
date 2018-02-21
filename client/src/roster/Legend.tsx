@@ -10,23 +10,22 @@ interface Props {
 }
 
 export const Legend = (props: Props) => {
-
-    return (
+  return (
     <div className={props.className}>
       <div>
-        <AppointmentIcon />
+        <AppointmentIcon/>
         <span>APPOINTMENT</span>
       </div>
       <div>
-        <LeaveIcon />
+        <LeaveIcon/>
         <span>LEAVE</span>
       </div>
       <div>
-        <MissionIcon />
+        <MissionIcon/>
         <span>MISSION</span>
       </div>
       <div>
-        <AvailableIcon />
+        <AvailableIcon/>
         <span>AVAILABLE</span>
       </div>
     </div>

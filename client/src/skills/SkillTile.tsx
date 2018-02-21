@@ -5,7 +5,6 @@ import { ExpirationAlert } from '../icons/ExpirationAlert';
 
 interface Props {
   skill: Skill;
-  key: number;
   handleClick: (skill: Skill) => void;
   className?: string;
 }
@@ -15,7 +14,6 @@ export const SkillTile = (props: Props) => {
   return (
     <div
       className={props.className}
-      key={props.key}
       onClick={() => props.handleClick(skill)}
     >
       <div className="currency-title">

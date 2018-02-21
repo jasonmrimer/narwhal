@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { mount, ReactWrapper } from 'enzyme';
+import { shallow, ShallowWrapper } from 'enzyme';
 import { TopBar } from './TopBar';
 
 describe('TopBar', () => {
-  let subject: ReactWrapper;
+  let subject: ShallowWrapper;
 
   beforeEach(() => {
-    subject = mount(<TopBar username="Tytus" pageTitle="AVAILABILITY ROSTER"/>);
+    subject = shallow(<TopBar username="Tytus" pageTitle="AVAILABILITY ROSTER"/>);
   });
 
   it('renders the username', () => {

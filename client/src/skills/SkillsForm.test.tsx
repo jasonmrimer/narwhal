@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { mount, ReactWrapper } from 'enzyme';
-import { eventStub, inputValueForDatePicker, selectValueFromDropdown } from '../utils/testUtils';
+import { mount, ReactWrapper, shallow, ShallowWrapper } from 'enzyme';
+import { eventStub } from '../utils/testUtils';
 import { SkillsForm } from './SkillsForm';
 import { QualificationModel } from './models/QualificationModel';
 import { AirmanQualificationModel } from '../airman/models/AirmanQualificationModel';
@@ -23,7 +23,8 @@ describe('SkillsForm', () => {
   let certs: CertificationModel[];
   let handleSubmitSpy: Mock;
   let handleDeleteSpy: Mock;
-  let subject: ReactWrapper;
+  let subject: ShallowWrapper;
+  let mountedSubject: ReactWrapper;
 
   beforeEach(() => {
     handleSubmitSpy = jest.fn();
@@ -32,7 +33,7 @@ describe('SkillsForm', () => {
     certs = CertificationModelFactory.buildList(3);
     errors = [];
 
-    subject = mount(
+    subject = shallow(
       <SkillsForm
         airmanId={1}
         qualifications={quals}
@@ -46,10 +47,12 @@ describe('SkillsForm', () => {
   });
 
   it('calls handleSubmit with a Qualification on submission', () => {
-    selectValueFromDropdown(subject, 'skillType', SkillType.Qualification);
-    selectValueFromDropdown(subject, 'skillNameId', '1');
-    inputValueForDatePicker(subject.find(DatePicker).at(0), 'earnDate', earnDate);
-    inputValueForDatePicker(subject.find(DatePicker).at(1), 'expirationDate', expirationDate);
+    const skillForm = (subject.instance() as SkillsForm);
+    skillForm.handleChange({target: {name: 'skillType', value: SkillType.Qualification}});
+    skillForm.handleChange({target: {name: 'skillNameId', value: 1}});
+    skillForm.handleChange({target: {name: 'earnDate', value: earnDate}});
+    skillForm.handleChange({target: {name: 'expirationDate', value: expirationDate}});
+
     subject.find('form').simulate('submit', eventStub);
 
     expect(handleSubmitSpy).toHaveBeenCalledWith(
@@ -62,10 +65,11 @@ describe('SkillsForm', () => {
   });
 
   it('calls handleSubmit with a Certification on submission', () => {
-    selectValueFromDropdown(subject, 'skillType', SkillType.Certification);
-    selectValueFromDropdown(subject, 'skillNameId', '1');
-    inputValueForDatePicker(subject.find(DatePicker).at(0), 'earnDate', earnDate);
-    inputValueForDatePicker(subject.find(DatePicker).at(1), 'expirationDate', expirationDate);
+    const skillForm = (subject.instance() as SkillsForm);
+    skillForm.handleChange({target: {name: 'skillType', value: SkillType.Certification}});
+    skillForm.handleChange({target: {name: 'skillNameId', value: 1}});
+    skillForm.handleChange({target: {name: 'earnDate', value: earnDate}});
+    skillForm.handleChange({target: {name: 'expirationDate', value: expirationDate}});
     subject.find('form').simulate('submit', eventStub);
 
     expect(handleSubmitSpy).toHaveBeenCalledWith(
@@ -77,17 +81,11 @@ describe('SkillsForm', () => {
       ));
   });
 
-  it('renders a form field validation', () => {
-    errors = [{expirationDate: 'Field is required'}, {earnDate: 'Field is required'}];
-    subject.setProps({errors: errors});
-    expect(subject.find('.error-msg').length).toBe(2);
-  });
-
   describe('rendering with an existing skill', () => {
     const skill = AirmanQualificationModelFactory.build(1);
 
     beforeEach(() => {
-      subject = mount(
+      mountedSubject = mount(
         <SkillsForm
           airmanId={1}
           qualifications={quals}
@@ -101,14 +99,14 @@ describe('SkillsForm', () => {
     });
 
     it('should only allow the edit of the expiration date', () => {
-      subject.find('select').forEach((elem) => {
+      mountedSubject.find('select').forEach((elem) => {
         expect(elem.prop('disabled')).toBeTruthy();
       });
 
-      expect(subject.find(DatePicker).at(0).prop('disabled')).toBeTruthy();
-      expect(subject.find(DatePicker).at(1).prop('disabled')).toBeFalsy();
+      expect(mountedSubject.find(DatePicker).at(0).prop('disabled')).toBeTruthy();
+      expect(mountedSubject.find(DatePicker).at(1).prop('disabled')).toBeFalsy();
 
-      subject.find('form').simulate('submit', eventStub);
+      mountedSubject.find('form').simulate('submit', eventStub);
 
       expect(handleSubmitSpy).toHaveBeenCalled();
       expect(handleSubmitSpy.mock.calls[0][0].id).toBeDefined();
@@ -116,7 +114,7 @@ describe('SkillsForm', () => {
     });
 
     it('calls handleDelete when clicking the delete button', () => {
-      subject.find('button').simulate('click');
+      mountedSubject.find('button').simulate('click');
       expect(handleDeleteSpy).toHaveBeenCalledWith(skill);
     });
   });

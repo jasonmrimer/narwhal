@@ -1,14 +1,14 @@
 import * as React from 'react';
-import { Moment } from 'moment';
 import styled from 'styled-components';
+import { Moment } from 'moment';
+import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { EventModel } from '../event/models/EventModel';
 import { StyledEventForm } from '../event/EventForm';
+import { StyledAvailabilityTile } from './AvailabilityTile';
 import { observer } from 'mobx-react';
-import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { NextIcon } from '../icons/NextIcon';
 import { doesDayHaveEvent } from '../utils/eventUtil';
 import { BackIcon } from '../icons/BackIcon';
-import { StyledAvailabilityTile } from './AvailabilityTile';
 
 interface Props {
   trackerStore: TrackerStore;
@@ -17,6 +17,16 @@ interface Props {
 
 @observer
 export class Availability extends React.Component<Props> {
+  openEventFormForEdit = (event: EventModel) => {
+    this.props.trackerStore.availabilityStore.setSelectedEvent(event);
+    this.props.trackerStore.availabilityStore.setShowEventForm(true);
+  }
+
+  closeEventForm = () => {
+    this.props.trackerStore.availabilityStore.clearSelectedEvent();
+    this.props.trackerStore.availabilityStore.setShowEventForm(false);
+  }
+
   render() {
     return (
       <div className={this.props.className}>
@@ -48,11 +58,6 @@ export class Availability extends React.Component<Props> {
     if (!this.props.trackerStore.availabilityStore.hasErrors) {
       this.closeEventForm();
     }
-  }
-
-  private closeEventForm = () => {
-    this.props.trackerStore.availabilityStore.clearSelectedEvent();
-    this.props.trackerStore.availabilityStore.setShowEventForm(false);
   }
 
   private renderAvailability = () => {
@@ -112,10 +117,6 @@ export class Availability extends React.Component<Props> {
     this.props.trackerStore.availabilityStore.setShowEventForm(true);
   }
 
-  private openEventFormForEdit = (event: EventModel) => {
-    this.props.trackerStore.availabilityStore.setSelectedEvent(event);
-    this.props.trackerStore.availabilityStore.setShowEventForm(true);
-  }
 }
 
 export const StyledAvailability = styled(Availability)`

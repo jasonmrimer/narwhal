@@ -19,7 +19,7 @@ export const AvailabilityTile = observer((props: Props) => {
         {
           props.event.type === EventType.Mission &&
           <Link to={`/crew/${props.event.id}`}>
-            <LookingGlass/>
+            <LookingGlass />
           </Link>
         }
       </div>

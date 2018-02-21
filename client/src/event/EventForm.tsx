@@ -97,6 +97,14 @@ export class EventForm extends React.Component<Props, EventFormState> {
     }
   }
 
+  handleDelete = (clickEvent: React.MouseEvent<HTMLButtonElement>) => {
+    clickEvent.preventDefault();
+    if (this.props.event == null) {
+      return;
+    }
+    this.props.setPendingDelete(this.props.event);
+  }
+
   render() {
     const disabled = this.state.eventType === EventType.Mission;
     return (
@@ -190,14 +198,6 @@ export class EventForm extends React.Component<Props, EventFormState> {
         </div>
       </form>
     );
-  }
-
-  private handleDelete = (clickEvent: React.MouseEvent<HTMLButtonElement>) => {
-    clickEvent.preventDefault();
-    if (this.props.event == null) {
-      return;
-    }
-    this.props.setPendingDelete(this.props.event);
   }
 }
 

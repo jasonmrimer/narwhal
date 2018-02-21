@@ -46,6 +46,11 @@ export class SkillsForm extends React.Component<Props, State> {
     this.state = SkillsForm.hydrate(props.skill, props.qualifications);
   }
 
+  /* tslint:disable:no-any */
+  handleChange = (e: any) => {
+    this.setState({[e.target.name]: e.target.value});
+  }
+
   render() {
     const disabled = this.props.skill != null;
     return (
@@ -131,11 +136,6 @@ export class SkillsForm extends React.Component<Props, State> {
           return <option key={`qual-${index}`} value={qual.id}>{qual.acronym} - {qual.title}</option>;
         });
     }
-  }
-
-  /* tslint:disable:no-any */
-  private handleChange = (e: any) => {
-    this.setState({[e.target.name]: e.target.value});
   }
 
   private handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

@@ -1,17 +1,22 @@
 import * as React from 'react';
-import { mount } from 'enzyme';
-import { ActiveBorder, Tab } from './Tab';
+import { ActiveBorder, InactiveBorder, Tab } from './Tab';
+import { shallow, ShallowWrapper } from 'enzyme';
 
+let subject: ShallowWrapper;
+const clickSpy = jest.fn();
 describe('Tab', () => {
-  const clickSpy = jest.fn();
-  const subject = mount(<Tab title={'Title'} onClick={clickSpy} isActive={false}/>);
+  beforeEach(() => {
+    subject = shallow(<Tab title={'Title'} onClick={clickSpy} isActive={false}/>);
+  });
 
   it('shows the tab title', () => {
-    expect(subject.text()).toBe('Title');
+    expect(subject.find(InactiveBorder).children().text()).toBe('Title');
+    subject.setProps({isActive: true});
+    expect(subject.find(ActiveBorder).children().text()).toBe('Title');
   });
 
   it('calls the onClick callback when clicked', () => {
-    subject.find('a').simulate('click');
+    subject.find(InactiveBorder).simulate('click');
     expect(clickSpy).toHaveBeenCalled();
   });
 
