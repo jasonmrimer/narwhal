@@ -25,6 +25,7 @@ import { WebSkillRepository } from './skills/repositories/web/WebSkillRepository
 import { WebCrewRepository } from './crew/repositories/web/WebCrewRepository';
 
 document.body.style.fontFamily = Theme.fontFamily;
+document.body.style.fontWeight = Theme.fontWeight;
 document.body.style.color = Theme.fontColor;
 document.body.style.backgroundColor = Theme.dark;
 

@@ -1,5 +1,6 @@
 export const Theme = Object.freeze({
   fontFamily: 'Roboto, Arial, Helvetica, sans-serif',
+  fontWeight: '300',
   fontSize: '16',
   fontColor: '#fff',
 

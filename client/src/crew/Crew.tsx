@@ -84,8 +84,7 @@ export const StyledCrew = styled(Crew)`
     
     th {
       font-size: 0.875rem;
-      font-weight: 500;
-      font-weight: normal;
+      font-weight: 400;
     }
   }
    
