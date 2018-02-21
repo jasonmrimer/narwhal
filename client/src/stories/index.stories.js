@@ -4,8 +4,8 @@ import '../index.css';
 import {FormStory} from "./Form.stories";
 import {NotificationStory} from "./Notification.stories";
 
-document.body.style.fontFamily = theme.fontFamily;
-document.body.style.color = theme.fontColor;
+document.body.style.fontFamily = Theme.fontFamily;
+document.body.style.color = Theme.fontColor;
 document.body.style.fontFamily = 'sans-serif';
 document.body.style.fontWeight = 300;
 

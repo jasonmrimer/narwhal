@@ -36,6 +36,7 @@ export const StyledDeleteEventPopup = styled(DeleteEventPopup)`
   height: 100%;
   width: 100%;
   font-size: 1.25rem;
+  z-index: 1001;
   
   .delete-confirmation {
     background: ${props => props.theme.blueSteel};

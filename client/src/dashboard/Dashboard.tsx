@@ -2,7 +2,6 @@ import * as React from 'react';
 import { MissionModel } from '../mission/models/MissionModel';
 import { StyledMission } from '../mission/Mission';
 import styled from 'styled-components';
-import { StyledTopBar } from '../widgets/TopBar';
 import { observer } from 'mobx-react';
 import { DashboardStore } from './stores/DashboardStore';
 import { TopLevelFilter } from '../widgets/Filter';
@@ -22,7 +21,6 @@ export class Dashboard extends React.Component<Props> {
   render() {
     return (
       [
-        <StyledTopBar key="0" username={this.props.username} pageTitle="MPS DASHBOARD"/>,
         (
           <div key="1" className={`${this.props.className} filter`}>
             <div className="filter">
@@ -35,13 +33,15 @@ export class Dashboard extends React.Component<Props> {
                 options={this.props.dashboardStore.siteOptions}
               />
             </div>
-          </div>),
+          </div>
+        ),
         (
           <div key="2" className={`${this.props.className} missions`}>
             {this.props.dashboardStore.missions.map((mission: MissionModel, index) => {
               return <StyledMission mission={mission} key={index}/>;
             })}
-          </div>)
+          </div>
+        )
       ]
     );
   }

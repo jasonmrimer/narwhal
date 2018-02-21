@@ -36,27 +36,32 @@ export const StyledMultiSelect = styled(MultiSelect)`
     
     .rbt-token-removeable {
       background: transparent;
-      border: 1px solid white;
+      border: 1px solid ${props => props.theme.graySteel};
       color: ${props => props.theme.fontColor};
       
       .rbt-token-remove-button {
         background: transparent;
         border: 0;
+        
         .sr-only {
           display: none;
         }
-      }  
+      }
+        
       &.rbt-token-active {
         border-width: 2px;
       }
     }
+    
     .rbt-input {
       border-bottom: 1px solid ${props => props.theme.graySteel} !important;
       padding: 0.765rem 0.25rem !important;
       caret-color: ${props => props.theme.fontColor};
+      
       input {
         color: ${props => props.theme.fontColor};
       }
+      
       &:after {
         content: ' ';
         background: ${caret(false)};
@@ -67,7 +72,12 @@ export const StyledMultiSelect = styled(MultiSelect)`
         position: absolute;
         pointer-events: none;
       }
+      
+      .rbt-input-hint {
+        display: none;
+      }
     }
+    
      
     input {
       font-size: 1rem;
@@ -75,13 +85,17 @@ export const StyledMultiSelect = styled(MultiSelect)`
     
     ul {
       padding: 0;
-      border: 1px solid white;
+      border: 1px solid ${props => props.theme.graySteel};
+      border-top: none;
       margin: 0;
     }
     
     li {
+      display: flex;
+      align-items: center;
       list-style: none;
-      padding: 0.5rem 0;
+      padding: 0.5rem 1rem;
+
       a {
         text-decoration: none;
         display: inline-block;
@@ -91,9 +105,21 @@ export const StyledMultiSelect = styled(MultiSelect)`
       span {
         color: ${props => props.theme.fontColor}
       }
+    }
+    
+    li:nth-child(odd) {
+      background-color: ${props => props.theme.lighter};
     
       &.active, &:hover {
-        background: ${props => props.theme.dark};
+        background-color: ${props => props.theme.light};
+      }
+    }
+    
+    li:nth-child(even) {
+      background-color: ${props => props.theme.lightest};
+    
+      &.active, &:hover {
+        background-color: ${props => props.theme.light};
       }
     }
     

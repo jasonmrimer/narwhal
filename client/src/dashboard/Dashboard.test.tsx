@@ -7,7 +7,6 @@ import { SiteRepositoryStub } from '../site/repositories/doubles/SiteRepositoryS
 import { MissionModel } from '../mission/models/MissionModel';
 import { DashboardStore } from './stores/DashboardStore';
 import { StyledMission } from '../mission/Mission';
-import { TopBar } from '../widgets/TopBar';
 
 const missionRepositoryStub = new MissionRepositoryStub();
 
@@ -36,11 +35,6 @@ describe('Dashboard', () => {
   it('renders a Dashboard with all missions', () => {
     expect(subject.find('.mission-card').length).toBe(3);
     expect(dashboardMissions(subject)).toEqual(missions);
-  });
-
-  it('renders the TopBar with a username and pageTitle', async () => {
-    expect(subject.find(TopBar).prop('username')).toBe('Tytus');
-    expect(subject.find(TopBar).prop('pageTitle')).toBe('MPS DASHBOARD');
   });
 
   describe('filtering', () => {

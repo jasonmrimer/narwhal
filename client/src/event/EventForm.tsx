@@ -35,7 +35,7 @@ export interface EventFormState {
   eventType: string;
 }
 
-export function emptyEventFormState() {
+export function emptyEventFormState(eventType: string = '') {
   return {
     title: '',
     description: '',
@@ -43,7 +43,7 @@ export function emptyEventFormState() {
     startTime: '',
     endDate: '',
     endTime: '',
-    eventType: ''
+    eventType: eventType
   };
 }
 
@@ -66,6 +66,9 @@ export class EventForm extends React.Component<Props, EventFormState> {
 
   /* tslint:disable:no-any*/
   handleChange = (event: any) => {
+    if (event.target.name === 'eventType') {
+      this.setState(emptyEventFormState());
+    }
     this.setState({[event.target.name]: event.target.value});
   }
 
@@ -93,7 +96,7 @@ export class EventForm extends React.Component<Props, EventFormState> {
       const eventFormState = Object.assign(emptyEventFormState(), attrs);
       this.setState(eventFormState);
     } else {
-      this.setState(emptyEventFormState());
+      this.setState(emptyEventFormState(EventType.Mission));
     }
   }
 

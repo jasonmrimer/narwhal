@@ -76,8 +76,10 @@ export const StyledSidePanel = styled(SidePanel)`
   padding: 0 1rem;
   position: fixed;
   right: 0;
+  top: 7rem;
   height: 100%;
   overflow: auto;
+  z-index: 1000;
   
   .header{
     justify-content: baseline;

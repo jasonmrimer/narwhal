@@ -1,16 +1,15 @@
 import * as React from 'react';
-import {shallow, ShallowWrapper} from 'enzyme';
-import {Tracker} from './Tracker';
-import {forIt, makeFakeTrackerStore} from '../utils/testUtils';
-import {TrackerStore} from './stores/TrackerStore';
-import {StyledLegend} from '../roster/Legend';
-import {StyledRoster} from '../roster/Roster';
-import {StyledTopBar} from '../widgets/TopBar';
-import {TopLevelFilter} from '../widgets/Filter';
-import {StyledSidePanel} from './SidePanel';
-import {AirmanModelFactory} from '../airman/factories/AirmanModelFactory';
-import {StyledDeleteEventPopup} from '../event/DeleteEventPopup';
-import {EventModelFactory} from '../event/factories/EventModelFactory';
+import { shallow, ShallowWrapper } from 'enzyme';
+import { Tracker } from './Tracker';
+import { forIt, makeFakeTrackerStore } from '../utils/testUtils';
+import { TrackerStore } from './stores/TrackerStore';
+import { StyledLegend } from '../roster/Legend';
+import { StyledRoster } from '../roster/Roster';
+import { TopLevelFilter } from '../widgets/Filter';
+import { StyledSidePanel } from './SidePanel';
+import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
+import { StyledDeleteEventPopup } from '../event/DeleteEventPopup';
+import { EventModelFactory } from '../event/factories/EventModelFactory';
 
 let trackerStore: TrackerStore;
 let subject: ShallowWrapper;
@@ -39,11 +38,6 @@ describe('Tracker', () => {
 
   it('should render a roster', () => {
     expect(subject.find(StyledRoster).prop('trackerStore')).toBe(trackerStore);
-  });
-
-  it('should render a topbar', () => {
-    expect(subject.find(StyledTopBar).prop('username')).toBe('Tytus');
-    expect(subject.find(StyledTopBar).prop('pageTitle')).toBe('AVAILABILITY ROSTER');
   });
 
   describe('TopLevelFilter', () => {
