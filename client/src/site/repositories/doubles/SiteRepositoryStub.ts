@@ -4,7 +4,7 @@ import { SquadronModel } from '../../../squadron/models/SquadronModel';
 import { FlightModel } from '../../../flight/model/FlightModel';
 
 const sites = [
-  new SiteModel(1, 'Site 1', [
+  new SiteModel(1, 'DMS-GA', [
     new SquadronModel(1, 'Squad 1', [
       new FlightModel(1, 'Flight 1'),
       new FlightModel(2, 'Flight 2')
@@ -14,7 +14,7 @@ const sites = [
       new FlightModel(4, 'Flight 4')
     ])
   ]),
-  new SiteModel(2, 'Site 2', [
+  new SiteModel(2, 'DMS-MD', [
     new SquadronModel(3, 'Squad 3', [
       new FlightModel(5, 'Flight 5'),
       new FlightModel(6, 'Flight 6')

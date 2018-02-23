@@ -7,7 +7,7 @@ const missionOne = new MissionModel(
   'ato1',
   moment('2018-01-01T01:00:00Z'),
   moment('2018-01-01T11:00:00Z'),
-  new SiteModel(1, 'Site 1', [])
+  new SiteModel(1, 'DMS-GA', [])
 );
 
 const missionTwo = new MissionModel(
@@ -15,7 +15,7 @@ const missionTwo = new MissionModel(
   'ato2',
   moment('2018-02-02T02:00:00Z'),
   moment('2018-02-02T14:00:00Z'),
-  new SiteModel(1, 'Site 1', [])
+  new SiteModel(1, 'DMS-GA', [])
 );
 
 const missionThree = new MissionModel(
@@ -23,7 +23,7 @@ const missionThree = new MissionModel(
   'ato3',
   moment('2018-03-03T03:00:00Z'),
   moment('2018-03-04T03:00:00Z'),
-  new SiteModel(2, 'Site 2', [])
+  new SiteModel(2, 'DMS-MD', [])
 );
 
 const missions = [missionOne, missionTwo, missionThree];

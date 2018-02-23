@@ -17,6 +17,7 @@ logging:
     org.springframework.ws: debug
     org.springframework.ws.client.MessageTracing: trace
     org.springframework.security: debug
+
 security:
   user:
     name: tytus

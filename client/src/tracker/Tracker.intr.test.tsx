@@ -24,7 +24,7 @@ describe('Tracker', () => {
     subject = mount(
       <MemoryRouter>
         <Tracker
-          profile={{username: 'Tytus', siteId: 1}}
+          profile={{id: 1, username: 'Tytus', siteId: 1}}
           trackerStore={trackerStore}
         />
       </MemoryRouter>

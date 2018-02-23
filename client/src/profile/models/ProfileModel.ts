@@ -1,4 +1,5 @@
 export interface ProfileModel {
+  id?: number;
   username: string;
-  siteId: number;
+  siteId: number | null;
 }

@@ -11,7 +11,6 @@ import mil.af.us.narwhal.skills.CertificationRepository;
 import mil.af.us.narwhal.skills.Qualification;
 import mil.af.us.narwhal.skills.QualificationRepository;
 import mil.af.us.narwhal.squadron.Squadron;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +22,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.Instant;
-import java.util.Date;
 
 import static io.restassured.RestAssured.given;
 import static java.util.Arrays.asList;

@@ -19,20 +19,22 @@ import { DashboardStore } from './dashboard/stores/DashboardStore';
 import { CrewStore } from './crew/stores/CrewStore';
 import { WebSkillRepository } from './skills/repositories/web/WebSkillRepository';
 import { WebCrewRepository } from './crew/repositories/web/WebCrewRepository';
+import { ProfileSitePickerStore } from './profile/stores/ProfileSitePickerStore';
 
 document.body.style.fontFamily = Theme.fontFamily;
 document.body.style.fontWeight = Theme.fontWeight;
 document.body.style.color = Theme.fontColor;
 document.body.style.backgroundColor = Theme.dark;
 
+const webSiteRepository = new WebSiteRepository();
 const dashboardStore = new DashboardStore(
   new WebMissionRepository(),
-  new WebSiteRepository()
+  webSiteRepository
 );
 
 const trackerStore = new TrackerStore(
   new WebAirmanRepository(),
-  new WebSiteRepository(),
+  webSiteRepository,
   new WebSkillRepository(),
   new WebEventRepository(),
   new MomentTimeService(),
@@ -42,15 +44,16 @@ const trackerStore = new TrackerStore(
 const crewStore = new CrewStore(
   new WebCrewRepository()
 );
+const profileStore = new ProfileSitePickerStore(new WebProfileRepository(), webSiteRepository);
 
 ReactDOM.render(
   <ThemeProvider theme={Theme}>
     <BrowserRouter>
       <App
-        profileRepository={new WebProfileRepository()}
         dashboardStore={dashboardStore}
         trackerStore={trackerStore}
         crewStore={crewStore}
+        profileStore={profileStore}
       />
     </BrowserRouter>
   </ThemeProvider>,

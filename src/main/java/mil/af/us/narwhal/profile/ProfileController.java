@@ -2,9 +2,7 @@ package mil.af.us.narwhal.profile;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(ProfileController.URI)
@@ -20,6 +18,16 @@ public class ProfileController {
   @GetMapping
   public Profile show(@AuthenticationPrincipal User user) {
     Profile profile = repository.findOneByUsername(user.getUsername());
-    return profile != null ? profile : new Profile(user.getUsername(), -1L);
+
+    if (profile == null) {
+      profile = repository.save(new Profile(user.getUsername(), null));
+    }
+
+    return profile;
+  }
+
+  @PutMapping
+  public Profile update(@AuthenticationPrincipal User user, @RequestBody Profile profile) {
+    return repository.save(profile);
   }
 }

@@ -2,6 +2,7 @@ require_relative './tracker_page'
 
 class LoginPage
   include Capybara::DSL
+  @loggedIn = false
 
   def initialize
     visit '/login'

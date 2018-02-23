@@ -18,7 +18,7 @@ interface Props {
 @observer
 export class Tracker extends React.Component<Props> {
   async componentDidMount() {
-    await this.props.trackerStore.hydrate(this.props.profile.siteId);
+    await this.props.trackerStore.hydrate(this.props.profile.siteId || -1);
   }
 
   render() {

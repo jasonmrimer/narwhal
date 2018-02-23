@@ -1,39 +1,31 @@
 import * as React from 'react';
-import { StyledTracker } from '../tracker/Tracker';
-import ProfileRepository from '../profile/repositories/ProfileRepository';
-import { StyledDashboard } from '../dashboard/Dashboard';
 import { Route, Switch } from 'react-router-dom';
-import { StyledCrew } from '../crew/Crew';
 import { CrewStore } from '../crew/stores/CrewStore';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { DashboardStore } from '../dashboard/stores/DashboardStore';
-import { Upload } from '../upload/Upload';
-import { ProfileModel } from '../profile/models/ProfileModel';
 import styled from 'styled-components';
+import { StyledTracker } from '../tracker/Tracker';
 import { StyledTopBar } from './TopBar';
+import { Upload } from '../upload/Upload';
+import { StyledDashboard } from '../dashboard/Dashboard';
+import { StyledCrew } from '../crew/Crew';
+import { StyledProfileSitePicker } from '../profile/ProfileSitePicker';
+import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
+import { observer } from 'mobx-react';
 
 interface Props {
-  profileRepository: ProfileRepository;
   dashboardStore: DashboardStore;
   trackerStore: TrackerStore;
   crewStore: CrewStore;
+  profileStore: ProfileSitePickerStore;
+
 }
 
-interface State {
-  profile: ProfileModel | null;
-}
-
-export class App extends React.Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      profile: null
-    };
-  }
+@observer
+export class App extends React.Component<Props> {
 
   async componentDidMount() {
-    const profile = await this.props.profileRepository.findOne();
-    this.setState({profile});
+    await this.props.profileStore.hydrate();
   }
 
   render() {
@@ -42,8 +34,7 @@ export class App extends React.Component<Props, State> {
         <StyledClassificationBanner/>
         <StyledAuthorizationBanner/>
         <main style={{marginTop: '8rem'}}>
-          {
-            this.state.profile != null &&
+          { this.props.profileStore.profile != null &&
             <Switch>
               <Route
                 path="/upload"
@@ -59,12 +50,12 @@ export class App extends React.Component<Props, State> {
                     [
                       <StyledTopBar
                         key="0"
-                        username={this.state.profile!.username}
+                        username={this.props.profileStore.profile!.username}
                         pageTitle="MPS DASHBOARD"
                       />,
                       <StyledDashboard
                         key="1"
-                        username={this.state.profile!.username}
+                        username={this.props.profileStore.profile!.username}
                         dashboardStore={this.props.dashboardStore}
                       />
                     ]
@@ -83,24 +74,25 @@ export class App extends React.Component<Props, State> {
                   );
                 }}
               />
-
               <Route
                 path="/"
                 render={() => {
-                  return (
-                    [
-                      <StyledTopBar
-                        key="0"
-                        username={this.state.profile!.username}
-                        pageTitle="AVAILABILITY ROSTER"
-                      />,
-                      <StyledTracker
-                        key="1"
-                        profile={this.state.profile!}
-                        trackerStore={this.props.trackerStore}
-                      />
-                    ]
-                  );
+                  return this.profileHasSite() ?
+                    <StyledProfileSitePicker profileStore={this.props.profileStore}/> :
+                    (
+                      [
+                        <StyledTopBar
+                          key="0"
+                          username={this.props.profileStore.profile!.username}
+                          pageTitle="AVAILABILITY ROSTER"
+                        />,
+                        <StyledTracker
+                          key="1"
+                          profile={this.props.profileStore.profile!}
+                          trackerStore={this.props.trackerStore}
+                        />
+                      ]
+                    );
                 }}
               />
             </Switch>
@@ -108,6 +100,10 @@ export class App extends React.Component<Props, State> {
         </main>
       </div>
     );
+  }
+
+  private profileHasSite() {
+    return this.props.profileStore.profile!.siteId === null;
   }
 }
 

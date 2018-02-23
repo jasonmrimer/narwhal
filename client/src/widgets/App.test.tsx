@@ -8,14 +8,17 @@ import { MissionRepositoryStub } from '../mission/repositories/doubles/MissionRe
 import { Tracker } from '../tracker/Tracker';
 import { Dashboard } from '../dashboard/Dashboard';
 import { SiteRepositoryStub } from '../site/repositories/doubles/SiteRepositoryStub';
-import { makeFakeTrackerStore } from '../utils/testUtils';
+import { forIt, makeFakeTrackerStore } from '../utils/testUtils';
 import { DashboardStore } from '../dashboard/stores/DashboardStore';
 import { CrewStore } from '../crew/stores/CrewStore';
 import { CrewRepositoryStub } from '../crew/repositories/doubles/CrewRepositoryStub';
 import { CrewModelFactory } from '../crew/factories/CrewModelFactory';
 import { Crew } from '../crew/Crew';
+import ProfileRepository from '../profile/repositories/ProfileRepository';
+import { StyledProfileSitePicker } from '../profile/ProfileSitePicker';
+import { ProfileModel } from '../profile/models/ProfileModel';
+import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 
-const profileRepository = new ProfileRepositoryStub();
 const siteRepository = new SiteRepositoryStub();
 const dashboardStore = new DashboardStore(new MissionRepositoryStub(), siteRepository);
 const crewStore = new CrewStore(new CrewRepositoryStub(CrewModelFactory.build()));
@@ -26,17 +29,17 @@ let mountedSubject: ReactWrapper;
 describe('App', () => {
   it('renders a route for the dashboard, roster and crew', async () => {
     const trackerStore = await makeFakeTrackerStore();
+    const profileStore = new ProfileSitePickerStore(new ProfileRepositoryStub(), siteRepository);
     subject = shallow(
       <App
         trackerStore={trackerStore}
-        profileRepository={profileRepository}
+        profileStore={profileStore}
         dashboardStore={dashboardStore}
         crewStore={crewStore}
       />
     );
-
-    const profile = await profileRepository.findOne();
-    subject.setState({profile});
+    await forIt();
+    subject.update();
 
     const routes = subject.find(Route);
     expect(routes.length).toBe(4);
@@ -48,57 +51,96 @@ describe('App', () => {
 
   it('renders the Tracker component when the route is /', async () => {
     const trackerStore = await makeFakeTrackerStore();
+    const profileStore = new ProfileSitePickerStore(new ProfileRepositoryStub(), siteRepository);
     mountedSubject = mount(
       <MemoryRouter initialEntries={['/']}>
         <App
           trackerStore={trackerStore}
-          profileRepository={profileRepository}
+          profileStore={profileStore}
           dashboardStore={dashboardStore}
           crewStore={crewStore}
         />
       </MemoryRouter>
     );
-
-    const profile = await profileRepository.findOne();
-    mountedSubject.setState({profile});
-
+    await forIt();
+    mountedSubject.update();
     expect(mountedSubject.find(Tracker).exists()).toBeTruthy();
+  });
+
+  describe('ProfileSitePicker', () => {
+    let profileStore: ProfileSitePickerStore;
+    beforeEach(async () => {
+      const trackerStore = await makeFakeTrackerStore();
+      const profileRepo: ProfileRepository = {
+        findOne: () => {
+          return Promise.resolve({id: 1, username: 'FontFace', siteId: null});
+        },
+
+        save: (profile: ProfileModel) => {
+          return Promise.resolve(profile);
+        }
+      };
+      profileStore = new ProfileSitePickerStore(profileRepo, siteRepository);
+      await profileStore.hydrate();
+      mountedSubject = mount(
+        <MemoryRouter initialEntries={['/']}>
+          <App
+            trackerStore={trackerStore}
+            profileStore={profileStore}
+            dashboardStore={dashboardStore}
+            crewStore={crewStore}
+          />
+        </MemoryRouter>
+      );
+      await forIt();
+      mountedSubject.update();
+    });
+
+    it('renders the ProfileSitePicker component when user profile has no site', () => {
+      expect(mountedSubject.find(StyledProfileSitePicker).exists()).toBeTruthy();
+    });
+
+    it('should render the Tracker page after saving a profile', async () => {
+      profileStore.setProfile({id: 1, username: 'FontFace', siteId: 1});
+      mountedSubject.update();
+      expect(mountedSubject.find(Tracker).exists()).toBeTruthy();
+    });
   });
 
   it('renders the Dashboard component when the route is /dashboard', async () => {
     const trackerStore = await makeFakeTrackerStore();
+    const profileStore = new ProfileSitePickerStore(new ProfileRepositoryStub(), siteRepository);
+    await profileStore.hydrate();
     mountedSubject = mount(
       <MemoryRouter initialEntries={['/dashboard']}>
         <App
           trackerStore={trackerStore}
-          profileRepository={profileRepository}
+          profileStore={profileStore}
           dashboardStore={dashboardStore}
           crewStore={crewStore}
         />
       </MemoryRouter>
     );
-
-    const profile = await profileRepository.findOne();
-    mountedSubject.setState({profile});
+    await forIt();
 
     expect(mountedSubject.find(Dashboard).exists()).toBeTruthy();
   });
 
   it('renders the Crew component when the route is /crew', async () => {
     const trackerStore = await makeFakeTrackerStore();
+    const profileStore = new ProfileSitePickerStore(new ProfileRepositoryStub(), siteRepository);
     mountedSubject = mount(
       <MemoryRouter initialEntries={['/crew/1']}>
         <App
           trackerStore={trackerStore}
-          profileRepository={profileRepository}
+          profileStore={profileStore}
           dashboardStore={dashboardStore}
           crewStore={crewStore}
         />
       </MemoryRouter>
     );
-
-    const profile = await profileRepository.findOne();
-    mountedSubject.setState({profile});
+    await forIt();
+    mountedSubject.update();
 
     expect(mountedSubject.find(Crew).exists()).toBeTruthy();
   });

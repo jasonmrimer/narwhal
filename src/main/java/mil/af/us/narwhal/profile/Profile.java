@@ -21,7 +21,7 @@ public class Profile {
   @Column(unique = true, nullable = false)
   private String username;
 
-  @Column(name = "site_id", nullable = false)
+  @Column(name = "site_id")
   private Long siteId;
 
   public Profile(String username, Long siteId) {
