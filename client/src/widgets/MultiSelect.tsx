@@ -5,10 +5,13 @@ import styled from 'styled-components';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { caret } from '../utils/StyleUtils';
 
+/* tslint:disable:no-any*/
 interface  Props {
   options: FilterOption[];
   onChange: (e: FilterOption[]) => void;
   placeholder: string;
+  disabled?: boolean;
+  selected?: any;
   className?: string;
   multiple?: boolean;
 }
@@ -17,6 +20,8 @@ export const MultiSelect =  (props: Props) => {
   return (
     <div className={props.className}>
       <Typeahead
+        selected={props.selected}
+        disabled={props.disabled}
         multiple={props.multiple}
         highlightOnlyResult={true}
         selectHintOnEnter={true}

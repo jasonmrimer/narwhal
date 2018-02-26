@@ -82,12 +82,11 @@ describe('Tracker', () => {
 
   describe('DeleteEventPopup', () => {
     it('should not render a delete event popup when there is no pending delete event', () => {
-      trackerStore.availabilityStore.setPendingDeleteEvent(null);
       expect(subject.find(StyledDeleteEventPopup).exists()).toBeFalsy();
     });
 
     it('should render a delete event popup when there is a pending delete event', () => {
-      trackerStore.availabilityStore.setPendingDeleteEvent(EventModelFactory.build());
+      trackerStore.removeEvent(EventModelFactory.build());
       subject.update();
       expect(subject.find(StyledDeleteEventPopup).exists()).toBeTruthy();
     });

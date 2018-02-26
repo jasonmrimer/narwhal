@@ -4,11 +4,14 @@ import { Availability } from './Availability';
 import { EventModel, EventType } from '../event/models/EventModel';
 import { AirmanModel } from '../airman/models/AirmanModel';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
-import { StyledEventForm } from '../event/EventForm';
 import { StyledAvailabilityTile } from './AvailabilityTile';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { makeFakeTrackerStore } from '../utils/testUtils';
 import { shallow, ShallowWrapper } from 'enzyme';
+import { StyledRadioButtons } from '../widgets/RadioButtons';
+import { StyledAppointmentForm } from '../event/AppointmentForm';
+import { StyledLeaveForm } from '../event/LeaveForm';
+import { EventModelFactory } from '../event/factories/EventModelFactory';
 
 let trackerStore: TrackerStore;
 let airman: AirmanModel;
@@ -26,7 +29,7 @@ describe('Availability', () => {
       moment('2017-11-27'),
       moment('2017-11-27'),
       1,
-      EventType.Mission
+      EventType.Appointment
     );
     eventTwo = new EventModel(
       'Event Two',
@@ -34,7 +37,7 @@ describe('Availability', () => {
       moment('2017-11-27'),
       moment('2017-11-27'),
       1,
-      EventType.Mission
+      EventType.Leave
     );
     eventThree = new EventModel(
       'Event Three',
@@ -50,7 +53,14 @@ describe('Availability', () => {
     trackerStore = await makeFakeTrackerStore();
     trackerStore.setSelectedAirman(airman);
 
-    subject = shallow(<Availability trackerStore={trackerStore}/>);
+    subject = shallow(
+      <Availability
+        selectedAirman={airman}
+        availabilityStore={trackerStore.availabilityStore}
+        missionStore={trackerStore.missionStore}
+        plannerStore={trackerStore.plannerStore}
+      />
+    );
   });
 
   it('renders the availability for an airman', () => {
@@ -79,11 +89,6 @@ describe('Availability', () => {
     expect(subject.find('button.add-event').text()).toBe('+ Add Event');
   });
 
-  it('opens a New Event form after clicking Add Event', () => {
-    subject.find('button.add-event').simulate('click');
-    expect(subject.find(StyledEventForm).exists()).toBeTruthy();
-  });
-
   it('forwards availability to next week', () => {
     subject.find('button.next-week').simulate('click');
     expect(subject.text()).toContain('03 DEC - 09 DEC');
@@ -98,18 +103,65 @@ describe('Availability', () => {
     expect(dateWrapper.find('.event-date').text()).toContain('MON, 20 NOV 17');
   });
 
-  it('opens an Edit Event form when clicking on an existing Event Card', () => {
-    (subject.instance() as Availability).openEventFormForEdit(eventOne);
-    subject.update();
-    expect(subject.find(StyledEventForm).prop('event')).toEqual(eventOne);
+  it('renders event type radio buttons form after clicking Add Event', () => {
+    expect(subject.find(StyledRadioButtons).exists()).toBeFalsy();
+    subject.find('button.add-event').simulate('click');
+    expect(subject.find(StyledRadioButtons).exists()).toBeTruthy();
+  });
+
+  describe('create new event form', () => {
+    beforeEach(() => {
+      trackerStore.availabilityStore.showEventForm();
+    });
+
+    it('shows an appointment form', () => {
+      trackerStore.availabilityStore.openCreateEventForm(EventType.Appointment);
+      subject.update();
+
+      expect(subject.find(StyledRadioButtons).prop('value')).toBe(EventType.Appointment);
+      expect(subject.find(StyledAppointmentForm).exists()).toBeTruthy();
+    });
+
+    it('shows a leave form', () => {
+      trackerStore.availabilityStore.openCreateEventForm(EventType.Leave);
+      subject.update();
+
+      expect(subject.find(StyledRadioButtons).prop('value')).toBe(EventType.Leave);
+      expect(subject.find(StyledLeaveForm).exists()).toBeTruthy();
+    });
+  });
+
+  describe('edit event form', () => {
+    let event: EventModel;
+
+    beforeEach(() => {
+      event = EventModelFactory.build();
+    });
+
+    it('shows an appointment form', () => {
+      event.type = EventType.Appointment;
+      trackerStore.availabilityStore.openEditEventForm(event);
+      subject.update();
+
+      expect(subject.find(StyledRadioButtons).exists()).toBeFalsy();
+      expect(subject.find(StyledAppointmentForm).exists()).toBeTruthy();
+    });
+
+    it('shows a leave form', () => {
+      event.type = EventType.Leave;
+      trackerStore.availabilityStore.openEditEventForm(event);
+      subject.update();
+
+      expect(subject.find(StyledRadioButtons).exists()).toBeFalsy();
+      expect(subject.find(StyledLeaveForm).exists()).toBeTruthy();
+    });
   });
 
   it('can exit out of an event form', () => {
     subject.find('button.add-event').simulate('click');
-    expect(trackerStore.availabilityStore.showEventForm).toBeTruthy();
-    (subject.instance() as Availability).closeEventForm();
-    subject.update();
-    expect(trackerStore.availabilityStore.showEventForm).toBeFalsy();
-    expect(subject.find(StyledEventForm).exists()).toBeFalsy();
+    expect(trackerStore.availabilityStore.shouldShowEventForm).toBeTruthy();
+
+    subject.find('a.back').simulate('click');
+    expect(trackerStore.availabilityStore.shouldShowEventForm).toBeFalsy();
   });
 });

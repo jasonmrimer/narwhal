@@ -1,60 +1,107 @@
-import { EventModel } from '../../event/models/EventModel';
+import { EventModel, EventType } from '../../event/models/EventModel';
 import { action, computed, observable } from 'mobx';
+import { AppointmentFormStore } from '../../event/stores/AppointmentFormStore';
+import { LeaveFormStore } from '../../event/stores/LeaveFormStore';
+import { MissionFormStore } from '../../event/stores/MissionFormStore';
 
 export class AvailabilityStore {
-  @observable private _showEventForm: boolean = false;
-  @observable private _selectedEvent: EventModel | null = null;
-  @observable private _pendingDeleteEvent: EventModel | null = null;
-  @observable private _errors: object[] = [];
+  @observable private _shouldShowEventForm: boolean = false;
+  @observable private _eventFormType: EventType | string = '';
 
-  @computed
-  get selectedEvent() {
-    return this._selectedEvent;
-  }
-
-  @action.bound
-  setSelectedEvent(event: EventModel) {
-    this._selectedEvent = event;
-  }
-
-  @action.bound
-  clearSelectedEvent() {
-    this._selectedEvent = null;
+  constructor(public appointmentFormStore: AppointmentFormStore,
+              public leaveFormStore: LeaveFormStore,
+              public missionFormStore: MissionFormStore) {
   }
 
   @computed
-  get showEventForm() {
-    return this._showEventForm;
-  }
-
-  @action.bound
-  setShowEventForm(showEventForm: boolean) {
-    this._errors = [];
-    this._showEventForm = showEventForm;
-  }
-
-  @action.bound
-  setPendingDeleteEvent(event: EventModel | null = null) {
-    this._pendingDeleteEvent = event;
+  get eventFormType() {
+    return this._eventFormType;
   }
 
   @computed
-  get pendingDeleteEvent() {
-    return this._pendingDeleteEvent;
+  get hasEvent() {
+    switch (this._eventFormType) {
+      case EventType.Appointment:
+        return this.appointmentFormStore.hasEvent;
+      case EventType.Leave:
+        return this.leaveFormStore.hasEvent;
+      case EventType.Mission:
+        return this.missionFormStore.hasEvent;
+      default:
+        return false;
+    }
+  }
+
+  @computed
+  get shouldShowEventForm() {
+    return this._shouldShowEventForm;
   }
 
   @action.bound
-  setErrors(errors: object[]) {
-    this._errors = errors;
+  showEventForm() {
+    this._shouldShowEventForm = true;
   }
 
-  @computed
-  get errors() {
-    return this._errors;
+  @action.bound
+  openCreateEventForm(eventType: EventType) {
+    this._eventFormType = eventType;
+    switch (eventType) {
+      case EventType.Appointment:
+        return this.appointmentFormStore.open();
+      case EventType.Leave:
+        return this.leaveFormStore.open();
+      case EventType.Mission:
+        return this.missionFormStore.open();
+      default:
+        return;
+    }
   }
 
-  @computed
-  get hasErrors(): boolean {
-    return this._errors.length > 0;
+  @action.bound
+  openEditEventForm(event: EventModel) {
+    this._shouldShowEventForm = true;
+    this._eventFormType = event.type;
+    switch (event.type) {
+      case EventType.Appointment:
+        return this.appointmentFormStore.open(event);
+      case EventType.Leave:
+        return this.leaveFormStore.open(event);
+      case EventType.Mission:
+        return this.missionFormStore.open(event);
+      default:
+        return;
+    }
+  }
+
+  @action.bound
+  closeEventForm() {
+    switch (this._eventFormType) {
+      case EventType.Appointment:
+        this.appointmentFormStore.close();
+        break;
+      case EventType.Leave:
+        this.leaveFormStore.close();
+        break;
+      case EventType.Mission:
+        this.missionFormStore.close();
+        break;
+      default:
+        break;
+    }
+    this._shouldShowEventForm = false;
+    this._eventFormType = '';
+  }
+
+  setFormErrors(errors: object[]) {
+    switch (this._eventFormType) {
+      case EventType.Appointment:
+        return this.appointmentFormStore.setErrors(errors);
+      case EventType.Leave:
+        return this.leaveFormStore.setErrors(errors);
+      case EventType.Mission:
+        return this.missionFormStore.setErrors(errors);
+      default:
+        return;
+    }
   }
 }

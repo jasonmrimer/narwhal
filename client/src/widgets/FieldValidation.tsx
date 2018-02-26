@@ -5,7 +5,7 @@ import { observer } from 'mobx-react';
 
 interface Props {
   name: string;
-  children: JSX.Element;
+  children: JSX.Element | JSX.Element[];
   errors: object[];
   className?: string;
 }

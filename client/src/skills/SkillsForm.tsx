@@ -95,7 +95,7 @@ export class SkillsForm extends React.Component<Props, State> {
               <label htmlFor="earn-date">Earn Date:</label>
               <StyledDatePicker
                 id="earn-date"
-                dateValue={this.state.earnDate}
+                value={this.state.earnDate}
                 onChange={this.handleChange}
                 disabled={disabled}
                 name="earnDate"
@@ -108,7 +108,7 @@ export class SkillsForm extends React.Component<Props, State> {
               <label htmlFor="expiration-date">Expiration Date:</label>
               <StyledDatePicker
                 id="expiration-date"
-                dateValue={this.state.expirationDate}
+                value={this.state.expirationDate}
                 onChange={this.handleChange}
                 name="expirationDate"
               />

@@ -16,10 +16,6 @@ import { WebEventRepository } from './event/repositories/web/WebEventRepository'
 import { MomentTimeService } from './tracker/services/MomentTimeService';
 import { TrackerStore } from './tracker/stores/TrackerStore';
 import { DashboardStore } from './dashboard/stores/DashboardStore';
-import { AvailabilityStore } from './availability/stores/AvailabilityStore';
-import { CurrencyStore } from './currency/stores/CurrencyStore';
-import { PlannerStore } from './roster/stores/PlannerStore';
-import { MissionStore } from './mission/stores/MissionStore';
 import { CrewStore } from './crew/stores/CrewStore';
 import { WebSkillRepository } from './skills/repositories/web/WebSkillRepository';
 import { WebCrewRepository } from './crew/repositories/web/WebCrewRepository';
@@ -29,25 +25,23 @@ document.body.style.fontWeight = Theme.fontWeight;
 document.body.style.color = Theme.fontColor;
 document.body.style.backgroundColor = Theme.dark;
 
-const siteRepository = new WebSiteRepository();
-
 const dashboardStore = new DashboardStore(
   new WebMissionRepository(),
-  siteRepository
+  new WebSiteRepository()
 );
 
 const trackerStore = new TrackerStore(
   new WebAirmanRepository(),
-  siteRepository,
+  new WebSiteRepository(),
   new WebSkillRepository(),
   new WebEventRepository(),
-  new CurrencyStore(),
-  new AvailabilityStore(),
-  new PlannerStore(new MomentTimeService()),
-  new MissionStore(new WebMissionRepository())
+  new MomentTimeService(),
+  new WebMissionRepository()
 );
 
-const crewStore = new CrewStore(new WebCrewRepository());
+const crewStore = new CrewStore(
+  new WebCrewRepository()
+);
 
 ReactDOM.render(
   <ThemeProvider theme={Theme}>

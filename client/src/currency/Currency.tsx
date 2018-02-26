@@ -50,7 +50,7 @@ export class Currency extends React.Component<Props> {
 
   private createAirmanSkill = async (skill: Skill) => {
     await this.props.trackerStore.addAirmanSkill(skill);
-    if (this.props.trackerStore.currencyStore.errors == null) {
+    if (this.props.trackerStore.currencyStore.errors.length === 0) {
       this.props.trackerStore.currencyStore.clearSelectedSkill();
       this.props.trackerStore.currencyStore.setShowSkillForm(false);
     }

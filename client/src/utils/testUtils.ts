@@ -8,10 +8,6 @@ import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
 import { default as SkillRepositoryStub } from '../skills/repositories/doubles/SkillRepositoryStub';
 import { Moment } from 'moment';
 import { MissionRepositoryStub } from '../mission/repositories/doubles/MissionRepositoryStub';
-import { AvailabilityStore } from '../availability/stores/AvailabilityStore';
-import { CurrencyStore } from '../currency/stores/CurrencyStore';
-import { PlannerStore } from '../roster/stores/PlannerStore';
-import { MissionStore } from '../mission/stores/MissionStore';
 import { ReactWrapper } from 'enzyme';
 
 export async function makeFakeTrackerStore(shouldHydrateState: boolean = true) {
@@ -20,10 +16,8 @@ export async function makeFakeTrackerStore(shouldHydrateState: boolean = true) {
     new SiteRepositoryStub(),
     new SkillRepositoryStub(),
     new EventRepositoryStub(),
-    new CurrencyStore(),
-    new AvailabilityStore(),
-    new PlannerStore(new TimeServiceStub()),
-    new MissionStore(new MissionRepositoryStub()),
+    new TimeServiceStub(),
+    new MissionRepositoryStub()
   );
   if (shouldHydrateState) {
     await store.hydrate();

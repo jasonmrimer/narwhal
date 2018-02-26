@@ -4,7 +4,7 @@ import styled from 'styled-components';
 /* tslint:disable:no-any*/
 interface Props {
   id?: string;
-  dateValue: string;
+  value: string;
   onChange: (e: any) => void;
   name: string;
   disabled?: boolean;
@@ -18,7 +18,7 @@ export const DatePicker = (props: Props) => {
       disabled={props.disabled}
       className={props.className}
       type="date"
-      value={props.dateValue}
+      value={props.value}
       name={props.name}
       onChange={props.onChange}
     />

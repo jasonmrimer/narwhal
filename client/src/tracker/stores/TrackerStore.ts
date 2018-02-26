@@ -14,6 +14,11 @@ import { AvailabilityStore } from '../../availability/stores/AvailabilityStore';
 import { PlannerStore } from '../../roster/stores/PlannerStore';
 import { MissionStore } from '../../mission/stores/MissionStore';
 import { FilterOption, UnfilteredValue } from '../../widgets/models/FilterOptionModel';
+import { AppointmentFormStore } from '../../event/stores/AppointmentFormStore';
+import { MissionRepository } from '../../mission/repositories/MissionRepository';
+import { TimeService } from '../services/TimeService';
+import { LeaveFormStore } from '../../event/stores/LeaveFormStore';
+import { MissionFormStore } from '../../event/stores/MissionFormStore';
 
 export class TrackerStore {
   public currencyStore: CurrencyStore;
@@ -38,23 +43,26 @@ export class TrackerStore {
   @observable private _qualificationIds: number[] = [];
 
   @observable private _selectedAirman: AirmanModel = AirmanModel.empty();
+  @observable private _pendingDeleteEvent: EventModel | null = null;
 
   constructor(airmanRepository: AirmanRepository,
               siteRepository: SiteRepository,
               skillRepository: SkillRepository,
               eventRepository: EventRepository,
-              currencyStore: CurrencyStore,
-              availabilityStore: AvailabilityStore,
-              plannerStore: PlannerStore,
-              missionStore: MissionStore) {
+              timeService: TimeService,
+              missionRepository: MissionRepository) {
     this.airmanRepository = airmanRepository;
     this.siteRepository = siteRepository;
     this.skillRepository = skillRepository;
     this.eventRepository = eventRepository;
-    this.currencyStore = currencyStore;
-    this.availabilityStore = availabilityStore;
-    this.plannerStore = plannerStore;
-    this.missionStore = missionStore;
+    this.currencyStore = new CurrencyStore();
+    this.availabilityStore = new AvailabilityStore(
+      new AppointmentFormStore(this),
+      new LeaveFormStore(this),
+      new MissionFormStore(this)
+    );
+    this.missionStore = new MissionStore(missionRepository);
+    this.plannerStore = new PlannerStore(timeService);
   }
 
   async hydrate(siteId: number = UnfilteredValue) {
@@ -213,9 +221,6 @@ export class TrackerStore {
     const week = airman.isEmpty ? this.plannerStore.plannerWeek : this.plannerStore.sidePanelWeek;
     this.plannerStore.setSidePanelWeek(week);
 
-    this.availabilityStore.clearSelectedEvent();
-    this.availabilityStore.setShowEventForm(false);
-
     this.currencyStore.clearSelectedSkill();
     this.currencyStore.setShowSkillForm(false);
   }
@@ -228,34 +233,51 @@ export class TrackerStore {
   @action.bound
   async addEvent(event: EventModel) {
     try {
-      event = await this.eventRepository.save(event);
-      this._airmen = await this.airmanRepository.findAll();
-      this._selectedAirman = this._airmen.find(a => a.id === event.airmanId)!;
+      const addedEvent = await this.eventRepository.save(event);
+      await this.refreshAirmen(event);
+      this.availabilityStore.closeEventForm();
+      return addedEvent;
     } catch (e) {
-      this.availabilityStore.setErrors(e);
+      this.availabilityStore.setFormErrors(e);
+      return event;
     }
-    return event;
+  }
+
+  @computed
+  get pendingDeleteEvent() {
+    return this._pendingDeleteEvent;
   }
 
   @action.bound
-  async deleteEvent() {
-    try {
-      const event = this.availabilityStore.pendingDeleteEvent!;
-      await this.eventRepository.delete(event);
-      this._airmen = await this.airmanRepository.findAll();
-      this._selectedAirman = this._airmen.find(a => a.id === event.airmanId)!;
-      this.availabilityStore.setPendingDeleteEvent(null);
-    } catch (e) {
-      // TODO : handle me!
+  removeEvent(event: EventModel) {
+    this._pendingDeleteEvent = event;
+  }
+
+  @action.bound
+  cancelPendingDelete() {
+    this._pendingDeleteEvent = null;
+  }
+
+  @action.bound
+  async executePendingDelete() {
+    if (this._pendingDeleteEvent == null) {
+      return;
     }
+    try {
+      await this.eventRepository.delete(this._pendingDeleteEvent);
+      await this.refreshAirmen(this._pendingDeleteEvent);
+      this.availabilityStore.closeEventForm();
+    } catch (e) {
+      this.availabilityStore.setFormErrors(e);
+    }
+    this._pendingDeleteEvent = null;
   }
 
   @action.bound
   async addAirmanSkill(skill: Skill) {
     try {
       await this.airmanRepository.saveSkill(skill);
-      this._airmen = await this.airmanRepository.findAll();
-      this._selectedAirman = this._airmen.find(a => a.id === skill.airmanId)!;
+      await this.refreshAirmen(skill);
     } catch (e) {
       this.currencyStore.setErrors(e);
     }
@@ -266,6 +288,11 @@ export class TrackerStore {
     await this.airmanRepository.deleteSkill(skill);
     this._airmen = await this.airmanRepository.findAll();
     this._selectedAirman = this._airmen.find(a => a.id === skill.airmanId)!;
+  }
+
+  private async refreshAirmen(item: { airmanId: number }) {
+    this._airmen = await this.airmanRepository.findAll();
+    this._selectedAirman = this._airmen.find(a => a.id === item.airmanId)!;
   }
 
   private byQualifications = (airman: AirmanModel) => {

@@ -1,9 +1,9 @@
 import * as React from 'react';
 import * as moment from 'moment';
 import { shallow, ShallowWrapper } from 'enzyme';
-import { AvailabilityStore } from '../availability/stores/AvailabilityStore';
 import { DeleteEventPopup } from './DeleteEventPopup';
 import { EventModel, EventType } from './models/EventModel';
+import { makeFakeTrackerStore } from '../utils/testUtils';
 
 const cancelPendingDeleteEvent = jest.fn();
 const confirmPendingDeleteEvent = jest.fn();
@@ -12,11 +12,11 @@ let subject: ShallowWrapper;
 
 describe('DeleteEventPopup', () => {
   beforeEach(async () => {
-    const availabilityStore = new AvailabilityStore;
-    availabilityStore.setPendingDeleteEvent(event);
+    const trackerStore = await makeFakeTrackerStore();
+    trackerStore.removeEvent(event);
     subject = shallow(
       <DeleteEventPopup
-        event={availabilityStore.pendingDeleteEvent!}
+        event={trackerStore.pendingDeleteEvent!}
         cancelPendingDeleteEvent={cancelPendingDeleteEvent}
         confirmPendingDeleteEvent={confirmPendingDeleteEvent}
       />

@@ -30,12 +30,21 @@ export class SidePanel extends React.Component<Props, State> {
   renderSelectedTab = () => {
     switch (this.state.selectedTab) {
       case 0:
-        this.props.trackerStore.currencyStore.setShowSkillForm(false);
-        return (<StyledCurrency trackerStore={this.props.trackerStore}/>);
+        return (
+          <StyledCurrency
+            trackerStore={this.props.trackerStore}
+          />
+        );
       case 1:
       default:
-        this.props.trackerStore.availabilityStore.setShowEventForm(false);
-        return (<StyledAvailability trackerStore={this.props.trackerStore}/>);
+        return (
+          <StyledAvailability
+            selectedAirman={this.props.trackerStore.selectedAirman}
+            availabilityStore={this.props.trackerStore.availabilityStore}
+            missionStore={this.props.trackerStore.missionStore}
+            plannerStore={this.props.trackerStore.plannerStore}
+          />
+        );
     }
   }
 

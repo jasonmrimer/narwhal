@@ -1,93 +1,143 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Moment } from 'moment';
-import { TrackerStore } from '../tracker/stores/TrackerStore';
-import { EventModel } from '../event/models/EventModel';
-import { StyledEventForm } from '../event/EventForm';
+import { EventModel, EventType } from '../event/models/EventModel';
 import { StyledAvailabilityTile } from './AvailabilityTile';
 import { observer } from 'mobx-react';
 import { NextIcon } from '../icons/NextIcon';
 import { doesDayHaveEvent } from '../utils/eventUtil';
 import { BackIcon } from '../icons/BackIcon';
+import { AvailabilityStore } from './stores/AvailabilityStore';
+import { PlannerStore } from '../roster/stores/PlannerStore';
+import { AirmanModel } from '../airman/models/AirmanModel';
+import { BackArrow } from '../icons/BackArrow';
+import { Theme } from '../themes/default';
+import { StyledRadioButtons } from '../widgets/RadioButtons';
+import { StyledAppointmentForm } from '../event/AppointmentForm';
+import { StyledLeaveForm } from '../event/LeaveForm';
+import { StyledMissionForm } from '../event/MissionForm';
+import { MissionStore } from '../mission/stores/MissionStore';
 
 interface Props {
-  trackerStore: TrackerStore;
+  selectedAirman: AirmanModel;
+  availabilityStore: AvailabilityStore;
+  missionStore: MissionStore;
+  plannerStore: PlannerStore;
   className?: string;
 }
 
 @observer
 export class Availability extends React.Component<Props> {
-  openEventFormForEdit = (event: EventModel) => {
-    this.props.trackerStore.availabilityStore.setSelectedEvent(event);
-    this.props.trackerStore.availabilityStore.setShowEventForm(true);
+  componentDidMount() {
+    this.props.availabilityStore.closeEventForm();
   }
 
-  closeEventForm = () => {
-    this.props.trackerStore.availabilityStore.clearSelectedEvent();
-    this.props.trackerStore.availabilityStore.setShowEventForm(false);
+  componentWillReceiveProps() {
+    this.props.availabilityStore.closeEventForm();
   }
 
   render() {
     return (
       <div className={this.props.className}>
         {
-          this.props.trackerStore.availabilityStore.showEventForm ?
-            this.renderEventForm() :
+          this.props.availabilityStore.shouldShowEventForm ?
+            this.renderEventFormContainer() :
             this.renderAvailability()
         }
       </div>
     );
   }
 
-  private renderEventForm = () => {
+  /* tslint:disable:no-any*/
+  private renderEventFormContainer = () => {
+    const {availabilityStore} = this.props;
     return (
-      <StyledEventForm
-        airmanId={this.props.trackerStore.selectedAirman.id}
-        hideEventForm={this.closeEventForm}
-        handleSubmit={this.submitAndCloseEventForm}
-        event={this.props.trackerStore.availabilityStore.selectedEvent}
-        errors={this.props.trackerStore.availabilityStore.errors}
-        setPendingDelete={this.props.trackerStore.availabilityStore.setPendingDeleteEvent}
-        missionStore={this.props.trackerStore.missionStore}
-      />
+      <div>
+        <a className="back" onClick={() => availabilityStore.closeEventForm()}>
+          <BackArrow color={Theme.graySteel}/>
+          <span>Back to Week View</span>
+        </a>
+
+        {
+          !availabilityStore.hasEvent &&
+          <div className="form-wrapper">
+            <div>Select Event Type:</div>
+            <StyledRadioButtons
+              name="eventType"
+              options={Object.keys(EventType).map(key => EventType[key])}
+              value={availabilityStore.eventFormType}
+              onChange={(e: any) => availabilityStore.openCreateEventForm(e.target.value)}
+            />
+          </div>
+        }
+
+        {this.renderEventForm()}
+      </div>
     );
   }
 
-  private submitAndCloseEventForm = async (event: EventModel) => {
-    await this.props.trackerStore.addEvent(event);
-    if (!this.props.trackerStore.availabilityStore.hasErrors) {
-      this.closeEventForm();
+  private renderEventForm() {
+    const {selectedAirman, availabilityStore, missionStore} = this.props;
+    switch (availabilityStore.eventFormType) {
+      case EventType.Appointment:
+        return (
+          <StyledAppointmentForm
+            airmanId={selectedAirman.id}
+            appointmentFormStore={availabilityStore.appointmentFormStore}
+          />
+        );
+      case EventType.Leave:
+        return (
+          <StyledLeaveForm
+            airmanId={selectedAirman.id}
+            leaveFormStore={availabilityStore.leaveFormStore}
+          />
+        );
+      case EventType.Mission:
+        return (
+          <StyledMissionForm
+            airmanId={selectedAirman.id}
+            missionStore={missionStore}
+            missionFormStore={availabilityStore.missionFormStore}
+          />
+        );
+      default:
+        return null;
     }
   }
 
   private renderAvailability = () => {
-    const {trackerStore} = this.props;
-    const week = trackerStore.plannerStore.sidePanelWeek;
+    const {selectedAirman, availabilityStore, plannerStore} = this.props;
+    const week = plannerStore.sidePanelWeek;
     return (
       <div>
         <div className="event-control-row">
-          <button className="add-event" onClick={this.openEventFormForCreate}>
+          <button className="add-event" onClick={() => availabilityStore.showEventForm()}>
             + Add Event
           </button>
         </div>
+
         <div className="nav-row">
-          <button className="last-week" onClick={trackerStore.plannerStore.decrementSidePanelWeek}>
+          <button className="last-week" onClick={plannerStore.decrementSidePanelWeek}>
             <BackIcon width={12} height={12}/>
           </button>
+
           <h3>
             {week[0].format('DD MMM').toUpperCase()} - {week[6].format('DD MMM').toUpperCase()}
           </h3>
-          <button className="next-week" onClick={trackerStore.plannerStore.incrementSidePanelWeek}>
+
+          <button className="next-week" onClick={plannerStore.incrementSidePanelWeek}>
             <NextIcon width={12} height={12}/>
           </button>
         </div>
+
         <div className="availability">
           {
-            trackerStore.plannerStore.sidePanelWeek.map((day, index) => {
+            plannerStore.sidePanelWeek.map((day, index) => {
               return (
                 <div id={`day-${index}`} key={index}>
                   <div className="event-date">{day.format('ddd, DD MMM YY').toUpperCase()}</div>
-                  {this.scheduledEventsForDate(day, trackerStore.selectedAirman.events)}
+                  {this.scheduledEventsForDate(day, selectedAirman.events)}
                 </div>
               );
             })
@@ -98,6 +148,7 @@ export class Availability extends React.Component<Props> {
   }
 
   private scheduledEventsForDate = (day: Moment, events: EventModel[]) => {
+    const {availabilityStore} = this.props;
     const eventsForDay = events.filter(event => doesDayHaveEvent(day, event));
     return eventsForDay.length === 0
       ? <div className="event-name">No Events Scheduled</div>
@@ -106,28 +157,42 @@ export class Availability extends React.Component<Props> {
           <StyledAvailabilityTile
             key={index}
             event={event}
-            editEvent={this.openEventFormForEdit}
+            editEvent={() => availabilityStore.openEditEventForm(event)}
           />
         );
       });
   }
-
-  private openEventFormForCreate = () => {
-    this.props.trackerStore.availabilityStore.clearSelectedEvent();
-    this.props.trackerStore.availabilityStore.setShowEventForm(true);
-  }
-
 }
 
 export const StyledAvailability = styled(Availability)`
   width: 100%;
-  text-align: center;
+  text-align: left;
 
   h3 {
     font-size: 0.875rem;
     font-weight: 500;
     margin: 0;
   }
+  
+  .back {
+    cursor: pointer;
+    fill: ${props => props.theme.graySteel};
+    background: none;
+    color: ${props => props.theme.graySteel};
+    font-size: 0.875rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1.5rem 0;
+
+    span {
+      margin-left: 0.5rem;
+    }
+   }
+   
+   .form-wrapper {
+     color: ${props => props.theme.graySteel};
+   }
 
   .event-control-row {
     display: flex;

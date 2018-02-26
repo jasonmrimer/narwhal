@@ -6,8 +6,8 @@ import { TrackerStore } from './stores/TrackerStore';
 import { TopLevelFilter } from '../widgets/Filter';
 import { StyledSidePanel } from './SidePanel';
 import { StyledLegend } from '../roster/Legend';
-import { StyledDeleteEventPopup } from '../event/DeleteEventPopup';
 import { ProfileModel } from '../profile/models/ProfileModel';
+import { StyledDeleteEventPopup } from '../event/DeleteEventPopup';
 
 interface Props {
   trackerStore: TrackerStore;
@@ -63,11 +63,11 @@ export class Tracker extends React.Component<Props> {
           />
         }
         {
-          this.props.trackerStore.availabilityStore.pendingDeleteEvent &&
+          this.props.trackerStore.pendingDeleteEvent &&
           <StyledDeleteEventPopup
-            event={this.props.trackerStore.availabilityStore.pendingDeleteEvent}
-            cancelPendingDeleteEvent={this.props.trackerStore.availabilityStore.setPendingDeleteEvent}
-            confirmPendingDeleteEvent={this.props.trackerStore.deleteEvent}
+            event={this.props.trackerStore.pendingDeleteEvent}
+            cancelPendingDeleteEvent={this.props.trackerStore.cancelPendingDelete}
+            confirmPendingDeleteEvent={this.props.trackerStore.executePendingDelete}
           />
         }
       </div>

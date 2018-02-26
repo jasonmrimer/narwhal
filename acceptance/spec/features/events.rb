@@ -38,7 +38,6 @@ class Event
       find('a', text: 'AVAILABILITY').click
       click(page.all('.event-title', text: @title)[0])
       expect(find_field('title').value).to eq @title
-      expect(find_field('APPOINTMENT', visible: false)).to be_checked
 
       set_attrs
 
@@ -55,14 +54,15 @@ class Event
     page.within('.side-panel') do
       find('a', text: 'AVAILABILITY').click
       click(page.all('.event-title', text: @title)[0])
-      click(page.all('button.delete', text: 'DELETE')[0])
+      # page.find('button.delete', text: 'DELETE').clikc
+      page.click_on 'DELETE'
     end
 
     expect(page.has_content?('REMOVE EVENT')).to be true
     page.find('button.cancel', text: 'CANCEL').click
     expect(page.has_content?('REMOVE EVENT')).to be false
 
-    click(page.all('button.delete', text: 'DELETE')[0])
+    page.click_on 'DELETE'
 
     expect(page.has_content?('REMOVE EVENT')).to be true
     page.find('button.confirm', text: 'REMOVE').click

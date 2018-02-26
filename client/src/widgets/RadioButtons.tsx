@@ -50,7 +50,7 @@ export const StyledRadioButtons = styled(RadioButtons)`
   }
   
   label {
-    margin: 1rem 0rem;
+    margin: 0.5rem 0rem;
     color: ${props => props.theme.fontColor};
     
     &:before {

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 /* tslint:disable:no-any*/
 interface Props {
-  timeValue: string;
+  value: string;
   onChange: (e: any) => void;
   name: string;
   className?: string;
@@ -15,8 +15,8 @@ export const TimeInput = (props: Props) => {
     <input
       className={props.className}
       type="text"
-      placeholder="hh:mm"
-      value={props.timeValue}
+      placeholder="hhmm"
+      value={props.value}
       name={props.name}
       onChange={props.onChange}
       disabled={props.disabled}
