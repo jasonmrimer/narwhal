@@ -262,6 +262,16 @@
   version "16.0.35"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.0.35.tgz#7ce8a83cad9690fd965551fc513217a74fc9e079"
 
+"@types/storybook__addon-actions@^3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@types/storybook__addon-actions/-/storybook__addon-actions-3.0.2.tgz#b5e0f95ecaf8902236fe74eab188f35a6b4d0c71"
+
+"@types/storybook__addon-links@^3.0.3":
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/@types/storybook__addon-links/-/storybook__addon-links-3.0.3.tgz#7d2e78f502c5f210954d833b816906289efac9f8"
+  dependencies:
+    "@types/react" "*"
+
 "@types/storybook__react@^3.0.6":
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/@types/storybook__react/-/storybook__react-3.0.6.tgz#f4c0e59dc2051772e31764237919d579dc4b596f"
