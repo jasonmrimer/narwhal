@@ -5,7 +5,7 @@ import { ThemeProvider } from 'styled-components';
 import { StyledSubmitButton } from '../widgets/SubmitButton';
 import { StyledDeleteButton } from '../widgets/DeleteButton';
 import { action } from '@storybook/addon-actions';
-import { StyledMultiSelect } from '../widgets/MultiSelect';
+import { StyledSingleTypeahead } from '../widgets/SingleTypeahead';
 import { StyledTextInput } from '../widgets/TextInput';
 import { StyledFieldValidation } from '../widgets/FieldValidation';
 import { StyledRadioButtons } from '../widgets/RadioButtons';
@@ -15,8 +15,9 @@ import { QualificationModel } from '../skills/models/QualificationModel';
 import { AirmanQualificationModel } from '../airman/models/AirmanQualificationModel';
 import { StyledSkillsForm } from '../skills/SkillsForm';
 import * as moment from 'moment';
+import { StyledMultiTypeahead } from '../widgets/MultiTypeahead';
 
-/*ts-lint:disable:no-any*/
+/*tslint:disable:no-any*/
 const wrapper = (story: any) => {
   return (
     <ThemeProvider theme={Theme}>
@@ -196,12 +197,12 @@ export function FormStory() {
       );
     });
 
-  storiesOf('StyledMultiSelect', module)
+  storiesOf('StyledSingleTypeahead', module)
     .addDecorator(story => wrapper(story))
     .add('default', () => {
       return (
-        <StyledMultiSelect
-          onChange={action('CHANGED!!!')}
+        <StyledSingleTypeahead
+          onChange={action('changed')}
           options={[
             {value: '1', label: 'banana'},
             {value: '2', label: 'bagel'},
@@ -211,11 +212,13 @@ export function FormStory() {
           placeholder="Favorite Food?"
         />
       );
-    })
+    });
+
+  storiesOf('StyledMultiTypeahead', module)
+    .addDecorator(story => wrapper(story))
     .add('multi select', () => {
       return (
-        <StyledMultiSelect
-          multiple={true}
+        <StyledMultiTypeahead
           onChange={action('CHANGED!!!')}
           options={[
             {value: '1', label: 'banana'},

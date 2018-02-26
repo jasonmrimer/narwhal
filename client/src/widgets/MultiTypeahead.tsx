@@ -13,16 +13,15 @@ interface  Props {
   disabled?: boolean;
   selected?: any;
   className?: string;
-  multiple?: boolean;
 }
 
-export const MultiSelect =  (props: Props) => {
+export const MultiTypeahead =  (props: Props) => {
   return (
     <div className={props.className}>
       <Typeahead
         selected={props.selected}
         disabled={props.disabled}
-        multiple={props.multiple}
+        multiple={true}
         highlightOnlyResult={true}
         selectHintOnEnter={true}
         onChange={props.onChange}
@@ -33,8 +32,9 @@ export const MultiSelect =  (props: Props) => {
   );
 };
 
-export const StyledMultiSelect = styled(MultiSelect)`
+export const StyledMultiTypeahead = styled(MultiTypeahead)`
   .rbt {
+  
     .rbt-sr-status {
       display: none;
     }
@@ -47,6 +47,7 @@ export const StyledMultiSelect = styled(MultiSelect)`
       .rbt-token-remove-button {
         background: transparent;
         border: 0;
+        cursor: pointer;
         
         .sr-only {
           display: none;
@@ -57,13 +58,14 @@ export const StyledMultiSelect = styled(MultiSelect)`
         border-width: 2px;
       }
     }
-    
+        
     .rbt-input {
       border-bottom: 1px solid ${props => props.theme.graySteel} !important;
-      padding: 0.765rem 0.25rem !important;
-      caret-color: ${props => props.theme.fontColor};
-      
+      padding: 0.5rem 0.5rem 0.5rem 0 !important;
+      height: 1rem;
+        
       input {
+        font-size: 1rem;
         color: ${props => props.theme.fontColor};
       }
       
@@ -78,14 +80,13 @@ export const StyledMultiSelect = styled(MultiSelect)`
         pointer-events: none;
       }
       
+      .rbt-input-wrapper {
+        overflow: initial;
+      }
+      
       .rbt-input-hint {
         display: none;
       }
-    }
-    
-     
-    input {
-      font-size: 1rem;
     }
     
     ul {
@@ -94,7 +95,7 @@ export const StyledMultiSelect = styled(MultiSelect)`
       border-top: none;
       margin: 0;
     }
-    
+
     li {
       display: flex;
       align-items: center;
@@ -106,7 +107,7 @@ export const StyledMultiSelect = styled(MultiSelect)`
         display: inline-block;
         width: 100%;
       }
-      
+
       span {
         color: ${props => props.theme.fontColor}
       }

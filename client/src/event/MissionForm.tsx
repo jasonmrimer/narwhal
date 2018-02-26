@@ -6,7 +6,7 @@ import { StyledDatePicker } from '../widgets/DatePicker';
 import { StyledTimeInput } from '../widgets/TimeInput';
 import { StyledSubmitButton } from '../widgets/SubmitButton';
 import { StyledDeleteButton } from '../widgets/DeleteButton';
-import { StyledMultiSelect } from '../widgets/MultiSelect';
+import { StyledSingleTypeahead } from '../widgets/SingleTypeahead';
 import { MissionStore } from '../mission/stores/MissionStore';
 import { FilterOption } from '../widgets/models/FilterOptionModel';
 import { StyledFieldValidation } from '../widgets/FieldValidation';
@@ -24,15 +24,14 @@ interface Props {
 
 @observer
 export class MissionForm extends React.Component<Props> {
-  handleChange = (option: FilterOption[]) => {
-    if (option.length === 0) {
+  handleChange = (option: FilterOption | null) => {
+    if (option == null) {
       this.props.missionFormStore.setState(null);
       return;
     }
 
     const mission = this.props.missionStore.missions
-      .find(msn => msn.missionId === option[0].value);
-
+      .find(msn => msn.missionId === option.value);
     if (mission != null) {
       this.props.missionFormStore.setState(mission);
     }
@@ -57,10 +56,9 @@ export class MissionForm extends React.Component<Props> {
       <form className={this.props.className} onSubmit={this.handleSubmit}>
         <div className="input-row">
           <StyledFieldValidation name="title" errors={errors} className="mission-select-row">
-            <StyledMultiSelect
-              selected={selected != null ? [selected] : undefined}
+            <StyledSingleTypeahead
+              selected={selected}
               disabled={hasEvent}
-              multiple={false}
               options={missionOptions}
               onChange={this.handleChange}
               placeholder="Mission ID"

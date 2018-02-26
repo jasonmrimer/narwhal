@@ -8,7 +8,7 @@ import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { QualificationModel } from '../skills/models/QualificationModel';
 import { StyledNotification } from '../widgets/Notification';
 import { StyledPlannerHeader } from '../widgets/PlannerHeader';
-import { StyledMultiSelect } from '../widgets/MultiSelect';
+import { StyledMultiTypeahead } from '../widgets/MultiTypeahead';
 
 let airmen: AirmanModel[];
 let certifications: CertificationModel[];
@@ -77,7 +77,7 @@ describe('Roster', () => {
       let qualificationMultiSelect: ShallowWrapper;
 
       beforeEach(() => {
-        const multiselects = subject.find(StyledMultiSelect);
+        const multiselects = subject.find(StyledMultiTypeahead);
         qualificationMultiSelect = findByClassName(multiselects, 'qualifications-multiselect');
         certificationMultiSelect = findByClassName(multiselects, 'certifications-multiselect');
       });

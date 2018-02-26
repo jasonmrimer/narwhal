@@ -5,7 +5,7 @@ import { observer } from 'mobx-react';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { StyledPlannerHeader } from '../widgets/PlannerHeader';
 import { StyledNotification } from '../widgets/Notification';
-import { StyledMultiSelect } from '../widgets/MultiSelect';
+import { StyledMultiTypeahead } from '../widgets/MultiTypeahead';
 
 interface Props {
   trackerStore: TrackerStore;
@@ -34,7 +34,7 @@ export class Roster extends React.Component<Props> {
               <div>CERTIFICATION</div>
               {this.renderCertificationFilter()}
             </th>
-            <StyledPlannerHeader plannerStore={this.props.trackerStore.plannerStore} />
+            <StyledPlannerHeader plannerStore={this.props.trackerStore.plannerStore}/>
           </tr>
           </thead>
           <tbody>
@@ -73,8 +73,7 @@ export class Roster extends React.Component<Props> {
 
   private renderQualificationFilter() {
     return (
-      <StyledMultiSelect
-        multiple={true}
+      <StyledMultiTypeahead
         onChange={this.props.trackerStore.setQualificationIds}
         options={this.props.trackerStore.qualificationOptions}
         placeholder="Filter Qualifications"
@@ -85,8 +84,7 @@ export class Roster extends React.Component<Props> {
 
   private renderCertificationFilter() {
     return (
-      <StyledMultiSelect
-        multiple={true}
+      <StyledMultiTypeahead
         onChange={this.props.trackerStore.setCertificationIds}
         options={this.props.trackerStore.certificationOptions}
         placeholder="Filter Certifications"

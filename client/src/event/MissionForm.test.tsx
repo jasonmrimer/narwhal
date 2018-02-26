@@ -12,7 +12,7 @@ import { MissionStore } from '../mission/stores/MissionStore';
 import { MissionRepositoryStub } from '../mission/repositories/doubles/MissionRepositoryStub';
 import { MissionModel } from '../mission/models/MissionModel';
 import { StyledSubmitButton } from '../widgets/SubmitButton';
-import { StyledMultiSelect } from '../widgets/MultiSelect';
+import { StyledSingleTypeahead } from '../widgets/SingleTypeahead';
 
 describe('MissionForm', () => {
   let mission: MissionModel;
@@ -45,7 +45,7 @@ describe('MissionForm', () => {
   });
 
   it('manages the state via form changes', () => {
-    subject.handleChange([{value: mission.missionId, label: mission.atoMissionNumber}]);
+    subject.handleChange({value: mission.missionId, label: mission.atoMissionNumber});
 
     expect(missionFormStore.state).toEqual({
       missionId: mission.missionId,
@@ -81,7 +81,7 @@ describe('MissionForm', () => {
 
     wrapper.update();
 
-    expect(wrapper.find(StyledMultiSelect).prop('selected')[0].value).toEqual(missionId);
+    expect(wrapper.find(StyledSingleTypeahead).prop('selected')!.value).toEqual(missionId);
     expect(findInputValueByName(wrapper, StyledDatePicker, 'startDate')).toEqual(missionFormStore.state.startDate);
     expect(findInputValueByName(wrapper, StyledTimeInput, 'startTime')).toEqual(missionFormStore.state.startTime);
     expect(findInputValueByName(wrapper, StyledDatePicker, 'endDate')).toEqual(missionFormStore.state.endDate);
@@ -93,10 +93,10 @@ describe('MissionForm', () => {
     missionFormStore.setState(mission);
     wrapper.update();
 
-    subject.handleChange([]);
+    subject.handleChange(null);
     wrapper.update();
 
-    expect(wrapper.find(StyledMultiSelect).prop('selected')).toBeUndefined();
+    expect(wrapper.find(StyledSingleTypeahead).prop('selected')).toBeUndefined();
     expect(findInputValueByName(wrapper, StyledDatePicker, 'startDate')).toEqual('');
     expect(findInputValueByName(wrapper, StyledTimeInput, 'startTime')).toEqual('');
     expect(findInputValueByName(wrapper, StyledDatePicker, 'endDate')).toEqual('');
