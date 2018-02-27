@@ -8,6 +8,7 @@ import { StyledTimeInput } from '../widgets/TimeInput';
 import { StyledSubmitButton } from '../widgets/SubmitButton';
 import { StyledFieldValidation } from '../widgets/FieldValidation';
 import { StyledDeleteButton } from '../widgets/DeleteButton';
+import { StyledForm, StyledFormRow } from '../widgets/Form';
 
 interface Props {
   airmanId: number;
@@ -35,29 +36,29 @@ export class AppointmentForm extends React.Component<Props> {
   render() {
     const {state, errors, hasEvent} = this.props.appointmentFormStore;
     return (
-      <form className={this.props.className} onSubmit={this.handleSubmit}>
-        <div className="input-row">
-          <StyledFieldValidation name="title" errors={errors}>
+      <StyledForm onSubmit={this.handleSubmit}>
+        <StyledFieldValidation name="title" errors={errors}>
+          <StyledFormRow>
             <StyledTextInput
               name="title"
               onChange={this.handleChange}
               placeholder="Title"
               value={state.title}
             />
-          </StyledFieldValidation>
-        </div>
+          </StyledFormRow>
+        </StyledFieldValidation>
 
-        <div className="input-row">
+        <StyledFormRow>
           <StyledTextInput
             name="description"
             onChange={this.handleChange}
             placeholder="Description"
             value={state.description}
           />
-        </div>
+        </StyledFormRow>
 
         <StyledFieldValidation name="startTime" errors={errors}>
-          <div className="input-row">
+          <StyledFormRow>
             <StyledDatePicker
               name="startDate"
               onChange={this.handleChange}
@@ -68,11 +69,11 @@ export class AppointmentForm extends React.Component<Props> {
               onChange={this.handleChange}
               value={state.startTime}
             />
-          </div>
+          </StyledFormRow>
         </StyledFieldValidation>
 
         <StyledFieldValidation name="endTime" errors={errors}>
-          <div className="input-row">
+          <StyledFormRow>
             <StyledDatePicker
               name="endDate"
               onChange={this.handleChange}
@@ -83,42 +84,18 @@ export class AppointmentForm extends React.Component<Props> {
               onChange={this.handleChange}
               value={state.endTime}
             />
-          </div>
+          </StyledFormRow>
         </StyledFieldValidation>
 
-        <div className="form-row">
-          {hasEvent && <StyledDeleteButton handleClick={this.handleDelete}/>}
+        <StyledFormRow reversed={true}>
           <StyledSubmitButton text="CONFIRM"/>
-        </div>
-      </form>
+          {hasEvent && <StyledDeleteButton handleClick={this.handleDelete}/>}
+        </StyledFormRow>
+      </StyledForm>
     );
   }
 }
 
 export const StyledAppointmentForm = styled(AppointmentForm)`
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  color: ${props => props.theme.graySteel};
-
-   .form-wrapper {
-      margin: 0 1rem;
-   }
-
-  .input-row {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-
-  .form-row {
-    display: flex;
-    margin-top: 2rem;
-    align-items: baseline;
-    justify-content: space-between;
-  }
-
-  .styled-select {
-    margin: 1rem 1rem 0;
-  }
+  min-width: ${props => props.theme.sidePanelWidth};
 `;

@@ -11,6 +11,8 @@ import { StyledDeleteButton } from '../widgets/DeleteButton';
 import { StyledFieldValidation } from '../widgets/FieldValidation';
 import { observer } from 'mobx-react';
 import { StyledSubmitButton } from '../widgets/SubmitButton';
+import { StyledForm, StyledFormRow } from '../widgets/Form';
+import { StyledDropdown } from '../widgets/Dropdown';
 
 interface Props {
   airmanId: number;
@@ -54,86 +56,78 @@ export class SkillsForm extends React.Component<Props, State> {
   render() {
     const disabled = this.props.skill != null;
     return (
-      <form className={this.props.className} onSubmit={this.handleSubmit}>
+      <StyledForm onSubmit={this.handleSubmit}>
         <div style={{marginTop: '1rem'}}>
           Add Skill:
         </div>
 
-        <div className="input-wrapper">
-          <div className="form-row">
-            <label htmlFor="skill-type-select">Type:</label>
-            <select
-              id="skill-type-select"
-              name="skillType"
-              value={this.state.skillType}
-              disabled={disabled}
+        <StyledFormRow>
+          <label htmlFor="skill-type-select">Type:</label>
+          <StyledDropdown
+            id="skill-type-select"
+            name="skillType"
+            options={allSkills().map(skill => ({value: skill, label: skill}))}
+            value={this.state.skillType}
+            onChange={this.handleChange}
+            disabled={disabled}
+          />
+        </StyledFormRow>
+
+        <StyledFormRow>
+          <label htmlFor="skill-name-select">Name:</label>
+          <StyledDropdown
+            id="skill-name-select"
+            name="skillNameId"
+            options={this.getSkillNameOptions()}
+            value={this.state.skillNameId}
+            onChange={this.handleChange}
+            disabled={disabled}
+          />
+        </StyledFormRow>
+
+        <StyledFieldValidation name="earnDate" errors={this.props.errors}>
+          <StyledFormRow>
+            <label htmlFor="earn-date">Earn Date:</label>
+            <StyledDatePicker
+              id="earn-date"
+              value={this.state.earnDate}
               onChange={this.handleChange}
-            >
-              {
-                allSkills().map((skill, index) => {
-                  return <option key={index} value={skill}>{skill}</option>;
-                })
-              }
-            </select>
-          </div>
-
-          <div className="form-row">
-            <label htmlFor="skill-name-select">Name:</label>
-            <select
-              id="skill-name-select"
-              name="skillNameId"
-              value={this.state.skillNameId}
               disabled={disabled}
+              name="earnDate"
+            />
+          </StyledFormRow>
+        </StyledFieldValidation>
+
+        <StyledFieldValidation name="expirationDate" errors={this.props.errors}>
+          <StyledFormRow>
+            <label htmlFor="expiration-date">Expiration Date:</label>
+            <StyledDatePicker
+              id="expiration-date"
+              value={this.state.expirationDate}
               onChange={this.handleChange}
-            >
-              {this.renderSkillNameOptions()}
-            </select>
-          </div>
+              name="expirationDate"
+            />
+          </StyledFormRow>
+        </StyledFieldValidation>
 
-          <StyledFieldValidation name="earnDate" errors={this.props.errors}>
-            <div className="form-row">
-              <label htmlFor="earn-date">Earn Date:</label>
-              <StyledDatePicker
-                id="earn-date"
-                value={this.state.earnDate}
-                onChange={this.handleChange}
-                disabled={disabled}
-                name="earnDate"
-              />
-            </div>
-          </StyledFieldValidation>
-
-          <StyledFieldValidation name="expirationDate" errors={this.props.errors}>
-            <div className="form-row">
-              <label htmlFor="expiration-date">Expiration Date:</label>
-              <StyledDatePicker
-                id="expiration-date"
-                value={this.state.expirationDate}
-                onChange={this.handleChange}
-                name="expirationDate"
-              />
-            </div>
-          </StyledFieldValidation>
-
-          <div className="form-row">
-            {this.props.skill && <StyledDeleteButton  className="delete" handleClick={this.handleDelete}/>}
-            <StyledSubmitButton text="CONFIRM"/>
-          </div>
-        </div>
-      </form>
+        <StyledFormRow reversed={true}>
+          <StyledSubmitButton text="CONFIRM"/>
+          {this.props.skill && <StyledDeleteButton className="delete" handleClick={this.handleDelete}/>}
+        </StyledFormRow>
+      </StyledForm>
     );
   }
 
-  private renderSkillNameOptions = () => {
+  private getSkillNameOptions = () => {
     switch (this.state.skillType) {
       case SkillType.Certification:
-        return this.props.certifications.map((cert, index) => {
-          return <option key={`cert-${index}`} value={cert.id}>{cert.title}</option>;
+        return this.props.certifications.map(cert => {
+          return {value: cert.id, label: cert.title};
         });
       case SkillType.Qualification:
       default:
-        return this.props.qualifications.map((qual, index) => {
-          return <option key={`qual-${index}`} value={qual.id}>{qual.acronym} - {qual.title}</option>;
+        return this.props.qualifications.map(qual => {
+          return {value: qual.id, label: `${qual.acronym} - ${qual.title}`};
         });
     }
   }
@@ -174,57 +168,6 @@ export class SkillsForm extends React.Component<Props, State> {
   }
 }
 
-const caret = (fillColor: string) => {
-  return `url("data:image/svg+xml;utf8,
-    <svg xmlns='http://www.w3.org/2000/svg' width='100' height='50' fill='${fillColor}'>
-        <polygon points='0,0 100,0 50,50'/>
-    </svg>")
-    no-repeat center right`;
-};
-
-export const StyledSkillsForm = styled(SkillsForm)`
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  color: ${props => props.theme.graySteel};
-  
-  .form-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    
-    &:last-of-type {
-      margin-top: 1rem;
-      align-items: baseline;
-    };
-    
-    label {
-      margin-right: 1rem;
-    }
-  }
-  
-  .input-wrapper {
-    margin: 1rem ;
-  }
-  
-  select {
-    background-color: ${props => props.theme.dark};
-    background: ${props => caret(props.theme.fontColor)};
-    background-position: 98%;
-    background-size: 0.75rem;
-    color: ${props => props.theme.fontColor};
-    height: 2rem;
-    border: none;
-    font-size: 1rem;
-    border-bottom: 1px solid ${props => props.theme.fontColor};
-    -webkit-appearance: none;
-    -webkit-border-radius: 0;
-    width: 75%;
-    
-    &:disabled {
-      color: ${props => props.theme.graySteel};
-      background: none;
-      border-bottom: 1px solid ${props => props.theme.graySteel};
-    }
-  }
+export const StyledSkillsForm = styled(SkillsForm)`  
+  min-width: ${props => props.theme.sidePanelWidth};
 `;

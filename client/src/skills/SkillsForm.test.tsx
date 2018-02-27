@@ -12,6 +12,7 @@ import { CertificationModelFactory } from './factories/CertificationModelFactory
 import { AirmanCertificationModel } from '../airman/models/AirmanCertificationModel';
 import { AirmanQualificationModelFactory } from '../airman/factories/AirmanQualificationModelFactory';
 import { SkillType } from './models/SkillType';
+import { StyledForm } from '../widgets/Form';
 import Mock = jest.Mock;
 
 describe('SkillsForm', () => {
@@ -53,7 +54,7 @@ describe('SkillsForm', () => {
     skillForm.handleChange({target: {name: 'earnDate', value: earnDate}});
     skillForm.handleChange({target: {name: 'expirationDate', value: expirationDate}});
 
-    subject.find('form').simulate('submit', eventStub);
+    subject.find(StyledForm).simulate('submit', eventStub);
 
     expect(handleSubmitSpy).toHaveBeenCalledWith(
       new AirmanQualificationModel(
@@ -70,7 +71,8 @@ describe('SkillsForm', () => {
     skillForm.handleChange({target: {name: 'skillNameId', value: 1}});
     skillForm.handleChange({target: {name: 'earnDate', value: earnDate}});
     skillForm.handleChange({target: {name: 'expirationDate', value: expirationDate}});
-    subject.find('form').simulate('submit', eventStub);
+
+    subject.find(StyledForm).simulate('submit', eventStub);
 
     expect(handleSubmitSpy).toHaveBeenCalledWith(
       new AirmanCertificationModel(

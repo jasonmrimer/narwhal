@@ -10,6 +10,7 @@ import { StyledSingleTypeahead } from '../widgets/SingleTypeahead';
 import { MissionStore } from '../mission/stores/MissionStore';
 import { FilterOption } from '../widgets/models/FilterOptionModel';
 import { StyledFieldValidation } from '../widgets/FieldValidation';
+import { StyledForm, StyledFormRow } from '../widgets/Form';
 
 /* tslint:disable:no-empty*/
 function noop() {
@@ -53,9 +54,9 @@ export class MissionForm extends React.Component<Props> {
     const selected = missionOptions.find(msn => msn.label === state.missionId);
 
     return (
-      <form className={this.props.className} onSubmit={this.handleSubmit}>
-        <div className="input-row">
-          <StyledFieldValidation name="title" errors={errors} className="mission-select-row">
+      <StyledForm onSubmit={this.handleSubmit}>
+        <StyledFieldValidation name="title" errors={errors}>
+          <StyledFormRow>
             <StyledSingleTypeahead
               selected={selected}
               disabled={hasEvent}
@@ -63,10 +64,10 @@ export class MissionForm extends React.Component<Props> {
               onChange={this.handleChange}
               placeholder="Mission ID"
             />
-          </StyledFieldValidation>
-        </div>
+          </StyledFormRow>
+        </StyledFieldValidation>
 
-        <div className="input-row">
+        <StyledFormRow>
           <StyledDatePicker
             name="startDate"
             disabled={true}
@@ -79,9 +80,9 @@ export class MissionForm extends React.Component<Props> {
             onChange={noop}
             value={state.startTime}
           />
-        </div>
+        </StyledFormRow>
 
-        <div className="input-row">
+        <StyledFormRow>
           <StyledDatePicker
             name="endDate"
             disabled={true}
@@ -94,45 +95,17 @@ export class MissionForm extends React.Component<Props> {
             onChange={noop}
             value={state.endTime}
           />
-        </div>
+        </StyledFormRow>
 
-        <div className="form-row">
+        <StyledFormRow reversed={!hasEvent}>
           {hasEvent && <StyledDeleteButton handleClick={this.handleDelete}/>}
           {!hasEvent && <StyledSubmitButton text="CONFIRM"/>}
-        </div>
-      </form>
+        </StyledFormRow>
+      </StyledForm>
     );
   }
 }
 
 export const StyledMissionForm = styled(MissionForm)`
- text-align: left;
- display: flex;
- flex-direction: column;
- color: ${props => props.theme.graySteel};
-
- .form-wrapper {
-  margin: 0 1rem;
- }
-
- .input-row {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
- }
- 
- .mission-select-row {
-  width: 100%;
- }
-
- .form-row {
-  display: flex;
-  margin-top: 2rem;
-  align-items: baseline;
-  justify-content: space-between;
- }
-
- .styled-select {
-  margin: 1rem 1rem 0;
- }
+  min-width: ${props => props.theme.sidePanelWidth};
 `;

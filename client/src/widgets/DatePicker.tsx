@@ -25,18 +25,17 @@ export const DatePicker = (props: Props) => {
   );
 };
 
-export const StyledDatePicker = styled(DatePicker)`      
+export const StyledDatePicker = styled(DatePicker)`
   background: none;
   color: ${props => props.theme.fontColor};
   border: none;
-  border-bottom: 1px solid green;
   border-bottom: 1px solid ${props => props.theme.graySteel};
   padding: 0;
   font: inherit;
   font-weight: 300;
   cursor: pointer;
   outline: inherit;
-  margin: 1rem 0;
+  height: 1.25rem;
   
   &::-webkit-inner-spin-button {
     display: none;

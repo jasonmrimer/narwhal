@@ -26,8 +26,12 @@ export const TextInput = (props: Props) => {
 };
 
 export const StyledTextInput = styled(TextInput)`
+  &::placeholder {
+   color: ${props => props.theme.graySteel};
+  }
+  
   background: none;
-  color: ${props => props.theme.graySteel};
+  color: ${props => props.theme.fontColor};
   border: none;
   border-bottom: 1px solid ${props => props.theme.graySteel};
   padding: 0;
@@ -35,5 +39,6 @@ export const StyledTextInput = styled(TextInput)`
   font-weight: 300;
   cursor: pointer;
   outline: inherit;
-  margin: 1rem 0rem;
+  height: 1.25rem;
+  width: 100%;
 `;

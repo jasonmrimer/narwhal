@@ -31,14 +31,12 @@ export const StyledTimeInput = styled(TimeInput)`
   }
   
   background: none;
-  color: ${props => props.theme.graySteel};
+  color: ${props => props.theme.fontColor};
   border: none;
-  border-bottom: 1px solid green;
   border-bottom: 1px solid ${props => props.theme.graySteel};
   padding: 0;
   font: inherit;
   font-weight: 300;
   cursor: pointer;
-  outline: inherit;
-  margin: 1rem 0;
+  height: 1.25rem;
 `;

@@ -32,8 +32,9 @@ export const SingleTypeahead =  (props: Props) => {
 };
 
 export const StyledSingleTypeahead = styled(SingleTypeahead)`
-  .rbt {
+  width: 100%;
   
+  .rbt {
     .rbt-sr-status {
       display: none;
     }

@@ -17,4 +17,6 @@ export const Theme = Object.freeze({
   darkSteel: '#9CA9B9',
   blueSteel: '#5C6977',
   hoverBlueSteel: '#475767',
+
+  sidePanelWidth: '380px'
 });
