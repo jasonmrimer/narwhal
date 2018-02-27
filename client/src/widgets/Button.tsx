@@ -1,37 +1,52 @@
 import * as React from 'react';
-import { DeleteIcon } from '../icons/DeleteIcon';
 import styled from 'styled-components';
 
 interface Props {
-  handleClick: (clickEvent: React.MouseEvent<HTMLButtonElement>) => void;
+  text: string;
+  onClick: (clickEvent: React.MouseEvent<HTMLButtonElement>) => void;
+  renderIcon?: () => JSX.Element;
   className?: string;
 }
 
-export const DeleteButton = (props: Props) => {
+export const Button = (props: Props) => {
   return (
-    <button type="button" className={`${props.className}`} onClick={props.handleClick}>
-      <DeleteIcon/>
-      <span>DELETE</span>
+    <button
+      type="button"
+      className={`${props.className}`}
+      onClick={props.onClick}
+    >
+      {
+        props.renderIcon &&
+        <i>{props.renderIcon()}</i>
+      }
+      {props.text}
     </button>
   );
 };
 
-export const StyledDeleteButton = styled(DeleteButton)`
+export const StyledButton = styled(Button)`
   display: flex;
   align-items: unset;
-  width: fit-content;
-  background: none;
-  color: ${props => props.theme.fontColor};
-  border: 1px solid ${props => props.theme.fontColor};
-  padding: 0.5rem 1rem;
+  
   font: inherit;
   font-size: 0.75rem;
   font-weight: 400;
-  cursor: pointer;
+  
+  width: fit-content;
+  
+  background: none;
+  
+  color: ${props => props.theme.fontColor};
+  
+  border: 1px solid ${props => props.theme.fontColor};
   outline: inherit;
   
-  span {
-    margin-left: 0.25rem;
+  padding: 0.5rem 1rem;
+  
+  cursor: pointer;
+  
+  i {
+    margin-right: 0.25rem;
   }
   
   &:hover {

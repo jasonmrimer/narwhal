@@ -1,9 +1,8 @@
 package mil.af.us.narwhal.crew;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(CrewController.URI)
@@ -19,5 +18,21 @@ public class CrewController {
   @GetMapping(value = "/{id}")
   public Crew show(@PathVariable Long id) {
     return crewRepository.findOne(id);
+  }
+
+  @PutMapping(value = "/{id}/positions")
+  public Crew update(@PathVariable Long id, @RequestBody List<CrewPositionJSON> positions) {
+    final Crew crew = crewRepository.findOne(id);
+
+
+    crew.getCrewPositions().forEach(position -> {
+      positions.forEach(p -> {
+        if (p.getId().equals(position.getId())) {
+          position.setTitle(p.getTitle());
+        }
+      });
+    });
+
+    return crewRepository.save(crew);
   }
 }

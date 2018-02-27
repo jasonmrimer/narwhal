@@ -9,9 +9,9 @@ import { StyledTopBar } from './TopBar';
 import { Upload } from '../upload/Upload';
 import { StyledDashboard } from '../dashboard/Dashboard';
 import { StyledCrew } from '../crew/Crew';
-import { StyledProfileSitePicker } from '../profile/ProfileSitePicker';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 import { observer } from 'mobx-react';
+import { StyledProfileSitePicker } from '../profile/ProfileSitePicker';
 
 interface Props {
   dashboardStore: DashboardStore;
@@ -23,7 +23,6 @@ interface Props {
 
 @observer
 export class App extends React.Component<Props> {
-
   async componentDidMount() {
     await this.props.profileStore.hydrate();
   }
@@ -34,76 +33,84 @@ export class App extends React.Component<Props> {
         <StyledClassificationBanner/>
         <StyledAuthorizationBanner/>
         <main style={{marginTop: '8rem'}}>
-          { this.props.profileStore.profile != null &&
-            <Switch>
-              <Route
-                path="/upload"
-                render={() => {
-                  return <Upload/>;
-                }}
-              />
-
-              <Route
-                path="/dashboard"
-                render={() => {
-                  return (
-                    [
-                      <StyledTopBar
-                        key="0"
-                        username={this.props.profileStore.profile!.username}
-                        pageTitle="MPS DASHBOARD"
-                      />,
-                      <StyledDashboard
-                        key="1"
-                        username={this.props.profileStore.profile!.username}
-                        dashboardStore={this.props.dashboardStore}
-                      />
-                    ]
-                  );
-                }}
-              />
-
-              <Route
-                path="/crew/:id"
-                render={({match}) => {
-                  return (
-                    <StyledCrew
-                      crewId={match.params.id}
-                      crewStore={this.props.crewStore}
-                    />
-                  );
-                }}
-              />
-              <Route
-                path="/"
-                render={() => {
-                  return this.profileHasSite() ?
-                    <StyledProfileSitePicker profileStore={this.props.profileStore}/> :
-                    (
-                      [
-                        <StyledTopBar
-                          key="0"
-                          username={this.props.profileStore.profile!.username}
-                          pageTitle="AVAILABILITY ROSTER"
-                        />,
-                        <StyledTracker
-                          key="1"
-                          profile={this.props.profileStore.profile!}
-                          trackerStore={this.props.trackerStore}
-                        />
-                      ]
-                    );
-                }}
-              />
-            </Switch>
+          {
+            this.props.profileStore.profile != null &&
+            (
+              this.profileHasSite() ?
+                this.renderApp() :
+                <StyledProfileSitePicker profileStore={this.props.profileStore}/>
+            )
           }
         </main>
       </div>
     );
   }
 
+  private renderApp() {
+    return (
+      <Switch>
+        <Route
+          path="/upload"
+          render={() => {
+            return <Upload/>;
+          }}
+        />
+
+        <Route
+          path="/dashboard"
+          render={() => {
+            return (
+              [
+                <StyledTopBar
+                  key="0"
+                  username={this.props.profileStore.profile!.username}
+                  pageTitle="MPS DASHBOARD"
+                />,
+                <StyledDashboard
+                  key="1"
+                  username={this.props.profileStore.profile!.username}
+                  dashboardStore={this.props.dashboardStore}
+                />
+              ]
+            );
+          }}
+        />
+
+        <Route
+          path="/crew/:id"
+          render={({match}) => {
+            return (
+              <StyledCrew
+                crewId={match.params.id}
+                crewStore={this.props.crewStore}
+              />
+            );
+          }}
+        />
+        <Route
+          exact={true}
+          path="/"
+          render={() => {
+            return [
+              <StyledTopBar
+                key="0"
+                username={this.props.profileStore.profile!.username}
+                pageTitle="AVAILABILITY ROSTER"
+              />,
+              <StyledTracker
+                key="1"
+                profile={this.props.profileStore.profile!}
+                trackerStore={this.props.trackerStore}
+              />
+            ];
+          }}
+        />
+      </Switch>
+    );
+  }
+
   private profileHasSite() {
-    return this.props.profileStore.profile!.siteId === null;
+    return this.props.profileStore.profile!.siteId != null;
   }
 }
 

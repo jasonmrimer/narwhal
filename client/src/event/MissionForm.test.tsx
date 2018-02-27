@@ -6,7 +6,7 @@ import { eventStub } from '../utils/testUtils';
 import { StyledDatePicker } from '../widgets/DatePicker';
 import { StyledTimeInput } from '../widgets/TimeInput';
 import { StyledFieldValidation } from '../widgets/FieldValidation';
-import { StyledDeleteButton } from '../widgets/DeleteButton';
+import { StyledButton } from '../widgets/Button';
 import { EventModelFactory } from './factories/EventModelFactory';
 import { MissionStore } from '../mission/stores/MissionStore';
 import { MissionRepositoryStub } from '../mission/repositories/doubles/MissionRepositoryStub';
@@ -61,12 +61,12 @@ describe('MissionForm', () => {
 
     wrapper.update();
 
-    expect(wrapper.find(StyledDeleteButton).exists()).toBeTruthy();
+    expect(wrapper.find(StyledButton).exists()).toBeTruthy();
     expect(wrapper.find(StyledSubmitButton).exists()).toBeFalsy();
   });
 
   it('should NOT render a delete button when there is NOT an event', () => {
-    expect(wrapper.find(StyledDeleteButton).exists()).toBeFalsy();
+    expect(wrapper.find(StyledButton).exists()).toBeFalsy();
     expect(wrapper.find(StyledSubmitButton).exists()).toBeTruthy();
   });
 

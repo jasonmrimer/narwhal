@@ -5,12 +5,13 @@ import { observer } from 'mobx-react';
 import { StyledDatePicker } from '../widgets/DatePicker';
 import { StyledTimeInput } from '../widgets/TimeInput';
 import { StyledSubmitButton } from '../widgets/SubmitButton';
-import { StyledDeleteButton } from '../widgets/DeleteButton';
+import { StyledButton } from '../widgets/Button';
 import { StyledSingleTypeahead } from '../widgets/SingleTypeahead';
 import { MissionStore } from '../mission/stores/MissionStore';
 import { FilterOption } from '../widgets/models/FilterOptionModel';
 import { StyledFieldValidation } from '../widgets/FieldValidation';
 import { StyledForm, StyledFormRow } from '../widgets/Form';
+import { DeleteIcon } from '../icons/DeleteIcon';
 
 /* tslint:disable:no-empty*/
 function noop() {
@@ -98,7 +99,14 @@ export class MissionForm extends React.Component<Props> {
         </StyledFormRow>
 
         <StyledFormRow reversed={!hasEvent}>
-          {hasEvent && <StyledDeleteButton handleClick={this.handleDelete}/>}
+          {
+            hasEvent &&
+            <StyledButton
+              text="DELETE"
+              onClick={this.handleDelete}
+              renderIcon={() => <DeleteIcon/>}
+            />
+          }
           {!hasEvent && <StyledSubmitButton text="CONFIRM"/>}
         </StyledFormRow>
       </StyledForm>

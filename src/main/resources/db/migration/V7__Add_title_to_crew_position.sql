@@ -1,0 +1,1 @@
+ALTER TABLE join_crew_airman ADD COLUMN title VARCHAR(64) DEFAULT '';

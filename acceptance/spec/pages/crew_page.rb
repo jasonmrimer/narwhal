@@ -2,7 +2,7 @@ class CrewPage
   include Capybara::DSL
   include RSpec::Matchers
 
-  def initialize(msn_title)
+  def initialize(msn_title = "")
     page.within('.side-panel') do
       find('a', text: 'AVAILABILITY').click
       page.within('.event-title', text: msn_title) do
@@ -13,6 +13,13 @@ class CrewPage
 
   def assert_has_assigned_airmen(*airmen)
     airmen.each { |airman| expect(page).to have_content(airman) }
+  end
+
+  def fill_in_position
+    page.first('input').set 'Chimichanga'
+    click_button 'SAVE'
+    page.refresh
+    expect(page).to have_selector('input[value="Chimichanga"]')
   end
 
   def click(element)

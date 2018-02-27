@@ -8,7 +8,7 @@ export class CrewSerializer implements Serializer<CrewModel> {
   private crewPositionSerializer = new CrewPositionSerializer();
 
   serialize(item: CrewModel): {} {
-    throw new Error('Not implemented');
+    return JSON.stringify(item);
   }
 
   /* tslint:disable:no-any*/

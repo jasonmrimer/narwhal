@@ -3,10 +3,11 @@ import styled from 'styled-components';
 
 /* tslint:disable:no-any */
 interface Props {
-  placeholder: string;
   value: string;
   name: string;
   onChange: (e: any) => void;
+  id?: string;
+  placeholder?: string;
   className?: string;
   disabled?: boolean;
 }
@@ -14,6 +15,7 @@ interface Props {
 export const TextInput = (props: Props) => {
   return (
     <input
+      id={props.id}
       className={props.className}
       type="text"
       placeholder={props.placeholder}

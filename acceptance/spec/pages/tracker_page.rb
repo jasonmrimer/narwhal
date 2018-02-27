@@ -18,15 +18,6 @@ class TrackerPage
     @@all_airmen_count = page.find_all('tbody tr').count
   end
 
-  def assert_shows_tracker
-    @@expected_columns.each { |column_name| expect(page).to have_content(column_name) }
-    expect(page).not_to have_selector('.side-panel')
-    expect(page).to have_css('tbody tr', count: @@all_airmen_count)
-    expect(page).to have_content 'TYTUS'
-    selected_site = page.all('option').detect { |elem| elem.text == 'DMS-MD' }
-    expect(page.find('#site-filter').value).to eq selected_site.value
-  end
-
   def assert_navigates_week
     click(page.find('button.next-week'))
     expect(page).to have_content(get_start_of_next_week.strftime('%d %^a'))
@@ -176,6 +167,8 @@ class TrackerPage
 
     crew_page = CrewPage.new(msn_assignment.msn_title)
     crew_page.assert_has_assigned_airmen('Spaceman', 'Keeter')
+
+    crew_page.fill_in_position
   end
 
   private

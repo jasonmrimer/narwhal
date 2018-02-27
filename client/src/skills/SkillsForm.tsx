@@ -7,12 +7,13 @@ import { CertificationModel } from './models/CertificationModel';
 import { allSkills, SkillType } from './models/SkillType';
 import { SkillBuilder } from './models/SkillBuilder';
 import { Skill } from './models/Skill';
-import { StyledDeleteButton } from '../widgets/DeleteButton';
+import { StyledButton } from '../widgets/Button';
 import { StyledFieldValidation } from '../widgets/FieldValidation';
 import { observer } from 'mobx-react';
 import { StyledSubmitButton } from '../widgets/SubmitButton';
 import { StyledForm, StyledFormRow } from '../widgets/Form';
 import { StyledDropdown } from '../widgets/Dropdown';
+import { DeleteIcon } from '../icons/DeleteIcon';
 
 interface Props {
   airmanId: number;
@@ -112,7 +113,14 @@ export class SkillsForm extends React.Component<Props, State> {
 
         <StyledFormRow reversed={true}>
           <StyledSubmitButton text="CONFIRM"/>
-          {this.props.skill && <StyledDeleteButton className="delete" handleClick={this.handleDelete}/>}
+          {
+            this.props.skill &&
+            <StyledButton
+              text="DELETE"
+              onClick={this.handleDelete}
+              renderIcon={() => <DeleteIcon/>}
+            />
+          }
         </StyledFormRow>
       </StyledForm>
     );

@@ -32,12 +32,14 @@ public class CrewPosition {
   @JsonManagedReference
   private Airman airman;
 
+  private String title;
+
   public CrewPosition(Airman airman) {
     this.airman = airman;
   }
 
   public CrewPosition(Crew crew, Airman airman) {
-    this(null, crew, airman);
+    this(null, crew, airman, "");
   }
 
   @Override public String toString() {

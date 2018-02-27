@@ -7,10 +7,6 @@ describe 'Tracker page', type: :feature do
     tracker_page = TrackerPage.new
   }
 
-  it 'shows a Tracker' do
-    tracker_page.assert_shows_tracker
-  end
-
   describe 'filtering' do
     it 'can filter the Roster by site' do
       tracker_page.assert_filters_by_site

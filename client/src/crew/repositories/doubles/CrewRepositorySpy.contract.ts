@@ -1,8 +1,8 @@
-import { CrewRepositoryStub } from './CrewRepositoryStub';
+import { CrewRepositorySpy } from './CrewRepositorySpy';
 import { crewRepositoryContract } from '../CrewRepositoryContract';
 import { CrewModelFactory } from '../../factories/CrewModelFactory';
 
-describe('CrewRepositoryStub', () => {
+describe('CrewRepositorySpy', () => {
   const crew = CrewModelFactory.build();
-  crewRepositoryContract(new CrewRepositoryStub(crew));
+  crewRepositoryContract(new CrewRepositorySpy(crew));
 });

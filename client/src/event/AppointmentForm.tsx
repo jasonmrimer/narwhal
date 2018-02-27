@@ -7,8 +7,9 @@ import { StyledDatePicker } from '../widgets/DatePicker';
 import { StyledTimeInput } from '../widgets/TimeInput';
 import { StyledSubmitButton } from '../widgets/SubmitButton';
 import { StyledFieldValidation } from '../widgets/FieldValidation';
-import { StyledDeleteButton } from '../widgets/DeleteButton';
+import { StyledButton } from '../widgets/Button';
 import { StyledForm, StyledFormRow } from '../widgets/Form';
+import { DeleteIcon } from '../icons/DeleteIcon';
 
 interface Props {
   airmanId: number;
@@ -89,7 +90,14 @@ export class AppointmentForm extends React.Component<Props> {
 
         <StyledFormRow reversed={true}>
           <StyledSubmitButton text="CONFIRM"/>
-          {hasEvent && <StyledDeleteButton handleClick={this.handleDelete}/>}
+          {
+            hasEvent &&
+            <StyledButton
+              text="DELETE"
+              onClick={this.handleDelete}
+              renderIcon={() => <DeleteIcon/>}
+            />
+          }
         </StyledFormRow>
       </StyledForm>
     );

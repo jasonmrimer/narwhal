@@ -20,6 +20,7 @@ import { CrewStore } from './crew/stores/CrewStore';
 import { WebSkillRepository } from './skills/repositories/web/WebSkillRepository';
 import { WebCrewRepository } from './crew/repositories/web/WebCrewRepository';
 import { ProfileSitePickerStore } from './profile/stores/ProfileSitePickerStore';
+import { withRouter } from 'react-router';
 
 document.body.style.fontFamily = Theme.fontFamily;
 document.body.style.fontWeight = Theme.fontWeight;
@@ -46,10 +47,13 @@ const crewStore = new CrewStore(
 );
 const profileStore = new ProfileSitePickerStore(new WebProfileRepository(), webSiteRepository);
 
+/*tslint:disable:no-any*/
+const AppWithRouter = withRouter((App as any)) as typeof App;
+
 ReactDOM.render(
   <ThemeProvider theme={Theme}>
     <BrowserRouter>
-      <App
+      <AppWithRouter
         dashboardStore={dashboardStore}
         trackerStore={trackerStore}
         crewStore={crewStore}

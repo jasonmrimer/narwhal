@@ -9,6 +9,7 @@
     <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V4__Migrate_date_fields_to_datetime.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V5__Create_profile_table.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V6__Create_crew_table.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V7__Add_title_to_crew_position.sql" dialect="MySQL" />
     <file url="PROJECT" dialect="PostgreSQL" />
   </component>
 </project>

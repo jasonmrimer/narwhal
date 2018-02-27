@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import { CrewStore } from './stores/CrewStore';
 import { observer } from 'mobx-react';
 import { CrewPositionModel } from './models/CrewPositionModel';
+import { StyledTextInput } from '../widgets/TextInput';
+import { StyledButton } from '../widgets/Button';
 
 interface Props {
   crewId: number;
@@ -14,6 +16,10 @@ interface Props {
 export class Crew extends React.Component<Props> {
   async componentDidMount() {
     await this.props.crewStore.setCrewId(this.props.crewId);
+  }
+
+  onChange = (e: any) => {
+    this.props.crewStore.setCrewPositionTitle(Number(e.target.id), e.target.value);
   }
 
   render() {
@@ -30,14 +36,19 @@ export class Crew extends React.Component<Props> {
           <span>MSN START {crew.mission.displayStartTime}</span>
           <span>MSN END {crew.mission.displayEndTime}</span>
         </div>
+        <StyledButton
+          text="SAVE"
+          onClick={this.props.crewStore.save}
+        />
         <table>
           <thead>
           <tr>
+            <td>POSITION</td>
             <td>ASSIGNED CREW MEMBER</td>
           </tr>
           </thead>
           <tbody>
-            {this.renderCrew(crew.crewPositions)}
+          {this.renderCrew(crew.crewPositions)}
           </tbody>
         </table>
       </div>
@@ -48,6 +59,14 @@ export class Crew extends React.Component<Props> {
     return crewPositions.map((crewPosition: CrewPositionModel, index: number) => {
       return (
         <tr key={index}>
+          <td>
+            <StyledTextInput
+              id={`${crewPosition.id}`}
+              name="position"
+              value={crewPosition.title}
+              onChange={this.onChange}
+            />
+          </td>
           <td>{crewPosition.airman.lastName}</td>
         </tr>
       );
@@ -95,5 +114,9 @@ export const StyledCrew = styled(Crew)`
   td, 
   th {
     padding: 0.75rem;
+  }
+  
+  button {
+    margin-bottom: 1.5rem;
   }
 `;

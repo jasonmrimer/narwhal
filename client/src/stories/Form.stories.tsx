@@ -3,7 +3,7 @@ import { Theme } from '../themes/default';
 import { storiesOf } from '@storybook/react';
 import { ThemeProvider } from 'styled-components';
 import { StyledSubmitButton } from '../widgets/SubmitButton';
-import { StyledDeleteButton } from '../widgets/DeleteButton';
+import { StyledButton } from '../widgets/Button';
 import { action } from '@storybook/addon-actions';
 import { StyledSingleTypeahead } from '../widgets/SingleTypeahead';
 import { StyledTextInput } from '../widgets/TextInput';
@@ -16,6 +16,7 @@ import { AirmanQualificationModel } from '../airman/models/AirmanQualificationMo
 import { StyledSkillsForm } from '../skills/SkillsForm';
 import * as moment from 'moment';
 import { StyledMultiTypeahead } from '../widgets/MultiTypeahead';
+import { DeleteIcon } from '../icons/DeleteIcon';
 
 /*tslint:disable:no-any*/
 const wrapper = (story: any) => {
@@ -237,9 +238,23 @@ export function FormStory() {
       return (<StyledSubmitButton text="CONFIRM"/>);
     });
 
-  storiesOf('StyledDeleteButton', module)
+  storiesOf('StyledButton', module)
     .addDecorator(story => wrapper(story))
-    .add('default', () => {
-      return (<StyledDeleteButton handleClick={action('delete clicked')}/>);
+    .add('simple', () => {
+      return (
+        <StyledButton
+          text="TEXT"
+          onClick={action('clicked')}
+        />
+      );
+    })
+    .add('delete', () => {
+      return (
+        <StyledButton
+          text="DELETE"
+          onClick={action('DELETE clicked')}
+          renderIcon={() => <DeleteIcon/>}
+        />
+      );
     });
 }

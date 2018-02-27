@@ -10,7 +10,8 @@ export class CrewPositionSerializer implements Serializer<CrewPositionModel> {
   deserialize(item: any): CrewPositionModel {
     return new CrewPositionModel(
       item.id,
-      item.airman
+      item.airman,
+      item.title,
     );
   }
 }

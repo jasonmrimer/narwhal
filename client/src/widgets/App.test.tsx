@@ -11,17 +11,16 @@ import { SiteRepositoryStub } from '../site/repositories/doubles/SiteRepositoryS
 import { forIt, makeFakeTrackerStore } from '../utils/testUtils';
 import { DashboardStore } from '../dashboard/stores/DashboardStore';
 import { CrewStore } from '../crew/stores/CrewStore';
-import { CrewRepositoryStub } from '../crew/repositories/doubles/CrewRepositoryStub';
+import { CrewRepositorySpy } from '../crew/repositories/doubles/CrewRepositorySpy';
 import { CrewModelFactory } from '../crew/factories/CrewModelFactory';
 import { Crew } from '../crew/Crew';
-import ProfileRepository from '../profile/repositories/ProfileRepository';
 import { StyledProfileSitePicker } from '../profile/ProfileSitePicker';
 import { ProfileModel } from '../profile/models/ProfileModel';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 
 const siteRepository = new SiteRepositoryStub();
 const dashboardStore = new DashboardStore(new MissionRepositoryStub(), siteRepository);
-const crewStore = new CrewStore(new CrewRepositoryStub(CrewModelFactory.build()));
+const crewStore = new CrewStore(new CrewRepositorySpy(CrewModelFactory.build()));
 
 let subject: ShallowWrapper;
 let mountedSubject: ReactWrapper;
@@ -71,7 +70,7 @@ describe('App', () => {
     let profileStore: ProfileSitePickerStore;
     beforeEach(async () => {
       const trackerStore = await makeFakeTrackerStore();
-      const profileRepo: ProfileRepository = {
+      const profileRepo = {
         findOne: () => {
           return Promise.resolve({id: 1, username: 'FontFace', siteId: null});
         },
@@ -101,7 +100,7 @@ describe('App', () => {
     });
 
     it('should render the Tracker page after saving a profile', async () => {
-      profileStore.setProfile({id: 1, username: 'FontFace', siteId: 1});
+      profileStore.setProfile({username: 'FontFace', siteId: 1, id: 1});
       mountedSubject.update();
       expect(mountedSubject.find(Tracker).exists()).toBeTruthy();
     });

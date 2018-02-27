@@ -7,7 +7,7 @@ import { StyledTextInput } from '../widgets/TextInput';
 import { StyledDatePicker } from '../widgets/DatePicker';
 import { StyledTimeInput } from '../widgets/TimeInput';
 import { StyledFieldValidation } from '../widgets/FieldValidation';
-import { StyledDeleteButton } from '../widgets/DeleteButton';
+import { StyledButton } from '../widgets/Button';
 import { EventModelFactory } from './factories/EventModelFactory';
 
 describe('AppointmentForm', () => {
@@ -54,7 +54,7 @@ describe('AppointmentForm', () => {
   it('should render a delete button', () => {
     store.open(EventModelFactory.build());
     wrapper.update();
-    expect(wrapper.find(StyledDeleteButton).prop('handleClick')).toEqual(subject.handleDelete);
+    expect(wrapper.find(StyledButton).prop('onClick')).toEqual(subject.handleDelete);
   });
 
   it('renders with field validation', () => {

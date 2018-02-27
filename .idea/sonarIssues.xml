@@ -38,6 +38,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/acceptance/spec/crew_spec.rb">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/acceptance/spec/features/events.rb">
           <value>
             <set />
@@ -114,6 +119,16 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/client/src/availability/Availability.tsx">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/client/src/crew/repositories/CrewRepository.ts">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/client/src/crew/repositories/web/WebCrewRepository.ts">
           <value>
             <set />
           </value>
@@ -523,6 +538,21 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/crew/CrewController.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/crew/CrewPosition.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/crew/CrewPositionJSON.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/event/Event.java">
           <value>
             <set />
@@ -778,6 +808,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/resources/db/migration/v7__Add_title_to_crew_position.sql">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/resources/response.xml">
           <value>
             <set />
@@ -839,6 +874,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/test/java/mil/af/us/narwhal/certification/CertificationControllerTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/test/java/mil/af/us/narwhal/crew/CrewControllerTest.java">
           <value>
             <set />
           </value>
