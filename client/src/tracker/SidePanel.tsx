@@ -32,7 +32,8 @@ export class SidePanel extends React.Component<Props, State> {
       case 0:
         return (
           <StyledCurrency
-            trackerStore={this.props.trackerStore}
+            selectedAirman={this.props.trackerStore.selectedAirman}
+            currencyStore={this.props.trackerStore.currencyStore}
           />
         );
       case 1:

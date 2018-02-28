@@ -4,17 +4,18 @@ import { SkillTile } from './SkillTile';
 import { AirmanQualificationModelFactory } from '../airman/factories/AirmanQualificationModelFactory';
 import * as moment from 'moment';
 import { ExpirationAlert } from '../icons/ExpirationAlert';
+import { SkillType } from './models/SkillType';
 
 describe('SkillTile', () => {
   let subject: ShallowWrapper;
   let skill = AirmanQualificationModelFactory.build(16);
-  const handleClickSpy = jest.fn();
+  const onClickSpy = jest.fn();
 
   beforeEach(() => {
     subject = shallow(
       <SkillTile
         skill={skill}
-        handleClick={handleClickSpy}
+        onClick={onClickSpy}
       />
     );
   });
@@ -24,9 +25,16 @@ describe('SkillTile', () => {
     expect(subject.text()).toContain(skill.expirationDate.format('DD MMM YY'));
   });
 
-  it('calls the handleClick callback', () => {
+  it('calls the onClick callback', () => {
     subject.simulate('click');
-    expect(handleClickSpy).toBeCalledWith(skill);
+    expect(onClickSpy).toBeCalledWith({
+      id: skill.id,
+      type: SkillType.Qualification,
+      airmanId: skill.airmanId,
+      skillId: skill.qualification.id,
+      earnDate: skill.earnDate,
+      expirationDate: skill.expirationDate
+    });
   });
 
   it('renders an expiration alert when skill is expired', () => {

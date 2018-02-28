@@ -1,24 +1,19 @@
 import { TrackerStore } from './TrackerStore';
-import { AirmanRepositoryStub } from '../../airman/repositories/doubles/AirmanRepositoryStub';
+import { FakeAirmanRepository } from '../../airman/repositories/doubles/FakeAirmanRepository';
 import { SiteRepositoryStub } from '../../site/repositories/doubles/SiteRepositoryStub';
 import { AirmanModel } from '../../airman/models/AirmanModel';
 import * as moment from 'moment';
 import { EventRepositoryStub } from '../../event/repositories/doubles/EventRepositoryStub';
 import { toJS } from 'mobx';
 import { UnfilteredValue } from '../../widgets/models/FilterOptionModel';
-import { AirmanModelFactory } from '../../airman/factories/AirmanModelFactory';
-import { QualificationModel } from '../../skills/models/QualificationModel';
-import { AirmanQualificationModel } from '../../airman/models/AirmanQualificationModel';
-import { AirmanCertificationModel } from '../../airman/models/AirmanCertificationModel';
-import { CertificationModel } from '../../skills/models/CertificationModel';
 import { MissionRepositoryStub } from '../../mission/repositories/doubles/MissionRepositoryStub';
-import { AirmanQualificationModelFactory } from '../../airman/factories/AirmanQualificationModelFactory';
 import { TimeServiceStub } from '../services/doubles/TimeServiceStub';
 import { EventModel, EventType } from '../../event/models/EventModel';
 import SkillRepositoryStub from '../../skills/repositories/doubles/SkillRepositoryStub';
+import { SkillType } from '../../skills/models/SkillType';
 
 describe('TrackerStore', () => {
-  const airmenRepository = new AirmanRepositoryStub();
+  const airmenRepository = new FakeAirmanRepository();
   const siteRepository = new SiteRepositoryStub();
   const skillRepository = new SkillRepositoryStub();
   const eventRepository = new EventRepositoryStub();
@@ -53,16 +48,16 @@ describe('TrackerStore', () => {
 
   it('returns a list of qualification options', () => {
     expect(subject.qualificationOptions).toEqual([
-      {value: 0, label: '0'},
-      {value: 1, label: '1'},
-      {value: 2, label: '2'},
-      {value: 3, label: '3'},
-      {value: 4, label: '4'},
-      {value: 5, label: '5'},
-      {value: 6, label: '6'},
-      {value: 7, label: '7'},
-      {value: 8, label: '8'},
-      {value: 9, label: '9'}
+      {value: 0, label: '0 - 0'},
+      {value: 1, label: '1 - 1'},
+      {value: 2, label: '2 - 2'},
+      {value: 3, label: '3 - 3'},
+      {value: 4, label: '4 - 4'},
+      {value: 5, label: '5 - 5'},
+      {value: 6, label: '6 - 6'},
+      {value: 7, label: '7 - 7'},
+      {value: 8, label: '8 - 8'},
+      {value: 9, label: '9 - 9'}
     ]);
   });
 
@@ -193,7 +188,7 @@ describe('TrackerStore', () => {
 
     it('should add an event to an airman', async () => {
       const savedEvent = await subject.addEvent(event);
-      expect(eventRepository.hasEvent(savedEvent)).toBeTruthy();
+      expect(eventRepository.hasItem(savedEvent)).toBeTruthy();
     });
 
     it('should edit an existing event on an airman', async () => {
@@ -204,13 +199,13 @@ describe('TrackerStore', () => {
       const updatedEvent = await subject.addEvent(savedEvent);
 
       expect(eventRepository.count).toBe(eventCount);
-      expect(eventRepository.hasEvent(updatedEvent)).toBeTruthy();
+      expect(eventRepository.hasItem(updatedEvent)).toBeTruthy();
     });
 
     describe('delete', () => {
       let savedEvent: EventModel;
 
-      beforeEach( async () => {
+      beforeEach(async () => {
         savedEvent = await subject.addEvent(event);
         expect(subject.pendingDeleteEvent).toBeNull();
         subject.removeEvent(savedEvent);
@@ -228,25 +223,13 @@ describe('TrackerStore', () => {
       it('should delete an airman\'s event', async () => {
         await subject.executePendingDelete();
         expect(subject.pendingDeleteEvent).toBeNull();
-        expect(eventRepository.hasEvent(savedEvent)).toBeFalsy();
+        expect(eventRepository.hasItem(savedEvent)).toBeFalsy();
         expect(subject.availabilityStore.shouldShowEventForm).toBeFalsy();
       });
     });
   });
 
   describe('selecting an airman', () => {
-    it('clears the selected skill', () => {
-      subject.currencyStore.setSelectedSkill(AirmanQualificationModelFactory.build(1));
-      subject.setSelectedAirman(AirmanModelFactory.build());
-      expect(subject.currencyStore.selectedSkill).toBeNull();
-    });
-
-    it('hides the skill form', () => {
-      subject.currencyStore.setShowSkillForm(true);
-      subject.setSelectedAirman(AirmanModelFactory.build());
-      expect(subject.currencyStore.showSkillForm).toBeFalsy();
-    });
-
     it('resets the side panel week', () => {
       expect(subject.plannerStore.sidePanelWeek[0].isSame(subject.plannerStore.plannerWeek[0])).toBeTruthy();
       subject.plannerStore.incrementSidePanelWeek();
@@ -260,44 +243,57 @@ describe('TrackerStore', () => {
   describe('skills', () => {
     it('should add a qualification to an airman', async () => {
       const airman = allAirmen[0];
-      const qualification = new AirmanQualificationModel(
-        airman.id,
-        new QualificationModel(100, 'A', 'A'),
-        moment(),
-        moment()
-      );
       const qualLength = airman.qualifications.length;
-      await subject.addAirmanSkill(qualification);
+
+      await subject.addSkill({
+        id: null,
+        type: SkillType.Qualification,
+        airmanId: airman.id,
+        skillId: 100,
+        earnDate: moment(),
+        expirationDate: moment()
+      });
+
       const updatedAirman = (await airmenRepository.findAll())[0];
       expect(updatedAirman.qualifications.length).toBeGreaterThan(qualLength);
     });
 
     it('should add a certification to an airman', async () => {
       const airman = allAirmen[0];
-      const certification = new AirmanCertificationModel(
-        airman.id,
-        new CertificationModel(100, 'A'),
-        moment(),
-        moment()
-      );
       const certLength = airman.certifications.length;
-      await subject.addAirmanSkill(certification);
+
+      await subject.addSkill({
+        id: null,
+        type: SkillType.Certification,
+        airmanId: airman.id,
+        skillId: 100,
+        earnDate: moment(),
+        expirationDate: moment()
+      });
+
       const updatedAirman = (await airmenRepository.findAll())[0];
       expect(updatedAirman.certifications.length).toBeGreaterThan(certLength);
     });
 
     it('should delete a qualification from the airman', async () => {
       const airman = allAirmen[0];
-      const qualification = new AirmanQualificationModel(
-        airman.id,
-        new QualificationModel(100, 'A', 'A'),
-        moment(),
-        moment()
-      );
-      await subject.addAirmanSkill(qualification);
+      const skill = {
+        id: null,
+        type: SkillType.Qualification,
+        airmanId: airman.id,
+        skillId: 100,
+        earnDate: moment(),
+        expirationDate: moment()
+      };
+
+      await subject.addSkill(skill);
+
       let updatedAirman = (await airmenRepository.findAll())[0];
       const qualLength = updatedAirman.qualifications.length;
-      await subject.deleteAirmanSkill(qualification);
+      const id = updatedAirman.qualifications.find(q => q.skillId === 100)!.id;
+
+      await subject.removeSkill(Object.assign({}, skill, {id}));
+
       updatedAirman = (await airmenRepository.findAll())[0];
       expect(updatedAirman.qualifications.length).toBeLessThan(qualLength);
     });

@@ -1,5 +1,9 @@
 package mil.af.us.narwhal.airman;
 
+import mil.af.us.narwhal.skills.Certification;
+import mil.af.us.narwhal.skills.CertificationRepository;
+import mil.af.us.narwhal.skills.Qualification;
+import mil.af.us.narwhal.skills.QualificationRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,9 +17,13 @@ public class AirmanController {
   public static final String URI = "/api/airmen";
 
   private AirmanRepository repository;
+  private QualificationRepository qualificationRepository;
+  private CertificationRepository certificationRepository;
 
-  public AirmanController(AirmanRepository repository) {
+  public AirmanController(AirmanRepository repository, QualificationRepository qualificationRepository, CertificationRepository certificationRepository) {
     this.repository = repository;
+    this.qualificationRepository = qualificationRepository;
+    this.certificationRepository = certificationRepository;
   }
 
   @GetMapping
@@ -37,10 +45,16 @@ public class AirmanController {
   public ResponseEntity<Airman> createAirmanQualification(
     @PathVariable("id") Long id,
     @Valid
-    @RequestBody AirmanQualification qualification
+    @RequestBody AirmanSkillJSON skill
   ) {
     final Airman airman = repository.findOne(id);
-    return airman.addQualification(qualification) ?
+    final Qualification qualification = qualificationRepository.findOne(skill.getSkillId());
+    final AirmanQualification airmanQualification = new AirmanQualification(
+      qualification,
+      skill.getEarnDate(),
+      skill.getExpirationDate()
+    );
+    return airman.addQualification(airmanQualification) ?
       new ResponseEntity<>(repository.save(airman), HttpStatus.CREATED) :
       new ResponseEntity<>(airman, HttpStatus.OK);
   }
@@ -49,10 +63,16 @@ public class AirmanController {
   public ResponseEntity<Airman> createAirmanCertification(
     @PathVariable("id") Long id,
     @Valid
-    @RequestBody AirmanCertification certification
+    @RequestBody AirmanSkillJSON skill
   ) {
     final Airman airman = repository.findOne(id);
-    return airman.addCertification(certification) ?
+    final Certification certification = certificationRepository.findOne(skill.getSkillId());
+    final AirmanCertification airmanCertification = new AirmanCertification(
+      certification,
+      skill.getEarnDate(),
+      skill.getExpirationDate()
+    );
+    return airman.addCertification(airmanCertification) ?
       new ResponseEntity<>(repository.save(airman), HttpStatus.CREATED) :
       new ResponseEntity<>(airman, HttpStatus.OK);
   }
@@ -61,10 +81,10 @@ public class AirmanController {
   public Airman updateAirmanQualification(
     @PathVariable("id") Long id,
     @Valid
-    @RequestBody AirmanQualification qualification
+    @RequestBody AirmanSkillJSON skill
   ) {
     final Airman airman = repository.findOne(id);
-    airman.updateQualification(qualification);
+    airman.updateQualification(skill.getId(), skill.getExpirationDate());
     return repository.save(airman);
   }
 
@@ -72,10 +92,10 @@ public class AirmanController {
   public Airman updateAirmanCertification(
     @PathVariable("id") Long id,
     @Valid
-    @RequestBody AirmanCertification certification
+    @RequestBody AirmanSkillJSON skill
   ) {
     final Airman airman = repository.findOne(id);
-    airman.updateCertification(certification);
+    airman.updateCertification(skill.getId(), skill.getExpirationDate());
     return repository.save(airman);
   }
 

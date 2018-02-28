@@ -2,16 +2,12 @@ import { AirmanRepository } from '../AirmanRepository';
 import { AirmanSerializer } from '../../serializers/AirmanSerializer';
 import { AirmanModel } from '../../models/AirmanModel';
 import * as Cookie from 'js-cookie';
-import { AirmanQualificationSerializer } from '../../serializers/AirmanQualificationSerializer';
-import { AirmanCertificationSerializer } from '../../serializers/AirmanCertificationSerializer';
-import { Skill } from '../../../skills/models/Skill';
 import { SkillType } from '../../../skills/models/SkillType';
+import { Skill } from '../../../skills/models/Skill';
 
 /* tslint:disable:no-any*/
 export class WebAirmanRepository implements AirmanRepository {
   private serializer = new AirmanSerializer();
-  private airmanQualSerializer = new AirmanQualificationSerializer();
-  private airmanCertSerializer = new AirmanCertificationSerializer();
   private csrfToken: string;
 
   constructor(private baseUrl: string = '') {
@@ -76,7 +72,7 @@ export class WebAirmanRepository implements AirmanRepository {
       {
         method: 'POST',
         headers: [['Content-Type', 'application/json'], ['X-XSRF-TOKEN', this.csrfToken]],
-        body: this.getBodyForSkill(skill),
+        body: JSON.stringify(skill),
         credentials: 'include'
       }
     );
@@ -88,7 +84,7 @@ export class WebAirmanRepository implements AirmanRepository {
       {
         method: 'PUT',
         headers: [['Content-Type', 'application/json'], ['X-XSRF-TOKEN', this.csrfToken]],
-        body: this.getBodyForSkill(skill),
+        body: JSON.stringify(skill),
         credentials: 'include'
       }
     );
@@ -99,13 +95,6 @@ export class WebAirmanRepository implements AirmanRepository {
       [SkillType.Qualification]: 'qualifications',
       [SkillType.Certification]: 'certifications'
     }[skill.type];
-  }
-
-  private getBodyForSkill(skill: Skill): {} {
-    return {
-      [SkillType.Qualification]: (s: any) => this.airmanQualSerializer.serialize(s),
-      [SkillType.Certification]: (s: any) => this.airmanCertSerializer.serialize(s)
-    }[skill.type](skill);
   }
 
   private handleError(response: { errors: object[] }): object {

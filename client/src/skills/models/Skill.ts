@@ -1,4 +1,11 @@
-import { AirmanQualificationModel } from '../../airman/models/AirmanQualificationModel';
-import { AirmanCertificationModel } from '../../airman/models/AirmanCertificationModel';
+import { Moment } from 'moment';
+import { SkillType } from './SkillType';
 
-export type Skill = AirmanQualificationModel | AirmanCertificationModel;
+export interface Skill {
+  id: number | null;
+  type: SkillType;
+  airmanId: number;
+  skillId: number;
+  earnDate: Moment;
+  expirationDate: Moment;
+}

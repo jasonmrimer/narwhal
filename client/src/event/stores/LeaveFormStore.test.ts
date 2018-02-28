@@ -22,7 +22,7 @@ describe('LeaveFormStore', () => {
   describe('open', () => {
     it('should have an empty state', () => {
       subject.open();
-      expect(subject.hasEvent).toBeFalsy();
+      expect(subject.hasItem).toBeFalsy();
       expect(subject.state.description).toBe('');
       expect(subject.state.startDate).toBe('');
       expect(subject.state.startTime).toBe('0000');
@@ -33,7 +33,7 @@ describe('LeaveFormStore', () => {
 
     it('should set the state with the given event', () => {
       subject.open(event);
-      expect(subject.hasEvent).toBeTruthy();
+      expect(subject.hasItem).toBeTruthy();
       expect(subject.state.description).toBe(event.description);
       expect(subject.state.startDate).toBe(event.startTime.format('YYYY-MM-DD'));
       expect(subject.state.startTime).toBe(event.startTime.format('HHmm'));
@@ -46,16 +46,16 @@ describe('LeaveFormStore', () => {
   describe('close', () => {
     it('should clear the state', () => {
       subject.open(event);
-      expect(subject.hasEvent).toBeTruthy();
+      expect(subject.hasItem).toBeTruthy();
 
       subject.close();
       expect(subject.state.description).toBe('');
       expect(subject.state.startDate).toBe('');
-      expect(subject.state.startTime).toBe('');
+      expect(subject.state.startTime).toBe('0000');
       expect(subject.state.endDate).toBe('');
-      expect(subject.state.endTime).toBe('');
+      expect(subject.state.endTime).toBe('2359');
       expect(subject.errors.length).toBe(0);
-      expect(subject.hasEvent).toBeFalsy();
+      expect(subject.hasItem).toBeFalsy();
     });
   });
 
@@ -68,7 +68,7 @@ describe('LeaveFormStore', () => {
       endTime: '2359'
     });
 
-    subject.addLeave(airmanId);
+    subject.addItem(airmanId);
 
     const expectedEvent = new EventModel(
       'Leave',
@@ -91,7 +91,7 @@ describe('LeaveFormStore', () => {
       endTime: '2359'
     });
 
-    subject.addLeave(airmanId);
+    subject.addItem(airmanId);
 
     expect((eventActions.addEvent as jest.Mock).mock.calls[0][0].startTime.isValid()).toBeFalsy();
   });
@@ -99,7 +99,7 @@ describe('LeaveFormStore', () => {
   it('can remove an event', () => {
     subject.open(event);
 
-    subject.removeLeave();
+    subject.removeItem();
 
     expect(eventActions.removeEvent).toHaveBeenCalledWith(event);
   });

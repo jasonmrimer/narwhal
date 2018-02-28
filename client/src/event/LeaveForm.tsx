@@ -25,17 +25,17 @@ export class LeaveForm extends React.Component<Props> {
   }
 
   handleDelete = () => {
-    this.props.leaveFormStore.removeLeave();
+    this.props.leaveFormStore.removeItem();
   }
 
   /* tslint:disable:no-any*/
   handleSubmit = (e: any) => {
     e.preventDefault();
-    this.props.leaveFormStore.addLeave(this.props.airmanId);
+    this.props.leaveFormStore.addItem(this.props.airmanId);
   }
 
   render() {
-    const {state, errors, hasEvent} = this.props.leaveFormStore;
+    const {state, errors, hasItem} = this.props.leaveFormStore;
     return (
       <StyledForm onSubmit={this.handleSubmit}>
         <StyledFormRow>
@@ -80,7 +80,7 @@ export class LeaveForm extends React.Component<Props> {
         <StyledFormRow reversed={true}>
           <StyledSubmitButton text="CONFIRM"/>
           {
-            hasEvent &&
+            hasItem &&
             <StyledButton
               text="DELETE"
               onClick={this.handleDelete}

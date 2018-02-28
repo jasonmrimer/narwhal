@@ -19,13 +19,16 @@ describe('Currency', () => {
 
   let trackerStore: TrackerStore;
   let subject: ShallowWrapper;
-  let currency: Currency;
 
   beforeEach(async () => {
     trackerStore = await makeFakeTrackerStore();
     trackerStore.setSelectedAirman(airman);
-    subject = shallow(<Currency trackerStore={trackerStore}/>);
-    currency = (subject.instance() as Currency);
+    subject = shallow(
+      <Currency
+        selectedAirman={trackerStore.selectedAirman}
+        currencyStore={trackerStore.currencyStore}
+      />
+    );
   });
 
   it('renders the currency of an airman', () => {
@@ -35,7 +38,7 @@ describe('Currency', () => {
 
     expect(skillTiles.length).toBe(skillsLength);
     expect(qualification.prop('skill')).toBe(airman.qualifications[0]);
-    expect(qualification.prop('handleClick')).toBeDefined();
+    expect(qualification.prop('onClick')).toBeDefined();
   });
 
   it('opens skill form on + Add Skill click', () => {
@@ -43,9 +46,12 @@ describe('Currency', () => {
     expect(subject.find(StyledSkillsForm).exists()).toBeTruthy();
   });
 
-  it('opens an Currency Form when clicking on an existing Currency Tile', () => {
-    currency.openSkillFormForEdit(airman.qualifications[0]);
+  it('opens a Skill Form when clicking on an existing Skill Tile', () => {
+    subject.find(StyledSkillTile).at(0).simulate('click');
     subject.update();
-    expect(subject.find(StyledSkillsForm).prop('skill')).toEqual(airman.qualifications[0]);
+
+    const store = trackerStore.currencyStore.skillFormStore;
+    expect(store.hasItem).toBeTruthy();
+    expect(Number(store.state.skillId)).toBe(airman.qualifications[0].skillId);
   });
 });

@@ -1,10 +1,10 @@
 import { AvailabilityStore } from './AvailabilityStore';
 import { LeaveFormStore } from '../../event/stores/LeaveFormStore';
-import { AppointmentFormStore } from '../../event/stores/AppointmentFormStore';
 import { EventActions } from '../../event/stores/EventActions';
 import { EventModel, EventType } from '../../event/models/EventModel';
 import { EventModelFactory } from '../../event/factories/EventModelFactory';
 import { MissionFormStore } from '../../event/stores/MissionFormStore';
+import { AppointmentFormStore } from '../../event/stores/AppointmentFormStore';
 
 describe('AvailabilityStore', () => {
   let eventActions: EventActions;
@@ -23,20 +23,20 @@ describe('AvailabilityStore', () => {
   });
 
   it('should show the event form without an event', () => {
-    expect(subject.hasEvent).toBeFalsy();
+    expect(subject.hasItem).toBeFalsy();
     expect(subject.shouldShowEventForm).toBeFalsy();
     expect(subject.eventFormType).toBe('');
 
     subject.showEventForm();
 
-    expect(subject.hasEvent).toBeFalsy();
+    expect(subject.hasItem).toBeFalsy();
     expect(subject.shouldShowEventForm).toBeTruthy();
     expect(subject.eventFormType).toBe('');
   });
 
   describe('should open an event form for create', () => {
     beforeEach(() => {
-      expect(subject.hasEvent).toBeFalsy();
+      expect(subject.hasItem).toBeFalsy();
       expect(subject.shouldShowEventForm).toBeFalsy();
       expect(subject.eventFormType).toBe('');
     });
@@ -44,7 +44,7 @@ describe('AvailabilityStore', () => {
     it('opens leave', () => {
       subject.openCreateEventForm(EventType.Leave);
 
-      expect(subject.hasEvent).toBeFalsy();
+      expect(subject.hasItem).toBeFalsy();
       expect(subject.shouldShowEventForm).toBeFalsy();
       expect(subject.eventFormType).toBe(EventType.Leave);
     });
@@ -52,7 +52,7 @@ describe('AvailabilityStore', () => {
     it('opens appointment', () => {
       subject.openCreateEventForm(EventType.Appointment);
 
-      expect(subject.hasEvent).toBeFalsy();
+      expect(subject.hasItem).toBeFalsy();
       expect(subject.shouldShowEventForm).toBeFalsy();
       expect(subject.eventFormType).toBe(EventType.Appointment);
     });
@@ -60,7 +60,7 @@ describe('AvailabilityStore', () => {
     it('opens mission', () => {
       subject.openCreateEventForm(EventType.Mission);
 
-      expect(subject.hasEvent).toBeFalsy();
+      expect(subject.hasItem).toBeFalsy();
       expect(subject.shouldShowEventForm).toBeFalsy();
       expect(subject.eventFormType).toBe(EventType.Mission);
     });
@@ -70,7 +70,7 @@ describe('AvailabilityStore', () => {
     let event: EventModel;
 
     beforeEach(() => {
-      expect(subject.hasEvent).toBeFalsy();
+      expect(subject.hasItem).toBeFalsy();
       expect(subject.shouldShowEventForm).toBeFalsy();
       expect(subject.eventFormType).toBe('');
       event = EventModelFactory.build();
@@ -80,7 +80,7 @@ describe('AvailabilityStore', () => {
       event.type = EventType.Leave;
       subject.openEditEventForm(event);
 
-      expect(subject.hasEvent).toBeTruthy();
+      expect(subject.hasItem).toBeTruthy();
       expect(subject.shouldShowEventForm).toBeTruthy();
       expect(subject.eventFormType).toBe(event.type);
     });
@@ -89,7 +89,7 @@ describe('AvailabilityStore', () => {
       event.type = EventType.Appointment;
       subject.openEditEventForm(event);
 
-      expect(subject.hasEvent).toBeTruthy();
+      expect(subject.hasItem).toBeTruthy();
       expect(subject.shouldShowEventForm).toBeTruthy();
       expect(subject.eventFormType).toBe(event.type);
     });
@@ -98,7 +98,7 @@ describe('AvailabilityStore', () => {
       event.type = EventType.Mission;
       subject.openEditEventForm(event);
 
-      expect(subject.hasEvent).toBeTruthy();
+      expect(subject.hasItem).toBeTruthy();
       expect(subject.shouldShowEventForm).toBeTruthy();
       expect(subject.eventFormType).toBe(event.type);
     });
@@ -110,7 +110,7 @@ describe('AvailabilityStore', () => {
 
     subject.closeEventForm();
 
-    expect(subject.hasEvent).toBeFalsy();
+    expect(subject.hasItem).toBeFalsy();
     expect(subject.shouldShowEventForm).toBeFalsy();
     expect(subject.eventFormType).toBe('');
   });

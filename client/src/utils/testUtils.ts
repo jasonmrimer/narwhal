@@ -1,7 +1,7 @@
 import { Filter } from '../widgets/Filter';
 import { StyledPlanner } from '../roster/Planner';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
-import { AirmanRepositoryStub } from '../airman/repositories/doubles/AirmanRepositoryStub';
+import { FakeAirmanRepository } from '../airman/repositories/doubles/FakeAirmanRepository';
 import { SiteRepositoryStub } from '../site/repositories/doubles/SiteRepositoryStub';
 import { EventRepositoryStub } from '../event/repositories/doubles/EventRepositoryStub';
 import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
@@ -12,7 +12,7 @@ import { ReactWrapper } from 'enzyme';
 
 export async function makeFakeTrackerStore(shouldHydrateState: boolean = true) {
   const store = new TrackerStore(
-    new AirmanRepositoryStub(),
+    new FakeAirmanRepository(),
     new SiteRepositoryStub(),
     new SkillRepositoryStub(),
     new EventRepositoryStub(),

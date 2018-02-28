@@ -131,13 +131,9 @@ public class AirmanControllerTest {
 
   @Test
   public void createAirmanQualificationTest() throws JsonProcessingException {
-    final AirmanQualification airmanQualification = new AirmanQualification(
-      airman1.getId(),
-      qualification1,
-      Instant.now(),
-      Instant.now()
+    final String json = objectMapper.writeValueAsString(
+      new AirmanSkillJSON(qualification1.getId(), Instant.now(), Instant.now())
     );
-    final String json = objectMapper.writeValueAsString(airmanQualification);
 
     // @formatter:off
     given()
@@ -157,13 +153,10 @@ public class AirmanControllerTest {
 
   @Test
   public void createAirmanCertification() throws JsonProcessingException {
-    final AirmanCertification airmanCertification = new AirmanCertification(
-      airman1.getId(),
-      certification1,
-      Instant.now(),
-      Instant.now()
+    final String json = objectMapper.writeValueAsString(
+      new AirmanSkillJSON(
+        certification1.getId(), Instant.now(), Instant.now())
     );
-    final String json = objectMapper.writeValueAsString(airmanCertification);
 
     // @formatter:off
     given()
@@ -189,13 +182,17 @@ public class AirmanControllerTest {
       Instant.now()
     );
     airman1.addQualification(airmanQualification);
-    final Airman savedAirman1 = airmanRepository.save(airman1);
+    Airman savedAirman1 = airmanRepository.save(airman1);
 
-    final Instant newExpirationDate = Instant.EPOCH;
     final AirmanQualification updatedAirmanQualification = savedAirman1.getQualifications().get(0);
-    updatedAirmanQualification.setExpirationDate(newExpirationDate);
-
-    final String json = objectMapper.writeValueAsString(updatedAirmanQualification);
+    final String json = objectMapper.writeValueAsString(
+      new AirmanSkillJSON(
+        updatedAirmanQualification.getId(),
+        updatedAirmanQualification.getQualification().getId(),
+        updatedAirmanQualification.getEarnDate(),
+        Instant.EPOCH
+      )
+    );
 
     // @formatter:off
     given()
@@ -223,11 +220,15 @@ public class AirmanControllerTest {
     airman1.addCertification(airmanCertification);
     final Airman savedAirman1 = airmanRepository.save(airman1);
 
-    final Instant newExpirationDate = Instant.EPOCH;
     final AirmanCertification updatedAirmanCertification = savedAirman1.getCertifications().get(0);
-    updatedAirmanCertification.setExpirationDate(newExpirationDate);
-
-    final String json = objectMapper.writeValueAsString(updatedAirmanCertification);
+    final String json = objectMapper.writeValueAsString(
+      new AirmanSkillJSON(
+        updatedAirmanCertification.getId(),
+        updatedAirmanCertification.getCertification().getId(),
+        updatedAirmanCertification.getEarnDate(),
+        Instant.EPOCH
+      )
+    );
 
     // @formatter:off
     given()

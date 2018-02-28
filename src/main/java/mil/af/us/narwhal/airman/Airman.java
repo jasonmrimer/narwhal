@@ -11,6 +11,7 @@ import mil.af.us.narwhal.event.Event;
 import mil.af.us.narwhal.mission.Mission;
 
 import javax.persistence.*;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -88,18 +89,18 @@ public class Airman {
     return true;
   }
 
-  public void updateCertification(AirmanCertification certification) {
+  public void updateCertification(long id, Instant expirationDate) {
     certifications.stream()
-      .filter(cert -> cert.getId().equals(certification.getId()))
+      .filter(cert -> cert.getId().equals(id))
       .findFirst()
-      .ifPresent(cert -> cert.setExpirationDate(certification.getExpirationDate()));
+      .ifPresent(cert -> cert.setExpirationDate(expirationDate));
   }
 
-  public void updateQualification(AirmanQualification qualification) {
+  public void updateQualification(long id, Instant expirationDate) {
     qualifications.stream()
-      .filter(qual -> qual.getId().equals(qualification.getId()))
+      .filter(qual -> qual.getId().equals(id))
       .findFirst()
-      .ifPresent(qual -> qual.setExpirationDate(qualification.getExpirationDate()));
+      .ifPresent(qual -> qual.setExpirationDate(expirationDate));
   }
 
   public void deleteQualification(Long id) {

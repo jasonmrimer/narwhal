@@ -84,7 +84,7 @@ describe('Roster', () => {
 
       it('renders multiple qualifications', () => {
         const qualificationOptions = qualifications.map(qualification => {
-          return {value: qualification.id, label: qualification.acronym};
+          return {value: qualification.id, label: `${qualification.acronym} - ${qualification.title}`};
         });
 
         expect(qualificationMultiSelect.prop('options')).toEqual(qualificationOptions);

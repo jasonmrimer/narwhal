@@ -59,7 +59,7 @@ export class Availability extends React.Component<Props> {
         </a>
 
         {
-          !availabilityStore.hasEvent &&
+          !availabilityStore.hasItem &&
           <div className="form-wrapper">
             <div>Select Event Type:</div>
             <StyledRadioButtons

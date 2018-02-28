@@ -35,7 +35,7 @@ export class EventRepositoryStub implements EventRepository {
     return Promise.resolve();
   }
 
-  hasEvent(event: EventModel) {
+  hasItem(event: EventModel) {
     return this._events.map(e => e.id).includes(event.id);
   }
 

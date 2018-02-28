@@ -11,12 +11,12 @@ import { StyledFieldValidation } from '../widgets/FieldValidation';
 import { StyledRadioButtons } from '../widgets/RadioButtons';
 import { StyledTimeInput } from '../widgets/TimeInput';
 import { StyledDatePicker } from '../widgets/DatePicker';
-import { QualificationModel } from '../skills/models/QualificationModel';
-import { AirmanQualificationModel } from '../airman/models/AirmanQualificationModel';
-import { StyledSkillsForm } from '../skills/SkillsForm';
-import * as moment from 'moment';
 import { StyledMultiTypeahead } from '../widgets/MultiTypeahead';
 import { DeleteIcon } from '../icons/DeleteIcon';
+import { StyledSkillsForm } from "../skills/SkillsForm";
+import { SkillFormStore } from '../skills/stores/SkillFormStore';
+import { SkillType } from '../skills/models/SkillType';
+import * as moment from 'moment';
 
 /*tslint:disable:no-any*/
 const wrapper = (story: any) => {
@@ -29,6 +29,23 @@ const wrapper = (story: any) => {
   );
 };
 
+const skillsActions = {
+  addSkill: () => {
+  },
+  removeSkill: () => {
+  },
+  qualificationOptions: [
+    {value: '1', label: 'A'},
+    {value: '2', label: 'B'},
+    {value: '3', label: 'C'},
+  ],
+  certificationOptions: [
+    {value: '1', label: 'X'},
+    {value: '2', label: 'Y'},
+    {value: '3', label: 'Z'},
+  ],
+};
+
 export function FormStory() {
   storiesOf('SkillForm', module)
     .addDecorator(story => wrapper(story))
@@ -36,48 +53,24 @@ export function FormStory() {
       return (
         <StyledSkillsForm
           airmanId={1}
-          qualifications={[
-            {id: 1, acronym: 'A', title: 'AAA'},
-            {id: 2, acronym: 'B', title: 'BBB'},
-            {id: 3, acronym: 'C', title: 'CCC'}
-          ]}
-          certifications={[
-            {id: 1, title: 'AAA'},
-            {id: 2, title: 'BBB'},
-            {id: 3, title: 'CCC'}
-          ]}
-          skill={null}
-          handleSubmit={action('created')}
-          handleDelete={action('deleted')}
-          errors={[]}
+          skillFormStore={new SkillFormStore(skillsActions)}
         />
       );
     })
     .add('edit skill', () => {
+      const store = new SkillFormStore(skillsActions);
+      store.open({
+        id: 1,
+        type: SkillType.Qualification,
+        skillId: 1,
+        airmanId: 1,
+        earnDate: moment(),
+        expirationDate: moment()
+      });
       return (
         <StyledSkillsForm
           airmanId={1}
-          qualifications={[
-            {id: 1, acronym: 'A', title: 'AAA'},
-            {id: 2, acronym: 'B', title: 'BBB'},
-            {id: 3, acronym: 'C', title: 'CCC'}
-          ]}
-          certifications={[
-            {id: 1, title: 'AAA'},
-            {id: 2, title: 'BBB'},
-            {id: 3, title: 'CCC'}
-          ]}
-          skill={
-            new AirmanQualificationModel(
-              1,
-              new QualificationModel(1, 'A', 'A'),
-              moment(),
-              moment()
-            )
-          }
-          handleSubmit={action('created')}
-          handleDelete={action('deleted')}
-          errors={[]}
+          skillFormStore={store}
         />
       );
     });

@@ -1,29 +1,32 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { observer } from 'mobx-react';
 import { AirmanModel } from '../airman/models/AirmanModel';
-import { Skill } from '../skills/models/Skill';
 import { StyledSkillsForm } from '../skills/SkillsForm';
 import { StyledSkillTile } from '../skills/SkillTile';
+import { CurrencyStore } from './stores/CurrencyStore';
 
 interface Props {
-  trackerStore: TrackerStore;
+  selectedAirman: AirmanModel;
+  currencyStore: CurrencyStore;
   className?: string;
 }
 
 @observer
 export class Currency extends React.Component<Props> {
-  openSkillFormForEdit = (skill: Skill) => {
-    this.props.trackerStore.currencyStore.setSelectedSkill(skill);
-    this.props.trackerStore.currencyStore.setShowSkillForm(true);
+  componentDidMount() {
+    this.props.currencyStore.closeSkillForm();
+  }
+
+  componentWillReceiveProps() {
+    this.props.currencyStore.closeSkillForm();
   }
 
   render() {
     return (
       <div className={this.props.className}>
         {
-          this.props.trackerStore.currencyStore.showSkillForm ?
+          this.props.currencyStore.shouldShowSkillForm ?
             this.renderSkillsForm() :
             this.renderSkillsList()
         }
@@ -32,42 +35,20 @@ export class Currency extends React.Component<Props> {
   }
 
   private renderSkillsForm = () => {
-    const airman = this.props.trackerStore.selectedAirman;
-    const qualifications = this.props.trackerStore.qualifications;
-    const certifications = this.props.trackerStore.certifications;
     return (
       <StyledSkillsForm
-        airmanId={airman.id}
-        qualifications={qualifications}
-        certifications={certifications}
-        skill={this.props.trackerStore.currencyStore.selectedSkill}
-        handleSubmit={this.createAirmanSkill}
-        handleDelete={this.deleteAirmanSkill}
-        errors={this.props.trackerStore.currencyStore.errors}
+        airmanId={this.props.selectedAirman.id}
+        skillFormStore={this.props.currencyStore.skillFormStore}
       />
     );
   }
 
-  private createAirmanSkill = async (skill: Skill) => {
-    await this.props.trackerStore.addAirmanSkill(skill);
-    if (this.props.trackerStore.currencyStore.errors.length === 0) {
-      this.props.trackerStore.currencyStore.clearSelectedSkill();
-      this.props.trackerStore.currencyStore.setShowSkillForm(false);
-    }
-  }
-
-  private deleteAirmanSkill = async (skill: Skill) => {
-    await this.props.trackerStore.deleteAirmanSkill(skill);
-    this.props.trackerStore.currencyStore.clearSelectedSkill();
-    this.props.trackerStore.currencyStore.setShowSkillForm(false);
-  }
-
   private renderSkillsList = () => {
-    const airman = this.props.trackerStore.selectedAirman;
+    const airman = this.props.selectedAirman;
     return (
       <div>
         <div className="skill-control-row">
-          <button className="add-skill" onClick={this.openSkillFormForCreate}>
+          <button className="add-skill" onClick={this.props.currencyStore.openCreateSkillForm}>
             + Add Skill
           </button>
         </div>
@@ -82,7 +63,7 @@ export class Currency extends React.Component<Props> {
       <StyledSkillTile
         key={index}
         skill={qual}
-        handleClick={() => this.openSkillFormForEdit(qual)}
+        onClick={() => this.props.currencyStore.openEditSkillForm(qual)}
       />
     ));
   }
@@ -92,14 +73,9 @@ export class Currency extends React.Component<Props> {
       <StyledSkillTile
         key={index}
         skill={cert}
-        handleClick={() => this.openSkillFormForEdit(cert)}
+        onClick={() => this.props.currencyStore.openEditSkillForm(cert)}
       />
     ));
-  }
-
-  private openSkillFormForCreate = () => {
-    this.props.trackerStore.currencyStore.clearSelectedSkill();
-    this.props.trackerStore.currencyStore.setShowSkillForm(true);
   }
 }
 

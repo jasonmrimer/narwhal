@@ -15,6 +15,7 @@ interface State {
 
 @observer
 export class ProfileSitePicker extends React.Component<Props, State> {
+  /*tslint:disable:no-any*/
   handleChange = (event: any) => {
     const {profileStore} = this.props;
     if (profileStore.profile) {

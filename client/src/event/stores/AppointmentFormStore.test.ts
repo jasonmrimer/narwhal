@@ -22,7 +22,7 @@ describe('AppointmenFormStore', () => {
   describe('open', () => {
     it('should have an empty state', () => {
       subject.open();
-      expect(subject.hasEvent).toBeFalsy();
+      expect(subject.hasItem).toBeFalsy();
       expect(subject.state.title).toBe('');
       expect(subject.state.description).toBe('');
       expect(subject.state.startDate).toBe('');
@@ -34,7 +34,7 @@ describe('AppointmenFormStore', () => {
 
     it('should set the state with the given event', () => {
       subject.open(event);
-      expect(subject.hasEvent).toBeTruthy();
+      expect(subject.hasItem).toBeTruthy();
       expect(subject.state.title).toBe(event.title);
       expect(subject.state.description).toBe(event.description);
       expect(subject.state.startDate).toBe(event.startTime.format('YYYY-MM-DD'));
@@ -48,7 +48,7 @@ describe('AppointmenFormStore', () => {
   describe('close', () => {
     it('should clear the state', () => {
       subject.open(event);
-      expect(subject.hasEvent).toBeTruthy();
+      expect(subject.hasItem).toBeTruthy();
 
       subject.close();
       expect(subject.state.title).toBe('');
@@ -58,7 +58,7 @@ describe('AppointmenFormStore', () => {
       expect(subject.state.endDate).toBe('');
       expect(subject.state.endTime).toBe('');
       expect(subject.errors.length).toBe(0);
-      expect(subject.hasEvent).toBeFalsy();
+      expect(subject.hasItem).toBeFalsy();
     });
   });
 
@@ -72,7 +72,7 @@ describe('AppointmenFormStore', () => {
       endTime: '1300'
     });
 
-    subject.addAppointment(airmanId);
+    subject.addItem(airmanId);
 
     const expectedEvent = new EventModel(
       'Title',
@@ -96,7 +96,7 @@ describe('AppointmenFormStore', () => {
       endTime: '2359'
     });
 
-    subject.addAppointment(airmanId);
+    subject.addItem(airmanId);
 
     expect((eventActions.addEvent as jest.Mock).mock.calls[0][0].startTime.isValid()).toBeFalsy();
   });
@@ -104,7 +104,7 @@ describe('AppointmenFormStore', () => {
   it('can remove an event', () => {
     subject.open(event);
 
-    subject.removeAppointment();
+    subject.removeItem();
 
     expect(eventActions.removeEvent).toHaveBeenCalledWith(event);
   });

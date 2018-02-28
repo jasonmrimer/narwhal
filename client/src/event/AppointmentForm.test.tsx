@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { AppointmentForm } from './AppointmentForm';
-import { AppointmentFormStore } from './stores/AppointmentFormStore';
 import { eventStub } from '../utils/testUtils';
 import { StyledTextInput } from '../widgets/TextInput';
 import { StyledDatePicker } from '../widgets/DatePicker';
@@ -9,6 +8,7 @@ import { StyledTimeInput } from '../widgets/TimeInput';
 import { StyledFieldValidation } from '../widgets/FieldValidation';
 import { StyledButton } from '../widgets/Button';
 import { EventModelFactory } from './factories/EventModelFactory';
+import { AppointmentFormStore } from './stores/AppointmentFormStore';
 
 describe('AppointmentForm', () => {
   let store: AppointmentFormStore;

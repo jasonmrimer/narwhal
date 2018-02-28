@@ -1,44 +1,47 @@
 import { action, computed, observable } from 'mobx';
+import { SkillFormStore } from '../../skills/stores/SkillFormStore';
 import { Skill } from '../../skills/models/Skill';
 
 export class CurrencyStore {
-  @observable private _showSkillForm: boolean = false;
-  @observable private _selectedSkill: Skill | null = null;
-  @observable private _errors: object[] = [];
+  @observable private _shouldShowSkillForm: boolean = false;
 
-  @computed
-  get showSkillForm() {
-    return this._showSkillForm;
-  }
-
-  @action.bound
-  setShowSkillForm(showSkillForm: boolean) {
-    this._errors = [];
-    this._showSkillForm = showSkillForm;
+  constructor(public skillFormStore: SkillFormStore) {
   }
 
   @computed
-  get selectedSkill() {
-    return this._selectedSkill;
-  }
-
-  @action.bound
-  setSelectedSkill(selectedSkill: Skill) {
-    this._selectedSkill = selectedSkill;
-  }
-
-  @action.bound
-  clearSelectedSkill() {
-    this._selectedSkill = null;
-  }
-
-  @action.bound
-  setErrors(errors: object[]) {
-    this._errors = errors;
+  get hasItem() {
+    return this.skillFormStore.hasItem;
   }
 
   @computed
-  get errors() {
-    return this._errors;
+  get shouldShowSkillForm() {
+    return this._shouldShowSkillForm;
+  }
+
+  @action.bound
+  showSkillForm() {
+    this._shouldShowSkillForm = true;
+  }
+
+  @action.bound
+  openCreateSkillForm() {
+    this._shouldShowSkillForm = true;
+    return this.skillFormStore.open();
+  }
+
+  @action.bound
+  openEditSkillForm(skill: Skill) {
+    this._shouldShowSkillForm = true;
+    return this.skillFormStore.open(skill);
+  }
+
+  @action.bound
+  closeSkillForm() {
+    this._shouldShowSkillForm = false;
+    this.skillFormStore.close();
+  }
+
+  setFormErrors(errors: object[]) {
+    this.skillFormStore.setErrors(errors);
   }
 }

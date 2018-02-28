@@ -8,17 +8,18 @@ import { EventModel } from '../../event/models/EventModel';
 import { EventRepository } from '../../event/repositories/EventRepository';
 import { QualificationModel } from '../../skills/models/QualificationModel';
 import SkillRepository from '../../skills/repositories/SkillRepository';
-import { Skill } from '../../skills/models/Skill';
 import { CurrencyStore } from '../../currency/stores/CurrencyStore';
 import { AvailabilityStore } from '../../availability/stores/AvailabilityStore';
 import { PlannerStore } from '../../roster/stores/PlannerStore';
 import { MissionStore } from '../../mission/stores/MissionStore';
 import { FilterOption, UnfilteredValue } from '../../widgets/models/FilterOptionModel';
-import { AppointmentFormStore } from '../../event/stores/AppointmentFormStore';
 import { MissionRepository } from '../../mission/repositories/MissionRepository';
 import { TimeService } from '../services/TimeService';
 import { LeaveFormStore } from '../../event/stores/LeaveFormStore';
 import { MissionFormStore } from '../../event/stores/MissionFormStore';
+import { AppointmentFormStore } from '../../event/stores/AppointmentFormStore';
+import { SkillFormStore } from '../../skills/stores/SkillFormStore';
+import { Skill } from '../../skills/models/Skill';
 
 export class TrackerStore {
   public currencyStore: CurrencyStore;
@@ -55,7 +56,9 @@ export class TrackerStore {
     this.siteRepository = siteRepository;
     this.skillRepository = skillRepository;
     this.eventRepository = eventRepository;
-    this.currencyStore = new CurrencyStore();
+    this.currencyStore = new CurrencyStore(
+      new SkillFormStore(this)
+    );
     this.availabilityStore = new AvailabilityStore(
       new AppointmentFormStore(this),
       new LeaveFormStore(this),
@@ -185,7 +188,7 @@ export class TrackerStore {
   @computed
   get qualificationOptions() {
     return this._qualifications.map(qual => {
-      return {value: qual.id, label: qual.acronym};
+      return {value: qual.id, label: `${qual.acronym} - ${qual.title}`};
     });
   }
 
@@ -217,12 +220,11 @@ export class TrackerStore {
   @action.bound
   setSelectedAirman(airman: AirmanModel) {
     this._selectedAirman = airman;
-
-    const week = airman.isEmpty ? this.plannerStore.plannerWeek : this.plannerStore.sidePanelWeek;
-    this.plannerStore.setSidePanelWeek(week);
-
-    this.currencyStore.clearSelectedSkill();
-    this.currencyStore.setShowSkillForm(false);
+    this.plannerStore.setSidePanelWeek(
+      airman.isEmpty ?
+        this.plannerStore.plannerWeek :
+        this.plannerStore.sidePanelWeek
+    );
   }
 
   @action.bound
@@ -274,20 +276,23 @@ export class TrackerStore {
   }
 
   @action.bound
-  async addAirmanSkill(skill: Skill) {
-    try {
-      await this.airmanRepository.saveSkill(skill);
-      await this.refreshAirmen(skill);
-    } catch (e) {
-      this.currencyStore.setErrors(e);
-    }
+  async addSkill(skill: Skill) {
+      try {
+        await this.airmanRepository.saveSkill(skill);
+        await this.refreshAirmen(skill);
+      } catch (e) {
+        this.currencyStore.setFormErrors(e);
+      }
   }
 
   @action.bound
-  async deleteAirmanSkill(skill: Skill) {
-    await this.airmanRepository.deleteSkill(skill);
-    this._airmen = await this.airmanRepository.findAll();
-    this._selectedAirman = this._airmen.find(a => a.id === skill.airmanId)!;
+  async removeSkill(skill: Skill) {
+    try {
+      await this.airmanRepository.deleteSkill(skill);
+      await this.refreshAirmen(skill);
+    } catch (e) {
+      this.currencyStore.setFormErrors(e);
+    }
   }
 
   private async refreshAirmen(item: { airmanId: number }) {

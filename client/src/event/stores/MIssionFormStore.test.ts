@@ -23,7 +23,7 @@ describe('MissionFormStore', () => {
   describe('open', () => {
     it('should have an empty state', () => {
       subject.open();
-      expect(subject.hasEvent).toBeFalsy();
+      expect(subject.hasItem).toBeFalsy();
       expect(subject.state.missionId).toBe('');
       expect(subject.state.startDate).toBe('');
       expect(subject.state.startTime).toBe('');
@@ -34,7 +34,7 @@ describe('MissionFormStore', () => {
 
     it('should set the state with the given event', () => {
       subject.open(event);
-      expect(subject.hasEvent).toBeTruthy();
+      expect(subject.hasItem).toBeTruthy();
       expect(subject.state.missionId).toBe(event.title);
       expect(subject.state.startDate).toBe(event.startTime.format('YYYY-MM-DD'));
       expect(subject.state.startTime).toBe(event.startTime.format('HHmm'));
@@ -47,7 +47,7 @@ describe('MissionFormStore', () => {
   describe('close', () => {
     it('should clear the state', () => {
       subject.open(event);
-      expect(subject.hasEvent).toBeTruthy();
+      expect(subject.hasItem).toBeTruthy();
 
       subject.close();
       expect(subject.state.missionId).toBe('');
@@ -56,15 +56,21 @@ describe('MissionFormStore', () => {
       expect(subject.state.endDate).toBe('');
       expect(subject.state.endTime).toBe('');
       expect(subject.errors.length).toBe(0);
-      expect(subject.hasEvent).toBeFalsy();
+      expect(subject.hasItem).toBeFalsy();
     });
   });
 
   it('can add an event', () => {
     const selectedMission = MissionModelFactory.build();
-    subject.setState(selectedMission);
+    subject.setState({
+      missionId: selectedMission.missionId,
+      startDate: selectedMission.startDateTime.format('YYYY-MM-DD'),
+      startTime: selectedMission.startDateTime.format('HHmm'),
+      endDate: selectedMission.endDateTime ? selectedMission.endDateTime.format('YYYY-MM-DD') : '',
+      endTime: selectedMission.endDateTime ? selectedMission.endDateTime.format('HHmm') : ''
+    });
 
-    subject.addMission(airmanId);
+    subject.addItem(airmanId);
 
     const expectedEvent = new EventModel(
       selectedMission.missionId,
@@ -85,7 +91,13 @@ describe('MissionFormStore', () => {
 
   it('can clear the state', () => {
     const selectedMission = MissionModelFactory.build();
-    subject.setState(selectedMission);
+    subject.setState({
+      missionId: selectedMission.missionId,
+      startDate: selectedMission.startDateTime.format('YYYY-MM-DD'),
+      startTime: selectedMission.startDateTime.format('HHmm'),
+      endDate: selectedMission.endDateTime ? selectedMission.endDateTime.format('YYYY-MM-DD') : '',
+      endTime: selectedMission.endDateTime ? selectedMission.endDateTime.format('HHmm') : ''
+    });
     expect(subject.state.missionId).toBe(selectedMission.missionId);
     expect(subject.state.startDate).toBe(selectedMission.startDateTime.format('YYYY-MM-DD'));
     expect(subject.state.startTime).toBe(selectedMission.startDateTime.format('HHmm'));
@@ -93,21 +105,20 @@ describe('MissionFormStore', () => {
     expect(subject.state.endTime).toBe(selectedMission.endDateTime!.format('HHmm'));
     expect(subject.errors.length).toBe(0);
 
-
-    subject.setState(null);
+    subject.clearState();
     expect(subject.state.missionId).toBe('');
     expect(subject.state.startDate).toBe('');
     expect(subject.state.startTime).toBe('');
     expect(subject.state.endDate).toBe('');
     expect(subject.state.endTime).toBe('');
     expect(subject.errors.length).toBe(0);
-    expect(subject.hasEvent).toBeFalsy();
+    expect(subject.hasItem).toBeFalsy();
   });
 
   it('can remove an event', () => {
     subject.open(event);
 
-    subject.removeMission();
+    subject.removeItem();
 
     expect(eventActions.removeEvent).toHaveBeenCalledWith(event);
   });

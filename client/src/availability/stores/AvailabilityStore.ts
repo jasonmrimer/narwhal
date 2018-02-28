@@ -1,8 +1,8 @@
 import { EventModel, EventType } from '../../event/models/EventModel';
 import { action, computed, observable } from 'mobx';
-import { AppointmentFormStore } from '../../event/stores/AppointmentFormStore';
 import { LeaveFormStore } from '../../event/stores/LeaveFormStore';
 import { MissionFormStore } from '../../event/stores/MissionFormStore';
+import { AppointmentFormStore } from '../../event/stores/AppointmentFormStore';
 
 export class AvailabilityStore {
   @observable private _shouldShowEventForm: boolean = false;
@@ -19,14 +19,14 @@ export class AvailabilityStore {
   }
 
   @computed
-  get hasEvent() {
+  get hasItem() {
     switch (this._eventFormType) {
       case EventType.Appointment:
-        return this.appointmentFormStore.hasEvent;
+        return this.appointmentFormStore.hasItem;
       case EventType.Leave:
-        return this.leaveFormStore.hasEvent;
+        return this.leaveFormStore.hasItem;
       case EventType.Mission:
-        return this.missionFormStore.hasEvent;
+        return this.missionFormStore.hasItem;
       default:
         return false;
     }

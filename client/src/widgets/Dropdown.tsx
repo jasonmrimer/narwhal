@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { FilterOption } from './models/FilterOptionModel';
 import { caret } from '../utils/StyleUtils';
 
+/*tslint:disable:no-any*/
 interface Props {
   name: string;
   options: FilterOption[];
@@ -25,7 +26,14 @@ export const Dropdown = (props: Props) => {
     >
       {
         props.options.map((opt, index) => {
-          return (<option key={index} value={opt.value}>{opt.label}</option>);
+          return (
+            <option
+              key={index}
+              value={opt.value}
+            >
+              {opt.label}
+            </option>
+          );
         })
       }
     </select>

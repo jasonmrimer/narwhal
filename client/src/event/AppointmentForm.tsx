@@ -1,6 +1,5 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { AppointmentFormStore } from './stores/AppointmentFormStore';
 import { observer } from 'mobx-react';
 import { StyledTextInput } from '../widgets/TextInput';
 import { StyledDatePicker } from '../widgets/DatePicker';
@@ -10,6 +9,7 @@ import { StyledFieldValidation } from '../widgets/FieldValidation';
 import { StyledButton } from '../widgets/Button';
 import { StyledForm, StyledFormRow } from '../widgets/Form';
 import { DeleteIcon } from '../icons/DeleteIcon';
+import { AppointmentFormStore } from './stores/AppointmentFormStore';
 
 interface Props {
   airmanId: number;
@@ -25,17 +25,17 @@ export class AppointmentForm extends React.Component<Props> {
   }
 
   handleDelete = () => {
-    this.props.appointmentFormStore.removeAppointment();
+    this.props.appointmentFormStore.removeItem();
   }
 
   /* tslint:disable:no-any*/
   handleSubmit = (e: any) => {
     e.preventDefault();
-    this.props.appointmentFormStore.addAppointment(this.props.airmanId);
+    this.props.appointmentFormStore.addItem(this.props.airmanId);
   }
 
   render() {
-    const {state, errors, hasEvent} = this.props.appointmentFormStore;
+    const {state, errors, hasItem} = this.props.appointmentFormStore;
     return (
       <StyledForm onSubmit={this.handleSubmit}>
         <StyledFieldValidation name="title" errors={errors}>
@@ -91,7 +91,7 @@ export class AppointmentForm extends React.Component<Props> {
         <StyledFormRow reversed={true}>
           <StyledSubmitButton text="CONFIRM"/>
           {
-            hasEvent &&
+            hasItem &&
             <StyledButton
               text="DELETE"
               onClick={this.handleDelete}

@@ -1,6 +1,6 @@
-import { action, computed, observable } from 'mobx';
+import { FormStore } from '../../widgets/stores/FormStore';
 import { EventModel, EventType } from '../models/EventModel';
-import * as moment from 'moment';
+import { action } from 'mobx';
 import { EventActions } from './EventActions';
 
 interface State {
@@ -12,13 +12,27 @@ interface State {
   endTime: string;
 }
 
-export class AppointmentFormStore {
-  @observable private event: EventModel | null = null;
-  @observable private _state: State;
-  @observable private _errors: object[] = [];
-
+export class AppointmentFormStore extends FormStore<EventModel, State> {
   constructor(private eventActions: EventActions) {
-    this._state = {
+    super();
+  }
+
+  protected itemToState(item: EventModel | null): State {
+    if (item == null) {
+      return this.emptyState();
+    }
+    return {
+      title: item.title,
+      description: item.description,
+      startDate: item.startTime.format('YYYY-MM-DD'),
+      startTime: item.startTime.format('HHmm'),
+      endDate: item.endTime.format('YYYY-MM-DD'),
+      endTime: item.endTime.format('HHmm')
+    };
+  }
+
+  protected emptyState(): State {
+    return {
       title: '',
       description: '',
       startDate: '',
@@ -29,59 +43,7 @@ export class AppointmentFormStore {
   }
 
   @action.bound
-  open(event: EventModel | null = null) {
-    this._errors = [];
-    this.event = event;
-    this._state = {
-      title: event ? event.title : '',
-      description: event ? event.description : '',
-      startDate: event ? event.startTime.format('YYYY-MM-DD') : '',
-      startTime: event ? event.startTime.format('HHmm') : '',
-      endDate: event ? event.endTime.format('YYYY-MM-DD') : '',
-      endTime: event ? event.endTime.format('HHmm') : '',
-    };
-  }
-
-  @action.bound
-  close() {
-    this._errors = [];
-    this.event = null;
-    this._state = {
-      title: '',
-      description: '',
-      startDate: '',
-      startTime: '',
-      endDate: '',
-      endTime: ''
-    };
-  }
-
-  @computed
-  get state() {
-    return this._state;
-  }
-
-  @action.bound
-  setState(state: Partial<State>) {
-    this._state = Object.assign({}, this._state, state);
-  }
-
-  @computed
-  get errors() {
-    return this._errors;
-  }
-
-  @action.bound
-  setErrors(errors: object[]) {
-    this._errors = errors;
-  }
-
-  @computed
-  get hasEvent() {
-    return this.event != null;
-  }
-
-  addAppointment(airmanId: number) {
+  addItem(airmanId: number): void {
     const event = new EventModel(
       this._state.title,
       this._state.description,
@@ -89,21 +51,15 @@ export class AppointmentFormStore {
       this.makeMoment(this._state.endDate, this._state.endTime),
       airmanId,
       EventType.Appointment,
-      this.event ? this.event.id : null
+      this.item ? this.item.id : null
     );
     this.eventActions.addEvent(event);
   }
 
-  removeAppointment() {
-    if (this.event != null) {
-      this.eventActions.removeEvent(this.event);
+  @action.bound
+  removeItem(): void {
+    if (this.item != null) {
+      this.eventActions.removeEvent(this.item);
     }
-  }
-
-  private makeMoment(date: string, time: string) {
-    if (date === '') {
-      return moment.invalid();
-    }
-    return moment(`${date} ${time}`, 'YYYY-MM-DD HHmm');
   }
 }

@@ -26,32 +26,36 @@ interface Props {
 
 @observer
 export class MissionForm extends React.Component<Props> {
-  handleChange = (option: FilterOption | null) => {
-    if (option == null) {
-      this.props.missionFormStore.setState(null);
-      return;
+  handleChange = (opt: FilterOption | null) => {
+    if (opt == null) {
+      return this.props.missionFormStore.clearState();
     }
 
-    const mission = this.props.missionStore.missions
-      .find(msn => msn.missionId === option.value);
+    const mission = this.props.missionStore.missions.find(msn => msn.missionId === opt.value);
     if (mission != null) {
-      this.props.missionFormStore.setState(mission);
+      this.props.missionFormStore.setState({
+        missionId: mission.missionId,
+        startDate: mission.startDateTime.format('YYYY-MM-DD'),
+        startTime: mission.startDateTime.format('HHmm'),
+        endDate: mission.endDateTime ? mission.endDateTime.format('YYYY-MM-DD') : '',
+        endTime: mission.endDateTime ? mission.endDateTime.format('HHmm') : ''
+      });
     }
   }
 
   handleDelete = () => {
-    this.props.missionFormStore.removeMission();
+    this.props.missionFormStore.removeItem();
   }
 
   /* tslint:disable:no-any*/
   handleSubmit = (e: any) => {
     e.preventDefault();
-    this.props.missionFormStore.addMission(this.props.airmanId);
+    this.props.missionFormStore.addItem(this.props.airmanId);
   }
 
   render() {
     const {missionOptions} = this.props.missionStore;
-    const {state, hasEvent, errors} = this.props.missionFormStore;
+    const {state, hasItem, errors} = this.props.missionFormStore;
     const selected = missionOptions.find(msn => msn.label === state.missionId);
 
     return (
@@ -60,7 +64,7 @@ export class MissionForm extends React.Component<Props> {
           <StyledFormRow>
             <StyledSingleTypeahead
               selected={selected}
-              disabled={hasEvent}
+              disabled={hasItem}
               options={missionOptions}
               onChange={this.handleChange}
               placeholder="Mission ID"
@@ -98,16 +102,16 @@ export class MissionForm extends React.Component<Props> {
           />
         </StyledFormRow>
 
-        <StyledFormRow reversed={!hasEvent}>
+        <StyledFormRow reversed={!hasItem}>
           {
-            hasEvent &&
+            hasItem &&
             <StyledButton
               text="DELETE"
               onClick={this.handleDelete}
               renderIcon={() => <DeleteIcon/>}
             />
           }
-          {!hasEvent && <StyledSubmitButton text="CONFIRM"/>}
+          {!hasItem && <StyledSubmitButton text="CONFIRM"/>}
         </StyledFormRow>
       </StyledForm>
     );
