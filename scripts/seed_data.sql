@@ -111,6 +111,22 @@ VALUES
 (38, 1, '2018-01-25', '2019-02-25'),
 (39, 2, '2018-01-25', '2019-03-25');
 
+INSERT INTO qualification VALUES
+  (1, 'QB', 'My Mission Supervisor'),
+  (2, 'WR', 'Multi Source Analyst'),
+  (3, 'RB', 'Mission Operations Commander'),
+  (4, 'CB', 'Imagery Mission Supervisor'),
+  (5, 'HB', 'Geospatial Reports Editor'),
+  (6, 'FB', 'Screener'),
+  (7, 'C', 'Geospatial Analyst'),
+  (8, 'TE', 'Ground Mission Supervisor'),
+  (9, 'K', 'Special Signals Operator'),
+  (10, 'SP', 'Cryptologic Mission Supervisor'),
+  (11, 'WB', 'Cryptologic Operator with Language'),
+  (12, 'JK', 'Cryptologic Operator W/O Language'),
+  (13, 'HT', 'Instructor'),
+  (14, 'XW', 'Evaluator');
+
 INSERT INTO join_airman_qualification
 (airman_id, qualification_id, earn_date, expiration_date)
 VALUES
