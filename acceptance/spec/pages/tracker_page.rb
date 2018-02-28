@@ -168,7 +168,7 @@ class TrackerPage
     crew_page = CrewPage.new(msn_assignment.msn_title)
     crew_page.assert_has_assigned_airmen('Spaceman', 'Keeter')
 
-    crew_page.fill_in_position
+    crew_page.fill_in_position_and_make_critical
   end
 
   private

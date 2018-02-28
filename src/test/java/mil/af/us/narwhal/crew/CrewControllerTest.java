@@ -85,6 +85,7 @@ public class CrewControllerTest {
   public void updateTest() throws JsonProcessingException {
     final List<CrewPosition> positions = crew.getCrewPositions();
     positions.get(0).setTitle("GOOBER");
+    positions.get(0).setCritical(true);
 
     final String json = objectMapper.writeValueAsString(positions);
 
@@ -100,7 +101,8 @@ public class CrewControllerTest {
       .put(CrewController.URI + "/" + crew.getId() + "/positions")
     .then()
       .statusCode(200)
-      .body("crewPositions[0].title", equalTo("GOOBER"));
+      .body("crewPositions[0].title", equalTo("GOOBER"))
+      .body("crewPositions[0].critical", equalTo(true));
    // @formatter:on
   }
 }

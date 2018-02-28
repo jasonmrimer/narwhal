@@ -15,11 +15,15 @@ class CrewPage
     airmen.each { |airman| expect(page).to have_content(airman) }
   end
 
-  def fill_in_position
-    page.first('input').set 'Chimichanga'
+  def fill_in_position_and_make_critical
+    page.first('input[name="title"]').set 'Chimichanga'
+    page.find('label[for="critical_0"]').click
     click_button 'SAVE'
+
     page.refresh
+
     expect(page).to have_selector('input[value="Chimichanga"]')
+    expect(page.find('#critical_0', visible: false)).to be_checked
   end
 
   def click(element)

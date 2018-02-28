@@ -1,26 +1,30 @@
 import { CrewStore } from './CrewStore';
 import { CrewRepositorySpy } from '../repositories/doubles/CrewRepositorySpy';
 import { CrewModelFactory } from '../factories/CrewModelFactory';
+import { CrewModel } from '../models/CrewModel';
 
 describe('CrewStore', () => {
-  it('retrieves a crew by ID', async () => {
-    const crew = CrewModelFactory.build();
+  let crew: CrewModel;
+  let subject: CrewStore;
 
-    const subject = new CrewStore(new CrewRepositorySpy(crew));
+  beforeEach(() => {
+    crew = CrewModelFactory.build();
+    subject = new CrewStore(new CrewRepositorySpy(crew));
+  });
+
+  it('retrieves a crew by ID', async () => {
     await subject.setCrewId(1);
     expect(subject.crew).toEqual(crew);
   });
 
-  it('sets the position title on a crew', () => {
-    const crew = CrewModelFactory.build();
-    const expected = 'chimichanga';
-
-    const subject = new CrewStore(new CrewRepositorySpy(crew));
-    subject.setCrewPositionTitle(1, expected);
-
+  it('sets the position attributes on a crew', () => {
+    const expectedTitle = 'chimichanga';
+    subject.setCrewPosition(1, {title: expectedTitle});
+    subject.setCrewPosition(1, {critical: true});
     if (subject.crew) {
       const crewPosition = subject.crew.crewPositions.find(position => position.id === 1)!;
-      expect(crewPosition.title).toBe(expected);
+      expect(crewPosition.title).toBe(expectedTitle);
+      expect(crewPosition.critical).toBeTruthy();
     }
   });
 });

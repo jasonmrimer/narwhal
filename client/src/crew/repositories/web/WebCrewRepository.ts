@@ -22,7 +22,7 @@ export class WebCrewRepository implements CrewRepository {
       `${this.baseUrl}/api/crews/${crew.id}/positions`,
       {
         method: 'PUT',
-        body: JSON.stringify(crew.crewPositions.map((pos) => ({id: pos.id, title: pos.title}))),
+        body: JSON.stringify(crew.crewPositions.map((pos) => ({id: pos.id, title: pos.title, critical: pos.critical}))),
         headers: [['Content-Type', 'application/json'], ['X-XSRF-TOKEN', this.csrfToken]],
         credentials: 'include',
       }

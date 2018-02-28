@@ -12,6 +12,7 @@ export class CrewPositionSerializer implements Serializer<CrewPositionModel> {
       item.id,
       item.airman,
       item.title,
+      item.critical,
     );
   }
 }

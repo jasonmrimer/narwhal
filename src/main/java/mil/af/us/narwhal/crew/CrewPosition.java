@@ -33,13 +33,14 @@ public class CrewPosition {
   private Airman airman;
 
   private String title;
+  private Boolean critical;
 
   public CrewPosition(Airman airman) {
     this.airman = airman;
   }
 
   public CrewPosition(Crew crew, Airman airman) {
-    this(null, crew, airman, "");
+    this(null, crew, airman, "", false);
   }
 
   @Override public String toString() {

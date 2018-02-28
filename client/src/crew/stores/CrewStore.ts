@@ -1,6 +1,7 @@
 import { action, computed, observable } from 'mobx';
 import { CrewModel } from '../models/CrewModel';
 import { CrewRepository } from '../repositories/CrewRepository';
+import { CrewPositionModel } from '../models/CrewPositionModel';
 
 export class CrewStore {
   @observable private _crew: CrewModel | null = null;
@@ -19,10 +20,11 @@ export class CrewStore {
   }
 
   @action.bound
-  setCrewPositionTitle(positionId: number, titleValue: string) {
+  setCrewPosition(positionId: number, property: Partial<CrewPositionModel>) {
     if (this._crew) {
-      const position = this._crew.crewPositions.find(pos => pos.id === positionId)!;
-      position.title = titleValue;
+      let position = this._crew.crewPositions.find(pos => pos.id === positionId)!;
+      Object.assign(position, property);
+
       this._crew = Object.assign({}, this._crew);
     }
   }

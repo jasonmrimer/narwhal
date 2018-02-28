@@ -29,6 +29,7 @@ public class CrewController {
       positions.forEach(p -> {
         if (p.getId().equals(position.getId())) {
           position.setTitle(p.getTitle());
+          position.setCritical(p.getCritical());
         }
       });
     });

@@ -44,13 +44,19 @@ describe('Crew', () => {
 
   it('renders an input for each crew member', () => {
     expect(subject.find(StyledTextInput).length).toBe(crewPositions.length);
-    expect(subject.find(StyledTextInput).at(0).prop('name')).toBe('position');
+    expect(subject.find(StyledTextInput).at(0).prop('name')).toBe('title');
   });
 
   it('sets the crew position title for each crew member', () => {
-    subject.find(StyledTextInput).at(0).simulate('change', {target: {value: 'chimichanga', id: 1}});
+    subject.find(StyledTextInput).at(0).simulate('change', {target: {value: 'chimichanga', id: 1, name: 'title'}});
     const position = crewStore.crew!.crewPositions.find(pos => pos.id === 1)!;
     expect(position.title).toBe('chimichanga');
+  });
+
+  it('sets the crew position as critical', () => {
+    subject.find('input[type="checkbox"]').at(0).simulate('change',  {target: {checked: true, id: 1, name: 'critical'}});
+    const position = crewStore.crew!.crewPositions.find(pos => pos.id === 1)!;
+    expect(position.critical).toBeTruthy();
   });
 
   it('was submitCrews submitted', () => {

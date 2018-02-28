@@ -1,0 +1,1 @@
+ALTER TABLE join_crew_airman ADD COLUMN critical BOOLEAN DEFAULT FALSE;
