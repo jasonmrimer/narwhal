@@ -23,13 +23,13 @@ export class SkillFormStore extends FormStore<Skill, State> {
     super.setState(state);
 
     let options: FilterOption[] = [];
-    if (state.skillType === SkillType.Qualification) {
+    if (state.skillType === SkillType.Qualification ) {
       options = this.skillActions.qualificationOptions;
     } else if (state.skillType === SkillType.Certification) {
       options = this.skillActions.certificationOptions;
     }
 
-    if (options.length > 0) {
+    if (state.skillId == null && options.length > 0) {
       this._state = Object.assign({}, this._state, {skillId: String(options[0].value)});
     }
   }

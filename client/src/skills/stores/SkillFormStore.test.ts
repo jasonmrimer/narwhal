@@ -22,11 +22,11 @@ describe('SkillFormStore', () => {
     skillActions = {
       addSkill: jest.fn(),
       removeSkill: jest.fn(),
-      certificationOptions: [
+      qualificationOptions: [
         {value: '1', label: 'A'},
         {value: '2', label: 'B'}
       ],
-      qualificationOptions: [
+      certificationOptions: [
         {value: '3', label: 'C'},
         {value: '4', label: 'D'}
       ]
@@ -36,10 +36,10 @@ describe('SkillFormStore', () => {
 
   it('should set the skillId when setting the skillType', () => {
     subject.setState({skillType: SkillType.Qualification});
-    expect(subject.state.skillId).toEqual('3');
+    expect(subject.state.skillId).toEqual('1');
 
     subject.setState({skillType: SkillType.Certification});
-    expect(subject.state.skillId).toEqual('1');
+    expect(subject.state.skillId).toEqual('3');
   });
 
   describe('open', () => {
@@ -47,7 +47,7 @@ describe('SkillFormStore', () => {
       subject.open();
       expect(subject.hasItem).toBeFalsy();
       expect(subject.state.skillType).toBe(SkillType.Qualification);
-      expect(subject.state.skillId).toBe('');
+      expect(subject.state.skillId).toBe('1');
       expect(subject.state.earnDate).toBe('');
       expect(subject.state.expirationDate).toBe('');
       expect(subject.errors.length).toBe(0);
@@ -71,7 +71,7 @@ describe('SkillFormStore', () => {
 
       subject.close();
       expect(subject.state.skillType).toBe(SkillType.Qualification);
-      expect(subject.state.skillId).toBe('');
+      expect(subject.state.skillId).toBe('1');
       expect(subject.state.earnDate).toBe('');
       expect(subject.state.expirationDate).toBe('');
       expect(subject.errors.length).toBe(0);
