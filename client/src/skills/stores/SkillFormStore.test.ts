@@ -22,10 +22,24 @@ describe('SkillFormStore', () => {
     skillActions = {
       addSkill: jest.fn(),
       removeSkill: jest.fn(),
-      certificationOptions: [],
-      qualificationOptions: []
+      certificationOptions: [
+        {value: '1', label: 'A'},
+        {value: '2', label: 'B'}
+      ],
+      qualificationOptions: [
+        {value: '3', label: 'C'},
+        {value: '4', label: 'D'}
+      ]
     };
     subject = new SkillFormStore(skillActions);
+  });
+
+  it('should set the skillId when setting the skillType', () => {
+    subject.setState({skillType: SkillType.Qualification});
+    expect(subject.state.skillId).toEqual('3');
+
+    subject.setState({skillType: SkillType.Certification});
+    expect(subject.state.skillId).toEqual('1');
   });
 
   describe('open', () => {

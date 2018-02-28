@@ -3,6 +3,8 @@ import { Skill } from '../models/Skill';
 import * as moment from 'moment';
 import { SkillType } from '../models/SkillType';
 import { SkillActions } from './SkillActions';
+import { FilterOption } from '../../widgets/models/FilterOptionModel';
+import { action } from 'mobx';
 
 interface State {
   skillType: string;
@@ -14,6 +16,22 @@ interface State {
 export class SkillFormStore extends FormStore<Skill, State> {
   constructor(private skillActions: SkillActions) {
     super();
+  }
+
+  @action
+  setState(state: Partial<State>) {
+    super.setState(state);
+
+    let options: FilterOption[] = [];
+    if (state.skillType === SkillType.Qualification) {
+      options = this.skillActions.qualificationOptions;
+    } else if (state.skillType === SkillType.Certification) {
+      options = this.skillActions.certificationOptions;
+    }
+
+    if (options.length > 0) {
+      this._state = Object.assign({}, this._state, {skillId: String(options[0].value)});
+    }
   }
 
   protected itemToState(item: Skill | null): State {

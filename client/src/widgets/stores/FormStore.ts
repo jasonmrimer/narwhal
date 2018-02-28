@@ -18,14 +18,14 @@ export abstract class FormStore<T, S> {
 
   public abstract removeItem(): void;
 
-  @action.bound
+  @action
   open(item: T | null = null) {
     this._errors = [];
     this.item = item;
     this._state = this.itemToState(item);
   }
 
-  @action.bound
+  @action
   close() {
     this._errors = [];
     this.item = null;
@@ -37,7 +37,7 @@ export abstract class FormStore<T, S> {
     return this._state;
   }
 
-  @action.bound
+  @action
   setState(state: Partial<S>) {
     this._state = Object.assign({}, this._state, state);
   }
@@ -47,7 +47,7 @@ export abstract class FormStore<T, S> {
     return this._errors;
   }
 
-  @action.bound
+  @action
   setErrors(errors: object[]) {
     this._errors = errors;
   }
