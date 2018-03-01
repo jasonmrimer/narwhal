@@ -11,7 +11,9 @@ export class MissionStore {
     this.missionRepository = missionRepository;
   }
 
-  async hydrate() { this._missions = await this.missionRepository.findAll(); }
+  async hydrate() {
+    this._missions = await this.missionRepository.findAll();
+  }
 
   @computed
   get missions() {

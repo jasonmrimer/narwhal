@@ -75,12 +75,20 @@ export class TrackerStore {
   }
 
   async hydrate(siteId: number = UnfilteredValue) {
-    this._siteId = siteId;
-    this._airmen = await this.airmanRepository.findAll();
-    this._sites = await this.siteRepository.findAll();
-    this._certifications = await this.skillRepository.findAllCertifications();
-    this._qualifications = await this.skillRepository.findAllQualifications();
-    this.missionStore.hydrate();
+    const results = await Promise.all([
+      this.siteRepository.findAll(),
+      this.airmanRepository.findAll(),
+      this.skillRepository.findAllCertifications(),
+      this.skillRepository.findAllQualifications(),
+      this.missionStore.hydrate()
+    ]);
+
+    this._sites = results[0];
+    this._airmen = results[1];
+    this._certifications = results[2];
+    this._qualifications = results[3];
+
+    this.setSiteId(siteId);
   }
 
   @computed
@@ -113,7 +121,17 @@ export class TrackerStore {
   @action.bound
   setSiteId(id: number) {
     this._siteId = id;
-    this.setSquadronId(UnfilteredValue);
+
+    const site = this._sites.find(s => s.id === this._siteId);
+    if (site == null) {
+      return;
+    }
+
+    if (site.squadrons.length === 1) {
+      this.setSquadronId(site.squadrons[0].id);
+    } else {
+      this.setSquadronId(UnfilteredValue);
+    }
   }
 
   @computed
@@ -283,12 +301,12 @@ export class TrackerStore {
 
   @action.bound
   async addSkill(skill: Skill) {
-      try {
-        await this.airmanRepository.saveSkill(skill);
-        await this.refreshAirmen(skill);
-      } catch (e) {
-        this.currencyStore.setFormErrors(e);
-      }
+    try {
+      await this.airmanRepository.saveSkill(skill);
+      await this.refreshAirmen(skill);
+    } catch (e) {
+      this.currencyStore.setFormErrors(e);
+    }
   }
 
   @action.bound

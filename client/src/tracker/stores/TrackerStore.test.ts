@@ -42,7 +42,8 @@ describe('TrackerStore', () => {
   it('returns a list of site options', () => {
     expect(subject.siteOptions).toEqual([
       {value: 1, label: 'DMS-GA'},
-      {value: 2, label: 'DMS-MD'}
+      {value: 2, label: 'DMS-MD'},
+      {value: 3, label: 'DMS-HI'}
     ]);
   });
 
@@ -85,11 +86,8 @@ describe('TrackerStore', () => {
   });
 
   describe('filtering by site', () => {
-    beforeEach(() => {
-      subject.setSiteId(1);
-    });
-
     it('returns airmen for the site', () => {
+      subject.setSiteId(1);
       const filteredAirmen = subject.airmen;
       expect(filteredAirmen.length).toBeLessThan(allAirmen.length);
       expect(filteredAirmen.map(airman => airman.flightId)
@@ -97,6 +95,7 @@ describe('TrackerStore', () => {
     });
 
     it('returns a list of squadron options for the site', () => {
+      subject.setSiteId(1);
       expect(subject.squadronOptions).toEqual([
         {value: 1, label: 'Squad 1'},
         {value: 2, label: 'Squad 2'}
@@ -104,11 +103,24 @@ describe('TrackerStore', () => {
     });
 
     it('resets squadron and flight', () => {
+      subject.setSiteId(1);
       subject.setSquadronId(2);
       subject.setFlightId(1);
       subject.setSiteId(2);
       expect(subject.squadronId).toBe(UnfilteredValue);
       expect(subject.flightId).toBe(UnfilteredValue);
+    });
+
+    describe('when a site only has one squadron', () => {
+      it('sets the squadron id on selection', () => {
+        subject.setSiteId(3);
+        expect(subject.squadronId).toBe(5);
+      });
+
+      it('sets the squadron id on hydration', async () => {
+        await subject.hydrate(3);
+        expect(subject.squadronId).toBe(5);
+      });
     });
   });
 

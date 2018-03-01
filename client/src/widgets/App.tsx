@@ -18,7 +18,6 @@ interface Props {
   trackerStore: TrackerStore;
   crewStore: CrewStore;
   profileStore: ProfileSitePickerStore;
-
 }
 
 @observer
@@ -32,7 +31,7 @@ export class App extends React.Component<Props> {
       <div>
         <StyledClassificationBanner/>
         <StyledAuthorizationBanner/>
-        <main style={{marginTop: '8rem'}}>
+        <div style={{marginTop: '8rem'}}>
           {
             this.props.profileStore.profile != null &&
             (
@@ -41,7 +40,7 @@ export class App extends React.Component<Props> {
                 <StyledProfileSitePicker profileStore={this.props.profileStore}/>
             )
           }
-        </main>
+        </div>
       </div>
     );
   }

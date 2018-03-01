@@ -23,6 +23,11 @@ const sites = [
       new FlightModel(7, 'Flight 7'),
       new FlightModel(8, 'Flight 8')
     ])
+  ]),
+  new SiteModel(3, 'DMS-HI', [
+    new SquadronModel(5, 'Squad 5', [
+      new FlightModel(9, 'Flight 9')
+    ])
   ])
 ];
 

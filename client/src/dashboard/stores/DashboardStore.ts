@@ -6,22 +6,27 @@ import { SiteModel } from '../../site/models/SiteModel';
 import { UnfilteredValue } from '../../widgets/models/FilterOptionModel';
 
 export class DashboardStore {
-  private missionRepository: MissionRepository;
   private siteRepository: SiteRepository;
+  private missionRepository: MissionRepository;
 
-  @observable private _missions: MissionModel[] = [];
   @observable private _sites: SiteModel[] = [];
+  @observable private _missions: MissionModel[] = [];
 
   @observable private _siteId: number = UnfilteredValue;
 
-  constructor(missionRepository: MissionRepository, siteRepository: SiteRepository) {
-    this.missionRepository = missionRepository;
+  constructor(siteRepository: SiteRepository, missionRepository: MissionRepository) {
     this.siteRepository = siteRepository;
+    this.missionRepository = missionRepository;
   }
 
   async hydrate() {
-    this._missions = await this.missionRepository.findAll();
-    this._sites = await this.siteRepository.findAll();
+    const results = await Promise.all([
+      this.siteRepository.findAll(),
+      this.missionRepository.findAll()
+    ]);
+
+    this._sites = results[0];
+    this._missions = results[1];
   }
 
   @computed

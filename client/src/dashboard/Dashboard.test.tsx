@@ -18,8 +18,8 @@ describe('Dashboard', () => {
     missions = await missionRepositoryStub.findAll();
 
     const dashboardStore = new DashboardStore(
-      new MissionRepositoryStub(),
-      new SiteRepositoryStub()
+      new SiteRepositoryStub(),
+      new MissionRepositoryStub()
     );
 
     subject = mount(

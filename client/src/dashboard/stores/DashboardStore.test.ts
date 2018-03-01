@@ -12,7 +12,7 @@ describe('DashboardStore', () => {
 
   beforeEach(async () => {
     allMissions = await missionRepository.findAll();
-    subject = new DashboardStore(missionRepository, siteRepository);
+    subject = new DashboardStore(siteRepository, missionRepository);
     await subject.hydrate();
   });
 
@@ -23,7 +23,8 @@ describe('DashboardStore', () => {
   it('returns a list of site options', () => {
     expect(subject.siteOptions).toEqual([
       {value: 1, label: 'DMS-GA'},
-      {value: 2, label: 'DMS-MD'}
+      {value: 2, label: 'DMS-MD'},
+      {value: 3, label: 'DMS-HI'}
     ]);
   });
 

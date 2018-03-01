@@ -29,8 +29,8 @@ document.body.style.backgroundColor = Theme.dark;
 
 const webSiteRepository = new WebSiteRepository();
 const dashboardStore = new DashboardStore(
-  new WebMissionRepository(),
-  webSiteRepository
+  webSiteRepository,
+  new WebMissionRepository()
 );
 
 const trackerStore = new TrackerStore(

@@ -19,7 +19,7 @@ import { ProfileModel } from '../profile/models/ProfileModel';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 
 const siteRepository = new SiteRepositoryStub();
-const dashboardStore = new DashboardStore(new MissionRepositoryStub(), siteRepository);
+const dashboardStore = new DashboardStore(siteRepository, new MissionRepositoryStub());
 const crewStore = new CrewStore(new CrewRepositorySpy(CrewModelFactory.build()));
 
 let subject: ShallowWrapper;
