@@ -56,15 +56,21 @@ export class TrackerStore {
     this.siteRepository = siteRepository;
     this.skillRepository = skillRepository;
     this.eventRepository = eventRepository;
+
+    const missionStore = new MissionStore(missionRepository);
+
     this.currencyStore = new CurrencyStore(
       new SkillFormStore(this)
     );
+
     this.availabilityStore = new AvailabilityStore(
       new AppointmentFormStore(this),
       new LeaveFormStore(this),
-      new MissionFormStore(this)
+      new MissionFormStore(this, missionStore)
     );
-    this.missionStore = new MissionStore(missionRepository);
+
+    this.missionStore = missionStore;
+
     this.plannerStore = new PlannerStore(timeService);
   }
 

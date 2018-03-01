@@ -28,18 +28,9 @@ interface Props {
 export class MissionForm extends React.Component<Props> {
   handleChange = (opt: FilterOption | null) => {
     if (opt == null) {
-      return this.props.missionFormStore.clearState();
-    }
-
-    const mission = this.props.missionStore.missions.find(msn => msn.missionId === opt.value);
-    if (mission != null) {
-      this.props.missionFormStore.setState({
-        missionId: mission.missionId,
-        startDate: mission.startDateTime.format('YYYY-MM-DD'),
-        startTime: mission.startDateTime.format('HHmm'),
-        endDate: mission.endDateTime ? mission.endDateTime.format('YYYY-MM-DD') : '',
-        endTime: mission.endDateTime ? mission.endDateTime.format('HHmm') : ''
-      });
+      this.props.missionFormStore.setState({missionId: ''});
+    } else {
+      this.props.missionFormStore.setState({missionId: String(opt.value)});
     }
   }
 

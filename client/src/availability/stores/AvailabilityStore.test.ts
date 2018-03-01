@@ -5,6 +5,8 @@ import { EventModel, EventType } from '../../event/models/EventModel';
 import { EventModelFactory } from '../../event/factories/EventModelFactory';
 import { MissionFormStore } from '../../event/stores/MissionFormStore';
 import { AppointmentFormStore } from '../../event/stores/AppointmentFormStore';
+import { MissionRepositoryStub } from '../../mission/repositories/doubles/MissionRepositoryStub';
+import { MissionStore } from '../../mission/stores/MissionStore';
 
 describe('AvailabilityStore', () => {
   let eventActions: EventActions;
@@ -18,7 +20,7 @@ describe('AvailabilityStore', () => {
     subject = new AvailabilityStore(
       new AppointmentFormStore(eventActions),
       new LeaveFormStore(eventActions),
-      new MissionFormStore(eventActions)
+      new MissionFormStore(eventActions, new MissionStore(new MissionRepositoryStub()))
     );
   });
 

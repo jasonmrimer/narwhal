@@ -2,6 +2,7 @@ import { EventModel, EventType } from '../models/EventModel';
 import { FormStore } from '../../widgets/stores/FormStore';
 import { EventActions } from './EventActions';
 import { action } from 'mobx';
+import { MissionStore } from '../../mission/stores/MissionStore';
 
 interface State {
   missionId: string;
@@ -12,8 +13,27 @@ interface State {
 }
 
 export class MissionFormStore extends FormStore<EventModel, State> {
-  constructor(private eventActions: EventActions) {
+  constructor(private eventActions: EventActions,
+              private missionStore: MissionStore) {
     super();
+  }
+
+  @action
+  setState(state: Partial<State>) {
+    if (state.missionId === '') {
+      this._state = this.emptyState();
+    } else {
+      const mission = this.missionStore.missions.find(msn => msn.missionId === state.missionId);
+      if (mission != null) {
+        this._state = {
+          missionId: mission.missionId,
+          startDate: mission.startDateTime.format('YYYY-MM-DD'),
+          startTime: mission.startDateTime.format('HHmm'),
+          endDate: mission.endDateTime ? mission.endDateTime.format('YYYY-MM-DD') : '',
+          endTime: mission.endDateTime ? mission.endDateTime.format('HHmm') : ''
+        };
+      }
+    }
   }
 
   protected itemToState(item: EventModel | null): State {
@@ -37,11 +57,6 @@ export class MissionFormStore extends FormStore<EventModel, State> {
       endDate: '',
       endTime: ''
     };
-  }
-
-  @action.bound
-  clearState() {
-    this._state = this.emptyState();
   }
 
   addItem(airmanId: number): void {

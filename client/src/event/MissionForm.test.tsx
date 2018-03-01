@@ -27,11 +27,12 @@ describe('MissionForm', () => {
       addEvent: jest.fn(),
       removeEvent: jest.fn()
     };
-    missionFormStore = new MissionFormStore(eventActions);
 
     missionStore = new MissionStore(new MissionRepositoryStub());
     await missionStore.hydrate();
     mission = missionStore.missions[0];
+
+    missionFormStore = new MissionFormStore(eventActions, missionStore);
 
     wrapper = shallow(
       <MissionForm

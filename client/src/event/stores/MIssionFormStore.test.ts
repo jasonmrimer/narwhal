@@ -2,22 +2,29 @@ import { EventActions } from './EventActions';
 import { EventModel, EventType } from '../models/EventModel';
 import { EventModelFactory } from '../factories/EventModelFactory';
 import { MissionFormStore } from './MissionFormStore';
-import { MissionModelFactory } from '../../mission/factories/MissionModelFactory';
+import { MissionRepositoryStub } from '../../mission/repositories/doubles/MissionRepositoryStub';
+import { MissionStore } from '../../mission/stores/MissionStore';
 
 describe('MissionFormStore', () => {
   const airmanId = 123;
   let eventActions: EventActions;
+  let missionStore: MissionStore;
   let subject: MissionFormStore;
   let event: EventModel;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     event = EventModelFactory.build();
     event.type = EventType.Mission;
+
     eventActions = {
       addEvent: jest.fn(),
       removeEvent: jest.fn()
     };
-    subject = new MissionFormStore(eventActions);
+
+    missionStore = new MissionStore(new MissionRepositoryStub());
+    await missionStore.hydrate();
+
+    subject = new MissionFormStore(eventActions, missionStore);
   });
 
   describe('open', () => {
@@ -61,14 +68,8 @@ describe('MissionFormStore', () => {
   });
 
   it('can add an event', () => {
-    const selectedMission = MissionModelFactory.build();
-    subject.setState({
-      missionId: selectedMission.missionId,
-      startDate: selectedMission.startDateTime.format('YYYY-MM-DD'),
-      startTime: selectedMission.startDateTime.format('HHmm'),
-      endDate: selectedMission.endDateTime ? selectedMission.endDateTime.format('YYYY-MM-DD') : '',
-      endTime: selectedMission.endDateTime ? selectedMission.endDateTime.format('HHmm') : ''
-    });
+    const selectedMission = missionStore.missions[0];
+    subject.setState({missionId: selectedMission.missionId});
 
     subject.addItem(airmanId);
 
@@ -90,14 +91,8 @@ describe('MissionFormStore', () => {
   });
 
   it('can clear the state', () => {
-    const selectedMission = MissionModelFactory.build();
-    subject.setState({
-      missionId: selectedMission.missionId,
-      startDate: selectedMission.startDateTime.format('YYYY-MM-DD'),
-      startTime: selectedMission.startDateTime.format('HHmm'),
-      endDate: selectedMission.endDateTime ? selectedMission.endDateTime.format('YYYY-MM-DD') : '',
-      endTime: selectedMission.endDateTime ? selectedMission.endDateTime.format('HHmm') : ''
-    });
+    const selectedMission = missionStore.missions[0];
+    subject.setState({missionId: selectedMission.missionId,});
     expect(subject.state.missionId).toBe(selectedMission.missionId);
     expect(subject.state.startDate).toBe(selectedMission.startDateTime.format('YYYY-MM-DD'));
     expect(subject.state.startTime).toBe(selectedMission.startDateTime.format('HHmm'));
@@ -105,7 +100,7 @@ describe('MissionFormStore', () => {
     expect(subject.state.endTime).toBe(selectedMission.endDateTime!.format('HHmm'));
     expect(subject.errors.length).toBe(0);
 
-    subject.clearState();
+    subject.setState({missionId: ''});
     expect(subject.state.missionId).toBe('');
     expect(subject.state.startDate).toBe('');
     expect(subject.state.startTime).toBe('');
