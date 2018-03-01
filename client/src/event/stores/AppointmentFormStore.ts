@@ -2,6 +2,7 @@ import { FormStore } from '../../widgets/stores/FormStore';
 import { EventModel, EventType } from '../models/EventModel';
 import { action } from 'mobx';
 import { EventActions } from './EventActions';
+import * as moment from 'moment'
 
 interface State {
   title: string;
@@ -15,6 +16,21 @@ interface State {
 export class AppointmentFormStore extends FormStore<EventModel, State> {
   constructor(private eventActions: EventActions) {
     super();
+  }
+
+  @action
+  setState(state: Partial<State>) {
+    if (state.startDate && !this._state.endDate) {
+      state.endDate = state.endDate || state.startDate;
+    }
+
+    if (state.startTime && !this._state.endTime) {
+      if (state.startTime.length === 4) {
+        state.endTime = state.endTime || moment(state.startTime, 'HHmm').add(1, 'h').format('HHmm');
+      }
+    }
+
+    super.setState(state);
   }
 
   protected itemToState(item: EventModel | null): State {

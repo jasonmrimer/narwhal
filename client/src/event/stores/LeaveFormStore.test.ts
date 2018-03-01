@@ -103,4 +103,15 @@ describe('LeaveFormStore', () => {
 
     expect(eventActions.removeEvent).toHaveBeenCalledWith(event);
   });
+
+  it('should auto-populate empty end data field when setting start date', () => {
+    subject.setState({startDate: '2018-02-22'});
+    expect(subject.state.endDate).toEqual('2018-02-22');
+  });
+
+  it('should keep the end date when modifying the start date', () => {
+    subject.setState({startDate: '2018-02-22', endDate: '2018-02-23'});
+    subject.setState({startDate: '2018-02-25'});
+    expect(subject.state.endDate).toEqual('2018-02-23');
+  });
 });

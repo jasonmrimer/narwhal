@@ -1,6 +1,7 @@
 import { EventModel, EventType } from '../models/EventModel';
 import { EventActions } from './EventActions';
 import { FormStore } from '../../widgets/stores/FormStore';
+import { action } from 'mobx';
 
 interface State {
   description: string;
@@ -13,6 +14,15 @@ interface State {
 export class LeaveFormStore extends FormStore<EventModel, State> {
   constructor(private eventActions: EventActions) {
     super();
+  }
+
+  @action
+  setState(state: Partial<State>): void {
+    if (state.startDate && !this._state.endDate) {
+      state.endDate = state.endDate || state.startDate;
+    }
+
+    super.setState(state);
   }
 
   protected itemToState(item: EventModel | null): State {

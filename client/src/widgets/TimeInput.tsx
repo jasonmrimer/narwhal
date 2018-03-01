@@ -4,7 +4,8 @@ import styled from 'styled-components';
 /* tslint:disable:no-any*/
 interface Props {
   value: string;
-  onChange: (e: any) => void;
+  onChange?: (e: any) => void;
+  onBlur?: (e: any) => void;
   name: string;
   className?: string;
   disabled?: boolean;
@@ -19,6 +20,7 @@ export const TimeInput = (props: Props) => {
       value={props.value}
       name={props.name}
       onChange={props.onChange}
+      onBlur={props.onBlur}
       disabled={props.disabled}
     />
 

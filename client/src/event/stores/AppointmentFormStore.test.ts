@@ -108,4 +108,34 @@ describe('AppointmenFormStore', () => {
 
     expect(eventActions.removeEvent).toHaveBeenCalledWith(event);
   });
+
+
+  describe('auto-populating date and time fields', () => {
+    it('should auto-populate empty end data field when setting start date', () => {
+      subject.setState({startDate: '2018-02-22'});
+      expect(subject.state.endDate).toEqual('2018-02-22');
+    });
+
+    it('should auto-populate empty end time field when setting start time', () => {
+      subject.setState({startTime: '0800'});
+      expect(subject.state.endTime).toEqual('0900');
+    });
+
+    it('should not populate the end time if the start time is incomplete', () => {
+      subject.setState({startTime: '08'});
+      expect(subject.state.endTime).toEqual('');
+    });
+
+    it('should keep the end date when modifying the start date', () => {
+      subject.setState({startDate: '2018-02-22', endDate: '2018-02-23'});
+      subject.setState({startDate: '2018-02-25'});
+      expect(subject.state.endDate).toEqual('2018-02-23');
+    });
+
+    it('should keep the end time when modifying the start time', () => {
+      subject.setState({startTime: '0800', endTime: '0900'});
+      subject.setState({startTime: '1000'});
+      expect(subject.state.endTime).toEqual('0900');
+    });
+  });
 });
