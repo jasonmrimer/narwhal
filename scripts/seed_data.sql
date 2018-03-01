@@ -43,9 +43,9 @@ INSERT INTO airman VALUES
 
 
 INSERT INTO certification VALUES
-(1, 'Laser Vision'),
-(2, 'X-Ray Vision'),
-(3, 'Super Speed');
+(1, 'Laser Vision', 14),
+(2, 'X-Ray Vision', 14),
+(3, 'Super Speed', 14);
 
 
 INSERT INTO join_airman_certification

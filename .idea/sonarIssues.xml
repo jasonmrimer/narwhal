@@ -18,6 +18,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$APPLICATION_CONFIG_DIR$/consoles/db/4d975c86-65f7-4c43-beb7-829411efc035/console.sql">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$APPLICATION_CONFIG_DIR$/consoles/db/724c8c86-da39-40ec-8e37-d03f2ed20a12/console.sql">
           <value>
             <set />
@@ -758,6 +763,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/resources/db/migration/V10__Add_site_to_certification.sql">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/resources/db/migration/V11__Create_and_populate_flight.sql">
           <value>
             <set />
@@ -829,6 +839,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/resources/db/migration/V8__Create_and_populate_site.sql">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/resources/db/migration/V9__Add_critical_to_crew_position.sql">
           <value>
             <set />
           </value>
@@ -949,6 +964,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/test/java/mil/af/us/narwhal/upload/UploadControllerTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/test/java/mil/af/us/narwhal/upload/certification/CertificationUploadServiceTest.java">
           <value>
             <set />
           </value>

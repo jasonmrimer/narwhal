@@ -75,7 +75,7 @@ public class AirmanControllerTest {
     qualification1 = new Qualification("Q1", "qualification1");
     qualificationRepository.save(qualification1);
 
-    certification1 = new Certification("certification1");
+    certification1 = new Certification("certification1", site);
     certificationRepository.save(certification1);
   }
 

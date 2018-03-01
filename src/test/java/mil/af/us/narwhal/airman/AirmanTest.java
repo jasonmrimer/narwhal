@@ -1,17 +1,23 @@
 package mil.af.us.narwhal.airman;
 
+import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.skills.Certification;
 import mil.af.us.narwhal.skills.Qualification;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.Instant;
-import java.util.Date;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@RunWith(MockitoJUnitRunner.class)
 public class AirmanTest {
+  @Mock private Site site;
+
   @Test
-  public void addQualification_doesNotDuplicateQuals() throws Exception {
+  public void addQualification_doesNotDuplicateQuals() {
     final Qualification qualification = new Qualification(1L, "A", "A");
     final AirmanQualification airmanQualification = new AirmanQualification(qualification, Instant.now(), Instant.now());
     final Airman airman = new Airman();
@@ -24,8 +30,8 @@ public class AirmanTest {
   }
 
   @Test
-  public void addCertification_doesNotDuplicateCerts() throws Exception {
-    final Certification certification = new Certification(1L, "A");
+  public void addCertification_doesNotDuplicateCerts() {
+    final Certification certification = new Certification(1L, "A", site);
     final AirmanCertification airmanCertification = new AirmanCertification(certification, Instant.now(), Instant.now());
     final Airman airman = new Airman();
 

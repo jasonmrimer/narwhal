@@ -3,6 +3,7 @@
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/scripts/seed_data.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/scripts/truncate_data.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V10__Add_site_to_certification.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V1__Create_baseline_db_schema.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V2__Add_primary_key_and_earn_date_to_airman_qualification.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V3__Add_primary_key_and_earn_date_to_airman_certification.sql" dialect="MySQL" />

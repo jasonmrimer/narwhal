@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CertificationUploadCSVRow {
-  @CsvBindByName
-  private String title;
+  @CsvBindByName private String title;
+  @CsvBindByName private String site;
 }
