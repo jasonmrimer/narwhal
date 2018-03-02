@@ -1,5 +1,6 @@
 package mil.af.us.narwhal.mission;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,6 +30,7 @@ public class Mission {
   private Instant endDateTime;
 
   @ManyToOne
+  @JsonManagedReference
   private Site site;
 
   public Event toEvent(Long crewId, Long airmanId) {

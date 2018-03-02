@@ -39,6 +39,12 @@ public class CrewPosition {
     this.airman = airman;
   }
 
+  public CrewPosition(Airman airman, String title, Boolean critical) {
+    this.airman = airman;
+    this.title = title;
+    this.critical = critical;
+  }
+
   public CrewPosition(Crew crew, Airman airman) {
     this(null, crew, airman, "", false);
   }

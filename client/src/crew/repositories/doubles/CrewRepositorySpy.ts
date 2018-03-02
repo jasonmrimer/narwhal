@@ -12,7 +12,7 @@ export class CrewRepositorySpy implements CrewRepository {
     return Promise.resolve(this.crew);
   }
 
-  save(crew: CrewModel): Promise<CrewModel> {
+  update(crew: CrewModel): Promise<CrewModel> {
     this.saveCalls.push(crew);
     return Promise.resolve(crew);
   }

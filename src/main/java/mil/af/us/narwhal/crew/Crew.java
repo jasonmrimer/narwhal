@@ -34,4 +34,14 @@ public class Crew {
     position.setCrew(this);
     this.crewPositions.add(position);
   }
+
+  public void updatePosition(Long positionId, String title, boolean critical) {
+    this.crewPositions.stream()
+      .filter(position -> position.getId().equals(positionId))
+      .findFirst()
+      .ifPresent(position -> {
+        position.setTitle(title);
+        position.setCritical(critical);
+      });
+  }
 }

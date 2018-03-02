@@ -5,8 +5,8 @@ import { CrewPositionModel } from '../models/CrewPositionModel';
 
 export class CrewModelFactory {
     static crewPositions = [
-      new CrewPositionModel(1, AirmanModelFactory.build(1)),
-      new CrewPositionModel(2, AirmanModelFactory.build(2))
+      new CrewPositionModel(AirmanModelFactory.build(1), '', false, 1),
+      new CrewPositionModel(AirmanModelFactory.build(2), '', false, 2)
     ];
 
   static build(id: number = 1) {

@@ -6,6 +6,7 @@ interface Props {
   value: string;
   name: string;
   onChange: (e: any) => void;
+  onKeyPress?: (e: any) => void;
   id?: string;
   placeholder?: string;
   className?: string;
@@ -22,6 +23,7 @@ export const TextInput = (props: Props) => {
       value={props.value}
       name={props.name}
       onChange={props.onChange}
+      onKeyPress={props.onKeyPress}
       disabled={props.disabled}
     />
   );

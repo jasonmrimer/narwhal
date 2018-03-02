@@ -43,7 +43,8 @@ const trackerStore = new TrackerStore(
 );
 
 const crewStore = new CrewStore(
-  new WebCrewRepository()
+  new WebCrewRepository(),
+  new WebAirmanRepository(),
 );
 const profileStore = new ProfileSitePickerStore(new WebProfileRepository(), webSiteRepository);
 

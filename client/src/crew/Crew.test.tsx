@@ -6,6 +6,9 @@ import { CrewRepositorySpy } from './repositories/doubles/CrewRepositorySpy';
 import { CrewModelFactory } from './factories/CrewModelFactory';
 import { StyledTextInput } from '../widgets/TextInput';
 import { StyledButton } from '../widgets/Button';
+import { FakeAirmanRepository } from '../airman/repositories/doubles/FakeAirmanRepository';
+import { AirmanModel } from '../airman/models/AirmanModel';
+import { StyledCheckbox } from '../widgets/Checkbox';
 
 describe('Crew', () => {
   let repositorySpy: CrewRepositorySpy;
@@ -18,8 +21,11 @@ describe('Crew', () => {
 
   beforeEach(async () => {
     repositorySpy = new CrewRepositorySpy(crewModel);
-    crewStore = new CrewStore(repositorySpy);
-    await crewStore.setCrewId(1);
+    const airmanRepository = new FakeAirmanRepository();
+    airmanRepository.findAll = () => Promise.resolve([new AirmanModel(1, 1, 'Diana', 'Munoz')]);
+
+    crewStore = new CrewStore(repositorySpy, airmanRepository);
+    await crewStore.hydrate(crewModel.id);
 
     subject = shallow(
       <Crew
@@ -43,8 +49,7 @@ describe('Crew', () => {
   });
 
   it('renders an input for each crew member', () => {
-    expect(subject.find(StyledTextInput).length).toBe(crewPositions.length);
-    expect(subject.find(StyledTextInput).at(0).prop('name')).toBe('title');
+    expect(subject.find(StyledTextInput).length).toBe(crewPositions.length + 2);
   });
 
   it('sets the crew position title for each crew member', () => {
@@ -54,7 +59,14 @@ describe('Crew', () => {
   });
 
   it('sets the crew position as critical', () => {
-    subject.find('input[type="checkbox"]').at(0).simulate('change',  {target: {checked: true, id: 1, name: 'critical'}});
+    subject.find(StyledCheckbox).at(0).simulate('change',  {
+      target:
+        {
+          checked: true,
+          id: 1,
+          name: 'critical'
+        }
+    });
     const position = crewStore.crew!.crewPositions.find(pos => pos.id === 1)!;
     expect(position.critical).toBeTruthy();
   });
@@ -63,5 +75,12 @@ describe('Crew', () => {
     subject.find(StyledButton).simulate('click');
     const [crew] = repositorySpy.saveCalls.slice(-1);
     expect(crew).toEqual(crewStore.crew);
+  });
+
+  it('set a new crew member', () => {
+    subject.find(StyledCheckbox).at(2).simulate('change', {target: {value: 'checked', name: 'critical'}});
+    subject.find(StyledTextInput).at(2).simulate('change', {target: {value: 'QB', name: 'title'}});
+    subject.find(StyledTextInput).at(3).simulate('change', {target: {value: 'Munoz, Diana', name: 'airmanName'}});
+    expect(crewStore.newEntry.airmanName).toBe('Munoz, Diana');
   });
 });

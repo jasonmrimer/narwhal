@@ -2,29 +2,38 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { CrewStore } from './stores/CrewStore';
 import { observer } from 'mobx-react';
-import { CrewPositionModel } from './models/CrewPositionModel';
 import { StyledTextInput } from '../widgets/TextInput';
 import { StyledButton } from '../widgets/Button';
+import { CrewPositionModel } from './models/CrewPositionModel';
+import { StyledCheckbox } from '../widgets/Checkbox';
 
-/* tslint:disable:no-any*/
 interface Props {
   crewId: number;
   crewStore: CrewStore;
   className?: string;
 }
 
+/*tslint:disable:no-any*/
 @observer
 export class Crew extends React.Component<Props> {
   async componentDidMount() {
-    await this.props.crewStore.setCrewId(this.props.crewId);
+    await this.props.crewStore.hydrate(this.props.crewId);
   }
 
   onChange = (e: any, id: number) => {
-    this.props.crewStore.setCrewPosition(id, {[e.target.name]: e.target.value});
+    this.props.crewStore.setCrewEntry(id, {[e.target.name]: e.target.value});
   }
 
   onCheck = (e: any, id: number) => {
-    this.props.crewStore.setCrewPosition(id, {[e.target.name]: e.target.checked});
+    this.props.crewStore.setCrewEntry(id, {[e.target.name]: e.target.checked});
+  }
+
+  handleNewEntryChange = (e: any) => {
+    this.props.crewStore.setNewEntry({[e.target.name]: e.target.value});
+  }
+
+  handleNewEntryCheck = (e: any) => {
+    this.props.crewStore.setNewEntry({[e.target.name]: e.target.checked});
   }
 
   render() {
@@ -54,39 +63,82 @@ export class Crew extends React.Component<Props> {
           </tr>
           </thead>
           <tbody>
-          {this.renderCrew(crew.crewPositions)}
+          {this.renderCrew()}
+          {this.renderCrewInput()}
           </tbody>
         </table>
       </div>
     );
   }
 
-  private renderCrew = (crewPositions: CrewPositionModel[]) => {
-    return crewPositions.map((crewPosition: CrewPositionModel, index: number) => {
+  private renderCrew = () => {
+    const {crew} = this.props.crewStore;
+    if (crew == null) {
+      return [];
+    }
+
+    return crew.crewPositions.map((position: CrewPositionModel, index: number) => {
       return (
         <tr key={index}>
           <td>
-            <label htmlFor={`critical_${index}`}>
-              <input
-                id={`critical_${index}`}
-                type="checkbox"
+            <label htmlFor={`critical-${index}`}>
+              <StyledCheckbox
+                id={`critical-${index}`}
                 name="critical"
-                onChange={(e) => this.onCheck(e, crewPosition.id)}
-                checked={crewPosition.critical}
+                onChange={(e) => this.onCheck(e, position.id!)}
+                checked={position.critical}
               />
             </label>
           </td>
           <td>
             <StyledTextInput
               name="title"
-              value={crewPosition.title}
-              onChange={(e) => this.onChange(e, crewPosition.id)}
+              value={position.title}
+              onChange={(e) => this.onChange(e, position.id!)}
             />
           </td>
-          <td>{crewPosition.airman.lastName}</td>
+          <td>
+            {position.displayFullName}
+          </td>
         </tr>
       );
     });
+  }
+
+  private renderCrewInput = () => {
+    return (
+      <tr>
+        <td>
+          <label htmlFor={`critical-new-entry`}>
+            <StyledCheckbox
+              id={`critical-new-entry`}
+              name="critical"
+              onChange={this.handleNewEntryCheck}
+              checked={this.props.crewStore.newEntry.critical}
+            />
+          </label>
+        </td>
+        <td>
+          <StyledTextInput
+            name="title"
+            onChange={this.handleNewEntryChange}
+            value={this.props.crewStore.newEntry.title}
+          />
+        </td>
+        <td>
+          <StyledTextInput
+            name="airmanName"
+            onChange={this.handleNewEntryChange}
+            onKeyPress={async (e) => {
+              if (e.key === 'Enter') {
+                await this.props.crewStore.save();
+              }
+            }}
+            value={this.props.crewStore.newEntry.airmanName}
+          />
+        </td>
+      </tr>
+    );
   }
 }
 
@@ -134,45 +186,5 @@ export const StyledCrew = styled(Crew)`
   
   button {
     margin-bottom: 1.5rem;
-  }
-  
-  input[type='checkbox']{
-    visibility: hidden;
-    position: relative;
-    left: 3px;
-  }
-  
-  input[type='checkbox']:before{
-    content: ' ';
-    visibility: visible;
-    border: 1px solid #ccc;
-    width: 16px;
-    height: 16px;
-    display: inline-block;
-    position: relative;
-    top: -5px;
-    right: 5px;
-  }
-
-  input[type='checkbox']:after{
-    opacity: 0;
-    box-sizing: border-box;
-    content: '\\2713 ';
-    visibility: visible;
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    font-size: 18px;
-    position: relative;
-    left: -4px;
-    top: -24px;
-    color: black;
-    background: white;
-    text-align: center;
-    line-height: 1.03;
-  }
-
-  input[type='checkbox']:checked:after{
-    opacity: 1;
   }
 `;

@@ -17,13 +17,22 @@ class CrewPage
 
   def fill_in_position_and_make_critical
     page.first('input[name="title"]').set 'Chimichanga'
-    page.find('label[for="critical_0"]').click
+    page.find('label[for="critical-0"]').click
     click_button 'SAVE'
 
     page.refresh
 
     expect(page).to have_selector('input[value="Chimichanga"]')
-    expect(page.find('#critical_0', visible: false)).to be_checked
+    expect(page.find('#critical-0', visible: false)).to be_checked
+  end
+
+  def add_new_crew_member
+    fill_in 'airmanName', with: 'Munoz, Diana'
+    click_button 'SAVE'
+
+    page.refresh
+
+    expect(page).to have_text 'Munoz, Diana'
   end
 
   def click(element)

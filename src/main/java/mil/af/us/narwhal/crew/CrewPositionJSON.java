@@ -11,4 +11,5 @@ public class CrewPositionJSON {
   private Long id;
   private String title;
   private Boolean critical;
+  private Long airmanId;
 }

@@ -13,14 +13,24 @@ export function crewRepositoryContract(subject: CrewRepository) {
     });
   });
 
-  describe('save', () => {
-    it('saves a crew', async () => {
+  describe('update', () => {
+    it('should update a crew with a position and critical', async () => {
       const airman = AirmanModelFactory.build();
       const mission = MissionModelFactory.build();
-      const crewPositions = [new CrewPositionModel(1, airman, 'QB')];
+      const crewPositions = [new CrewPositionModel(airman, 'QB', true)];
+      const crew = new CrewModel(1, mission, crewPositions);
+      const resp = await subject.update(crew);
+
+      expect(resp.crewPositions.length).toBe(1);
+    });
+
+    it('updates a crew', async () => {
+      const airman = AirmanModelFactory.build();
+      const mission = MissionModelFactory.build();
+      const crewPositions = [new CrewPositionModel(airman, 'QB', false, 1)];
       const crew = new CrewModel(1, mission, crewPositions);
 
-      const resp = await subject.save(crew);
+      const resp = await subject.update(crew);
 
       expect(resp.mission).toBeDefined();
       expect(resp.crewPositions).toBeDefined();

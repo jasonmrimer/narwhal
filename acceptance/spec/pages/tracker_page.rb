@@ -169,6 +169,7 @@ class TrackerPage
     crew_page.assert_has_assigned_airmen('Spaceman', 'Keeter')
 
     crew_page.fill_in_position_and_make_critical
+    crew_page.add_new_crew_member
   end
 
   private

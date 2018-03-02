@@ -20,9 +20,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.Instant;
-import java.util.List;
 
 import static io.restassured.RestAssured.given;
+import static java.util.Collections.singletonList;
 import static org.hamcrest.Matchers.equalTo;
 
 @ActiveProfiles("test")
@@ -82,12 +82,41 @@ public class CrewControllerTest {
   }
 
   @Test
-  public void updateTest() throws JsonProcessingException {
-    final List<CrewPosition> positions = crew.getCrewPositions();
-    positions.get(0).setTitle("GOOBER");
-    positions.get(0).setCritical(true);
+  public void addAirmanTest() throws JsonProcessingException {
+    final Airman newAirman = new Airman(2L, "B", "C");
+    airmanRepository.save(newAirman);
 
-    final String json = objectMapper.writeValueAsString(positions);
+    final String json = objectMapper.writeValueAsString(singletonList(
+      new CrewPositionJSON(null, "", false, newAirman.getId())
+    ));
+
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .contentType("application/json")
+      .body(json)
+    .when()
+      .put(CrewController.URI + "/" + crew.getId() + "/positions")
+    .then()
+      .statusCode(200)
+      .body("crewPositions.size()", equalTo(2))
+      .body("crewPositions[1].airman.id", equalTo(newAirman.getId().intValue()));
+    // @formatter:on
+  }
+
+  @Test
+  public void updateTest() throws JsonProcessingException {
+    final CrewPosition crewPosition = crew.getCrewPositions().get(0);
+    final String json = objectMapper.writeValueAsString(singletonList(
+      new CrewPositionJSON(
+        crewPosition.getId(),
+        "GOOBER",
+        true,
+        crewPosition.getAirman().getId())
+    ));
 
     // @formatter:off
     given()

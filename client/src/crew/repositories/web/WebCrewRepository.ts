@@ -17,12 +17,19 @@ export class WebCrewRepository implements CrewRepository {
     return this.serializer.deserialize(json);
   }
 
-  async save(crew: CrewModel): Promise<CrewModel> {
+  async update(crew: CrewModel): Promise<CrewModel> {
     const resp = await fetch(
       `${this.baseUrl}/api/crews/${crew.id}/positions`,
       {
         method: 'PUT',
-        body: JSON.stringify(crew.crewPositions.map((pos) => ({id: pos.id, title: pos.title, critical: pos.critical}))),
+        body: JSON.stringify(crew.crewPositions.map((pos) => {
+          return {
+            id: pos.id,
+            title: pos.title,
+            critical: pos.critical,
+            airmanId: pos.airman.id,
+          };
+        })),
         headers: [['Content-Type', 'application/json'], ['X-XSRF-TOKEN', this.csrfToken]],
         credentials: 'include',
       }

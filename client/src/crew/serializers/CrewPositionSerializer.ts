@@ -9,10 +9,10 @@ export class CrewPositionSerializer implements Serializer<CrewPositionModel> {
   /* tslint:disable:no-any*/
   deserialize(item: any): CrewPositionModel {
     return new CrewPositionModel(
-      item.id,
       item.airman,
       item.title,
       item.critical,
+      item.id,
     );
   }
 }

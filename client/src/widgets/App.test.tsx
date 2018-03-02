@@ -17,10 +17,11 @@ import { Crew } from '../crew/Crew';
 import { StyledProfileSitePicker } from '../profile/ProfileSitePicker';
 import { ProfileModel } from '../profile/models/ProfileModel';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
+import { FakeAirmanRepository } from '../airman/repositories/doubles/FakeAirmanRepository';
 
 const siteRepository = new SiteRepositoryStub();
 const dashboardStore = new DashboardStore(siteRepository, new MissionRepositoryStub());
-const crewStore = new CrewStore(new CrewRepositorySpy(CrewModelFactory.build()));
+const crewStore = new CrewStore(new CrewRepositorySpy(CrewModelFactory.build()), new FakeAirmanRepository());
 
 let subject: ShallowWrapper;
 let mountedSubject: ReactWrapper;
