@@ -51,7 +51,7 @@ public class Event {
     this(null, title, description, startTime, endTime, eventType, airmanId);
   }
 
-  @AssertTrue(message = "Start Date cannot be after End Date")
+  @AssertTrue(message = "End Date cannot be before Start Date.")
   public boolean isValidDateRange() {
     if (this.endTime != null && this.startTime != null) {
       return this.endTime.compareTo(this.startTime) >= 0;

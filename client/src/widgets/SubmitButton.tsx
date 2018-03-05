@@ -22,7 +22,6 @@ export const StyledSubmitButton = styled(SubmitButton)`
   font-size: 0.75rem;
   font-weight: 400;
   cursor: pointer;
-  outline: inherit;
   
   &:hover {
     background: ${props => props.theme.yellowHover};

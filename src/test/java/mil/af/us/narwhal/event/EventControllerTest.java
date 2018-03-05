@@ -150,7 +150,7 @@ public class EventControllerTest {
       .post(EventController.URI)
     .then()
       .statusCode(400)
-      .body("errors[0].defaultMessage", equalTo("Start Date cannot be after End Date"));
+      .body("errors[0].defaultMessage", equalTo("End Date cannot be before Start Date."));
     // @formatter:on
   }
 

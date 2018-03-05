@@ -44,7 +44,7 @@ export function EventRepositoryContract(subject: EventRepository) {
         try {
           await subject.save(event);
         } catch (errors) {
-          expect(errors).toEqual([{validDateRange: 'Start Date cannot be after End Date'}]);
+          expect(errors).toEqual([{validDateRange: 'End Date cannot be before Start Date.'}]);
         }
       });
     });
