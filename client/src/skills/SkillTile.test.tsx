@@ -22,7 +22,7 @@ describe('SkillTile', () => {
 
   it('should render the still title and expiration date', () => {
     expect(subject.text()).toContain(skill.title);
-    expect(subject.text()).toContain(skill.expirationDate.format('DD MMM YY'));
+    expect(subject.text()).toContain(skill.expirationDate.format('DD MMM YY').toUpperCase());
   });
 
   it('calls the onClick callback', () => {

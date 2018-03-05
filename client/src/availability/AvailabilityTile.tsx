@@ -18,8 +18,8 @@ export const AvailabilityTile = observer((props: Props) => {
         <span>{props.event.title}</span>
         {
           props.event.type === EventType.Mission &&
-          <Link to={`/crew/${props.event.id}`}>
-            <LookingGlass />
+          <Link to={`/crew/${props.event.id}`} className="mission-list">
+            <LookingGlass /> Mission List
           </Link>
         }
       </div>
@@ -33,6 +33,7 @@ export const AvailabilityTile = observer((props: Props) => {
 
 export const StyledAvailabilityTile = styled(AvailabilityTile)`
   background: ${props => props.theme.blueSteel};
+  border-radius: 0.25rem 0.25rem 0 0;
   padding: 1px;
   margin: 0.5rem 0;
   cursor: pointer;
@@ -45,10 +46,21 @@ export const StyledAvailabilityTile = styled(AvailabilityTile)`
     
   &:hover {
     background: ${props => props.theme.hoverBlueSteel};
+    border-radius: 0.25rem 0.25rem 0 0;
   }
   
   .event-description {
     background: ${props => props.theme.lighter};
     font-size: 12px;
+  }
+  
+  .mission-list {
+ 
+  text-decoration: none;
+  color: ${props => props.theme.fontColor};
+  
+    &:hover {
+      background: ${props => props.theme.lightest};
+    }
   }
 `;

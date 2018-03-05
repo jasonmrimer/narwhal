@@ -13,7 +13,7 @@ import { StyledTimeInput } from '../widgets/TimeInput';
 import { StyledDatePicker } from '../widgets/DatePicker';
 import { StyledMultiTypeahead } from '../widgets/MultiTypeahead';
 import { DeleteIcon } from '../icons/DeleteIcon';
-import { StyledSkillsForm } from "../skills/SkillsForm";
+import { StyledSkillsForm } from '../skills/SkillsForm';
 import { SkillFormStore } from '../skills/stores/SkillFormStore';
 import { SkillType } from '../skills/models/SkillType';
 import * as moment from 'moment';

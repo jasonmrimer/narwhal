@@ -40,6 +40,7 @@ export const StyledFieldValidation = styled(FieldValidation)`
     } 
     
     .error-msg{
+      padding: 0.25rem;
       width:fit-content;
       background: ${props => props.theme.yellow};
       color: ${props => props.theme.darkest};

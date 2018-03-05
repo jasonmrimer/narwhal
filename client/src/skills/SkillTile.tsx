@@ -45,13 +45,14 @@ export const SkillTile = (props: Props) => {
         <span>{skill.title}</span>
         {skill.isExpired && <ExpirationAlert/>}
       </div>
-      <div className="currency-description"> {skill.expirationDate.format('DD MMM YY')}</div>
+      <div className="currency-description"> {skill.expirationDate.format('DD MMM YY').toUpperCase()}</div>
     </div>
   );
 };
 
 export const StyledSkillTile = styled(SkillTile)`
   background: ${props => props.theme.blueSteel};
+  border-radius: 0.25rem 0.25rem 0 0;
   margin: 0.5rem 0;
   padding: 1px;
   
@@ -63,6 +64,7 @@ export const StyledSkillTile = styled(SkillTile)`
     
     &:hover {
       background-color: ${props => props.theme.hoverBlueSteel};
+      border-radius: 0.25rem 0.25rem 0 0;
       cursor: pointer;
     }
   }

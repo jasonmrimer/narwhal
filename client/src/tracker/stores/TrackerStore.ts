@@ -217,6 +217,13 @@ export class TrackerStore implements EventActions {
     });
   }
 
+  @computed
+  get qualificationFilterOptions() {
+    return this._qualifications.map(qual => {
+      return {value: qual.id, label: `${qual.acronym}`};
+    });
+  }
+
   @action.bound
   setQualificationIds(options: FilterOption[]) {
     this._qualificationIds = options.map(option => Number(option.value));

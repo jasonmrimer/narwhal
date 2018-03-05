@@ -87,7 +87,7 @@ export const StyledCurrency = styled(Currency)`
     justify-content: flex-end;
 
     .add-skill {
-      font-size: 12px;
+      font-size: 16px;
       margin: 0.5rem 1rem;
       color: ${props => props.theme.fontColor};
       background-color: ${props => props.theme.lighter};

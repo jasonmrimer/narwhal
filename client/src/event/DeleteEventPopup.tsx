@@ -35,7 +35,7 @@ export const StyledDeleteEventPopup = styled(DeleteEventPopup)`
   left: 0;
   height: 100%;
   width: 100%;
-  font-size: 1.25rem;
+  font-size: 1rem;
   z-index: 1001;
   
   .delete-confirmation {
@@ -65,17 +65,30 @@ export const StyledDeleteEventPopup = styled(DeleteEventPopup)`
     } 
     
     button {
-      padding: 0.75rem 2.5rem;
+      font-size: 0.75rem;
+      padding: 0.5rem 1.5rem;
       margin-left: 0.5rem;
       font-weight: 500;
       background: none;
       color: ${props => props.theme.fontColor};
       border: 1px solid ${props => props.theme.fontColor}; 
       border-radius: 5%;
+      cursor: pointer;
+      
+      &.cancel {
+        background: ${props => props.theme.yellow};
+        color: ${props => props.theme.darkest};
+        border: none;
+      }
       
       &:hover {
         background: ${props => props.theme.fontColor};
         color: ${props => props.theme.darkest};
+        
+        &.cancel{
+          background: ${props => props.theme.yellowHover};
+          color: ${props => props.theme.darkest};
+        }
       }
     }
   }

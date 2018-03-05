@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-
+/*tslint:disable:no-any*/
 interface Props {
   name: string;
   onChange: (e: any) => void;
@@ -19,8 +19,8 @@ export const Checkbox = (props: Props) => {
       onChange={props.onChange}
       checked={props.checked}
     />
-  )
-}
+  );
+};
 
 export const StyledCheckbox = styled(Checkbox)`
   visibility: hidden;

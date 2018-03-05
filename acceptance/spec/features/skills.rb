@@ -55,7 +55,7 @@ class Skill
   def qualification_correct_date?
     page.within('.side-panel') do
       return page.has_content?('CURRENCY') &&
-          page.has_content?(@expiration.strftime('%d %b %y')) &&
+          page.has_content?(@expiration.strftime('%d %^b %y')) &&
           page.has_content?(@qual_title)
     end
   end
@@ -100,7 +100,7 @@ class Skill
   def certification_correct_date?
     page.within('.side-panel') do
       return page.has_content?('CURRENCY') &&
-          page.has_content?(@expiration.strftime('%d %b %y')) &&
+          page.has_content?(@expiration.strftime('%d %^b %y')) &&
           page.has_content?(@cert_title)
     end
   end

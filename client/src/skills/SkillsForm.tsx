@@ -39,8 +39,13 @@ export class SkillsForm extends React.Component<Props> {
     const disabled = hasItem;
     return (
       <StyledForm onSubmit={this.handleSubmit}>
-        <div style={{marginTop: '1rem'}}>
-          Add Skill:
+        <div>
+          {
+            !hasItem &&
+            <div style={{marginTop: '1rem'}}>
+              Add Skill:
+            </div>
+          }
         </div>
 
         <StyledFormRow>

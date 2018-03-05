@@ -72,10 +72,12 @@ export const StyledPlannerHeader = styled(PlannerHeader)`
    
   .last-week {
     padding-right: 1rem;
+    cursor: pointer;
   }
   
   .next-week {
     padding-left: 1rem;
+    cursor: pointer;
   }
    
   .planner-day-header {

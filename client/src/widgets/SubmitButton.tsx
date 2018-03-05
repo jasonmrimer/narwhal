@@ -14,9 +14,9 @@ export const SubmitButton = (props: Props) => {
 
 export const StyledSubmitButton = styled(SubmitButton)`
   width: fit-content;
-  background: none;
-  color: ${props => props.theme.fontColor};
-  border: 1px solid ${props => props.theme.fontColor};
+  background: ${props => props.theme.yellow};
+  color: ${props => props.theme.darkest};
+  border: none;
   padding: 0.5rem 1rem;
   font: inherit;
   font-size: 0.75rem;
@@ -25,7 +25,7 @@ export const StyledSubmitButton = styled(SubmitButton)`
   outline: inherit;
   
   &:hover {
-    background: ${props => props.theme.fontColor};
+    background: ${props => props.theme.yellowHover};
     color: ${props => props.theme.darkest};
   }
 `;

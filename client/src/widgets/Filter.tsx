@@ -50,7 +50,6 @@ export const TopLevelFilter = styled(Filter)`
   float: left;
   z-index: 9;
   margin: 0 32px 0 0;
-  
 
   &:after {
     content: ' ';
@@ -84,6 +83,7 @@ export const TopLevelFilter = styled(Filter)`
     border-bottom: 1px solid ${props => props.theme.fontColor};
     color: ${props => props.theme.fontColor};
     border-radius: 0;
+    cursor: pointer;
     
     &:disabled {
       color: ${props => props.theme.graySteel};

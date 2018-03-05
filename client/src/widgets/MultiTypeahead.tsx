@@ -33,8 +33,8 @@ export const MultiTypeahead =  (props: Props) => {
 };
 
 export const StyledMultiTypeahead = styled(MultiTypeahead)`
+
   .rbt {
-  
     .rbt-sr-status {
       display: none;
     }

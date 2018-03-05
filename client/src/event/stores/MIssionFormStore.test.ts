@@ -92,7 +92,7 @@ describe('MissionFormStore', () => {
 
   it('can clear the state', () => {
     const selectedMission = missionStore.missions[0];
-    subject.setState({missionId: selectedMission.missionId,});
+    subject.setState({missionId: selectedMission.missionId, });
     expect(subject.state.missionId).toBe(selectedMission.missionId);
     expect(subject.state.startDate).toBe(selectedMission.startDateTime.format('YYYY-MM-DD'));
     expect(subject.state.startTime).toBe(selectedMission.startDateTime.format('HHmm'));

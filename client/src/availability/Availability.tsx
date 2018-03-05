@@ -199,7 +199,7 @@ export const StyledAvailability = styled(Availability)`
     justify-content: flex-end;
 
     .add-event {
-      font-size: 12px;
+      font-size: 16px;
       margin: 0.5rem 1rem;
       color: ${props => props.theme.fontColor};
       background-color: ${props => props.theme.lighter};

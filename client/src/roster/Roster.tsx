@@ -75,7 +75,7 @@ export class Roster extends React.Component<Props> {
     return (
       <StyledMultiTypeahead
         onChange={this.props.trackerStore.setQualificationIds}
-        options={this.props.trackerStore.qualificationOptions}
+        options={this.props.trackerStore.qualificationFilterOptions}
         placeholder="Filter Qualifications"
         className="qualifications-multiselect"
       />
@@ -149,6 +149,10 @@ export const StyledRoster = styled(Roster)`
   
   .qualification{
     width: 14%;
+  }
+  
+  .qualifications-multiselect, .certifications-multiselect{
+    margin-top: 0.25rem;
   }
   
   .certification{

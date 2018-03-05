@@ -45,5 +45,5 @@ export function LeaveFormStory() {
           leaveFormStore={store}
         />
       );
-    })
+    });
 }
