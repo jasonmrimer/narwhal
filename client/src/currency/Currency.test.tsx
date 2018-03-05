@@ -8,6 +8,7 @@ import { StyledSkillsForm } from '../skills/SkillsForm';
 import { StyledSkillTile } from '../skills/SkillTile';
 import { AirmanQualificationModelFactory } from '../airman/factories/AirmanQualificationModelFactory';
 import { AirmanCertificationModelFactory } from '../airman/factories/AirmanCertificationModelFactory';
+import { StyledBackButton } from '../widgets/BackButton';
 
 describe('Currency', () => {
   const airman = AirmanModelFactory.build(
@@ -53,5 +54,13 @@ describe('Currency', () => {
     const store = trackerStore.currencyStore.skillFormStore;
     expect(store.hasItem).toBeTruthy();
     expect(Number(store.state.skillId)).toBe(airman.qualifications[0].skillId);
+  });
+
+  it('can exit out of a skill form', () => {
+    findSelectorWithText(subject, 'button', '+ Add Skill').simulate('click');
+    expect(subject.find(StyledSkillsForm).exists()).toBeTruthy();
+
+    subject.find(StyledBackButton).simulate('click');
+    expect(trackerStore.currencyStore.shouldShowSkillForm).toBeFalsy();
   });
 });

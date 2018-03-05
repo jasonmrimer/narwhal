@@ -5,6 +5,7 @@ import { AirmanModel } from '../airman/models/AirmanModel';
 import { StyledSkillsForm } from '../skills/SkillsForm';
 import { StyledSkillTile } from '../skills/SkillTile';
 import { CurrencyStore } from './stores/CurrencyStore';
+import { StyledBackButton } from '../widgets/BackButton';
 
 interface Props {
   selectedAirman: AirmanModel;
@@ -36,10 +37,17 @@ export class Currency extends React.Component<Props> {
 
   private renderSkillsForm = () => {
     return (
-      <StyledSkillsForm
-        airmanId={this.props.selectedAirman.id}
-        skillFormStore={this.props.currencyStore.skillFormStore}
-      />
+      <div>
+        <StyledBackButton
+          onClick={() => this.props.currencyStore.closeSkillForm()}
+          text="Back to Overview"
+        />
+
+        <StyledSkillsForm
+          airmanId={this.props.selectedAirman.id}
+          skillFormStore={this.props.currencyStore.skillFormStore}
+        />
+      </div>
     );
   }
 

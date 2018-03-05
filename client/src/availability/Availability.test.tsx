@@ -6,12 +6,13 @@ import { AirmanModel } from '../airman/models/AirmanModel';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 import { StyledAvailabilityTile } from './AvailabilityTile';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
-import { makeFakeTrackerStore } from '../utils/testUtils';
+import { findSelectorWithText, makeFakeTrackerStore } from '../utils/testUtils';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { StyledRadioButtons } from '../widgets/RadioButtons';
 import { StyledAppointmentForm } from '../event/AppointmentForm';
 import { StyledLeaveForm } from '../event/LeaveForm';
 import { EventModelFactory } from '../event/factories/EventModelFactory';
+import { StyledBackButton } from '../widgets/BackButton';
 
 let trackerStore: TrackerStore;
 let airman: AirmanModel;
@@ -158,10 +159,10 @@ describe('Availability', () => {
   });
 
   it('can exit out of an event form', () => {
-    subject.find('button.add-event').simulate('click');
+    findSelectorWithText(subject, 'button', '+ Add Event').simulate('click');
     expect(trackerStore.availabilityStore.shouldShowEventForm).toBeTruthy();
 
-    subject.find('a.back').simulate('click');
+    subject.find(StyledBackButton).simulate('click');
     expect(trackerStore.availabilityStore.shouldShowEventForm).toBeFalsy();
   });
 });

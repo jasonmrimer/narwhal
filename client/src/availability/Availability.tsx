@@ -10,13 +10,12 @@ import { BackIcon } from '../icons/BackIcon';
 import { AvailabilityStore } from './stores/AvailabilityStore';
 import { PlannerStore } from '../roster/stores/PlannerStore';
 import { AirmanModel } from '../airman/models/AirmanModel';
-import { BackArrow } from '../icons/BackArrow';
-import { Theme } from '../themes/default';
 import { StyledRadioButtons } from '../widgets/RadioButtons';
 import { StyledAppointmentForm } from '../event/AppointmentForm';
 import { StyledLeaveForm } from '../event/LeaveForm';
 import { StyledMissionForm } from '../event/MissionForm';
 import { MissionStore } from '../mission/stores/MissionStore';
+import { StyledBackButton } from '../widgets/BackButton';
 
 interface Props {
   selectedAirman: AirmanModel;
@@ -53,10 +52,10 @@ export class Availability extends React.Component<Props> {
     const {availabilityStore} = this.props;
     return (
       <div>
-        <a className="back" onClick={() => availabilityStore.closeEventForm()}>
-          <BackArrow color={Theme.graySteel}/>
-          <span>Back to Week View</span>
-        </a>
+        <StyledBackButton
+          onClick={() => availabilityStore.closeEventForm()}
+          text="Back to Week View"
+        />
 
         {
           !availabilityStore.hasItem &&
@@ -173,22 +172,6 @@ export const StyledAvailability = styled(Availability)`
     font-weight: 500;
     margin: 0;
   }
-  
-  .back {
-    cursor: pointer;
-    fill: ${props => props.theme.graySteel};
-    background: none;
-    color: ${props => props.theme.graySteel};
-    font-size: 0.875rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 1.5rem 0;
-
-    span {
-      margin-left: 0.5rem;
-    }
-   }
    
    .form-wrapper {
      color: ${props => props.theme.graySteel};
