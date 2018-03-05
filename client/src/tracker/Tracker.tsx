@@ -60,6 +60,7 @@ export class Tracker extends React.Component<Props> {
           !this.props.trackerStore.selectedAirman.isEmpty &&
           <StyledSidePanel
             trackerStore={this.props.trackerStore}
+            sidePanelStore={this.props.trackerStore.sidePanelStore}
           />
         }
         {

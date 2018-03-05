@@ -6,6 +6,8 @@ import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { StyledPlannerHeader } from '../widgets/PlannerHeader';
 import { StyledNotification } from '../widgets/Notification';
 import { StyledMultiTypeahead } from '../widgets/MultiTypeahead';
+import { TabType } from '../tracker/stores/SidePanelStore';
+import { AirmanDatum } from '../tracker/AirmanDatum';
 
 interface Props {
   trackerStore: TrackerStore;
@@ -50,22 +52,41 @@ export class Roster extends React.Component<Props> {
   }
 
   private renderAirmen() {
-    const selectedAirmanId = this.props.trackerStore.selectedAirman.id;
-    return this.props.trackerStore.airmen.map((airman, index) => {
+    const {trackerStore} = this.props;
+    const selectedAirmanId = trackerStore.selectedAirman.id;
+    return trackerStore.airmen.map((airman, index) => {
       const className = airman.id === selectedAirmanId ? 'selected' : '';
       return (
         <tr
           key={index}
           className={className}
-          onClick={() => {
-            this.props.trackerStore.setSelectedAirman(airman);
-          }}
         >
-          <td className="airman-name">{airman.lastName}, {airman.firstName}</td>
-          <td>{formatAttributes(airman.qualifications, 'acronym')}</td>
-          <td className="certification-row">{formatAttributes(airman.certifications, 'title')}</td>
-
-          <StyledPlanner events={airman.events} week={this.props.trackerStore.plannerStore.plannerWeek}/>
+          <AirmanDatum
+            trackerStore={trackerStore}
+            airman={airman}
+            text={`${airman.lastName}, ${airman.firstName}`}
+            tab={TabType.AVAILABILITY}
+            className="airman-name"
+          />
+          <AirmanDatum
+            trackerStore={trackerStore}
+            airman={airman}
+            text={formatAttributes(airman.qualifications, 'acronym')}
+            tab={TabType.CURRENCY}
+            className="airman-qual"
+          />
+          <AirmanDatum
+            trackerStore={trackerStore}
+            airman={airman}
+            text={formatAttributes(airman.certifications, 'title')}
+            tab={TabType.CURRENCY}
+            className="airman-cert"
+          />
+          <StyledPlanner
+            week={trackerStore.plannerStore.plannerWeek}
+            trackerStore={trackerStore}
+            airman={airman}
+          />
         </tr>
       );
     });
@@ -164,7 +185,7 @@ export const StyledRoster = styled(Roster)`
     justify-content: space-between;
   }
 
-  .certification-row {
+  .airman-cert {
     border-right: 1px solid ${props => props.theme.graySteel};
   }
 `;

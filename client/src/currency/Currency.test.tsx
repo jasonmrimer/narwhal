@@ -8,6 +8,7 @@ import { StyledSkillsForm } from '../skills/SkillsForm';
 import { StyledSkillTile } from '../skills/SkillTile';
 import { AirmanQualificationModelFactory } from '../airman/factories/AirmanQualificationModelFactory';
 import { AirmanCertificationModelFactory } from '../airman/factories/AirmanCertificationModelFactory';
+import { TabType } from '../tracker/stores/SidePanelStore';
 import { StyledBackButton } from '../widgets/BackButton';
 
 describe('Currency', () => {
@@ -23,7 +24,7 @@ describe('Currency', () => {
 
   beforeEach(async () => {
     trackerStore = await makeFakeTrackerStore();
-    trackerStore.setSelectedAirman(airman);
+    trackerStore.setSelectedAirman(airman, TabType.AVAILABILITY);
     subject = shallow(
       <Currency
         selectedAirman={trackerStore.selectedAirman}

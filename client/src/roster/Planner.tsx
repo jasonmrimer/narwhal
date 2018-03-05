@@ -8,10 +8,14 @@ import { AvailableIcon } from '../icons/AvailableIcon';
 import { doesDayHaveEvent } from '../utils/eventUtil';
 import styled from 'styled-components';
 import { EventModel, EventType } from '../event/models/EventModel';
+import { TrackerStore } from '../tracker/stores/TrackerStore';
+import { TabType } from '../tracker/stores/SidePanelStore';
+import { AirmanModel } from '../airman/models/AirmanModel';
 
 interface Props {
-  events: EventModel[];
   week: Moment[];
+  trackerStore: TrackerStore;
+  airman: AirmanModel;
   className?: string;
 }
 
@@ -38,12 +42,17 @@ const renderEvents = (day: Moment, events: EventModel[], key: number) => {
 };
 
 export const Planner = (props: Props) => {
-  const {events, week} = props;
+  const {airman, week} = props;
   return (
-    <td className={classNames(props.className, 'planner-row')}>
+    <td
+      className={classNames(props.className, 'planner-row')}
+      onClick={() => {
+        props.trackerStore.setSelectedAirman(airman, TabType.AVAILABILITY);
+      }}
+    >
       <span className="blank"/>
       <div>
-       {week.map((day, index) => renderEvents(day, events, index))}
+       {week.map((day, index) => renderEvents(day, airman.events, index))}
       </div>
       <span className="blank"/>
     </td>

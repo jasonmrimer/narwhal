@@ -9,6 +9,7 @@ import { default as SkillRepositoryStub } from '../skills/repositories/doubles/S
 import { Moment } from 'moment';
 import { MissionRepositoryStub } from '../mission/repositories/doubles/MissionRepositoryStub';
 import { ReactWrapper } from 'enzyme';
+import { AirmanDatum } from '../tracker/AirmanDatum';
 
 export async function makeFakeTrackerStore(shouldHydrateState: boolean = true) {
   const store = new TrackerStore(
@@ -74,7 +75,7 @@ export class Table {
   getTextForRowAndCol(rowIndex: number, columnName: string) {
     const columnIndex = this.getColumnHeaders().findIndex((header: any) => header === columnName);
     const row = this.getRows().at(rowIndex);
-    return row.find('td').at(columnIndex).text();
+    return row.find(AirmanDatum).at(columnIndex).dive().text();
   }
 
   getRows() {
@@ -104,7 +105,7 @@ export function findSelectorWithText(wrapper: any, selector: string, text: strin
   return wrapper.find(selector).filterWhere((x: any) => x.text().includes(text));
 }
 
-export const clickOnFirstAirman = (wrapper: any) => wrapper.find('tbody tr').first().simulate('click');
+export const clickOnFirstAirman = (wrapper: any) => wrapper.find('.airman-name').first().simulate('click');
 
 export function clickButtonByName(wrapper: ReactWrapper, component: any, className: string) {
   findByClassName(wrapper.find(component).find('button'), className).simulate('click');

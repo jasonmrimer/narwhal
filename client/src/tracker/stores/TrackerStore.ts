@@ -21,12 +21,14 @@ import { AppointmentFormStore } from '../../event/stores/AppointmentFormStore';
 import { SkillFormStore } from '../../skills/stores/SkillFormStore';
 import { Skill } from '../../skills/models/Skill';
 import { EventActions } from '../../event/stores/EventActions';
+import { SidePanelStore, TabType } from './SidePanelStore';
 
 export class TrackerStore implements EventActions {
   public currencyStore: CurrencyStore;
   public availabilityStore: AvailabilityStore;
   public plannerStore: PlannerStore;
   public missionStore: MissionStore;
+  public sidePanelStore: SidePanelStore;
 
   private airmanRepository: AirmanRepository;
   private siteRepository: SiteRepository;
@@ -73,6 +75,8 @@ export class TrackerStore implements EventActions {
     this.missionStore = missionStore;
 
     this.plannerStore = new PlannerStore(timeService);
+
+    this.sidePanelStore = new SidePanelStore();
   }
 
   async hydrate(siteId: number = UnfilteredValue) {
@@ -250,8 +254,9 @@ export class TrackerStore implements EventActions {
   }
 
   @action.bound
-  setSelectedAirman(airman: AirmanModel) {
+  setSelectedAirman(airman: AirmanModel, tab: TabType) {
     this._selectedAirman = airman;
+    this.sidePanelStore.setSelectedTab(tab);
     this.plannerStore.setSidePanelWeek(
       airman.isEmpty ?
         this.plannerStore.plannerWeek :
@@ -261,7 +266,7 @@ export class TrackerStore implements EventActions {
 
   @action.bound
   clearSelectedAirman() {
-    this.setSelectedAirman(AirmanModel.empty());
+    this.setSelectedAirman(AirmanModel.empty(), TabType.AVAILABILITY);
   }
 
   @action.bound

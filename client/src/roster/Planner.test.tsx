@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, ShallowWrapper } from 'enzyme';
 import { Planner } from './Planner';
 import * as moment from 'moment';
 import { AppointmentIcon } from '../icons/AppointmentIcon';
@@ -8,9 +8,18 @@ import { MissionIcon } from '../icons/MissionIcon';
 import { AvailableIcon } from '../icons/AvailableIcon';
 import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
 import { EventModel, EventType } from '../event/models/EventModel';
+import { TabType } from '../tracker/stores/SidePanelStore';
+import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
+import { makeFakeTrackerStore } from '../utils/testUtils';
+import { TrackerStore } from '../tracker/stores/TrackerStore';
+import { AirmanModel } from '../airman/models/AirmanModel';
 
 describe('Planner', () => {
-  it('renders airmen high-level availability', () => {
+  let subject: ShallowWrapper;
+  let trackerStore: TrackerStore;
+  let airman: AirmanModel;
+
+  beforeEach(async () => {
     const appointment = new EventModel(
       'Appointment',
       '',
@@ -41,17 +50,34 @@ describe('Planner', () => {
       3
     );
 
-    const events = [
+    airman = AirmanModelFactory.build();
+    airman.events = [
       appointment,
       mission,
       leave,
     ];
-    const week = new TimeServiceStub().getCurrentWeek();
-    const subject = shallow(<Planner events={events} week={week}/>);
 
+    const week = new TimeServiceStub().getCurrentWeek();
+    trackerStore = await makeFakeTrackerStore();
+
+    subject = shallow(
+      <Planner
+        airman={airman}
+        week={week}
+        trackerStore={trackerStore}
+      />);
+  });
+
+  it('renders airmen high-level availability', () => {
     expect(subject.find(AppointmentIcon).length).toBe(1);
     expect(subject.find(MissionIcon).length).toBe(1);
     expect(subject.find(LeaveIcon).length).toBe(3);
     expect(subject.find(AvailableIcon).length).toBe(2);
+  });
+
+  it('calls the selectAirman when clicking on the planner', () => {
+    subject.simulate('click');
+    expect(trackerStore.selectedAirman).toEqual(airman);
+    expect(trackerStore.sidePanelStore.selectedTab).toEqual(TabType.AVAILABILITY);
   });
 });

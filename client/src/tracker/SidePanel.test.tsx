@@ -11,11 +11,12 @@ import { CertificationModelFactory } from '../skills/factories/CertificationMode
 import * as moment from 'moment';
 import { TabAlert } from '../icons/TabAlert';
 import { StyledTab } from './Tab';
-import { StyledAvailability } from '../availability/Availability';
+import { SidePanelStore, TabType } from './stores/SidePanelStore';
 
 let airman: AirmanModel;
 let trackerStore: TrackerStore;
 let subject: ShallowWrapper;
+let sidePanelStore: SidePanelStore;
 
 describe('SidePanel', () => {
   beforeEach(async () => {
@@ -29,11 +30,13 @@ describe('SidePanel', () => {
     airman.certifications.push(certification);
 
     trackerStore = await makeFakeTrackerStore();
-    trackerStore.setSelectedAirman(airman);
+    trackerStore.setSelectedAirman(airman, TabType.AVAILABILITY);
+    sidePanelStore = new SidePanelStore();
 
     subject = shallow(
       <SidePanel
         trackerStore={trackerStore}
+        sidePanelStore={sidePanelStore}
       />
     );
   });
@@ -48,9 +51,11 @@ describe('SidePanel', () => {
     expect(subject.find(StyledTab).at(1).prop('title')).toBe('AVAILABILITY');
   });
 
-  it('renders the availability for a selected airman', () => {
-    const availability = subject.find(StyledAvailability);
-    expect(availability.exists()).toBeTruthy();
+  it('should render the selectedTab from the SidePanelStore', () => {
+    sidePanelStore.setSelectedTab(TabType.CURRENCY);
+    subject.update();
+    const currency = subject.find(StyledCurrency);
+    expect(currency.exists()).toBeTruthy();
   });
 
   it('renders the currency for a selected airman', () => {

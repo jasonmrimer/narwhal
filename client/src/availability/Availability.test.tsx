@@ -12,6 +12,7 @@ import { StyledRadioButtons } from '../widgets/RadioButtons';
 import { StyledAppointmentForm } from '../event/AppointmentForm';
 import { StyledLeaveForm } from '../event/LeaveForm';
 import { EventModelFactory } from '../event/factories/EventModelFactory';
+import { TabType } from '../tracker/stores/SidePanelStore';
 import { StyledBackButton } from '../widgets/BackButton';
 
 let trackerStore: TrackerStore;
@@ -52,7 +53,7 @@ describe('Availability', () => {
     airman.events = [eventOne, eventTwo, eventThree];
 
     trackerStore = await makeFakeTrackerStore();
-    trackerStore.setSelectedAirman(airman);
+    trackerStore.setSelectedAirman(airman, TabType.AVAILABILITY);
 
     subject = shallow(
       <Availability

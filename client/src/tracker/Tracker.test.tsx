@@ -10,6 +10,7 @@ import { StyledSidePanel } from './SidePanel';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 import { StyledDeleteEventPopup } from '../event/DeleteEventPopup';
 import { EventModelFactory } from '../event/factories/EventModelFactory';
+import { TabType } from './stores/SidePanelStore';
 
 let trackerStore: TrackerStore;
 let subject: ShallowWrapper;
@@ -74,7 +75,7 @@ describe('Tracker', () => {
     });
 
     it('should render a sidepanel when an airman is selected', () => {
-      trackerStore.setSelectedAirman(AirmanModelFactory.build());
+      trackerStore.setSelectedAirman(AirmanModelFactory.build(), TabType.AVAILABILITY);
       subject.update();
       expect(subject.find(StyledSidePanel).exists()).toBeTruthy();
     });

@@ -7,36 +7,27 @@ import { observer } from 'mobx-react';
 import { TrackerStore } from './stores/TrackerStore';
 import { StyledAvailability } from '../availability/Availability';
 import { TabAlert } from '../icons/TabAlert';
+import { SidePanelStore, TabType } from './stores/SidePanelStore';
 
 interface Props {
   trackerStore: TrackerStore;
+  sidePanelStore: SidePanelStore;
   className?: string;
 }
 
-interface State {
-  selectedTab: number;
-}
-
 @observer
-export class SidePanel extends React.Component<Props, State> {
-  state = {
-    selectedTab: 1
-  };
-
-  setSelectedTab = (selectedTab: number) => {
-    this.setState({selectedTab});
-  }
+export class SidePanel extends React.Component<Props> {
 
   renderSelectedTab = () => {
-    switch (this.state.selectedTab) {
-      case 0:
+    switch (this.props.sidePanelStore.selectedTab) {
+      case TabType.CURRENCY:
         return (
           <StyledCurrency
             selectedAirman={this.props.trackerStore.selectedAirman}
             currencyStore={this.props.trackerStore.currencyStore}
           />
         );
-      case 1:
+      case TabType.AVAILABILITY:
       default:
         return (
           <StyledAvailability
@@ -50,7 +41,7 @@ export class SidePanel extends React.Component<Props, State> {
   }
 
   render() {
-    const {trackerStore, className} = this.props;
+    const {trackerStore, className, sidePanelStore} = this.props;
 
     return (
       <div className={`${className} side-panel`}>
@@ -63,13 +54,17 @@ export class SidePanel extends React.Component<Props, State> {
           </h2>
         </div>
         <div className="tabs">
-          <StyledTab onClick={() => this.setSelectedTab(0)} title="CURRENCY" isActive={this.state.selectedTab === 0}>
+          <StyledTab
+            onClick={() => sidePanelStore.setSelectedTab(TabType.CURRENCY)}
+            title="CURRENCY"
+            isActive={sidePanelStore.selectedTab === TabType.CURRENCY}
+          >
             {trackerStore.selectedAirman.hasExpiredSkills && <TabAlert/>}
           </StyledTab>
           <StyledTab
-            onClick={() => this.setSelectedTab(1)}
+            onClick={() => sidePanelStore.setSelectedTab(TabType.AVAILABILITY)}
             title="AVAILABILITY"
-            isActive={this.state.selectedTab === 1}
+            isActive={sidePanelStore.selectedTab === TabType.AVAILABILITY}
           />
         </div>
         <div>

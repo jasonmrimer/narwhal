@@ -1,6 +1,6 @@
 import { shallow, ShallowWrapper } from 'enzyme';
 import * as React from 'react';
-import { clickOnFirstAirman, findByClassName, makeFakeTrackerStore, Table } from '../utils/testUtils';
+import { findByClassName, makeFakeTrackerStore, Table } from '../utils/testUtils';
 import { Roster } from './Roster';
 import { AirmanModel } from '../airman/models/AirmanModel';
 import { CertificationModel } from '../skills/models/CertificationModel';
@@ -9,6 +9,8 @@ import { QualificationModel } from '../skills/models/QualificationModel';
 import { StyledNotification } from '../widgets/Notification';
 import { StyledPlannerHeader } from '../widgets/PlannerHeader';
 import { StyledMultiTypeahead } from '../widgets/MultiTypeahead';
+import { StyledPlanner } from './Planner';
+import { AirmanDatum } from '../tracker/AirmanDatum';
 
 let airmen: AirmanModel[];
 let certifications: CertificationModel[];
@@ -48,6 +50,11 @@ describe('Roster', () => {
       expect(subject.find(StyledPlannerHeader).exists()).toBeTruthy();
     });
 
+    it('renders AirmanDatum components', () => {
+      const airmanDataCount = 3 * airmen.length;
+      expect(subject.find(AirmanDatum).length).toBe(airmanDataCount);
+    });
+
     it('renders airmen names', async () => {
       const expectedFullNames = airmen.map(airman => `${airman.lastName}, ${airman.firstName}`);
 
@@ -65,11 +72,6 @@ describe('Roster', () => {
     it('renders airmen certification', () => {
       const expectedCertification = airmen[0].certifications.map(cert => cert.title).join(' / ');
       expect(table.getTextForRowAndCol(0, 'CERTIFICATION')).toBe(expectedCertification);
-    });
-
-    it('calls the selectAirman when clicking on an airman', () => {
-      clickOnFirstAirman(subject);
-      expect(trackerStore.selectedAirman).toEqual(airmen[0]);
     });
 
     describe('multiselect', () => {
@@ -101,6 +103,11 @@ describe('Roster', () => {
     describe('planner', () => {
       it('renders a Planner for every airman', () => {
         expect(table.getPlanner().length).toBe(airmen.length);
+      });
+
+      it('passes Planner an airman and trackerStore', () => {
+        expect(subject.find(StyledPlanner).at(0).prop('airman')).toBe(airmen[0]);
+        expect(subject.find(StyledPlanner).at(0).prop('trackerStore')).toBe(trackerStore);
       });
     });
   });
