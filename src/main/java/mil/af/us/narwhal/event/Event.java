@@ -6,8 +6,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
+import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.Instant;
 
 @Entity
@@ -15,26 +15,28 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Event {
+  private static final String emptyFieldMessage = "This field is required.";
+
   @Id
   @GeneratedValue
   private Long id;
 
-  @NotEmpty
+  @NotEmpty(message = emptyFieldMessage)
   private String title;
 
   private String description;
 
-  @NotNull
+  @NotNull(message = emptyFieldMessage)
   private Instant startTime;
 
-  @NotNull
+  @NotNull(message = emptyFieldMessage)
   private Instant endTime;
 
-  @NotNull
+  @NotNull(message = emptyFieldMessage)
   @Enumerated(EnumType.STRING)
   private EventType type;
 
-  @NotNull
+  @NotNull(message = emptyFieldMessage)
   @Column(name = "airman_id")
   private Long airmanId;
 
@@ -47,5 +49,14 @@ public class Event {
     Long airmanId
   ) {
     this(null, title, description, startTime, endTime, eventType, airmanId);
+  }
+
+  @AssertTrue(message = "Start Date cannot be after End Date")
+  public boolean isValidDateRange() {
+    if (this.endTime != null && this.startTime != null) {
+      return this.endTime.compareTo(this.startTime) >= 0;
+    } else {
+      return true;
+    }
   }
 }

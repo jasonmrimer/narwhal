@@ -109,7 +109,6 @@ describe('AppointmenFormStore', () => {
     expect(eventActions.removeEvent).toHaveBeenCalledWith(event);
   });
 
-
   describe('auto-populating date and time fields', () => {
     it('should auto-populate empty end data field when setting start date', () => {
       subject.setState({startDate: '2018-02-22'});

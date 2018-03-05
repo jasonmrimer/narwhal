@@ -7,6 +7,7 @@ import { MissionFormStore } from '../../event/stores/MissionFormStore';
 import { AppointmentFormStore } from '../../event/stores/AppointmentFormStore';
 import { MissionRepositoryStub } from '../../mission/repositories/doubles/MissionRepositoryStub';
 import { MissionStore } from '../../mission/stores/MissionStore';
+import { toJS } from 'mobx';
 
 describe('AvailabilityStore', () => {
   let eventActions: EventActions;
@@ -115,5 +116,11 @@ describe('AvailabilityStore', () => {
     expect(subject.hasItem).toBeFalsy();
     expect(subject.shouldShowEventForm).toBeFalsy();
     expect(subject.eventFormType).toBe('');
+  });
+
+  it('should set errors on children stores when it calls setFormErrors', () => {
+    subject.openCreateEventForm(EventType.Appointment);
+    subject.setFormErrors([{title: 'This field is required.'}]);
+    expect(toJS(subject.appointmentFormStore.errors)).toEqual([{title: 'This field is required.'}]);
   });
 });

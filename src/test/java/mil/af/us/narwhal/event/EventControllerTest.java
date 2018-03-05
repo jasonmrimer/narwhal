@@ -96,6 +96,65 @@ public class EventControllerTest {
   }
 
   @Test
+  public void createWithBlankFieldsTest() throws Exception {
+    final Event event = new Event(
+      "",
+      "",
+      null,
+      null,
+      EventType.APPOINTMENT,
+      airman.getId()
+    );
+
+    final String json = objectMapper.writeValueAsString(event);
+
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .contentType("application/json")
+      .body(json)
+    .when()
+      .post(EventController.URI)
+    .then()
+      .statusCode(400)
+      .body("errors[0].defaultMessage", equalTo("This field is required."));
+    // @formatter:on
+  }
+
+  @Test
+  public void createWithInvalidEndDateTest() throws Exception {
+    Instant now = Instant.now();
+    final Event event = new Event(
+      "New Event",
+      "New Description",
+      now,
+      now.minusSeconds(100),
+      EventType.APPOINTMENT,
+      airman.getId()
+    );
+
+    final String json = objectMapper.writeValueAsString(event);
+
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .contentType("application/json")
+      .body(json)
+    .when()
+      .post(EventController.URI)
+    .then()
+      .statusCode(400)
+      .body("errors[0].defaultMessage", equalTo("Start Date cannot be after End Date"));
+    // @formatter:on
+  }
+
+  @Test
   public void updateTest() throws Exception {
     Event existingEvent = new Event(
       "Existing Event",

@@ -2,7 +2,7 @@ import { FormStore } from '../../widgets/stores/FormStore';
 import { EventModel, EventType } from '../models/EventModel';
 import { action } from 'mobx';
 import { EventActions } from './EventActions';
-import * as moment from 'moment'
+import * as moment from 'moment';
 
 interface State {
   title: string;

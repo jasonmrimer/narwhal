@@ -59,8 +59,9 @@ describe('AppointmentForm', () => {
 
   it('renders with field validation', () => {
     expect(wrapper.find(StyledFieldValidation).at(0).prop('name')).toBe('title');
-    expect(wrapper.find(StyledFieldValidation).at(1).prop('name')).toBe('startTime');
-    expect(wrapper.find(StyledFieldValidation).at(2).prop('name')).toBe('endTime');
+    expect(wrapper.find(StyledFieldValidation).at(1).prop('name')).toBe('validDateRange');
+    expect(wrapper.find(StyledFieldValidation).at(2).prop('name')).toBe('startTime');
+    expect(wrapper.find(StyledFieldValidation).at(3).prop('name')).toBe('endTime');
   });
 
   it('populates the fields with values from AppointmentFormStore', () => {

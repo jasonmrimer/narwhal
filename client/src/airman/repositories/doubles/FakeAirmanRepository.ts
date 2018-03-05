@@ -47,15 +47,15 @@ export class FakeAirmanRepository implements AirmanRepository {
   saveSkill(skill: Skill): Promise<AirmanModel> {
     const errors = [];
     if (skill.skillId == null) {
-      errors.push({id: 'Field is required'});
+      errors.push({id: 'This field is required.'});
     }
 
     if (!skill.earnDate.isValid()) {
-      errors.push({earnDate: 'Field is required'});
+      errors.push({earnDate: 'This field is required.'});
     }
 
     if (!skill.expirationDate.isValid()) {
-      errors.push({expirationDate: 'Field is required'});
+      errors.push({expirationDate: 'This field is required.'});
     }
 
     if (errors.length > 0) {

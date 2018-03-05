@@ -5,25 +5,29 @@ import { observer } from 'mobx-react';
 
 interface Props {
   name: string;
-  children: JSX.Element | JSX.Element[];
   errors: object[];
+  children?: JSX.Element | JSX.Element[];
   className?: string;
 }
 
 @observer
 export class FieldValidation extends React.Component<Props> {
-  fieldHasError() {
+  findErrorIndex() {
     if (this.props.errors.length === 0) {
-      return false;
+      return -1;
     }
-    return this.props.errors.findIndex(error => error.hasOwnProperty(this.props.name)) > -1;
+    return this.props.errors.findIndex(error => error.hasOwnProperty(this.props.name));
   }
 
   render() {
+    const errorIndex = this.findErrorIndex();
+    const hasError = errorIndex > -1;
     return (
-      <div className={classNames(this.props.className, {error: this.fieldHasError()})}>
+      <div className={classNames(this.props.className, {error: hasError})}>
         {this.props.children}
-        {this.fieldHasError() && <div className="error-msg">This field is required.</div>}
+        {hasError && <div className="error-msg">
+          {this.props.errors[errorIndex][this.props.name]}
+        </div>}
       </div>
     );
   }

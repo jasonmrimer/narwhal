@@ -95,13 +95,16 @@ export class AvailabilityStore {
   setFormErrors(errors: object[]) {
     switch (this._eventFormType) {
       case EventType.Appointment:
-        return this.appointmentFormStore.setErrors(errors);
+        this.appointmentFormStore.setErrors(errors);
+        break;
       case EventType.Leave:
-        return this.leaveFormStore.setErrors(errors);
+        this.leaveFormStore.setErrors(errors);
+        break;
       case EventType.Mission:
-        return this.missionFormStore.setErrors(errors);
+        this.missionFormStore.setErrors(errors);
+        break;
       default:
-        return;
+        break;
     }
   }
 }

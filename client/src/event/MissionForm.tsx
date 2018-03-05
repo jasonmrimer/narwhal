@@ -63,35 +63,37 @@ export class MissionForm extends React.Component<Props> {
           </StyledFormRow>
         </StyledFieldValidation>
 
-        <StyledFormRow>
-          <StyledDatePicker
-            name="startDate"
-            disabled={true}
-            onChange={noop}
-            value={state.startDate}
-          />
-          <StyledTimeInput
-            name="startTime"
-            disabled={true}
-            onChange={noop}
-            value={state.startTime}
-          />
-        </StyledFormRow>
+        <StyledFieldValidation name="validDateRange" errors={errors}>
+          <StyledFormRow>
+            <StyledDatePicker
+              name="startDate"
+              disabled={true}
+              onChange={noop}
+              value={state.startDate}
+            />
+            <StyledTimeInput
+              name="startTime"
+              disabled={true}
+              onChange={noop}
+              value={state.startTime}
+            />
+          </StyledFormRow>
 
-        <StyledFormRow>
-          <StyledDatePicker
-            name="endDate"
-            disabled={true}
-            onChange={noop}
-            value={state.endDate}
-          />
-          <StyledTimeInput
-            name="endTime"
-            disabled={true}
-            onChange={noop}
-            value={state.endTime}
-          />
-        </StyledFormRow>
+          <StyledFormRow>
+            <StyledDatePicker
+              name="endDate"
+              disabled={true}
+              onChange={noop}
+              value={state.endDate}
+            />
+            <StyledTimeInput
+              name="endTime"
+              disabled={true}
+              onChange={noop}
+              value={state.endTime}
+            />
+          </StyledFormRow>
+        </StyledFieldValidation>
 
         <StyledFormRow reversed={!hasItem}>
           {

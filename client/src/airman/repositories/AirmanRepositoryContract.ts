@@ -148,7 +148,7 @@ export function airmanRepositoryContract(subject: AirmanRepository) {
     describe('validation', () => {
       it('correctly handles validations from the server', async () => {
         const qualId = 5;
-        const errors = [{earnDate: 'Field is required'}, {expirationDate: 'Field is required'}];
+        const errors = [{earnDate: 'This field is required.'}, {expirationDate: 'This field is required.'}];
 
         try {
           await subject.saveSkill({

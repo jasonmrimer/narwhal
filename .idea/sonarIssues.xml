@@ -148,6 +148,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/client/src/event/AppointmentForm.tsx">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/client/src/event/EventForm.test.tsx">
           <value>
             <set />
@@ -159,6 +164,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/client/src/event/EventModel.ts">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/client/src/event/LeaveForm.tsx">
           <value>
             <set />
           </value>

@@ -30,21 +30,21 @@ export function EventRepositoryContract(subject: EventRepository) {
     });
 
     describe('validation', () => {
-      it('correctly handles validations from the server', async () => {
-        const event = new EventModel('', 'description1', moment(), moment(), 1, EventType.Leave);
-        try {
-          await subject.save(event);
-        } catch (errors) {
-          expect(errors).toEqual([{title: 'Field is required'}]);
-        }
-      });
-
-      it('correctly handles blank submissions from the server', async () => {
+      it('correctly handles empty event title from the server', async () => {
         const event = new EventModel('', 'description1', moment(), moment(), 1);
         try {
           await subject.save(event);
         } catch (errors) {
-          expect(errors).toEqual([{title: 'Field is required'}]);
+          expect(errors).toEqual([{title: 'This field is required.'}]);
+        }
+      });
+
+      it('correctly handles end dates that are before the start date from the server', async () => {
+        const event = new EventModel('Event 1', 'description1', moment(), moment().subtract(1, 'd'), 1);
+        try {
+          await subject.save(event);
+        } catch (errors) {
+          expect(errors).toEqual([{validDateRange: 'Start Date cannot be after End Date'}]);
         }
       });
     });

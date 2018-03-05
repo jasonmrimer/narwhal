@@ -99,7 +99,7 @@ export class WebAirmanRepository implements AirmanRepository {
 
   private handleError(response: { errors: object[] }): object {
     return response.errors.map((error: { field: string }) => {
-      return {[error.field]: 'Field is required'};
+      return {[error.field]: 'This field is required.'};
     });
   }
 }

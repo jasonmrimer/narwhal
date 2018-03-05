@@ -58,34 +58,36 @@ export class AppointmentForm extends React.Component<Props> {
           />
         </StyledFormRow>
 
-        <StyledFieldValidation name="startTime" errors={errors}>
-          <StyledFormRow>
-            <StyledDatePicker
-              name="startDate"
-              onChange={this.handleChange}
-              value={state.startDate}
-            />
-            <StyledTimeInput
-              name="startTime"
-              onChange={this.handleChange}
-              value={state.startTime}
-            />
-          </StyledFormRow>
-        </StyledFieldValidation>
+        <StyledFieldValidation name="validDateRange" errors={errors}>
+          <StyledFieldValidation name="startTime" errors={errors}>
+            <StyledFormRow>
+              <StyledDatePicker
+                name="startDate"
+                onChange={this.handleChange}
+                value={state.startDate}
+              />
+              <StyledTimeInput
+                name="startTime"
+                onChange={this.handleChange}
+                value={state.startTime}
+              />
+            </StyledFormRow>
+          </StyledFieldValidation>
 
-        <StyledFieldValidation name="endTime" errors={errors}>
-          <StyledFormRow>
-            <StyledDatePicker
-              name="endDate"
-              onChange={this.handleChange}
-              value={state.endDate}
-            />
-            <StyledTimeInput
-              name="endTime"
-              onChange={this.handleChange}
-              value={state.endTime}
-            />
-          </StyledFormRow>
+          <StyledFieldValidation name="endTime" errors={errors}>
+            <StyledFormRow>
+              <StyledDatePicker
+                name="endDate"
+                onChange={this.handleChange}
+                value={state.endDate}
+              />
+              <StyledTimeInput
+                name="endTime"
+                onChange={this.handleChange}
+                value={state.endTime}
+              />
+            </StyledFormRow>
+          </StyledFieldValidation>
         </StyledFieldValidation>
 
         <StyledFormRow reversed={true}>

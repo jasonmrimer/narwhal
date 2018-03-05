@@ -198,9 +198,19 @@ describe('TrackerStore', () => {
   describe('events', () => {
     const event = new EventModel('Title', 'Description', moment(), moment(), 1, EventType.Mission);
 
-    it('should add an event to an airman', async () => {
-      const savedEvent = await subject.addEvent(event);
-      expect(eventRepository.hasItem(savedEvent)).toBeTruthy();
+    describe('addEvent', () => {
+      it('should add an event to an airman', async () => {
+        const savedEvent = await subject.addEvent(event);
+        expect(eventRepository.hasItem(savedEvent)).toBeTruthy();
+      });
+
+      it('should call set form errors on Availability Stores when catching errors from add event', async () => {
+        const invalidEvent = new EventModel('', 'Description', moment(), moment(), 1, EventType.Appointment);
+        const setFormErrorsSpy = jest.fn();
+        subject.availabilityStore.setFormErrors = setFormErrorsSpy;
+        await subject.addEvent(invalidEvent);
+        expect(setFormErrorsSpy).toHaveBeenCalledWith([{title: 'This field is required.'}]);
+      });
     });
 
     it('should edit an existing event on an airman', async () => {

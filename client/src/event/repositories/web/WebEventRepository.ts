@@ -42,8 +42,8 @@ export class WebEventRepository implements EventRepository {
 
   private handleError(response: { errors: object[] }): object {
     if (response.errors != null) {
-      return response.errors.map((error: { field: string }) => {
-        return {[error.field]: 'Field is required'};
+      return response.errors.map((error: { field: string, defaultMessage: string }) => {
+        return {[error.field]: error.defaultMessage};
       });
     }
     return [];

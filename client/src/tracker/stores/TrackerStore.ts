@@ -20,8 +20,9 @@ import { MissionFormStore } from '../../event/stores/MissionFormStore';
 import { AppointmentFormStore } from '../../event/stores/AppointmentFormStore';
 import { SkillFormStore } from '../../skills/stores/SkillFormStore';
 import { Skill } from '../../skills/models/Skill';
+import { EventActions } from '../../event/stores/EventActions';
 
-export class TrackerStore {
+export class TrackerStore implements EventActions {
   public currencyStore: CurrencyStore;
   public availabilityStore: AvailabilityStore;
   public plannerStore: PlannerStore;
