@@ -62,7 +62,7 @@ class TrackerPage
   end
 
   def assert_shows_availability
-    click_on_airman('Spaceman')
+    click_on_airman('Spaceman, Corey')
     page.within('.side-panel') do
       expect(page).to have_content('AVAILABILITY')
       expect(page).to have_content('Spaceman, Corey')
@@ -72,7 +72,7 @@ class TrackerPage
   end
 
   def assert_shows_currency
-    click_on_airman('Spaceman')
+    click_on_airman('Spaceman, Corey')
     page.within('.side-panel') do
       find('a', text: 'CURRENCY').click
       expect(page).to have_content('CURRENCY')
@@ -85,7 +85,7 @@ class TrackerPage
   end
 
   def assert_create_update_delete_event
-    click_on_airman('Keeter')
+    click_on_airman('Keeter, Tracy')
 
     event = Event.new
 
@@ -100,7 +100,7 @@ class TrackerPage
   end
 
   def assert_create_event_validation
-    click_on_airman('Keeter')
+    click_on_airman('Keeter, Tracy')
     event = Event.new
 
     event.create_invalid
@@ -108,7 +108,7 @@ class TrackerPage
   end
 
   def assert_delete_create_update_qualification
-    click_on_airman('Spaceman')
+    click_on_airman('Spaceman, Corey')
 
     skill = Skill.new
 
@@ -129,7 +129,7 @@ class TrackerPage
   end
 
   def assert_delete_create_update_certification
-    click_on_airman('Spaceman')
+    click_on_airman('Spaceman, Corey')
 
     skill = Skill.new
 
@@ -149,7 +149,7 @@ class TrackerPage
   end
 
   def assert_create_skill_validation
-    click_on_airman('Keeter')
+    click_on_airman('Keeter, Tracy')
     skill = Skill.new
 
     skill.create_invalid
@@ -157,16 +157,16 @@ class TrackerPage
   end
 
   def assert_create_and_view_crew
-    click_on_airman('Spaceman')
+    click_on_airman('Spaceman, Corey')
     msn_assignment = MsnAssignment.new
     msn_assignment.create
 
-    click_on_airman('Keeter')
+    click_on_airman('Keeter, Tracy')
     msn_assignment = MsnAssignment.new
     msn_assignment.create
 
     crew_page = CrewPage.new(msn_assignment.msn_title)
-    crew_page.assert_has_assigned_airmen('Spaceman', 'Keeter')
+    crew_page.assert_has_assigned_airmen('Spaceman, Corey', 'Keeter, Tracy')
 
     crew_page.fill_in_position_and_make_critical
     crew_page.add_new_crew_member
