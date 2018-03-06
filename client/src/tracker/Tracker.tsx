@@ -41,7 +41,7 @@ export class Tracker extends React.Component<Props> {
               value={this.props.trackerStore.squadronId}
               callback={this.props.trackerStore.setSquadronId}
               options={this.props.trackerStore.squadronOptions}
-              notification="Please Select a Site First"
+              notification="Please select a site first."
             />
             <TopLevelFilter
               id="flight-filter"
@@ -50,7 +50,7 @@ export class Tracker extends React.Component<Props> {
               value={this.props.trackerStore.flightId}
               callback={this.props.trackerStore.setFlightId}
               options={this.props.trackerStore.flightOptions}
-              notification="Please Select a Squadron First"
+              notification="Please select a squadron first."
             />
           </div>
           <div>
