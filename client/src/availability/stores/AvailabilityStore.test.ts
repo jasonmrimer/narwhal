@@ -8,6 +8,7 @@ import { AppointmentFormStore } from '../../event/stores/AppointmentFormStore';
 import { MissionRepositoryStub } from '../../mission/repositories/doubles/MissionRepositoryStub';
 import { MissionStore } from '../../mission/stores/MissionStore';
 import { toJS } from 'mobx';
+import * as moment from 'moment';
 
 describe('AvailabilityStore', () => {
   let eventActions: EventActions;
@@ -44,8 +45,19 @@ describe('AvailabilityStore', () => {
       expect(subject.eventFormType).toBe('');
     });
 
+    it('should open an event form with a selectedDate', () => {
+      const openAppointmentSpy = jest.fn();
+      subject.appointmentFormStore.open = openAppointmentSpy;
+
+      subject.showEventForm(moment('2017-11-26'));
+      const event = new EventModel('', '', subject.selectedDate, subject.selectedDate, 1, EventType.Appointment);
+
+      subject.openCreateEventForm(EventType.Appointment, 1);
+      expect(openAppointmentSpy).toHaveBeenCalledWith(event);
+    });
+
     it('opens leave', () => {
-      subject.openCreateEventForm(EventType.Leave);
+      subject.openCreateEventForm(EventType.Leave, 1);
 
       expect(subject.hasItem).toBeFalsy();
       expect(subject.shouldShowEventForm).toBeFalsy();
@@ -53,7 +65,7 @@ describe('AvailabilityStore', () => {
     });
 
     it('opens appointment', () => {
-      subject.openCreateEventForm(EventType.Appointment);
+      subject.openCreateEventForm(EventType.Appointment, 1);
 
       expect(subject.hasItem).toBeFalsy();
       expect(subject.shouldShowEventForm).toBeFalsy();
@@ -61,7 +73,7 @@ describe('AvailabilityStore', () => {
     });
 
     it('opens mission', () => {
-      subject.openCreateEventForm(EventType.Mission);
+      subject.openCreateEventForm(EventType.Mission, 1);
 
       expect(subject.hasItem).toBeFalsy();
       expect(subject.shouldShowEventForm).toBeFalsy();
@@ -119,7 +131,7 @@ describe('AvailabilityStore', () => {
   });
 
   it('should set errors on children stores when it calls setFormErrors', () => {
-    subject.openCreateEventForm(EventType.Appointment);
+    subject.openCreateEventForm(EventType.Appointment, 1);
     subject.setFormErrors([{title: 'This field is required.'}]);
     expect(toJS(subject.appointmentFormStore.errors)).toEqual([{title: 'This field is required.'}]);
   });

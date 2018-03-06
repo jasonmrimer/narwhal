@@ -1,12 +1,14 @@
-import { EventModel, EventType } from '../../event/models/EventModel';
-import { action, computed, observable } from 'mobx';
-import { LeaveFormStore } from '../../event/stores/LeaveFormStore';
-import { MissionFormStore } from '../../event/stores/MissionFormStore';
-import { AppointmentFormStore } from '../../event/stores/AppointmentFormStore';
+import {EventModel, EventType} from '../../event/models/EventModel';
+import {action, computed, observable} from 'mobx';
+import {LeaveFormStore} from '../../event/stores/LeaveFormStore';
+import {MissionFormStore} from '../../event/stores/MissionFormStore';
+import {AppointmentFormStore} from '../../event/stores/AppointmentFormStore';
+import {Moment} from 'moment';
 
 export class AvailabilityStore {
   @observable private _shouldShowEventForm: boolean = false;
   @observable private _eventFormType: EventType | string = '';
+  @observable private _selectedDate: Moment;
 
   constructor(public appointmentFormStore: AppointmentFormStore,
               public leaveFormStore: LeaveFormStore,
@@ -37,23 +39,39 @@ export class AvailabilityStore {
     return this._shouldShowEventForm;
   }
 
+  @computed
+  get selectedDate() {
+    return this._selectedDate;
+  }
+
   @action.bound
-  showEventForm() {
+  showEventForm(selectedDate?: Moment) {
+    if (selectedDate) {
+      this._selectedDate = this._selectedDate = selectedDate;
+    }
     this._shouldShowEventForm = true;
   }
 
   @action.bound
-  openCreateEventForm(eventType: EventType) {
+  openCreateEventForm(eventType: EventType, airmanId: number) {
     this._eventFormType = eventType;
+
+    const event = this._selectedDate ?
+      new EventModel('', '', this._selectedDate, this._selectedDate, airmanId, eventType)
+      : null;
+
     switch (eventType) {
       case EventType.Appointment:
-        return this.appointmentFormStore.open();
+        this.appointmentFormStore.open(event);
+        break;
       case EventType.Leave:
-        return this.leaveFormStore.open();
+        this.leaveFormStore.open(event);
+        break;
       case EventType.Mission:
-        return this.missionFormStore.open();
+        this.missionFormStore.open(event);
+        break;
       default:
-        return;
+        break;
     }
   }
 
@@ -63,13 +81,16 @@ export class AvailabilityStore {
     this._eventFormType = event.type;
     switch (event.type) {
       case EventType.Appointment:
-        return this.appointmentFormStore.open(event);
+        this.appointmentFormStore.open(event);
+        break;
       case EventType.Leave:
-        return this.leaveFormStore.open(event);
+        this.leaveFormStore.open(event);
+        break;
       case EventType.Mission:
-        return this.missionFormStore.open(event);
+        this.missionFormStore.open(event);
+        break;
       default:
-        return;
+        break;
     }
   }
 

@@ -49,7 +49,7 @@ export class Availability extends React.Component<Props> {
 
   /* tslint:disable:no-any*/
   private renderEventFormContainer = () => {
-    const {availabilityStore} = this.props;
+    const {availabilityStore, selectedAirman} = this.props;
     return (
       <div>
         <StyledBackButton
@@ -65,7 +65,7 @@ export class Availability extends React.Component<Props> {
               name="eventType"
               options={Object.keys(EventType).map(key => EventType[key])}
               value={availabilityStore.eventFormType}
-              onChange={(e: any) => availabilityStore.openCreateEventForm(e.target.value)}
+              onChange={(e: any) => availabilityStore.openCreateEventForm(e.target.value, selectedAirman.id)}
             />
           </div>
         }
@@ -135,7 +135,18 @@ export class Availability extends React.Component<Props> {
             plannerStore.sidePanelWeek.map((day, index) => {
               return (
                 <div id={`day-${index}`} key={index}>
-                  <div className="event-date">{day.format('ddd, DD MMM YY').toUpperCase()}</div>
+                  <div
+                    className="event-date"
+                    onClick={() => availabilityStore.showEventForm(day)}
+                  >
+                    {day.format('ddd, DD MMM YY').toUpperCase()}
+                    <button
+                      className="add-event-on-date"
+                      onClick={() => availabilityStore.showEventForm(day)}
+                    >
+                      + Add Event
+                    </button>
+                  </div>
                   {this.scheduledEventsForDate(day, selectedAirman.events)}
                 </div>
               );
@@ -200,12 +211,25 @@ export const StyledAvailability = styled(Availability)`
     text-align: left;
     font-size: 0.75rem;
     margin-top: 1.5rem;
+    cursor: pointer;
+    
+    :hover button {
+      display: inline;
+      background: none;
+      margin-left: 0.5rem;
+      border: none;
+      font-size: inherit;
+      font-weight: inherit;
+      color: ${props => props.theme.fontColor};
+      cursor: pointer;
+    }
   }
 
   .event-name {
     color: ${props => props.theme.graySteel};
     border-bottom: ${props => props.theme.graySteel} 1px solid;
     margin: 1.5rem 20%;
+    text-align: center;
   }
   
   .nav-row {
@@ -218,5 +242,9 @@ export const StyledAvailability = styled(Availability)`
       border: none;
       cursor: pointer;
     }
+  }
+  
+  .add-event-on-date {
+    display: none;
   }
   `;
