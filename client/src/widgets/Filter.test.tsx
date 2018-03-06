@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { Filter } from './Filter';
-import Mock = jest.Mock;
 import { UnfilteredValue } from './models/FilterOptionModel';
+import { StyledFilterNotification } from './FilterNotification';
+import Mock = jest.Mock;
 
 const expectedOptions = [
   {label: 'A-label', value: UnfilteredValue},
@@ -64,5 +65,22 @@ describe('Filter', () => {
     );
 
     expect(subject.find('select').prop('disabled')).toBeTruthy();
+  });
+
+  it('renders a StyledFilterNotifcation if a disabled filter is clicked', () => {
+    subject = shallow(
+      <Filter
+        id="filter"
+        label="foo"
+        options={[]}
+        value={UnfilteredValue}
+        unfilteredOptionLabel="Unfiltered"
+        callback={callbackSpy}
+      />
+    );
+
+    subject.simulate('click');
+    expect(subject.state('showNotification')).toBeTruthy();
+    expect(subject.find(StyledFilterNotification).exists()).toBeTruthy();
   });
 });

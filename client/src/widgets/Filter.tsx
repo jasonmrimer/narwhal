@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { ChangeEvent } from 'react';
+import {ChangeEvent} from 'react';
 import styled from 'styled-components';
-import { observer } from 'mobx-react/custom';
-import { caret } from '../utils/StyleUtils';
-import { FilterOption, UnfilteredValue } from './models/FilterOptionModel';
+import {caret} from '../utils/StyleUtils';
+import {FilterOption, UnfilteredValue} from './models/FilterOptionModel';
+import {StyledFilterNotification} from './FilterNotification';
 
 interface Props {
   id: string;
@@ -12,7 +12,12 @@ interface Props {
   value: number;
   options: FilterOption[];
   callback: (id: number) => void;
+  notification?: string;
   className?: string;
+}
+
+interface State {
+  showNotification: boolean;
 }
 
 const handleChange = (event: ChangeEvent<HTMLSelectElement>, {callback}: Props) => {
@@ -25,23 +30,48 @@ const renderOptions = (unfilteredOptionLabel: string, options: FilterOption[]) =
   });
 };
 
-export const Filter = observer((props: Props) => {
-  const {options, value, unfilteredOptionLabel} = props;
-  return (
-    <div className={props.className}>
-      <label htmlFor={props.id}>{props.label}</label>
-      <br/>
-      <select
-        id={props.id}
-        disabled={options.length === 0}
-        value={value}
-        onChange={(event) => handleChange(event, props)}
-      >
-        {renderOptions(unfilteredOptionLabel, options)}
-      </select>
-    </div>
-  );
-});
+export class Filter extends React.Component<Props, State> {
+  state = {showNotification: false};
+
+  setNotification = () => {
+    if (this.disabled()) {
+      this.setState({showNotification: true});
+      this.hideNotification();
+    }
+  }
+
+  hideNotification = () => {
+    setTimeout(() => {
+      this.setState({showNotification: false});
+    },         5000);
+  }
+
+  render() {
+    return (
+      <div className={this.props.className} onClick={this.setNotification}>
+        <label htmlFor={this.props.id}>{this.props.label}</label>
+        <br/>
+        <select
+          id={this.props.id}
+          disabled={this.disabled()}
+          value={this.props.value}
+          onChange={(event) => handleChange(event, this.props)}
+        >
+          {renderOptions(this.props.unfilteredOptionLabel, this.props.options)}
+        </select>
+        {
+          this.state.showNotification &&
+          <StyledFilterNotification>{this.props.notification}</StyledFilterNotification>
+        }
+
+      </div>
+    );
+  }
+
+  private disabled() {
+    return this.props.options.length === 0;
+  }
+}
 
 export const TopLevelFilter = styled(Filter)`
   min-width: 20%;
@@ -88,10 +118,13 @@ export const TopLevelFilter = styled(Filter)`
     &:disabled {
       color: ${props => props.theme.graySteel};
       border-bottom: 1px solid ${props => props.theme.graySteel};
+      pointer-events: none;
     }
   }
   
   option {
     color: black;
   }
+  
+  
 `;

@@ -126,7 +126,6 @@ export class TrackerStore implements EventActions {
   @action.bound
   setSiteId(id: number) {
     this._siteId = id;
-
     const site = this._sites.find(s => s.id === this._siteId);
     if (site == null) {
       return;
