@@ -28,7 +28,7 @@ public class AirmanController {
 
   @GetMapping
   public List<Airman> index() {
-    return repository.findAll();
+    return repository.findAllAndByOrderByLastName();
   }
 
   @GetMapping(params = {"squadron"})

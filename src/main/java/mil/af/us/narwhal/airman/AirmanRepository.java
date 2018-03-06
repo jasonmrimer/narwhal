@@ -10,4 +10,6 @@ public interface AirmanRepository extends JpaRepository<Airman, Long> {
   List<Airman> findBySquadronId(Long squadronId);
 
   List<Airman> findByFlightId(Long flightId);
+
+  List<Airman> findAllAndByOrderByLastName();
 }
