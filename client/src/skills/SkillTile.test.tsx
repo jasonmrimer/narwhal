@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
-import { SkillTile } from './SkillTile';
+import { SkillTile, timeToExpire } from './SkillTile';
 import { AirmanQualificationModelFactory } from '../airman/factories/AirmanQualificationModelFactory';
 import * as moment from 'moment';
 import { ExpirationAlert } from '../icons/ExpirationAlert';
@@ -21,8 +21,10 @@ describe('SkillTile', () => {
   });
 
   it('should render the still title and expiration date', () => {
+    const expirationDate = timeToExpire(skill.expirationDate);
+
     expect(subject.text()).toContain(skill.title);
-    expect(subject.text()).toContain(skill.expirationDate.format('DD MMM YY').toUpperCase());
+    expect(subject.text()).toContain(`${expirationDate} days until expiration.`);
   });
 
   it('calls the onClick callback', () => {

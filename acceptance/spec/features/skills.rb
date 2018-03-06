@@ -2,6 +2,7 @@ class Skill
   include Capybara::DSL
   include RSpec::Matchers
   attr_accessor :earn, :expiration, :qual_title, :cert_title
+  require 'date'
 
   def initialize
     set_attrs
@@ -26,7 +27,7 @@ class Skill
   end
 
   def update_qualification
-    @expiration += 3600000
+    @expiration += 90
     page.within('.side-panel') do
       find('a', text: 'CURRENCY').click
       scroll_to(page.find('.currency-title', text: @qual_title))
@@ -55,7 +56,7 @@ class Skill
   def qualification_correct_date?
     page.within('.side-panel') do
       return page.has_content?('CURRENCY') &&
-          page.has_content?(@expiration.strftime('%d %^b %y')) &&
+          page.has_text?("179 days until expiration.") &&
           page.has_content?(@qual_title)
     end
   end
@@ -71,7 +72,7 @@ class Skill
   end
 
   def update_certification
-    @expiration += 3600000
+    @expiration += 90
     page.within('.side-panel') do
       find('a', text: 'CURRENCY').click
       scroll_to(page.find('.currency-title', text: @cert_title))
@@ -100,7 +101,7 @@ class Skill
   def certification_correct_date?
     page.within('.side-panel') do
       return page.has_content?('CURRENCY') &&
-          page.has_content?(@expiration.strftime('%d %^b %y')) &&
+          page.has_text?("179 days until expiration.") &&
           page.has_content?(@cert_title)
     end
   end
@@ -108,8 +109,8 @@ class Skill
   private
 
   def set_attrs
-    @earn = Time.now
-    @expiration = @earn + (60 * 60 * 24 * 365)
+    @earn = DateTime.now
+    @expiration = @earn + (90)
     @qual_title = 'HT - Instructor'
     @cert_title = 'X-Ray Vision'
   end

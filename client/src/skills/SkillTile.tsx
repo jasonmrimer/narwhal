@@ -5,6 +5,8 @@ import { Skill } from './models/Skill';
 import { AirmanQualificationModel } from '../airman/models/AirmanQualificationModel';
 import { AirmanCertificationModel } from '../airman/models/AirmanCertificationModel';
 import { SkillType } from './models/SkillType';
+import { Moment } from 'moment';
+import * as moment from 'moment';
 
 interface Props {
   skill: AirmanQualificationModel | AirmanCertificationModel;
@@ -34,6 +36,15 @@ const convertToSkill = (skill: AirmanQualificationModel | AirmanCertificationMod
   }
 };
 
+export const timeToExpire = (expirationDate: Moment) => {
+  const result = expirationDate.diff(moment(), 'days');
+  if (result > 0) {
+    return result;
+  } else {
+    return 0;
+  }
+};
+
 export const SkillTile = (props: Props) => {
   const {skill} = props;
   return (
@@ -45,7 +56,7 @@ export const SkillTile = (props: Props) => {
         <span>{skill.title}</span>
         {skill.isExpired && <ExpirationAlert/>}
       </div>
-      <div className="currency-description"> {skill.expirationDate.format('DD MMM YY').toUpperCase()}</div>
+      <div className="currency-description"> {timeToExpire(skill.expirationDate)} days until expiration.</div>
     </div>
   );
 };
