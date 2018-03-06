@@ -91,13 +91,6 @@ describe('Availability', () => {
     expect(trackerStore.availabilityStore.selectedDate).toEqual(moment('2017-11-26'));
   });
 
-  it('calls the createEvent on add-event-on-date button click', () => {
-    const dateWrapper = subject.find('#day-0');
-    expect(dateWrapper.find('.add-event-on-date').simulate('click'));
-    expect(trackerStore.availabilityStore.shouldShowEventForm).toBeTruthy();
-    expect(trackerStore.availabilityStore.selectedDate).toEqual(moment('2017-11-26'));
-  });
-
   it('renders a list of events', () => {
     expect(subject.find(StyledAvailabilityTile).length).toBe(6);
   });

@@ -139,13 +139,12 @@ export class Availability extends React.Component<Props> {
                     className="event-date"
                     onClick={() => availabilityStore.showEventForm(day)}
                   >
-                    {day.format('ddd, DD MMM YY').toUpperCase()}
-                    <button
-                      className="add-event-on-date"
-                      onClick={() => availabilityStore.showEventForm(day)}
-                    >
+                    <span>
+                      {day.format('ddd, DD MMM YY').toUpperCase()}
+                    </span>
+                    <span className="add-event-on-date">
                       + Add Event
-                    </button>
+                    </span>
                   </div>
                   {this.scheduledEventsForDate(day, selectedAirman.events)}
                 </div>
@@ -212,12 +211,15 @@ export const StyledAvailability = styled(Availability)`
     font-size: 0.75rem;
     margin-top: 1.5rem;
     cursor: pointer;
+    height: 0.75rem;
+    align-items: center;
+    display: flex;
     
-    :hover button {
+    :hover .add-event-on-date {
       display: inline;
-      background: none;
       margin-left: 0.5rem;
-      border: none;
+      margin-top: 0;
+      padding: 0;
       font-size: inherit;
       font-weight: inherit;
       color: ${props => props.theme.fontColor};
