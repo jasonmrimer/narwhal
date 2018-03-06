@@ -1,9 +1,9 @@
-import {EventModel, EventType} from '../../event/models/EventModel';
-import {action, computed, observable} from 'mobx';
-import {LeaveFormStore} from '../../event/stores/LeaveFormStore';
-import {MissionFormStore} from '../../event/stores/MissionFormStore';
-import {AppointmentFormStore} from '../../event/stores/AppointmentFormStore';
-import {Moment} from 'moment';
+import { EventModel, EventType } from '../../event/models/EventModel';
+import { action, computed, observable } from 'mobx';
+import { LeaveFormStore } from '../../event/stores/LeaveFormStore';
+import { MissionFormStore } from '../../event/stores/MissionFormStore';
+import { AppointmentFormStore } from '../../event/stores/AppointmentFormStore';
+import { Moment } from 'moment';
 
 export class AvailabilityStore {
   @observable private _shouldShowEventForm: boolean = false;

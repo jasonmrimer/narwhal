@@ -24,6 +24,7 @@ import { EventActions } from '../../event/stores/EventActions';
 import { SidePanelStore, TabType } from './SidePanelStore';
 import * as Fuse from 'fuse.js';
 
+/* tslint:disable:no-any*/
 export class TrackerStore implements EventActions {
   public currencyStore: CurrencyStore;
   public availabilityStore: AvailabilityStore;
@@ -131,11 +132,8 @@ export class TrackerStore implements EventActions {
   setSiteId(id: number) {
     this._siteId = id;
     const site = this._sites.find(s => s.id === this._siteId);
-    if (site == null) {
-      return;
-    }
 
-    if (site.squadrons.length === 1) {
+    if (site && site.squadrons.length === 1) {
       this.setSquadronId(site.squadrons[0].id);
     } else {
       this.setSquadronId(UnfilteredValue);
