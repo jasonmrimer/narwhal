@@ -37,9 +37,9 @@ describe('Availability', () => {
       'Event Two',
       '',
       moment('2017-11-27'),
-      moment('2017-11-27'),
+      moment('2017-11-28'),
       1,
-      EventType.Leave
+      EventType.Mission
     );
     eventThree = new EventModel(
       'Event Three',

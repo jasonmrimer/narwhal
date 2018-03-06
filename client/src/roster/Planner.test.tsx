@@ -34,7 +34,7 @@ describe('Planner', () => {
       'Mission',
       '',
       moment('2017-11-27T05:00:00.000Z'),
-      moment('2017-11-27T06:00:00.000Z'),
+      moment('2017-11-28T06:00:00.000Z'),
       1,
       EventType.Mission,
       2

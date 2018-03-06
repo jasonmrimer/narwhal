@@ -5,7 +5,7 @@ import { AppointmentIcon } from '../icons/AppointmentIcon';
 import { LeaveIcon } from '../icons/LeaveIcon';
 import { MissionIcon } from '../icons/MissionIcon';
 import { AvailableIcon } from '../icons/AvailableIcon';
-import { doesDayHaveEvent } from '../utils/eventUtil';
+import { findEventsForDay } from '../utils/eventUtil';
 import styled from 'styled-components';
 import { EventModel, EventType } from '../event/models/EventModel';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
@@ -33,7 +33,7 @@ const renderEventType = (type: EventType, key: number) => {
 };
 
 const renderEvents = (day: Moment, events: EventModel[], key: number) => {
-  const matchedEvents = events.filter(event => doesDayHaveEvent(day, event));
+  const matchedEvents = findEventsForDay(events, day);
   if (matchedEvents.length > 0) {
     return renderEventType(matchedEvents[0].type, key);
   } else {
@@ -52,7 +52,7 @@ export const Planner = (props: Props) => {
     >
       <span className="blank"/>
       <div>
-       {week.map((day, index) => renderEvents(day, airman.events, index))}
+        {week.map((day, index) => renderEvents(day, airman.events, index))}
       </div>
       <span className="blank"/>
     </td>

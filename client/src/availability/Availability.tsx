@@ -5,7 +5,7 @@ import { EventModel, EventType } from '../event/models/EventModel';
 import { StyledAvailabilityTile } from './AvailabilityTile';
 import { observer } from 'mobx-react';
 import { NextIcon } from '../icons/NextIcon';
-import { doesDayHaveEvent } from '../utils/eventUtil';
+import { findEventsForDay } from '../utils/eventUtil';
 import { BackIcon } from '../icons/BackIcon';
 import { AvailabilityStore } from './stores/AvailabilityStore';
 import { PlannerStore } from '../roster/stores/PlannerStore';
@@ -159,7 +159,7 @@ export class Availability extends React.Component<Props> {
 
   private scheduledEventsForDate = (day: Moment, events: EventModel[]) => {
     const {availabilityStore} = this.props;
-    const eventsForDay = events.filter(event => doesDayHaveEvent(day, event));
+    const eventsForDay = findEventsForDay(events, day);
     return eventsForDay.length === 0
       ? <div className="event-name">No Events Scheduled</div>
       : eventsForDay.map((event, index) => {
