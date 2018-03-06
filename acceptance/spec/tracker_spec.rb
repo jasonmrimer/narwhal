@@ -67,5 +67,9 @@ describe 'Tracker page', type: :feature do
     it 'can add airmen to a mission and then view a created crew' do
       tracker_page.assert_create_and_view_crew
     end
+
+    it 'can return to the tracker with previously selected filters' do
+      tracker_page.assert_return_to_tracker
+    end
   end
 end

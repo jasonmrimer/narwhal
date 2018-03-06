@@ -6,6 +6,9 @@ import { StyledTextInput } from '../widgets/TextInput';
 import { StyledButton } from '../widgets/Button';
 import { CrewPositionModel } from './models/CrewPositionModel';
 import { StyledCheckbox } from '../widgets/Checkbox';
+import { Link } from 'react-router-dom';
+import { BackArrow } from '../icons/BackArrow';
+import { Theme } from '../themes/default';
 
 interface Props {
   crewId: number;
@@ -44,6 +47,10 @@ export class Crew extends React.Component<Props> {
 
     return (
       <div className={this.props.className}>
+        <Link to={`/`}>
+          <BackArrow color={Theme.graySteel}/>
+          <span>Back to Availability Roster</span>
+        </Link>
         <div className="mission-details">
           <h1>{crew.mission.atoMissionNumber}</h1>
           <span>MSN DATE {crew.mission.displayDate}</span>
@@ -186,5 +193,18 @@ export const StyledCrew = styled(Crew)`
   
   button {
     margin-bottom: 1.5rem;
+  }
+  
+  a {
+    text-decoration: none;
+    font-size: 0.875rem;
+    color: ${props => props.theme.graySteel};
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    
+    span {
+      margin-left: 0.5rem;
+    }
   }
 `;

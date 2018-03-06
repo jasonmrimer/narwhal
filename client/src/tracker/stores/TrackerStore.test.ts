@@ -102,13 +102,22 @@ describe('TrackerStore', () => {
       ]);
     });
 
-    it('resets squadron and flight', () => {
+    it('resets squadron and flight when it sets a new site', () => {
       subject.setSiteId(1);
       subject.setSquadronId(2);
       subject.setFlightId(1);
       subject.setSiteId(2);
       expect(subject.squadronId).toBe(UnfilteredValue);
       expect(subject.flightId).toBe(UnfilteredValue);
+    });
+
+    it('keeps the squadron and flight when it sets the same site', () => {
+      subject.setSiteId(1);
+      subject.setSquadronId(2);
+      subject.setFlightId(1);
+      subject.setSiteId(1);
+      expect(subject.squadronId).toBe(2);
+      expect(subject.flightId).toBe(1);
     });
 
     describe('when a site only has one squadron', () => {
@@ -144,10 +153,16 @@ describe('TrackerStore', () => {
       ]);
     });
 
-    it('resets the flight', () => {
+    it('resets the flight when a new squadron is set', () => {
       subject.setFlightId(1);
       subject.setSquadronId(2);
       expect(subject.flightId).toBe(UnfilteredValue);
+    });
+
+    it('keeps the flight when the same squadron is set', () => {
+      subject.setFlightId(1);
+      subject.setSquadronId(1);
+      expect(subject.flightId).toBe(1);
     });
   });
 

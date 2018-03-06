@@ -30,7 +30,7 @@ export const StyledBackButton = styled(BackButton)`
   align-items: center;
   margin: 1.5rem 0;
 
-    span {
-      margin-left: 0.5rem;
-    }
+  span {
+    margin-left: 0.5rem;
+  }
 `;

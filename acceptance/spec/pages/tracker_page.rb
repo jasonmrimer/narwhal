@@ -8,14 +8,12 @@ class TrackerPage
   include Capybara::DSL
   include RSpec::Matchers
 
-  @@expected_columns = %w(NAME QUALIFICATION CERTIFICATION SUN MON TUE WED THU FRI SAT).freeze
-  @@expected_availability_days = %w(SUN MON TUE WED THU FRI SAT).freeze
-  @@expected_flights = %w(DOA DOM DOP).freeze
+  EXPECTED_AVAILABILITY_DAYS = %w(SUN MON TUE WED THU FRI SAT).freeze
 
   def initialize
     expect(page).to have_content('All Sites')
 
-    @@all_airmen_count = page.find_all('tbody tr').count
+    @all_airmen_count = page.find_all('tbody tr').count
   end
 
   def assert_navigates_week
@@ -29,7 +27,7 @@ class TrackerPage
   def assert_filters_by_site
     expect(page).to have_content('All Sites')
     filter('site', 'DMS-MD')
-    expect(page).to have_css('tbody tr', maximum: @@all_airmen_count)
+    expect(page).to have_css('tbody tr', maximum: @all_airmen_count)
   end
 
   def assert_filters_by_squadron
@@ -51,16 +49,6 @@ class TrackerPage
     expect(page).to have_css('tbody tr', maximum: squadron_count)
   end
 
-  def assert_filters_by_certification
-    typeahead('Filter Certifications', 'Super Speed')
-    expect(page).to have_css('tbody tr', maximum: @@all_airmen_count - 1)
-  end
-
-  def assert_filters_by_qualification
-    typeahead('Filter Qualifications', 'QB')
-    expect(page).to have_css('tbody tr', maximum: @@all_airmen_count - 1)
-  end
-
   def assert_filters_by_last_name
     last_name = "Spaceman"
     fill_in('last-name', with: last_name)
@@ -70,7 +58,17 @@ class TrackerPage
       page.find('input[name=last-name]').native.send_key(:backspace)
     end
 
-    expect(page).to have_css('tbody tr', count: @@all_airmen_count)
+    expect(page).to have_css('tbody tr', count: @all_airmen_count)
+  end
+
+  def assert_filters_by_certification
+    typeahead('Filter Certifications', 'Super Speed')
+    expect(page).to have_css('tbody tr', maximum: @all_airmen_count - 1)
+  end
+
+  def assert_filters_by_qualification
+    typeahead('Filter Qualifications', 'QB')
+    expect(page).to have_css('tbody tr', maximum: @all_airmen_count - 1)
   end
 
   def assert_shows_availability
@@ -78,7 +76,7 @@ class TrackerPage
     page.within('.side-panel') do
       expect(page).to have_content('AVAILABILITY')
       expect(page).to have_content('Spaceman, Corey')
-      @@expected_availability_days.each { |day_name| expect(page).to have_content(day_name) }
+      EXPECTED_AVAILABILITY_DAYS.each { |day_name| expect(page).to have_content(day_name) }
     end
     can_advance_to_next_week
   end
@@ -184,12 +182,36 @@ class TrackerPage
     crew_page.add_new_crew_member
   end
 
+  def assert_return_to_tracker
+    filter('site', 'DMS-MD')
+    filter('squadron', '94 IS')
+    squadron_count = page.find_all('tbody tr').count
+
+    filter('flight', 'DOB')
+    expect(page).to have_css('tbody tr', maximum: squadron_count)
+    flight_count = page.find_all('tbody tr').count
+    expect(flight_count).to be < squadron_count
+
+    click_on_airman('Spaceman, Corey')
+    page.within('.side-panel') do
+      find('a', text: 'AVAILABILITY').click
+      page.within('.event-title', text: 'XXX-FAKE-MISSION-1') do
+        click(find('a'))
+      end
+    end
+
+    expect(page).to have_content('XXX-FAKE-MISSION-1')
+    click(find('a', text: 'Back to Availability Roster'))
+
+    expect(page.find_all('tbody tr').count).to be < squadron_count
+    expect(page).to have_select('site-filter', selected: 'DMS-MD')
+    expect(page).to have_select('squadron-filter', selected: '94 IS')
+    expect(page).to have_select('flight-filter', selected: 'DOB')
+  end
+
   private
 
   def click_on_airman(name)
-    page.within 'table > tbody' do
-      expect(page).to have_selector('tr', count: 39)
-    end
     page.find(:xpath, "//*[text()='#{name}']").click
     page.within '.side-panel' do
       expect(page).to have_content name
@@ -232,4 +254,3 @@ class TrackerPage
     Capybara.current_session.driver.browser.execute_script(script, element.native)
   end
 end
-

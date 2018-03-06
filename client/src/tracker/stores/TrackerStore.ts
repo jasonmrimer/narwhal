@@ -130,13 +130,15 @@ export class TrackerStore implements EventActions {
 
   @action.bound
   setSiteId(id: number) {
-    this._siteId = id;
-    const site = this._sites.find(s => s.id === this._siteId);
+    if (this._siteId !== id) {
+      this._siteId = id;
+      const site = this._sites.find(s => s.id === this._siteId);
 
-    if (site && site.squadrons.length === 1) {
-      this.setSquadronId(site.squadrons[0].id);
-    } else {
-      this.setSquadronId(UnfilteredValue);
+      if (site && site.squadrons.length === 1) {
+        this.setSquadronId(site.squadrons[0].id);
+      } else {
+        this.setSquadronId(UnfilteredValue);
+      }
     }
   }
 
@@ -163,8 +165,10 @@ export class TrackerStore implements EventActions {
 
   @action.bound
   setSquadronId(id: number) {
-    this._squadronId = id;
-    this.setFlightId(UnfilteredValue);
+    if (this._squadronId !== id) {
+      this._squadronId = id;
+      this.setFlightId(UnfilteredValue);
+    }
   }
 
   @computed
@@ -203,16 +207,26 @@ export class TrackerStore implements EventActions {
     return this._certifications;
   }
 
+  @computed
+  get certificationOptions() {
+    return this._certifications.map(cert => {
+      return {value: cert.id, label: cert.title};
+    });
+  }
+
+  @computed
+  get certificationIds() {
+    return this._certificationIds;
+  }
+
   @action.bound
   setCertificationIds(options: FilterOption[]) {
     this._certificationIds = options.map(option => Number(option.value));
   }
 
   @computed
-  get certificationOptions() {
-    return this._certifications.map(cert => {
-      return {value: cert.id, label: cert.title};
-    });
+  get qualifications() {
+    return this._qualifications;
   }
 
   @computed
@@ -229,24 +243,14 @@ export class TrackerStore implements EventActions {
     });
   }
 
-  @action.bound
-  setQualificationIds(options: FilterOption[]) {
-    this._qualificationIds = options.map(option => Number(option.value));
-  }
-
   @computed
   get qualificationIds() {
     return this._qualificationIds;
   }
 
-  @computed
-  get certificationIds() {
-    return this._certificationIds;
-  }
-
-  @computed
-  get qualifications() {
-    return this._qualifications;
+  @action.bound
+  setQualificationIds(options: FilterOption[]) {
+    this._qualificationIds = options.map(option => Number(option.value));
   }
 
   @computed
@@ -348,20 +352,6 @@ export class TrackerStore implements EventActions {
     this._selectedAirman = this._airmen.find(a => a.id === item.airmanId)!;
   }
 
-  private byQualifications = (airman: AirmanModel) => {
-    if (this._qualificationIds.length === 0) {
-      return true;
-    }
-    return !this._qualificationIds.some(val => airman.qualificationIds.indexOf(val) === -1);
-  }
-
-  private byCertifications = (airman: AirmanModel) => {
-    if (this._certificationIds.length === 0) {
-      return true;
-    }
-    return !this._certificationIds.some(val => airman.certificationIds.indexOf(val) === -1);
-  }
-
   private bySite = (airman: AirmanModel) => {
     if (this._siteId === UnfilteredValue) {
       return true;
@@ -398,6 +388,20 @@ export class TrackerStore implements EventActions {
       return true;
     }
     return airman.flightId === this._flightId;
+  }
+
+  private byQualifications = (airman: AirmanModel) => {
+    if (this._qualificationIds.length === 0) {
+      return true;
+    }
+    return !this._qualificationIds.some(val => airman.qualificationIds.indexOf(val) === -1);
+  }
+
+  private byCertifications = (airman: AirmanModel) => {
+    if (this._certificationIds.length === 0) {
+      return true;
+    }
+    return !this._certificationIds.some(val => airman.certificationIds.indexOf(val) === -1);
   }
 
   private filterByLastName = (airmen: AirmanModel[]): AirmanModel[] => {

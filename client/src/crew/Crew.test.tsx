@@ -9,6 +9,7 @@ import { StyledButton } from '../widgets/Button';
 import { FakeAirmanRepository } from '../airman/repositories/doubles/FakeAirmanRepository';
 import { AirmanModel } from '../airman/models/AirmanModel';
 import { StyledCheckbox } from '../widgets/Checkbox';
+import { Link } from 'react-router-dom';
 
 describe('Crew', () => {
   let repositorySpy: CrewRepositorySpy;
@@ -52,6 +53,11 @@ describe('Crew', () => {
     expect(subject.find(StyledTextInput).length).toBe(crewPositions.length + 2);
   });
 
+  it('renders a link back to Tracker', () => {
+    expect(subject.find(Link).exists()).toBeTruthy();
+    expect(subject.find(Link).prop('to')).toBe('/');
+  });
+
   it('sets the crew position title for each crew member', () => {
     subject.find(StyledTextInput).at(0).simulate('change', {target: {value: 'chimichanga', id: 1, name: 'title'}});
     const position = crewStore.crew!.crewPositions.find(pos => pos.id === 1)!;
@@ -71,13 +77,13 @@ describe('Crew', () => {
     expect(position.critical).toBeTruthy();
   });
 
-  it('was submitCrews submitted', () => {
+  it('submits crew on submitCrews', () => {
     subject.find(StyledButton).simulate('click');
     const [crew] = repositorySpy.saveCalls.slice(-1);
     expect(crew).toEqual(crewStore.crew);
   });
 
-  it('set a new crew member', () => {
+  it('sets a new crew member', () => {
     subject.find(StyledCheckbox).at(2).simulate('change', {target: {value: 'checked', name: 'critical'}});
     subject.find(StyledTextInput).at(2).simulate('change', {target: {value: 'QB', name: 'title'}});
     subject.find(StyledTextInput).at(3).simulate('change', {target: {value: 'Munoz, Diana', name: 'airmanName'}});
