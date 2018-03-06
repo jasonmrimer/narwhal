@@ -320,4 +320,12 @@ describe('TrackerStore', () => {
       expect(updatedAirman.qualifications.length).toBeLessThan(qualLength);
     });
   });
+
+  it('should set the lastNameFilter', () => {
+    const airman = subject.airmen[0];
+    subject.setLastNameFilter({target: {value: airman.lastName}});
+
+    expect(subject.airmen.length).toBe(1);
+    expect(subject.airmen[0].firstName).toBe(airman.firstName);
+  });
 });

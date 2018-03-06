@@ -22,6 +22,7 @@ import { SkillFormStore } from '../../skills/stores/SkillFormStore';
 import { Skill } from '../../skills/models/Skill';
 import { EventActions } from '../../event/stores/EventActions';
 import { SidePanelStore, TabType } from './SidePanelStore';
+import * as Fuse from 'fuse.js';
 
 export class TrackerStore implements EventActions {
   public currencyStore: CurrencyStore;
@@ -45,6 +46,7 @@ export class TrackerStore implements EventActions {
   @observable private _flightId: number = UnfilteredValue;
   @observable private _certificationIds: number[] = [];
   @observable private _qualificationIds: number[] = [];
+  @observable private _lastNameFilter: string = '';
 
   @observable private _selectedAirman: AirmanModel = AirmanModel.empty();
   @observable private _pendingDeleteEvent: EventModel | null = null;
@@ -98,12 +100,14 @@ export class TrackerStore implements EventActions {
 
   @computed
   get airmen() {
-    return this._airmen
+    const airmen = this._airmen
       .filter(this.byQualifications)
       .filter(this.byCertifications)
       .filter(this.bySite)
       .filter(this.bySquadron)
       .filter(this.byFlight);
+
+    return this.filterByLastName(airmen);
   }
 
   @computed
@@ -331,6 +335,16 @@ export class TrackerStore implements EventActions {
     }
   }
 
+  @action.bound
+  setLastNameFilter = (e: any) => {
+    this._lastNameFilter = e.target.value;
+  }
+
+  @computed
+  get lastNameFilter() {
+    return this._lastNameFilter;
+  }
+
   private async refreshAirmen(item: { airmanId: number }) {
     this._airmen = await this.airmanRepository.findAll();
     this._selectedAirman = this._airmen.find(a => a.id === item.airmanId)!;
@@ -386,5 +400,18 @@ export class TrackerStore implements EventActions {
       return true;
     }
     return airman.flightId === this._flightId;
+  }
+
+  private filterByLastName = (airmen: AirmanModel[]): AirmanModel[] => {
+    if (this._lastNameFilter === '') {
+      return airmen;
+    }
+    const options = {
+      keys: ['lastName'],
+      threshold: 0.2,
+    };
+
+    const fuse = new Fuse(airmen, options);
+    return fuse.search(this._lastNameFilter);
   }
 }

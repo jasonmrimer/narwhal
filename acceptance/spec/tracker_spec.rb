@@ -27,6 +27,10 @@ describe 'Tracker page', type: :feature do
     it 'can filter the Roster by qualification' do
       tracker_page.assert_filters_by_qualification
     end
+
+    it 'can filter the Roster by Last Name' do
+      tracker_page.assert_filters_by_last_name
+    end
   end
 
   describe 'events' do

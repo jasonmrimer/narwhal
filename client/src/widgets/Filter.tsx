@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {ChangeEvent} from 'react';
+import { ChangeEvent } from 'react';
 import styled from 'styled-components';
-import {caret} from '../utils/StyleUtils';
-import {FilterOption, UnfilteredValue} from './models/FilterOptionModel';
-import {StyledFilterNotification} from './FilterNotification';
+import { caret } from '../utils/StyleUtils';
+import { FilterOption, UnfilteredValue } from './models/FilterOptionModel';
+import { StyledFilterNotification } from './FilterNotification';
 
 interface Props {
   id: string;
@@ -43,7 +43,7 @@ export class Filter extends React.Component<Props, State> {
   hideNotification = () => {
     setTimeout(() => {
       this.setState({showNotification: false});
-    },         5000);
+    }, 5000);
   }
 
   render() {
@@ -125,6 +125,5 @@ export const TopLevelFilter = styled(Filter)`
   option {
     color: black;
   }
-  
-  
+   
 `;

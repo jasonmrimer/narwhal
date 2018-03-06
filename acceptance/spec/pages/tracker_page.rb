@@ -61,6 +61,18 @@ class TrackerPage
     expect(page).to have_css('tbody tr', maximum: @@all_airmen_count - 1)
   end
 
+  def assert_filters_by_last_name
+    last_name = "Spaceman"
+    fill_in('last-name', with: last_name)
+    expect(page).to have_css('tbody tr', count: 1)
+
+    last_name.split("").each do |i|
+      page.find('input[name=last-name]').native.send_key(:backspace)
+    end
+
+    expect(page).to have_css('tbody tr', count: @@all_airmen_count)
+  end
+
   def assert_shows_availability
     click_on_airman('Spaceman, Corey')
     page.within('.side-panel') do

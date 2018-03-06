@@ -8,6 +8,7 @@ import { StyledNotification } from '../widgets/Notification';
 import { StyledMultiTypeahead } from '../widgets/MultiTypeahead';
 import { TabType } from '../tracker/stores/SidePanelStore';
 import { AirmanDatum } from '../tracker/AirmanDatum';
+import { StyledTextInput } from '../widgets/TextInput';
 
 interface Props {
   trackerStore: TrackerStore;
@@ -27,6 +28,13 @@ export class Roster extends React.Component<Props> {
           <tr>
             <th className="name">
               <div>NAME</div>
+                <StyledTextInput
+                    value={this.props.trackerStore.lastNameFilter}
+                    name="last-name"
+                    onChange={this.props.trackerStore.setLastNameFilter}
+                    placeholder="Search by Last Name"
+                    className="last-name-search"
+                />
             </th>
             <th className="qualification">
               <div>QUALIFICATION</div>
@@ -172,8 +180,14 @@ export const StyledRoster = styled(Roster)`
     width: 14%;
   }
   
-  .qualifications-multiselect, .certifications-multiselect{
+  .qualifications-multiselect, .certifications-multiselect, .last-name-search {
     margin-top: 0.25rem;
+  }
+  
+  input.last-name-search {
+    font-size: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.25rem;
   }
   
   .certification{
