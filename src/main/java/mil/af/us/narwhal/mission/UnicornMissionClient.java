@@ -4,8 +4,8 @@ import generated.Results;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.ws.client.core.support.WebServiceGatewaySupport;
 import org.springframework.ws.soap.client.core.SoapActionCallback;
-import unicorn.GetMissionMetaData;
-import unicorn.GetMissionMetaDataResponse;
+import unicorn.GetMissionMetaDataRestV2;
+import unicorn.GetMissionMetaDataRestV2Response;
 
 import java.util.List;
 
@@ -27,11 +27,12 @@ public class UnicornMissionClient extends WebServiceGatewaySupport implements Mi
 
   @Override
   public List<Results.MissionMetaData> getMissionMetaData() {
-    GetMissionMetaData getMissionMetaData = new GetMissionMetaData();
-    getMissionMetaData.setXmlRequest("");
-    GetMissionMetaDataResponse response = (GetMissionMetaDataResponse) getWebServiceTemplate()
-      .marshalSendAndReceive(getMissionMetaData, new SoapActionCallback("Unicorn/GetMissionMetaData"));
+    GetMissionMetaDataRestV2 getMissionMetaData = new GetMissionMetaDataRestV2();
+    getMissionMetaData.setStart("03/01/2018");
+    getMissionMetaData.setEnd("04/01/2018");
+    GetMissionMetaDataRestV2Response response = (GetMissionMetaDataRestV2Response) getWebServiceTemplate()
+      .marshalSendAndReceive(getMissionMetaData, new SoapActionCallback("Unicorn/GetMissionMetaDataRestV2"));
 
-    return response.getGetMissionMetaDataResult().getResults().getMissionMetaData();
+    return response.getGetMissionMetaDataRestV2Result().getResults().getMissionMetaData();
   }
 }
