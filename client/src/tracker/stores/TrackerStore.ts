@@ -96,7 +96,9 @@ export class TrackerStore implements EventActions {
     this._certifications = results[2];
     this._qualifications = results[3];
 
-    this.setSiteId(siteId);
+    if (this._siteId === UnfilteredValue) {
+      this.setSiteId(siteId);
+    }
   }
 
   @computed

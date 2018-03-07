@@ -8,6 +8,7 @@ import { StyledSidePanel } from './SidePanel';
 import { StyledLegend } from '../roster/Legend';
 import { ProfileModel } from '../profile/models/ProfileModel';
 import { StyledDeleteEventPopup } from '../event/DeleteEventPopup';
+import { UnfilteredValue } from '../widgets/models/FilterOptionModel';
 
 interface Props {
   trackerStore: TrackerStore;
@@ -18,7 +19,7 @@ interface Props {
 @observer
 export class Tracker extends React.Component<Props> {
   async componentDidMount() {
-    await this.props.trackerStore.hydrate(this.props.profile.siteId || -1);
+    await this.props.trackerStore.hydrate(this.props.profile.siteId || UnfilteredValue);
   }
 
   render() {

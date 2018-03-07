@@ -111,6 +111,12 @@ describe('TrackerStore', () => {
       expect(subject.flightId).toBe(UnfilteredValue);
     });
 
+    it('retains selected site when returning to tracker if site in profile is already set', async  () => {
+      subject.setSiteId(5);
+      await subject.hydrate(1);
+      expect(subject.siteId).toBe(5);
+    });
+
     it('keeps the squadron and flight when it sets the same site', () => {
       subject.setSiteId(1);
       subject.setSquadronId(2);
