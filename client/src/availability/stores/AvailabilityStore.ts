@@ -68,7 +68,7 @@ export class AvailabilityStore {
         this.leaveFormStore.open(event);
         break;
       case EventType.Mission:
-        this.missionFormStore.open(event);
+        this.missionFormStore.open();
         break;
       default:
         break;

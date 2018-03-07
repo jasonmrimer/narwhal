@@ -56,6 +56,16 @@ describe('AvailabilityStore', () => {
       expect(openAppointmentSpy).toHaveBeenCalledWith(event);
     });
 
+    it('should not include the selectedDate when opens a new Mission Form', () => {
+      const openMissionSpy = jest.fn();
+      subject.missionFormStore.open = openMissionSpy;
+
+      subject.showEventForm(moment('2017-11-26'));
+
+      subject.openCreateEventForm(EventType.Mission, 1);
+      expect(openMissionSpy).toHaveBeenCalledWith();
+    });
+
     it('opens leave', () => {
       subject.openCreateEventForm(EventType.Leave, 1);
 
