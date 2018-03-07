@@ -41,7 +41,6 @@ export const Dropdown = (props: Props) => {
 };
 
 export const StyledDropdown = styled(Dropdown)`
-  background-color: ${props => props.theme.dark};
   background: ${props => caret(props.theme.fontColor)};
   background-position: 98%;
   background-size: 0.75rem;
@@ -58,5 +57,21 @@ export const StyledDropdown = styled(Dropdown)`
     color: ${props => props.theme.graySteel};
     background: none;
     border-bottom: 1px solid ${props => props.theme.graySteel};
+  }
+  
+  option {
+    padding: 0.25rem 0;    
+    
+    :hover {
+      background-color: ${props => props.theme.light};
+    }
+    
+    :nth-child(odd) {
+      background-color: ${props => props.theme.lighter};
+    }
+    
+    :nth-child(even) {
+      background-color: ${props => props.theme.lightest};
+    }  
   }
 `;
