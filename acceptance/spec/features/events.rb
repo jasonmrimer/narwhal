@@ -54,15 +54,14 @@ class Event
     page.within('.side-panel') do
       find('a', text: 'AVAILABILITY').click
       click(page.all('.event-title', text: @title)[0])
-      # page.find('button.delete', text: 'DELETE').clikc
-      page.click_on 'DELETE'
+      click(page.find('button[type="button"]', text: 'DELETE'))
     end
 
     expect(page.has_content?('REMOVE EVENT')).to be true
     page.find('button.cancel', text: 'CANCEL').click
     expect(page.has_content?('REMOVE EVENT')).to be false
 
-    page.click_on 'DELETE'
+    click(page.find('button[type="button"]', text: 'DELETE'))
 
     expect(page.has_content?('REMOVE EVENT')).to be true
     page.find('button.confirm', text: 'REMOVE').click
