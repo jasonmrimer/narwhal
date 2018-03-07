@@ -56,20 +56,15 @@ export class Availability extends React.Component<Props> {
           onClick={() => availabilityStore.closeEventForm()}
           text="Back to Week View"
         />
-
-        {
-          !availabilityStore.hasItem &&
-          <div className="form-wrapper">
-            <div>Select Event Type:</div>
-            <StyledRadioButtons
-              name="eventType"
-              options={Object.keys(EventType).map(key => EventType[key])}
-              value={availabilityStore.eventFormType}
-              onChange={(e: any) => availabilityStore.openCreateEventForm(e.target.value, selectedAirman.id)}
-            />
-          </div>
-        }
-
+        <div className="form-wrapper">
+          <div>Select Event Type:</div>
+          <StyledRadioButtons
+            name="eventType"
+            options={Object.keys(EventType).map(key => EventType[key])}
+            value={availabilityStore.eventFormType}
+            onChange={(e: any) => availabilityStore.openCreateEventForm(e.target.value, selectedAirman.id)}
+          />
+        </div>
         {this.renderEventForm()}
       </div>
     );

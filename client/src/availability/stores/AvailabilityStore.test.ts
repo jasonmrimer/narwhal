@@ -27,20 +27,17 @@ describe('AvailabilityStore', () => {
   });
 
   it('should show the event form without an event', () => {
-    expect(subject.hasItem).toBeFalsy();
     expect(subject.shouldShowEventForm).toBeFalsy();
     expect(subject.eventFormType).toBe('');
 
     subject.showEventForm();
 
-    expect(subject.hasItem).toBeFalsy();
     expect(subject.shouldShowEventForm).toBeTruthy();
     expect(subject.eventFormType).toBe('');
   });
 
   describe('should open an event form for create', () => {
     beforeEach(() => {
-      expect(subject.hasItem).toBeFalsy();
       expect(subject.shouldShowEventForm).toBeFalsy();
       expect(subject.eventFormType).toBe('');
     });
@@ -63,13 +60,12 @@ describe('AvailabilityStore', () => {
       subject.showEventForm(moment('2017-11-26'));
 
       subject.openCreateEventForm(EventType.Mission, 1);
-      expect(openMissionSpy).toHaveBeenCalledWith();
+      expect(openMissionSpy).toHaveBeenCalledWith(null);
     });
 
     it('opens leave', () => {
       subject.openCreateEventForm(EventType.Leave, 1);
 
-      expect(subject.hasItem).toBeFalsy();
       expect(subject.shouldShowEventForm).toBeFalsy();
       expect(subject.eventFormType).toBe(EventType.Leave);
     });
@@ -77,7 +73,6 @@ describe('AvailabilityStore', () => {
     it('opens appointment', () => {
       subject.openCreateEventForm(EventType.Appointment, 1);
 
-      expect(subject.hasItem).toBeFalsy();
       expect(subject.shouldShowEventForm).toBeFalsy();
       expect(subject.eventFormType).toBe(EventType.Appointment);
     });
@@ -85,7 +80,6 @@ describe('AvailabilityStore', () => {
     it('opens mission', () => {
       subject.openCreateEventForm(EventType.Mission, 1);
 
-      expect(subject.hasItem).toBeFalsy();
       expect(subject.shouldShowEventForm).toBeFalsy();
       expect(subject.eventFormType).toBe(EventType.Mission);
     });
@@ -95,7 +89,6 @@ describe('AvailabilityStore', () => {
     let event: EventModel;
 
     beforeEach(() => {
-      expect(subject.hasItem).toBeFalsy();
       expect(subject.shouldShowEventForm).toBeFalsy();
       expect(subject.eventFormType).toBe('');
       event = EventModelFactory.build();
@@ -105,7 +98,6 @@ describe('AvailabilityStore', () => {
       event.type = EventType.Leave;
       subject.openEditEventForm(event);
 
-      expect(subject.hasItem).toBeTruthy();
       expect(subject.shouldShowEventForm).toBeTruthy();
       expect(subject.eventFormType).toBe(event.type);
     });
@@ -114,7 +106,6 @@ describe('AvailabilityStore', () => {
       event.type = EventType.Appointment;
       subject.openEditEventForm(event);
 
-      expect(subject.hasItem).toBeTruthy();
       expect(subject.shouldShowEventForm).toBeTruthy();
       expect(subject.eventFormType).toBe(event.type);
     });
@@ -123,7 +114,6 @@ describe('AvailabilityStore', () => {
       event.type = EventType.Mission;
       subject.openEditEventForm(event);
 
-      expect(subject.hasItem).toBeTruthy();
       expect(subject.shouldShowEventForm).toBeTruthy();
       expect(subject.eventFormType).toBe(event.type);
     });
@@ -135,7 +125,6 @@ describe('AvailabilityStore', () => {
 
     subject.closeEventForm();
 
-    expect(subject.hasItem).toBeFalsy();
     expect(subject.shouldShowEventForm).toBeFalsy();
     expect(subject.eventFormType).toBe('');
   });
