@@ -6,6 +6,7 @@ import { StyledSkillsForm } from '../skills/SkillsForm';
 import { StyledSkillTile } from '../skills/SkillTile';
 import { CurrencyStore } from './stores/CurrencyStore';
 import { StyledBackButton } from '../widgets/BackButton';
+import { StyledNotification } from '../widgets/Notification';
 
 interface Props {
   selectedAirman: AirmanModel;
@@ -52,7 +53,6 @@ export class Currency extends React.Component<Props> {
   }
 
   private renderSkillsList = () => {
-    const airman = this.props.selectedAirman;
     return (
       <div>
         <div className="skill-control-row">
@@ -60,14 +60,16 @@ export class Currency extends React.Component<Props> {
             + Add Skill
           </button>
         </div>
-        {this.renderQualifications(airman)}
-        {this.renderCertifications(airman)}
+        {this.renderQualifications()}
+        {this.renderCertifications()}
+        {this.renderSkillNotification()}
       </div>
     );
   }
 
-  private renderQualifications = (airman: AirmanModel) => {
-    return airman.qualifications.map((qual, index) => (
+  private renderQualifications = () => {
+
+    return this.props.selectedAirman.qualifications.map((qual, index) => (
       <StyledSkillTile
         key={index}
         skill={qual}
@@ -76,14 +78,22 @@ export class Currency extends React.Component<Props> {
     ));
   }
 
-  private renderCertifications = (airman: AirmanModel) => {
-    return airman.certifications.map((cert, index) => (
+  private renderCertifications = () => {
+    return this.props.selectedAirman.certifications.map((cert, index) => (
       <StyledSkillTile
         key={index}
         skill={cert}
         onClick={() => this.props.currencyStore.openEditSkillForm(cert)}
       />
     ));
+  }
+
+  private renderSkillNotification = () => {
+    if (this.props.selectedAirman.qualifications.length === 0 &&
+      this.props.selectedAirman.certifications.length === 0) {
+      return <StyledNotification>This Airman has no associated skills.</StyledNotification>;
+    }
+    return;
   }
 }
 

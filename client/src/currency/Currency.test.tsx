@@ -10,6 +10,7 @@ import { AirmanQualificationModelFactory } from '../airman/factories/AirmanQuali
 import { AirmanCertificationModelFactory } from '../airman/factories/AirmanCertificationModelFactory';
 import { TabType } from '../tracker/stores/SidePanelStore';
 import { StyledBackButton } from '../widgets/BackButton';
+import { StyledNotification } from '../widgets/Notification';
 
 describe('Currency', () => {
   const airman = AirmanModelFactory.build(
@@ -41,6 +42,13 @@ describe('Currency', () => {
     expect(skillTiles.length).toBe(skillsLength);
     expect(qualification.prop('skill')).toBe(airman.qualifications[0]);
     expect(qualification.prop('onClick')).toBeDefined();
+  });
+
+  it('renders a skill notification if the airman has no skills', () => {
+    const emptyAirman = AirmanModelFactory.build();
+    subject.setProps({selectedAirman: emptyAirman});
+    
+    expect(subject.find(StyledNotification).exists()).toBeTruthy();
   });
 
   it('opens skill form on + Add Skill click', () => {
