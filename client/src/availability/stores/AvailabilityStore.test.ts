@@ -83,6 +83,10 @@ describe('AvailabilityStore', () => {
       expect(subject.shouldShowEventForm).toBeFalsy();
       expect(subject.eventFormType).toBe(EventType.Mission);
     });
+
+    it('should render the StyledRadioButtons for event types', () => {
+      expect(subject.shouldShowEventTypeSelection).toBeTruthy();
+    });
   });
 
   describe('should open an event form for edit', () => {
@@ -117,6 +121,16 @@ describe('AvailabilityStore', () => {
       expect(subject.shouldShowEventForm).toBeTruthy();
       expect(subject.eventFormType).toBe(event.type);
     });
+
+    it('should not render the StyledRadioButtons for event types', () => {
+      event.id = 1;
+      event.type = EventType.Leave;
+      subject.openEditEventForm(event);
+
+      expect(subject.shouldShowEventForm).toBeTruthy();
+      expect(subject.shouldShowEventTypeSelection).toBeFalsy();
+    });
+
   });
 
   it('should close the event form', () => {

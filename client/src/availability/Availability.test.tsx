@@ -160,7 +160,7 @@ describe('Availability', () => {
       trackerStore.availabilityStore.openEditEventForm(event);
       subject.update();
 
-      expect(subject.find(StyledRadioButtons).exists()).toBeTruthy();
+      expect(subject.find(StyledRadioButtons).exists()).toBeFalsy();
       expect(subject.find(StyledAppointmentForm).exists()).toBeTruthy();
     });
 
@@ -169,7 +169,7 @@ describe('Availability', () => {
       trackerStore.availabilityStore.openEditEventForm(event);
       subject.update();
 
-      expect(subject.find(StyledRadioButtons).exists()).toBeTruthy();
+      expect(subject.find(StyledRadioButtons).exists()).toBeFalsy();
       expect(subject.find(StyledLeaveForm).exists()).toBeTruthy();
     });
   });

@@ -8,6 +8,7 @@ import { FormStore } from '../../widgets/stores/FormStore';
 
 export class AvailabilityStore {
   @observable private _shouldShowEventForm: boolean = false;
+  @observable private _shouldShowEventTypeSelection: boolean = true;
   @observable private _eventFormType: EventType | string = '';
   @observable private _selectedDate: Moment;
   private eventTypeFormStoreMap: object;
@@ -39,12 +40,18 @@ export class AvailabilityStore {
   }
 
   @computed
+  get shouldShowEventTypeSelection() {
+    return this._shouldShowEventTypeSelection;
+  }
+
+  @computed
   get selectedDate() {
     return this._selectedDate;
   }
 
   @action.bound
   showEventForm(selectedDate?: Moment) {
+    this._shouldShowEventTypeSelection = true;
     if (selectedDate) {
       this._selectedDate = this._selectedDate = selectedDate;
     }
@@ -64,6 +71,7 @@ export class AvailabilityStore {
 
   @action.bound
   openEditEventForm(event: EventModel) {
+    this._shouldShowEventTypeSelection = false;
     this._shouldShowEventForm = true;
     this._eventFormType = event.type;
     AvailabilityStore.callFormStoreFunction(this.eventTypeFormStoreMap[event.type], 'open', event);
