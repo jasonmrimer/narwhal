@@ -35,6 +35,12 @@ const renderEventType = (type: EventType, key: number) => {
 const renderEvents = (day: Moment, events: EventModel[], key: number) => {
   const matchedEvents = findEventsForDay(events, day);
   if (matchedEvents.length > 0) {
+    const eventType =  matchedEvents.map(event => event.type);
+
+    if (eventType.includes(EventType.Mission)) {
+      return renderEventType(EventType.Mission, key);
+    }
+
     return renderEventType(matchedEvents[0].type, key);
   } else {
     return <AvailableIcon key={key}/>;

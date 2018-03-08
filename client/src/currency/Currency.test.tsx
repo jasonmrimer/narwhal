@@ -47,7 +47,7 @@ describe('Currency', () => {
   it('renders a skill notification if the airman has no skills', () => {
     const emptyAirman = AirmanModelFactory.build();
     subject.setProps({selectedAirman: emptyAirman});
-    
+
     expect(subject.find(StyledNotification).exists()).toBeTruthy();
   });
 

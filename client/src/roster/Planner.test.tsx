@@ -43,7 +43,7 @@ describe('Planner', () => {
     const leave = new EventModel(
       'Leave',
       '',
-      moment('2017-11-28T05:00:00.000Z'),
+      moment('2017-11-27T05:00:00.000Z'),
       moment('2017-11-30T05:00:00.000Z'),
       1,
       EventType.Leave,
@@ -53,8 +53,8 @@ describe('Planner', () => {
     airman = AirmanModelFactory.build();
     airman.events = [
       appointment,
-      mission,
       leave,
+      mission,
     ];
 
     const week = new TimeServiceStub().getCurrentWeek();
@@ -73,6 +73,10 @@ describe('Planner', () => {
     expect(subject.find(MissionIcon).length).toBe(1);
     expect(subject.find(LeaveIcon).length).toBe(3);
     expect(subject.find(AvailableIcon).length).toBe(2);
+  });
+
+  it('give higher importance to mission Event Type than the others', () => {
+    expect(subject.find(MissionIcon).length).toBe(1);
   });
 
   it('calls the selectAirman when clicking on the planner', () => {
