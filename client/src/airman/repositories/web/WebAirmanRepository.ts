@@ -9,7 +9,6 @@ import { Skill } from '../../../skills/models/Skill';
 export class WebAirmanRepository implements AirmanRepository {
   private serializer = new AirmanSerializer();
   private csrfToken: string;
-
   constructor(private baseUrl: string = '') {
     this.csrfToken = Cookie.get('XSRF-TOKEN') || '';
   }
@@ -45,6 +44,21 @@ export class WebAirmanRepository implements AirmanRepository {
       throw this.handleError(json);
     }
     return Promise.resolve(this.serializer.deserialize(json));
+  }
+
+  async saveAirman(airman: AirmanModel): Promise<AirmanModel> {
+    const resp = await fetch(
+      `${this.baseUrl}/api/airmen`,
+      {
+        method: 'POST',
+        headers: [['Content-Type', 'application/json'], ['X-XSRF-TOKEN', this.csrfToken]],
+        body: JSON.stringify(airman),
+        credentials: 'include'
+      }
+    );
+
+    const json = await resp.json();
+    return this.serializer.deserialize(json);
   }
 
   async deleteSkill(skill: Skill): Promise<AirmanModel> {

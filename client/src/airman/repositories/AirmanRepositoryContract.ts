@@ -1,5 +1,5 @@
 import { AirmanRepository } from './AirmanRepository';
-import { AirmanModel } from '../models/AirmanModel';
+import { AirmanModel, ShiftType } from '../models/AirmanModel';
 import * as moment from 'moment';
 import { SkillType } from '../../skills/models/SkillType';
 import * as assert from 'assert';
@@ -147,6 +147,15 @@ export function airmanRepositoryContract(subject: AirmanRepository) {
         .find(q => q.qualification.id === qualId)!
         .expirationDate.isSame(newExpirationDate))
         .toBeTruthy();
+    });
+
+    it('updates an airman with a new shift', async () => {
+      let airman = airmen[0];
+      airman.shift = ShiftType.Night;
+
+      const updatedAirman = await subject.saveAirman(airman);
+
+      expect(updatedAirman.shift).toBe(ShiftType.Night);
     });
 
     describe('validation', () => {

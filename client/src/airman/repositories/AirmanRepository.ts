@@ -10,5 +10,7 @@ export interface AirmanRepository {
 
   saveSkill(skill: Skill): Promise<AirmanModel>;
 
+  saveAirman(airman: AirmanModel): Promise<AirmanModel>;
+
   deleteSkill(skill: Skill): Promise<AirmanModel>;
 }

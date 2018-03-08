@@ -118,6 +118,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/client/src/ShiftDropdown.tsx">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/client/src/airman/AirmanEvent.tsx">
           <value>
             <set />
@@ -508,6 +513,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/airman/AirmanJSON.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/airman/AirmanQualification.java">
           <value>
             <set />
@@ -519,6 +529,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/airman/AirmanRepository.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/airman/AirmanService.java">
           <value>
             <set />
           </value>

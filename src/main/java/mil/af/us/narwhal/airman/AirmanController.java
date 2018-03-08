@@ -19,11 +19,13 @@ public class AirmanController {
   private AirmanRepository repository;
   private QualificationRepository qualificationRepository;
   private CertificationRepository certificationRepository;
+  private AirmanService airmanService;
 
-  public AirmanController(AirmanRepository repository, QualificationRepository qualificationRepository, CertificationRepository certificationRepository) {
+  public AirmanController(AirmanRepository repository, QualificationRepository qualificationRepository, CertificationRepository certificationRepository, AirmanService airmanService) {
     this.repository = repository;
     this.qualificationRepository = qualificationRepository;
     this.certificationRepository = certificationRepository;
+    this.airmanService = airmanService;
   }
 
   @GetMapping
@@ -39,6 +41,12 @@ public class AirmanController {
   @GetMapping(params = {"flight"})
   public List<Airman> indexByFlightId(@RequestParam("flight") Long flightId) {
     return repository.findByFlightId(flightId);
+  }
+
+  @PostMapping
+  public Airman update(@RequestBody AirmanJSON airmanJSON) {
+    Airman airman = airmanService.buildAirmanFromJSON(airmanJSON);
+    return repository.save(airman);
   }
 
   @PostMapping(path = "/{id}/qualifications")

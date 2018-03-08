@@ -9,7 +9,7 @@ import { StyledMultiTypeahead } from '../widgets/MultiTypeahead';
 import { TabType } from '../tracker/stores/SidePanelStore';
 import { AirmanDatum } from '../tracker/AirmanDatum';
 import { StyledTextInput } from '../widgets/TextInput';
-import { ShiftDisplay } from './ShiftDisplay';
+import { StyledShiftDropdown } from '../ShiftDropdown';
 
 interface Props {
   trackerStore: TrackerStore;
@@ -71,7 +71,7 @@ export class Roster extends React.Component<Props> {
           key={index}
           className={className}
         >
-          <ShiftDisplay shift={airman.shift}/>
+          <StyledShiftDropdown airman={airman} trackerStore={trackerStore}/>
           <AirmanDatum
             trackerStore={trackerStore}
             airman={airman}
@@ -155,6 +155,7 @@ export const StyledRoster = styled(Roster)`
   }
   
   tbody tr {
+    position: relative;
     cursor: pointer;
   }
   

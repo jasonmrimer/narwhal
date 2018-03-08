@@ -1,7 +1,7 @@
 import { TrackerStore } from './TrackerStore';
 import { FakeAirmanRepository } from '../../airman/repositories/doubles/FakeAirmanRepository';
 import { SiteRepositoryStub } from '../../site/repositories/doubles/SiteRepositoryStub';
-import { AirmanModel } from '../../airman/models/AirmanModel';
+import { AirmanModel, ShiftType } from '../../airman/models/AirmanModel';
 import * as moment from 'moment';
 import { EventRepositoryStub } from '../../event/repositories/doubles/EventRepositoryStub';
 import { toJS } from 'mobx';
@@ -348,5 +348,13 @@ describe('TrackerStore', () => {
 
     expect(subject.airmen.length).toBe(1);
     expect(subject.airmen[0].firstName).toBe(airman.firstName);
+  });
+
+  it('should update an airman shift', async () => {
+    const airman = subject.airmen[0];
+    airman.shift = ShiftType.Swing;
+
+    await subject.updateAirmanShift(airman, ShiftType.Night);
+    expect(subject.airmen[0].shift).toBe(ShiftType.Night);
   });
 });

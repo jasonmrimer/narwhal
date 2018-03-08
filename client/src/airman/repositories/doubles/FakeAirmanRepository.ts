@@ -34,7 +34,6 @@ export class FakeAirmanRepository implements AirmanRepository {
   findAll() {
     return Promise.resolve(airmen);
   }
-
   findBySquadron(id: number) {
     return Promise.resolve(squadrons[String(id)]);
   }
@@ -81,6 +80,13 @@ export class FakeAirmanRepository implements AirmanRepository {
       this.save(airman.certifications, ac);
     }
     return Promise.resolve(airman);
+  }
+
+  saveAirman(airman: AirmanModel): Promise<AirmanModel> {
+    const index = airmen.findIndex(a => a.id === airman.id)!;
+    const updatedAirman = Object.assign({}, airmen[index], {shift: airman.shift});
+    airmen[index] = updatedAirman;
+    return Promise.resolve(updatedAirman);
   }
 
   deleteSkill(skill: Skill): Promise<AirmanModel> {

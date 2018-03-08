@@ -179,6 +179,27 @@ public class AirmanControllerTest {
   }
 
   @Test
+  public void updateTest() throws JsonProcessingException {
+    airman1.setShift(ShiftType.Night);
+    final String json = objectMapper.writeValueAsString(airman1);
+
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .contentType("application/json")
+      .body(json)
+    .when()
+      .post(AirmanController.URI)
+    .then()
+      .statusCode(200)
+      .body("shift", equalTo("Night"));
+    // @formatter:on
+  }
+
+  @Test
   public void updateAirmanQualification() throws JsonProcessingException {
     final AirmanQualification airmanQualification = new AirmanQualification(
       qualification1,

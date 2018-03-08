@@ -11,8 +11,8 @@ import { StyledPlannerHeader } from '../widgets/PlannerHeader';
 import { StyledMultiTypeahead } from '../widgets/MultiTypeahead';
 import { StyledPlanner } from './Planner';
 import { AirmanDatum } from '../tracker/AirmanDatum';
-import { ShiftDisplay } from './ShiftDisplay';
 import { TabType } from '../tracker/stores/SidePanelStore';
+import { StyledShiftDropdown } from '../ShiftDropdown';
 
 let airmen: AirmanModel[];
 let certifications: CertificationModel[];
@@ -61,7 +61,7 @@ describe('Roster', () => {
       const expectedShifts = airmen.map(airman => airman.shift);
       expect(table.getRowCount()).toEqual(airmen.length);
       table.getRows().forEach((row: ShallowWrapper, index: number) => {
-        expect(row.find(ShiftDisplay).prop('shift')).toBe(expectedShifts[index]);
+        expect(row.find(StyledShiftDropdown).prop('airman').shift).toBe(expectedShifts[index]);
       });
     });
 

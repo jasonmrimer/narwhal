@@ -1,4 +1,4 @@
-import { AirmanModel } from '../../airman/models/AirmanModel';
+import { AirmanModel, ShiftType } from '../../airman/models/AirmanModel';
 import { SiteModel } from '../../site/models/SiteModel';
 import { AirmanRepository } from '../../airman/repositories/AirmanRepository';
 import { SiteRepository } from '../../site/repositories/SiteRepository';
@@ -342,6 +342,13 @@ export class TrackerStore implements EventActions {
   @action.bound
   setLastNameFilter = (e: any) => {
     this._lastNameFilter = e.target.value;
+  }
+
+  @action.bound
+  async updateAirmanShift(airman: AirmanModel, shiftType: ShiftType) {
+    const updatedAirman = Object.assign({}, airman, {shift: shiftType});
+    await this.airmanRepository.saveAirman(updatedAirman);
+    this._airmen = await this.airmanRepository.findAll();
   }
 
   @computed

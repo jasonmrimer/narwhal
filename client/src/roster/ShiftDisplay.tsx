@@ -10,11 +10,11 @@ interface Props {
 
 export const ShiftDisplay = (props: Props) => {
   return (
-    <td>
+    <span>
       {props.shift === ShiftType.Day && <DayShiftIcon/>}
       {props.shift === ShiftType.Swing && <SwingShiftIcon/>}
       {props.shift === ShiftType.Night && <NightShiftIcon/>}
       {!props && <div/>}
-    </td>
+    </span>
   );
 };
