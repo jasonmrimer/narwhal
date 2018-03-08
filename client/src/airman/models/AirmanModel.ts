@@ -13,7 +13,8 @@ export class AirmanModel {
               public lastName: string,
               public qualifications: AirmanQualificationModel[] = [],
               public certifications: AirmanCertificationModel[] = [],
-              public events: EventModel[] = []) {
+              public events: EventModel[] = [],
+              public shift?: ShiftType) {
   }
 
   get isEmpty() {
@@ -32,4 +33,10 @@ export class AirmanModel {
   get certificationIds() {
     return this.certifications.map(cert => cert.certification.id);
   }
+}
+
+export enum ShiftType {
+  Day = 'Day',
+  Swing = 'Swing',
+  Night = 'Night',
 }

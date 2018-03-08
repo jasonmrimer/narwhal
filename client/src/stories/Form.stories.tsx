@@ -30,20 +30,13 @@ const wrapper = (story: any) => {
 };
 
 const skillsActions = {
+  /* tslint:disable:no-empty */
   addSkill: () => {
   },
   removeSkill: () => {
   },
-  qualificationOptions: [
-    {value: '1', label: 'A'},
-    {value: '2', label: 'B'},
-    {value: '3', label: 'C'},
-  ],
-  certificationOptions: [
-    {value: '1', label: 'X'},
-    {value: '2', label: 'Y'},
-    {value: '3', label: 'Z'},
-  ],
+  qualificationOptions: [{value: '1', label: 'A'}, {value: '2', label: 'B'}, {value: '3', label: 'C'}],
+  certificationOptions: [{value: '1', label: 'X'}, {value: '2', label: 'Y'}, {value: '3', label: 'Z'}],
 };
 
 export function FormStory() {
@@ -60,12 +53,7 @@ export function FormStory() {
     .add('edit skill', () => {
       const store = new SkillFormStore(skillsActions);
       store.open({
-        id: 1,
-        type: SkillType.Qualification,
-        skillId: 1,
-        airmanId: 1,
-        earnDate: moment(),
-        expirationDate: moment()
+        id: 1, type: SkillType.Qualification, skillId: 1, airmanId: 1, earnDate: moment(), expirationDate: moment()
       });
       return (
         <StyledSkillsForm

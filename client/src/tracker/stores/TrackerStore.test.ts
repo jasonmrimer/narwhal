@@ -189,8 +189,8 @@ describe('TrackerStore', () => {
   describe('filtering by certifications', () => {
     beforeEach(() => {
       subject.setCertificationIds([
-        {value: 1, label: 'Certification 1'},
-        {value: 2, label: 'Certification 2'}
+        {value: 4, label: 'Certification 4'},
+        {value: 5, label: 'Certification 5'}
       ]);
     });
 

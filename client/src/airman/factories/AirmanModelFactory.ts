@@ -1,6 +1,6 @@
 import { AirmanCertificationModel } from '../models/AirmanCertificationModel';
 import { AirmanQualificationModel } from '../models/AirmanQualificationModel';
-import { AirmanModel } from '../models/AirmanModel';
+import { AirmanModel, ShiftType } from '../models/AirmanModel';
 import { randomText } from '../../utils/randomizer';
 import { EventModel, EventType } from '../../event/models/EventModel';
 import * as moment from 'moment';
@@ -25,7 +25,13 @@ export class AirmanModelFactory {
           moment('2017-11-27T10:00:00.000Z'),
           id,
           EventType.Mission)
-      ]
+      ],
+      randomShiftType()
     );
   }
+}
+
+function randomShiftType(): ShiftType {
+  const shiftArray = ['Day', 'Swing', 'Night'];
+  return ShiftType[shiftArray[Math.floor(Math.random() * shiftArray.length)]];
 }

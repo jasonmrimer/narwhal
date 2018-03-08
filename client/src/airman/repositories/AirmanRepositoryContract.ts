@@ -19,6 +19,10 @@ export function airmanRepositoryContract(subject: AirmanRepository) {
       const uniqueIds = airmen.map(airman => airman.id).filter((el, i, a) => i === a.indexOf(el));
       expect(uniqueIds.length).toEqual(airmen.length);
 
+      airmen.forEach(({shift}) => {
+        expect(shift).toBeDefined();
+      });
+
       airmen.forEach(({qualifications}) => {
         expect(Array.isArray(qualifications)).toBeTruthy();
       });
@@ -197,17 +201,17 @@ export function airmanRepositoryContract(subject: AirmanRepository) {
         id: null,
         type: SkillType.Certification,
         airmanId: airmen[0].id,
-        skillId: 1,
+        skillId: 4,
         earnDate: moment(),
         expirationDate: moment()
       });
-      const savedSkill = airman.certifications.find(c => c.skillId === 1)!;
+      const savedSkill = airman.certifications.find(c => c.skillId === 4)!;
 
       const updatedAirman = await subject.deleteSkill({
         id: savedSkill.id,
         type: SkillType.Certification,
         airmanId: airmen[0].id,
-        skillId: 1,
+        skillId: 4,
         earnDate: savedSkill.earnDate,
         expirationDate: savedSkill.expirationDate
       });

@@ -23,6 +23,7 @@ export class AirmanSerializer implements Serializer<AirmanModel> {
       item.qualifications.map((qual: object) => this.qualSerializer.deserialize(qual)),
       item.certifications.map((cert: object) => this.certSerializer.deserialize(cert)),
       item.events.map((event: object) => this.eventSerializer.deserialize((event))),
+      item.shift
     );
   }
 }

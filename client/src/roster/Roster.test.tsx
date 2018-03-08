@@ -11,6 +11,8 @@ import { StyledPlannerHeader } from '../widgets/PlannerHeader';
 import { StyledMultiTypeahead } from '../widgets/MultiTypeahead';
 import { StyledPlanner } from './Planner';
 import { AirmanDatum } from '../tracker/AirmanDatum';
+import { ShiftDisplay } from './ShiftDisplay';
+import { TabType } from '../tracker/stores/SidePanelStore';
 
 let airmen: AirmanModel[];
 let certifications: CertificationModel[];
@@ -44,8 +46,8 @@ describe('Roster', () => {
       table = new Table(subject);
     });
 
-    it('renders NAME, QUALIFICATION, CERTIFICATION, and Planner table headers', () => {
-      const columnHeaders = ['NAME', 'QUALIFICATION', 'CERTIFICATION'];
+    it('renders SHIFT, NAME, QUALIFICATION, CERTIFICATION, and Planner table headers', () => {
+      const columnHeaders = ['SHIFT', 'NAME', 'QUALIFICATION', 'CERTIFICATION'];
       expect(table.getColumnHeaders()).toEqual(columnHeaders);
       expect(subject.find(StyledPlannerHeader).exists()).toBeTruthy();
     });
@@ -55,23 +57,42 @@ describe('Roster', () => {
       expect(subject.find(AirmanDatum).length).toBe(airmanDataCount);
     });
 
-    it('renders airmen names', async () => {
+    it('renders airmen shifts', () => {
+      const expectedShifts = airmen.map(airman => airman.shift);
+      expect(table.getRowCount()).toEqual(airmen.length);
+      table.getRows().forEach((row: ShallowWrapper, index: number) => {
+        expect(row.find(ShiftDisplay).prop('shift')).toBe(expectedShifts[index]);
+      });
+    });
+
+    it('renders airmen names', () => {
       const expectedFullNames = airmen.map(airman => `${airman.lastName}, ${airman.firstName}`);
 
       expect(table.getRowCount()).toEqual(airmen.length);
-      for (let i = 0; i < table.getRowCount(); i++) {
-        expect(table.getTextForRowAndCol(i, 'NAME')).toBe(expectedFullNames[i]);
-      }
+
+      table.getRows().forEach((row: ShallowWrapper, index: number) => {
+        expect(row.find(AirmanDatum).at(0).prop('airman')).toEqual(airmen[index]);
+        expect(row.find(AirmanDatum).at(0).prop('text')).toEqual(expectedFullNames[index]);
+        expect(row.find(AirmanDatum).at(0).prop('tab')).toEqual(TabType.AVAILABILITY);
+      });
     });
 
     it('renders airmen qualification', () => {
-      const expectedQualifications = airmen[0].qualifications.map(qual => qual.qualification.acronym).join(' / ');
-      expect(table.getTextForRowAndCol(0, 'QUALIFICATION')).toBe(expectedQualifications);
+      table.getRows().forEach((row: ShallowWrapper, index: number) => {
+        const expectedQualifications = airmen[index].qualifications.map(qual => qual.qualification.acronym).join(' / ');
+        expect(row.find(AirmanDatum).at(1).prop('airman')).toEqual(airmen[index]);
+        expect(row.find(AirmanDatum).at(1).prop('text')).toEqual(expectedQualifications);
+        expect(row.find(AirmanDatum).at(1).prop('tab')).toEqual(TabType.CURRENCY);
+      });
     });
 
     it('renders airmen certification', () => {
-      const expectedCertification = airmen[0].certifications.map(cert => cert.title).join(' / ');
-      expect(table.getTextForRowAndCol(0, 'CERTIFICATION')).toBe(expectedCertification);
+      table.getRows().forEach((row: ShallowWrapper, index: number) => {
+        const expectedCertification = airmen[index].certifications.map(cert => cert.title).join(' / ');
+        expect(row.find(AirmanDatum).at(2).prop('airman')).toEqual(airmen[index]);
+        expect(row.find(AirmanDatum).at(2).prop('text')).toEqual(expectedCertification);
+        expect(row.find(AirmanDatum).at(2).prop('tab')).toEqual(TabType.CURRENCY);
+      });
     });
 
     describe('multiselect', () => {

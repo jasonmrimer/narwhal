@@ -67,6 +67,7 @@ public class AirmanControllerTest {
     siteRepository.save(site);
 
     airman1 = new Airman(flight1.getId(), "first1", "last1");
+    airman1.setShift(ShiftType.Day);
     final Airman airman2 = new Airman(flight2.getId(), "first2", "last2");
     final Airman airman3 = new Airman(flight2.getId(), "first3", "last3");
 
@@ -91,7 +92,10 @@ public class AirmanControllerTest {
       .get(AirmanController.URI)
     .then()
       .statusCode(200)
-      .body("$.size()", equalTo(3));
+      .body("$.size()", equalTo(3))
+      .body("[0].firstName", equalTo("first1"))
+      .body("[0].shift", equalTo("Day"))
+      .body("[1].shift", equalTo(null));
     // @formatter:on
   }
 

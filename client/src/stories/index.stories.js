@@ -4,6 +4,7 @@ import '../index.css';
 import { FormStory } from './Form.stories';
 import { NotificationStory } from './Notification.stories';
 import {LeaveFormStory} from "./LeaveForm.stories";
+import {IconStory} from "./Icon.stories";
 
 document.body.style.fontFamily = Theme.fontFamily;
 document.body.style.color = Theme.fontColor;
@@ -13,3 +14,4 @@ document.body.style.fontWeight = '300';
 FormStory();
 NotificationStory();
 LeaveFormStory();
+IconStory();

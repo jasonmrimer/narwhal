@@ -32,6 +32,9 @@ public class Airman {
 
   private String lastName;
 
+  @Enumerated(EnumType.STRING)
+  private ShiftType shift;
+
   @OneToMany(mappedBy = "airmanId", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonManagedReference
   private List<AirmanQualification> qualifications = new ArrayList<>();
