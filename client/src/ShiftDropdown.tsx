@@ -68,6 +68,11 @@ export class ShiftDropdown extends React.Component<Props, State> {
 export const StyledShiftDropdown = styled(ShiftDropdown)`
   position: absolute;
   
+  div {
+    height: 1rem;
+    width: 1rem;
+  }
+  
   ul {
     position: absolute;
     padding: 0;
