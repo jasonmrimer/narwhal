@@ -12,11 +12,8 @@ export const doesMissionStartOnDay = (day: Moment, event: EventModel) => {
 export const findEventsForDay = (events: EventModel[], day: Moment) => {
   return events.filter(
     event => {
-      if (event.type === EventType.Mission) {
-        return doesMissionStartOnDay(day, event);
-      } else {
-        return doesDayHaveEvent(day, event);
-      }
-    }
-  );
+      return event.type === EventType.Mission
+        ? doesMissionStartOnDay(day, event)
+        : doesDayHaveEvent(day, event);
+    });
 };

@@ -10,4 +10,8 @@ export class MissionRepositoryStub implements MissionRepository {
   findBySite(id: number): Promise<MissionModel[]> {
     return Promise.resolve(MissionModelFactory.buildForSite(id));
   }
+
+  findAllFromTodayOn(): Promise<MissionModel[]> {
+    return Promise.resolve(MissionModelFactory.buildForAllFromTodayOn());
+  }
 }

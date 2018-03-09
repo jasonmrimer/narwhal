@@ -68,9 +68,8 @@ describe('MissionFormStore', () => {
   });
 
   it('can add an event', () => {
-    const selectedMission = missionStore.missions[0];
+    const selectedMission = missionStore.missions[1];
     subject.setState({missionId: selectedMission.missionId});
-
     subject.addItem(airmanId);
 
     const expectedEvent = new EventModel(
@@ -84,8 +83,8 @@ describe('MissionFormStore', () => {
 
     const addedEvent = (eventActions.addEvent as jest.Mock).mock.calls[0][0];
     expect(addedEvent.title).toEqual(expectedEvent.title);
-    expect(addedEvent.startTime.isSame(expectedEvent.startTime)).toBeTruthy();
-    expect(addedEvent.endTime.isSame(expectedEvent.endTime)).toBeTruthy();
+    expect(addedEvent.startTime.format('DD MMM YY HHmm')).toBe(expectedEvent.startTime.format('DD MMM YY HHmm'));
+    expect(addedEvent.endTime.format('DD MMM YY HHmm')).toBe(expectedEvent.endTime.format('DD MMM YY HHmm'));
     expect(addedEvent.airmanId).toEqual(expectedEvent.airmanId);
     expect(addedEvent.type).toEqual(expectedEvent.type);
   });

@@ -28,9 +28,9 @@ export class Currency extends React.Component<Props> {
     return (
       <div className={this.props.className}>
         {
-          this.props.currencyStore.shouldShowSkillForm ?
-            this.renderSkillsForm() :
-            this.renderSkillsList()
+          this.props.currencyStore.shouldShowSkillForm
+            ? this.renderSkillsForm()
+            : this.renderSkillsList()
         }
       </div>
     );

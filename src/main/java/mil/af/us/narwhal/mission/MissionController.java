@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @RestController
@@ -26,5 +28,10 @@ public class MissionController {
   @GetMapping(params = {"site"})
   public List<Mission> index(@RequestParam("site") Long siteId) {
     return missionRepository.findBySiteId(siteId);
+  }
+
+  @GetMapping(path = "/from-today")
+  public List<Mission> indexFromToday(){
+    return missionRepository.findByStartDateTimeGreaterThanEqual(Instant.now().truncatedTo(ChronoUnit.DAYS));
   }
 }

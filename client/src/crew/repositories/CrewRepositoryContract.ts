@@ -31,7 +31,6 @@ export function crewRepositoryContract(subject: CrewRepository) {
       const crew = new CrewModel(1, mission, crewPositions);
 
       const resp = await subject.update(crew);
-
       expect(resp.mission).toBeDefined();
       expect(resp.crewPositions).toBeDefined();
     });

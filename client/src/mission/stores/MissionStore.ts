@@ -6,6 +6,7 @@ export class MissionStore {
   private missionRepository: MissionRepository;
 
   @observable private _missions: MissionModel[] = [];
+  @observable private _missionOptions: MissionModel[] = [];
 
   constructor(missionRepository: MissionRepository) {
     this.missionRepository = missionRepository;
@@ -13,6 +14,7 @@ export class MissionStore {
 
   async hydrate() {
     this._missions = await this.missionRepository.findAll();
+    this._missionOptions = await this.missionRepository.findAllFromTodayOn();
   }
 
   @computed
@@ -22,7 +24,7 @@ export class MissionStore {
 
   @computed
   get missionOptions() {
-    return this._missions.map(msn => {
+    return this._missionOptions.map(msn => {
       return {value: msn.missionId, label: msn.atoMissionNumber};
     });
   }

@@ -30,7 +30,7 @@ describe('MissionForm', () => {
 
     missionStore = new MissionStore(new MissionRepositoryStub());
     await missionStore.hydrate();
-    mission = missionStore.missions[0];
+    mission = missionStore.missions[1];
 
     missionFormStore = new MissionFormStore(eventActions, missionStore);
 

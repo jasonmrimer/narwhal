@@ -17,8 +17,12 @@ export class WebMissionRepository implements MissionRepository {
   async findBySite(id: number) {
     const resp = await fetch(`${this.baseUrl}/api/missions?site=${id}`, {credentials: 'include'});
     const json = await resp.json();
-    return json.map((obj: object) => {
-      return this.serializer.deserialize(obj);
-    });
+    return json.map((obj: object) => this.serializer.deserialize(obj));
+  }
+
+  async findAllFromTodayOn() {
+    const resp = await fetch(`${this.baseUrl}/api/missions/from-today`, {credentials: 'include'});
+    const json = await resp.json();
+    return json.map((obj: object) => this.serializer.deserialize(obj));
   }
 }
