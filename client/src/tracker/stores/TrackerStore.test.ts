@@ -11,6 +11,7 @@ import { TimeServiceStub } from '../services/doubles/TimeServiceStub';
 import { EventModel, EventType } from '../../event/models/EventModel';
 import SkillRepositoryStub from '../../skills/repositories/doubles/SkillRepositoryStub';
 import { SkillType } from '../../skills/models/SkillType';
+import {TabType} from "./SidePanelStore";
 
 describe('TrackerStore', () => {
   const airmenRepository = new FakeAirmanRepository();
@@ -254,6 +255,17 @@ describe('TrackerStore', () => {
 
       expect(eventRepository.count).toBe(eventCount);
       expect(eventRepository.hasItem(updatedEvent)).toBeTruthy();
+    });
+
+    it('should set selected Airman with a new event form for airman', () => {
+      const airman = allAirmen[0];
+      const date = moment.utc();
+      subject.newEvent(airman, date);
+      expect(subject.selectedAirman).toEqual(airman);
+      expect(subject.availabilityStore.selectedDate).toEqual(date);
+      expect(subject.availabilityStore.shouldShowEventForm).toBeTruthy();
+      expect(subject.availabilityStore.shouldShowEventTypeSelection).toBeTruthy();
+      expect(subject.sidePanelStore.selectedTab).toBe(TabType.AVAILABILITY);
     });
 
     describe('delete', () => {

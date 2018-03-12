@@ -27,10 +27,6 @@ interface Props {
 
 @observer
 export class Availability extends React.Component<Props> {
-  componentDidMount() {
-    this.props.availabilityStore.closeEventForm();
-  }
-
   componentWillReceiveProps() {
     this.props.availabilityStore.closeEventForm();
   }

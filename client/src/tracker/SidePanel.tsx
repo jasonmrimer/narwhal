@@ -55,7 +55,10 @@ export class SidePanel extends React.Component<Props> {
         </div>
         <div className="tabs">
           <StyledTab
-            onClick={() => sidePanelStore.setSelectedTab(TabType.CURRENCY)}
+            onClick={() => {
+              trackerStore.availabilityStore.closeEventForm();
+              sidePanelStore.setSelectedTab(TabType.CURRENCY);
+            }}
             title="CURRENCY"
             isActive={sidePanelStore.selectedTab === TabType.CURRENCY}
           >

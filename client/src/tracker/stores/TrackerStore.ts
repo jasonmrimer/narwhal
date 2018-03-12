@@ -23,6 +23,7 @@ import { Skill } from '../../skills/models/Skill';
 import { EventActions } from '../../event/stores/EventActions';
 import { SidePanelStore, TabType } from './SidePanelStore';
 import * as Fuse from 'fuse.js';
+import { Moment } from 'moment';
 
 /* tslint:disable:no-any*/
 export class TrackerStore implements EventActions {
@@ -275,6 +276,7 @@ export class TrackerStore implements EventActions {
 
   @action.bound
   clearSelectedAirman() {
+    this.availabilityStore.closeEventForm();
     this.setSelectedAirman(AirmanModel.empty(), TabType.AVAILABILITY);
   }
 
@@ -299,6 +301,13 @@ export class TrackerStore implements EventActions {
   @action.bound
   removeEvent(event: EventModel) {
     this._pendingDeleteEvent = event;
+  }
+
+  @action.bound
+  newEvent(airman: AirmanModel, date: Moment) {
+    this._selectedAirman = airman;
+    this.sidePanelStore.setSelectedTab(TabType.AVAILABILITY);
+    this.availabilityStore.showEventForm(date);
   }
 
   @action.bound

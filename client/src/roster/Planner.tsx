@@ -9,7 +9,6 @@ import { findEventsForDay } from '../utils/eventUtil';
 import styled from 'styled-components';
 import { EventModel, EventType } from '../event/models/EventModel';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
-import { TabType } from '../tracker/stores/SidePanelStore';
 import { AirmanModel } from '../airman/models/AirmanModel';
 
 interface Props {
@@ -32,7 +31,7 @@ const renderEventType = (type: EventType, key: number) => {
   }
 };
 
-const renderEvents = (day: Moment, events: EventModel[], key: number) => {
+const renderEvents = (day: Moment, events: EventModel[], key: number, airman: AirmanModel, trackerStore: TrackerStore) => {
   const matchedEvents = findEventsForDay(events, day);
   if (matchedEvents.length > 0) {
     const eventType =  matchedEvents.map(event => event.type);
@@ -43,22 +42,17 @@ const renderEvents = (day: Moment, events: EventModel[], key: number) => {
 
     return renderEventType(matchedEvents[0].type, key);
   } else {
-    return <AvailableIcon key={key}/>;
+    return <AvailableIcon key={key} onClick={() => trackerStore.newEvent(airman, day)}/>;
   }
 };
 
 export const Planner = (props: Props) => {
   const {airman, week} = props;
   return (
-    <td
-      className={classNames(props.className, 'planner-row')}
-      onClick={() => {
-        props.trackerStore.setSelectedAirman(airman, TabType.AVAILABILITY);
-      }}
-    >
+    <td className={classNames(props.className, 'planner-row')}>
       <span className="blank"/>
       <div>
-        {week.map((day, index) => renderEvents(day, airman.events, index))}
+        {week.map((day, index) => renderEvents(day, airman.events, index, airman, props.trackerStore))}
       </div>
       <span className="blank"/>
     </td>

@@ -18,6 +18,7 @@ describe('Planner', () => {
   let subject: ShallowWrapper;
   let trackerStore: TrackerStore;
   let airman: AirmanModel;
+  let newEventSpy = jest.fn();
 
   beforeEach(async () => {
     const appointment = new EventModel(
@@ -59,7 +60,7 @@ describe('Planner', () => {
 
     const week = new TimeServiceStub().getCurrentWeek();
     trackerStore = await makeFakeTrackerStore();
-
+    trackerStore.newEvent = newEventSpy;
     subject = shallow(
       <Planner
         airman={airman}
@@ -79,9 +80,10 @@ describe('Planner', () => {
     expect(subject.find(MissionIcon).length).toBe(1);
   });
 
-  it('calls the selectAirman when clicking on the planner', () => {
-    subject.simulate('click');
-    expect(trackerStore.selectedAirman).toEqual(airman);
-    expect(trackerStore.sidePanelStore.selectedTab).toEqual(TabType.AVAILABILITY);
+  it('calls the newEvent when clicking on an empty bubble', () => {
+    const emptyBubble = subject.find(AvailableIcon).at(0);
+    emptyBubble.simulate('click');
+    expect(newEventSpy.mock.calls[0][1].isSame(moment.utc('2017-12-01T05:00:00.000Z'))).toBeTruthy();
+    expect(newEventSpy.mock.calls[0][0]).toEqual(airman);
   });
 });

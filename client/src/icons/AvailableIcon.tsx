@@ -1,7 +1,10 @@
 import * as React from 'react';
 
+interface Props {
+  onClick?: () => void;
+}
 /* tslint:disable:max-line-length */
-export const AvailableIcon = () => {
+export const AvailableIcon = (props: Props) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -9,6 +12,7 @@ export const AvailableIcon = () => {
       width="18"
       height="18"
       viewBox="0 0 24 24"
+      onClick={props.onClick}
     >
       <defs>
         <path id="9lk6a" d="M.96 12a11.04 11.04 0 1 1 22.08 0A11.04 11.04 0 0 1 .96 12zM24 12a12 12 0 1 0-24 0 12 12 0 0 0 24 0z"/>
