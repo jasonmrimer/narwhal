@@ -12,12 +12,18 @@ describe('ProfileSitePickerStore', () => {
   });
 
   it('should return profile', async () => {
-    expect(subject.profile).toEqual({id: 1, username: 'FontFace', siteId: 1});
+    expect(subject.profile).toEqual({
+      user: {id: 1, username: 'FontFace', siteId: 1},
+      classified: false
+    });
   });
 
   it('should update a profile with given information', async () => {
-    const updatedProfile = {id: 1, username: 'FooFace', siteId: 2};
-    subject.setProfile(updatedProfile);
+    const updatedProfile = {
+      user: {id: 1, username: 'FooFace', siteId: 2},
+      classified: false
+    };
+    subject.setUser({id: 1, username: 'FooFace', siteId: 2});
     await subject.save();
     expect(subject.profile).toEqual(updatedProfile);
   });

@@ -1,12 +1,17 @@
 import ProfileRepository from '../ProfileRepository';
-import { ProfileModel } from '../../models/ProfileModel';
+import { ProfileModel, UserModel } from '../../models/ProfileModel';
 
 export class ProfileRepositoryStub implements ProfileRepository {
   findOne(): Promise<ProfileModel> {
-    return Promise.resolve({id: 1, username: 'FontFace', siteId: 1});
+    const profile = {
+      user: {id: 1, username: 'FontFace', siteId: 1},
+      classified: false,
+    };
+
+    return Promise.resolve(profile);
   }
 
-  save(profile: ProfileModel): Promise<ProfileModel> {
-    return Promise.resolve(profile);
+  save(user: UserModel): Promise<ProfileModel> {
+    return Promise.resolve({user: user, classified: false});
   }
 }

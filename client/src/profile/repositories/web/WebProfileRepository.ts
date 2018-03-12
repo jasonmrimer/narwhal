@@ -1,5 +1,5 @@
 import ProfileRepository from '../ProfileRepository';
-import { ProfileModel } from '../../models/ProfileModel';
+import { ProfileModel, UserModel } from '../../models/ProfileModel';
 import * as Cookie from 'js-cookie';
 
 export class WebProfileRepository implements ProfileRepository {
@@ -9,18 +9,20 @@ export class WebProfileRepository implements ProfileRepository {
     this.csrfToken = Cookie.get('XSRF-TOKEN') || '';
   }
 
-  findOne(): Promise<ProfileModel> {
-    return fetch(`${this.baseUrl}/api/profiles`, {credentials: 'include'})
-      .then(resp => resp.json());
+  async findOne(): Promise<ProfileModel> {
+    const resp = await fetch(`${this.baseUrl}/api/profiles`, {credentials: 'include'});
+    const json = await resp.json();
+    return {user: json.profile, classified: json.classified};
+
   }
 
-  save(profile: ProfileModel): Promise<ProfileModel> {
+  save(user: UserModel): Promise<ProfileModel> {
     return fetch(
       `${this.baseUrl}/api/profiles`,
       {
         method: 'PUT',
         headers: [['Content-Type', 'application/json'], ['X-XSRF-TOKEN', this.csrfToken]],
-        body: JSON.stringify(profile),
+        body: JSON.stringify(user),
         credentials: 'include'
       })
       .then(resp => resp.json());

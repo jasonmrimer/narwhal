@@ -1,8 +1,8 @@
-import { ProfileModel } from '../models/ProfileModel';
+import { ProfileModel, UserModel } from '../models/ProfileModel';
 
 interface ProfileRepository {
   findOne(): Promise<ProfileModel>;
-  save(profile: ProfileModel): Promise<ProfileModel>;
+  save(user: UserModel): Promise<ProfileModel>;
 }
 
 export default ProfileRepository;

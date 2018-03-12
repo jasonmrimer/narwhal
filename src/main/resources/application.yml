@@ -23,3 +23,4 @@ security:
     name: tytus
     password: password
     role: USER
+classified: false

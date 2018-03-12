@@ -6,13 +6,13 @@ import { TrackerStore } from './stores/TrackerStore';
 import { TopLevelFilter } from '../widgets/Filter';
 import { StyledSidePanel } from './SidePanel';
 import { StyledLegend } from '../roster/Legend';
-import { ProfileModel } from '../profile/models/ProfileModel';
+import { UserModel } from '../profile/models/ProfileModel';
 import { StyledDeleteEventPopup } from '../event/DeleteEventPopup';
 import { UnfilteredValue } from '../widgets/models/FilterOptionModel';
 
 interface Props {
   trackerStore: TrackerStore;
-  profile: ProfileModel;
+  profile: UserModel;
   className?: string;
 }
 

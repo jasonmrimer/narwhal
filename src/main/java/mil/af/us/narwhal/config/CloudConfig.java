@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
-@Profile("cloud")
+@Profile({"cloud", "prod"})
 @Configuration
 public class CloudConfig {
   @Bean

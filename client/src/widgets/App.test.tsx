@@ -1,7 +1,7 @@
 import { mount, ReactWrapper, shallow, ShallowWrapper } from 'enzyme';
 import * as React from 'react';
 
-import { App } from './App';
+import { App, ClassificationBanner } from './App';
 import { ProfileRepositoryStub } from '../profile/repositories/doubles/ProfileRepositoryStub';
 import { MemoryRouter, Route } from 'react-router-dom';
 import { MissionRepositoryStub } from '../mission/repositories/doubles/MissionRepositoryStub';
@@ -15,7 +15,7 @@ import { CrewRepositorySpy } from '../crew/repositories/doubles/CrewRepositorySp
 import { CrewModelFactory } from '../crew/factories/CrewModelFactory';
 import { Crew } from '../crew/Crew';
 import { StyledProfileSitePicker } from '../profile/ProfileSitePicker';
-import { ProfileModel } from '../profile/models/ProfileModel';
+import { UserModel } from '../profile/models/ProfileModel';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 import { FakeAirmanRepository } from '../airman/repositories/doubles/FakeAirmanRepository';
 
@@ -73,11 +73,14 @@ describe('App', () => {
       const trackerStore = await makeFakeTrackerStore();
       const profileRepo = {
         findOne: () => {
-          return Promise.resolve({id: 1, username: 'FontFace', siteId: null});
+          return Promise.resolve({
+            user: {id: 1, username: 'FontFace', siteId: null},
+            classified: false
+          });
         },
 
-        save: (profile: ProfileModel) => {
-          return Promise.resolve(profile);
+        save: (user: UserModel) => {
+          return Promise.resolve({user: user, classified: false});
         }
       };
       profileStore = new ProfileSitePickerStore(profileRepo, siteRepository);
@@ -96,12 +99,20 @@ describe('App', () => {
       mountedSubject.update();
     });
 
+    it('renders the correct classification banner', () => {
+      const classifiedBanner = 'Dynamic Classification Highest Possible Classification: TS//SI//REL TO USA, FVEY';
+      expect(mountedSubject.find(ClassificationBanner).text()).toBe('Not Actual Classification. Prototype Only');
+      profileStore.profile!.classified = true;
+      mountedSubject.update();
+      expect(mountedSubject.find(ClassificationBanner).text()).toBe(classifiedBanner);
+    });
+
     it('renders the ProfileSitePicker component when user profile has no site', () => {
       expect(mountedSubject.find(StyledProfileSitePicker).exists()).toBeTruthy();
     });
 
     it('should render the Tracker page after saving a profile', async () => {
-      profileStore.setProfile({username: 'FontFace', siteId: 1, id: 1});
+      profileStore.setUser({username: 'FontFace', siteId: 1, id: 1});
       mountedSubject.update();
       expect(mountedSubject.find(Tracker).exists()).toBeTruthy();
     });

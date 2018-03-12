@@ -29,18 +29,20 @@ export class App extends React.Component<Props> {
   render() {
     return (
       <div>
-        <StyledClassificationBanner/>
-        <StyledAuthorizationBanner/>
-        <div style={{marginTop: '8rem'}}>
-          {
-            this.props.profileStore.profile != null &&
-            (
-              this.profileHasSite() ?
-                this.renderApp() :
-                <StyledProfileSitePicker profileStore={this.props.profileStore}/>
-            )
-          }
-        </div>
+        {
+          this.props.profileStore.profile != null &&
+          <div>
+            <StyledClassificationBanner classified={this.props.profileStore.profile!.classified}/>
+            <StyledAuthorizationBanner/>
+            <div style={{marginTop: '8rem'}}>
+              {
+                this.profileHasSite() ?
+                  this.renderApp() :
+                  <StyledProfileSitePicker profileStore={this.props.profileStore}/>
+              }
+            </div>
+          </div>
+        }
       </div>
     );
   }
@@ -62,12 +64,12 @@ export class App extends React.Component<Props> {
               [
                 <StyledTopBar
                   key="0"
-                  username={this.props.profileStore.profile!.username}
+                  username={this.props.profileStore.profile!.user.username}
                   pageTitle="MPS DASHBOARD"
                 />,
                 <StyledDashboard
                   key="1"
-                  username={this.props.profileStore.profile!.username}
+                  username={this.props.profileStore.profile!.user.username}
                   dashboardStore={this.props.dashboardStore}
                 />
               ]
@@ -93,12 +95,12 @@ export class App extends React.Component<Props> {
             return [
               <StyledTopBar
                 key="0"
-                username={this.props.profileStore.profile!.username}
+                username={this.props.profileStore.profile!.user.username}
                 pageTitle="AVAILABILITY ROSTER"
               />,
               <StyledTracker
                 key="1"
-                profile={this.props.profileStore.profile!}
+                profile={this.props.profileStore.profile!.user}
                 trackerStore={this.props.trackerStore}
               />
             ];
@@ -109,14 +111,17 @@ export class App extends React.Component<Props> {
   }
 
   private profileHasSite() {
-    return this.props.profileStore.profile!.siteId != null;
+    return this.props.profileStore.profile!.user.siteId != null;
   }
 }
 
-const ClassificationBanner = (props: { className?: string }) => {
+export const ClassificationBanner = (props: { classified: boolean, className?: string }) => {
   return (
     <div className={props.className}>
-      Not Actual Classification. Prototype Only
+      {props.classified ?
+        'Dynamic Classification Highest Possible Classification: TS//SI//REL TO USA, FVEY' :
+        'Not Actual Classification. Prototype Only'
+      }
     </div>
   );
 };

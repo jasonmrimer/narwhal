@@ -13,7 +13,7 @@ describe('ProfileSitePicker', () => {
   let sites: SiteModel[];
   let subject: ShallowWrapper;
   let profileStore = new ProfileSitePickerStore(profileRepository, siteRepository);
-  profileStore.setProfile = jest.fn();
+  profileStore.setUser = jest.fn();
   profileStore.save = jest.fn();
 
   beforeEach(async () => {
@@ -43,8 +43,8 @@ describe('ProfileSitePicker', () => {
 
   it('should call a callback on handleChange', () => {
     subject.find('button').at(0).simulate('click', {target: {value: 1}});
-    const updatedProfile = Object.assign(profileStore.profile, {siteId: 1});
-    expect(profileStore.setProfile).toHaveBeenCalledWith(updatedProfile);
+    const updatedProfile = Object.assign(profileStore.profile!.user, {siteId: 1});
+    expect(profileStore.setUser).toHaveBeenCalledWith(updatedProfile);
     expect(profileStore.save).toHaveBeenCalled();
   });
 });

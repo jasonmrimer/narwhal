@@ -19,8 +19,8 @@ export class ProfileSitePicker extends React.Component<Props, State> {
   handleChange = (event: any) => {
     const {profileStore} = this.props;
     if (profileStore.profile) {
-      profileStore.profile.siteId = event.target.value;
-      profileStore.setProfile(profileStore.profile);
+      profileStore.profile.user.siteId = event.target.value;
+      profileStore.setUser(profileStore.profile.user);
       profileStore.save();
     }
   }

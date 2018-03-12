@@ -37,8 +37,9 @@ public class ProfileControllerTest {
       .get(ProfileController.URI)
     .then()
       .statusCode(200)
-      .body("username", equalTo("tytus"))
-      .body("siteId", equalTo(profile.getSiteId().intValue()));
+      .body("profile.username", equalTo("tytus"))
+      .body("profile.siteId", equalTo(profile.getSiteId().intValue()))
+      .body("classified", equalTo(false));
     // @formatter:on
   }
 
@@ -54,8 +55,8 @@ public class ProfileControllerTest {
       .get(ProfileController.URI)
     .then()
       .statusCode(200)
-      .body("username", equalTo("tytus"))
-      .body("siteId", equalTo(null));
+      .body("profile.username", equalTo("tytus"))
+      .body("profile.siteId", equalTo(null));
     // @formatter:on
   }
 
@@ -74,8 +75,8 @@ public class ProfileControllerTest {
       .put(ProfileController.URI)
     .then()
       .statusCode(200)
-      .body("username", equalTo("FooFace"))
-      .body("siteId", equalTo(1));
+      .body("profile.username", equalTo("FooFace"))
+      .body("profile.siteId", equalTo(1));
     // @formatter:on
   }
 }

@@ -1,5 +1,6 @@
 package mil.af.us.narwhal.profile;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(ProfileController.URI)
 public class ProfileController {
   public static final String URI = "/api/profiles";
+  @Value("${classified}") private Boolean classified;
 
   private ProfileRepository repository;
 
@@ -16,18 +18,18 @@ public class ProfileController {
   }
 
   @GetMapping
-  public Profile show(@AuthenticationPrincipal User user) {
+  public ProfileJSON show(@AuthenticationPrincipal User user) {
     Profile profile = repository.findOneByUsername(user.getUsername());
 
     if (profile == null) {
       profile = repository.save(new Profile(user.getUsername(), null));
     }
-
-    return profile;
+    return new ProfileJSON(profile, classified);
   }
 
   @PutMapping
-  public Profile update(@AuthenticationPrincipal User user, @RequestBody Profile profile) {
-    return repository.save(profile);
+  public ProfileJSON update(@AuthenticationPrincipal User user, @RequestBody Profile profile) {
+    repository.save(profile);
+    return new ProfileJSON(profile, classified);
   }
 }
