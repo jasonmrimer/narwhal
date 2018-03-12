@@ -7,11 +7,11 @@ import { StyledFilterNotification } from './FilterNotification';
 
 interface Props {
   id: string;
-  label: string;
   unfilteredOptionLabel: string;
   value: number;
   options: FilterOption[];
   callback: (id: number) => void;
+  label?: string;
   notification?: string;
   className?: string;
 }
@@ -43,14 +43,19 @@ export class Filter extends React.Component<Props, State> {
   hideNotification = () => {
     setTimeout(() => {
       this.setState({showNotification: false});
-    },         5000);
+    }, 5000);
+  }
+
+  renderLabel = () => {
+    return this.props.label ?
+      [<label key="0" htmlFor={this.props.id}>{this.props.label}</label>, <br key="1"/>] :
+      null;
   }
 
   render() {
     return (
       <div className={this.props.className} onClick={this.setNotification}>
-        <label htmlFor={this.props.id}>{this.props.label}</label>
-        <br/>
+        {this.renderLabel()}
         <select
           id={this.props.id}
           disabled={this.disabled()}
@@ -126,4 +131,57 @@ export const TopLevelFilter = styled(Filter)`
     color: black;
   }
    
+`;
+
+export const RosterLevelFilter = styled(Filter)`
+  position: relative;
+
+  &:after {
+    content: ' ';
+    background: ${props => caret(props.options.length === 0)};
+    right: 0;
+    height: 14px;
+    width: 20px;
+    top: 18px;
+    position: absolute;
+    pointer-events: none;
+  }
+  
+  select::-ms-expand {
+    display: none;
+  }
+  
+  select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: transparent;
+    
+    font-size: 1rem;
+    font-weight: 300;
+    
+    padding-top: 0.5rem;
+    padding-bottom: 0.25rem;
+    
+    margin-top: 0.25rem;
+    
+    width: 100%;
+    height: 2.0625rem;
+    
+    border: none;
+    border-bottom: 1px solid ${props => props.theme.fontColor};
+    color: ${props => props.theme.fontColor};
+    border-radius: 0;
+    cursor: pointer;
+    
+    &:disabled {
+      color: ${props => props.theme.graySteel};
+      border-bottom: 1px solid ${props => props.theme.graySteel};
+      pointer-events: none;
+    }
+  }
+  
+  option {
+    color: black;
+  } 
 `;

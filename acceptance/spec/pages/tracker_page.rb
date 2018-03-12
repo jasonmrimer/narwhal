@@ -61,6 +61,14 @@ class TrackerPage
     expect(page).to have_css('tbody tr', count: @all_airmen_count)
   end
 
+  def assert_filters_by_shift
+    filter('shift', 'Night')
+    expect(page).to have_css('tbody tr', maximum: @all_airmen_count - 1)
+
+    filter('shift', 'All')
+    expect(page).to have_css('tbody tr', count: @all_airmen_count)
+  end
+
   def assert_filters_by_certification
     typeahead('Filter Certifications', 'Super Speed')
     expect(page).to have_css('tbody tr', maximum: @all_airmen_count - 1)

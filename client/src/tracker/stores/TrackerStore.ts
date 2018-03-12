@@ -48,6 +48,7 @@ export class TrackerStore implements EventActions {
   @observable private _certificationIds: number[] = [];
   @observable private _qualificationIds: number[] = [];
   @observable private _lastNameFilter: string = '';
+  @observable private _shiftFilterValue: number = UnfilteredValue;
 
   @observable private _selectedAirman: AirmanModel = AirmanModel.empty();
   @observable private _pendingDeleteEvent: EventModel | null = null;
@@ -104,11 +105,12 @@ export class TrackerStore implements EventActions {
   @computed
   get airmen() {
     const airmen = this._airmen
-      .filter(this.byQualifications)
-      .filter(this.byCertifications)
       .filter(this.bySite)
       .filter(this.bySquadron)
-      .filter(this.byFlight);
+      .filter(this.byFlight)
+      .filter(this.byShift)
+      .filter(this.byQualifications)
+      .filter(this.byCertifications);
 
     return this.filterByLastName(airmen);
   }
@@ -344,6 +346,11 @@ export class TrackerStore implements EventActions {
     this._lastNameFilter = e.target.value;
   }
 
+  @computed
+  get lastNameFilter() {
+    return this._lastNameFilter;
+  }
+
   @action.bound
   async updateAirmanShift(airman: AirmanModel, shiftType: ShiftType) {
     const updatedAirman = Object.assign({}, airman, {shift: shiftType});
@@ -351,9 +358,20 @@ export class TrackerStore implements EventActions {
     this._airmen = await this.airmanRepository.findAll();
   }
 
+  @action.bound
+  setShiftFilter(shiftValue: number) {
+    this._shiftFilterValue = shiftValue;
+  }
+
   @computed
-  get lastNameFilter() {
-    return this._lastNameFilter;
+  get shiftFilter() {
+    return this._shiftFilterValue;
+  }
+
+  get shiftOptions() {
+    return Object.keys(ShiftType).map((key, index) => {
+      return {label: ShiftType[key], value: index};
+    });
   }
 
   private async refreshAirmen(item: { airmanId: number }) {
@@ -397,6 +415,13 @@ export class TrackerStore implements EventActions {
       return true;
     }
     return airman.flightId === this._flightId;
+  }
+
+  private byShift = (airman: AirmanModel) => {
+    if (this._shiftFilterValue === UnfilteredValue) {
+      return true;
+    }
+    return airman.shift === Object.keys(ShiftType)[this._shiftFilterValue];
   }
 
   private byQualifications = (airman: AirmanModel) => {

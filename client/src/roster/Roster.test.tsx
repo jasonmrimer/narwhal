@@ -13,6 +13,7 @@ import { StyledPlanner } from './Planner';
 import { AirmanDatum } from '../tracker/AirmanDatum';
 import { TabType } from '../tracker/stores/SidePanelStore';
 import { StyledShiftDropdown } from '../ShiftDropdown';
+import { FilterOption } from '../widgets/models/FilterOptionModel';
 
 let airmen: AirmanModel[];
 let certifications: CertificationModel[];
@@ -95,29 +96,45 @@ describe('Roster', () => {
       });
     });
 
-    describe('multiselect', () => {
-      let certificationMultiSelect: ShallowWrapper;
-      let qualificationMultiSelect: ShallowWrapper;
+    describe('filter by', () => {
 
-      beforeEach(() => {
-        const multiselects = subject.find(StyledMultiTypeahead);
-        qualificationMultiSelect = findByClassName(multiselects, 'qualifications-multiselect');
-        certificationMultiSelect = findByClassName(multiselects, 'certifications-multiselect');
-      });
+      describe('airmen skill', () => {
+        let certificationMultiSelect: ShallowWrapper;
+        let qualificationMultiSelect: ShallowWrapper;
 
-      it('renders multiple qualifications', () => {
-        const qualificationOptions = qualifications.map(qualification => {
-          return {value: qualification.id, label: `${qualification.acronym}`};
+        beforeEach(() => {
+          const multiselects = subject.find(StyledMultiTypeahead);
+          qualificationMultiSelect = findByClassName(multiselects, 'qualifications-multiselect');
+          certificationMultiSelect = findByClassName(multiselects, 'certifications-multiselect');
         });
 
-        expect(qualificationMultiSelect.prop('options')).toEqual(qualificationOptions);
+        it('which renders multiple qualifications', () => {
+          const qualificationOptions = qualifications.map(qualification => {
+            return {value: qualification.id, label: `${qualification.acronym}`};
+          });
+
+          expect(qualificationMultiSelect.prop('options')).toEqual(qualificationOptions);
+        });
+
+        it('which renders multiple certifications', () => {
+          const certificationOptions = certifications.map(certification => {
+            return {value: certification.id, label: certification.title};
+          });
+          expect(certificationMultiSelect.prop('options')).toEqual(certificationOptions);
+        });
       });
 
-      it('renders multiple certifications', () => {
-        const certificationOptions = certifications.map(certification => {
-          return {value: certification.id, label: certification.title};
+      describe('airmen shift', () => {
+        let shiftFilter: ShallowWrapper;
+
+        beforeEach(() => {
+          shiftFilter = subject.find('#shift-filter');
         });
-        expect(certificationMultiSelect.prop('options')).toEqual(certificationOptions);
+
+        it('which renders all shifts', () => {
+          expect(shiftFilter.exists()).toBeTruthy();
+          expect((shiftFilter.prop('options') as Array<FilterOption>).length).toBe(3);
+        });
       });
     });
 

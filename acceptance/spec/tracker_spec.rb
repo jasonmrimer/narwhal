@@ -20,16 +20,20 @@ describe 'Tracker page', type: :feature do
       tracker_page.assert_filters_by_flight
     end
 
+    it 'can filter the Roster by Shift' do
+      tracker_page.assert_filters_by_shift
+    end
+
+    it 'can filter the Roster by Last Name' do
+      tracker_page.assert_filters_by_last_name
+    end
+
     it 'can filter the Roster by certification' do
       tracker_page.assert_filters_by_certification
     end
 
     it 'can filter the Roster by qualification' do
       tracker_page.assert_filters_by_qualification
-    end
-
-    it 'can filter the Roster by Last Name' do
-      tracker_page.assert_filters_by_last_name
     end
   end
 

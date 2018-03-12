@@ -111,7 +111,7 @@ describe('TrackerStore', () => {
       expect(subject.flightId).toBe(UnfilteredValue);
     });
 
-    it('retains selected site when returning to tracker if site in profile is already set', async  () => {
+    it('retains selected site when returning to tracker if site in profile is already set', async () => {
       subject.setSiteId(5);
       await subject.hydrate(1);
       expect(subject.siteId).toBe(5);
@@ -213,6 +213,17 @@ describe('TrackerStore', () => {
       const filteredAirmen = subject.airmen;
       expect(filteredAirmen.length).toBeLessThan(allAirmen.length);
       expect(filteredAirmen.map(airman => airman.id)).toEqual([4, 10]);
+    });
+  });
+
+  describe('filtering by shift', () => {
+    it('should return the airmen with the selected shift', () => {
+      subject.setShiftFilter(2);
+      const shift = subject.airmen
+        .map(amn => amn.shift)
+        .filter((el, i, a) => i === a.indexOf(el));
+      expect(shift.length).toBe(1);
+      expect(shift[0]).toBe(ShiftType.Night);
     });
   });
 

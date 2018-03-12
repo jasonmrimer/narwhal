@@ -10,6 +10,7 @@ import { TabType } from '../tracker/stores/SidePanelStore';
 import { AirmanDatum } from '../tracker/AirmanDatum';
 import { StyledTextInput } from '../widgets/TextInput';
 import { StyledShiftDropdown } from '../ShiftDropdown';
+import { RosterLevelFilter } from '../widgets/Filter';
 
 interface Props {
   trackerStore: TrackerStore;
@@ -27,16 +28,25 @@ export class Roster extends React.Component<Props> {
           <caption>Roster</caption>
           <thead>
           <tr>
-            <th>SHIFT</th>
+            <th className="shift">
+              <div>SHIFT</div>
+              <RosterLevelFilter
+                id="shift-filter"
+                unfilteredOptionLabel="All"
+                value={this.props.trackerStore.shiftFilter}
+                callback={this.props.trackerStore.setShiftFilter}
+                options={this.props.trackerStore.shiftOptions}
+              />
+            </th>
             <th className="name">
               <div>NAME</div>
-                <StyledTextInput
-                    value={this.props.trackerStore.lastNameFilter}
-                    name="last-name"
-                    onChange={this.props.trackerStore.setLastNameFilter}
-                    placeholder="Search by Last Name"
-                    className="last-name-search"
-                />
+              <StyledTextInput
+                value={this.props.trackerStore.lastNameFilter}
+                name="last-name"
+                onChange={this.props.trackerStore.setLastNameFilter}
+                placeholder="Search by Last Name"
+                className="last-name-search"
+              />
             </th>
             <th className="qualification">
               <div>QUALIFICATION</div>
@@ -176,12 +186,20 @@ export const StyledRoster = styled(Roster)`
     box-shadow: inset 0.5rem 0px 0px ${props => props.theme.yellow};
   }
   
+  .shift {
+    width: 10%;  
+  }
+  
   .name{
-    width: 16%;
+    width: 15%;
   }
   
   .qualification{
-    width: 14%;
+    width: 20%;
+  }
+  
+  .certification{
+    width: 20%;
   }
   
   .qualifications-multiselect, .certifications-multiselect, .last-name-search {
@@ -192,10 +210,6 @@ export const StyledRoster = styled(Roster)`
     font-size: 1rem;
     padding-top: 0.5rem;
     padding-bottom: 0.25rem;
-  }
-  
-  .certification{
-    width: 24%;
   }
   
   .planner-row {

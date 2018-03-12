@@ -20,12 +20,12 @@ describe('ShiftDropdown', () => {
     subject = mount(
       <table>
         <tbody>
-          <tr>
-            <ShiftDropdown
-              airman={airman}
-              trackerStore={trackerStore}
-            />
-          </tr>
+        <tr>
+          <ShiftDropdown
+            airman={airman}
+            trackerStore={trackerStore}
+          />
+        </tr>
         </tbody>
       </table>
     );
@@ -51,11 +51,10 @@ describe('ShiftDropdown', () => {
   });
 
   it('should save an airman with a new shift', () => {
+    airman.shift = ShiftType.Day;
     subject.find(ShiftDropdown).find('div').at(0).simulate('click');
-    subject.find('li').at(2).simulate('click');
-    subject.update();
-
-    expect(updateAirmanShiftSpy).toBeCalledWith(airman, ShiftType.Night);
+    subject.find('li').at(0).simulate('click');
+    expect(updateAirmanShiftSpy).toHaveBeenCalledTimes(0);
   });
 
   it('should close the dropdown after a selection is made', () => {
