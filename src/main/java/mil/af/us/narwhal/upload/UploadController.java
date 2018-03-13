@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.time.ZoneId;
 
 @Controller
 @RequestMapping(UploadController.URI)
@@ -78,13 +79,16 @@ public class UploadController {
   }
 
   @PostMapping("/airmen/certifications")
-  public String attachCertificationsCSV(@RequestParam("file") MultipartFile file) throws IOException {
+  public String attachCertificationsCSV(
+    @RequestParam("file") MultipartFile file,
+    @RequestParam("timezone") String timezone
+  ) throws IOException {
     try (Reader reader = new InputStreamReader(file.getInputStream())) {
       CsvToBean csvToBean = new CsvToBeanBuilder<AttachCertificationCSVRow>(reader)
         .withType(AttachCertificationCSVRow.class)
         .withIgnoreLeadingWhiteSpace(true)
         .build();
-      airmanUploadService.attachCertifications(csvToBean.parse());
+      airmanUploadService.attachCertifications(csvToBean.parse(), ZoneId.of(timezone));
       return "redirect:/";
     }
   }

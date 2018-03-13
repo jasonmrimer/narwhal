@@ -57,7 +57,7 @@ public class AirmanUploadService {
     if (!airmen.isEmpty()) airmanRepository.save(airmen);
   }
 
-  public void attachCertifications(List<AttachCertificationCSVRow> rows) {
+  public void attachCertifications(List<AttachCertificationCSVRow> rows, ZoneId zoneId) {
     for (AttachCertificationCSVRow row : rows) {
       final Airman airman = airmanRepository.findOneByFirstNameAndLastName(
         row.getFirstName(),
@@ -71,16 +71,18 @@ public class AirmanUploadService {
 
       airman.addCertification(new AirmanCertification(
         certification,
-        instantFromDateString(row.getEarnDate()),
-        instantFromDateString(row.getExpirationDate())
+        instantFromDateString(row.getEarnDate(), zoneId),
+        instantFromDateString(row.getExpirationDate(), zoneId)
       ));
 
       airmanRepository.save(airman);
     }
   }
 
-  private Instant instantFromDateString(String date) {
-    return Instant.from(ZonedDateTime.of(LocalDate.parse(date, FORMATTER), LocalTime.MIN, ZoneId.of("UTC")));
+  private Instant instantFromDateString(String dateString, ZoneId zoneId) {
+    LocalDate date = LocalDate.parse(dateString, FORMATTER);
+    ZonedDateTime dateTime = ZonedDateTime.of(date.getYear(), date.getMonth().getValue(), date.getDayOfMonth(), 0, 0, 0, 0, zoneId);
+    return Instant.from(dateTime);
   }
 
   private Squadron getSquadron(AirmanUploadCSVRow row, Site site) {

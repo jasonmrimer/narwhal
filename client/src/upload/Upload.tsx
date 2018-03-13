@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Cookie from 'js-cookie';
+import * as moment from 'moment-timezone';
 
 export class Upload extends React.Component {
   render() {
@@ -41,6 +42,7 @@ export class Upload extends React.Component {
           <form encType="multipart/form-data" method="post" action="/api/upload/airmen/certifications">
             <input type="file" name="file"/>
             <input type="submit" value="Upload CSV"/>
+            <input type="hidden" name="timezone" value={moment.tz.guess()} />
             <input type="hidden" name="_csrf" value={csrfToken}/>
           </form>
         </div>

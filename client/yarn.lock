@@ -226,6 +226,12 @@
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@types/js-cookie/-/js-cookie-2.1.0.tgz#a8916246aa994db646c66d54c854916213300a51"
 
+"@types/moment-timezone@^0.5.4":
+  version "0.5.4"
+  resolved "https://registry.yarnpkg.com/@types/moment-timezone/-/moment-timezone-0.5.4.tgz#b600e033f871f3074c283e2bd26fe4f4ec3949d4"
+  dependencies:
+    moment ">=2.14.0"
+
 "@types/moment@^2.13.0":
   version "2.13.0"
   resolved "https://registry.yarnpkg.com/@types/moment/-/moment-2.13.0.tgz#604ebd189bc3bc34a1548689404e61a2a4aac896"
@@ -5435,9 +5441,19 @@ mobx@^3.4.1:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/mobx/-/mobx-3.4.1.tgz#37abe5ee882d401828d9f26c6c1a2f47614bbbef"
 
+moment-timezone@^0.5.14:
+  version "0.5.14"
+  resolved "https://registry.yarnpkg.com/moment-timezone/-/moment-timezone-0.5.14.tgz#4eb38ff9538b80108ba467a458f3ed4268ccfcb1"
+  dependencies:
+    moment ">= 2.9.0"
+
 moment@*, moment@^2.19.4:
   version "2.20.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.20.1.tgz#d6eb1a46cbcc14a2b2f9434112c1ff8907f313fd"
+
+"moment@>= 2.9.0", moment@>=2.14.0:
+  version "2.21.0"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.21.0.tgz#2a114b51d2a6ec9e6d83cf803f838a878d8a023a"
 
 move-concurrently@^1.0.1:
   version "1.0.1"

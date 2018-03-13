@@ -19,6 +19,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.ZoneId;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -151,7 +152,8 @@ public class AirmanUploadServiceTest {
           "03/22/2018",
           "05/22/2018"
         )
-      )
+      ),
+      ZoneId.of("America/New_York")
     );
 
     final List<AirmanCertification> certifications = airmanRepository.findOne(airman.getId()).getCertifications();
