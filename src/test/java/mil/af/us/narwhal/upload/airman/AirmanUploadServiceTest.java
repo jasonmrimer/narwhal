@@ -2,6 +2,7 @@ package mil.af.us.narwhal.upload.airman;
 
 import mil.af.us.narwhal.airman.Airman;
 import mil.af.us.narwhal.airman.AirmanCertification;
+import mil.af.us.narwhal.airman.AirmanQualification;
 import mil.af.us.narwhal.airman.AirmanRepository;
 import mil.af.us.narwhal.flight.Flight;
 import mil.af.us.narwhal.flight.FlightRepository;
@@ -9,6 +10,8 @@ import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
 import mil.af.us.narwhal.skills.Certification;
 import mil.af.us.narwhal.skills.CertificationRepository;
+import mil.af.us.narwhal.skills.Qualification;
+import mil.af.us.narwhal.skills.QualificationRepository;
 import mil.af.us.narwhal.squadron.Squadron;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,6 +43,7 @@ public class AirmanUploadServiceTest {
   @Autowired private SiteRepository siteRepository;
   @Autowired private FlightRepository flightRepository;
   @Autowired private CertificationRepository certificationRepository;
+  @Autowired private QualificationRepository qualificationRepository;
   private AirmanUploadService subject;
 
   @Before
@@ -52,7 +56,8 @@ public class AirmanUploadServiceTest {
       airmanRepository,
       siteRepository,
       flightRepository,
-      certificationRepository
+      certificationRepository,
+      qualificationRepository
     );
   }
 
@@ -163,5 +168,35 @@ public class AirmanUploadServiceTest {
       .collect(toList());
     assertThat(certificationIds.size()).isEqualTo(2);
     assertThat(certificationIds).containsExactlyInAnyOrder(certification1.getId(), certification2.getId());
+  }
+
+  @Test
+  public void testAttachAListOfQualifications() {
+    final Airman airman = new Airman(flight, "first1", "last1");
+    airmanRepository.save(airman);
+
+    Qualification qualification1 = new Qualification("TEST", "test qualificaiton");
+    qualificationRepository.save(qualification1);
+
+    subject.attachQualifications(
+      singletonList(
+        new AttachQualificationCSVRow(
+          airman.getFirstName(),
+          airman.getLastName(),
+          qualification1.getTitle(),
+          "03/22/2018",
+          "05/22/2018")
+      ),
+      ZoneId.of("America/New_York")
+    );
+
+    final List<AirmanQualification> qualifications = airman.getQualifications();
+
+    final List<Long> qualificationIds = qualifications.stream()
+      .map(AirmanQualification::getQualification)
+      .map(Qualification::getId)
+      .collect(toList());
+    assertThat(qualificationIds.size()).isEqualTo(1);
+    assertThat(qualificationIds).containsExactlyInAnyOrder(qualification1.getId());
   }
 }

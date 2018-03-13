@@ -5,12 +5,11 @@ import com.opencsv.bean.CsvToBeanBuilder;
 import mil.af.us.narwhal.upload.airman.AirmanUploadCSVRow;
 import mil.af.us.narwhal.upload.airman.AirmanUploadService;
 import mil.af.us.narwhal.upload.airman.AttachCertificationCSVRow;
+import mil.af.us.narwhal.upload.airman.AttachQualificationCSVRow;
 import mil.af.us.narwhal.upload.certification.CertificationUploadCSVRow;
 import mil.af.us.narwhal.upload.certification.CertificationUploadService;
 import mil.af.us.narwhal.upload.qualification.QualificationUploadCSVRow;
 import mil.af.us.narwhal.upload.qualification.QualificationUploadService;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -89,6 +88,21 @@ public class UploadController {
         .withIgnoreLeadingWhiteSpace(true)
         .build();
       airmanUploadService.attachCertifications(csvToBean.parse(), ZoneId.of(timezone));
+      return "redirect:/";
+    }
+  }
+
+  @PostMapping("/airmen/qualifications")
+  public String attachQualificationsCSV(
+    @RequestParam("file") MultipartFile file,
+    @RequestParam("timezone") String timezone
+  ) throws IOException {
+    try (Reader reader = new InputStreamReader(file.getInputStream())) {
+      CsvToBean csvToBean = new CsvToBeanBuilder<AttachQualificationCSVRow>(reader)
+        .withType(AttachQualificationCSVRow.class)
+        .withIgnoreLeadingWhiteSpace(true)
+        .build();
+      airmanUploadService.attachQualifications(csvToBean.parse(), ZoneId.of(timezone));
       return "redirect:/";
     }
   }

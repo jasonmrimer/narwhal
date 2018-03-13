@@ -798,6 +798,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/upload/airman/AttachQualificationCSVRow.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/upload/airman_upload/AirmanUploadCSVRow.java">
           <value>
             <set />

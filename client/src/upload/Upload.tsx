@@ -47,6 +47,17 @@ export class Upload extends React.Component {
           </form>
         </div>
       ),
+      (
+        <div key="4">
+          <h3>Attach Qualifications to Airmen: </h3>
+          <form encType="multipart/form-data" method="post" action="/api/upload/airmen/qualifications">
+            <input type="file" name="file"/>
+            <input type="submit" value="Upload CSV"/>
+            <input type="hidden" name="timezone" value={moment.tz.guess()} />
+            <input type="hidden" name="_csrf" value={csrfToken}/>
+          </form>
+        </div>
+      )
     ];
   }
 }

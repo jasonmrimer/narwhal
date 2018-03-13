@@ -46,7 +46,7 @@ export class ShiftDropdown extends React.Component<Props, State> {
   setNode = (node: HTMLTableDataCellElement) => {
     this.node = node;
   }
-  
+
   render() {
     return (
       <td className={this.props.className} ref={this.setNode}>
@@ -54,11 +54,11 @@ export class ShiftDropdown extends React.Component<Props, State> {
           <ShiftDisplay shift={this.props.airman.shift}/>
         </div>
         {this.state.showDropdown &&
-          <ul>
-            <li onClick={(e) => this.handleShiftIconClick(e, ShiftType.Day)}><DayShiftIcon/>Day Shift</li>
-            <li onClick={(e) => this.handleShiftIconClick(e, ShiftType.Swing)}><SwingShiftIcon/>Swing Shift</li>
-            <li onClick={(e) => this.handleShiftIconClick(e, ShiftType.Night)}><NightShiftIcon/>Night Shift</li>
-          </ul>
+        <ul>
+          <li onClick={(e) => this.handleShiftIconClick(e, ShiftType.Day)}><DayShiftIcon/>Day Shift</li>
+          <li onClick={(e) => this.handleShiftIconClick(e, ShiftType.Swing)}><SwingShiftIcon/>Swing Shift</li>
+          <li onClick={(e) => this.handleShiftIconClick(e, ShiftType.Night)}><NightShiftIcon/>Night Shift</li>
+        </ul>
         }
       </td>
     );

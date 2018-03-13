@@ -2,6 +2,7 @@ package mil.af.us.narwhal.upload.airman;
 
 import mil.af.us.narwhal.airman.Airman;
 import mil.af.us.narwhal.airman.AirmanCertification;
+import mil.af.us.narwhal.airman.AirmanQualification;
 import mil.af.us.narwhal.airman.AirmanRepository;
 import mil.af.us.narwhal.flight.Flight;
 import mil.af.us.narwhal.flight.FlightRepository;
@@ -9,6 +10,8 @@ import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
 import mil.af.us.narwhal.skills.Certification;
 import mil.af.us.narwhal.skills.CertificationRepository;
+import mil.af.us.narwhal.skills.Qualification;
+import mil.af.us.narwhal.skills.QualificationRepository;
 import mil.af.us.narwhal.squadron.Squadron;
 import org.springframework.stereotype.Service;
 
@@ -26,17 +29,14 @@ public class AirmanUploadService {
   private SiteRepository siteRepository;
   private FlightRepository flightRepository;
   private CertificationRepository certificationRepository;
+  private QualificationRepository qualificationRepository;
 
-  public AirmanUploadService(
-    AirmanRepository airmanRepository,
-    SiteRepository siteRepository,
-    FlightRepository flightRepository,
-    CertificationRepository certificationRepository
-  ) {
+  public AirmanUploadService(AirmanRepository airmanRepository, SiteRepository siteRepository, FlightRepository flightRepository, CertificationRepository certificationRepository, QualificationRepository qualificationRepository) {
     this.airmanRepository = airmanRepository;
     this.siteRepository = siteRepository;
     this.flightRepository = flightRepository;
     this.certificationRepository = certificationRepository;
+    this.qualificationRepository = qualificationRepository;
   }
 
   public void importToDatabase(List<AirmanUploadCSVRow> rows) {
@@ -71,6 +71,25 @@ public class AirmanUploadService {
 
       airman.addCertification(new AirmanCertification(
         certification,
+        instantFromDateString(row.getEarnDate(), zoneId),
+        instantFromDateString(row.getExpirationDate(), zoneId)
+      ));
+
+      airmanRepository.save(airman);
+    }
+  }
+
+  public void attachQualifications(List<AttachQualificationCSVRow> rows, ZoneId zoneId) {
+    for (AttachQualificationCSVRow row : rows) {
+      final Airman airman = airmanRepository.findOneByFirstNameAndLastName(
+        row.getFirstName(),
+        row.getLastName()
+      );
+
+      final Qualification qualification = qualificationRepository.findOneByTitle(row.getQualificationName());
+
+      airman.addQualification(new AirmanQualification(
+        qualification,
         instantFromDateString(row.getEarnDate(), zoneId),
         instantFromDateString(row.getExpirationDate(), zoneId)
       ));
