@@ -7,7 +7,7 @@ export class Upload extends React.Component {
     return [
       (
         <div key="0">
-          <h3>Upload airmen: </h3>
+          <h3>Upload Airmen: </h3>
           <form encType="multipart/form-data" method="post" action="/api/upload/airman">
             <input type="file" name="file"/>
             <input type="submit" value="Upload CSV"/>
@@ -17,7 +17,7 @@ export class Upload extends React.Component {
       ),
       (
         <div key="1">
-          <h3>Upload qualifications: </h3>
+          <h3>Upload Qualifications: </h3>
           <form encType="multipart/form-data" method="post" action="/api/upload/qualification">
             <input type="file" name="file"/>
             <input type="submit" value="Upload CSV"/>
@@ -27,8 +27,18 @@ export class Upload extends React.Component {
       ),
       (
         <div key="2">
-          <h3>Upload certifications: </h3>
+          <h3>Upload Certifications: </h3>
           <form encType="multipart/form-data" method="post" action="/api/upload/certification">
+            <input type="file" name="file"/>
+            <input type="submit" value="Upload CSV"/>
+            <input type="hidden" name="_csrf" value={csrfToken}/>
+          </form>
+        </div>
+      ),
+      (
+        <div key="3">
+          <h3>Attach Certifications to Airmen: </h3>
+          <form encType="multipart/form-data" method="post" action="/api/upload/airmen/certifications">
             <input type="file" name="file"/>
             <input type="submit" value="Upload CSV"/>
             <input type="hidden" name="_csrf" value={csrfToken}/>

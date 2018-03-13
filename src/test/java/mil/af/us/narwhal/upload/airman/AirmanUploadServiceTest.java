@@ -1,14 +1,15 @@
 package mil.af.us.narwhal.upload.airman;
 
 import mil.af.us.narwhal.airman.Airman;
+import mil.af.us.narwhal.airman.AirmanCertification;
 import mil.af.us.narwhal.airman.AirmanRepository;
 import mil.af.us.narwhal.flight.Flight;
 import mil.af.us.narwhal.flight.FlightRepository;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
+import mil.af.us.narwhal.skills.Certification;
+import mil.af.us.narwhal.skills.CertificationRepository;
 import mil.af.us.narwhal.squadron.Squadron;
-import mil.af.us.narwhal.upload.airman.AirmanUploadCSVRow;
-import mil.af.us.narwhal.upload.airman.AirmanUploadService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,9 +19,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
@@ -39,6 +38,7 @@ public class AirmanUploadServiceTest {
   @Autowired private AirmanRepository airmanRepository;
   @Autowired private SiteRepository siteRepository;
   @Autowired private FlightRepository flightRepository;
+  @Autowired private CertificationRepository certificationRepository;
   private AirmanUploadService subject;
 
   @Before
@@ -47,7 +47,12 @@ public class AirmanUploadServiceTest {
     site.addSquadron(squadron);
     siteRepository.save(site);
 
-    subject = new AirmanUploadService(airmanRepository, siteRepository, flightRepository);
+    subject = new AirmanUploadService(
+      airmanRepository,
+      siteRepository,
+      flightRepository,
+      certificationRepository
+    );
   }
 
   @Test
@@ -68,7 +73,7 @@ public class AirmanUploadServiceTest {
     assertThat(airmen.stream().map(Airman::getLastName).collect(toList()))
       .containsExactlyInAnyOrder("last1", "last2", "last3");
 
-    assertThat(airmen.stream().map(Airman::getFlightId).distinct().findFirst().orElseThrow(Exception::new))
+    assertThat(airmen.stream().map(Airman::flightId).distinct().findFirst().orElseThrow(Exception::new))
       .isEqualTo(flight.getId());
   }
 
@@ -119,5 +124,42 @@ public class AirmanUploadServiceTest {
 
     assertThat(airmanRepository.count()).isEqualTo(airmanCount);
     assertThat(flightRepository.count()).isEqualTo(flightCount);
+  }
+
+  @Test
+  public void testAttachAListOfCertifications() {
+    final Airman airman = new Airman(flight, "first1", "last1");
+    airmanRepository.save(airman);
+
+    final Certification certification1 = new Certification("Certification1", site);
+    final Certification certification2 = new Certification("Certification2", site);
+    certificationRepository.save(asList(certification1, certification2));
+
+    subject.attachCertifications(
+      asList(
+        new AttachCertificationCSVRow(
+          airman.getFirstName(),
+          airman.getLastName(),
+          certification1.getTitle(),
+          "03/22/2018",
+          "05/22/2018"
+        ),
+        new AttachCertificationCSVRow(
+          airman.getFirstName(),
+          airman.getLastName(),
+          certification2.getTitle(),
+          "03/22/2018",
+          "05/22/2018"
+        )
+      )
+    );
+
+    final List<AirmanCertification> certifications = airmanRepository.findOne(airman.getId()).getCertifications();
+    final List<Long> certificationIds = certifications.stream()
+      .map(AirmanCertification::getCertification)
+      .map(Certification::getId)
+      .collect(toList());
+    assertThat(certificationIds.size()).isEqualTo(2);
+    assertThat(certificationIds).containsExactlyInAnyOrder(certification1.getId(), certification2.getId());
   }
 }

@@ -5,10 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import mil.af.us.narwhal.airman.Airman;
 import mil.af.us.narwhal.airman.AirmanRepository;
+import mil.af.us.narwhal.flight.Flight;
 import mil.af.us.narwhal.mission.Mission;
 import mil.af.us.narwhal.mission.MissionRepository;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
+import mil.af.us.narwhal.squadron.Squadron;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,16 +48,23 @@ public class CrewControllerTest {
   @Autowired private SiteRepository siteRepository;
   @Autowired private MissionRepository missionRepository;
   @Autowired private AirmanRepository airmanRepository;
+  private Flight flight;
 
   @Before
   public void setUp() {
+    flight = new Flight();
+
+    Squadron squadron = new Squadron();
+    squadron.addFlight(flight);
+
     site = new Site();
+    site.addSquadron(squadron);
     siteRepository.save(site);
 
     mission = new Mission("A", "B", Instant.now(), Instant.now(), site);
     missionRepository.save(mission);
 
-    airman = new Airman(1L, "A", "B");
+    airman = new Airman(flight, "A", "B");
     airmanRepository.save(airman);
 
     crew = new Crew(mission);
@@ -83,7 +92,7 @@ public class CrewControllerTest {
 
   @Test
   public void addAirmanTest() throws JsonProcessingException {
-    final Airman newAirman = new Airman(2L, "B", "C");
+    final Airman newAirman = new Airman(flight, "B", "C");
     airmanRepository.save(newAirman);
 
     final String json = objectMapper.writeValueAsString(singletonList(

@@ -66,10 +66,10 @@ public class AirmanControllerTest {
 
     siteRepository.save(site);
 
-    airman1 = new Airman(flight1.getId(), "first1", "last1");
+    airman1 = new Airman(flight1, "first1", "last1");
     airman1.setShift(ShiftType.Day);
-    final Airman airman2 = new Airman(flight2.getId(), "first2", "last2");
-    final Airman airman3 = new Airman(flight2.getId(), "first3", "last3");
+    final Airman airman2 = new Airman(flight2, "first2", "last2");
+    final Airman airman3 = new Airman(flight2, "first3", "last3");
 
     airmanRepository.save(asList(airman1, airman2, airman3));
 

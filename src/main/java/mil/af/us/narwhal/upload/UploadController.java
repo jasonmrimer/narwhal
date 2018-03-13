@@ -4,10 +4,13 @@ import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import mil.af.us.narwhal.upload.airman.AirmanUploadCSVRow;
 import mil.af.us.narwhal.upload.airman.AirmanUploadService;
+import mil.af.us.narwhal.upload.airman.AttachCertificationCSVRow;
 import mil.af.us.narwhal.upload.certification.CertificationUploadCSVRow;
 import mil.af.us.narwhal.upload.certification.CertificationUploadService;
 import mil.af.us.narwhal.upload.qualification.QualificationUploadCSVRow;
 import mil.af.us.narwhal.upload.qualification.QualificationUploadService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -70,6 +73,18 @@ public class UploadController {
         .withIgnoreLeadingWhiteSpace(true)
         .build();
       certificationUploadService.importToDatabase(csvToBean.parse());
+      return "redirect:/";
+    }
+  }
+
+  @PostMapping("/airmen/certifications")
+  public String attachCertificationsCSV(@RequestParam("file") MultipartFile file) throws IOException {
+    try (Reader reader = new InputStreamReader(file.getInputStream())) {
+      CsvToBean csvToBean = new CsvToBeanBuilder<AttachCertificationCSVRow>(reader)
+        .withType(AttachCertificationCSVRow.class)
+        .withIgnoreLeadingWhiteSpace(true)
+        .build();
+      airmanUploadService.attachCertifications(csvToBean.parse());
       return "redirect:/";
     }
   }

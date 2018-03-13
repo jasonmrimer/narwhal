@@ -63,7 +63,7 @@ public class EventControllerTest {
     site.addSquadron(squadron);
     siteRepository.save(site);
 
-    airman = new Airman(flight.getId(), "first", "last");
+    airman = new Airman(flight, "first", "last");
     airman = airmanRepository.save(airman);
   }
 

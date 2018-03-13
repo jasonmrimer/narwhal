@@ -23,6 +23,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$APPLICATION_CONFIG_DIR$/consoles/db/4d975c86-65f7-4c43-beb7-829411efc035/console_4.sql">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$APPLICATION_CONFIG_DIR$/consoles/db/724c8c86-da39-40ec-8e37-d03f2ed20a12/console.sql">
           <value>
             <set />
@@ -733,6 +738,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/site/SiteRepository.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/skills/Certification.java">
           <value>
             <set />
@@ -774,6 +784,16 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/upload/airman/AirmanUploadCSVRow.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/upload/airman/AirmanUploadService.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/upload/airman/AttachCertificationCSVRow.java">
           <value>
             <set />
           </value>
@@ -1034,6 +1054,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/test/java/mil/af/us/narwhal/upload/UploadControllerTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/test/java/mil/af/us/narwhal/upload/airman/AirmanUploadServiceTest.java">
           <value>
             <set />
           </value>

@@ -4,9 +4,9 @@ import * as Cookie from 'js-cookie';
 import { Upload } from './Upload';
 
 describe('Upload', () => {
-  it('renders two forms', () => {
+  it('renders upload forms', () => {
     const subject = mount(<Upload/>);
-    expect(subject.find('form').length).toBe(3);
+    expect(subject.find('form').length).toBe(4);
   });
 
   it('renders with a hidden csrf token', () => {

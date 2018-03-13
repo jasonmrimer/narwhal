@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import mil.af.us.narwhal.crew.CrewPosition;
 import mil.af.us.narwhal.event.Event;
+import mil.af.us.narwhal.flight.Flight;
 import mil.af.us.narwhal.mission.Mission;
 
 import javax.persistence.*;
@@ -25,12 +26,13 @@ public class Airman {
   @GeneratedValue
   private Long id;
 
-  @Column(name = "flight_id")
-  private Long flightId;
-
   private String firstName;
 
   private String lastName;
+
+  @JsonIgnore
+  @ManyToOne(optional = false)
+  private Flight flight;
 
   @Enumerated(EnumType.STRING)
   private ShiftType shift;
@@ -51,10 +53,19 @@ public class Airman {
   @JsonBackReference
   private List<CrewPosition> crewPositions = new ArrayList<>();
 
-  public Airman(Long flightId, String firstName, String lastName) {
-    this.flightId = flightId;
+  public Airman(Flight flight, String firstName, String lastName) {
+    this.flight = flight;
     this.firstName = firstName;
     this.lastName = lastName;
+  }
+
+  @JsonProperty("flightId")
+  public Long flightId() {
+    return flight.getId();
+  }
+
+  public Long getSiteId() {
+    return flight.getSquadron().getSite().getId();
   }
 
   @JsonProperty("events")
