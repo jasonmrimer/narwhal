@@ -19,7 +19,7 @@ export class WebSkillRepository implements SkillRepository {
     const resp = await fetch(`${this.baseUrl}/api/skills/certifications`, {credentials: 'include'});
     const json = await resp.json();
     return json.map((obj: any) => {
-      return new CertificationModel(obj.id, obj.title);
+      return new CertificationModel(obj.id, obj.title, obj.siteId);
     });
   }
 }

@@ -214,9 +214,20 @@ export class TrackerStore implements EventActions {
 
   @computed
   get certificationOptions() {
-    return this._certifications.map(cert => {
-      return {value: cert.id, label: cert.title};
-    });
+    let certificationOptions: FilterOption[];
+    if (this.siteId === UnfilteredValue) {
+      return this._certifications.map(cert => {
+        return {value: cert.id, label: cert.title};
+      });
+    } else {
+      certificationOptions = this._certifications.reduce((certOpts: FilterOption[], cert) => {
+        if (cert.siteId === this._siteId) {
+          certOpts.push({value: cert.id, label: cert.title});
+        }
+        return certOpts;
+      }, []);
+      return certificationOptions;
+    }
   }
 
   @computed

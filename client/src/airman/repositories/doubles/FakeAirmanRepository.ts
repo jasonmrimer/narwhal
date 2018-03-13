@@ -73,7 +73,7 @@ export class FakeAirmanRepository implements AirmanRepository {
     } else {
       const ac = new AirmanCertificationModel(
         airman.id,
-        new CertificationModel(skill.skillId, 'A'),
+        new CertificationModel(skill.skillId, 'A', 1),
         skill.earnDate,
         skill.expirationDate
       );

@@ -23,7 +23,7 @@ describe('SidePanel', () => {
     airman = AirmanModelFactory.build();
     const certification = new AirmanCertificationModel(
       airman.id,
-      CertificationModelFactory.build(1),
+      CertificationModelFactory.build(1, 1),
       moment(),
       moment().subtract(3, 'year')
     );

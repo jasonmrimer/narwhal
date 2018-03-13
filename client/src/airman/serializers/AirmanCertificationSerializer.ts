@@ -4,6 +4,7 @@ import { CertificationModel } from '../../skills/models/CertificationModel';
 import { AirmanCertificationModel } from '../models/AirmanCertificationModel';
 
 export class AirmanCertificationSerializer implements Serializer<AirmanCertificationModel> {
+
   serialize(item: AirmanCertificationModel): {} {
     return JSON.stringify(item);
   }
@@ -14,7 +15,8 @@ export class AirmanCertificationSerializer implements Serializer<AirmanCertifica
       item.airmanId,
       new CertificationModel(
         item.certification.id,
-        item.certification.title
+        item.certification.title,
+        item.certification.siteId
       ),
       moment(item.earnDate),
       moment(item.expirationDate),

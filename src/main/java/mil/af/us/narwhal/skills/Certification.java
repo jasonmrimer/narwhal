@@ -1,6 +1,7 @@
 package mil.af.us.narwhal.skills;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -32,5 +33,10 @@ public class Certification {
   public Certification(String title, Site site) {
     this.title = title;
     this.site = site;
+  }
+
+  @JsonProperty
+  public Long siteId() {
+    return this.site.getId();
   }
 }

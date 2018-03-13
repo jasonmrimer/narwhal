@@ -6,7 +6,7 @@ export class AirmanCertificationModelFactory {
   static build(id: number) {
     return new AirmanCertificationModel(
       1,
-      new CertificationModel(id, `${id}`),
+      new CertificationModel(id, `${id}`, 1),
       moment(0).add(id, 'days'),
       moment(0).add(id, 'days'),
       1

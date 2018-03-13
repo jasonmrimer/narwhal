@@ -10,6 +10,8 @@ export default class SkillRepositoryStub implements SkillRepository {
   }
 
   findAllCertifications(): Promise<CertificationModel[]> {
-    return Promise.resolve(CertificationModelFactory.buildList(10));
+    return Promise.resolve(
+      CertificationModelFactory.buildList(5, 1).concat(CertificationModelFactory.buildList(10, 2).splice(5, 5))
+    );
   }
 }
