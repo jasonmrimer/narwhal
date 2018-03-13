@@ -8,7 +8,6 @@ import { MissionIcon } from '../icons/MissionIcon';
 import { AvailableIcon } from '../icons/AvailableIcon';
 import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
 import { EventModel, EventType } from '../event/models/EventModel';
-import { TabType } from '../tracker/stores/SidePanelStore';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 import { makeFakeTrackerStore } from '../utils/testUtils';
 import { TrackerStore } from '../tracker/stores/TrackerStore';

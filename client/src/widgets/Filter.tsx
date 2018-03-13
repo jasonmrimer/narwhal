@@ -43,7 +43,7 @@ export class Filter extends React.Component<Props, State> {
   hideNotification = () => {
     setTimeout(() => {
       this.setState({showNotification: false});
-    }, 5000);
+    },         5000);
   }
 
   renderLabel = () => {

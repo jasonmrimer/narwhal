@@ -31,7 +31,11 @@ const renderEventType = (type: EventType, key: number) => {
   }
 };
 
-const renderEvents = (day: Moment, events: EventModel[], key: number, airman: AirmanModel, trackerStore: TrackerStore) => {
+const renderEvents = (day: Moment,
+                      events: EventModel[],
+                      key: number,
+                      airman: AirmanModel,
+                      trackerStore: TrackerStore) => {
   const matchedEvents = findEventsForDay(events, day);
   if (matchedEvents.length > 0) {
     const eventType =  matchedEvents.map(event => event.type);
