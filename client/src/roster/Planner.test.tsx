@@ -82,7 +82,11 @@ describe('Planner', () => {
   it('calls the newEvent when clicking on an empty bubble', () => {
     const emptyBubble = subject.find(AvailableIcon).at(0);
     emptyBubble.simulate('click');
-    expect(newEventSpy.mock.calls[0][1].isSame(moment.utc('2017-12-01T05:00:00.000Z'))).toBeTruthy();
+
+    const calledMoment = (newEventSpy.mock.calls[0][1]).startOf('day');
+    const expectedMoment = moment('2017-12-01T05:00:00.000').startOf('day');
+
+    expect(calledMoment.isSame(expectedMoment)).toBeTruthy();
     expect(newEventSpy.mock.calls[0][0]).toEqual(airman);
   });
 });
