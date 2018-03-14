@@ -1,8 +1,8 @@
 package mil.af.us.narwhal.airman;
 
 import mil.af.us.narwhal.site.Site;
-import mil.af.us.narwhal.skills.Certification;
-import mil.af.us.narwhal.skills.Qualification;
+import mil.af.us.narwhal.skill.Certification;
+import mil.af.us.narwhal.skill.Qualification;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;

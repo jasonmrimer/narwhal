@@ -1,7 +1,7 @@
 package mil.af.us.narwhal.upload.qualification;
 
-import mil.af.us.narwhal.skills.Qualification;
-import mil.af.us.narwhal.skills.QualificationRepository;
+import mil.af.us.narwhal.skill.Qualification;
+import mil.af.us.narwhal.skill.QualificationRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;

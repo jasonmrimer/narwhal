@@ -1,4 +1,4 @@
-package mil.af.us.narwhal.skills;
+package mil.af.us.narwhal.skill;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +10,7 @@ import java.util.List;
 @RestController
 @RequestMapping(SkillController.URI)
 public class SkillController {
-  public static final String URI = "/api/skills";
+  public static final String URI = "/api/skill";
 
   @Autowired private QualificationRepository qualificationRepository;
   @Autowired private CertificationRepository certificationRepository;

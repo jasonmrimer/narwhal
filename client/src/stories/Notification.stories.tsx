@@ -4,7 +4,6 @@ import { storiesOf } from '@storybook/react';
 import { ThemeProvider } from 'styled-components';
 import { StyledNotification } from '../widgets/Notification';
 
-/*tslint:disable:no-any*/
 const wrapper = (story: any) => {
   return (
     <ThemeProvider theme={Theme}>

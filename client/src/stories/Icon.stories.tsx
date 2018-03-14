@@ -6,7 +6,6 @@ import { SwingShiftIcon } from '../icons/SwingShiftIcon';
 import { DayShiftIcon } from '../icons/DayShiftIcon';
 import { storiesOf } from '@storybook/react';
 
-/*tslint:disable:no-any*/
 const wrapper = (story: any) => {
   return (
     <ThemeProvider theme={Theme}>

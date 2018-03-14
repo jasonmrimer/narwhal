@@ -1,4 +1,4 @@
-package mil.af.us.narwhal.skills;
+package mil.af.us.narwhal.skill;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

@@ -3,12 +3,11 @@ package mil.af.us.narwhal.airman;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import mil.af.us.narwhal.skills.Certification;
+import mil.af.us.narwhal.skill.Certification;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.Instant;
-import java.util.Date;
 
 @Entity
 @Data

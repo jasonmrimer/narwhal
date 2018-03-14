@@ -25,8 +25,8 @@ import { SidePanelStore, TabType } from './SidePanelStore';
 import * as Fuse from 'fuse.js';
 import { Moment } from 'moment';
 import { filterOptionsBy } from '../../utils/eventUtil';
+import { RipItemRepository } from '../../rip-items/repositories/RipItemRepository';
 
-/* tslint:disable:no-any*/
 export class TrackerStore implements EventActions {
   public currencyStore: CurrencyStore;
   public availabilityStore: AvailabilityStore;
@@ -62,7 +62,8 @@ export class TrackerStore implements EventActions {
               skillRepository: SkillRepository,
               eventRepository: EventRepository,
               timeService: TimeService,
-              missionRepository: MissionRepository) {
+              missionRepository: MissionRepository,
+              ripItemRepository: RipItemRepository) {
     this.airmanRepository = airmanRepository;
     this.siteRepository = siteRepository;
     this.skillRepository = skillRepository;
@@ -71,7 +72,8 @@ export class TrackerStore implements EventActions {
     const missionStore = new MissionStore(missionRepository);
 
     this.currencyStore = new CurrencyStore(
-      new SkillFormStore(this)
+      new SkillFormStore(this),
+      ripItemRepository
     );
 
     this.availabilityStore = new AvailabilityStore(
@@ -94,8 +96,9 @@ export class TrackerStore implements EventActions {
       this.siteRepository.findAll(),
       this.skillRepository.findAllCertifications(),
       this.skillRepository.findAllQualifications(),
-      this.missionStore.hydrate(),
+      this.currencyStore.hydrate(),
       this.airmanRepository.findAll(),
+      this.missionStore.hydrate(),
     ]);
 
     this._sites = results[0];

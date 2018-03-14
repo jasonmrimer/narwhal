@@ -13,6 +13,7 @@ import SkillRepositoryStub from '../../skills/repositories/doubles/SkillReposito
 import { SkillType } from '../../skills/models/SkillType';
 import { TabType } from './SidePanelStore';
 import { AirmanQualificationModel } from '../../airman/models/AirmanQualificationModel';
+import { RipItemRepositoryStub } from '../../rip-items/repositories/doubles/RipItemRepositoryStub';
 
 describe('TrackerStore', () => {
   const airmenRepository = new FakeAirmanRepository();
@@ -21,6 +22,7 @@ describe('TrackerStore', () => {
   const eventRepository = new EventRepositoryStub();
   const missionRepository = new MissionRepositoryStub();
   const timeServiceStub = new TimeServiceStub();
+  const ripItemRespository =  new RipItemRepositoryStub();
   let allAirmen: AirmanModel[];
   let subject: TrackerStore;
 
@@ -32,7 +34,8 @@ describe('TrackerStore', () => {
       skillRepository,
       eventRepository,
       timeServiceStub,
-      missionRepository
+      missionRepository,
+      ripItemRespository
     );
     await subject.hydrate();
   });
@@ -303,7 +306,7 @@ describe('TrackerStore', () => {
     });
   });
 
-  describe('skills', () => {
+  describe('skill', () => {
     it('should render certification options based off the site of the selected airman', () => {
       subject.setSelectedAirman(allAirmen[0], TabType.CURRENCY);
       expect(subject.airmanCertificationOptions.length).toBe(5);
@@ -390,7 +393,8 @@ describe('TrackerStore', () => {
       skillRepository,
       eventRepository,
       timeServiceStub,
-      missionRepository
+      missionRepository,
+      ripItemRespository
     );
     subject.setLoading(true);
 

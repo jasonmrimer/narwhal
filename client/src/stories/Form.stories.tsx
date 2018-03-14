@@ -18,7 +18,6 @@ import { SkillFormStore } from '../skills/stores/SkillFormStore';
 import { SkillType } from '../skills/models/SkillType';
 import * as moment from 'moment';
 
-/*tslint:disable:no-any*/
 const wrapper = (story: any) => {
   return (
     <ThemeProvider theme={Theme}>

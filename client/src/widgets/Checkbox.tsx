@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-/*tslint:disable:no-any*/
+
 interface Props {
   name: string;
   onChange: (e: any) => void;

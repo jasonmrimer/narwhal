@@ -5,7 +5,6 @@ import { CrewPositionModel } from '../models/CrewPositionModel';
 import { AirmanRepository } from '../../airman/repositories/AirmanRepository';
 import { AirmanModel } from '../../airman/models/AirmanModel';
 
-/*tslint:disable:no-any*/
 interface NewEntry {
   airmanName: string;
   title: string;

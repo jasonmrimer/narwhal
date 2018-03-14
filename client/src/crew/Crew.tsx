@@ -16,7 +16,6 @@ interface Props {
   className?: string;
 }
 
-/*tslint:disable:no-any*/
 @observer
 export class Crew extends React.Component<Props> {
   async componentDidMount() {

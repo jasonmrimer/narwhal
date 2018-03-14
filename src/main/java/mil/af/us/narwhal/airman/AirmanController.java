@@ -1,9 +1,9 @@
 package mil.af.us.narwhal.airman;
 
-import mil.af.us.narwhal.skills.Certification;
-import mil.af.us.narwhal.skills.CertificationRepository;
-import mil.af.us.narwhal.skills.Qualification;
-import mil.af.us.narwhal.skills.QualificationRepository;
+import mil.af.us.narwhal.skill.Certification;
+import mil.af.us.narwhal.skill.CertificationRepository;
+import mil.af.us.narwhal.skill.Qualification;
+import mil.af.us.narwhal.skill.QualificationRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

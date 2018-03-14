@@ -94,6 +94,7 @@ class TrackerPage
     page.within('.side-panel') do
       find('a', text: 'CURRENCY').click
       expect(page).to have_content('CURRENCY')
+      expect(page).to have_content('RIP TASKS')
       expect(page).to have_content('Spaceman, Corey')
       expect(page).to have_content('QB')
       expect(page).to have_content('25 Jan 19')
@@ -123,6 +124,13 @@ class TrackerPage
 
     event.create_invalid
     expect(page.has_content?('This field is required.')).to be true
+  end
+
+  def assert_view_RIP
+    click(page.first("td.airman-cert", text: "Laser Vision"))
+    expect(page).to have_content('RIP TASKS')
+    click(page.find("div.rip-item-tile-title", text: "RIP TASKS"))
+    expect(page).to have_content('DCGS Mission')
   end
 
   def assert_delete_create_update_qualification

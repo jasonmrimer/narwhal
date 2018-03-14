@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { FilterOption } from './models/FilterOptionModel';
 import { caret } from '../utils/StyleUtils';
 
-/*tslint:disable:no-any*/
 interface Props {
   name: string;
   options: FilterOption[];

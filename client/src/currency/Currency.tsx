@@ -7,6 +7,8 @@ import { StyledSkillTile } from '../skills/SkillTile';
 import { CurrencyStore } from './stores/CurrencyStore';
 import { StyledBackButton } from '../widgets/BackButton';
 import { StyledNotification } from '../widgets/Notification';
+import { StyledRipItems } from '../rip-items/RipItems';
+import { StyledRipItemsTile } from '../rip-items/RipItemsTile';
 
 interface Props {
   selectedAirman: AirmanModel;
@@ -27,10 +29,12 @@ export class Currency extends React.Component<Props> {
   render() {
     return (
       <div className={this.props.className}>
+        {this.props.currencyStore.shouldShowRipItems && this.renderRipItems()}
+        {this.props.currencyStore.shouldShowSkillForm && this.renderSkillsForm()}
         {
-          this.props.currencyStore.shouldShowSkillForm
-            ? this.renderSkillsForm()
-            : this.renderSkillsList()
+          !this.props.currencyStore.shouldShowSkillForm
+          && !this.props.currencyStore.shouldShowRipItems
+          && this.renderSkillsList()
         }
       </div>
     );
@@ -39,11 +43,7 @@ export class Currency extends React.Component<Props> {
   private renderSkillsForm = () => {
     return (
       <div>
-        <StyledBackButton
-          onClick={() => this.props.currencyStore.closeSkillForm()}
-          text="Back to Overview"
-        />
-
+        {this.renderBackButton()}
         <StyledSkillsForm
           airmanId={this.props.selectedAirman.id}
           skillFormStore={this.props.currencyStore.skillFormStore}
@@ -60,6 +60,7 @@ export class Currency extends React.Component<Props> {
             + Add Skill
           </button>
         </div>
+        {this.renderRip()}
         {this.renderQualifications()}
         {this.renderCertifications()}
         {this.renderSkillNotification()}
@@ -67,8 +68,25 @@ export class Currency extends React.Component<Props> {
     );
   }
 
-  private renderQualifications = () => {
+  private renderRip = () => {
+    return (
+      <StyledRipItemsTile
+        title="RIP TASKS"
+        onClick={this.props.currencyStore.showRipItems}
+      />
+    );
+  }
 
+  private renderRipItems = () => {
+    return (
+      <div>
+        {this.renderBackButton()}
+        <StyledRipItems items={this.props.currencyStore.ripItems}/>
+      </div>
+    );
+  }
+
+  private renderQualifications = () => {
     return this.props.selectedAirman.qualifications.map((qual, index) => (
       <StyledSkillTile
         key={index}
@@ -94,6 +112,15 @@ export class Currency extends React.Component<Props> {
       return <StyledNotification>This Airman has no associated skills.</StyledNotification>;
     }
     return;
+  }
+
+  private renderBackButton = () => {
+    return (
+      <StyledBackButton
+        onClick={() => this.props.currencyStore.closeSkillForm()}
+        text="Back to Overview"
+      />
+    );
   }
 }
 

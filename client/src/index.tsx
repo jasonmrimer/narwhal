@@ -22,6 +22,7 @@ import { WebCrewRepository } from './crew/repositories/web/WebCrewRepository';
 import { ProfileSitePickerStore } from './profile/stores/ProfileSitePickerStore';
 import { withRouter } from 'react-router';
 import { HTTPClient } from './HTTPClient';
+import { WebRipItemRepository } from './rip-items/repositories/web/WebRipItemRepository';
 
 document.body.style.fontFamily = Theme.fontFamily;
 document.body.style.fontWeight = Theme.fontWeight;
@@ -33,6 +34,7 @@ const client = new HTTPClient();
 const webAirmanRepository = new WebAirmanRepository(client);
 const webSiteRepository = new WebSiteRepository(client);
 const webMissionRepository = new WebMissionRepository(client);
+const webRipItemRepository = new WebRipItemRepository(client);
 const webSkillRepository = new WebSkillRepository(client);
 const webEventRepository = new WebEventRepository(client);
 const webCrewRepository = new WebCrewRepository(client);
@@ -46,14 +48,14 @@ const trackerStore = new TrackerStore(
   webSkillRepository,
   webEventRepository,
   new MomentTimeService(),
-  webMissionRepository
+  webMissionRepository,
+  webRipItemRepository
 );
 
 const crewStore = new CrewStore(webCrewRepository, webAirmanRepository);
 
 const profileStore = new ProfileSitePickerStore(webProfileRepository, webSiteRepository);
 
-/*tslint:disable:no-any*/
 const AppWithRouter = withRouter((App as any)) as typeof App;
 
 ReactDOM.render(

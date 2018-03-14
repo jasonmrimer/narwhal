@@ -3,6 +3,7 @@ import { SkillActions } from '../../skills/stores/SkillActions';
 import { SkillFormStore } from '../../skills/stores/SkillFormStore';
 import * as moment from 'moment';
 import { SkillType } from '../../skills/models/SkillType';
+import { RipItemRepositoryStub } from '../../rip-items/repositories/doubles/RipItemRepositoryStub';
 
 describe('CurrencyStore', () => {
   const skill = {
@@ -24,7 +25,12 @@ describe('CurrencyStore', () => {
       qualificationOptions: [],
       airmanCertificationOptions: []
     };
-    subject = new CurrencyStore(new SkillFormStore(skillActions));
+    subject = new CurrencyStore(new SkillFormStore(skillActions), new RipItemRepositoryStub());
+  });
+
+  it('should populate RIP items', async () => {
+    await subject.hydrate();
+    expect(subject.ripItems.length).toBe(1);
   });
 
   it('should show the skill form without a skill', () => {
@@ -64,5 +70,10 @@ describe('CurrencyStore', () => {
 
     expect(subject.hasItem).toBeFalsy();
     expect(subject.shouldShowSkillForm).toBeFalsy();
+  });
+
+  it('should open the RipItems form', () => {
+    subject.showRipItems();
+    expect(subject.shouldShowRipItems).toBeTruthy();
   });
 });

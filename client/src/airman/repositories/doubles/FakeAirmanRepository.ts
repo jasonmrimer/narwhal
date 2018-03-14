@@ -99,7 +99,6 @@ export class FakeAirmanRepository implements AirmanRepository {
     return Promise.resolve(airman);
   }
 
-  /*tslint:disable:no-any*/
   private save(skills: any[], skillToSave: any) {
     const existingSkill = skills.find((s: any) => s.id === skillToSave.skillId);
     if (!existingSkill) {
@@ -108,7 +107,6 @@ export class FakeAirmanRepository implements AirmanRepository {
     }
   }
 
-  /*tslint:disable:no-any*/
   private delete(skills: any[], skillToDeleteId: number) {
     const index = skills.map(s => s.id).indexOf(skillToDeleteId, 0);
     if (index > -1) {

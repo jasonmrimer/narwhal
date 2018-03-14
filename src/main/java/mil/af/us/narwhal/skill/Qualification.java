@@ -1,4 +1,4 @@
-package mil.af.us.narwhal.skills;
+package mil.af.us.narwhal.skill;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

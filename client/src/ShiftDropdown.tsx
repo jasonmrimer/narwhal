@@ -17,7 +17,6 @@ interface State {
   showDropdown: boolean;
 }
 
-/*tslint:disable:no-any*/
 export class ShiftDropdown extends React.Component<Props, State> {
   node: HTMLTableDataCellElement | null = null;
   state = {showDropdown: false};

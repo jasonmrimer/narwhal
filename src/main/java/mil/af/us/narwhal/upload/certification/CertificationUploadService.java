@@ -2,8 +2,8 @@ package mil.af.us.narwhal.upload.certification;
 
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
-import mil.af.us.narwhal.skills.Certification;
-import mil.af.us.narwhal.skills.CertificationRepository;
+import mil.af.us.narwhal.skill.Certification;
+import mil.af.us.narwhal.skill.CertificationRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;

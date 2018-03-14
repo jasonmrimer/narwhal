@@ -3,7 +3,7 @@ package mil.af.us.narwhal.airman;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import mil.af.us.narwhal.skills.Qualification;
+import mil.af.us.narwhal.skill.Qualification;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

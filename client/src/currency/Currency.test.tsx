@@ -11,6 +11,7 @@ import { AirmanCertificationModelFactory } from '../airman/factories/AirmanCerti
 import { TabType } from '../tracker/stores/SidePanelStore';
 import { StyledBackButton } from '../widgets/BackButton';
 import { StyledNotification } from '../widgets/Notification';
+import { StyledRipItems } from '../rip-items/RipItems';
 
 describe('Currency', () => {
   const airman = AirmanModelFactory.build(
@@ -23,7 +24,6 @@ describe('Currency', () => {
 
   let trackerStore: TrackerStore;
   let subject: ShallowWrapper;
-
   beforeEach(async () => {
     trackerStore = await makeFakeTrackerStore();
     trackerStore.setSelectedAirman(airman, TabType.AVAILABILITY);
@@ -45,11 +45,19 @@ describe('Currency', () => {
     expect(qualification.prop('onClick')).toBeDefined();
   });
 
-  it('renders a skill notification if the airman has no skills', () => {
+  it('renders a skill notification if the airman has no skill', () => {
     const emptyAirman = AirmanModelFactory.build();
     subject.setProps({selectedAirman: emptyAirman});
 
     expect(subject.find(StyledNotification).exists()).toBeTruthy();
+  });
+
+  it('should show RIP items', () => {
+    trackerStore.currencyStore.showRipItems();
+    subject.update();
+
+    expect(subject.find(StyledRipItems).exists()).toBeTruthy();
+    expect(subject.find(StyledRipItems).prop('items').length).toBe(trackerStore.currencyStore.ripItems.length);
   });
 
   it('opens skill form on + Add Skill click', () => {

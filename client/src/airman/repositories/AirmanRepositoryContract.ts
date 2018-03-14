@@ -173,7 +173,7 @@ export function airmanRepositoryContract(subject: AirmanRepository) {
             expirationDate: moment.invalid()
           });
         } catch (e) {
-          /*tslint:disable:no-any*/
+
           errors.forEach((item: any) => expect(e).toContainEqual(item));
           return;
         }

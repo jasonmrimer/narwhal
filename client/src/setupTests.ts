@@ -1,4 +1,3 @@
-/* tslint:disable:no-any*/
 const globalAny: {} = global;
 
 ((globalAny as any).requestAnimationFrame = (cb: () => void) => {

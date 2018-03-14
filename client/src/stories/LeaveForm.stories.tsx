@@ -6,7 +6,6 @@ import { StyledLeaveForm } from '../event/LeaveForm';
 import { LeaveFormStore } from '../event/stores/LeaveFormStore';
 import { EventModelFactory } from '../event/factories/EventModelFactory';
 
-/*tslint:disable:no-any*/
 const wrapper = (story: any) => {
   return (
     <ThemeProvider theme={Theme}>

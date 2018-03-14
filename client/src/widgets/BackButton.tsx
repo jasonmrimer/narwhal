@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { Theme } from '../themes/default';
 import { BackArrow } from '../icons/BackArrow';
 
-/*tslint:disable:no-any*/
 interface Props {
   onClick: (e: any) => void;
   text?: string;
