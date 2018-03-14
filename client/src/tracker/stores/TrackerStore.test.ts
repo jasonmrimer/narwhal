@@ -11,7 +11,8 @@ import { TimeServiceStub } from '../services/doubles/TimeServiceStub';
 import { EventModel, EventType } from '../../event/models/EventModel';
 import SkillRepositoryStub from '../../skills/repositories/doubles/SkillRepositoryStub';
 import { SkillType } from '../../skills/models/SkillType';
-import {TabType} from "./SidePanelStore";
+import { TabType } from './SidePanelStore';
+import { AirmanQualificationModel } from '../../airman/models/AirmanQualificationModel';
 
 describe('TrackerStore', () => {
   const airmenRepository = new FakeAirmanRepository();
@@ -303,6 +304,11 @@ describe('TrackerStore', () => {
   });
 
   describe('skills', () => {
+    it('should render certification options based off the site of the selected airman', () => {
+      subject.setSelectedAirman(allAirmen[0], TabType.CURRENCY);
+      expect(subject.airmanCertificationOptions.length).toBe(5);
+    });
+
     it('should add a qualification to an airman', async () => {
       const airman = allAirmen[0];
       const qualLength = airman.qualifications.length;
@@ -352,7 +358,7 @@ describe('TrackerStore', () => {
 
       let updatedAirman = (await airmenRepository.findAll())[0];
       const qualLength = updatedAirman.qualifications.length;
-      const id = updatedAirman.qualifications.find(q => q.skillId === 100)!.id;
+      const id = updatedAirman.qualifications.find((q: AirmanQualificationModel) => q.skillId === 100)!.id;
 
       await subject.removeSkill(Object.assign({}, skill, {id}));
 

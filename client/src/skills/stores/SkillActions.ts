@@ -5,5 +5,5 @@ export interface SkillActions {
   addSkill: (skill: Skill) => void;
   removeSkill: (skill: Skill) => void;
   qualificationOptions: FilterOption[];
-  certificationOptions: FilterOption[];
+  airmanCertificationOptions: FilterOption[];
 }

@@ -18,6 +18,7 @@ export class AirmanSerializer implements Serializer<AirmanModel> {
     return new AirmanModel(
       item.id,
       item.flightId,
+      item.siteId,
       item.firstName,
       item.lastName,
       item.qualifications.map((qual: object) => this.qualSerializer.deserialize(qual)),

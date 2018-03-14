@@ -22,7 +22,7 @@ describe('CurrencyStore', () => {
       addSkill: jest.fn(),
       removeSkill: jest.fn(),
       qualificationOptions: [],
-      certificationOptions: []
+      airmanCertificationOptions: []
     };
     subject = new CurrencyStore(new SkillFormStore(skillActions));
   });

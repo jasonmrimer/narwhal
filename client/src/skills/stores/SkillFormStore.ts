@@ -26,7 +26,7 @@ export class SkillFormStore extends FormStore<Skill, State> {
     if (state.skillType === SkillType.Qualification ) {
       options = this.skillActions.qualificationOptions;
     } else if (state.skillType === SkillType.Certification) {
-      options = this.skillActions.certificationOptions;
+      options = this.skillActions.airmanCertificationOptions;
     }
 
     if (state.skillId == null && options.length > 0) {
@@ -79,6 +79,6 @@ export class SkillFormStore extends FormStore<Skill, State> {
   }
 
   get certificationOptions() {
-    return this.skillActions.certificationOptions;
+    return this.skillActions.airmanCertificationOptions;
   }
 }

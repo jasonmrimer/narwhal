@@ -27,7 +27,7 @@ describe('SkillsForm', () => {
         {value: 1, label: 'A'},
         {value: 2, label: 'B'}
       ],
-      certificationOptions: [
+      airmanCertificationOptions: [
         {value: 1, label: 'X'},
         {value: 2, label: 'Y'}
       ]
@@ -97,7 +97,7 @@ describe('SkillsForm', () => {
           {value: 1, label: 'A'},
           {value: 2, label: 'B'}
         ],
-        certificationOptions: [
+        airmanCertificationOptions: [
           {value: 1, label: 'X'},
           {value: 2, label: 'Y'}
         ]

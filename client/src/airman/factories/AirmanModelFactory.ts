@@ -8,11 +8,13 @@ import * as moment from 'moment';
 export class AirmanModelFactory {
   static build(id: number = 1,
                flightId: number = 1,
+               siteId: number = 1,
                qualifications: AirmanQualificationModel[] = [],
                certifications: AirmanCertificationModel[] = []) {
     return new AirmanModel(
       id,
       flightId,
+      siteId,
       randomText(5),
       randomText(5),
       qualifications,

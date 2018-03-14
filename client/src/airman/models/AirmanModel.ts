@@ -4,11 +4,12 @@ import { AirmanCertificationModel } from './AirmanCertificationModel';
 
 export class AirmanModel {
   static empty(): AirmanModel {
-    return new AirmanModel(-1, -1, '', '', [], [], []);
+    return new AirmanModel(-1, -1, -1, '', '', [], [], []);
   }
 
   constructor(public id: number,
               public flightId: number,
+              public siteId: number,
               public firstName: string,
               public lastName: string,
               public qualifications: AirmanQualificationModel[] = [],

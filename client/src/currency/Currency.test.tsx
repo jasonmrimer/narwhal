@@ -16,8 +16,9 @@ describe('Currency', () => {
   const airman = AirmanModelFactory.build(
     1,
     1,
+    1,
     AirmanQualificationModelFactory.buildList(3),
-    AirmanCertificationModelFactory.buildList(3)
+    AirmanCertificationModelFactory.buildList(3, 1)
   );
 
   let trackerStore: TrackerStore;

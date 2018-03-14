@@ -24,6 +24,7 @@ import { EventActions } from '../../event/stores/EventActions';
 import { SidePanelStore, TabType } from './SidePanelStore';
 import * as Fuse from 'fuse.js';
 import { Moment } from 'moment';
+import { filterOptionsBy } from '../../utils/eventUtil';
 
 /* tslint:disable:no-any*/
 export class TrackerStore implements EventActions {
@@ -214,20 +215,18 @@ export class TrackerStore implements EventActions {
 
   @computed
   get certificationOptions() {
-    let certificationOptions: FilterOption[];
     if (this.siteId === UnfilteredValue) {
       return this._certifications.map(cert => {
         return {value: cert.id, label: cert.title};
       });
     } else {
-      certificationOptions = this._certifications.reduce((certOpts: FilterOption[], cert) => {
-        if (cert.siteId === this._siteId) {
-          certOpts.push({value: cert.id, label: cert.title});
-        }
-        return certOpts;
-      }, []);
-      return certificationOptions;
+      return filterOptionsBy(this._certifications, this.siteId);
     }
+  }
+
+  @computed
+  get airmanCertificationOptions() {
+    return filterOptionsBy(this._certifications, this._selectedAirman.siteId);
   }
 
   @computed
