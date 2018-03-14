@@ -1,7 +1,8 @@
 import { MissionRepositoryContract } from '../MissionRepositoryContract';
 import { WebMissionRepository } from './WebMissionRepository';
+import { HTTPClient } from '../../../HTTPClient';
 
 describe('WebMissionRepository', () => {
-  const HOST = process.env.REACT_APP_HOST || 'http://localhost:8080';
-  MissionRepositoryContract(new WebMissionRepository(HOST));
+  const client = new HTTPClient(process.env.REACT_APP_HOST || 'http://localhost:8080');
+  MissionRepositoryContract(new WebMissionRepository(client));
 });

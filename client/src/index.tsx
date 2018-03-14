@@ -21,32 +21,37 @@ import { WebSkillRepository } from './skills/repositories/web/WebSkillRepository
 import { WebCrewRepository } from './crew/repositories/web/WebCrewRepository';
 import { ProfileSitePickerStore } from './profile/stores/ProfileSitePickerStore';
 import { withRouter } from 'react-router';
+import { HTTPClient } from './HTTPClient';
 
 document.body.style.fontFamily = Theme.fontFamily;
 document.body.style.fontWeight = Theme.fontWeight;
 document.body.style.color = Theme.fontColor;
 document.body.style.backgroundColor = Theme.dark;
 
-const webSiteRepository = new WebSiteRepository();
-const dashboardStore = new DashboardStore(
-  webSiteRepository,
-  new WebMissionRepository()
-);
+const client = new HTTPClient();
+
+const webAirmanRepository = new WebAirmanRepository(client);
+const webSiteRepository = new WebSiteRepository(client);
+const webMissionRepository = new WebMissionRepository(client);
+const webSkillRepository = new WebSkillRepository(client);
+const webEventRepository = new WebEventRepository(client);
+const webCrewRepository = new WebCrewRepository(client);
+const webProfileRepository = new WebProfileRepository(client);
+
+const dashboardStore = new DashboardStore(webSiteRepository, webMissionRepository);
 
 const trackerStore = new TrackerStore(
-  new WebAirmanRepository(),
+  webAirmanRepository,
   webSiteRepository,
-  new WebSkillRepository(),
-  new WebEventRepository(),
+  webSkillRepository,
+  webEventRepository,
   new MomentTimeService(),
-  new WebMissionRepository()
+  webMissionRepository
 );
 
-const crewStore = new CrewStore(
-  new WebCrewRepository(),
-  new WebAirmanRepository(),
-);
-const profileStore = new ProfileSitePickerStore(new WebProfileRepository(), webSiteRepository);
+const crewStore = new CrewStore(webCrewRepository, webAirmanRepository);
+
+const profileStore = new ProfileSitePickerStore(webProfileRepository, webSiteRepository);
 
 /*tslint:disable:no-any*/
 const AppWithRouter = withRouter((App as any)) as typeof App;

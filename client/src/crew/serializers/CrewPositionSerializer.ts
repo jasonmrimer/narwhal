@@ -3,7 +3,12 @@ import { CrewPositionModel } from '../models/CrewPositionModel';
 
 export class CrewPositionSerializer implements Serializer<CrewPositionModel> {
   serialize(item: CrewPositionModel): {} {
-    throw new Error('Not implemented');
+    return {
+      id: item.id,
+      title: item.title,
+      critical: item.critical,
+      airmanId: item.airman.id,
+    };
   }
 
   /* tslint:disable:no-any*/

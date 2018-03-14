@@ -1,40 +1,24 @@
 import { CrewRepository } from '../CrewRepository';
 import { CrewSerializer } from '../../serializers/CrewSerializer';
 import { CrewModel } from '../../models/CrewModel';
-import * as Cookie from 'js-cookie';
+import { CrewPositionSerializer } from '../../serializers/CrewPositionSerializer';
+import { HTTPClient } from '../../../HTTPClient';
 
 export class WebCrewRepository implements CrewRepository {
   private serializer = new CrewSerializer();
-  private csrfToken: string;
+  private crewPositionSerializer = new CrewPositionSerializer();
 
-  constructor(private baseUrl: string = '') {
-    this.csrfToken = Cookie.get('XSRF-TOKEN') || '';
+  constructor(private client: HTTPClient) {
   }
 
   async findOne(id: number) {
-    const resp = await fetch(`${this.baseUrl}/api/crews/${id}`, {credentials: 'include'});
-    const json = await resp.json();
+    const json = await this.client.getJSON(`/api/crews/${id}`);
     return this.serializer.deserialize(json);
   }
 
-  async update(crew: CrewModel): Promise<CrewModel> {
-    const resp = await fetch(
-      `${this.baseUrl}/api/crews/${crew.id}/positions`,
-      {
-        method: 'PUT',
-        body: JSON.stringify(crew.crewPositions.map((pos) => {
-          return {
-            id: pos.id,
-            title: pos.title,
-            critical: pos.critical,
-            airmanId: pos.airman.id,
-          };
-        })),
-        headers: [['Content-Type', 'application/json'], ['X-XSRF-TOKEN', this.csrfToken]],
-        credentials: 'include',
-      }
-    );
-    const json = await resp.json();
+  async update(crew: CrewModel) {
+    const body = JSON.stringify(crew.crewPositions.map(this.crewPositionSerializer.serialize));
+    const json = await this.client.putJSON(`/api/crews/${crew.id}/positions`, body);
     return this.serializer.deserialize(json);
   }
 }

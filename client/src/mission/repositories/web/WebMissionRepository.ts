@@ -1,28 +1,26 @@
 import { MissionRepository } from '../MissionRepository';
 import { MissionModel } from '../../models/MissionModel';
 import { MissionSerializer } from '../../serializers/MissionSerializer';
+import { HTTPClient } from '../../../HTTPClient';
 
 export class WebMissionRepository implements MissionRepository {
   private serializer: MissionSerializer = new MissionSerializer();
 
-  constructor(private baseUrl: string = '') {
+  constructor(private client: HTTPClient) {
   }
 
   async findAll(): Promise<MissionModel[]> {
-    const resp = await fetch(`${this.baseUrl}/api/missions`, {credentials: 'include'});
-    const json = await resp.json();
+    const json = await this.client.getJSON('api/missions');
     return json.map((obj: object) => this.serializer.deserialize(obj));
   }
 
   async findBySite(id: number) {
-    const resp = await fetch(`${this.baseUrl}/api/missions?site=${id}`, {credentials: 'include'});
-    const json = await resp.json();
+    const json = await this.client.getJSON(`api/missions?site=${id}`);
     return json.map((obj: object) => this.serializer.deserialize(obj));
   }
 
   async findAllFromTodayOn() {
-    const resp = await fetch(`${this.baseUrl}/api/missions/from-today`, {credentials: 'include'});
-    const json = await resp.json();
+    const json = await this.client.getJSON(`api/missions/from-today`);
     return json.map((obj: object) => this.serializer.deserialize(obj));
   }
 }

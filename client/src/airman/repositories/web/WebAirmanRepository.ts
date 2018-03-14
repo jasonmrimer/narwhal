@@ -1,110 +1,55 @@
 import { AirmanRepository } from '../AirmanRepository';
 import { AirmanSerializer } from '../../serializers/AirmanSerializer';
 import { AirmanModel } from '../../models/AirmanModel';
-import * as Cookie from 'js-cookie';
 import { SkillType } from '../../../skills/models/SkillType';
 import { Skill } from '../../../skills/models/Skill';
+import { HTTPClient } from '../../../HTTPClient';
 
 /* tslint:disable:no-any*/
 export class WebAirmanRepository implements AirmanRepository {
   private serializer = new AirmanSerializer();
-  private csrfToken: string;
-  constructor(private baseUrl: string = '') {
-    this.csrfToken = Cookie.get('XSRF-TOKEN') || '';
+
+  constructor(private client: HTTPClient) {
   }
 
   async findAll() {
-    const resp = await fetch(`${this.baseUrl}/api/airmen`, {credentials: 'include'});
-    const json = await resp.json();
-    return json.map((obj: object) => {
-      return this.serializer.deserialize(obj);
-    });
+    const json = await this.client.getJSON('/api/airmen');
+    return json.map((item: any) => this.serializer.deserialize(item));
   }
 
   async findBySquadron(id: number) {
-    const resp = await fetch(`${this.baseUrl}/api/airmen?squadron=${id}`, {credentials: 'include'});
-    const json = await resp.json();
-    return json.map((obj: object) => {
-      return this.serializer.deserialize(obj);
-    });
+    const json = await this.client.getJSON(`/api/airmen?squadron=${id}`);
+    return json.map((item: any) => this.serializer.deserialize(item));
   }
 
   async findByFlight(id: number) {
-    const resp = await fetch(`${this.baseUrl}/api/airmen?flight=${id}`, {credentials: 'include'});
-    const json = await resp.json();
-    return json.map((obj: object) => {
-      return this.serializer.deserialize(obj);
-    });
-  }
-
-  async saveSkill(skill: Skill): Promise<AirmanModel> {
-    const resp = skill.id ? await this.updateSkill(skill) : await this.createSkill(skill);
-    const json = await resp.json();
-    if (resp.status === 400) {
-      throw this.handleError(json);
-    }
-    return Promise.resolve(this.serializer.deserialize(json));
+    const json = await this.client.getJSON(`/api/airmen?flight=${id}`);
+    return json.map((item: any) => this.serializer.deserialize(item));
   }
 
   async saveAirman(airman: AirmanModel): Promise<AirmanModel> {
-    const resp = await fetch(
-      `${this.baseUrl}/api/airmen`,
-      {
-        method: 'POST',
-        headers: [['Content-Type', 'application/json'], ['X-XSRF-TOKEN', this.csrfToken]],
-        body: JSON.stringify(airman),
-        credentials: 'include'
-      }
-    );
-
-    const json = await resp.json();
+    const json = await this.client.postJSON('/api/airmen', JSON.stringify(airman));
     return this.serializer.deserialize(json);
   }
 
-  async deleteSkill(skill: Skill): Promise<AirmanModel> {
-    const resp = await fetch(
-      `${this.baseUrl}/api/airmen/${skill.airmanId}/${this.getResourceForSkill(skill)}/${skill.id}`,
-      {
-        method: 'DELETE',
-        headers: [['X-XSRF-TOKEN', this.csrfToken]],
-        credentials: 'include'
-      }
-    );
-
-    if (resp.status < 200 || resp.status >= 300) {
-      throw new Error(`Unable to delete skill with ID: ${skill.id}`);
+  async saveSkill(skill: Skill): Promise<AirmanModel> {
+    try {
+      const body = JSON.stringify(skill);
+      const json = skill.id ?
+        await this.client.putJSON(`/api/airmen/${skill.airmanId}/${this.pathForSkill(skill)}`, body) :
+        await this.client.postJSON(`/api/airmen/${skill.airmanId}/${this.pathForSkill(skill)}`, body);
+      return this.serializer.deserialize(json);
+    } catch (errorJSON) {
+      throw this.handleError(errorJSON);
     }
-
-    const json = await resp.json();
-
-    return Promise.resolve(this.serializer.deserialize(json));
   }
 
-  private createSkill(skill: Skill) {
-    return fetch(
-      `${this.baseUrl}/api/airmen/${skill.airmanId}/${this.getResourceForSkill(skill)}`,
-      {
-        method: 'POST',
-        headers: [['Content-Type', 'application/json'], ['X-XSRF-TOKEN', this.csrfToken]],
-        body: JSON.stringify(skill),
-        credentials: 'include'
-      }
-    );
+  async deleteSkill(skill: Skill): Promise<AirmanModel> {
+    const json = await this.client.deleteJSON(`/api/airmen/${skill.airmanId}/${this.pathForSkill(skill)}/${skill.id}`);
+    return this.serializer.deserialize(json);
   }
 
-  private updateSkill(skill: Skill) {
-    return fetch(
-      `${this.baseUrl}/api/airmen/${skill.airmanId}/${this.getResourceForSkill(skill)}`,
-      {
-        method: 'PUT',
-        headers: [['Content-Type', 'application/json'], ['X-XSRF-TOKEN', this.csrfToken]],
-        body: JSON.stringify(skill),
-        credentials: 'include'
-      }
-    );
-  }
-
-  private getResourceForSkill(skill: Skill): string {
+  private pathForSkill(skill: Skill): string {
     return {
       [SkillType.Qualification]: 'qualifications',
       [SkillType.Certification]: 'certifications'

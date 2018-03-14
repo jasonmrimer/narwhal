@@ -1,43 +1,28 @@
 import { EventRepository } from '../EventRepository';
-import { EventModel } from '../../models/EventModel';
+import { EventModel, EventType } from '../../models/EventModel';
 import { EventSerializer } from '../../serializers/EventSerializer';
-import * as Cookie from 'js-cookie';
+import { HTTPClient } from '../../../HTTPClient';
 
 export class WebEventRepository implements EventRepository {
   private serializer: EventSerializer = new EventSerializer();
-  private csrfToken: string;
 
-  constructor(private baseUrl: string = '') {
-    this.csrfToken = Cookie.get('XSRF-TOKEN') || '';
+  constructor(private client: HTTPClient) {
   }
 
-  async save(event: EventModel): Promise<EventModel> {
-    const resp = event.id ?
-      await this.updateEvent(event) :
-      await this.createEvent(event);
-
-    const json = await resp.json();
-    if (resp.status < 200 || resp.status >= 300) {
-      throw this.handleError(json);
+  async save(event: EventModel) {
+    try {
+      return event.id ?
+        await this.client.putJSON(`api/events/${event.id}`, this.serializer.serialize(event)) :
+        await this.client.postJSON('api/events', this.serializer.serialize(event));
+    } catch (e) {
+      throw this.handleError(e);
     }
-
-    return Promise.resolve(this.serializer.deserialize(json));
   }
 
   async delete(event: EventModel): Promise<void> {
-    const resp = await fetch(
-      `${this.baseUrl}/api/events/${event.id}`,
-      {
-        method: 'DELETE',
-        headers: [['Content-Type', 'application/json'], ['X-XSRF-TOKEN', this.csrfToken]],
-        body: this.serializer.serialize(event),
-        credentials: 'include'
-      }
-    );
-
-    if (resp.status < 200 || resp.status >= 300) {
-      throw new Error(`Unable to delete event with ID: ${event.id}`);
-    }
+    return event.type === EventType.Mission ?
+      await this.client.delete(`api/crews/${event.id}/airmen/${event.airmanId}`) :
+      await this.client.delete(`api/events/${event.id}`);
   }
 
   private handleError(response: { errors: object[] }): object {
@@ -47,29 +32,5 @@ export class WebEventRepository implements EventRepository {
       });
     }
     return [];
-  }
-
-  private createEvent(event: EventModel) {
-    return fetch(
-      `${this.baseUrl}/api/events`,
-      {
-        method: 'POST',
-        headers: [['Content-Type', 'application/json'], ['X-XSRF-TOKEN', this.csrfToken]],
-        body: this.serializer.serialize(event),
-        credentials: 'include'
-      }
-    );
-  }
-
-  private updateEvent(event: EventModel) {
-    return fetch(
-      `${this.baseUrl}/api/events/${event.id}`,
-      {
-        method: 'PUT',
-        headers: [['Content-Type', 'application/json'], ['X-XSRF-TOKEN', this.csrfToken]],
-        body: this.serializer.serialize(event),
-        credentials: 'include'
-      }
-    );
   }
 }

@@ -25,6 +25,7 @@ import java.time.Instant;
 
 import static io.restassured.RestAssured.given;
 import static java.util.Collections.singletonList;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 @ActiveProfiles("test")
@@ -45,6 +46,7 @@ public class CrewControllerTest {
   private Crew crew;
   @LocalServerPort private int port;
   @Autowired private CrewRepository crewRepository;
+  @Autowired private CrewPositionRepository crewPositionRepository;
   @Autowired private SiteRepository siteRepository;
   @Autowired private MissionRepository missionRepository;
   @Autowired private AirmanRepository airmanRepository;
@@ -142,5 +144,25 @@ public class CrewControllerTest {
       .body("crewPositions[0].title", equalTo("GOOBER"))
       .body("crewPositions[0].critical", equalTo(true));
    // @formatter:on
+  }
+
+  @Test
+  public void deleteTest() {
+    long count = crewPositionRepository.count();
+
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .contentType("application/json")
+    .when()
+      .delete(CrewController.URI + "/" + crew.getId() + "/airmen/" + airman.getId())
+    .then()
+      .statusCode(200);
+   // @formatter:on
+
+    assertThat(crewPositionRepository.count()).isEqualTo(count - 1);
   }
 }

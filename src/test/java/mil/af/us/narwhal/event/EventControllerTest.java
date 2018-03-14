@@ -184,7 +184,7 @@ public class EventControllerTest {
   }
 
   @Test
-  public void deleteTest() throws JsonProcessingException {
+  public void deleteTest() {
     Event event = new Event(
       "Existing Event",
       "Existing Description",
@@ -195,7 +195,6 @@ public class EventControllerTest {
     );
     event = eventRepository.save(event);
 
-    final String json = objectMapper.writeValueAsString(event);
 
     // @formatter:off
     given()
@@ -204,47 +203,6 @@ public class EventControllerTest {
       .preemptive()
       .basic("tytus", "password")
       .contentType("application/json")
-      .body(json)
-    .when()
-      .delete(EventController.URI + "/" + event.getId())
-    .then()
-      .statusCode(200);
-    // @formatter:on
-
-    assertThat(eventRepository.findOne(event.getId())).isNull();
-  }
-
-  @Test
-  public void deleteMissionTest() throws JsonProcessingException {
-    final Site site = new Site("site");
-    siteRepository.save(site);
-
-    final Mission mission = new Mission("A", "B", Instant.now(), Instant.now(), site);
-    missionRepository.save(mission);
-
-    final Crew crew = new Crew(mission);
-    crew.addCrewPosition(new CrewPosition(airman));
-    crewRepository.save(crew);
-
-    Event event = new Event(
-      crew.getId(),
-      mission.getMissionId(),
-      "",
-      mission.getStartDateTime(),
-      mission.getEndDateTime(),
-      EventType.MISSION,
-      airman.getId()
-    );
-    final String json = objectMapper.writeValueAsString(event);
-
-    // @formatter:off
-    given()
-      .port(port)
-      .auth()
-      .preemptive()
-      .basic("tytus", "password")
-      .contentType("application/json")
-      .body(json)
     .when()
       .delete(EventController.URI + "/" + event.getId())
     .then()

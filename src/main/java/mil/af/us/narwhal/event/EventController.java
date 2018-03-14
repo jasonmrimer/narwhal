@@ -1,6 +1,5 @@
 package mil.af.us.narwhal.event;
 
-import mil.af.us.narwhal.crew.CrewPositionRepository;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -11,16 +10,13 @@ public class EventController {
   public static final String URI = "/api/events";
 
   private EventRepository eventRepository;
-  private CrewPositionRepository crewPositionRepository;
   private EventService service;
 
   public EventController(
     EventRepository eventRepository,
-    CrewPositionRepository crewPositionRepository,
     EventService service
   ) {
     this.eventRepository = eventRepository;
-    this.crewPositionRepository = crewPositionRepository;
     this.service = service;
   }
 
@@ -37,12 +33,8 @@ public class EventController {
     return eventRepository.save(event);
   }
 
-  @DeleteMapping(value = "{id}")
-  public void delete(@PathVariable Long id, @RequestBody Event event) {
-    if (event.getType() == EventType.MISSION) {
-      crewPositionRepository.deleteOneByCrewIdAndAirmanId(event.getId(), event.getAirmanId());
-    } else {
-      eventRepository.delete(id);
-    }
+  @DeleteMapping(value = "/{id}")
+  public void delete(@PathVariable Long id) {
+    eventRepository.delete(id);
   }
 }

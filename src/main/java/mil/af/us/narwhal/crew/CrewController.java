@@ -16,10 +16,12 @@ public class CrewController {
   public static final String URI = "/api/crews";
 
   private CrewRepository crewRepository;
+  private CrewPositionRepository crewPositionRepository;
   private AirmanRepository airmanRepository;
 
-  public CrewController(CrewRepository crewRepository, AirmanRepository airmanRepository) {
+  public CrewController(CrewRepository crewRepository, CrewPositionRepository crewPositionRepository, AirmanRepository airmanRepository) {
     this.crewRepository = crewRepository;
+    this.crewPositionRepository = crewPositionRepository;
     this.airmanRepository = airmanRepository;
   }
 
@@ -49,5 +51,10 @@ public class CrewController {
     });
 
     return crewRepository.save(crew);
+  }
+
+  @DeleteMapping(value = "/{id}/airmen/{airmanId}")
+  public void delete(@PathVariable Long id, @PathVariable Long airmanId) {
+    crewPositionRepository.deleteOneByCrewIdAndAirmanId(id, airmanId);
   }
 }

@@ -1,16 +1,16 @@
 import { SiteRepository } from '../SiteRepository';
 import { SiteModel } from '../../models/SiteModel';
 import { SiteSerializer } from '../../serializers/SiteSerializer';
+import { HTTPClient } from '../../../HTTPClient';
 
 export class WebSiteRepository implements SiteRepository {
-  private static siteSerializer: SiteSerializer = new SiteSerializer();
+  private siteSerializer: SiteSerializer = new SiteSerializer();
 
-  constructor(private baseUrl: string = '') {
+  constructor(private client: HTTPClient) {
   }
 
-  findAll(): Promise<SiteModel[]> {
-    return fetch(`${this.baseUrl}/api/sites`, {credentials: 'include'})
-      .then(resp => resp.json())
-      .then(items => items.map((item: {}) => WebSiteRepository.siteSerializer.deserialize(item)));
+  async findAll(): Promise<SiteModel[]> {
+    const json = await this.client.getJSON('api/sites');
+    return json.map((item: {}) => this.siteSerializer.deserialize(item));
   }
 }

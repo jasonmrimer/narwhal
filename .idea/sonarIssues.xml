@@ -123,6 +123,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/client/package.json">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/client/src/ShiftDropdown.tsx">
           <value>
             <set />
@@ -243,6 +248,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/client/src/skills/repositories/web/WebSkillRepository.contract.ts">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/client/src/stories/Form.stories.js">
           <value>
             <set />
@@ -299,6 +309,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/client/src/tracker/stores/TrackerStore.ts">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/client/src/utils/eventUtil.ts">
           <value>
             <set />
           </value>
@@ -644,6 +659,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/crew/CrewPositionJSON.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/crew/CrewPositionRepository.java">
           <value>
             <set />
           </value>

@@ -3,7 +3,7 @@ import { EventModel } from '../models/EventModel';
 import * as moment from 'moment';
 
 export class EventSerializer implements Serializer<EventModel> {
-  serialize(item: EventModel): {} {
+  serialize(item: EventModel) {
     return JSON.stringify(item);
   }
 

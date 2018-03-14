@@ -1,7 +1,8 @@
 import { ProfileRepositoryContract } from '../ProfileRepositoryContract';
 import { WebProfileRepository } from './WebProfileRepository';
+import { HTTPClient } from '../../../HTTPClient';
 
 describe('WebProfileRepository', () => {
-  const HOST = process.env.REACT_APP_HOST || 'http://localhost:8080';
-  ProfileRepositoryContract(new WebProfileRepository(HOST));
+  const client = new HTTPClient(process.env.REACT_APP_HOST || 'http://localhost:8080');
+  ProfileRepositoryContract(new WebProfileRepository(client));
 });
