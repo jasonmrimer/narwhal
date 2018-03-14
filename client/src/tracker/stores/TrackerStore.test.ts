@@ -382,4 +382,20 @@ describe('TrackerStore', () => {
     await subject.updateAirmanShift(airman, ShiftType.Night);
     expect(subject.airmen[0].shift).toBe(ShiftType.Night);
   });
+
+  it('should set loading until hydrate completes', async () => {
+    subject = new TrackerStore(
+      airmenRepository,
+      siteRepository,
+      skillRepository,
+      eventRepository,
+      timeServiceStub,
+      missionRepository
+    );
+    subject.setLoading(true);
+
+    await subject.hydrate();
+
+    expect(subject.loading).toBeFalsy();
+  });
 });

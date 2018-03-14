@@ -11,6 +11,7 @@ import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 import { StyledDeleteEventPopup } from '../event/DeleteEventPopup';
 import { EventModelFactory } from '../event/factories/EventModelFactory';
 import { TabType } from './stores/SidePanelStore';
+import { ClipLoader } from 'react-spinners';
 
 let trackerStore: TrackerStore;
 let subject: ShallowWrapper;
@@ -26,6 +27,14 @@ describe('Tracker', () => {
     );
     await forIt();
     subject.update();
+  });
+
+  it('should render the bar only while loading', async () => {
+    expect(subject.find(ClipLoader).exists()).toBeFalsy();
+
+    trackerStore.setLoading(true);
+    subject.update();
+    expect(subject.find(ClipLoader).exists()).toBeTruthy();
   });
 
   it('sets the trackerStores siteID and squadronId', () => {

@@ -39,6 +39,8 @@ export class TrackerStore implements EventActions {
   private skillRepository: SkillRepository;
   private eventRepository: EventRepository;
 
+  @observable private _loading: boolean = false;
+
   @observable private _airmen: AirmanModel[] = [];
   @observable private _sites: SiteModel[] = [];
   @observable private _certifications: CertificationModel[] = [];
@@ -86,22 +88,36 @@ export class TrackerStore implements EventActions {
   }
 
   async hydrate(siteId: number = UnfilteredValue) {
+    this._loading = true;
+
     const results = await Promise.all([
       this.siteRepository.findAll(),
-      this.airmanRepository.findAll(),
       this.skillRepository.findAllCertifications(),
       this.skillRepository.findAllQualifications(),
-      this.missionStore.hydrate()
+      this.missionStore.hydrate(),
+      this.airmanRepository.findAll(),
     ]);
 
     this._sites = results[0];
-    this._airmen = results[1];
-    this._certifications = results[2];
-    this._qualifications = results[3];
+    this._certifications = results[1];
+    this._qualifications = results[2];
+    this._airmen = results[4];
 
     if (this._siteId === UnfilteredValue) {
       this.setSiteId(siteId);
     }
+
+    this._loading = false;
+  }
+
+  @computed
+  get loading() {
+    return this._loading;
+  }
+
+  @action.bound
+  setLoading(loading: boolean) {
+    this._loading = loading;
   }
 
   @computed

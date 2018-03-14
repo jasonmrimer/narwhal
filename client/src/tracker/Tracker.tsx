@@ -9,6 +9,8 @@ import { StyledLegend } from '../roster/Legend';
 import { UserModel } from '../profile/models/ProfileModel';
 import { StyledDeleteEventPopup } from '../event/DeleteEventPopup';
 import { UnfilteredValue } from '../widgets/models/FilterOptionModel';
+import { Theme } from '../themes/default';
+import { ClipLoader } from 'react-spinners';
 
 interface Props {
   trackerStore: TrackerStore;
@@ -25,6 +27,12 @@ export class Tracker extends React.Component<Props> {
   render() {
     return (
       <div className={this.props.className}>
+        {
+          this.props.trackerStore.loading &&
+          <div className="loader">
+            <ClipLoader color={Theme.yellow} size={100}/>
+          </div>
+        }
         <div className="main">
           <div className="filters">
             <TopLevelFilter
@@ -86,13 +94,30 @@ export const StyledTracker = styled(Tracker)`
   display: flex;
   color: white;
   
+  .loader {
+    position: fixed;
+    background: rgba(0, 0, 0, 0.5);
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 1001;
+    
+    & > * {
+      position: fixed; 
+      top: 50%; 
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+  }
+  
   .filters {
      &:after {
       content: "."; 
-       visibility: hidden; 
-       display: block; 
-       height: 0; 
-       clear: both;
+      visibility: hidden; 
+      display: block; 
+      height: 0; 
+      clear: both;
      }
   }
   
