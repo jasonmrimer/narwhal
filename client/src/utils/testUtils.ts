@@ -1,15 +1,12 @@
 import { Filter } from '../widgets/Filter';
-import { StyledPlanner } from '../roster/Planner';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { FakeAirmanRepository } from '../airman/repositories/doubles/FakeAirmanRepository';
 import { SiteRepositoryStub } from '../site/repositories/doubles/SiteRepositoryStub';
 import { EventRepositoryStub } from '../event/repositories/doubles/EventRepositoryStub';
 import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
 import { default as SkillRepositoryStub } from '../skills/repositories/doubles/SkillRepositoryStub';
-import { Moment } from 'moment';
 import { MissionRepositoryStub } from '../mission/repositories/doubles/MissionRepositoryStub';
 import { ReactWrapper } from 'enzyme';
-import { AirmanDatum } from '../tracker/AirmanDatum';
 import { RipItemRepositoryStub } from '../airman/repositories/doubles/AirmanRipItemRepositoryStub';
 
 export async function makeFakeTrackerStore(shouldHydrateState: boolean = true) {
@@ -41,57 +38,6 @@ export const eventStub = {
   stopPropagation: () => {
   }
 };
-
-/* tslint:disable:no-any */
-export const eventTargetStub = (name: string, value: any) => {
-  return {
-    target: {
-      name: name,
-      value: value
-    }
-  };
-};
-
-/* tslint:disable:no-any */
-export function selectValueFromDropdown(wrapper: any, name: string, value: any) {
-  wrapper.find(`select[name="${name}"]`).simulate('change', eventTargetStub(name, value));
-}
-
-export function inputValueForDatePicker(wrapper: any, name: string, value: Moment) {
-  wrapper.find(`input[name="${name}"]`).simulate('change', eventTargetStub(name, value.format('YYYY-MM-DD')));
-}
-
-/* tslint:disable:no-any*/
-export class Table {
-  private wrapper: any;
-
-  constructor(subject: any) {
-    this.wrapper = subject.find('table');
-  }
-
-  getColumnHeaders() {
-    const headers = this.wrapper.find('th');
-    return headers.map((header: any) => header.childAt(0).text());
-  }
-
-  getTextForRowAndCol(rowIndex: number, columnName: string) {
-    const columnIndex = this.getColumnHeaders().findIndex((header: any) => header === columnName);
-    const row = this.getRows().at(rowIndex);
-    return row.find(AirmanDatum).at(columnIndex).dive().text();
-  }
-
-  getRows() {
-    return this.wrapper.find('tbody tr');
-  }
-
-  getRowCount() {
-    return this.getRows().length;
-  }
-
-  getPlanner() {
-    return this.wrapper.find(StyledPlanner);
-  }
-}
 
 export function findFilterById(wrapper: any, id: string) {
   return wrapper.find(Filter).filterWhere((elem: any) => elem.prop('id') === id);

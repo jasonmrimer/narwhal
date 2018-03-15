@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { Theme } from '../themes/default';
+import {Theme} from '../themes/default';
 import '../index.css';
-import { FormStory } from './Form.stories';
-import { NotificationStory } from './Notification.stories';
+import {FormStory} from './Form.stories';
+import {NotificationStory} from './Notification.stories';
 import {LeaveFormStory} from "./LeaveForm.stories";
 import {IconStory} from "./Icon.stories";
+import {RosterStory} from "./Roster.stories";
 
 document.body.style.fontFamily = Theme.fontFamily;
 document.body.style.color = Theme.fontColor;

@@ -14,7 +14,7 @@ class TrackerPage
   def initialize
     expect(page).to have_content('All Sites')
 
-    @all_airmen_count = page.find_all('tbody tr').count
+    @all_airmen_count = page.find_all('.airman-name').count
   end
 
   def assert_navigates_to_dashboard
@@ -58,31 +58,31 @@ class TrackerPage
   def assert_filters_by_last_name
     last_name = "Spaceman"
     fill_in('last-name', with: last_name)
-    expect(page).to have_css('tbody tr', count: 1)
+    expect(page).to have_css('.airman-name', count: 1)
 
     last_name.split("").each do |i|
       page.find('input[name=last-name]').native.send_key(:backspace)
     end
 
-    expect(page).to have_css('tbody tr', count: @all_airmen_count)
+    expect(page).to have_css('.airman-name', count: @all_airmen_count)
   end
 
   def assert_filters_by_shift
     filter('shift', 'Night')
-    expect(page).to have_css('tbody tr', maximum: @all_airmen_count - 1)
+    expect(page).to have_css('.airman-name', maximum: @all_airmen_count - 1)
 
     filter('shift', 'All')
-    expect(page).to have_css('tbody tr', count: @all_airmen_count)
+    expect(page).to have_css('.airman-name', count: @all_airmen_count)
   end
 
   def assert_filters_by_certification
     typeahead('Filter Certifications', 'Super Speed')
-    expect(page).to have_css('tbody tr', maximum: @all_airmen_count - 1)
+    expect(page).to have_css('.airman-name', maximum: @all_airmen_count - 1)
   end
 
   def assert_filters_by_qualification
     typeahead('Filter Qualifications', 'QB')
-    expect(page).to have_css('tbody tr', maximum: @all_airmen_count - 1)
+    expect(page).to have_css('.airman-name', maximum: @all_airmen_count - 1)
   end
 
   def assert_shows_availability
@@ -209,11 +209,11 @@ class TrackerPage
   def assert_return_to_tracker
     filter('site', 'DMS-MD')
     filter('squadron', '94 IS')
-    squadron_count = page.find_all('tbody tr').count
+    squadron_count = page.find_all('.airman-name').count
 
     filter('flight', 'DOB')
-    expect(page).to have_css('tbody tr', maximum: squadron_count)
-    flight_count = page.find_all('tbody tr').count
+    expect(page).to have_css('.airman-name', maximum: squadron_count)
+    flight_count = page.find_all('.airman-name').count
     expect(flight_count).to be < squadron_count
 
     click_on_airman('Spaceman, Corey')
@@ -227,7 +227,7 @@ class TrackerPage
     expect(page).to have_content('XXX-FAKE-MISSION-1')
     click(find('a', text: 'Back to Availability Roster'))
 
-    expect(page.find_all('tbody tr').count).to be < squadron_count
+    expect(page.find_all('.airman-name').count).to be < squadron_count
     expect(page).to have_select('site-filter', selected: 'DMS-MD')
     expect(page).to have_select('squadron-filter', selected: '94 IS')
     expect(page).to have_select('flight-filter', selected: 'DOB')
@@ -243,7 +243,7 @@ class TrackerPage
   end
 
   def open_rip_page
-    click(page.first("td.airman-cert", text: "Laser Vision"))
+    click(page.first(".airman-cert", text: "Laser Vision"))
     expect(page).to have_content('RIP TASKS')
     click(page.find("div.rip-item-tile-title", text: "RIP TASKS"))
     expect(page).to have_content('DCGS Mission')
@@ -254,7 +254,7 @@ class TrackerPage
   end
 
   def typeahead(item, value)
-    page.within('table') do
+    page.within('.roster-header') do
       fill_in(item, with: value)
       click_link(value)
     end

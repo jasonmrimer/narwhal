@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { StyledRoster } from '../roster/Roster';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import { TrackerStore } from './stores/TrackerStore';
@@ -11,6 +10,7 @@ import { StyledDeleteEventPopup } from '../event/DeleteEventPopup';
 import { UnfilteredValue } from '../widgets/models/FilterOptionModel';
 import { Theme } from '../themes/default';
 import { ClipLoader } from 'react-spinners';
+import { StyledRosterContainer } from '../roster/RosterContainer';
 
 interface Props {
   trackerStore: TrackerStore;
@@ -67,7 +67,8 @@ export class Tracker extends React.Component<Props> {
           <div>
             <StyledLegend/>
           </div>
-          <StyledRoster trackerStore={this.props.trackerStore}/>
+          <StyledRosterContainer trackerStore={this.props.trackerStore}/>
+          {/*<StyledRoster trackerStore={this.props.trackerStore}/>*/}
         </div>
         {
           !this.props.trackerStore.selectedAirman.isEmpty &&
@@ -90,7 +91,6 @@ export class Tracker extends React.Component<Props> {
 }
 
 export const StyledTracker = styled(Tracker)`
-  width: 80%;
   margin-left: 3rem;
   padding: 0.5rem;
   display: flex;
@@ -98,18 +98,17 @@ export const StyledTracker = styled(Tracker)`
   
   .loader {
     position: fixed;
-    background: rgba(0, 0, 0, 0.5);
+    background: ${props => props.theme.dark};
     top: 0;
     left: 0;
     height: 100%;
     width: 100%;
-    z-index: 1001;
+    z-index: 999;
     
     & > * {
       position: fixed; 
       top: 50%; 
-      left: 50%;
-      transform: translate(-50%, -50%);
+      left: 47%;
     }
   }
   
@@ -118,12 +117,13 @@ export const StyledTracker = styled(Tracker)`
       content: "."; 
       visibility: hidden; 
       display: block; 
-      height: 0; 
+      height: 0;
       clear: both;
      }
   }
   
   .main {
-    width: 100%;
+    width: 75%;
+    min-width: 1400px;
   }
  `;

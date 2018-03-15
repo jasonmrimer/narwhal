@@ -43,6 +43,5 @@ export const StyledTextInput = styled(TextInput)`
   font-weight: 300;
   cursor: pointer;
   outline: inherit;
-  height: 1.25rem;
   width: 100%;
 `;

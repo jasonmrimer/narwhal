@@ -4,7 +4,8 @@ import { NextIcon } from '../icons/NextIcon';
 import { Moment } from 'moment';
 import styled from 'styled-components';
 import * as classNames from 'classnames';
-import { PlannerStore } from '../roster/stores/PlannerStore';
+import { PlannerStore } from './stores/PlannerStore';
+import { observer } from 'mobx-react';
 
 interface Props {
   plannerStore: PlannerStore;
@@ -26,9 +27,9 @@ const renderWeek = (plannerWeek: Moment[]) => {
   );
 };
 
-export const PlannerHeader = (props: Props) => {
+export const PlannerHeader = observer((props: Props) => {
   return (
-    <th className={classNames(props.className, 'planner-header')}>
+    <div className={classNames(props.className, 'planner-header')}>
       <div className="month-header">
         {props.plannerStore.plannerWeek[0].format('MMMM YYYY').toUpperCase()}
       </div>
@@ -46,22 +47,21 @@ export const PlannerHeader = (props: Props) => {
           </button>
         </span>
       </span>
-    </th>
+    </div>
   );
-};
+});
 
 export const StyledPlannerHeader = styled(PlannerHeader)`
-  
+  background: ${props => props.theme.lightest};
+  padding: 0.75rem;
+  flex-grow: 2;
   border-left: 1px solid ${props => props.theme.graySteel};
+  border-right: 1px solid ${props => props.theme.graySteel};
   
-  .planner-day-navigation {;
+  .planner-day-navigation {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-
-  .month-header {
-    margin: 0 0 1rem 0;
   }
 
   .next-week, .last-week {
@@ -84,6 +84,10 @@ export const StyledPlannerHeader = styled(PlannerHeader)`
     display: flex;
     justify-content: space-between;
     flex-grow: 2;
+  }
+  
+  .month-header {
+    margin-bottom: 7px;
   }
 
 `;

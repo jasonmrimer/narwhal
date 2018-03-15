@@ -5,8 +5,8 @@ export const AppointmentIcon = () => {
   return (
     <svg
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      width="18"
-      height="18"
+      width="19"
+      height="19"
       viewBox="0 0 24 24"
     >
       <defs>

@@ -139,10 +139,10 @@ export const RosterLevelFilter = styled(Filter)`
   &:after {
     content: ' ';
     background: ${props => caret(props.options.length === 0)};
-    right: 0;
+    right: -8px;
     height: 14px;
     width: 20px;
-    top: 18px;
+    top: 11px;
     position: absolute;
     pointer-events: none;
   }
@@ -160,13 +160,7 @@ export const RosterLevelFilter = styled(Filter)`
     font-size: 1rem;
     font-weight: 300;
     
-    padding-top: 0.5rem;
-    padding-bottom: 0.25rem;
-    
-    margin-top: 0.25rem;
-    
     width: 100%;
-    height: 2.0625rem;
     
     border: none;
     border-bottom: 1px solid ${props => props.theme.fontColor};

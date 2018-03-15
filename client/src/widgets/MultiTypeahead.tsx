@@ -61,8 +61,7 @@ export const StyledMultiTypeahead = styled(MultiTypeahead)`
         
     .rbt-input {
       border-bottom: 1px solid ${props => props.theme.graySteel} !important;
-      padding: 0.5rem 0.5rem 0.5rem 0 !important;
-      height: 1rem;
+      padding: 0.5rem 0 !important;
         
       input {
         font-size: 1rem;

@@ -7,3 +7,7 @@ export const caret = (disabled: boolean) => {
     </svg>")
     no-repeat`;
 };
+
+export const formatAttributes = (objArray: object[], key: string) => {
+  return objArray.map((object: object) => object[key]).join(' / ');
+};

@@ -2,11 +2,8 @@ import * as React from 'react';
 
 export const ExpirationAlert = () => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="20px" height="20px" viewBox="0 0 24 24">
-      <g fill="none" fillRule="evenodd">
-        <circle cx="12" cy="13" r="8" fill="#E9A90F"/>
-        <path fill="#000" d="M11 7h2v8h-2zM11 17h2v2h-2z"/>
-      </g>
+    <svg xmlns="http://www.w3.org/2000/svg" width="84" height="100%" viewBox="0 0 64 24" preserveAspectRatio="none">
+      <path fill="#E9A90F" fillRule="evenodd" d="M21 0h41a2 2 0 0 1 2 2v22H0L21 0z"/>
     </svg>
   );
 };

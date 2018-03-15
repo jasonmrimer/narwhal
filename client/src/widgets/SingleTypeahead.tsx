@@ -43,7 +43,7 @@ export const StyledSingleTypeahead = styled(SingleTypeahead)`
     .rbt-input {
       border-bottom: 1px solid ${props => props.theme.graySteel} !important;
       padding: 0.5rem 0.5rem 0.5rem 0 !important;
-      height: 1rem;
+      //height: 1rem;
         
       input {
         font-size: 1rem;

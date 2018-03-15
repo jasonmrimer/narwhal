@@ -34,7 +34,7 @@ export class App extends React.Component<Props> {
           <div>
             <StyledClassificationBanner classified={this.props.profileStore.profile!.classified}/>
             <StyledAuthorizationBanner/>
-            <div style={{marginTop: '8rem'}}>
+            <div style={{marginTop: '7rem'}}>
               {
                 this.profileHasSite() ?
                   this.renderApp() :

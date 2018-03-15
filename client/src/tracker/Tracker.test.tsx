@@ -4,7 +4,6 @@ import { Tracker } from './Tracker';
 import { forIt, makeFakeTrackerStore } from '../utils/testUtils';
 import { TrackerStore } from './stores/TrackerStore';
 import { StyledLegend } from '../roster/Legend';
-import { StyledRoster } from '../roster/Roster';
 import { TopLevelFilter } from '../widgets/Filter';
 import { StyledSidePanel } from './SidePanel';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
@@ -12,6 +11,7 @@ import { StyledDeleteEventPopup } from '../event/DeleteEventPopup';
 import { EventModelFactory } from '../event/factories/EventModelFactory';
 import { TabType } from './stores/SidePanelStore';
 import { ClipLoader } from 'react-spinners';
+import { StyledRosterContainer } from '../roster/RosterContainer';
 
 let trackerStore: TrackerStore;
 let subject: ShallowWrapper;
@@ -47,7 +47,7 @@ describe('Tracker', () => {
   });
 
   it('should render a roster', () => {
-    expect(subject.find(StyledRoster).prop('trackerStore')).toBe(trackerStore);
+    expect(subject.find(StyledRosterContainer).prop('trackerStore')).toBe(trackerStore);
   });
 
   describe('TopLevelFilter', () => {

@@ -43,3 +43,7 @@ button:focus {
     outline: -webkit-focus-ring-color auto 5px;
     outline-offset: -2px;
 }
+
+* {
+    box-sizing: border-box;
+}

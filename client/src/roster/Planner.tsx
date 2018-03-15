@@ -10,6 +10,7 @@ import styled from 'styled-components';
 import { EventModel, EventType } from '../event/models/EventModel';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { AirmanModel } from '../airman/models/AirmanModel';
+import { TabType } from '../tracker/stores/SidePanelStore';
 
 interface Props {
   week: Moment[];
@@ -38,7 +39,7 @@ const renderEvents = (day: Moment,
                       trackerStore: TrackerStore) => {
   const matchedEvents = findEventsForDay(events, day);
   if (matchedEvents.length > 0) {
-    const eventType =  matchedEvents.map(event => event.type);
+    const eventType = matchedEvents.map(event => event.type);
 
     if (eventType.includes(EventType.Mission)) {
       return renderEventType(EventType.Mission, key);
@@ -51,25 +52,34 @@ const renderEvents = (day: Moment,
 };
 
 export const Planner = (props: Props) => {
-  const {airman, week} = props;
+  const {airman, week, trackerStore} = props;
   return (
-    <td className={classNames(props.className, 'planner-row')}>
+    <div
+      className={classNames(props.className, 'planner-row', 'tr')}
+      onClick={() => trackerStore.setSelectedAirman(airman, TabType.AVAILABILITY)}
+    >
       <span className="blank"/>
       <div>
-        {week.map((day, index) => renderEvents(day, airman.events, index, airman, props.trackerStore))}
+        {week.map((day, index) => renderEvents(day, airman.events, index, airman, trackerStore))}
       </div>
       <span className="blank"/>
-    </td>
+    </div>
   );
 };
 
 export const StyledPlanner = styled(Planner)`
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  width: 100%;
+  
   div {
     display: flex;
     justify-content: space-between;
     flex-grow: 2;
   }
+  
   .blank {
-    width: 1.8rem;
+    width: 30px;
   }
 `;

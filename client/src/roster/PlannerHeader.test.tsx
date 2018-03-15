@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { PlannerHeader } from './PlannerHeader';
-import { PlannerStore } from '../roster/stores/PlannerStore';
+import { PlannerStore } from './stores/PlannerStore';
 import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
 
 describe('PlannerHeader', () => {

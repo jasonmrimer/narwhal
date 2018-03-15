@@ -54,7 +54,7 @@ export const StyledCheckbox = styled(Checkbox)`
     color: black;
     background: white;
     text-align: center;
-    line-height: 1.03;
+    //line-height: 1.03;
   }
 
   &:checked:after{

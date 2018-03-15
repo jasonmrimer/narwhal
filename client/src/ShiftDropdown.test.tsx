@@ -18,16 +18,10 @@ describe('ShiftDropdown', () => {
     trackerStore.updateAirmanShift = updateAirmanShiftSpy;
     airman = trackerStore.airmen[0];
     subject = mount(
-      <table>
-        <tbody>
-        <tr>
           <ShiftDropdown
             airman={airman}
             trackerStore={trackerStore}
           />
-        </tr>
-        </tbody>
-      </table>
     );
   });
 

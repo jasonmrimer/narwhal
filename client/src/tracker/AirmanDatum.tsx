@@ -14,11 +14,11 @@ export interface Props {
 export const AirmanDatum = (props: Props) => {
   const {className, trackerStore, airman, tab, text} = props;
   return (
-    <td
+    <span
       className={className}
       onClick={() => trackerStore.setSelectedAirman(airman, tab)}
     >
       {text}
-    </td>
+    </span>
   );
 };

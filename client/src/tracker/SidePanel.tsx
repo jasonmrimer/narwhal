@@ -81,11 +81,12 @@ export class SidePanel extends React.Component<Props> {
 export const StyledSidePanel = styled(SidePanel)`
   background-color: ${props => props.theme.lighter};
   min-width: 380px;
+  max-width: 380px;
   padding: 0 1rem;
   position: fixed;
   right: 0;
   top: 7rem;
-  height: calc(100% - 7rem);
+  height: calc(100% - 8rem);
   overflow: auto;
   z-index: 999;
   

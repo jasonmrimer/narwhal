@@ -68,7 +68,7 @@ export const StyledSkillTile = styled(SkillTile)`
   padding: 1px;
   
   .currency-title {
-    padding: 0.35rem;
+    height: 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -78,11 +78,16 @@ export const StyledSkillTile = styled(SkillTile)`
       border-radius: 0.25rem 0.25rem 0 0;
       cursor: pointer;
     }
+    
+    span {
+      padding-left: 0.375rem;
+    }
   }
 
   .currency-description {
+    border-top: solid ${props => props.theme.blueSteel} 1px;
     background: ${props => props.theme.lighter};
-    font-size: 12px;
-    padding: 0.35rem;
+    font-size: 0.75rem;
+    padding: 0.375rem;
   }
 `;

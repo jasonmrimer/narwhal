@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { AirmanModel, ShiftType } from './airman/models/AirmanModel';
 import { TrackerStore } from './tracker/stores/TrackerStore';
 import { ShiftDisplay } from './roster/ShiftDisplay';
+import { TabType } from './tracker/stores/SidePanelStore';
 
 interface Props {
   airman: AirmanModel;
@@ -48,7 +49,11 @@ export class ShiftDropdown extends React.Component<Props, State> {
 
   render() {
     return (
-      <td className={this.props.className} ref={this.setNode}>
+      <span
+        className={this.props.className}
+        ref={this.setNode}
+        onClick={() => this.props.trackerStore.setSelectedAirman(this.props.airman, TabType.AVAILABILITY)}
+      >
         <div onClick={() => this.setState({showDropdown: !this.state.showDropdown})}>
           <ShiftDisplay shift={this.props.airman.shift}/>
         </div>
@@ -59,14 +64,12 @@ export class ShiftDropdown extends React.Component<Props, State> {
           <li onClick={(e) => this.handleShiftIconClick(e, ShiftType.Night)}><NightShiftIcon/>Night Shift</li>
         </ul>
         }
-      </td>
+      </span>
     );
   }
 }
 
 export const StyledShiftDropdown = styled(ShiftDropdown)`
-  position: absolute;
-  
   div {
     height: 1rem;
     width: 1rem;

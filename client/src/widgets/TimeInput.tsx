@@ -40,5 +40,5 @@ export const StyledTimeInput = styled(TimeInput)`
   font: inherit;
   font-weight: 300;
   cursor: pointer;
-  height: 1.25rem;
+  //height: 1.25rem;
 `;

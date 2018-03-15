@@ -18,7 +18,7 @@ export class TopBar extends React.Component<Props, State> {
   render() {
     return (
       <div className={this.props.className}>
-      <span>
+      <span className="logo">
         <img src="sally.png"/>
         <span>Narwhal</span>
       </span>
@@ -61,8 +61,6 @@ export const StyledTopBar = styled(TopBar)`
   background-color: ${props => props.theme.lighter};
   border-bottom: 2px solid ${props => props.theme.yellow};
   
-  padding: 1rem 0;
-  
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -73,19 +71,25 @@ export const StyledTopBar = styled(TopBar)`
   top: 3rem;
   
   width:100%;
-  height: 2rem;
+  height: 4rem;
   
   z-index: 1000;
   
+  .logo {
+    display: flex;
+    align-items: center;
+  }
+  
   img {
-    height: 1.5rem;
-    width: 1.5rem;
+    height: 3rem;
+    width: 3rem;
   }
   
   .navigation-tabs {
    display: flex;
    flex-direction: row;
    height: 100%;
+   padding-top: calc(1rem - 2px);
    
     a {
       text-decoration: none;
@@ -98,7 +102,7 @@ export const StyledTopBar = styled(TopBar)`
   }
   
   span:last-child {
-    font-size: 0.75rem;
+    font-size: 1rem;
     margin-right: 1.5rem;
   }  
 `;

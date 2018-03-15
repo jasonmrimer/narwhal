@@ -35,7 +35,7 @@ export const StyledDatePicker = styled(DatePicker)`
   font-weight: 300;
   cursor: pointer;
   outline: inherit;
-  height: 1.25rem;
+  //height: 1.25rem;
   
   &::-webkit-inner-spin-button {
     display: none;

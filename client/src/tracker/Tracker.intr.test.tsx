@@ -1,18 +1,15 @@
 import * as React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import { Tracker } from './Tracker';
-import {
-  clickButtonByName, clickOnFirstAirman, forIt,
-  makeFakeTrackerStore
-} from '../utils/testUtils';
+import { clickButtonByName, clickOnFirstAirman, forIt, makeFakeTrackerStore } from '../utils/testUtils';
 import { SidePanel } from './SidePanel';
 import { TrackerStore } from './stores/TrackerStore';
 import * as moment from 'moment';
 import { StyledDeleteEventPopup } from '../event/DeleteEventPopup';
 import { EventModel, EventType } from '../event/models/EventModel';
 import { AirmanModel } from '../airman/models/AirmanModel';
-import { Roster } from '../roster/Roster';
 import { MemoryRouter } from 'react-router';
+import { RosterBody } from '../roster/RosterBody';
 
 let trackerStore: TrackerStore;
 let subject: ReactWrapper;
@@ -83,7 +80,7 @@ describe('Tracker', () => {
 
   describe('SidePanel', () => {
     it('populates the side panelStore with the selected airman', () => {
-      clickOnFirstAirman(subject.find(Roster));
+      clickOnFirstAirman(subject.find(RosterBody));
       const sidePanel = subject.find(SidePanel);
       expect(sidePanel.exists()).toBeTruthy();
       expect(sidePanel.text()).toContain(airman.lastName);
@@ -91,7 +88,7 @@ describe('Tracker', () => {
     });
 
     it('closes the sidepanel', () => {
-      clickOnFirstAirman(subject.find(Roster));
+      clickOnFirstAirman(subject.find(RosterBody));
       clickButtonByName(subject, SidePanel, 'close');
       expect(subject.find(SidePanel).exists()).toBeFalsy();
     });
