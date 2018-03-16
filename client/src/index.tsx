@@ -22,7 +22,7 @@ import { WebCrewRepository } from './crew/repositories/web/WebCrewRepository';
 import { ProfileSitePickerStore } from './profile/stores/ProfileSitePickerStore';
 import { withRouter } from 'react-router';
 import { HTTPClient } from './HTTPClient';
-import { WebRipItemRepository } from './rip-items/repositories/web/WebRipItemRepository';
+import { WebRipItemRepository } from './airman/repositories/web/WebAirmanRipItemRepository';
 
 document.body.style.fontFamily = Theme.fontFamily;
 document.body.style.fontWeight = Theme.fontWeight;

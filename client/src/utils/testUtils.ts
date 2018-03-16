@@ -10,7 +10,7 @@ import { Moment } from 'moment';
 import { MissionRepositoryStub } from '../mission/repositories/doubles/MissionRepositoryStub';
 import { ReactWrapper } from 'enzyme';
 import { AirmanDatum } from '../tracker/AirmanDatum';
-import { RipItemRepositoryStub } from '../rip-items/repositories/doubles/RipItemRepositoryStub';
+import { RipItemRepositoryStub } from '../airman/repositories/doubles/AirmanRipItemRepositoryStub';
 
 export async function makeFakeTrackerStore(shouldHydrateState: boolean = true) {
   const store = new TrackerStore(

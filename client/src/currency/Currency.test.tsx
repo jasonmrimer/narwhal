@@ -11,7 +11,8 @@ import { AirmanCertificationModelFactory } from '../airman/factories/AirmanCerti
 import { TabType } from '../tracker/stores/SidePanelStore';
 import { StyledBackButton } from '../widgets/BackButton';
 import { StyledNotification } from '../widgets/Notification';
-import { StyledRipItems } from '../rip-items/RipItems';
+import { StyledRipItems } from '../rip-items/AirmanRipItemForm';
+import { CurrencyChild } from './stores/CurrencyStore';
 
 describe('Currency', () => {
   const airman = AirmanModelFactory.build(
@@ -53,11 +54,10 @@ describe('Currency', () => {
   });
 
   it('should show RIP items', () => {
-    trackerStore.currencyStore.showRipItems();
+    trackerStore.currencyStore.openAirmanRipItemForm();
     subject.update();
 
     expect(subject.find(StyledRipItems).exists()).toBeTruthy();
-    expect(subject.find(StyledRipItems).prop('items').length).toBe(trackerStore.currencyStore.ripItems.length);
   });
 
   it('opens skill form on + Add Skill click', () => {
@@ -79,6 +79,6 @@ describe('Currency', () => {
     expect(subject.find(StyledSkillsForm).exists()).toBeTruthy();
 
     subject.find(StyledBackButton).simulate('click');
-    expect(trackerStore.currencyStore.shouldShowSkillForm).toBeFalsy();
+    expect(trackerStore.currencyStore.currencyChild).toBe(CurrencyChild.SkillList);
   });
 });

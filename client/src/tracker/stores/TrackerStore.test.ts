@@ -13,7 +13,7 @@ import SkillRepositoryStub from '../../skills/repositories/doubles/SkillReposito
 import { SkillType } from '../../skills/models/SkillType';
 import { TabType } from './SidePanelStore';
 import { AirmanQualificationModel } from '../../airman/models/AirmanQualificationModel';
-import { RipItemRepositoryStub } from '../../rip-items/repositories/doubles/RipItemRepositoryStub';
+import { RipItemRepositoryStub } from '../../airman/repositories/doubles/AirmanRipItemRepositoryStub';
 
 describe('TrackerStore', () => {
   const airmenRepository = new FakeAirmanRepository();

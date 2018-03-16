@@ -1,24 +1,41 @@
 package mil.af.us.narwhal.rip_item;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import mil.af.us.narwhal.airman.*;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(RipItemController.URI)
 public class RipItemController {
-  public static final String URI = "/api/skills/rip-items";
+  public static final String URI = "/api/skill/rip-items";
 
-  RipItemRepository ripItemRepository;
+  AirmanRepository airmanRepository;
+  AirmanRipItemRepository airmanRipItemRepository;
 
-  public RipItemController(RipItemRepository ripItemRepository) {
-    this.ripItemRepository = ripItemRepository;
+  public RipItemController(AirmanRepository airmanRepository, AirmanRipItemRepository airmanRipItemRepository) {
+    this.airmanRepository = airmanRepository;
+    this.airmanRipItemRepository = airmanRipItemRepository;
   }
 
-  @GetMapping
-  public List<RipItem> index() {
-    return ripItemRepository.findAll();
+  @GetMapping(params = {"id"})
+  public List<AirmanRipItem> index(@RequestParam("id") Long id) {
+    Airman airman = airmanRepository.findOne(id);
+    return airman.getRipItems();
+  }
+
+  @PutMapping
+  public List<AirmanRipItem> update(@RequestBody List<AirmanRipItemJSON> airmanRipItemJSONS) {
+    List<AirmanRipItem> airmanRipItems = airmanRipItemJSONS
+      .stream()
+      .map(airmanRipItemJSON ->
+        new AirmanRipItem(
+          airmanRipItemJSON.getId(),
+          airmanRipItemJSON.getAirmanId(),
+          airmanRipItemJSON.getRipItem(),
+          airmanRipItemJSON.getExpirationDate()
+        )).collect(Collectors.toList());
+    return airmanRipItemRepository.save(airmanRipItems);
   }
 }

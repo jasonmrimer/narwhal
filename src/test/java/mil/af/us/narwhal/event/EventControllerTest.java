@@ -1,16 +1,10 @@
 package mil.af.us.narwhal.event;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import mil.af.us.narwhal.airman.Airman;
 import mil.af.us.narwhal.airman.AirmanRepository;
-import mil.af.us.narwhal.crew.Crew;
-import mil.af.us.narwhal.crew.CrewPosition;
-import mil.af.us.narwhal.crew.CrewRepository;
 import mil.af.us.narwhal.flight.Flight;
-import mil.af.us.narwhal.mission.Mission;
-import mil.af.us.narwhal.mission.MissionRepository;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
 import mil.af.us.narwhal.squadron.Squadron;
@@ -49,8 +43,6 @@ public class EventControllerTest {
   @Autowired private SiteRepository siteRepository;
   @Autowired private AirmanRepository airmanRepository;
   @Autowired private EventRepository eventRepository;
-  @Autowired private MissionRepository missionRepository;
-  @Autowired private CrewRepository crewRepository;
 
   @Before
   public void setUp() {

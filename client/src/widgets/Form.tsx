@@ -6,7 +6,7 @@ interface SubmitEvent {
 }
 
 interface FormProps {
-  children: JSX.Element | JSX.Element[];
+  children: any;
   onSubmit: (event: SubmitEvent) => void;
   className?: string;
 }
@@ -29,6 +29,7 @@ export const StyledForm = styled(Form)`
 interface FormRowProps {
   children: JSX.Element | JSX.Element[] | (false | JSX.Element)[] | (null | JSX.Element)[];
   reversed?: boolean;
+  direction?: string;
   className?: string;
 }
 
@@ -43,7 +44,7 @@ export const FormRow = (props: FormRowProps) => {
 export const StyledFormRow = styled(FormRow)`
   margin-top: 1rem;
   display: flex;
-  flex-direction: ${props => props.reversed ? 'row-reverse' : 'reverse'};
+  flex-direction: ${props => props.reversed ? 'row-reverse' : props.direction || 'row'};
   align-items: baseline;
   justify-content: space-between;
   padding: 0.25rem 0;

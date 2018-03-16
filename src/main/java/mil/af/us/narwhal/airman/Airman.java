@@ -53,6 +53,11 @@ public class Airman {
   @JsonBackReference
   private List<CrewPosition> crewPositions = new ArrayList<>();
 
+  @OneToMany(mappedBy = "airmanId", cascade = CascadeType.ALL, orphanRemoval = true)
+  @JsonManagedReference
+  private List<AirmanRipItem> ripItems = new ArrayList<>();
+
+
   public Airman(Flight flight, String firstName, String lastName) {
     this.flight = flight;
     this.firstName = firstName;
@@ -79,6 +84,24 @@ public class Airman {
         }),
       this.events.stream()
     ).collect(Collectors.toList());
+  }
+
+  public boolean addRipItem(AirmanRipItem airmanRipItem) {
+    for (AirmanRipItem rip : ripItems) {
+      if (rip.getRipItem().getId().equals(airmanRipItem.getRipItem().getId())) {
+        return false;
+      }
+    }
+    airmanRipItem.setAirmanId(this.id);
+    ripItems.add(airmanRipItem);
+    return true;
+  }
+
+  public void updateRipItem(long id, Instant expirationDate) {
+    ripItems.stream()
+      .filter(ripItem -> ripItem.getId().equals(id))
+      .findFirst()
+      .ifPresent(ripItem -> ripItem.setExpirationDate(expirationDate));
   }
 
   public boolean addQualification(AirmanQualification airmanQualification) {

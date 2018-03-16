@@ -110,7 +110,7 @@ class Skill
 
   def set_attrs
     @earn = DateTime.now
-    @expiration = @earn + (90)
+    @expiration = @earn + 90
     @qual_title = 'HT - Instructor'
     @cert_title = 'X-Ray Vision'
   end

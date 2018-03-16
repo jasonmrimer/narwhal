@@ -25,7 +25,7 @@ import { SidePanelStore, TabType } from './SidePanelStore';
 import * as Fuse from 'fuse.js';
 import { Moment } from 'moment';
 import { filterOptionsBy } from '../../utils/eventUtil';
-import { RipItemRepository } from '../../rip-items/repositories/RipItemRepository';
+import { RipItemRepository } from '../../airman/repositories/AirmanRipItemRepository';
 
 export class TrackerStore implements EventActions {
   public currencyStore: CurrencyStore;
@@ -96,7 +96,6 @@ export class TrackerStore implements EventActions {
       this.siteRepository.findAll(),
       this.skillRepository.findAllCertifications(),
       this.skillRepository.findAllQualifications(),
-      this.currencyStore.hydrate(),
       this.airmanRepository.findAll(),
       this.missionStore.hydrate(),
     ]);
@@ -104,7 +103,7 @@ export class TrackerStore implements EventActions {
     this._sites = results[0];
     this._certifications = results[1];
     this._qualifications = results[2];
-    this._airmen = results[4];
+    this._airmen = results[3];
 
     if (this._siteId === UnfilteredValue) {
       this.setSiteId(siteId);

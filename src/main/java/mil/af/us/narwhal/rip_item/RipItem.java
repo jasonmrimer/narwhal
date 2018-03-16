@@ -18,4 +18,5 @@ public class RipItem {
   private Long id;
 
   private String title;
+
 }

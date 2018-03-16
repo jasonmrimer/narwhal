@@ -7,6 +7,7 @@ require_relative './crew_page'
 class TrackerPage
   include Capybara::DSL
   include RSpec::Matchers
+  require 'date'
 
   EXPECTED_AVAILABILITY_DAYS = %w(SUN MON TUE WED THU FRI SAT).freeze
 
@@ -126,11 +127,13 @@ class TrackerPage
     expect(page.has_content?('This field is required.')).to be true
   end
 
-  def assert_view_RIP
-    click(page.first("td.airman-cert", text: "Laser Vision"))
-    expect(page).to have_content('RIP TASKS')
-    click(page.find("div.rip-item-tile-title", text: "RIP TASKS"))
-    expect(page).to have_content('DCGS Mission')
+  def assert_view_update_RIP
+    expiration = DateTime.now + 90
+    open_rip_page
+    first('input[name="DCGS Mission"]').set(expiration.strftime('%m/%d/%Y'))
+    find('input[type="submit"]').click
+    open_rip_page
+    expect(find('input[name="DCGS Mission"]').value).to eq(expiration.strftime('%Y-%m-%d'))
   end
 
   def assert_delete_create_update_qualification
@@ -232,6 +235,13 @@ class TrackerPage
     page.within '.side-panel' do
       expect(page).to have_content name
     end
+  end
+
+  def open_rip_page
+    click(page.first("td.airman-cert", text: "Laser Vision"))
+    expect(page).to have_content('RIP TASKS')
+    click(page.find("div.rip-item-tile-title", text: "RIP TASKS"))
+    expect(page).to have_content('DCGS Mission')
   end
 
   def filter(item, value)

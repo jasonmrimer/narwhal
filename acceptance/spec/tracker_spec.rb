@@ -49,7 +49,7 @@ describe 'Tracker page', type: :feature do
 
   describe 'skill' do
     it 'can view RIP items' do
-      tracker_page.assert_view_RIP
+      tracker_page.assert_view_update_RIP
     end
 
     it 'can delete, create and update a qualification' do

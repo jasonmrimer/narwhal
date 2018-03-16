@@ -41,6 +41,7 @@ public class CrewControllerTest {
   }
 
   private Site site;
+  private Flight flight;
   private Mission mission;
   private Airman airman;
   private Crew crew;
@@ -50,7 +51,6 @@ public class CrewControllerTest {
   @Autowired private SiteRepository siteRepository;
   @Autowired private MissionRepository missionRepository;
   @Autowired private AirmanRepository airmanRepository;
-  private Flight flight;
 
   @Before
   public void setUp() {

@@ -1,9 +1,10 @@
-import { CurrencyStore } from './CurrencyStore';
+import { CurrencyChild, CurrencyStore } from './CurrencyStore';
 import { SkillActions } from '../../skills/stores/SkillActions';
 import { SkillFormStore } from '../../skills/stores/SkillFormStore';
 import * as moment from 'moment';
 import { SkillType } from '../../skills/models/SkillType';
-import { RipItemRepositoryStub } from '../../rip-items/repositories/doubles/RipItemRepositoryStub';
+import { RipItemRepositoryStub } from '../../airman/repositories/doubles/AirmanRipItemRepositoryStub';
+import { RipItemRepository } from '../../airman/repositories/AirmanRipItemRepository';
 
 describe('CurrencyStore', () => {
   const skill = {
@@ -16,64 +17,48 @@ describe('CurrencyStore', () => {
   };
 
   let skillActions: SkillActions;
+  let ripItemRepository: RipItemRepository;
   let subject: CurrencyStore;
 
   beforeEach(() => {
+    ripItemRepository = new RipItemRepositoryStub();
+
     skillActions = {
       addSkill: jest.fn(),
       removeSkill: jest.fn(),
       qualificationOptions: [],
       airmanCertificationOptions: []
     };
-    subject = new CurrencyStore(new SkillFormStore(skillActions), new RipItemRepositoryStub());
-  });
 
-  it('should populate RIP items', async () => {
-    await subject.hydrate();
-    expect(subject.ripItems.length).toBe(1);
-  });
-
-  it('should show the skill form without a skill', () => {
-    expect(subject.hasItem).toBeFalsy();
-    expect(subject.shouldShowSkillForm).toBeFalsy();
-
-    subject.showSkillForm();
-
-    expect(subject.hasItem).toBeFalsy();
-    expect(subject.shouldShowSkillForm).toBeTruthy();
+    subject = new CurrencyStore(new SkillFormStore(skillActions), ripItemRepository);
   });
 
   it('should open an skill form for create', () => {
-    expect(subject.hasItem).toBeFalsy();
-    expect(subject.shouldShowSkillForm).toBeFalsy();
+    expect(subject.currencyChild).toBe(CurrencyChild.SkillList);
 
     subject.openCreateSkillForm();
 
-    expect(subject.hasItem).toBeFalsy();
-    expect(subject.shouldShowSkillForm).toBeTruthy();
+    expect(subject.currencyChild).toBe(CurrencyChild.SkillForm);
   });
 
   it('should open an skill form for edit', () => {
-    expect(subject.hasItem).toBeFalsy();
-    expect(subject.shouldShowSkillForm).toBeFalsy();
+    expect(subject.currencyChild).toBe(CurrencyChild.SkillList);
 
     subject.openEditSkillForm(skill);
 
-    expect(subject.hasItem).toBeTruthy();
-    expect(subject.shouldShowSkillForm).toBeTruthy();
+    expect(subject.currencyChild).toBe(CurrencyChild.SkillForm);
   });
 
   it('should close the skill form', () => {
     subject.openEditSkillForm(skill);
-
     subject.closeSkillForm();
 
-    expect(subject.hasItem).toBeFalsy();
-    expect(subject.shouldShowSkillForm).toBeFalsy();
+    expect(subject.currencyChild).toBe(CurrencyChild.SkillList);
   });
 
   it('should open the RipItems form', () => {
-    subject.showRipItems();
-    expect(subject.shouldShowRipItems).toBeTruthy();
+    subject.openAirmanRipItemForm();
+
+    expect(subject.currencyChild).toBe(CurrencyChild.RipItemForm);
   });
 });

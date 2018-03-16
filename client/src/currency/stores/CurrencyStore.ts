@@ -1,72 +1,54 @@
 import { action, computed, observable } from 'mobx';
 import { SkillFormStore } from '../../skills/stores/SkillFormStore';
 import { Skill } from '../../skills/models/Skill';
-import { RipItemModel } from '../../rip-items/models/RipItemModel';
-import { RipItemRepository } from '../../rip-items/repositories/RipItemRepository';
+import { AirmanRipItemFormStore } from '../../rip-items/stores/AirmanRipItemFormStore';
+import { RipItemRepository } from '../../airman/repositories/AirmanRipItemRepository';
+
+export enum CurrencyChild {
+  SkillList,
+  SkillForm,
+  RipItemForm
+}
 
 export class CurrencyStore {
-  @observable private _shouldShowSkillForm: boolean = false;
-  @observable private _shouldShowRipItems: boolean = false;
-  @observable private _ripItems: RipItemModel[] = [];
+  public airmanRipItemFormStore: AirmanRipItemFormStore;
+  @observable private _child: CurrencyChild = CurrencyChild.SkillList;
 
-  constructor(public skillFormStore: SkillFormStore, public ripItemRepository: RipItemRepository) {
-  }
-
-  async hydrate() {
-    this._ripItems = await this.ripItemRepository.findAll();
+  constructor(public skillFormStore: SkillFormStore, ripItemRepository: RipItemRepository) {
+    this.airmanRipItemFormStore = new AirmanRipItemFormStore(this, ripItemRepository);
   }
 
   @computed
-  get ripItems() {
-    return this._ripItems;
-  }
-
-  @computed
-  get hasItem() {
-    return this.skillFormStore.hasItem;
-  }
-
-  @computed
-  get shouldShowSkillForm() {
-    return this._shouldShowSkillForm;
-  }
-
-  @action.bound
-  showSkillForm() {
-    this._shouldShowRipItems = false;
-    this._shouldShowSkillForm = true;
+  get currencyChild() {
+    return this._child;
   }
 
   @action.bound
   openCreateSkillForm() {
-    this._shouldShowRipItems = false;
-    this._shouldShowSkillForm = true;
+    this._child = CurrencyChild.SkillForm;
     return this.skillFormStore.open();
   }
 
   @action.bound
   openEditSkillForm(skill: Skill) {
-    this._shouldShowRipItems = false;
-    this._shouldShowSkillForm = true;
+    this._child = CurrencyChild.SkillForm;
     return this.skillFormStore.open(skill);
   }
 
   @action.bound
   closeSkillForm() {
-    this._shouldShowRipItems = false;
-    this._shouldShowSkillForm = false;
+    this._child = CurrencyChild.SkillList;
     this.skillFormStore.close();
   }
 
   @action.bound
-  showRipItems() {
-    this._shouldShowSkillForm = false;
-    this._shouldShowRipItems = true;
+  openAirmanRipItemForm() {
+    this._child = CurrencyChild.RipItemForm;
   }
 
-  @computed
-  get shouldShowRipItems() {
-    return this._shouldShowRipItems;
+  @action.bound
+  closeAirmanRipItemForm() {
+    this._child = CurrencyChild.SkillList;
   }
 
   setFormErrors(errors: object[]) {

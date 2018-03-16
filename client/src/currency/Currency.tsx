@@ -4,10 +4,10 @@ import { observer } from 'mobx-react';
 import { AirmanModel } from '../airman/models/AirmanModel';
 import { StyledSkillsForm } from '../skills/SkillsForm';
 import { StyledSkillTile } from '../skills/SkillTile';
-import { CurrencyStore } from './stores/CurrencyStore';
+import { CurrencyChild, CurrencyStore } from './stores/CurrencyStore';
 import { StyledBackButton } from '../widgets/BackButton';
 import { StyledNotification } from '../widgets/Notification';
-import { StyledRipItems } from '../rip-items/RipItems';
+import { StyledRipItems } from '../rip-items/AirmanRipItemForm';
 import { StyledRipItemsTile } from '../rip-items/RipItemsTile';
 
 interface Props {
@@ -18,26 +18,32 @@ interface Props {
 
 @observer
 export class Currency extends React.Component<Props> {
-  componentDidMount() {
+  async componentDidMount() {
     this.props.currencyStore.closeSkillForm();
   }
 
-  componentWillReceiveProps() {
+  async componentWillReceiveProps() {
     this.props.currencyStore.closeSkillForm();
   }
 
   render() {
     return (
       <div className={this.props.className}>
-        {this.props.currencyStore.shouldShowRipItems && this.renderRipItems()}
-        {this.props.currencyStore.shouldShowSkillForm && this.renderSkillsForm()}
-        {
-          !this.props.currencyStore.shouldShowSkillForm
-          && !this.props.currencyStore.shouldShowRipItems
-          && this.renderSkillsList()
-        }
+        {this.renderCurrencyChild()}
       </div>
     );
+  }
+
+  private renderCurrencyChild = () => {
+    switch (this.props.currencyStore.currencyChild) {
+      case CurrencyChild.SkillForm:
+        return this.renderSkillsForm();
+      case CurrencyChild.RipItemForm:
+        return this.renderRipItems();
+      case CurrencyChild.SkillList:
+      default:
+        return this.renderSkillsList();
+    }
   }
 
   private renderSkillsForm = () => {
@@ -72,7 +78,7 @@ export class Currency extends React.Component<Props> {
     return (
       <StyledRipItemsTile
         title="RIP TASKS"
-        onClick={this.props.currencyStore.showRipItems}
+        onClick={this.props.currencyStore.openAirmanRipItemForm}
       />
     );
   }
@@ -81,7 +87,10 @@ export class Currency extends React.Component<Props> {
     return (
       <div>
         {this.renderBackButton()}
-        <StyledRipItems items={this.props.currencyStore.ripItems}/>
+        <StyledRipItems
+          selectedAirmanId={this.props.selectedAirman.id}
+          store={this.props.currencyStore.airmanRipItemFormStore}
+        />
       </div>
     );
   }
