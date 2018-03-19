@@ -34,7 +34,7 @@
     "test:debug": "react-scripts-ts --inspect-brk test --runInBand --env=jsdom",
     "contracts:debug": "react-scripts-ts --inspect-brk test --runInBand  --env=jsdom --testMatch='<rootDir>/src/**/?(*.)contract.ts?(x)'",
     "storybook": "start-storybook -p 6006",
-    "build:storybook": "build-storybook && mv storybook-static/index.html storybook-static/storybook.html && rsync -a storybook-static/ ../src/main/resources/static/"
+    "build:storybook": "build-storybook && mv storybook-static/index.html storybook-static/storybook.html && rm storybook-static/favicon.ico && rsync -a storybook-static/ ../src/main/resources/static/"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^3.3.11",
