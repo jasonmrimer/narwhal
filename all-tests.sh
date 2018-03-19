@@ -15,7 +15,10 @@ source ./scripts/setup_env.sh
 
 mkdir -p tmp
 
-rm -r $HOME/.chromedriver-helper
+if [ -d "$HOME/.chromedriver-helper" ]; then
+    rm -r $HOME/.chromedriver-helper
+fi
+
 chromedriver-update
 
 ./gradlew clean
