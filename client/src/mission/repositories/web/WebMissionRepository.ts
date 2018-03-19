@@ -13,14 +13,4 @@ export class WebMissionRepository implements MissionRepository {
     const json = await this.client.getJSON('api/missions');
     return json.map((obj: object) => this.serializer.deserialize(obj));
   }
-
-  async findBySite(id: number) {
-    const json = await this.client.getJSON(`api/missions?site=${id}`);
-    return json.map((obj: object) => this.serializer.deserialize(obj));
-  }
-
-  async findAllFromTodayOn() {
-    const json = await this.client.getJSON(`api/missions/from-today`);
-    return json.map((obj: object) => this.serializer.deserialize(obj));
-  }
 }

@@ -33,7 +33,7 @@ describe('Dashboard', () => {
   });
 
   it('renders a Dashboard with all missions', () => {
-    expect(subject.find('.mission-card').length).toBe(5);
+    expect(subject.find('.mission-card').length).toBe(4);
     expect(dashboardMissions(subject)).toEqual(missions);
   });
 
@@ -45,9 +45,10 @@ describe('Dashboard', () => {
       await selectOption(subject, filter, siteId);
     });
 
-    it('can filter a dashboard by site', async () => {
-      const filteredMissions = await missionRepositoryStub.findBySite(siteId);
-      expect(dashboardMissions(subject)).toEqual(filteredMissions);
+    it('can filter a dashboard by site', () => {
+      dashboardMissions(subject).map(mission => {
+        expect(mission.site!.id).toEqual(siteId);
+      });
     });
   });
 });

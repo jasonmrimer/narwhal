@@ -16,22 +16,14 @@ public class MissionController {
 
   MissionRepository missionRepository;
 
+
   public MissionController(MissionRepository repository) {
     this.missionRepository = repository;
   }
 
   @GetMapping
   public List<Mission> index() {
-    return missionRepository.findAll();
-  }
-
-  @GetMapping(params = {"site"})
-  public List<Mission> index(@RequestParam("site") Long siteId) {
-    return missionRepository.findBySiteId(siteId);
-  }
-
-  @GetMapping(path = "/from-today")
-  public List<Mission> indexFromToday(){
-    return missionRepository.findByStartDateTimeGreaterThanEqual(Instant.now().truncatedTo(ChronoUnit.DAYS));
+    Instant today = Instant.now().truncatedTo(ChronoUnit.DAYS);
+    return missionRepository.findByStartDateTimeGreaterThanEqualOrderByStartDateTime(today);
   }
 }

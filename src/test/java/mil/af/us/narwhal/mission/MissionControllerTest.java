@@ -13,6 +13,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.Temporal;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
@@ -27,6 +29,7 @@ public class MissionControllerTest {
   private Site site1;
   private Site site2;
   private Instant time = Instant.now();
+  private Instant future = Instant.now().plus(2, ChronoUnit.DAYS);
 
   @LocalServerPort private int port;
   @Autowired private SiteRepository siteRepository;
@@ -40,18 +43,25 @@ public class MissionControllerTest {
 
     final List missions = asList(
       new Mission(
-        "mission-id-1",
-        "MISNUM1",
-        Instant.parse("2017-12-12T09:00:00Z"),
-        Instant.parse("2017-12-12T15:00:00Z"),
-        site1
-      ),
-      new Mission(
         "mission-id-2",
         "MISNUM2",
-        time,
-        time,
+        Instant.parse("2017-12-12T09:00:00Z"),
+        Instant.parse("2017-12-12T15:00:00Z"),
         site2
+      ),
+      new Mission(
+        "mission-id-3",
+        "MISNUM3",
+        future,
+        future,
+        site2
+      ),
+      new Mission(
+        "mission-id-1",
+        "MISNUM1",
+        time,
+        time,
+        site1
       )
     );
     missionRepository.save(missions);
@@ -74,60 +84,15 @@ public class MissionControllerTest {
 
       .body("[0].missionId", equalTo("mission-id-1"))
       .body("[0].atoMissionNumber", equalTo("MISNUM1"))
-      .body("[0].startDateTime", equalTo("2017-12-12T09:00:00Z"))
-      .body("[0].endDateTime", equalTo("2017-12-12T15:00:00Z"))
+      .body("[0].startDateTime", equalTo(time.toString()))
+      .body("[0].endDateTime", equalTo(time.toString()))
       .body("[0].site.id", equalTo(site1.getId().intValue()))
 
-      .body("[1].missionId", equalTo("mission-id-2"))
-      .body("[1].atoMissionNumber", equalTo("MISNUM2"))
-      .body("[1].startDateTime", equalTo(time.toString()))
-      .body("[1].endDateTime", equalTo(time.toString()))
+      .body("[1].missionId", equalTo("mission-id-3"))
+      .body("[1].atoMissionNumber", equalTo("MISNUM3"))
+      .body("[1].startDateTime", equalTo(future.toString()))
+      .body("[1].endDateTime", equalTo(future.toString()))
       .body("[1].site.id", equalTo(site2.getId().intValue()));
     // @formatter:on
   }
-
-  @Test
-  public void indexBySiteId() {
-    // @formatter:off
-    given()
-      .port(port)
-      .auth()
-      .preemptive()
-      .basic("tytus", "password")
-      .queryParam("site", site1.getId())
-    .when()
-      .get(MissionController.URI)
-    .then()
-      .statusCode(200)
-      .body("$.size()", equalTo(1))
-      .body("[0].missionId", equalTo("mission-id-1"))
-      .body("[0].atoMissionNumber", equalTo("MISNUM1"))
-      .body("[0].startDateTime", equalTo("2017-12-12T09:00:00Z"))
-      .body("[0].endDateTime", equalTo("2017-12-12T15:00:00Z"))
-      .body("[0].site.id", equalTo(site1.getId().intValue()));
-    // @formatter:on
-  }
-
-  @Test
-  public void findByStartDateTimeGreaterThanEqual() {
-    // @formatter:off
-    given()
-      .port(port)
-      .auth()
-      .preemptive()
-      .basic("tytus", "password")
-    .when()
-      .get(MissionController.URI + "/from-today")
-    .then()
-      .statusCode(200)
-      .body("$.size()", equalTo(1))
-      .body("[0].missionId", equalTo("mission-id-2"))
-      .body("[0].atoMissionNumber", equalTo("MISNUM2"))
-      .body("[0].startDateTime", equalTo(time.toString()))
-      .body("[0].endDateTime", equalTo(time.toString()))
-      .body("[0].site.id", equalTo(site2.getId().intValue()));
-    // @formatter:on
-  }
-
-
 }

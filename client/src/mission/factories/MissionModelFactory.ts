@@ -7,8 +7,8 @@ const time = moment();
 const missionOne = new MissionModel(
   'missionId1',
   'ato1',
-  time.clone().subtract(2, 'days'),
-  time.clone().subtract(2, 'days'),
+  time,
+  time,
   new SiteModel(1, 'DMS-GA', [])
 );
 
@@ -36,28 +36,11 @@ const missionFour = new MissionModel(
   new SiteModel(3, 'DMS-HI', [])
 );
 
-const missionFive = new MissionModel(
-  'missionId5',
-  'ato5',
-  time.clone().add(2, 'days'),
-  time.clone().add(2, 'days'),
-  new SiteModel(3, 'DMS-HI', [])
-);
-
-const missions = [missionOne, missionTwo, missionThree, missionFour, missionFive];
-const missionList = [missionTwo, missionThree, missionFour, missionFive];
+const missions = [missionOne, missionTwo, missionThree, missionFour];
 
 export class MissionModelFactory {
   static buildList() {
     return missions;
-  }
-
-  static buildForSite(siteId: number) {
-    return missions.filter((mission) => mission.site != null ? mission.site.id === siteId : false);
-  }
-
-  static buildForAllFromTodayOn() {
-    return missionList;
   }
 
   static build() {
