@@ -104,7 +104,7 @@ describe('MissionForm', () => {
     expect(findInputValueByName(wrapper, StyledTimeInput, 'endTime')).toEqual('');
   });
 
-  it('add an Mission', () => {
+  it('add a Mission', () => {
     subject.handleSubmit(eventStub);
     expect(eventActions.addEvent).toHaveBeenCalled();
   });

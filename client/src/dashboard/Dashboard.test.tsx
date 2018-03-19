@@ -33,7 +33,7 @@ describe('Dashboard', () => {
   });
 
   it('renders a Dashboard with all missions', () => {
-    expect(subject.find('.mission-card').length).toBe(3);
+    expect(subject.find('.mission-card').length).toBe(5);
     expect(dashboardMissions(subject)).toEqual(missions);
   });
 
