@@ -54,14 +54,12 @@ describe('SidePanel', () => {
   it('should render the selectedTab from the SidePanelStore', () => {
     sidePanelStore.setSelectedTab(TabType.CURRENCY);
     subject.update();
-    const currency = subject.find(StyledCurrency);
-    expect(currency.exists()).toBeTruthy();
+    expect(subject.find(StyledCurrency).exists()).toBeTruthy();
   });
 
   it('renders the currency for a selected airman', () => {
     subject.find(StyledTab).at(0).simulate('click');
-    const currency = subject.find(StyledCurrency);
-    expect(currency.exists()).toBeTruthy();
+    expect(subject.find(StyledCurrency).exists()).toBeTruthy();
   });
 
   it('makes the tab active when selected', () => {

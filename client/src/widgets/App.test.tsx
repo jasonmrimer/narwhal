@@ -50,20 +50,7 @@ describe('App', () => {
   });
 
   it('renders the Tracker component when the route is /', async () => {
-    const trackerStore = await makeFakeTrackerStore();
-    const profileStore = new ProfileSitePickerStore(new ProfileRepositoryStub(), siteRepository);
-    mountedSubject = mount(
-      <MemoryRouter initialEntries={['/']}>
-        <App
-          trackerStore={trackerStore}
-          profileStore={profileStore}
-          dashboardStore={dashboardStore}
-          crewStore={crewStore}
-        />
-      </MemoryRouter>
-    );
-    await forIt();
-    mountedSubject.update();
+    mountedSubject = await createMountedPage('/');
     expect(mountedSubject.find(Tracker).exists()).toBeTruthy();
   });
 
@@ -119,40 +106,31 @@ describe('App', () => {
   });
 
   it('renders the Dashboard component when the route is /dashboard', async () => {
-    const trackerStore = await makeFakeTrackerStore();
-    const profileStore = new ProfileSitePickerStore(new ProfileRepositoryStub(), siteRepository);
-    await profileStore.hydrate();
-    mountedSubject = mount(
-      <MemoryRouter initialEntries={['/dashboard']}>
-        <App
-          trackerStore={trackerStore}
-          profileStore={profileStore}
-          dashboardStore={dashboardStore}
-          crewStore={crewStore}
-        />
-      </MemoryRouter>
-    );
-    await forIt();
-
+    mountedSubject = await createMountedPage('/dashboard');
     expect(mountedSubject.find(Dashboard).exists()).toBeTruthy();
   });
 
   it('renders the Crew component when the route is /crew', async () => {
-    const trackerStore = await makeFakeTrackerStore();
-    const profileStore = new ProfileSitePickerStore(new ProfileRepositoryStub(), siteRepository);
-    mountedSubject = mount(
-      <MemoryRouter initialEntries={['/crew/1']}>
-        <App
-          trackerStore={trackerStore}
-          profileStore={profileStore}
-          dashboardStore={dashboardStore}
-          crewStore={crewStore}
-        />
-      </MemoryRouter>
-    );
-    await forIt();
-    mountedSubject.update();
-
+    mountedSubject = await createMountedPage('/crew/1');
     expect(mountedSubject.find(Crew).exists()).toBeTruthy();
   });
 });
+
+const createMountedPage = async (entry: string) => {
+  let mountedRouter: ReactWrapper;
+  const trackerStore = await makeFakeTrackerStore();
+  const profileStore = new ProfileSitePickerStore(new ProfileRepositoryStub(), siteRepository);
+  mountedRouter = mount(
+    <MemoryRouter initialEntries={[entry]}>
+      <App
+        trackerStore={trackerStore}
+        profileStore={profileStore}
+        dashboardStore={dashboardStore}
+        crewStore={crewStore}
+      />
+    </MemoryRouter>
+  );
+  await forIt();
+  mountedRouter.update();
+  return mountedRouter;
+};

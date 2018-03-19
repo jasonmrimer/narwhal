@@ -65,7 +65,6 @@ export class App extends React.Component<Props> {
                 <StyledTopBar
                   key="0"
                   username={this.props.profileStore.profile!.user.username}
-                  pageTitle="MPS DASHBOARD"
                 />,
                 <StyledDashboard
                   key="1"
@@ -96,7 +95,6 @@ export class App extends React.Component<Props> {
               <StyledTopBar
                 key="0"
                 username={this.props.profileStore.profile!.user.username}
-                pageTitle="AVAILABILITY ROSTER"
               />,
               <StyledTracker
                 key="1"

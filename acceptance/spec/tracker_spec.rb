@@ -7,6 +7,12 @@ describe 'Tracker page', type: :feature do
     tracker_page = TrackerPage.new
   }
 
+  describe 'navigating' do
+    it 'can navigate to the dashboard page' do
+      tracker_page.assert_navigates_to_dashboard
+    end
+  end
+
   describe 'filtering' do
     it 'can filter the Roster by site' do
       tracker_page.assert_filters_by_site

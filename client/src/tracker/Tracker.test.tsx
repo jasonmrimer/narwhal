@@ -18,7 +18,7 @@ let subject: ShallowWrapper;
 
 describe('Tracker', () => {
   beforeEach(async () => {
-    trackerStore = await makeFakeTrackerStore();
+    trackerStore = await makeFakeTrackerStore(false);
     subject = shallow(
       <Tracker
         trackerStore={trackerStore}

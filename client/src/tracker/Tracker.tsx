@@ -21,7 +21,9 @@ interface Props {
 @observer
 export class Tracker extends React.Component<Props> {
   async componentDidMount() {
-    await this.props.trackerStore.hydrate(this.props.profile.siteId || UnfilteredValue);
+    if (this.props.trackerStore.airmen.length === 0) {
+      await this.props.trackerStore.hydrate(this.props.profile.siteId || UnfilteredValue);
+    }
   }
 
   render() {

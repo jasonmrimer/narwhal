@@ -1,31 +1,65 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import { StyledTopBarTab } from './TopBarTab';
 
 interface Props {
   username: string;
-  pageTitle: string;
   className?: string;
 }
 
-export const TopBar = (props: Props) => {
-  return (
-    <div className={props.className}>
+interface State {
+  isActive: LinkType;
+}
+
+export class TopBar extends React.Component<Props, State> {
+  state = {isActive: LinkType.AVAILABILITY};
+
+  render() {
+    return (
+      <div className={this.props.className}>
       <span>
-        {props.pageTitle}
+        <img src="sally.png"/>
+        <span>Narwhal</span>
       </span>
-      <span>
-        {props.username}
+        <span className="navigation-tabs">
+          <Link to={`/dashboard`} className="dashboard-link">
+            <StyledTopBarTab
+             onClick={() => this.onClick(LinkType.DASHBOARD)}
+             title="MISSION"
+             isActive={this.state.isActive === LinkType.DASHBOARD}
+            />
+          </Link>
+          <Link to={`/`} className="availability-link">
+            <StyledTopBarTab
+              onClick={() => this.onClick(LinkType.AVAILABILITY)}
+              title="AVAILABILITY"
+              isActive={this.state.isActive === LinkType.AVAILABILITY}
+            />
+          </Link>
+        </span>
+        <span>
+        {this.props.username}
       </span>
-    </div>
-  );
-};
+      </div>
+    );
+  }
+
+  onClick = (linkType: LinkType) => {
+    this.setState({isActive: linkType});
+  }
+}
+
+export enum LinkType {
+  DASHBOARD,
+  AVAILABILITY
+}
 
 export const StyledTopBar = styled(TopBar)`
   border-collapse: collapse;
   
   background-color: ${props => props.theme.lighter};
-  
-  box-shadow: ${props => props.theme.darkest} 0px 1px 4px;
+  border-bottom: 2px solid ${props => props.theme.yellow};
   
   padding: 1rem 0;
   
@@ -43,6 +77,21 @@ export const StyledTopBar = styled(TopBar)`
   
   z-index: 1000;
   
+  img {
+    height: 1.5rem;
+    width: 1.5rem;
+  }
+  
+  .navigation-tabs {
+   display: flex;
+   flex-direction: row;
+   height: 100%;
+   
+    a {
+      text-decoration: none;
+    }
+  }
+  
   span:first-child {
     font-size: 1.25rem;
     margin-left: 1.5rem;
@@ -50,7 +99,6 @@ export const StyledTopBar = styled(TopBar)`
   
   span:last-child {
     font-size: 0.75rem;
-    text-transform: uppercase;
     margin-right: 1.5rem;
   }  
 `;

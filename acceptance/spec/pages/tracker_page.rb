@@ -17,6 +17,11 @@ class TrackerPage
     @all_airmen_count = page.find_all('tbody tr').count
   end
 
+  def assert_navigates_to_dashboard
+    click(find('a', text: 'MISSION'))
+    expect(page).to have_content('Narwhal')
+  end
+
   def assert_navigates_week
     click(page.find('button.next-week'))
     expect(page).to have_content(get_start_of_next_week.strftime('%d %^a'))
