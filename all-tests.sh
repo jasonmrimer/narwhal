@@ -15,7 +15,7 @@ source ./scripts/setup_env.sh
 
 mkdir -p tmp
 
-rm $HOME/.chromedriver-helper
+rm -r $HOME/.chromedriver-helper
 chromedriver-update
 
 ./gradlew clean
