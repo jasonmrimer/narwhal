@@ -15,8 +15,10 @@ source ./scripts/setup_env.sh
 
 mkdir -p tmp
 
-./gradlew clean
+rm $HOME/.chromedriver-helper
+chromedriver-update
 
+./gradlew clean
 pushd client
 yarn install
 CI=true yarn test
