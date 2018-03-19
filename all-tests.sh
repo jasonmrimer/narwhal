@@ -15,18 +15,12 @@ source ./scripts/setup_env.sh
 
 mkdir -p tmp
 
-if [ -d "$HOME/.chromedriver-helper" ]; then
-    rm -r $HOME/.chromedriver-helper
-fi
-
-chromedriver-update
-
 ./gradlew clean
+
 pushd client
 yarn install
 CI=true yarn test
 yarn build
-
 popd
 
 if [ "$NARWHAL_MIL" = "true" ]

@@ -1,5 +1,6 @@
 require 'capybara/rspec'
 require 'selenium-webdriver'
+require 'chromedriver/helper'
 
 Capybara.register_driver :chrome do |app|
   Capybara::Selenium::Driver.new(app, browser: :chrome)
@@ -47,4 +48,6 @@ RSpec.configure do |config|
   config.order = :random
 
   Kernel.srand config.seed
+
+  Chromedriver.set_version "2.36"
 end
