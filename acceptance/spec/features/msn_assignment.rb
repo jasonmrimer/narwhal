@@ -1,10 +1,13 @@
 class MsnAssignment
   include Capybara::DSL
   include RSpec::Matchers
-  attr_reader :msn_title
+  attr_reader :msn_title, :msn_id
 
   def initialize
-    @msn_title = 'XXX-FAKE-MISSION-1'
+    # @msn_title = Time.now.strftime("%D") + ' XXX-FAKE-MISSION-1'
+    @msn_id = 'XXX-FAKE-MISSION-1'
+    @msn_date = Time.now.strftime("%D")
+    @msn_title = @msn_date + ' ' + @msn_id
   end
 
   def create
@@ -12,7 +15,7 @@ class MsnAssignment
       find('a', text: 'AVAILABILITY').click
       click_link_or_button '+ Add Event'
       find('label', text: 'MISSION').click
-      typeahead('Mission ID', @msn_title)
+      typeahead('Mission ID', 'XXX-FAKE')
       click(find('input[type="submit"]'))
     end
   end

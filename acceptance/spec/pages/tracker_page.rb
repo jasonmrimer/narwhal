@@ -90,7 +90,7 @@ class TrackerPage
     page.within('.side-panel') do
       expect(page).to have_content('AVAILABILITY')
       expect(page).to have_content('Spaceman, Corey')
-      EXPECTED_AVAILABILITY_DAYS.each { |day_name| expect(page).to have_content(day_name) }
+      EXPECTED_AVAILABILITY_DAYS.each {|day_name| expect(page).to have_content(day_name)}
     end
     can_advance_to_next_week
   end
@@ -199,10 +199,11 @@ class TrackerPage
     msn_assignment = MsnAssignment.new
     msn_assignment.create
 
-    crew_page = CrewPage.new(msn_assignment.msn_title)
+    click_on_airman('Spaceman, Corey')
+    crew_page = CrewPage.new(msn_assignment.msn_id)
     crew_page.assert_has_assigned_airmen('Spaceman, Corey', 'Keeter, Tracy')
 
-    crew_page.fill_in_position_and_make_critical
+    crew_page.fill_in_position
     crew_page.add_new_crew_member
   end
 
