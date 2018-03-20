@@ -15,12 +15,14 @@ import javax.persistence.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Entity
 @Data
 @NoArgsConstructor
+@EntityListeners(AttachAirmanRipItemsListener.class)
 public class Airman {
   @Id
   @GeneratedValue
@@ -53,10 +55,9 @@ public class Airman {
   @JsonBackReference
   private List<CrewPosition> crewPositions = new ArrayList<>();
 
-  @OneToMany(mappedBy = "airmanId", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "airman", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonManagedReference
   private List<AirmanRipItem> ripItems = new ArrayList<>();
-
 
   public Airman(Flight flight, String firstName, String lastName) {
     this.flight = flight;
@@ -92,16 +93,21 @@ public class Airman {
         return false;
       }
     }
-    airmanRipItem.setAirmanId(this.id);
+    airmanRipItem.setAirman(this);
     ripItems.add(airmanRipItem);
     return true;
   }
 
-  public void updateRipItem(long id, Instant expirationDate) {
-    ripItems.stream()
+  public AirmanRipItem updateRipItem(long id, Instant expirationDate) {
+    final Optional<AirmanRipItem> optional = ripItems.stream()
       .filter(ripItem -> ripItem.getId().equals(id))
-      .findFirst()
-      .ifPresent(ripItem -> ripItem.setExpirationDate(expirationDate));
+      .findFirst();
+    if (optional.isPresent()) {
+      final AirmanRipItem airmanRipItem = optional.get();
+      airmanRipItem.setExpirationDate(expirationDate);
+      return airmanRipItem;
+    }
+    return null;
   }
 
   public boolean addQualification(AirmanQualification airmanQualification) {

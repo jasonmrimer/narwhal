@@ -593,6 +593,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/airman/AttachAirmanRipItemsListener.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/airman/CertificationRepository.java">
           <value>
             <set />
@@ -669,6 +674,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/config/WebSecurityConfig.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/crew/Crew.java">
           <value>
             <set />
           </value>

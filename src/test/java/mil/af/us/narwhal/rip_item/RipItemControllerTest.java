@@ -56,7 +56,7 @@ public class RipItemControllerTest {
 
     ripItemRepository.save(ripItem1);
 
-    AirmanRipItem airmanRipItem = new AirmanRipItem(1L, airman.getId(), ripItem1, null);
+    AirmanRipItem airmanRipItem = new AirmanRipItem(1L, airman, ripItem1, null);
 
     airman.addRipItem(airmanRipItem);
 
