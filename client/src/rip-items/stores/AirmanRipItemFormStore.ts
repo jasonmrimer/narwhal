@@ -23,8 +23,7 @@ export class AirmanRipItemFormStore {
 
   @action.bound
   updateRipItem(item: AirmanRipItemModel) {
-    const ripItem = this._airmanRipItems.find(i => i.id === item.id)!;
-    const index = this._airmanRipItems.indexOf(ripItem);
+    const index = this._airmanRipItems.findIndex(i => i.id === item.id)!;
     this._airmanRipItems[index] = item;
     this._airmanRipItems = this._airmanRipItems.slice();
   }

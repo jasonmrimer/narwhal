@@ -7,6 +7,7 @@ import { observer } from 'mobx-react';
 import { StyledSubmitButton } from '../widgets/SubmitButton';
 import { StyledForm, StyledFormRow } from '../widgets/Form';
 import { AirmanRipItemFormStore } from './stores/AirmanRipItemFormStore';
+import { StyledButton } from '../widgets/Button';
 
 interface Props {
   selectedAirmanId: number;
@@ -26,6 +27,11 @@ export class AirmanRipItems extends React.Component<Props> {
     this.props.store.updateRipItem(item);
   }
 
+  onClick = (item: AirmanRipItemModel) => {
+    item.expirationDate = moment().add(90, 'days').startOf('day');
+    this.props.store.updateRipItem(item);
+  }
+
   onSubmit = (e: any) => {
     e.preventDefault();
     this.props.store.submitRipItems();
@@ -39,11 +45,19 @@ export class AirmanRipItems extends React.Component<Props> {
             return (
               <StyledFormRow key={index} direction="column">
                 <div className="item">{item.ripItem.title}</div>
-                <StyledDatePicker
-                  value={item.expirationDate ? item.expirationDate.format('YYYY-MM-DD') : ''}
-                  onChange={(e) => this.onChange(e, item)}
-                  name={item.ripItem.title}
-                />
+                <div className="item-date-controls">
+                  <StyledDatePicker
+                    className="item-date-input"
+                    value={item.expirationDate ? item.expirationDate.format('YYYY-MM-DD') : ''}
+                    onChange={(e) => this.onChange(e, item)}
+                    name={item.ripItem.title}
+                  />
+                  <StyledButton
+                    className="item-date-button"
+                    text="90"
+                    onClick={() => this.onClick(item)}
+                  />
+                </div>
               </StyledFormRow>
             );
           }
@@ -67,5 +81,18 @@ export const StyledRipItems = styled(AirmanRipItems)`
   .item {
     margin: 0 0 0.5rem 0;
     color: ${props => props.theme.grayishBlueSteel};
+  }
+  
+  .item-date-controls {
+    display: flex;
+    align-items: flex-end;
+  }
+  
+  .item-date-input {
+    margin-right: 1rem;
+  }
+  
+  .item-date-button {
+    padding: 0.25rem;
   }
 `;
