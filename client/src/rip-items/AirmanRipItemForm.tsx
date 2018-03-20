@@ -54,7 +54,7 @@ export class AirmanRipItems extends React.Component<Props> {
                   />
                   <StyledButton
                     className="item-date-button"
-                    text="90"
+                    text="+ 90 DAYS"
                     onClick={() => this.onClick(item)}
                   />
                 </div>
