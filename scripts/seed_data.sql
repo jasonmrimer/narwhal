@@ -179,6 +179,3 @@ INSERT INTO mission VALUES
 
 INSERT INTO profile (username, site_id) VALUES
   ('tytus', (SELECT id FROM site WHERE name = 'DMS-MD'));
-
-INSERT INTO crew (id, mission_id) VALUES
-  (1, '1');
