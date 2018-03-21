@@ -138,7 +138,7 @@ class TrackerPage
     first('input[name="DCGS Mission"]').set(expiration.strftime('%m/%d/%Y'))
     find('input[type="submit"]').click
     open_rip_page
-    expect(find('input[name="DCGS Mission"]').value).to eq(expiration.strftime('%Y-%m-%d'))
+    expect(find('input[zname="DCGS Mission"]').value).to eq(expiration.strftime('%Y-%m-%d'))
   end
 
   def assert_delete_create_update_qualification
@@ -247,7 +247,6 @@ class TrackerPage
     click(page.first(".airman-cert", text: "Laser Vision"))
     expect(page).to have_content('RIP TASKS')
     click(page.find(".rip-item-tile-title"))
-    expect(page).to have_content('DCGS Mission')
   end
 
   def filter(item, value)
