@@ -20,7 +20,6 @@ public class ProfileController {
   @GetMapping
   public ProfileJSON show(@AuthenticationPrincipal User user) {
     Profile profile = repository.findOneByUsername(user.getUsername());
-
     if (profile == null) {
       profile = repository.save(new Profile(user.getUsername(), null));
     }
@@ -29,7 +28,6 @@ public class ProfileController {
 
   @PutMapping
   public ProfileJSON update(@AuthenticationPrincipal User user, @RequestBody Profile profile) {
-    repository.save(profile);
-    return new ProfileJSON(profile, classified);
+    return new ProfileJSON(repository.save(profile), classified);
   }
 }

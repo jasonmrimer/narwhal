@@ -15,14 +15,8 @@ interface State {
 
 @observer
 export class ProfileSitePicker extends React.Component<Props, State> {
-
-  handleChange = (event: any) => {
-    const {profileStore} = this.props;
-    if (profileStore.profile) {
-      profileStore.profile.user.siteId = event.target.value;
-      profileStore.setUser(profileStore.profile.user);
-      profileStore.save();
-    }
+  handleChange = async (event: any) => {
+    await this.props.profileStore.saveSiteId(Number(event.target.value));
   }
 
   render() {
@@ -30,14 +24,14 @@ export class ProfileSitePicker extends React.Component<Props, State> {
       <div className={this.props.className}>
         <div>SELECT YOUR HOME SITE</div>
         <button
-          value={this.props.profileStore.siteByName('DMS-GA').id}
+          value={this.props.profileStore.getSiteByName('DMS-GA').id}
           onClick={(event) => this.handleChange(event)}
           className="dms-ga"
         >
           <span>Fort Gordon</span><span>Georgia</span>
         </button>
         <button
-          value={this.props.profileStore.siteByName('DMS-MD').id}
+          value={this.props.profileStore.getSiteByName('DMS-MD').id}
           onClick={(event) => this.handleChange(event)}
           className="dms-md"
         >

@@ -1,5 +1,5 @@
 import { action, computed, observable } from 'mobx';
-import { ProfileModel, UserModel } from '../models/ProfileModel';
+import { ProfileModel } from '../models/ProfileModel';
 import ProfileRepository from '../repositories/ProfileRepository';
 import { SiteRepository } from '../../site/repositories/SiteRepository';
 import { SiteModel } from '../../site/models/SiteModel';
@@ -7,6 +7,7 @@ import { SiteModel } from '../../site/models/SiteModel';
 export class ProfileSitePickerStore {
   @observable private _profile: ProfileModel | null = null;
   @observable private _sites: SiteModel[];
+
   constructor(
     private profileRepository: ProfileRepository,
     private siteRepository: SiteRepository) {}
@@ -23,16 +24,14 @@ export class ProfileSitePickerStore {
   }
 
   @action.bound
-  setUser(user: UserModel) {
-    this._profile = Object.assign({}, this._profile, {user: user});
+  async saveSiteId(siteId: number) {
+    if (this._profile) {
+      const user = Object.assign({}, this._profile.user, {siteId: siteId});
+      this._profile = await this.profileRepository.save(user);
+    }
   }
 
-  @action.bound
-  async save() {
-    this._profile = await this.profileRepository.save(this._profile!.user);
-  }
-
-  siteByName (name: string) {
+  getSiteByName (name: string) {
     return this._sites.find(s => s.name === name)!;
   }
 }

@@ -10,10 +10,10 @@ export class WebProfileRepository implements ProfileRepository {
   async findOne(): Promise<ProfileModel> {
     const json = await this.client.getJSON('api/profiles');
     return {user: json.profile, classified: json.classified};
-
   }
 
   async save(user: UserModel): Promise<ProfileModel> {
-    return await this.client.putJSON('api/profiles', JSON.stringify(user));
+    const json = await this.client.putJSON('api/profiles', JSON.stringify(user));
+    return {user: json.profile, classified: json.classified};
   }
 }

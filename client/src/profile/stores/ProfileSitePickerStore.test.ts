@@ -18,13 +18,8 @@ describe('ProfileSitePickerStore', () => {
     });
   });
 
-  it('should update a profile with given information', async () => {
-    const updatedProfile = {
-      user: {id: 1, username: 'FooFace', siteId: 2},
-      classified: false
-    };
-    subject.setUser({id: 1, username: 'FooFace', siteId: 2});
-    await subject.save();
-    expect(subject.profile).toEqual(updatedProfile);
+  it('should save the selected site it to the profile', async () => {
+    await subject.saveSiteId(2);
+    expect(subject.profile!.user.siteId).toEqual(2);
   });
 });

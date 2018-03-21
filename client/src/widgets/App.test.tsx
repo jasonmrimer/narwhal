@@ -99,7 +99,7 @@ describe('App', () => {
     });
 
     it('should render the Tracker page after saving a profile', async () => {
-      profileStore.setUser({username: 'FontFace', siteId: 1, id: 1});
+      await profileStore.saveSiteId(1);
       mountedSubject.update();
       expect(mountedSubject.find(Tracker).exists()).toBeTruthy();
     });
