@@ -24,7 +24,3 @@ security:
     password: password
     role: USER
 classified: false
-
-logging.level.org.hibernate:
-  SQL: DEBUG
-  type.descriptor.sql.BasicBinder: TRACE
