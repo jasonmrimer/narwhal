@@ -246,7 +246,7 @@ class TrackerPage
   def open_rip_page
     click(page.first(".airman-cert", text: "Laser Vision"))
     expect(page).to have_content('RIP TASKS')
-    click(page.find("div.rip-item-tile-title", text: "RIP TASKS"))
+    click(page.find(".rip-item-tile-title"))
     expect(page).to have_content('DCGS Mission')
   end
 
