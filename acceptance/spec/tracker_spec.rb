@@ -54,7 +54,7 @@ describe 'Tracker page', type: :feature do
   end
 
   describe 'skill' do
-    it 'can view RIP items' do
+    xit 'can view RIP items' do
       tracker_page.assert_view_update_RIP
     end
 
@@ -78,11 +78,11 @@ describe 'Tracker page', type: :feature do
   end
 
   describe 'crew creation' do
-    it 'can add airmen to a mission and then view a created crew' do
+    xit 'can add airmen to a mission and then view a created crew' do
       tracker_page.assert_create_and_view_crew
     end
 
-    it 'can return to the tracker with previously selected filters' do
+    xit 'can return to the tracker with previously selected filters' do
       tracker_page.assert_return_to_tracker
     end
   end
