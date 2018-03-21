@@ -90,7 +90,7 @@ class TrackerPage
     page.within('.side-panel') do
       expect(page).to have_content('AVAILABILITY')
       expect(page).to have_content('Spaceman, Corey')
-      EXPECTED_AVAILABILITY_DAYS.each {|day_name| expect(page).to have_content(day_name)}
+      EXPECTED_AVAILABILITY_DAYS.each { |day_name| expect(page).to have_content(day_name) }
     end
     can_advance_to_next_week
   end
@@ -138,7 +138,7 @@ class TrackerPage
     first('input[name="DCGS Mission"]').set(expiration.strftime('%m/%d/%Y'))
     find('input[type="submit"]').click
     open_rip_page
-    expect(find('input[zname="DCGS Mission"]').value).to eq(expiration.strftime('%Y-%m-%d'))
+    expect(find('input[name="DCGS Mission"]').value).to eq(expiration.strftime('%Y-%m-%d'))
   end
 
   def assert_delete_create_update_qualification
@@ -199,11 +199,10 @@ class TrackerPage
     msn_assignment = MsnAssignment.new
     msn_assignment.create
 
-    click_on_airman('Spaceman, Corey')
-    crew_page = CrewPage.new(msn_assignment.msn_id)
+    crew_page = CrewPage.new(msn_assignment.msn_title)
     crew_page.assert_has_assigned_airmen('Spaceman, Corey', 'Keeter, Tracy')
 
-    crew_page.fill_in_position
+    crew_page.fill_in_position_and_make_critical
     crew_page.add_new_crew_member
   end
 
@@ -246,7 +245,8 @@ class TrackerPage
   def open_rip_page
     click(page.first(".airman-cert", text: "Laser Vision"))
     expect(page).to have_content('RIP TASKS')
-    click(page.find(".rip-item-tile-title"))
+    click(page.find("div.rip-item-tile-title", text: "RIP TASKS"))
+    expect(page).to have_content('DCGS Mission')
   end
 
   def filter(item, value)

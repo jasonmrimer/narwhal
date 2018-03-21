@@ -2,13 +2,12 @@ package mil.af.us.narwhal.mission;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.*;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.TimeZone;
-
-import static java.util.TimeZone.getDefault;
 
 @RestController
 @RequestMapping(MissionController.URI)
@@ -24,7 +23,7 @@ public class MissionController {
 
   @GetMapping
   public List<Mission> index() {
-    Instant today = LocalDate.now().atStartOfDay().toInstant(ZoneOffset.UTC);
+    Instant today = Instant.now().truncatedTo(ChronoUnit.DAYS);
     return missionRepository.findByStartDateTimeGreaterThanEqualOrderByStartDateTime(today);
   }
 }

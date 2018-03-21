@@ -6,22 +6,24 @@ class CrewPage
     page.within('.side-panel') do
       find('a', text: 'AVAILABILITY').click
       page.within('.event-title', text: msn_title) do
-        click(find('a.mission-list'))
+        click(find('a'))
       end
     end
   end
 
   def assert_has_assigned_airmen(*airmen)
-    airmen.each {|airman| expect(page).to have_content(airman)}
+    airmen.each { |airman| expect(page).to have_content(airman) }
   end
 
-  def fill_in_position
+  def fill_in_position_and_make_critical
     page.first('input[name="title"]').set 'Chimichanga'
-
+    page.find('label[for="critical-0"]').click
     click_button 'SAVE'
+
     page.refresh
 
     expect(page).to have_selector('input[value="Chimichanga"]')
+    expect(page.find('#critical-0', visible: false)).to be_checked
   end
 
   def add_new_crew_member
