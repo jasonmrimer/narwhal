@@ -18,7 +18,7 @@ export const AirmanDatum = (props: Props) => {
       className={className}
       onClick={(e: any) => {
         e.stopPropagation();
-        trackerStore.setSelectedAirman(airman, tab)
+        trackerStore.setSelectedAirman(airman, tab);
       }}
     >
       {text}

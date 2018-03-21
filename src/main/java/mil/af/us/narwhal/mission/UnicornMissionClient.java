@@ -32,7 +32,7 @@ public class UnicornMissionClient extends WebServiceGatewaySupport implements Mi
     SimpleDateFormat format1 = new SimpleDateFormat("MM/dd/yyyy");
     Calendar cal = Calendar.getInstance();
     String startDate = format1.format(cal.getTime());
-    cal.add(Calendar.DAY_OF_YEAR, 14);
+    cal.add(Calendar.DAY_OF_YEAR, 30);
     String endDate = format1.format(cal.getTime());
 
     GetMissionMetaDataRestV2 getMissionMetaData = new GetMissionMetaDataRestV2();
