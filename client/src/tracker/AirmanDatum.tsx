@@ -16,7 +16,10 @@ export const AirmanDatum = (props: Props) => {
   return (
     <span
       className={className}
-      onClick={() => trackerStore.setSelectedAirman(airman, tab)}
+      onClick={(e: any) => {
+        e.stopPropagation();
+        trackerStore.setSelectedAirman(airman, tab)
+      }}
     >
       {text}
     </span>

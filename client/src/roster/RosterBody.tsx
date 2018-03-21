@@ -26,13 +26,15 @@ export class RosterBody extends React.Component<Props> {
       <div className={this.props.className}>
         {
           trackerStore.airmen.map((airman: AirmanModel, index: number) => {
-            const className = airman.id === selectedAirmanId ? 'selected' : '';
             return (
               <div
                 key={index}
-                className={classNames('tr', className)}
+                className={classNames({selected: airman.id === selectedAirmanId})}
               >
-                <div className="left">
+                <div
+                  className="left"
+                  onClick={() => trackerStore.setSelectedAirman(airman, TabType.AVAILABILITY)}
+                >
                   <StyledShiftDropdown
                     airman={airman}
                     trackerStore={trackerStore}
@@ -60,7 +62,10 @@ export class RosterBody extends React.Component<Props> {
                     className="airman-cert"
                   />
                 </div>
-                <div className="right">
+                <div
+                  className="right"
+                  onClick={() => trackerStore.setSelectedAirman(airman, TabType.AVAILABILITY)}
+                >
                   <StyledPlanner
                     key={index}
                     week={this.props.trackerStore.plannerStore.plannerWeek}
@@ -97,30 +102,34 @@ export const StyledRosterBody = styled(RosterBody)`
       background: ${props => props.theme.darkest};
     }
     
-    & > div {
-      & > span {
-        width: 23%;
-      }
-      
-      &.left {
-        width: 868px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 0.75rem;
-        border-right: 1px solid ${props => props.theme.graySteel};
-      }
+    & > div > span {
+      width: 23%;
     }
-   
+    
+    .left {
+      width: 868px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.75rem;
+      cursor: pointer;
+      border-right: 1px solid ${props => props.theme.graySteel};
+    }
+    
     .right { 
       display: flex;
       flex-grow: 2;
       align-items: center;
       padding: 0.75rem;
+      cursor: pointer;
     }
   }
   
   .shift {
     width: 2rem;
+  }
+  
+  .selected {
+    box-shadow: inset 0.5rem 0px 0px ${props => props.theme.yellow};
   }
 `;

@@ -4,7 +4,7 @@ import { TrackerStore } from './stores/TrackerStore';
 import { AirmanDatum } from './AirmanDatum';
 import { TabType } from './stores/SidePanelStore';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
-import { makeFakeTrackerStore } from '../utils/testUtils';
+import { eventStub, makeFakeTrackerStore } from '../utils/testUtils';
 
 describe('AirmanDatum', () => {
   let subject: ShallowWrapper;
@@ -25,12 +25,12 @@ describe('AirmanDatum', () => {
   });
 
   it('calls the selectAirman when clicking on an airman', () => {
-    subject.simulate('click');
+    subject.simulate('click', eventStub);
     expect(trackerStore.selectedAirman).toEqual(airman);
     expect(trackerStore.sidePanelStore.selectedTab).toEqual(TabType.CURRENCY);
   });
 
-  it('should render its given text' , () => {
+  it('should render its given text', () => {
     expect(subject.text()).toBe('whatever');
   });
 
