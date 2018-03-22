@@ -31,7 +31,8 @@ describe('MissionFormStore', () => {
     it('should have an empty state', () => {
       subject.open();
       expect(subject.hasItem).toBeFalsy();
-      expect(subject.state.missionId).toBe('');
+      expect(subject.state.id).toBe(null);
+      expect(subject.state.title).toBe('');
       expect(subject.state.startDate).toBe('');
       expect(subject.state.startTime).toBe('');
       expect(subject.state.endDate).toBe('');
@@ -42,7 +43,8 @@ describe('MissionFormStore', () => {
     it('should set the state with the given event', () => {
       subject.open(event);
       expect(subject.hasItem).toBeTruthy();
-      expect(subject.state.missionId).toBe(event.title);
+      expect(subject.state.id).toBe(event.id);
+      expect(subject.state.title).toBe(event.title);
       expect(subject.state.startDate).toBe(event.startTime.format('YYYY-MM-DD'));
       expect(subject.state.startTime).toBe(event.startTime.format('HHmm'));
       expect(subject.state.endDate).toBe(event.endTime.format('YYYY-MM-DD'));
@@ -57,7 +59,8 @@ describe('MissionFormStore', () => {
       expect(subject.hasItem).toBeTruthy();
 
       subject.close();
-      expect(subject.state.missionId).toBe('');
+      expect(subject.state.id).toBe(null);
+      expect(subject.state.title).toBe('');
       expect(subject.state.startDate).toBe('');
       expect(subject.state.startTime).toBe('');
       expect(subject.state.endDate).toBe('');
@@ -69,16 +72,17 @@ describe('MissionFormStore', () => {
 
   it('can add an event', () => {
     const selectedMission = missionStore.missions[1];
-    subject.setState({missionId: selectedMission.missionId});
+    subject.setState({id: selectedMission.id});
     subject.addItem(airmanId);
 
     const expectedEvent = new EventModel(
-      selectedMission.missionId,
+      selectedMission.atoMissionNumber,
       '',
       selectedMission.startDateTime,
       selectedMission.endDateTime!,
       airmanId,
-      EventType.Mission
+      EventType.Mission,
+    selectedMission.id
     );
 
     const addedEvent = (eventActions.addEvent as jest.Mock).mock.calls[0][0];
@@ -91,16 +95,19 @@ describe('MissionFormStore', () => {
 
   it('can clear the state', () => {
     const selectedMission = missionStore.missions[0];
-    subject.setState({missionId: selectedMission.missionId, });
-    expect(subject.state.missionId).toBe(selectedMission.missionId);
+    subject.setState({id: selectedMission.id,});
+    expect(subject.state.id).toBe(selectedMission.id);
+    expect(subject.state.title).toBe(selectedMission.atoMissionNumber);
     expect(subject.state.startDate).toBe(selectedMission.startDateTime.format('YYYY-MM-DD'));
     expect(subject.state.startTime).toBe(selectedMission.startDateTime.format('HHmm'));
     expect(subject.state.endDate).toBe(selectedMission.endDateTime!.format('YYYY-MM-DD'));
     expect(subject.state.endTime).toBe(selectedMission.endDateTime!.format('HHmm'));
     expect(subject.errors.length).toBe(0);
 
-    subject.setState({missionId: ''});
-    expect(subject.state.missionId).toBe('');
+    subject.setState({id: null});
+    subject.setState({title: ''});
+    expect(subject.state.id).toBe(null);
+    expect(subject.state.title).toBe('');
     expect(subject.state.startDate).toBe('');
     expect(subject.state.startTime).toBe('');
     expect(subject.state.endDate).toBe('');

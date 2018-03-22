@@ -7,6 +7,7 @@ import * as moment from 'moment';
 describe('Mission', () => {
   it('renders the mission atoMissionNumber', () => {
     const mission = new MissionModel(
+      1,
       '123',
       'fakeMission',
       moment('2017-12-12T09:00:00Z'),
@@ -21,6 +22,7 @@ describe('Mission', () => {
 
   it('renders TBD when mission endDate not provided', () => {
     const mission = new MissionModel(
+      1,
       '123',
       'fakeMission',
       moment('2017-12-12T09:00:00Z')

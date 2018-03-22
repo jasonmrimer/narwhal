@@ -28,9 +28,9 @@ interface Props {
 export class MissionForm extends React.Component<Props> {
   handleChange = (opt: FilterOption | null) => {
     if (opt == null) {
-      this.props.missionFormStore.setState({missionId: ''});
+      this.props.missionFormStore.setState({id: null});
     } else {
-      this.props.missionFormStore.setState({missionId: String(opt.value)});
+      this.props.missionFormStore.setState({id: Number(opt.value)});
     }
   }
 
@@ -47,7 +47,7 @@ export class MissionForm extends React.Component<Props> {
   render() {
     const {missionOptions} = this.props.missionStore;
     const {state, hasItem, errors} = this.props.missionFormStore;
-    const selected = missionOptions.find(msn => msn.label === state.missionId);
+    const selected = missionOptions.find(msn => msn.value === state.id);
 
     return (
       <StyledForm onSubmit={this.handleSubmit}>

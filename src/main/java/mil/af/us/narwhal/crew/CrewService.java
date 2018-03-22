@@ -9,32 +9,24 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class CrewService {
-  private CrewRepository crewRepository;
   private MissionRepository missionRepository;
   private AirmanRepository airmanRepository;
 
   public CrewService(
-    CrewRepository crewRepository,
     MissionRepository missionRepository,
     AirmanRepository airmanRepository
   ) {
-    this.crewRepository = crewRepository;
     this.missionRepository = missionRepository;
     this.airmanRepository = airmanRepository;
   }
 
   public Event save(Event event) {
     Airman airman = airmanRepository.findOne(event.getAirmanId());
-    Mission mission = missionRepository.findOneByMissionId(event.getTitle());
-    Crew crew = crewRepository.findOneByMission(mission);
-    if (crew == null) {
-      crew = new Crew(mission);
-    }
+    Mission mission = missionRepository.findOne(event.getId());
 
-    CrewPosition position = new CrewPosition(crew, airman);
-    crew.addCrewPosition(position);
+    CrewPosition position = new CrewPosition(airman);
+    mission.addCrewPosition(position);
 
-    crew = crewRepository.save(crew);
-    return crew.getMission().toEvent(crew.getId(), event.getAirmanId());
+    return missionRepository.save(mission).toEvent(event.getAirmanId());
   }
 }

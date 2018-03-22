@@ -10,6 +10,7 @@ export class MissionSerializer implements Serializer<MissionModel> {
   /* tslint:disable:no-any*/
   deserialize(item: any): MissionModel {
     return new MissionModel(
+      item.id,
       item.missionId,
       item.atoMissionNumber,
       moment(item.startDateTime),

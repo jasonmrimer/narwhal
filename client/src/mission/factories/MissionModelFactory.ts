@@ -5,6 +5,7 @@ import { MissionModel } from '../models/MissionModel';
 const time = moment();
 
 const missionOne = new MissionModel(
+  1,
   'missionId1',
   'ato1',
   time,
@@ -13,6 +14,7 @@ const missionOne = new MissionModel(
 );
 
 const missionTwo = new MissionModel(
+  2,
   'missionId2',
   'ato2',
   time,
@@ -21,6 +23,7 @@ const missionTwo = new MissionModel(
 );
 
 const missionThree = new MissionModel(
+  3,
   'missionId3',
   'ato3',
   time.clone().add(1, 'days'),
@@ -29,6 +32,7 @@ const missionThree = new MissionModel(
 );
 
 const missionFour = new MissionModel(
+  4,
   'missionId4',
   'ato4',
   time.clone().add(2, 'days'),

@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 public class CrewPositionJSON {
   private Long id;
   private String title;
-  private Boolean critical;
+  private boolean critical;
   private Long airmanId;
 }

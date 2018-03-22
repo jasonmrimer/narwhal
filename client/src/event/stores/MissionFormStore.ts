@@ -5,7 +5,8 @@ import { action } from 'mobx';
 import { MissionStore } from '../../mission/stores/MissionStore';
 
 interface State {
-  missionId: string;
+  id: number | null;
+  title: string;
   startDate: string;
   startTime: string;
   endDate: string;
@@ -20,13 +21,14 @@ export class MissionFormStore extends FormStore<EventModel, State> {
 
   @action
   setState(state: Partial<State>) {
-    if (state.missionId === '') {
+    if (state.id === null) {
       this._state = this.emptyState();
     } else {
-      const mission = this.missionStore.missions.find(msn => msn.missionId === state.missionId);
+      const mission = this.missionStore.missions.find(msn => msn.id === state.id);
       if (mission != null) {
         this._state = {
-          missionId: mission.missionId,
+          id: mission.id,
+          title: mission.atoMissionNumber,
           startDate: mission.startDateTime.format('YYYY-MM-DD'),
           startTime: mission.startDateTime.format('HHmm'),
           endDate: mission.endDateTime ? mission.endDateTime.format('YYYY-MM-DD') : '',
@@ -41,7 +43,8 @@ export class MissionFormStore extends FormStore<EventModel, State> {
       return this.emptyState();
     }
     return {
-      missionId: item.title,
+      id: item.id,
+      title: item.title,
       startDate: item.startTime.format('YYYY-MM-DD'),
       startTime: item.startTime.format('HHmm'),
       endDate: item.endTime.format('YYYY-MM-DD'),
@@ -51,7 +54,8 @@ export class MissionFormStore extends FormStore<EventModel, State> {
 
   protected emptyState(): State {
     return {
-      missionId: '',
+      id: null,
+      title: '',
       startDate: '',
       startTime: '',
       endDate: '',
@@ -61,13 +65,13 @@ export class MissionFormStore extends FormStore<EventModel, State> {
 
   addItem(airmanId: number): void {
     const event = new EventModel(
-      this._state.missionId,
+      this._state.title,
       '',
       this.makeMoment(this._state.startDate, this._state.startTime),
       this.makeMoment(this._state.endDate, this._state.endTime),
       airmanId,
       EventType.Mission,
-      this.item ? this.item.id : null
+      this.item ? this.item.id : this._state.id
     );
     this.eventActions.addEvent(event);
   }

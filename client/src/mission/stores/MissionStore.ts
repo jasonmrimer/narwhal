@@ -23,7 +23,7 @@ export class MissionStore {
   @computed
   get missionOptions() {
     return this._missions.map(msn => {
-      return {value: msn.missionId, label: msn.atoMissionNumber, date: msn.startDateTime};
+      return {value: msn.id, label: `${msn.displayDate} - ${msn.atoMissionNumber}`};
     });
   }
 }

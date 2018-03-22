@@ -78,11 +78,8 @@ public class Airman {
   public List<Event> getEvents() {
     return Stream.concat(
       this.crewPositions.stream()
-        .map(CrewPosition::getCrew)
-        .map(crew -> {
-          final Mission mission = crew.getMission();
-          return mission.toEvent(crew.getId(), this.getId());
-        }),
+        .map(CrewPosition::getMission)
+        .map(mission -> mission.toEvent(this.getId())),
       this.events.stream()
     ).collect(Collectors.toList());
   }

@@ -28,7 +28,7 @@ public class EventController {
   @PutMapping(value = "{id}")
   public Event update(@PathVariable Long id, @Valid @RequestBody Event event) {
     if (event.getType() == EventType.MISSION) {
-      return event;
+      return service.save(event);
     }
     return eventRepository.save(event);
   }

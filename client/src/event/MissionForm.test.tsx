@@ -46,10 +46,11 @@ describe('MissionForm', () => {
   });
 
   it('manages the state via form changes', () => {
-    subject.handleChange({value: mission.missionId, label: mission.atoMissionNumber});
+    subject.handleChange({value: mission.id, label: mission.atoMissionNumber});
 
     expect(missionFormStore.state).toEqual({
-      missionId: mission.missionId,
+      id: mission.id,
+      title: mission.atoMissionNumber,
       startDate: mission.startDateTime.format('YYYY-MM-DD'),
       startTime: mission.startDateTime.format('HHmm'),
       endDate: mission.endDateTime!.format('YYYY-MM-DD'),
@@ -76,13 +77,11 @@ describe('MissionForm', () => {
   });
 
   it('populates the fields with values from MissionFormStore', () => {
-    const missionId = mission.missionId;
-    mission.missionId = mission.atoMissionNumber;
     missionFormStore.setState(mission);
 
     wrapper.update();
 
-    expect(wrapper.find(StyledSingleTypeahead).prop('selected')!.value).toEqual(missionId);
+    expect(wrapper.find(StyledSingleTypeahead).prop('selected')!.value).toEqual(mission.id);
     expect(findInputValueByName(wrapper, StyledDatePicker, 'startDate')).toEqual(missionFormStore.state.startDate);
     expect(findInputValueByName(wrapper, StyledTimeInput, 'startTime')).toEqual(missionFormStore.state.startTime);
     expect(findInputValueByName(wrapper, StyledDatePicker, 'endDate')).toEqual(missionFormStore.state.endDate);

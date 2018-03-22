@@ -38,6 +38,21 @@
             <set />
           </value>
         </entry>
+        <entry key="$APPLICATION_CONFIG_DIR$/consoles/db/4d975c86-65f7-4c43-beb7-829411efc035/console_5.sql">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$APPLICATION_CONFIG_DIR$/consoles/db/4d975c86-65f7-4c43-beb7-829411efc035/console_6.sql">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$APPLICATION_CONFIG_DIR$/consoles/db/4d975c86-65f7-4c43-beb7-829411efc035/console_7.sql">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$APPLICATION_CONFIG_DIR$/consoles/db/724c8c86-da39-40ec-8e37-d03f2ed20a12/console.sql">
           <value>
             <set />
@@ -688,6 +703,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/crew/CrewJSON.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/crew/CrewPosition.java">
           <value>
             <set />
@@ -699,6 +719,16 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/crew/CrewPositionRepository.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/crew/CrewRepository.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/crew/CrewService.java">
           <value>
             <set />
           </value>
@@ -734,6 +764,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/jaxb/StringToXMLGregorianCalendarXmlAdapter.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/mission/AttachMissionCrewListener.java">
           <value>
             <set />
           </value>
@@ -938,6 +973,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/resources/db/migration/V16__Add_mission_id_to_join_crew_airman_and_remove_crew.sql">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/resources/db/migration/V1__Create_and_populate_airman.sql">
           <value>
             <set />
@@ -1069,6 +1109,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/test/java/mil/af/us/narwhal/crew/CrewControllerTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/test/java/mil/af/us/narwhal/crew/CrewServiceTest.java">
           <value>
             <set />
           </value>

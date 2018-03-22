@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 import java.time.Instant;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -23,12 +24,9 @@ import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CrewServiceTest {
-
-  @Mock private CrewRepository crewRepository;
   @Mock private MissionRepository missionRepository;
   @Mock private AirmanRepository airmanRepository;
-  @Captor private ArgumentCaptor<Crew> captor;
-  private CrewService subject;
+  @Captor private ArgumentCaptor<Mission> captor;
 
   @Test
   public void save_savesCrew() {
@@ -36,15 +34,16 @@ public class CrewServiceTest {
     airman.setId(1L);
 
     Mission mission =  new Mission(
+      1L,
       "mission-id-1",
       "MISNUM1",
       Instant.parse("2017-12-12T09:00:00Z"),
       Instant.parse("2017-12-12T15:00:00Z"),
       new Site("Site-1")
     );
-    Crew crew = new Crew(mission);
-    crew.addCrewPosition(new CrewPosition(crew, airman));
+
     Event event = new Event(
+      mission.getId(),
       mission.getAtoMissionNumber(),
       "Crazy Mission",
       mission.getStartDateTime(),
@@ -53,16 +52,17 @@ public class CrewServiceTest {
       airman.getId()
     );
 
-    when(crewRepository.save(any(Crew.class))).thenReturn(crew);
-    when(crewRepository.findOneByMission(mission)).thenReturn(null);
-    when(missionRepository.findOneByMissionId(event.getTitle())).thenReturn(mission);
+    when(missionRepository.save(any(Mission.class))).thenReturn(mission);
+    when(missionRepository.findOne(event.getId())).thenReturn(mission);
     when(airmanRepository.findOne(event.getAirmanId())).thenReturn(airman);
 
-    subject = new CrewService(crewRepository, missionRepository, airmanRepository);
+    CrewService subject = new CrewService(missionRepository, airmanRepository);
     subject.save(event);
 
-    verify(crewRepository).save(captor.capture());
-    Crew value = captor.getValue();
-    assertThat(value).isEqualToComparingOnlyGivenFields(crew, "mission", "id");
+    verify(missionRepository).save(captor.capture());
+    Mission value = captor.getValue();
+    List<CrewPosition> positions = value.getCrewPositions();
+    assertThat(positions.size()).isEqualTo(1);
+    assertThat(positions.get(0).getAirman().getId()).isEqualTo(airman.getId());
   }
 }

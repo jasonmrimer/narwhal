@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.time.Instant;
 import java.util.List;
 
-public interface MissionRepository extends JpaRepository<Mission, String> {
+public interface MissionRepository extends JpaRepository<Mission, Long> {
   List<Mission> findByStartDateTimeGreaterThanEqualOrderByStartDateTime(Instant date);
   Mission findOneByMissionId(String missionId);
 }

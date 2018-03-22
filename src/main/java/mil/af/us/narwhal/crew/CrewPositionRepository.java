@@ -5,5 +5,5 @@ import org.springframework.transaction.annotation.Transactional;
 
 public interface CrewPositionRepository extends JpaRepository<CrewPosition, Long> {
   @Transactional
-  void deleteOneByCrewIdAndAirmanId(Long crewId, Long airmanId);
+  void deleteOneByMissionIdAndAirmanId(Long missionId, Long airmanId);
 }

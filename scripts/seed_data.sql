@@ -172,18 +172,11 @@ VALUES
   (39, 14, '2019-03-25', '2019-02-25');
 
 INSERT INTO mission VALUES
-  ('1', 'XXX-FAKE-MISSION-1', NOW(), NOW(), 1),
-  ('2', 'YYY-FAKE-MISSION-2', NOW(), NOW(), 1),
-  ('3', 'ZZZ-FAKE-MISSION-3', NOW(), NOW(), 2),
-  ('4', 'AAA-FAKE-MISSION-4', NOW(), NOW(), 2);
+  ('1', 'XXX-FAKE-MISSION-1', NOW(), NOW(), 1, 1),
+  ('2', 'YYY-FAKE-MISSION-2', NOW(), NOW(), 1, 2),
+  ('3', 'ZZZ-FAKE-MISSION-3', NOW(), NOW(), 2, 3),
+  ('4', 'AAA-FAKE-MISSION-4', NOW(), NOW(), 2, 4);
 
-select * from crew;
-
-INSERT INTO crew VALUES
-  (1, '1'),
-  (2, '2'),
-  (3, '3'),
-  (4, '4');
 
 INSERT INTO profile (username, site_id) VALUES
   ('tytus', (SELECT id

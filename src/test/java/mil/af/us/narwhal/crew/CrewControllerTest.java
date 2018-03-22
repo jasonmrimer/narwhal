@@ -44,9 +44,7 @@ public class CrewControllerTest {
   private Flight flight;
   private Mission mission;
   private Airman airman;
-  private Crew crew;
   @LocalServerPort private int port;
-  @Autowired private CrewRepository crewRepository;
   @Autowired private CrewPositionRepository crewPositionRepository;
   @Autowired private SiteRepository siteRepository;
   @Autowired private MissionRepository missionRepository;
@@ -63,15 +61,12 @@ public class CrewControllerTest {
     site.addSquadron(squadron);
     siteRepository.save(site);
 
-    mission = new Mission("A", "B", Instant.now(), Instant.now(), site);
-    missionRepository.save(mission);
-
     airman = new Airman(flight, "A", "B");
     airmanRepository.save(airman);
 
-    crew = new Crew(mission);
-    crew.addCrewPosition(new CrewPosition(crew, airman));
-    crewRepository.save(crew);
+    mission = new Mission("A", "B", Instant.now(), Instant.now(), site);
+    mission.addCrewPosition(new CrewPosition(airman));
+    missionRepository.save(mission);
   }
 
   @Test
@@ -83,10 +78,10 @@ public class CrewControllerTest {
       .preemptive()
       .basic("tytus", "password")
     .when()
-      .get(CrewController.URI + "/" + crew.getId())
+      .get(CrewController.URI + "/" + mission.getId())
     .then()
       .statusCode(200)
-      .body("mission.missionId", equalTo(mission.getMissionId()))
+      .body("id", equalTo(mission.getId().intValue()))
       .body("crewPositions.size()", equalTo(1))
       .body("crewPositions[0].airman.id", equalTo(airman.getId().intValue()));
     // @formatter:on
@@ -110,7 +105,7 @@ public class CrewControllerTest {
       .contentType("application/json")
       .body(json)
     .when()
-      .put(CrewController.URI + "/" + crew.getId() + "/positions")
+      .put(CrewController.URI + "/" + mission.getId() + "/positions")
     .then()
       .statusCode(200)
       .body("crewPositions.size()", equalTo(2))
@@ -120,7 +115,7 @@ public class CrewControllerTest {
 
   @Test
   public void updateTest() throws JsonProcessingException {
-    final CrewPosition crewPosition = crew.getCrewPositions().get(0);
+    final CrewPosition crewPosition = mission.getCrewPositions().get(0);
     final String json = objectMapper.writeValueAsString(singletonList(
       new CrewPositionJSON(
         crewPosition.getId(),
@@ -138,7 +133,7 @@ public class CrewControllerTest {
       .contentType("application/json")
       .body(json)
     .when()
-      .put(CrewController.URI + "/" + crew.getId() + "/positions")
+      .put(CrewController.URI + "/" + mission.getId() + "/positions")
     .then()
       .statusCode(200)
       .body("crewPositions[0].title", equalTo("GOOBER"))
@@ -158,7 +153,7 @@ public class CrewControllerTest {
       .basic("tytus", "password")
       .contentType("application/json")
     .when()
-      .delete(CrewController.URI + "/" + crew.getId() + "/airmen/" + airman.getId())
+      .delete(CrewController.URI + "/" + mission.getId() + "/airmen/" + airman.getId())
     .then()
       .statusCode(200);
    // @formatter:on

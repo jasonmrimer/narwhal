@@ -26,7 +26,6 @@ export const SingleTypeahead =  (props: Props) => {
         options={props.options}
         placeholder={props.placeholder}
         clearButton={true}
-        labelKey={option => `${option.date.format('MM/DD/YYYY')} - ${option.label}`}
       />
     </div>
   );

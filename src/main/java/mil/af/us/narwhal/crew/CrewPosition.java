@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import mil.af.us.narwhal.airman.Airman;
+import mil.af.us.narwhal.mission.Mission;
 
 import javax.persistence.*;
 
@@ -14,8 +15,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(
-  name = "join_crew_airman",
-  uniqueConstraints = {@UniqueConstraint(columnNames = {"crew_id", "airman_id"})}
+  name = "join_mission_airman",
+  uniqueConstraints = {@UniqueConstraint(columnNames = {"mission_id", "airman_id"})}
 )
 public class CrewPosition {
   @Id
@@ -23,9 +24,9 @@ public class CrewPosition {
   private Long id;
 
   @ManyToOne
-  @JoinColumn(name = "crew_id", referencedColumnName = "id", nullable = false)
+  @JoinColumn(name = "mission_id", referencedColumnName = "id", nullable = false)
   @JsonBackReference
-  private Crew crew;
+  private Mission mission;
 
   @ManyToOne
   @JoinColumn(name = "airman_id", referencedColumnName = "id", nullable = false)
@@ -33,6 +34,7 @@ public class CrewPosition {
   private Airman airman;
 
   private String title;
+
   private Boolean critical;
 
   public CrewPosition(Airman airman) {
@@ -43,10 +45,6 @@ public class CrewPosition {
     this.airman = airman;
     this.title = title;
     this.critical = critical;
-  }
-
-  public CrewPosition(Crew crew, Airman airman) {
-    this(null, crew, airman, "", false);
   }
 
   @Override public String toString() {
