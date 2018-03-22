@@ -11,7 +11,7 @@ node ('') {
         
         docker stop narwhal || true && docker rm narwhal || true
         
-        docker run --name narwhal -v `pwd`:/app -itd  narwhalpivotal/base-image
+        docker run --name narwhal -v `pwd`:/app -v $HOME/.gradle:/root/.gradle -itd  narwhalpivotal/base-image
         
         docker exec narwhal /bin/bash -c "cd /app && ./all-tests.sh"
         """
@@ -33,7 +33,7 @@ node ('') {
     
     stage ('FortifyScan') {
         sh '/opt/hp_fortify_sca/bin/sourceanalyzer -64 -verbose -Xms2G -Xmx10G -b ${BUILD_NUMBER} -clean'
-        sh '/opt/hp_fortify_sca/bin/sourceanalyzer -64 -verbose -Xms2G -Xmx10G -b ${BUILD_NUMBER} "**/*" -exclude "client/node_modules/**/*" -exclude "admin/**/*" -exclude "build/**/*"'
+        sh '/opt/hp_fortify_sca/bin/sourceanalyzer -64 -verbose -Xms2G -Xmx10G -b ${BUILD_NUMBER} "**/*" -exclude "client/node_modules/**/*" -exclude "admin/**/*" -exclude "build/**/*" -exclude "acceptance/**/*"'
         sh '/opt/hp_fortify_sca/bin/sourceanalyzer -64 -verbose -Xms2G -Xmx10G -b ${BUILD_NUMBER} -scan -f fortifyResults-${BUILD_NUMBER}.fpr'
     }
 
