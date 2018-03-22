@@ -1,22 +1,18 @@
 package mil.af.us.narwhal.rip_item;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import mil.af.us.narwhal.airman.*;
+import mil.af.us.narwhal.BaseIntegrationTest;
+import mil.af.us.narwhal.airman.Airman;
+import mil.af.us.narwhal.airman.AirmanRepository;
+import mil.af.us.narwhal.airman.AirmanRipItemJSON;
+import mil.af.us.narwhal.airman.AirmanRipItemRepository;
 import mil.af.us.narwhal.flight.Flight;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
 import mil.af.us.narwhal.squadron.Squadron;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.embedded.LocalServerPort;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
-
 
 import java.time.Instant;
 
@@ -26,19 +22,14 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-@ActiveProfiles("test")
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class RipItemControllerTest {
-  @LocalServerPort private int port;
+public class RipItemControllerTest extends BaseIntegrationTest {
   @Autowired private AirmanRepository airmanRepository;
   @Autowired private SiteRepository siteRepository;
   @Autowired private RipItemRepository ripItemRepository;
   @Autowired private AirmanRipItemRepository airmanRipItemRepository;
 
   private Airman airman;
-  private RipItem ripItem1 = new RipItem(1L, "Distress Signal");
+  private RipItem ripItem;
 
   @Before
   public void setup() {
@@ -51,16 +42,15 @@ public class RipItemControllerTest {
     site.addSquadron(squadron);
     siteRepository.save(site);
 
+    ripItem = ripItemRepository.save(new RipItem("Distress Signal"));
+
     airman = new Airman(flight, "A", "B");
     airmanRepository.save(airman);
+  }
 
-    ripItemRepository.save(ripItem1);
-
-    AirmanRipItem airmanRipItem = new AirmanRipItem(1L, airman, ripItem1, null);
-
-    airman.addRipItem(airmanRipItem);
-
-    airmanRepository.save(airman);
+  @After
+  public void tearDown() {
+    super.tearDown();
   }
 
   @Test
@@ -85,12 +75,12 @@ public class RipItemControllerTest {
 
   @Test
   public void updateTest() throws Exception {
-    JavaTimeModule module = new JavaTimeModule();
-    ObjectMapper objectMapper = new ObjectMapper();
-    objectMapper.registerModule(module);
-
-    AirmanRipItemJSON airmanRipItem = new AirmanRipItemJSON(1L, airman.getId(), ripItem1, Instant.now());
-
+    AirmanRipItemJSON airmanRipItem = new AirmanRipItemJSON(
+      airman.getRipItems().get(0).getId(),
+      airman.getId(),
+      ripItem,
+      Instant.now()
+    );
     final String json = objectMapper.writeValueAsString(singletonList(airmanRipItem));
 
     // @formatter:off
@@ -108,8 +98,7 @@ public class RipItemControllerTest {
       .body("[0].ripItem.title", equalTo("Distress Signal"));
     // @formatter:on
 
-    final Instant updatedExpirationDate = airmanRipItemRepository.findOne(1L).getExpirationDate();
-
+    final Instant updatedExpirationDate = airmanRipItemRepository.findOne(airmanRipItem.getId()).getExpirationDate();
     assertTrue(updatedExpirationDate.equals(airmanRipItem.getExpirationDate()));
   }
 }

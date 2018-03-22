@@ -19,4 +19,7 @@ public class RipItem {
 
   private String title;
 
+  public RipItem(String title) {
+    this.title = title;
+  }
 }

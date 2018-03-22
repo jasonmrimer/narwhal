@@ -60,7 +60,7 @@ class TrackerPage
     fill_in('last-name', with: last_name)
     expect(page).to have_css('.airman-name', count: 1)
 
-    last_name.split("").each do |i|
+    last_name.split("").each do
       page.find('input[name=last-name]').native.send_key(:backspace)
     end
 

@@ -1,17 +1,14 @@
 package mil.af.us.narwhal.upload.certification;
 
+import mil.af.us.narwhal.BaseIntegrationTest;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
 import mil.af.us.narwhal.skill.Certification;
 import mil.af.us.narwhal.skill.CertificationRepository;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.AbstractMap.SimpleEntry;
 import java.util.List;
@@ -21,11 +18,7 @@ import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ActiveProfiles("test")
-@RunWith(SpringRunner.class)
-@DataJpaTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class CertificationUploadServiceTest {
+public class CertificationUploadServiceTest extends BaseIntegrationTest {
   @Autowired private CertificationRepository certificationRepository;
   @Autowired private SiteRepository siteRepository;
   private CertificationUploadService subject;
@@ -44,7 +37,11 @@ public class CertificationUploadServiceTest {
       new CertificationUploadCSVRow("Cert B", "DMS-MD"),
       new CertificationUploadCSVRow("Cert C", "DMS-MD")
     ));
+  }
 
+  @After
+  public void tearDown() {
+    super.tearDown();
   }
 
   @Test

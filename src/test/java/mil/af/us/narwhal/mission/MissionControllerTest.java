@@ -1,37 +1,26 @@
 package mil.af.us.narwhal.mission;
 
+import mil.af.us.narwhal.BaseIntegrationTest;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.embedded.LocalServerPort;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.Temporal;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.equalTo;
 
-@ActiveProfiles("test")
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class MissionControllerTest {
+public class MissionControllerTest extends BaseIntegrationTest {
   private Site site1;
   private Site site2;
   private Instant time = Instant.now();
   private Instant future = Instant.now().plus(2, ChronoUnit.DAYS);
-
-  @LocalServerPort private int port;
   @Autowired private SiteRepository siteRepository;
   @Autowired private MissionRepository missionRepository;
 
@@ -41,7 +30,7 @@ public class MissionControllerTest {
     site2 = new Site("Site-2");
     siteRepository.save(asList(site1, site2));
 
-    final List missions = asList(
+    final List<Mission> missions = asList(
       new Mission(
         "mission-id-2",
         "MISNUM2",
@@ -65,6 +54,11 @@ public class MissionControllerTest {
       )
     );
     missionRepository.save(missions);
+  }
+
+  @After
+  public void tearDown() {
+    super.tearDown();
   }
 
   @Test

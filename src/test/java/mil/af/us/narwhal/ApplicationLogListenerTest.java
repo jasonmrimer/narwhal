@@ -35,7 +35,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
-@ActiveProfiles(profiles = "cloud")
+@ActiveProfiles(profiles = {"cloud", "test"})
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class ApplicationLogListenerTest {

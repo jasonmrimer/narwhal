@@ -1,22 +1,16 @@
 package mil.af.us.narwhal.event;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import mil.af.us.narwhal.BaseIntegrationTest;
 import mil.af.us.narwhal.airman.Airman;
 import mil.af.us.narwhal.airman.AirmanRepository;
 import mil.af.us.narwhal.flight.Flight;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
 import mil.af.us.narwhal.squadron.Squadron;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.embedded.LocalServerPort;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.Instant;
 
@@ -25,21 +19,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
-
-@ActiveProfiles("test")
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class EventControllerTest {
-  private final static ObjectMapper objectMapper = new ObjectMapper();
-  private final static JavaTimeModule module = new JavaTimeModule();
-
-  static {
-    objectMapper.registerModule(module);
-  }
-
+public class EventControllerTest extends BaseIntegrationTest {
   private Airman airman;
-  @LocalServerPort private int port;
   @Autowired private SiteRepository siteRepository;
   @Autowired private AirmanRepository airmanRepository;
   @Autowired private EventRepository eventRepository;
@@ -57,6 +38,11 @@ public class EventControllerTest {
 
     airman = new Airman(flight, "first", "last");
     airman = airmanRepository.save(airman);
+  }
+
+  @After
+  public void tearDown() {
+    super.tearDown();
   }
 
   @Test

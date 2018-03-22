@@ -1,8 +1,7 @@
 package mil.af.us.narwhal.airman;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import mil.af.us.narwhal.BaseIntegrationTest;
 import mil.af.us.narwhal.flight.Flight;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
@@ -11,15 +10,10 @@ import mil.af.us.narwhal.skill.CertificationRepository;
 import mil.af.us.narwhal.skill.Qualification;
 import mil.af.us.narwhal.skill.QualificationRepository;
 import mil.af.us.narwhal.squadron.Squadron;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.embedded.LocalServerPort;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.Instant;
 
@@ -27,24 +21,12 @@ import static io.restassured.RestAssured.given;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.equalTo;
 
-@ActiveProfiles("test")
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class AirmanControllerTest {
-  private final static ObjectMapper objectMapper = new ObjectMapper();
-  private final static JavaTimeModule module = new JavaTimeModule();
-
-  static {
-    objectMapper.registerModule(module);
-  }
-
+public class AirmanControllerTest extends BaseIntegrationTest {
   private Airman airman1;
   private Squadron squadron2;
   private Flight flight1;
   private Qualification qualification1;
   private Certification certification1;
-  @LocalServerPort private int port;
   @Autowired private SiteRepository siteRepository;
   @Autowired private AirmanRepository airmanRepository;
   @Autowired private QualificationRepository qualificationRepository;
@@ -78,6 +60,11 @@ public class AirmanControllerTest {
 
     certification1 = new Certification("certification1", site);
     certificationRepository.save(certification1);
+  }
+
+  @After
+  public void tearDown() {
+    super.tearDown();
   }
 
   @Test

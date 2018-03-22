@@ -29,7 +29,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ActiveProfiles(profiles = "cloud")
+@ActiveProfiles(profiles = {"cloud", "test"})
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class CsrfTest {

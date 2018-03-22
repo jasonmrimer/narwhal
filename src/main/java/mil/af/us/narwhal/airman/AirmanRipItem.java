@@ -24,6 +24,7 @@ public class AirmanRipItem {
   private Long id;
 
   @ManyToOne
+  @JoinColumn(name = "airman_id", referencedColumnName = "id", nullable = false)
   @JsonIgnore
   private Airman airman;
 
