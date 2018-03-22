@@ -46,7 +46,7 @@ export class Crew extends React.Component<Props> {
 
     return (
       <div className={this.props.className}>
-        <Link to={`/`}>
+        <Link to="/">
           <BackArrow color={Theme.graySteel}/>
           <span>Back to Availability Roster</span>
         </Link>

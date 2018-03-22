@@ -7,6 +7,7 @@ import { SiteRepositoryStub } from '../site/repositories/doubles/SiteRepositoryS
 import { MissionModel } from '../mission/models/MissionModel';
 import { DashboardStore } from './stores/DashboardStore';
 import { StyledMission } from '../mission/Mission';
+import { MemoryRouter } from 'react-router';
 
 const missionRepositoryStub = new MissionRepositoryStub();
 
@@ -23,10 +24,12 @@ describe('Dashboard', () => {
     );
 
     subject = mount(
-      <Dashboard
-        username="Tytus"
-        dashboardStore={dashboardStore}
-      />
+      <MemoryRouter>
+        <Dashboard
+          username="Tytus"
+          dashboardStore={dashboardStore}
+        />
+      </MemoryRouter>
     );
     await forIt();
     subject.update();
@@ -35,6 +38,10 @@ describe('Dashboard', () => {
   it('renders a Dashboard with all missions', () => {
     expect(subject.find('.mission-card').length).toBe(4);
     expect(dashboardMissions(subject)).toEqual(missions);
+  });
+
+  it('should render a link to the asso', () => {
+
   });
 
   describe('filtering', () => {
