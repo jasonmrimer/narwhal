@@ -23,7 +23,7 @@ public class MissionController {
 
   @GetMapping
   public List<Mission> index() {
-    Instant today = Instant.now().truncatedTo(ChronoUnit.DAYS);
-    return missionRepository.findByStartDateTimeGreaterThanEqualOrderByStartDateTime(today);
+    Instant time = Instant.now().minus(1, ChronoUnit.DAYS).truncatedTo(ChronoUnit.DAYS);
+    return missionRepository.findByStartDateTimeGreaterThanEqualOrderByStartDateTime(time);
   }
 }
