@@ -20,7 +20,6 @@ export function crewRepositoryContract(subject: CrewRepository) {
       const crewPositions = [new CrewPositionModel(airman, 'QB', true)];
       const crew = new CrewModel(1, mission, crewPositions);
       const resp = await subject.update(crew);
-
       expect(resp.crewPositions.length).toBe(1);
     });
 

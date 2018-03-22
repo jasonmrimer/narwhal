@@ -8,6 +8,7 @@ import { StyledSubmitButton } from '../widgets/SubmitButton';
 import { StyledForm, StyledFormRow } from '../widgets/Form';
 import { AirmanRipItemFormStore } from './stores/AirmanRipItemFormStore';
 import { StyledButton } from '../widgets/Button';
+import * as classNames from 'classnames';
 
 interface Props {
   selectedAirmanId: number;
@@ -17,10 +18,6 @@ interface Props {
 
 @observer
 export class AirmanRipItems extends React.Component<Props> {
-  async componentDidMount() {
-    await this.props.store.hydrate(this.props.selectedAirmanId);
-  }
-
   onChange = (e: any, item: AirmanRipItemModel) => {
     const expirationDate = moment(e.target.value);
     item.expirationDate = expirationDate.isValid() ? expirationDate : null;
@@ -44,7 +41,7 @@ export class AirmanRipItems extends React.Component<Props> {
         {this.props.store.ripItems.map((item: AirmanRipItemModel, index: number) => {
             return (
               <StyledFormRow key={index} direction="column">
-                <div className="item">{item.ripItem.title}</div>
+                <div className={classNames('item', {expired: item.isExpired})}>{item.ripItem.title}</div>
                 <div className="item-date-controls">
                   <StyledDatePicker
                     className="item-date-input"
@@ -75,7 +72,6 @@ export const StyledRipItems = styled(AirmanRipItems)`
     font-weight: 300;
     font-size: 1rem;
     margin: 0;
-    
   }
 
   .item {
@@ -94,5 +90,9 @@ export const StyledRipItems = styled(AirmanRipItems)`
   
   .item-date-button {
     padding: 0.25rem;
+  }
+  
+  .expired {
+    color: ${props => props.theme.yellow};
   }
 `;

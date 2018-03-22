@@ -1,12 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ExpirationAlert } from '../icons/ExpirationAlert';
 import { Skill } from './models/Skill';
 import { AirmanQualificationModel } from '../airman/models/AirmanQualificationModel';
 import { AirmanCertificationModel } from '../airman/models/AirmanCertificationModel';
 import { SkillType } from './models/SkillType';
-import { Moment } from 'moment';
 import * as moment from 'moment';
+import { Moment } from 'moment';
+import { StyledExpirationSleeve } from '../widgets/ExpirationSleeve';
 
 interface Props {
   skill: AirmanQualificationModel | AirmanCertificationModel;
@@ -54,7 +54,7 @@ export const SkillTile = (props: Props) => {
     >
       <div className="currency-title">
         <span>{skill.title}</span>
-        {skill.isExpired && <ExpirationAlert/>}
+        {skill.isExpired && <StyledExpirationSleeve />}
       </div>
       <div className="currency-description"> {timeToExpire(skill.expirationDate)} days until expiration.</div>
     </div>
@@ -73,14 +73,18 @@ export const StyledSkillTile = styled(SkillTile)`
     justify-content: space-between;
     align-items: center;
     
+    & > span {
+      white-space: nowrap;
+      max-width: 240px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      padding-left: 0.375rem;
+    }
+    
     &:hover {
       background-color: ${props => props.theme.hoverBlueSteel};
       border-radius: 0.25rem 0.25rem 0 0;
       cursor: pointer;
-    }
-    
-    span {
-      padding-left: 0.375rem;
     }
   }
 

@@ -79,6 +79,7 @@ export class Currency extends React.Component<Props> {
       <StyledRipItemsTile
         title="RIP TASKS"
         onClick={this.props.currencyStore.openAirmanRipItemForm}
+        hasExpiredRipItem={this.props.currencyStore.airmanRipItemFormStore.hasExpiredItem}
       />
     );
   }

@@ -28,6 +28,7 @@ export class AirmanModelFactory {
           id,
           EventType.Mission)
       ],
+      [],
       randomShiftType()
     );
   }

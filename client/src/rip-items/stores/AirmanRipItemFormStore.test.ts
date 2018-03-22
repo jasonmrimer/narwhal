@@ -1,9 +1,12 @@
 import { AirmanRipItemFormStore } from './AirmanRipItemFormStore';
 import { RipItemRepository } from '../../airman/repositories/AirmanRipItemRepository';
 import { RipItemRepositoryStub } from '../../airman/repositories/doubles/AirmanRipItemRepositoryStub';
+import { AirmanRipItemModel } from '../../airman/models/AirmanRipItemModel';
+import { RipItemModel } from '../models/RipItemModel';
+import * as moment from 'moment';
 import Mock = jest.Mock;
 
-describe('AirmanRipItemStore', () => {
+describe('AirmanRipItemFormStore', () => {
   let subject: AirmanRipItemFormStore;
   let ripItemRepository: RipItemRepository;
   let closeSpy: Mock;
@@ -18,16 +21,24 @@ describe('AirmanRipItemStore', () => {
     };
 
     subject = new AirmanRipItemFormStore(closeable, ripItemRepository);
+    subject.setRipItems(
+      [
+        new AirmanRipItemModel(1, 1, new RipItemModel(1, 'goober'), null),
+        new AirmanRipItemModel(2, 1, new RipItemModel(2, 'face'), moment()),
+      ]);
   });
 
-  it('should populate RIP items', async () => {
-    await subject.hydrate(1);
-    expect(subject.ripItems.length).toBe(1);
+  it('should set RIP items', async () => {
+    expect(subject.ripItems.length).toBe(2);
   });
 
   it('should call updateAirmanRipItems', async () => {
     await subject.submitRipItems();
     expect(ripItemRepository.updateAirmanRipItems).toBeCalled();
     expect(closeSpy).toHaveBeenCalled();
+  });
+
+  it('should return true when hasExpiredItem in rip items array', () => {
+    expect(subject.hasExpiredItem).toBeTruthy();
   });
 });

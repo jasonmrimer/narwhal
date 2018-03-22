@@ -26,7 +26,7 @@ describe('RosterHeader', () => {
       const columnHeaders = ['SHIFT', 'NAME', 'QUALIFICATION', 'CERTIFICATION'];
       const componentText = subject.find('span div').map(thing => thing.text());
       componentText.forEach((header: string) => {
-        expect(columnHeaders).toContain(header)
+        expect(columnHeaders).toContain(header);
       });
     });
 

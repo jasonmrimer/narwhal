@@ -1,6 +1,7 @@
 import { AirmanQualificationModel } from './AirmanQualificationModel';
 import { EventModel } from '../../event/models/EventModel';
 import { AirmanCertificationModel } from './AirmanCertificationModel';
+import { AirmanRipItemModel } from './AirmanRipItemModel';
 
 export class AirmanModel {
   static empty(): AirmanModel {
@@ -15,6 +16,7 @@ export class AirmanModel {
               public qualifications: AirmanQualificationModel[] = [],
               public certifications: AirmanCertificationModel[] = [],
               public events: EventModel[] = [],
+              public ripItems: AirmanRipItemModel[] = [],
               public shift?: ShiftType) {
   }
 

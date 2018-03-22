@@ -3,8 +3,8 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import { SkillTile, timeToExpire } from './SkillTile';
 import { AirmanQualificationModelFactory } from '../airman/factories/AirmanQualificationModelFactory';
 import * as moment from 'moment';
-import { ExpirationAlert } from '../icons/ExpirationAlert';
 import { SkillType } from './models/SkillType';
+import { StyledExpirationSleeve } from '../widgets/ExpirationSleeve';
 
 describe('SkillTile', () => {
   let subject: ShallowWrapper;
@@ -42,6 +42,6 @@ describe('SkillTile', () => {
   it('renders an expiration alert when skill is expired', () => {
     skill.expirationDate = moment();
     subject.setProps({skill: skill});
-    expect(subject.find(ExpirationAlert).exists()).toBeTruthy();
+    expect(subject.find(StyledExpirationSleeve).exists()).toBeTruthy();
   });
 });

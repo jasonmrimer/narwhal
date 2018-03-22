@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { RipItemsTile } from './RipItemsTile';
+import { StyledExpirationSleeve } from '../widgets/ExpirationSleeve';
 import Mock = jest.Mock;
 
 describe('RipItemsTile', () => {
@@ -13,6 +14,7 @@ describe('RipItemsTile', () => {
       <RipItemsTile
         title="title"
         onClick={onClickSpy}
+        hasExpiredRipItem={false}
       />
     );
   });
@@ -20,5 +22,11 @@ describe('RipItemsTile', () => {
   it('should give feedback for onClick', () => {
     subject.simulate('click');
     expect(onClickSpy).toBeCalled();
+  });
+
+  it('should render an ExpirationAlert when hasExpiredRipItem is true', () => {
+    expect(subject.find(StyledExpirationSleeve).exists()).toBeFalsy();
+    subject.setProps({hasExpiredRipItem: true});
+    expect(subject.find(StyledExpirationSleeve).exists()).toBeTruthy();
   });
 });

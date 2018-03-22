@@ -8,6 +8,8 @@ import { AirmanRipItemFormStore } from './stores/AirmanRipItemFormStore';
 import { RipItemRepositoryStub } from '../airman/repositories/doubles/AirmanRipItemRepositoryStub';
 import { StyledButton } from '../widgets/Button';
 import Mock = jest.Mock;
+import { AirmanRipItemModel } from '../airman/models/AirmanRipItemModel';
+import { RipItemModel } from './models/RipItemModel';
 
 describe('RipItems', () => {
   let store: AirmanRipItemFormStore;
@@ -21,7 +23,9 @@ describe('RipItems', () => {
     };
 
     store = new AirmanRipItemFormStore(closeable, new RipItemRepositoryStub());
-    await store.hydrate(1);
+    const ripItem = new RipItemModel(1, 'NICKLEBACK');
+    const airmanRipItem = [new AirmanRipItemModel(1, 1, ripItem, moment())];
+    store.setRipItems(airmanRipItem);
 
     store.updateRipItem = jest.fn();
     store.submitRipItems = jest.fn();

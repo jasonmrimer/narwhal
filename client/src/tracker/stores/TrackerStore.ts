@@ -294,6 +294,7 @@ export class TrackerStore implements EventActions {
   @action.bound
   setSelectedAirman(airman: AirmanModel, tab: TabType) {
     this._selectedAirman = airman;
+    this.currencyStore.airmanRipItemFormStore.setRipItems(airman.ripItems);
     this.sidePanelStore.setSelectedTab(tab);
     this.plannerStore.setSidePanelWeek(
       airman.isEmpty ?

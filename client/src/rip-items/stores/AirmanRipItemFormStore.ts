@@ -12,8 +12,9 @@ export class AirmanRipItemFormStore {
   constructor(private closeable: Closeable, public ripItemRepository: RipItemRepository) {
   }
 
-  async hydrate(airmanId: number) {
-    this._airmanRipItems = await this.ripItemRepository.findBySelectedAirman(airmanId);
+  @action.bound
+  setRipItems(airmanRipItems: AirmanRipItemModel[]) {
+    this._airmanRipItems = airmanRipItems;
   }
 
   @computed
@@ -32,5 +33,10 @@ export class AirmanRipItemFormStore {
   async submitRipItems() {
     this._airmanRipItems = await this.ripItemRepository.updateAirmanRipItems(this._airmanRipItems);
     this.closeable.closeAirmanRipItemForm();
+  }
+
+  @computed
+  get hasExpiredItem() {
+    return this._airmanRipItems.filter(item => item.isExpired).length > 0;
   }
 }
