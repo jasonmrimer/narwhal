@@ -22,7 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-
 @RunWith(MockitoJUnitRunner.class)
 public class MissionServiceTest {
   private final Site site1 = new Site(1L, "DGS-1", emptyList());
@@ -182,5 +181,54 @@ public class MissionServiceTest {
 
     verify(missionRepository).save(captor.capture());
     Assertions.assertThat(captor.getValue().get(0).getSite()).isNull();
+  }
+
+  @Test
+  public void updatesExistingMissions() {
+    Mission mission = new Mission(1L, "ABC-123", "ATOMSN", Instant.now(), Instant.now(), site1);
+
+    //language=XML
+    String xml = "<GetMissionMetaDataResponse xmlns=\"Unicorn\">\n" +
+      "  <GetMissionMetaDataResult>\n" +
+      "    <results xmlns=\"\">\n" +
+      "      <missionMetaData>\n" +
+      "        <missionid>ABC-123</missionid>\n" +
+      "        <description>U2 over</description>\n" +
+      "        <missionStatus>CLOSED</missionStatus>\n" +
+      "        <classification>Unclassified</classification>\n" +
+      "        <distrocontrol>FOUO</distrocontrol>\n" +
+      "        <atomissionnumber>ATOMSN</atomissionnumber>\n" +
+      "        <atoday>aaa</atoday>\n" +
+      "        <startdttime>12-12-2017T04:29:00.0Z</startdttime>\n" +
+      "        <enddttime>12-12-2017T04:29:00.0Z</enddttime>\n" +
+      "        <primaryorg>XBOW</primaryorg>\n" +
+      "        <callsign>Spaceman</callsign>\n" +
+      "        <platform>U2</platform>\n" +
+      "        <tailnumber>NW1</tailnumber>\n" +
+      "        <missionstatickmllink>\n" +
+      "          http://codweb1.leidoshost.com/UNICORN.NET/webservices/googleearth.asmx/getkmzformissionbyato?ato=HGZ3W09&amp;streaming=false\n" +
+      "        </missionstatickmllink>\n" +
+      "        <missiondynamickmllink>\n" +
+      "          http://codweb1.leidoshost.com/UNICORN.NET/webservices/googleearth.asmx/getkmzformissionbyato?ato=HGZ3W09&amp;streaming=true\n" +
+      "        </missiondynamickmllink>\n" +
+      "        <unicornmissiondataurl>\n" +
+      "          http://codweb1.leidoshost.com/UNICORN.NET/pages/public/publiccustomerreport.aspx?strATO=HGZ3W09\n" +
+      "        </unicornmissiondataurl>\n" +
+      "      </missionMetaData>\n" +
+      "    </results>\n" +
+      "  </GetMissionMetaDataResult>\n" +
+      "</GetMissionMetaDataResponse>";
+
+    getMissionMetaDataResponse = JAXB.unmarshal(new StringSource(xml), GetMissionMetaDataResponse.class);
+    when(missionClient.getMissionMetaData()).thenReturn(getMissionMetaDataResponse.getGetMissionMetaDataResult().getResults().getMissionMetaData());
+
+    when(missionRepository.findOneByMissionId(mission.getMissionId())).thenReturn(mission);
+
+    subject = new MissionService(missionRepository, missionClient, siteRepository);
+    subject.refreshMissions();
+
+    verify(missionRepository).save(captor.capture());
+    Mission savedMission = captor.getValue().get(0);
+    Assertions.assertThat(savedMission.getId()).isEqualTo(mission.getId());
   }
 }

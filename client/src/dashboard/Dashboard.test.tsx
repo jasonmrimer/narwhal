@@ -40,10 +40,6 @@ describe('Dashboard', () => {
     expect(dashboardMissions(subject)).toEqual(missions);
   });
 
-  it('should render a link to the asso', () => {
-
-  });
-
   describe('filtering', () => {
     const siteId = 1;
 

@@ -27,22 +27,32 @@ public class MissionService {
       .stream()
       .map(MissionService.this::mapMetaDataToMission)
       .collect(Collectors.toList());
+
     missionRepository.save(missions);
   }
 
   private Mission mapMetaDataToMission(Results.MissionMetaData metaData) {
     final Site site = siteRepository.findOneByName(metaData.getPrimaryorg());
 
-    Mission.MissionBuilder builder = new Mission.MissionBuilder()
-      .missionId(metaData.getMissionid())
-      .atoMissionNumber(metaData.getAtomissionnumber())
-      .startDateTime(metaData.getStartdttime().toGregorianCalendar().getTime().toInstant())
-      .site(site);
-
-    if (metaData.getEnddttime() != null) {
-      builder.endDateTime(metaData.getEnddttime().toGregorianCalendar().getTime().toInstant());
+    Mission foundMission = missionRepository.findOneByMissionId(metaData.getMissionid());
+    if (foundMission != null) {
+      foundMission.setAtoMissionNumber(metaData.getAtomissionnumber());
+      foundMission.setSite(site);
+      foundMission.setStartDateTime(metaData.getStartdttime().toGregorianCalendar().getTime().toInstant());
+      if (metaData.getEnddttime() != null) {
+        foundMission.setEndDateTime(metaData.getEnddttime().toGregorianCalendar().getTime().toInstant());
+      }
+      return foundMission;
+    } else {
+      Mission.MissionBuilder builder = new Mission.MissionBuilder()
+        .missionId(metaData.getMissionid())
+        .atoMissionNumber(metaData.getAtomissionnumber())
+        .startDateTime(metaData.getStartdttime().toGregorianCalendar().getTime().toInstant())
+        .site(site);
+      if (metaData.getEnddttime() != null) {
+        builder.endDateTime(metaData.getEnddttime().toGregorianCalendar().getTime().toInstant());
+      }
+      return builder.build();
     }
-
-    return builder.build();
   }
 }

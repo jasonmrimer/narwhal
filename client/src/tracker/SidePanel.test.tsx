@@ -1,4 +1,4 @@
-  import * as React from 'react';
+import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { SidePanel } from './SidePanel';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
