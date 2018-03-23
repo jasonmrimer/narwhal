@@ -6,10 +6,6 @@ export abstract class FormStore<T, S> {
   @observable protected _state: S;
   @observable protected _errors: object[] = [];
 
-  constructor() {
-    this._state = this.emptyState();
-  }
-
   protected abstract itemToState(item: T | null): S;
 
   protected abstract emptyState(): S;

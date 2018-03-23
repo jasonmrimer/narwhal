@@ -4,7 +4,10 @@ import * as moment from 'moment';
 import { SkillType } from '../models/SkillType';
 import { SkillActions } from './SkillActions';
 import { FilterOption } from '../../widgets/models/FilterOptionModel';
-import { action } from 'mobx';
+import { action, computed, observable } from 'mobx';
+import { QualificationModel } from '../models/QualificationModel';
+import { CertificationModel } from '../models/CertificationModel';
+import { filterOptionsBy } from '../../utils/eventUtil';
 
 interface State {
   skillType: string;
@@ -14,19 +17,34 @@ interface State {
 }
 
 export class SkillFormStore extends FormStore<Skill, State> {
+  @observable private _certifications: CertificationModel[] = [];
+  @observable private _qualifications: QualificationModel[] = [];
+
   constructor(private skillActions: SkillActions) {
     super();
+    this._state = {
+      skillType: '',
+      skillId: '',
+      earnDate: '',
+      expirationDate: '',
+    };
   }
 
-  @action
+  @action.bound
+  hydrate(certifications: CertificationModel[], qualifications: QualificationModel[]) {
+    this._certifications = certifications;
+    this._qualifications = qualifications;
+  }
+
+  @action.bound
   setState(state: Partial<State>) {
     super.setState(state);
 
     let options: FilterOption[] = [];
-    if (state.skillType === SkillType.Qualification ) {
-      options = this.skillActions.qualificationOptions;
+    if (state.skillType === SkillType.Qualification) {
+      options = this.qualificationOptions;
     } else if (state.skillType === SkillType.Certification) {
-      options = this.skillActions.airmanCertificationOptions;
+      options = this.certificationOptions;
     }
 
     if (state.skillId == null && options.length > 0) {
@@ -47,7 +65,7 @@ export class SkillFormStore extends FormStore<Skill, State> {
   }
 
   protected emptyState(): State {
-    const options = this.skillActions ? this.skillActions.qualificationOptions : [];
+    const options = this.qualificationOptions;
     return {
       skillType: SkillType.Qualification,
       skillId: options.length > 0 ? String(options[0].value) : '',
@@ -74,11 +92,15 @@ export class SkillFormStore extends FormStore<Skill, State> {
     }
   }
 
+  @computed
   get qualificationOptions() {
-    return this.skillActions.qualificationOptions;
+    return (this._qualifications || []).map(qual => {
+      return {value: qual.id, label: `${qual.acronym} - ${qual.title}`};
+    });
   }
 
+  @computed
   get certificationOptions() {
-    return this.skillActions.airmanCertificationOptions;
+    return filterOptionsBy(this._certifications, this.skillActions.siteId);
   }
 }

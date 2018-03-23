@@ -2,37 +2,38 @@ import * as React from 'react';
 import { RosterLevelFilter } from '../widgets/Filter';
 import { StyledTextInput } from '../widgets/TextInput';
 import { StyledMultiTypeahead } from '../widgets/MultiTypeahead';
-import { TrackerStore } from '../tracker/stores/TrackerStore';
 import styled from 'styled-components';
 import * as classNames from 'classnames';
 import { observer } from 'mobx-react';
+import { RosterHeaderStore } from './stores/RosterHeaderStore';
 
 interface Props {
-  trackerStore: TrackerStore;
+  rosterHeaderStore: RosterHeaderStore;
   className?: string;
 }
 
 @observer
 export class RosterHeader extends React.Component<Props> {
   render() {
+    const {className, rosterHeaderStore} = this.props;
     return (
-      <div className={classNames('thead', this.props.className)}>
+      <div className={classNames('thead', className)}>
         <span className="shift">
           <div>SHIFT</div>
           <RosterLevelFilter
             id="shift-filter"
             unfilteredOptionLabel="All"
-            value={this.props.trackerStore.shiftFilter}
-            callback={this.props.trackerStore.setShiftFilter}
-            options={this.props.trackerStore.shiftOptions}
+            value={rosterHeaderStore.shiftFilter}
+            callback={rosterHeaderStore.setShiftFilter}
+            options={rosterHeaderStore.shiftOptions}
           />
         </span>
         <span>
           <div>NAME</div>
           <StyledTextInput
-            value={this.props.trackerStore.lastNameFilter}
+            value={rosterHeaderStore.lastNameFilter}
             name="last-name"
-            onChange={this.props.trackerStore.setLastNameFilter}
+            onChange={rosterHeaderStore.setLastNameFilter}
             placeholder="Search by Last Name"
             className="last-name-search"
           />
@@ -40,8 +41,8 @@ export class RosterHeader extends React.Component<Props> {
         <span>
           <div>QUALIFICATION</div>
           <StyledMultiTypeahead
-            onChange={this.props.trackerStore.setQualificationIds}
-            options={this.props.trackerStore.qualificationFilterOptions}
+            onChange={rosterHeaderStore.setQualificationIds}
+            options={rosterHeaderStore.qualificationFilterOptions}
             placeholder="Filter Qualifications"
             className="qualifications-multiselect"
           />
@@ -49,8 +50,8 @@ export class RosterHeader extends React.Component<Props> {
         <span>
           <div>CERTIFICATION</div>
           <StyledMultiTypeahead
-            onChange={this.props.trackerStore.setCertificationIds}
-            options={this.props.trackerStore.certificationOptions}
+            onChange={rosterHeaderStore.setCertificationIds}
+            options={rosterHeaderStore.certificationOptions}
             placeholder="Filter Certifications"
             className="certifications-multiselect"
           />

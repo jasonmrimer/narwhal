@@ -34,8 +34,7 @@ const skillsActions = {
   },
   removeSkill: () => {
   },
-  qualificationOptions: [{value: '1', label: 'A'}, {value: '2', label: 'B'}, {value: '3', label: 'C'}],
-  airmanCertificationOptions: [{value: '1', label: 'X'}, {value: '2', label: 'Y'}, {value: '3', label: 'Z'}],
+  siteId: 1
 };
 
 export function FormStory() {

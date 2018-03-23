@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { StyledButton } from '../widgets/Button';
 
-function noops() {
+function noop() {
 }
 
 interface Props {
@@ -24,7 +24,7 @@ export const Mission = (props: Props) => {
           <div>MSN END: {endDateTime ? endDateTime.format('HHmm[L]') : 'TBD'}</div>
         </div>
         <Link className="crew-link" to={`/crew/${id}`}>
-        <StyledButton text="VIEW" onClick={noops}/>
+        <StyledButton text="VIEW" onClick={noop}/>
       </Link>
       </div>
     </span>

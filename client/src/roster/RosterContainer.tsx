@@ -21,7 +21,7 @@ export class RosterContainer extends React.Component<Props, State> {
     return (
       <div className={this.props.className}>
         <div className="roster-header">
-          <StyledRosterHeader trackerStore={this.props.trackerStore}/>
+          <StyledRosterHeader rosterHeaderStore={this.props.trackerStore.rosterHeaderStore}/>
           <StyledPlannerHeader plannerStore={this.props.trackerStore.plannerStore}/>
         </div>
         <div className="roster-body">

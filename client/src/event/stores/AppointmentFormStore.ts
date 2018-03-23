@@ -16,6 +16,14 @@ interface State {
 export class AppointmentFormStore extends FormStore<EventModel, State> {
   constructor(private eventActions: EventActions) {
     super();
+    this._state = {
+      title: '',
+      description: '',
+      startDate: '',
+      startTime: '',
+      endDate: '',
+      endTime: ''
+    };
   }
 
   @action

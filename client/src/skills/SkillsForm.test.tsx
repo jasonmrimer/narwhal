@@ -23,22 +23,11 @@ describe('SkillsForm', () => {
     skillActions = {
       addSkill: jest.fn(),
       removeSkill: jest.fn(),
-      qualificationOptions: [
-        {value: 1, label: 'A'},
-        {value: 2, label: 'B'}
-      ],
-      airmanCertificationOptions: [
-        {value: 1, label: 'X'},
-        {value: 2, label: 'Y'}
-      ]
+      siteId: 1
     };
 
-    subject = shallow(
-      <SkillsForm
-        airmanId={1}
-        skillFormStore={new SkillFormStore(skillActions)}
-      />
-    );
+    const store = new SkillFormStore(skillActions);
+    subject = shallow(<SkillsForm airmanId={1} skillFormStore={store}/>);
   });
 
   it('calls handleSubmit with a Qualification on submission', () => {
@@ -93,25 +82,13 @@ describe('SkillsForm', () => {
       skillActions = {
         addSkill: jest.fn(),
         removeSkill: jest.fn(),
-        qualificationOptions: [
-          {value: 1, label: 'A'},
-          {value: 2, label: 'B'}
-        ],
-        airmanCertificationOptions: [
-          {value: 1, label: 'X'},
-          {value: 2, label: 'Y'}
-        ]
+        siteId: 1
       };
 
-      const skillFormStore = new SkillFormStore(skillActions);
-      skillFormStore.open(skill);
+      const store = new SkillFormStore(skillActions);
+      store.open(skill);
 
-      mountedSubject = mount(
-        <SkillsForm
-          airmanId={1}
-          skillFormStore={skillFormStore}
-        />
-      );
+      mountedSubject = mount(<SkillsForm airmanId={1} skillFormStore={store}/>);
     });
 
     it('should only allow the edit of the expiration date', () => {

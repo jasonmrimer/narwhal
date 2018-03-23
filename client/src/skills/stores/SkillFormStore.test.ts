@@ -3,6 +3,8 @@ import { SkillActions } from './SkillActions';
 import { Skill } from '../models/Skill';
 import { SkillType } from '../models/SkillType';
 import * as moment from 'moment';
+import { CertificationModelFactory } from '../factories/CertificationModelFactory';
+import { QualificationModelFactory } from '../factories/QualificationModelFactory';
 
 describe('SkillFormStore', () => {
   const airmanId = 123;
@@ -22,24 +24,25 @@ describe('SkillFormStore', () => {
     skillActions = {
       addSkill: jest.fn(),
       removeSkill: jest.fn(),
-      qualificationOptions: [
-        {value: '1', label: 'A'},
-        {value: '2', label: 'B'}
-      ],
-      airmanCertificationOptions: [
-        {value: '3', label: 'C'},
-        {value: '4', label: 'D'}
-      ]
+      siteId: 1
     };
+
+    const certifications = [
+      ...CertificationModelFactory.buildList(3, 1),
+      ...CertificationModelFactory.buildList(3, 2)
+    ];
+    const qualifications = QualificationModelFactory.buildList(3);
+
     subject = new SkillFormStore(skillActions);
+    subject.hydrate(certifications, qualifications);
   });
 
   it('should set the skillId when setting the skillType', () => {
     subject.setState({skillType: SkillType.Qualification});
-    expect(subject.state.skillId).toEqual('1');
+    expect(subject.state.skillId).toEqual('0');
 
     subject.setState({skillType: SkillType.Certification});
-    expect(subject.state.skillId).toEqual('3');
+    expect(subject.state.skillId).toEqual('0');
   });
 
   describe('open', () => {
@@ -47,7 +50,7 @@ describe('SkillFormStore', () => {
       subject.open();
       expect(subject.hasItem).toBeFalsy();
       expect(subject.state.skillType).toBe(SkillType.Qualification);
-      expect(subject.state.skillId).toBe('1');
+      expect(subject.state.skillId).toBe('0');
       expect(subject.state.earnDate).toBe('');
       expect(subject.state.expirationDate).toBe('');
       expect(subject.errors.length).toBe(0);
@@ -71,7 +74,7 @@ describe('SkillFormStore', () => {
 
       subject.close();
       expect(subject.state.skillType).toBe(SkillType.Qualification);
-      expect(subject.state.skillId).toBe('1');
+      expect(subject.state.skillId).toBe('0');
       expect(subject.state.earnDate).toBe('');
       expect(subject.state.expirationDate).toBe('');
       expect(subject.errors.length).toBe(0);
@@ -99,5 +102,9 @@ describe('SkillFormStore', () => {
     subject.removeItem();
 
     expect(skillActions.removeSkill).toHaveBeenCalledWith(skill);
+  });
+
+  it('should render certification options based off the site of the selected airman', () => {
+    expect(subject.certificationOptions.length).toBe(3);
   });
 });

@@ -14,6 +14,13 @@ interface State {
 export class LeaveFormStore extends FormStore<EventModel, State> {
   constructor(private eventActions: EventActions) {
     super();
+    this._state = {
+      description: '',
+      startDate: '',
+      startTime: '',
+      endDate: '',
+      endTime: ''
+    };
   }
 
   @action

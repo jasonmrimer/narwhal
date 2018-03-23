@@ -52,32 +52,6 @@ describe('TrackerStore', () => {
     ]);
   });
 
-  it('returns a list of qualification options', () => {
-    expect(subject.qualificationOptions).toEqual([
-      {value: 0, label: '0 - 0'},
-      {value: 1, label: '1 - 1'},
-      {value: 2, label: '2 - 2'},
-      {value: 3, label: '3 - 3'},
-      {value: 4, label: '4 - 4'},
-      {value: 5, label: '5 - 5'},
-      {value: 6, label: '6 - 6'},
-      {value: 7, label: '7 - 7'},
-      {value: 8, label: '8 - 8'},
-      {value: 9, label: '9 - 9'}
-    ]);
-  });
-
-  it('returns a list of certification options based on selected siteId', () => {
-    subject.setSiteId(1);
-    expect(subject.certificationOptions).toEqual([
-      {value: 0, label: '0'},
-      {value: 1, label: '1'},
-      {value: 2, label: '2'},
-      {value: 3, label: '3'},
-      {value: 4, label: '4'}
-    ]);
-  });
-
   it('returns an empty list of squadron options', () => {
     expect(subject.squadronOptions).toEqual([]);
   });
@@ -187,47 +161,6 @@ describe('TrackerStore', () => {
     });
   });
 
-  describe('filtering by certifications', () => {
-    beforeEach(() => {
-      subject.setCertificationIds([
-        {value: 4, label: 'Certification 4'},
-        {value: 5, label: 'Certification 5'}
-      ]);
-    });
-
-    it('returns airmen with the selected certifications', () => {
-      const filteredAirmen = subject.airmen;
-      expect(filteredAirmen.length).toBeLessThan(allAirmen.length);
-      expect(filteredAirmen.map(airman => airman.id)).toEqual([4, 10]);
-    });
-  });
-
-  describe('filtering by qualifications', () => {
-    beforeEach(() => {
-      subject.setQualificationIds([
-        {value: 1, label: 'qualification 1'},
-        {value: 2, label: 'qualification 2'}
-      ]);
-    });
-
-    it('returns airmen with the selected qualifications', () => {
-      const filteredAirmen = subject.airmen;
-      expect(filteredAirmen.length).toBeLessThan(allAirmen.length);
-      expect(filteredAirmen.map(airman => airman.id)).toEqual([4, 10]);
-    });
-  });
-
-  describe('filtering by shift', () => {
-    it('should return the airmen with the selected shift', () => {
-      subject.setShiftFilter(2);
-      const shift = subject.airmen
-        .map(amn => amn.shift)
-        .filter((el, i, a) => i === a.indexOf(el));
-      expect(shift.length).toBe(1);
-      expect(shift[0]).toBe(ShiftType.Night);
-    });
-  });
-
   describe('events', () => {
     const event = new EventModel('Title', 'Description', moment(), moment(), 1, EventType.Mission);
 
@@ -307,11 +240,6 @@ describe('TrackerStore', () => {
   });
 
   describe('skill', () => {
-    it('should render certification options based off the site of the selected airman', () => {
-      subject.setSelectedAirman(allAirmen[0], TabType.CURRENCY);
-      expect(subject.airmanCertificationOptions.length).toBe(5);
-    });
-
     it('should add a qualification to an airman', async () => {
       const airman = allAirmen[0];
       const qualLength = airman.qualifications.length;
@@ -370,15 +298,7 @@ describe('TrackerStore', () => {
     });
   });
 
-  it('should set the lastNameFilter', () => {
-    const airman = subject.airmen[0];
-    subject.setLastNameFilter({target: {value: airman.lastName}});
-
-    expect(subject.airmen.length).toBe(1);
-    expect(subject.airmen[0].firstName).toBe(airman.firstName);
-  });
-
-  it('should update an airman shift', async () => {
+  it('should update an airmans shift', async () => {
     const airman = subject.airmen[0];
     airman.shift = ShiftType.Swing;
 

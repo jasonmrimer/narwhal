@@ -3,6 +3,8 @@ import { SkillFormStore } from '../../skills/stores/SkillFormStore';
 import { Skill } from '../../skills/models/Skill';
 import { AirmanRipItemFormStore } from '../../rip-items/stores/AirmanRipItemFormStore';
 import { RipItemRepository } from '../../airman/repositories/AirmanRipItemRepository';
+import { CertificationModel } from '../../skills/models/CertificationModel';
+import { QualificationModel } from '../../skills/models/QualificationModel';
 
 export enum CurrencyChild {
   SkillList,
@@ -16,6 +18,10 @@ export class CurrencyStore {
 
   constructor(public skillFormStore: SkillFormStore, ripItemRepository: RipItemRepository) {
     this.airmanRipItemFormStore = new AirmanRipItemFormStore(this, ripItemRepository);
+  }
+
+  hydrate(certifications: CertificationModel[], qualifications: QualificationModel[]) {
+    this.skillFormStore.hydrate(certifications, qualifications);
   }
 
   @computed

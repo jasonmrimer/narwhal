@@ -17,6 +17,14 @@ export class MissionFormStore extends FormStore<EventModel, State> {
   constructor(private eventActions: EventActions,
               private missionStore: MissionStore) {
     super();
+    this._state = {
+      id: null,
+      title: '',
+      startDate: '',
+      startTime: '',
+      endDate: '',
+      endTime: ''
+    };
   }
 
   @action

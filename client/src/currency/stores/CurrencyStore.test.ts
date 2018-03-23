@@ -26,8 +26,7 @@ describe('CurrencyStore', () => {
     skillActions = {
       addSkill: jest.fn(),
       removeSkill: jest.fn(),
-      qualificationOptions: [],
-      airmanCertificationOptions: []
+      siteId: 1
     };
 
     subject = new CurrencyStore(new SkillFormStore(skillActions), ripItemRepository);

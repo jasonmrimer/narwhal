@@ -1,9 +1,7 @@
 import { Skill } from '../models/Skill';
-import { FilterOption } from '../../widgets/models/FilterOptionModel';
 
 export interface SkillActions {
+  siteId: number;
   addSkill: (skill: Skill) => void;
   removeSkill: (skill: Skill) => void;
-  qualificationOptions: FilterOption[];
-  airmanCertificationOptions: FilterOption[];
 }

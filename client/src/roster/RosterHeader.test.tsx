@@ -1,25 +1,29 @@
 import { FilterOption } from '../widgets/models/FilterOptionModel';
 import { StyledMultiTypeahead } from '../widgets/MultiTypeahead';
-import { findByClassName, makeFakeTrackerStore } from '../utils/testUtils';
+import { findByClassName } from '../utils/testUtils';
 import { shallow, ShallowWrapper } from 'enzyme';
 import * as React from 'react';
-import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { RosterHeader } from './RosterHeader';
 import { QualificationModel } from '../skills/models/QualificationModel';
 import { CertificationModel } from '../skills/models/CertificationModel';
+import { RosterHeaderStore } from './stores/RosterHeaderStore';
+import { CertificationModelFactory } from '../skills/factories/CertificationModelFactory';
+import { QualificationModelFactory } from '../skills/factories/QualificationModelFactory';
 
 describe('RosterHeader', () => {
   describe('when the list of airmen is empty', () => {
-    let trackerStore: TrackerStore;
     let subject: ShallowWrapper;
     let qualifications: QualificationModel[];
     let certifications: CertificationModel[];
 
     beforeEach(async () => {
-      trackerStore = await makeFakeTrackerStore(false);
-      subject = shallow(<RosterHeader trackerStore={trackerStore}/>);
-      qualifications = trackerStore.qualifications;
-      certifications = trackerStore.certifications;
+      certifications = CertificationModelFactory.buildList(2, 1);
+      qualifications = QualificationModelFactory.buildList(2);
+
+      const store = new RosterHeaderStore({siteId: 1});
+      store.hydrate(certifications, qualifications)
+
+      subject = shallow(<RosterHeader rosterHeaderStore={store}/>);
     });
 
     it('renders SHIFT, NAME, QUALIFICATION, CERTIFICATION, and Planner table headers', () => {
