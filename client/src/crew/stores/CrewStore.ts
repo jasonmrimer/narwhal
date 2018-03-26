@@ -4,6 +4,7 @@ import { CrewRepository } from '../repositories/CrewRepository';
 import { CrewPositionModel } from '../models/CrewPositionModel';
 import { AirmanRepository } from '../../airman/repositories/AirmanRepository';
 import { AirmanModel } from '../../airman/models/AirmanModel';
+import { Repositories } from '../../Repositories';
 
 interface NewEntry {
   airmanName: string;
@@ -12,12 +13,15 @@ interface NewEntry {
 }
 
 export class CrewStore {
+  private airmanRepository: AirmanRepository;
+  private crewRepository: CrewRepository;
   @observable private _crew: CrewModel | null = null;
   @observable private _airmen: AirmanModel[] = [];
   @observable private _newEntry: NewEntry = {airmanName: '', title: '', critical: false};
 
-  constructor(private crewRepository: CrewRepository,
-              private airmanRepository: AirmanRepository) {
+  constructor(repositories: Repositories) {
+    this.airmanRepository = repositories.airmanRepository;
+    this.crewRepository = repositories.crewRepository;
   }
 
   async hydrate(crewId: number) {

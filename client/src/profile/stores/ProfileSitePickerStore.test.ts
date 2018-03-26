@@ -1,12 +1,11 @@
 import { ProfileSitePickerStore } from './ProfileSitePickerStore';
-import { ProfileRepositoryStub } from '../repositories/doubles/ProfileRepositoryStub';
 import { forIt } from '../../utils/testUtils';
-import { SiteRepositoryStub } from '../../site/repositories/doubles/SiteRepositoryStub';
+import { DoubleRepositories } from '../../Repositories';
 
 describe('ProfileSitePickerStore', () => {
   let subject: ProfileSitePickerStore;
   beforeEach(async () => {
-    subject = new ProfileSitePickerStore(new ProfileRepositoryStub(), new SiteRepositoryStub());
+    subject = new ProfileSitePickerStore(DoubleRepositories);
     subject.hydrate();
     await forIt();
   });

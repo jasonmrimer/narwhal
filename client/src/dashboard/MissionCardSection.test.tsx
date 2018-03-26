@@ -13,11 +13,11 @@ describe('MissionCardSection', () => {
     subject = new ShallowWrapper(
       <MissionCardSection
         missions={missions}
-        header='Header Text'
+        header="Header Text"
         intervalStart={moment().add(2, 'hours')}
         intervalEnd={moment().add(3, 'hours')}
       />
-    )
+    );
   });
 
   it('should render appropriate header text', () => {

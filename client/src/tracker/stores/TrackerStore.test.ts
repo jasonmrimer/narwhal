@@ -1,41 +1,27 @@
 import { TrackerStore } from './TrackerStore';
-import { FakeAirmanRepository } from '../../airman/repositories/doubles/FakeAirmanRepository';
-import { SiteRepositoryStub } from '../../site/repositories/doubles/SiteRepositoryStub';
 import { AirmanModel, ShiftType } from '../../airman/models/AirmanModel';
 import * as moment from 'moment';
-import { EventRepositoryStub } from '../../event/repositories/doubles/EventRepositoryStub';
 import { toJS } from 'mobx';
-import { MissionRepositoryStub } from '../../mission/repositories/doubles/MissionRepositoryStub';
 import { TimeServiceStub } from '../services/doubles/TimeServiceStub';
 import { EventModel, EventType } from '../../event/models/EventModel';
-import SkillRepositoryStub from '../../skills/repositories/doubles/SkillRepositoryStub';
 import { SkillType } from '../../skills/models/SkillType';
 import { TabType } from './SidePanelStore';
 import { AirmanQualificationModel } from '../../airman/models/AirmanQualificationModel';
-import { RipItemRepositoryStub } from '../../airman/repositories/doubles/AirmanRipItemRepositoryStub';
+import { DoubleRepositories } from '../../Repositories';
+import { FakeAirmanRepository } from '../../airman/repositories/doubles/FakeAirmanRepository';
+import { EventRepositoryStub } from '../../event/repositories/doubles/EventRepositoryStub';
 
 describe('TrackerStore', () => {
-  const airmenRepository = new FakeAirmanRepository();
-  const siteRepository = new SiteRepositoryStub();
-  const skillRepository = new SkillRepositoryStub();
-  const eventRepository = new EventRepositoryStub();
-  const missionRepository = new MissionRepositoryStub();
   const timeServiceStub = new TimeServiceStub();
-  const ripItemRespository = new RipItemRepositoryStub();
+  const airmanRepository = (DoubleRepositories.airmanRepository as FakeAirmanRepository);
+  const eventRepository = (DoubleRepositories.eventRepository as EventRepositoryStub);
+
   let allAirmen: AirmanModel[];
   let subject: TrackerStore;
 
   beforeEach(async () => {
-    allAirmen = await airmenRepository.findAll();
-    subject = new TrackerStore(
-      airmenRepository,
-      siteRepository,
-      skillRepository,
-      eventRepository,
-      timeServiceStub,
-      missionRepository,
-      ripItemRespository
-    );
+    allAirmen = await airmanRepository.findAll();
+    subject = new TrackerStore(DoubleRepositories, timeServiceStub);
     await subject.hydrate();
   });
 
@@ -135,7 +121,7 @@ describe('TrackerStore', () => {
         expirationDate: moment()
       });
 
-      const updatedAirman = (await airmenRepository.findAll())[0];
+      const updatedAirman = (await airmanRepository.findAll())[0];
       expect(updatedAirman.qualifications.length).toBeGreaterThan(qualLength);
     });
 
@@ -152,7 +138,7 @@ describe('TrackerStore', () => {
         expirationDate: moment()
       });
 
-      const updatedAirman = (await airmenRepository.findAll())[0];
+      const updatedAirman = (await airmanRepository.findAll())[0];
       expect(updatedAirman.certifications.length).toBeGreaterThan(certLength);
     });
 
@@ -169,13 +155,13 @@ describe('TrackerStore', () => {
 
       await subject.addSkill(skill);
 
-      let updatedAirman = (await airmenRepository.findAll())[0];
+      let updatedAirman = (await airmanRepository.findAll())[0];
       const qualLength = updatedAirman.qualifications.length;
       const id = updatedAirman.qualifications.find((q: AirmanQualificationModel) => q.skillId === 100)!.id;
 
       await subject.removeSkill(Object.assign({}, skill, {id}));
 
-      updatedAirman = (await airmenRepository.findAll())[0];
+      updatedAirman = (await airmanRepository.findAll())[0];
       expect(updatedAirman.qualifications.length).toBeLessThan(qualLength);
     });
   });
@@ -189,15 +175,8 @@ describe('TrackerStore', () => {
   });
 
   it('should set loading until hydrate completes', async () => {
-    subject = new TrackerStore(
-      airmenRepository,
-      siteRepository,
-      skillRepository,
-      eventRepository,
-      timeServiceStub,
-      missionRepository,
-      ripItemRespository
-    );
+    subject = new TrackerStore(DoubleRepositories, timeServiceStub);
+
     subject.setLoading(true);
 
     await subject.hydrate();

@@ -1,16 +1,15 @@
 import * as React from 'react';
 import { Dashboard } from './Dashboard';
 import { mount, ReactWrapper } from 'enzyme';
-import { MissionRepositoryStub } from '../mission/repositories/doubles/MissionRepositoryStub';
 import { findFilterById, forIt, selectOption } from '../utils/testUtils';
-import { SiteRepositoryStub } from '../site/repositories/doubles/SiteRepositoryStub';
 import { MissionModel } from '../mission/models/MissionModel';
 import { DashboardStore } from './stores/DashboardStore';
 import { StyledMission } from '../mission/Mission';
 import { MemoryRouter } from 'react-router';
+import { DoubleRepositories } from '../Repositories';
 import { StyledMissionCardSection } from './MissionCardSection';
 
-const missionRepositoryStub = new MissionRepositoryStub();
+const missionRepositoryStub = DoubleRepositories.missionRepository;
 
 describe('Dashboard', () => {
   let missions: MissionModel[];
@@ -19,10 +18,7 @@ describe('Dashboard', () => {
   beforeEach(async () => {
     missions = await missionRepositoryStub.findAll();
 
-    const dashboardStore = new DashboardStore(
-      new SiteRepositoryStub(),
-      new MissionRepositoryStub()
-    );
+    const dashboardStore = new DashboardStore(DoubleRepositories);
 
     subject = mount(
       <MemoryRouter>

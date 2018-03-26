@@ -2,35 +2,29 @@ import { mount, ReactWrapper, shallow, ShallowWrapper } from 'enzyme';
 import * as React from 'react';
 
 import { App, ClassificationBanner } from './App';
-import { ProfileRepositoryStub } from '../profile/repositories/doubles/ProfileRepositoryStub';
 import { MemoryRouter, Route } from 'react-router-dom';
-import { MissionRepositoryStub } from '../mission/repositories/doubles/MissionRepositoryStub';
 import { Tracker } from '../tracker/Tracker';
 import { Dashboard } from '../dashboard/Dashboard';
-import { SiteRepositoryStub } from '../site/repositories/doubles/SiteRepositoryStub';
 import { forIt, makeFakeTrackerStore } from '../utils/testUtils';
 import { DashboardStore } from '../dashboard/stores/DashboardStore';
 import { CrewStore } from '../crew/stores/CrewStore';
-import { CrewRepositorySpy } from '../crew/repositories/doubles/CrewRepositorySpy';
-import { CrewModelFactory } from '../crew/factories/CrewModelFactory';
 import { Crew } from '../crew/Crew';
 import { StyledProfileSitePicker } from '../profile/ProfileSitePicker';
-import { UserModel } from '../profile/models/ProfileModel';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
-import { FakeAirmanRepository } from '../airman/repositories/doubles/FakeAirmanRepository';
 import { ThemeProvider } from 'styled-components';
-
-const siteRepository = new SiteRepositoryStub();
-const dashboardStore = new DashboardStore(siteRepository, new MissionRepositoryStub());
-const crewStore = new CrewStore(new CrewRepositorySpy(CrewModelFactory.build()), new FakeAirmanRepository());
-
-let subject: ShallowWrapper;
-let mountedSubject: ReactWrapper;
+import { DoubleRepositories } from '../Repositories';
+import { UserModel } from '../profile/models/ProfileModel';
 
 describe('App', () => {
+  let subject: ShallowWrapper;
+  let mountedSubject: ReactWrapper;
+
   it('renders a route for the dashboard, roster and crew', async () => {
     const trackerStore = await makeFakeTrackerStore();
-    const profileStore = new ProfileSitePickerStore(new ProfileRepositoryStub(), siteRepository);
+    const dashboardStore = new DashboardStore(DoubleRepositories);
+    const crewStore = new CrewStore(DoubleRepositories);
+    const profileStore = new ProfileSitePickerStore(DoubleRepositories);
+
     subject = shallow(
       <App
         trackerStore={trackerStore}
@@ -57,8 +51,11 @@ describe('App', () => {
 
   describe('ProfileSitePicker', () => {
     let profileStore: ProfileSitePickerStore;
+
     beforeEach(async () => {
       const trackerStore = await makeFakeTrackerStore();
+      const dashboardStore = new DashboardStore(DoubleRepositories);
+      const crewStore = new CrewStore(DoubleRepositories);
       const profileRepo = {
         findOne: () => {
           return Promise.resolve({
@@ -71,8 +68,9 @@ describe('App', () => {
           return Promise.resolve({user: user, classified: false});
         }
       };
-      profileStore = new ProfileSitePickerStore(profileRepo, siteRepository);
+      profileStore = new ProfileSitePickerStore(Object.assign({}, DoubleRepositories, {profileRepository: profileRepo}));
       await profileStore.hydrate();
+
       mountedSubject = mount(
         <ThemeProvider theme={{}}>
           <MemoryRouter initialEntries={['/']}>
@@ -120,10 +118,12 @@ describe('App', () => {
 });
 
 const createMountedPage = async (entry: string) => {
-  let mountedRouter: ReactWrapper;
   const trackerStore = await makeFakeTrackerStore();
-  const profileStore = new ProfileSitePickerStore(new ProfileRepositoryStub(), siteRepository);
-  mountedRouter = mount(
+  const dashboardStore = new DashboardStore(DoubleRepositories);
+  const crewStore = new CrewStore(DoubleRepositories);
+  const profileStore = new ProfileSitePickerStore(DoubleRepositories);
+
+  const mountedRouter = mount(
     <ThemeProvider theme={{}}>
       <MemoryRouter initialEntries={[entry]}>
         <App

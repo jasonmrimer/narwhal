@@ -6,11 +6,11 @@ import { StyledMission } from '../mission/Mission';
 import styled from 'styled-components';
 
 interface Props {
-  missions: MissionModel[],
-  header: string,
-  intervalStart: Moment,
-  intervalEnd: Moment,
-  className?: string,
+  missions: MissionModel[];
+  header: string;
+  intervalStart: Moment;
+  intervalEnd: Moment;
+  className?: string;
 }
 
 function renderFilteredMissions(missions: MissionModel[], startTime: Moment, endTime: Moment) {

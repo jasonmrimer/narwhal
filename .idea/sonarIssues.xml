@@ -218,6 +218,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/client/src/dashboard/Dashboard.test.tsx">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/client/src/event/AppointmentForm.tsx">
           <value>
             <set />

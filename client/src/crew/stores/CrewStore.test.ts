@@ -1,18 +1,15 @@
 import { CrewStore } from './CrewStore';
-import { CrewRepositorySpy } from '../repositories/doubles/CrewRepositorySpy';
 import { CrewModelFactory } from '../factories/CrewModelFactory';
 import { CrewModel } from '../models/CrewModel';
-import { AirmanRepository } from '../../airman/repositories/AirmanRepository';
-import { FakeAirmanRepository } from '../../airman/repositories/doubles/FakeAirmanRepository';
+import { DoubleRepositories } from '../../Repositories';
 
 describe('CrewStore', () => {
   let crew: CrewModel;
   let subject: CrewStore;
 
   beforeEach(async () => {
-    const airmanRepository: AirmanRepository = new FakeAirmanRepository();
     crew = CrewModelFactory.build();
-    subject = new CrewStore(new CrewRepositorySpy(crew), airmanRepository);
+    subject = new CrewStore(DoubleRepositories);
     await subject.hydrate(crew.id);
 
   });

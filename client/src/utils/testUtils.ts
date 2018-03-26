@@ -1,24 +1,11 @@
 import { Filter } from '../widgets/Filter';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
-import { FakeAirmanRepository } from '../airman/repositories/doubles/FakeAirmanRepository';
-import { SiteRepositoryStub } from '../site/repositories/doubles/SiteRepositoryStub';
-import { EventRepositoryStub } from '../event/repositories/doubles/EventRepositoryStub';
 import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
-import { default as SkillRepositoryStub } from '../skills/repositories/doubles/SkillRepositoryStub';
-import { MissionRepositoryStub } from '../mission/repositories/doubles/MissionRepositoryStub';
 import { ReactWrapper } from 'enzyme';
-import { RipItemRepositoryStub } from '../airman/repositories/doubles/AirmanRipItemRepositoryStub';
+import { DoubleRepositories } from '../Repositories';
 
 export async function makeFakeTrackerStore(shouldHydrateState: boolean = true) {
-  const store = new TrackerStore(
-    new FakeAirmanRepository(),
-    new SiteRepositoryStub(),
-    new SkillRepositoryStub(),
-    new EventRepositoryStub(),
-    new TimeServiceStub(),
-    new MissionRepositoryStub(),
-    new RipItemRepositoryStub(),
-  );
+  const store = new TrackerStore(DoubleRepositories, new TimeServiceStub());
   if (shouldHydrateState) {
     await store.hydrate();
   }

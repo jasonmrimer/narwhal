@@ -6,10 +6,9 @@ import { CrewRepositorySpy } from './repositories/doubles/CrewRepositorySpy';
 import { CrewModelFactory } from './factories/CrewModelFactory';
 import { StyledTextInput } from '../widgets/TextInput';
 import { StyledButton } from '../widgets/Button';
-import { FakeAirmanRepository } from '../airman/repositories/doubles/FakeAirmanRepository';
-import { AirmanModel } from '../airman/models/AirmanModel';
 import { StyledCheckbox } from '../widgets/Checkbox';
 import { Link } from 'react-router-dom';
+import { DoubleRepositories } from '../Repositories';
 
 describe('Crew', () => {
   let repositorySpy: CrewRepositorySpy;
@@ -21,11 +20,10 @@ describe('Crew', () => {
   const crewPositions = crewModel.crewPositions;
 
   beforeEach(async () => {
-    repositorySpy = new CrewRepositorySpy(crewModel);
-    const airmanRepository = new FakeAirmanRepository();
-    airmanRepository.findAll = () => Promise.resolve([new AirmanModel(1, 1, 1, 1, 'Diana', 'Munoz')]);
+    repositorySpy = (DoubleRepositories.crewRepository as CrewRepositorySpy);
+    repositorySpy.setCrew(crewModel);
 
-    crewStore = new CrewStore(repositorySpy, airmanRepository);
+    crewStore = new CrewStore(DoubleRepositories);
     await crewStore.hydrate(crewModel.id);
 
     subject = shallow(
@@ -65,7 +63,7 @@ describe('Crew', () => {
   });
 
   it('sets the crew position as critical', () => {
-    subject.find(StyledCheckbox).at(0).simulate('change',  {
+    subject.find(StyledCheckbox).at(0).simulate('change', {
       target:
         {
           checked: true,

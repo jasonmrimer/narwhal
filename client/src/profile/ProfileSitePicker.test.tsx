@@ -1,18 +1,15 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
-import { SiteRepositoryStub } from '../site/repositories/doubles/SiteRepositoryStub';
 import { ProfileSitePicker } from './ProfileSitePicker';
-import { ProfileRepositoryStub } from './repositories/doubles/ProfileRepositoryStub';
 import { forIt } from '../utils/testUtils';
 import { SiteModel } from '../site/models/SiteModel';
 import { ProfileSitePickerStore } from './stores/ProfileSitePickerStore';
+import { DoubleRepositories } from '../Repositories';
 
 describe('ProfileSitePicker', () => {
-  const siteRepository = new SiteRepositoryStub;
-  const profileRepository = new ProfileRepositoryStub;
   let sites: SiteModel[];
   let subject: ShallowWrapper;
-  let profileStore = new ProfileSitePickerStore(profileRepository, siteRepository);
+  let profileStore = new ProfileSitePickerStore(DoubleRepositories);
   profileStore.saveSiteId = jest.fn();
 
   beforeEach(async () => {

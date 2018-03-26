@@ -4,6 +4,7 @@ import { MissionModel } from '../../mission/models/MissionModel';
 import { action, computed, observable } from 'mobx';
 import { SiteModel } from '../../site/models/SiteModel';
 import { UnfilteredValue } from '../../widgets/models/FilterOptionModel';
+import { Repositories } from '../../Repositories';
 
 export class DashboardStore {
   private siteRepository: SiteRepository;
@@ -14,9 +15,9 @@ export class DashboardStore {
 
   @observable private _siteId: number = UnfilteredValue;
 
-  constructor(siteRepository: SiteRepository, missionRepository: MissionRepository) {
-    this.siteRepository = siteRepository;
-    this.missionRepository = missionRepository;
+  constructor(repositories: Repositories) {
+    this.siteRepository = repositories.siteRepository;
+    this.missionRepository = repositories.missionRepository;
   }
 
   async hydrate() {

@@ -67,7 +67,6 @@ const missionSeven = new MissionModel(
   new SiteModel(3, 'DMS-HI', [])
 );
 
-
 const missionEight = new MissionModel(
   8,
   'missionId8',
@@ -76,7 +75,6 @@ const missionEight = new MissionModel(
   time.clone().add(20, 'days'),
   new SiteModel(3, 'DMS-HI', [])
 );
-
 
 const missionNine = new MissionModel(
   9,
@@ -87,7 +85,6 @@ const missionNine = new MissionModel(
   new SiteModel(3, 'DMS-HI', [])
 );
 
-
 const missionTen = new MissionModel(
   10,
   'missionId10',
@@ -96,7 +93,6 @@ const missionTen = new MissionModel(
   time.clone().add(20, 'days'),
   new SiteModel(3, 'DMS-HI', [])
 );
-
 
 const missionEleven = new MissionModel(
   11,
@@ -107,7 +103,6 @@ const missionEleven = new MissionModel(
   new SiteModel(3, 'DMS-HI', [])
 );
 
-
 const missionTwelve = new MissionModel(
   12,
   'missionId12',
@@ -116,7 +111,6 @@ const missionTwelve = new MissionModel(
   time.clone().add(20, 'days'),
   new SiteModel(3, 'DMS-HI', [])
 );
-
 
 const missionThirteen = new MissionModel(
   13,
@@ -127,7 +121,6 @@ const missionThirteen = new MissionModel(
   new SiteModel(3, 'DMS-HI', [])
 );
 
-
 const missionFourteen = new MissionModel(
   14,
   'missionId14',
@@ -136,7 +129,6 @@ const missionFourteen = new MissionModel(
   time.clone().add(20, 'days'),
   new SiteModel(3, 'DMS-HI', [])
 );
-
 
 const missionFifteen = new MissionModel(
   15,
@@ -147,7 +139,6 @@ const missionFifteen = new MissionModel(
   new SiteModel(3, 'DMS-HI', [])
 );
 
-
 const missionSixteen = new MissionModel(
   16,
   'missionId16',
@@ -156,7 +147,6 @@ const missionSixteen = new MissionModel(
   time.clone().add(20, 'days'),
   new SiteModel(3, 'DMS-HI', [])
 );
-
 
 const missionSeventeen = new MissionModel(
   17,
@@ -167,7 +157,6 @@ const missionSeventeen = new MissionModel(
   new SiteModel(3, 'DMS-HI', [])
 );
 
-
 const missionEightteen = new MissionModel(
   18,
   'missionId18',
@@ -176,7 +165,6 @@ const missionEightteen = new MissionModel(
   time.clone().add(20, 'days'),
   new SiteModel(3, 'DMS-HI', [])
 );
-
 
 const missionNineteen = new MissionModel(
   19,
