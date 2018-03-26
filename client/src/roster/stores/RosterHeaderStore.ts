@@ -6,7 +6,7 @@ import { AirmanModel, ShiftType } from '../../airman/models/AirmanModel';
 import * as Fuse from 'fuse.js';
 
 interface SiteIdContainer {
-  siteId: number;
+  selectedSite: number;
 }
 
 export class RosterHeaderStore {
@@ -29,7 +29,7 @@ export class RosterHeaderStore {
   @computed
   get certificationOptions() {
     return this._certifications.filter((cert: CertificationModel) => {
-      return cert.siteId === this.siteIdContainer.siteId || this.siteIdContainer.siteId === UnfilteredValue;
+      return cert.siteId === this.siteIdContainer.selectedSite || this.siteIdContainer.selectedSite === UnfilteredValue;
     }).map(cert => {
       return {value: cert.id, label: cert.title};
     });
@@ -115,6 +115,6 @@ export class RosterHeaderStore {
     if (this._selectedLastName === '') {
       return airmen;
     }
-    return new Fuse(airmen, {keys: ['lastName'], threshold: 0.2,}).search(this._selectedLastName);
+    return new Fuse(airmen, {keys: ['lastName'], threshold: 0.2, }).search(this._selectedLastName);
   }
 }

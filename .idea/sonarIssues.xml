@@ -283,6 +283,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/client/src/roster/stores/RosterHeaderStore.test.ts">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/client/src/skills/repositories/web/WebSkillRepository.contract.ts">
           <value>
             <set />

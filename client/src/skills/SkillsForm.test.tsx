@@ -6,9 +6,8 @@ import * as moment from 'moment';
 import { DatePicker } from '../widgets/DatePicker';
 import { SkillType } from './models/SkillType';
 import { StyledForm } from '../widgets/Form';
-import { SkillFormStore } from './stores/SkillFormStore';
+import { SkillActions, SkillFormStore } from './stores/SkillFormStore';
 import { StyledButton } from '../widgets/Button';
-import { SkillActions } from './stores/SkillActions';
 import Mock = jest.Mock;
 
 describe('SkillsForm', () => {
@@ -20,13 +19,16 @@ describe('SkillsForm', () => {
   const expirationDate = moment('2019-02-01');
 
   beforeEach(() => {
+    const selectedSiteContatiner = {
+      selectedSite: 1,
+    };
+
     skillActions = {
       addSkill: jest.fn(),
       removeSkill: jest.fn(),
-      siteId: 1
     };
 
-    const store = new SkillFormStore(skillActions);
+    const store = new SkillFormStore(selectedSiteContatiner, skillActions);
     subject = shallow(<SkillsForm airmanId={1} skillFormStore={store}/>);
   });
 
@@ -79,13 +81,16 @@ describe('SkillsForm', () => {
     };
 
     beforeEach(() => {
-      skillActions = {
-        addSkill: jest.fn(),
-        removeSkill: jest.fn(),
-        siteId: 1
+      const selectedSiteContatiner = {
+        selectedSite: 1,
       };
 
-      const store = new SkillFormStore(skillActions);
+      skillActions = {
+        addSkill: jest.fn(),
+        removeSkill: jest.fn()
+      };
+
+      const store = new SkillFormStore(selectedSiteContatiner, skillActions);
       store.open(skill);
 
       mountedSubject = mount(<SkillsForm airmanId={1} skillFormStore={store}/>);

@@ -28,13 +28,16 @@ const wrapper = (story: any) => {
   );
 };
 
+const siteIdContainer = {
+  selectedSite: 1,
+};
+
+/* tslint:disable:no-empty */
 const skillsActions = {
-  /* tslint:disable:no-empty */
   addSkill: () => {
   },
   removeSkill: () => {
   },
-  siteId: 1
 };
 
 export function FormStory() {
@@ -44,12 +47,12 @@ export function FormStory() {
       return (
         <StyledSkillsForm
           airmanId={1}
-          skillFormStore={new SkillFormStore(skillsActions)}
+          skillFormStore={new SkillFormStore(siteIdContainer, skillsActions)}
         />
       );
     })
     .add('edit skill', () => {
-      const store = new SkillFormStore(skillsActions);
+      const store = new SkillFormStore(siteIdContainer, skillsActions);
       store.open({
         id: 1, type: SkillType.Qualification, skillId: 1, airmanId: 1, earnDate: moment(), expirationDate: moment()
       });

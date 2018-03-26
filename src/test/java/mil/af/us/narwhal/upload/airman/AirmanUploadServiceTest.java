@@ -79,7 +79,7 @@ public class AirmanUploadServiceTest {
     assertThat(airmen.stream().map(Airman::getLastName).collect(toList()))
       .containsExactlyInAnyOrder("last1", "last2", "last3");
 
-    assertThat(airmen.stream().map(Airman::flightId).distinct().findFirst().orElseThrow(Exception::new))
+    assertThat(airmen.stream().map(Airman::getFlightId).distinct().findFirst().orElseThrow(Exception::new))
       .isEqualTo(flight.getId());
   }
 

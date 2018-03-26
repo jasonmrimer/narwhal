@@ -23,7 +23,7 @@ describe('Crew', () => {
   beforeEach(async () => {
     repositorySpy = new CrewRepositorySpy(crewModel);
     const airmanRepository = new FakeAirmanRepository();
-    airmanRepository.findAll = () => Promise.resolve([new AirmanModel(1, 1, 1, 'Diana', 'Munoz')]);
+    airmanRepository.findAll = () => Promise.resolve([new AirmanModel(1, 1, 1, 1, 'Diana', 'Munoz')]);
 
     crewStore = new CrewStore(repositorySpy, airmanRepository);
     await crewStore.hydrate(crewModel.id);

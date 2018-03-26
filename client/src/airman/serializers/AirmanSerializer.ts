@@ -20,6 +20,7 @@ export class AirmanSerializer implements Serializer<AirmanModel> {
     return new AirmanModel(
       item.id,
       item.flightId,
+      item.squadronId,
       item.siteId,
       item.firstName,
       item.lastName,

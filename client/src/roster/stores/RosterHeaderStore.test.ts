@@ -11,7 +11,7 @@ describe('RosterHeaderStore', () => {
 
   beforeEach(async () => {
     allAirmen = await airmanRepository.findAll();
-    subject = new RosterHeaderStore({siteId: 1});
+    subject = new RosterHeaderStore({selectedSite: 1});
     subject.hydrate(CertificationModelFactory.buildList(3, 1), QualificationModelFactory.buildList(3));
   });
 
@@ -23,7 +23,7 @@ describe('RosterHeaderStore', () => {
     ]);
   });
 
-  it('returns a list of certification options based on selected siteId', () => {
+  it('returns a list of certification options based on the selected site', () => {
     expect(subject.certificationOptions).toEqual([
       {value: 0, label: '0'},
       {value: 1, label: '1'},

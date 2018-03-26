@@ -2,12 +2,20 @@ import { FormStore } from '../../widgets/stores/FormStore';
 import { Skill } from '../models/Skill';
 import * as moment from 'moment';
 import { SkillType } from '../models/SkillType';
-import { SkillActions } from './SkillActions';
 import { FilterOption } from '../../widgets/models/FilterOptionModel';
 import { action, computed, observable } from 'mobx';
 import { QualificationModel } from '../models/QualificationModel';
 import { CertificationModel } from '../models/CertificationModel';
 import { filterOptionsBy } from '../../utils/eventUtil';
+
+export interface SiteIdContainer {
+  selectedSite: number;
+}
+
+export interface SkillActions {
+  addSkill: (skill: Skill) => void;
+  removeSkill: (skill: Skill) => void;
+}
 
 interface State {
   skillType: string;
@@ -20,7 +28,7 @@ export class SkillFormStore extends FormStore<Skill, State> {
   @observable private _certifications: CertificationModel[] = [];
   @observable private _qualifications: QualificationModel[] = [];
 
-  constructor(private skillActions: SkillActions) {
+  constructor(private siteIdContainer: SiteIdContainer, private skillActions: SkillActions) {
     super();
     this._state = {
       skillType: '',
@@ -101,6 +109,6 @@ export class SkillFormStore extends FormStore<Skill, State> {
 
   @computed
   get certificationOptions() {
-    return filterOptionsBy(this._certifications, this.skillActions.siteId);
+    return filterOptionsBy(this._certifications, this.siteIdContainer.selectedSite);
   }
 }

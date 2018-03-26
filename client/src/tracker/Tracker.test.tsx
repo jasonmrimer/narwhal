@@ -12,6 +12,7 @@ import { EventModelFactory } from '../event/factories/EventModelFactory';
 import { TabType } from './stores/SidePanelStore';
 import { ClipLoader } from 'react-spinners';
 import { StyledRosterContainer } from '../roster/RosterContainer';
+import { UnfilteredValue } from '../widgets/models/FilterOptionModel';
 
 let trackerStore: TrackerStore;
 let subject: ShallowWrapper;
@@ -22,6 +23,7 @@ describe('Tracker', () => {
     subject = shallow(
       <Tracker
         trackerStore={trackerStore}
+        theme={{yellow: 'yellow'}}
         profile={{id: 1, username: 'Tytus', siteId: 1}}
       />
     );
@@ -37,9 +39,9 @@ describe('Tracker', () => {
     expect(subject.find(ClipLoader).exists()).toBeTruthy();
   });
 
-  it('sets the trackerStores siteID and squadronId', () => {
-    expect(trackerStore.siteId).toBe(1);
-    expect(trackerStore.squadronId).toBe(-1);
+  it('sets the trackerStores siteID and selectedSquadron', () => {
+    expect(trackerStore.trackerFilterStore.selectedSite).toBe(1);
+    expect(trackerStore.trackerFilterStore.selectedSquadron).toBe(UnfilteredValue);
   });
 
   it('should render a legend', () => {
@@ -57,23 +59,23 @@ describe('Tracker', () => {
 
     it('should render a site filter with the correct props', () => {
       const wrapper = findTopLevelFilterById(subject, '#site-filter');
-      expect(wrapper.prop('value')).toEqual(trackerStore.siteId);
-      expect(wrapper.prop('callback')).toEqual(trackerStore.setSiteId);
-      expect(wrapper.prop('options')).toEqual(trackerStore.siteOptions);
+      expect(wrapper.prop('value')).toEqual(trackerStore.trackerFilterStore.selectedSite);
+      expect(wrapper.prop('callback')).toEqual(trackerStore.trackerFilterStore.setSelectedSite);
+      expect(wrapper.prop('options')).toEqual(trackerStore.trackerFilterStore.siteOptions);
     });
 
     it('should render a squadron filter with the correct props', () => {
       const wrapper = findTopLevelFilterById(subject, '#squadron-filter');
-      expect(wrapper.prop('value')).toEqual(trackerStore.squadronId);
-      expect(wrapper.prop('callback')).toEqual(trackerStore.setSquadronId);
-      expect(wrapper.prop('options')).toEqual(trackerStore.squadronOptions);
+      expect(wrapper.prop('value')).toEqual(trackerStore.trackerFilterStore.selectedSquadron);
+      expect(wrapper.prop('callback')).toEqual(trackerStore.trackerFilterStore.setSelectedSquadron);
+      expect(wrapper.prop('options')).toEqual(trackerStore.trackerFilterStore.squadronOptions);
     });
 
     it('should render a flight filter with the correct props', () => {
       const wrapper = findTopLevelFilterById(subject, '#flight-filter');
-      expect(wrapper.prop('value')).toEqual(trackerStore.flightId);
-      expect(wrapper.prop('callback')).toEqual(trackerStore.setFlightId);
-      expect(wrapper.prop('options')).toEqual(trackerStore.flightOptions);
+      expect(wrapper.prop('value')).toEqual(trackerStore.trackerFilterStore.selectedFlight);
+      expect(wrapper.prop('callback')).toEqual(trackerStore.trackerFilterStore.setSelectedFlight);
+      expect(wrapper.prop('options')).toEqual(trackerStore.trackerFilterStore.flightOptions);
     });
   });
 

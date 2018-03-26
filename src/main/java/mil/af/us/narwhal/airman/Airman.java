@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import mil.af.us.narwhal.crew.CrewPosition;
 import mil.af.us.narwhal.event.Event;
 import mil.af.us.narwhal.flight.Flight;
-import mil.af.us.narwhal.mission.Mission;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -65,9 +64,12 @@ public class Airman {
     this.lastName = lastName;
   }
 
-  @JsonProperty("flightId")
-  public Long flightId() {
+  public Long getFlightId() {
     return flight.getId();
+  }
+
+  public Long getSquadronId() {
+    return flight.getSquadron().getId();
   }
 
   public Long getSiteId() {

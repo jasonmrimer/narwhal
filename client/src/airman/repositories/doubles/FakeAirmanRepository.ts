@@ -12,20 +12,18 @@ import { AirmanCertificationModel } from '../../models/AirmanCertificationModel'
 
 const af = AirmanModelFactory;
 const airmen = [
-  af.build(1, 1, 1, [AirmanQualificationModelFactory.build(1)], [AirmanCertificationModelFactory.build(4, 1)]),
-  af.build(2, 1, 1, [AirmanQualificationModelFactory.build(2)], [AirmanCertificationModelFactory.build(5, 1)]),
-  af.build(3, 1, 1, [AirmanQualificationModelFactory.build(3)], [AirmanCertificationModelFactory.build(4, 1)]),
-  af.build(4, 2, 1, [AirmanQualificationModelFactory.build(1), AirmanQualificationModelFactory.build(2)],
-           [AirmanCertificationModelFactory.build(4, 1), AirmanCertificationModelFactory.build(5, 1)]),
-  af.build(5, 2, 1, [AirmanQualificationModelFactory.build(2)], [AirmanCertificationModelFactory.build(5, 1)]),
-  af.build(6, 2, 1, [AirmanQualificationModelFactory.build(3)], [AirmanCertificationModelFactory.build(4, 1)]),
-  af.build(7, 3, 1, [AirmanQualificationModelFactory.build(1)], [AirmanCertificationModelFactory.build(4, 1)]),
-  af.build(8, 3, 1, [AirmanQualificationModelFactory.build(2)], [AirmanCertificationModelFactory.build(5, 1)]),
-  af.build(9, 3, 1, [AirmanQualificationModelFactory.build(3)], [AirmanCertificationModelFactory.build(5, 1)]),
-  af.build(10, 4, 1, [AirmanQualificationModelFactory.build(1), AirmanQualificationModelFactory.build(2)],
-           [AirmanCertificationModelFactory.build(4, 1), AirmanCertificationModelFactory.build(5, 1)]),
-  af.build(11, 5, 2, [AirmanQualificationModelFactory.build(2)], [AirmanCertificationModelFactory.build(6, 2)]),
-  af.build(12, 6, 2, [AirmanQualificationModelFactory.build(3)], [AirmanCertificationModelFactory.build(7, 2)])
+  af.build(1, 1, 1, 1, [AirmanQualificationModelFactory.build(1)], [AirmanCertificationModelFactory.build(4, 1)]),
+  af.build(2, 1, 1, 1, [AirmanQualificationModelFactory.build(2)], [AirmanCertificationModelFactory.build(5, 1)]),
+  af.build(3, 1, 1, 1, [AirmanQualificationModelFactory.build(3)], [AirmanCertificationModelFactory.build(4, 1)]),
+  af.build(4, 2, 1, 1, [AirmanQualificationModelFactory.build(1), AirmanQualificationModelFactory.build(2)], [AirmanCertificationModelFactory.build(4, 1), AirmanCertificationModelFactory.build(5, 1)]),
+  af.build(5, 2, 1, 1, [AirmanQualificationModelFactory.build(2)], [AirmanCertificationModelFactory.build(5, 1)]),
+  af.build(6, 2, 1, 1, [AirmanQualificationModelFactory.build(3)], [AirmanCertificationModelFactory.build(4, 1)]),
+  af.build(7, 3, 2, 1, [AirmanQualificationModelFactory.build(1)], [AirmanCertificationModelFactory.build(4, 1)]),
+  af.build(8, 3, 2, 1, [AirmanQualificationModelFactory.build(2)], [AirmanCertificationModelFactory.build(5, 1)]),
+  af.build(9, 3, 2, 1, [AirmanQualificationModelFactory.build(3)], [AirmanCertificationModelFactory.build(5, 1)]),
+  af.build(10, 4, 2, 1, [AirmanQualificationModelFactory.build(1), AirmanQualificationModelFactory.build(2)], [AirmanCertificationModelFactory.build(4, 1), AirmanCertificationModelFactory.build(5, 1)]),
+  af.build(11, 5, 2, 2, [AirmanQualificationModelFactory.build(2)], [AirmanCertificationModelFactory.build(6, 2)]),
+  af.build(12, 6, 2, 2, [AirmanQualificationModelFactory.build(3)], [AirmanCertificationModelFactory.build(7, 2)])
 ];
 
 const squadrons = {'1': airmen.slice(0, 6), '2': airmen.slice(6, 12)};
@@ -34,6 +32,7 @@ export class FakeAirmanRepository implements AirmanRepository {
   findAll() {
     return Promise.resolve(airmen);
   }
+
   findBySquadron(id: number) {
     return Promise.resolve(squadrons[String(id)]);
   }

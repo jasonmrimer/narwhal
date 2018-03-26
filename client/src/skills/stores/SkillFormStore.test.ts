@@ -1,5 +1,4 @@
-import { SkillFormStore } from './SkillFormStore';
-import { SkillActions } from './SkillActions';
+import { SkillActions, SkillFormStore } from './SkillFormStore';
 import { Skill } from '../models/Skill';
 import { SkillType } from '../models/SkillType';
 import * as moment from 'moment';
@@ -21,10 +20,13 @@ describe('SkillFormStore', () => {
   let subject: SkillFormStore;
 
   beforeEach(() => {
+    const siteIdContainer = {
+      selectedSite: 1
+  };
+
     skillActions = {
       addSkill: jest.fn(),
       removeSkill: jest.fn(),
-      siteId: 1
     };
 
     const certifications = [
@@ -33,7 +35,7 @@ describe('SkillFormStore', () => {
     ];
     const qualifications = QualificationModelFactory.buildList(3);
 
-    subject = new SkillFormStore(skillActions);
+    subject = new SkillFormStore(siteIdContainer, skillActions);
     subject.hydrate(certifications, qualifications);
   });
 

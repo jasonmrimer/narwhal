@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styled from 'styled-components';
+import styled, { withTheme } from 'styled-components';
 import { observer } from 'mobx-react';
 import { TrackerStore } from './stores/TrackerStore';
 import { TopLevelFilter } from '../widgets/Filter';
@@ -8,13 +8,13 @@ import { StyledLegend } from '../roster/Legend';
 import { UserModel } from '../profile/models/ProfileModel';
 import { StyledDeleteEventPopup } from '../event/DeleteEventPopup';
 import { UnfilteredValue } from '../widgets/models/FilterOptionModel';
-import { Theme } from '../themes/default';
 import { ClipLoader } from 'react-spinners';
 import { StyledRosterContainer } from '../roster/RosterContainer';
 
 interface Props {
   trackerStore: TrackerStore;
   profile: UserModel;
+  theme?: any;
   className?: string;
 }
 
@@ -27,12 +27,14 @@ export class Tracker extends React.Component<Props> {
   }
 
   render() {
+    const {trackerStore, className, theme} = this.props;
+    const {trackerFilterStore, sidePanelStore} = trackerStore;
     return (
-      <div className={this.props.className}>
+      <div className={className}>
         {
-          this.props.trackerStore.loading &&
+          trackerStore.loading &&
           <div className="loader">
-            <ClipLoader color={Theme.yellow} size={100}/>
+            <ClipLoader color={theme!.yellow} size={100}/>
           </div>
         }
         <div className="main">
@@ -41,48 +43,47 @@ export class Tracker extends React.Component<Props> {
               id="site-filter"
               label="SITE"
               unfilteredOptionLabel="All Sites"
-              value={this.props.trackerStore.siteId}
-              callback={this.props.trackerStore.setSiteId}
-              options={this.props.trackerStore.siteOptions}
+              value={trackerFilterStore.selectedSite}
+              callback={trackerFilterStore.setSelectedSite}
+              options={trackerFilterStore.siteOptions}
             />
             <TopLevelFilter
               id="squadron-filter"
               label="SQUADRON"
               unfilteredOptionLabel="All Squadrons"
-              value={this.props.trackerStore.squadronId}
-              callback={this.props.trackerStore.setSquadronId}
-              options={this.props.trackerStore.squadronOptions}
+              value={trackerFilterStore.selectedSquadron}
+              callback={trackerFilterStore.setSelectedSquadron}
+              options={trackerFilterStore.squadronOptions}
               notification="Please select a site first."
             />
             <TopLevelFilter
               id="flight-filter"
               label="FLIGHT"
               unfilteredOptionLabel="All Flights"
-              value={this.props.trackerStore.flightId}
-              callback={this.props.trackerStore.setFlightId}
-              options={this.props.trackerStore.flightOptions}
+              value={trackerFilterStore.selectedFlight}
+              callback={trackerFilterStore.setSelectedFlight}
+              options={trackerFilterStore.flightOptions}
               notification="Please select a squadron first."
             />
           </div>
           <div>
             <StyledLegend/>
           </div>
-          <StyledRosterContainer trackerStore={this.props.trackerStore}/>
-          {/*<StyledRoster trackerStore={this.props.trackerStore}/>*/}
+          <StyledRosterContainer trackerStore={trackerStore}/>
         </div>
         {
-          !this.props.trackerStore.selectedAirman.isEmpty &&
+          !trackerStore.selectedAirman.isEmpty &&
           <StyledSidePanel
-            trackerStore={this.props.trackerStore}
-            sidePanelStore={this.props.trackerStore.sidePanelStore}
+            trackerStore={trackerStore}
+            sidePanelStore={sidePanelStore}
           />
         }
         {
-          this.props.trackerStore.pendingDeleteEvent &&
+          trackerStore.pendingDeleteEvent &&
           <StyledDeleteEventPopup
-            event={this.props.trackerStore.pendingDeleteEvent}
-            cancelPendingDeleteEvent={this.props.trackerStore.cancelPendingDelete}
-            confirmPendingDeleteEvent={this.props.trackerStore.executePendingDelete}
+            event={trackerStore.pendingDeleteEvent}
+            cancelPendingDeleteEvent={trackerStore.cancelPendingDelete}
+            confirmPendingDeleteEvent={trackerStore.executePendingDelete}
           />
         }
       </div>
@@ -90,7 +91,7 @@ export class Tracker extends React.Component<Props> {
   }
 }
 
-export const StyledTracker = styled(Tracker)`
+export const StyledTracker = styled(withTheme(Tracker))`
   margin-left: 3rem;
   padding: 0.5rem;
   display: flex;

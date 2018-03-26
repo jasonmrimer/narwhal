@@ -20,8 +20,8 @@ describe('RosterHeader', () => {
       certifications = CertificationModelFactory.buildList(2, 1);
       qualifications = QualificationModelFactory.buildList(2);
 
-      const store = new RosterHeaderStore({siteId: 1});
-      store.hydrate(certifications, qualifications)
+      const store = new RosterHeaderStore({selectedSite: 1});
+      store.hydrate(certifications, qualifications);
 
       subject = shallow(<RosterHeader rosterHeaderStore={store}/>);
     });

@@ -1,6 +1,5 @@
 import { CurrencyChild, CurrencyStore } from './CurrencyStore';
-import { SkillActions } from '../../skills/stores/SkillActions';
-import { SkillFormStore } from '../../skills/stores/SkillFormStore';
+import { SkillActions, SkillFormStore } from '../../skills/stores/SkillFormStore';
 import * as moment from 'moment';
 import { SkillType } from '../../skills/models/SkillType';
 import { RipItemRepositoryStub } from '../../airman/repositories/doubles/AirmanRipItemRepositoryStub';
@@ -23,13 +22,16 @@ describe('CurrencyStore', () => {
   beforeEach(() => {
     ripItemRepository = new RipItemRepositoryStub();
 
-    skillActions = {
-      addSkill: jest.fn(),
-      removeSkill: jest.fn(),
-      siteId: 1
+    const selectedSiteContainer = {
+      selectedSite: 1
     };
 
-    subject = new CurrencyStore(new SkillFormStore(skillActions), ripItemRepository);
+    skillActions = {
+      addSkill: jest.fn(),
+      removeSkill: jest.fn()
+    };
+
+    subject = new CurrencyStore(new SkillFormStore(selectedSiteContainer, skillActions), ripItemRepository);
   });
 
   it('should open an skill form for create', () => {

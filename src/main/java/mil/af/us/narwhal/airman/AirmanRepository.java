@@ -9,6 +9,7 @@ public interface AirmanRepository extends JpaRepository<Airman, Long> {
   @Query(value="select a from Airman a where flight_id in (select id from Flight where squadron_id = ?1)")
   List<Airman> findBySquadronId(Long squadronId);
 
+  @Query(value="select a from Airman a where flight_id = ?1")
   List<Airman> findByFlightId(Long flightId);
 
   List<Airman> findAllAndByOrderByLastName();

@@ -23,6 +23,7 @@ describe('Currency', () => {
     1,
     1,
     1,
+    1,
     AirmanQualificationModelFactory.buildList(3),
     AirmanCertificationModelFactory.buildList(3, 1)
   );

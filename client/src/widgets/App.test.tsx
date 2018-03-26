@@ -18,6 +18,7 @@ import { StyledProfileSitePicker } from '../profile/ProfileSitePicker';
 import { UserModel } from '../profile/models/ProfileModel';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 import { FakeAirmanRepository } from '../airman/repositories/doubles/FakeAirmanRepository';
+import { ThemeProvider } from 'styled-components';
 
 const siteRepository = new SiteRepositoryStub();
 const dashboardStore = new DashboardStore(siteRepository, new MissionRepositoryStub());
@@ -73,14 +74,16 @@ describe('App', () => {
       profileStore = new ProfileSitePickerStore(profileRepo, siteRepository);
       await profileStore.hydrate();
       mountedSubject = mount(
-        <MemoryRouter initialEntries={['/']}>
-          <App
-            trackerStore={trackerStore}
-            profileStore={profileStore}
-            dashboardStore={dashboardStore}
-            crewStore={crewStore}
-          />
-        </MemoryRouter>
+        <ThemeProvider theme={{}}>
+          <MemoryRouter initialEntries={['/']}>
+            <App
+              trackerStore={trackerStore}
+              profileStore={profileStore}
+              dashboardStore={dashboardStore}
+              crewStore={crewStore}
+            />
+          </MemoryRouter>
+        </ThemeProvider>
       );
       await forIt();
       mountedSubject.update();
@@ -121,14 +124,16 @@ const createMountedPage = async (entry: string) => {
   const trackerStore = await makeFakeTrackerStore();
   const profileStore = new ProfileSitePickerStore(new ProfileRepositoryStub(), siteRepository);
   mountedRouter = mount(
-    <MemoryRouter initialEntries={[entry]}>
-      <App
-        trackerStore={trackerStore}
-        profileStore={profileStore}
-        dashboardStore={dashboardStore}
-        crewStore={crewStore}
-      />
-    </MemoryRouter>
+    <ThemeProvider theme={{}}>
+      <MemoryRouter initialEntries={[entry]}>
+        <App
+          trackerStore={trackerStore}
+          profileStore={profileStore}
+          dashboardStore={dashboardStore}
+          crewStore={crewStore}
+        />
+      </MemoryRouter>
+    </ThemeProvider>
   );
   await forIt();
   mountedRouter.update();
