@@ -12,7 +12,7 @@ export function MissionRepositoryContract(subject: MissionRepository) {
 
       const missionStartDates = missions.filter(msn => msn.startDateTime.isAfter(moment().subtract(1, 'days')))
         .map(msn => msn.startDateTime);
-      expect(missionStartDates.length).toEqual(4);
+      expect(missionStartDates.length).toEqual(19);
     });
   });
 }

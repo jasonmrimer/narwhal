@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { MissionModel } from '../mission/models/MissionModel';
-import { StyledMission } from '../mission/Mission';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import { DashboardStore } from './stores/DashboardStore';
 import { TopLevelFilter } from '../widgets/Filter';
+import * as moment from 'moment';
+import { StyledMissionCardSection } from './MissionCardSection';
 
 interface Props {
   dashboardStore: DashboardStore;
@@ -19,6 +19,7 @@ export class Dashboard extends React.Component<Props> {
   }
 
   render() {
+    const {missions} = this.props.dashboardStore;
     return (
       [
         (
@@ -37,9 +38,41 @@ export class Dashboard extends React.Component<Props> {
         ),
         (
           <div key="2" className={`${this.props.className} missions`}>
-            {this.props.dashboardStore.missions.map((mission: MissionModel, index) => {
-              return <StyledMission mission={mission} key={index}/>;
-            })}
+            <StyledMissionCardSection
+              missions={missions}
+              header={'NEXT 24 HOURS'}
+              intervalStart={moment()}
+              intervalEnd={moment().add(24, 'hours')}
+              className="next-24"
+            />
+            <StyledMissionCardSection
+              missions={missions}
+              header={'NEXT 72 HOURS'}
+              intervalStart={moment().add(24, 'hours')}
+              intervalEnd={moment().add(24 * 3, 'hours')}
+              className="next-72"
+            />
+            <StyledMissionCardSection
+              missions={missions}
+              header={'THIS WEEK'}
+              intervalStart={moment().add(24 * 3, 'hours')}
+              intervalEnd={moment().add(24 * 7, 'hours')}
+              className="this-week"
+            />
+            <StyledMissionCardSection
+              missions={missions}
+              header={'NEXT WEEK'}
+              intervalStart={moment().add(24 * 7, 'hours')}
+              intervalEnd={moment().add(24 * 14, 'hours')}
+              className="next-week"
+            />
+            <StyledMissionCardSection
+              missions={missions}
+              header={'LONG RANGE'}
+              intervalStart={moment().add(24 * 14, 'hours')}
+              intervalEnd={moment().add(24 * 30, 'hours')}
+              className="long-range"
+            />
           </div>
         )
       ]
@@ -49,9 +82,10 @@ export class Dashboard extends React.Component<Props> {
 
 export const StyledDashboard = styled(Dashboard)`
   display: flex;
+  flex-direction: column;
   justify-content: flex-start;
   flex-wrap: wrap;
-
+  
   .filter {
     min-width: 40%;
     padding-left: calc(1% / 1);

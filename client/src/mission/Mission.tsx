@@ -33,15 +33,14 @@ export const Mission = (props: Props) => {
 
 export const StyledMission = styled(Mission)`
   background-color: ${props => props.theme.lighter};
-  width: calc(31% + 1% / 3);
-  min-height:  8rem;
+  width: calc(94% / 3);
+  min-height: 8rem;
   padding: 1rem;
-  margin-right: calc(2% / 3);
-  margin-bottom: calc(4% / 3);
-  margin-left: calc(2% / 3);
+  margin: 1% 1%;
   
   h3 {
     margin: 0 0 1rem 0;
+    font-weight: 300;
   }
   
   & > div {
