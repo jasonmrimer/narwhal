@@ -4,17 +4,16 @@ import { QualificationModel } from '../../skills/models/QualificationModel';
 import { CertificationModel } from '../../skills/models/CertificationModel';
 import { AirmanModel, ShiftType } from '../../airman/models/AirmanModel';
 import * as Fuse from 'fuse.js';
-import { filterOptionsBy } from '../../utils/eventUtil';
 
 interface SiteIdContainer {
   siteId: number;
 }
 
 export class RosterHeaderStore {
-  @observable private _certificationIds: number[] = [];
-  @observable private _qualificationIds: number[] = [];
-  @observable private _lastNameFilter: string = '';
-  @observable private _shiftFilterValue: number = UnfilteredValue;
+  @observable private _selectedCertifications: number[] = [];
+  @observable private _selectedQualifications: number[] = [];
+  @observable private _selectedShift: number = UnfilteredValue;
+  @observable private _selectedLastName: string = '';
   @observable private _certifications: CertificationModel[] = [];
   @observable private _qualifications: QualificationModel[] = [];
 
@@ -28,84 +27,65 @@ export class RosterHeaderStore {
   }
 
   @computed
-  get certifications() {
-    return this._certifications;
-  }
-
-  @computed
   get certificationOptions() {
-    if (this.siteIdContainer.siteId === UnfilteredValue) {
-      return this._certifications.map(cert => {
-        return {value: cert.id, label: cert.title};
-      });
-    } else {
-      return filterOptionsBy(this._certifications, this.siteIdContainer.siteId);
-    }
-  }
-
-  @computed
-  get certificationIds() {
-    return this._certificationIds;
-  }
-
-  @action.bound
-  setCertificationIds(options: FilterOption[]) {
-    this._certificationIds = options.map(option => Number(option.value));
-  }
-
-  @computed
-  get qualifications() {
-    return this._qualifications;
-  }
-
-  @computed
-  get qualificationOptions() {
-    return this._qualifications.map(qual => {
-      return {value: qual.id, label: `${qual.acronym} - ${qual.title}`};
+    return this._certifications.filter((cert: CertificationModel) => {
+      return cert.siteId === this.siteIdContainer.siteId || this.siteIdContainer.siteId === UnfilteredValue;
+    }).map(cert => {
+      return {value: cert.id, label: cert.title};
     });
   }
 
   @computed
-  get qualificationFilterOptions() {
+  get selectedCertifications() {
+    return this._selectedCertifications;
+  }
+
+  @action.bound
+  setSelectedCertifications(options: FilterOption[]) {
+    this._selectedCertifications = options.map(option => Number(option.value));
+  }
+
+  @computed
+  get qualificationOptions() {
     return this._qualifications.map(qual => {
       return {value: qual.id, label: `${qual.acronym}`};
     });
   }
 
   @computed
-  get qualificationIds() {
-    return this._qualificationIds;
+  get selectedQualifications() {
+    return this._selectedQualifications;
   }
 
   @action.bound
-  setQualificationIds(options: FilterOption[]) {
-    this._qualificationIds = options.map(option => Number(option.value));
-  }
-
-  @action.bound
-  setShiftFilter(shiftValue: number) {
-    this._shiftFilterValue = shiftValue;
-  }
-
-  @action.bound
-  setLastNameFilter = (e: any) => {
-    this._lastNameFilter = e.target.value;
+  setSelectedQualifications(options: FilterOption[]) {
+    this._selectedQualifications = options.map(option => Number(option.value));
   }
 
   @computed
-  get lastNameFilter() {
-    return this._lastNameFilter;
+  get selectedShift() {
+    return this._selectedShift;
   }
 
-  @computed
-  get shiftFilter() {
-    return this._shiftFilterValue;
+  @action.bound
+  setSelectedShift(shift: number) {
+    this._selectedShift = shift;
   }
 
   get shiftOptions() {
     return Object.keys(ShiftType).map((key, index) => {
       return {label: ShiftType[key], value: index};
     });
+  }
+
+  @computed
+  get selectedLastName() {
+    return this._selectedLastName;
+  }
+
+  @action.bound
+  setSelectedLastName = (e: any) => {
+    this._selectedLastName = e.target.value;
   }
 
   filterAirmen(airmen: AirmanModel[]) {
@@ -117,36 +97,24 @@ export class RosterHeaderStore {
   }
 
   private byShift = (airman: AirmanModel) => {
-    if (this._shiftFilterValue === UnfilteredValue) {
+    if (this._selectedShift === UnfilteredValue) {
       return true;
     }
-    return airman.shift === Object.keys(ShiftType)[this._shiftFilterValue];
+    return airman.shift === Object.keys(ShiftType)[this._selectedShift];
   }
 
   private byQualifications = (airman: AirmanModel) => {
-    if (this._qualificationIds.length === 0) {
-      return true;
-    }
-    return !this._qualificationIds.some(val => airman.qualificationIds.indexOf(val) === -1);
+    return this._selectedQualifications.every(val => airman.qualificationIds.includes(val));
   }
 
   private byCertifications = (airman: AirmanModel) => {
-    if (this._certificationIds.length === 0) {
-      return true;
-    }
-    return !this._certificationIds.some(val => airman.certificationIds.indexOf(val) === -1);
+    return this._selectedCertifications.every(val => airman.certificationIds.includes(val));
   }
 
   private filterByLastName = (airmen: AirmanModel[]): AirmanModel[] => {
-    if (this._lastNameFilter === '') {
+    if (this._selectedLastName === '') {
       return airmen;
     }
-    const options = {
-      keys: ['lastName'],
-      threshold: 0.2,
-    };
-
-    const fuse = new Fuse(airmen, options);
-    return fuse.search(this._lastNameFilter);
+    return new Fuse(airmen, {keys: ['lastName'], threshold: 0.2,}).search(this._selectedLastName);
   }
 }

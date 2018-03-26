@@ -298,7 +298,7 @@ describe('TrackerStore', () => {
     });
   });
 
-  it('should update an airmans shift', async () => {
+  it('should update airman shift', async () => {
     const airman = subject.airmen[0];
     airman.shift = ShiftType.Swing;
 

@@ -11,17 +11,15 @@ describe('RosterHeaderStore', () => {
 
   beforeEach(async () => {
     allAirmen = await airmanRepository.findAll();
-
     subject = new RosterHeaderStore({siteId: 1});
     subject.hydrate(CertificationModelFactory.buildList(3, 1), QualificationModelFactory.buildList(3));
   });
 
   it('returns a list of qualification options', () => {
     expect(subject.qualificationOptions).toEqual([
-      {value: 0, label: '0 - 0'},
-      {value: 1, label: '1 - 1'},
-      {value: 2, label: '2 - 2'}
-
+      {value: 0, label: '0'},
+      {value: 1, label: '1'},
+      {value: 2, label: '2'}
     ]);
   });
 
@@ -35,7 +33,7 @@ describe('RosterHeaderStore', () => {
 
   describe('filtering by certifications', () => {
     beforeEach(() => {
-      subject.setCertificationIds([
+      subject.setSelectedCertifications([
         {value: 4, label: 'Certification 4'},
         {value: 5, label: 'Certification 5'}
       ]);
@@ -50,7 +48,7 @@ describe('RosterHeaderStore', () => {
 
   describe('filtering by qualifications', () => {
     beforeEach(() => {
-      subject.setQualificationIds([
+      subject.setSelectedQualifications([
         {value: 1, label: 'qualification 1'},
         {value: 2, label: 'qualification 2'}
       ]);
@@ -65,7 +63,7 @@ describe('RosterHeaderStore', () => {
 
   describe('filtering by shift', () => {
     it('should return the airmen with the selected shift', () => {
-      subject.setShiftFilter(2);
+      subject.setSelectedShift(2);
       const shift = subject.filterAirmen(allAirmen)
         .map(amn => amn.shift)
         .filter((el, i, a) => i === a.indexOf(el));
@@ -74,9 +72,9 @@ describe('RosterHeaderStore', () => {
     });
   });
 
-  it('should set the lastNameFilter', () => {
+  it('should set the selectedLastName', () => {
     const airman = allAirmen[0];
-    subject.setLastNameFilter({target: {value: airman.lastName}});
+    subject.setSelectedLastName({target: {value: airman.lastName}});
 
     expect(subject.filterAirmen(allAirmen).length).toBe(1);
     expect(subject.filterAirmen(allAirmen)[0].firstName).toBe(airman.firstName);

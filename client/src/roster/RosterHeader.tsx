@@ -23,17 +23,17 @@ export class RosterHeader extends React.Component<Props> {
           <RosterLevelFilter
             id="shift-filter"
             unfilteredOptionLabel="All"
-            value={rosterHeaderStore.shiftFilter}
-            callback={rosterHeaderStore.setShiftFilter}
+            value={rosterHeaderStore.selectedShift}
+            callback={rosterHeaderStore.setSelectedShift}
             options={rosterHeaderStore.shiftOptions}
           />
         </span>
         <span>
           <div>NAME</div>
           <StyledTextInput
-            value={rosterHeaderStore.lastNameFilter}
+            value={rosterHeaderStore.selectedLastName}
             name="last-name"
-            onChange={rosterHeaderStore.setLastNameFilter}
+            onChange={rosterHeaderStore.setSelectedLastName}
             placeholder="Search by Last Name"
             className="last-name-search"
           />
@@ -41,8 +41,8 @@ export class RosterHeader extends React.Component<Props> {
         <span>
           <div>QUALIFICATION</div>
           <StyledMultiTypeahead
-            onChange={rosterHeaderStore.setQualificationIds}
-            options={rosterHeaderStore.qualificationFilterOptions}
+            onChange={rosterHeaderStore.setSelectedQualifications}
+            options={rosterHeaderStore.qualificationOptions}
             placeholder="Filter Qualifications"
             className="qualifications-multiselect"
           />
@@ -50,7 +50,7 @@ export class RosterHeader extends React.Component<Props> {
         <span>
           <div>CERTIFICATION</div>
           <StyledMultiTypeahead
-            onChange={rosterHeaderStore.setCertificationIds}
+            onChange={rosterHeaderStore.setSelectedCertifications}
             options={rosterHeaderStore.certificationOptions}
             placeholder="Filter Certifications"
             className="certifications-multiselect"
