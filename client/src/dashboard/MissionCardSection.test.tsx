@@ -21,10 +21,14 @@ describe('MissionCardSection', () => {
   });
 
   it('should render appropriate header text', () => {
-    expect(subject.find('h2').text()).toBe('Header Text');
+    expect(subject.find('.title').text()).toBe('Header Text');
   });
 
   it('should filter the mission out based on interval', () => {
     expect(subject.find(StyledMission).length).toBe(0);
+  });
+
+  it('should show mission count in that section', () => {
+    expect(subject.find('.count').text()).toBe('0');
   });
 });

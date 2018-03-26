@@ -85,10 +85,11 @@ export const StyledDashboard = styled(Dashboard)`
   flex-direction: column;
   justify-content: flex-start;
   flex-wrap: wrap;
+  width: 1200px;
+  margin: 0 auto;
   
   .filter {
     min-width: 40%;
-    padding-left: calc(1% / 1);
     padding-top: 0.75rem;
     padding-bottom: 2.5rem;
   }
