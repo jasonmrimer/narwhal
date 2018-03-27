@@ -4,9 +4,6 @@ import { Tracker } from './Tracker';
 import { clickButtonByName, clickOnFirstAirman, forIt, makeFakeTrackerStore } from '../utils/testUtils';
 import { SidePanel } from './SidePanel';
 import { TrackerStore } from './stores/TrackerStore';
-import * as moment from 'moment';
-import { StyledDeleteEventPopup } from '../event/DeleteEventPopup';
-import { EventModel, EventType } from '../event/models/EventModel';
 import { AirmanModel } from '../airman/models/AirmanModel';
 import { MemoryRouter } from 'react-router';
 import { RosterBody } from '../roster/RosterBody';
@@ -92,13 +89,5 @@ describe('Tracker', () => {
       clickButtonByName(subject, SidePanel, 'close');
       expect(subject.find(SidePanel).exists()).toBeFalsy();
     });
-  });
-
-  it('renders a delete popup when there is a pending delete event', () => {
-    const event = new EventModel('Title', 'Description', moment(), moment(), 1, EventType.Appointment);
-    expect(subject.find(StyledDeleteEventPopup).exists()).toBeFalsy();
-    trackerStore.removeEvent(event);
-    subject.update();
-    expect(subject.find(StyledDeleteEventPopup).exists()).toBeTruthy();
   });
 });

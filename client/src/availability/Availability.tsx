@@ -16,6 +16,7 @@ import { StyledLeaveForm } from '../event/LeaveForm';
 import { StyledMissionForm } from '../event/MissionForm';
 import { MissionStore } from '../mission/stores/MissionStore';
 import { StyledBackButton } from '../widgets/BackButton';
+import { StyledDeleteEventPopup } from '../event/DeleteEventPopup';
 
 interface Props {
   selectedAirman: AirmanModel;
@@ -65,6 +66,14 @@ export class Availability extends React.Component<Props> {
         </div>
         }
         {this.renderEventForm()}
+        {
+          availabilityStore.pendingDeleteEvent &&
+          <StyledDeleteEventPopup
+            event={availabilityStore.pendingDeleteEvent}
+            cancelPendingDeleteEvent={availabilityStore.cancelPendingDelete}
+            confirmPendingDeleteEvent={availabilityStore.executePendingDelete}
+          />
+        }
       </div>
     );
   }

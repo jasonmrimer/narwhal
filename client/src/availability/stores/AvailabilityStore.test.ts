@@ -1,29 +1,26 @@
 import { AvailabilityStore } from './AvailabilityStore';
-import { LeaveFormStore } from '../../event/stores/LeaveFormStore';
-import { EventActions } from '../../event/stores/EventActions';
 import { EventModel, EventType } from '../../event/models/EventModel';
 import { EventModelFactory } from '../../event/factories/EventModelFactory';
-import { MissionFormStore } from '../../event/stores/MissionFormStore';
-import { AppointmentFormStore } from '../../event/stores/AppointmentFormStore';
-import { MissionRepositoryStub } from '../../mission/repositories/doubles/MissionRepositoryStub';
 import { MissionStore } from '../../mission/stores/MissionStore';
 import { toJS } from 'mobx';
 import * as moment from 'moment';
+import { DoubleRepositories } from '../../Repositories';
+import { EventRepositoryStub } from '../../event/repositories/doubles/EventRepositoryStub';
 
 describe('AvailabilityStore', () => {
-  let eventActions: EventActions;
   let subject: AvailabilityStore;
-
+  let eventRepository: EventRepositoryStub;
   beforeEach(() => {
-    eventActions = {
-      addEvent: jest.fn(),
-      removeEvent: jest.fn()
-    };
+    const refreshAirmen = {
+      refreshAirmen: jest.fn()
+    }
+
     subject = new AvailabilityStore(
-      new AppointmentFormStore(eventActions),
-      new LeaveFormStore(eventActions),
-      new MissionFormStore(eventActions, new MissionStore(new MissionRepositoryStub()))
+      refreshAirmen,
+      new MissionStore(DoubleRepositories.missionRepository),
+      DoubleRepositories
     );
+    eventRepository = (DoubleRepositories.eventRepository as EventRepositoryStub);
   });
 
   it('should show the event form without an event', () => {
@@ -147,5 +144,61 @@ describe('AvailabilityStore', () => {
     subject.openCreateEventForm(EventType.Appointment, 1);
     subject.setFormErrors([{title: 'This field is required.'}]);
     expect(toJS(subject.appointmentFormStore.errors)).toEqual([{title: 'This field is required.'}]);
+  });
+
+  describe('deleting events', () => {
+    let savedEvent: EventModel;
+
+    beforeEach(async () => {
+      savedEvent = await subject.addEvent(EventModelFactory.build());
+      expect(subject.pendingDeleteEvent).toBeNull();
+      subject.removeEvent(savedEvent);
+    });
+
+    it('should set pending delete event', () => {
+      expect(subject.pendingDeleteEvent).toEqual(savedEvent);
+    });
+
+    it('should cancel pending delete event', () => {
+      subject.cancelPendingDelete();
+      expect(subject.pendingDeleteEvent).toBeNull();
+    });
+
+    it('should delete an airman\'s event', async () => {
+      await subject.executePendingDelete();
+      expect(subject.pendingDeleteEvent).toBeNull();
+      expect(eventRepository.hasItem(savedEvent)).toBeFalsy();
+      expect(subject.shouldShowEventForm).toBeFalsy();
+    });
+  });
+
+  describe('creating and editing events', () => {
+    const event = new EventModel('Title', 'Description', moment(), moment(), 1, EventType.Mission);
+
+    describe('addEvent', () => {
+      it('should add an event to an airman', async () => {
+        const savedEvent = await subject.addEvent(event);
+        expect(eventRepository.hasItem(savedEvent)).toBeTruthy();
+      });
+
+      it('should call set form errors on Availability Stores when catching errors from add event', async () => {
+        const invalidEvent = new EventModel('', 'Description', moment(), moment(), 1, EventType.Appointment);
+        const setFormErrorsSpy = jest.fn();
+        subject.setFormErrors = setFormErrorsSpy;
+        await subject.addEvent(invalidEvent);
+        expect(setFormErrorsSpy).toHaveBeenCalledWith([{title: 'This field is required.'}]);
+      });
+    });
+
+    it('should edit an existing event on an airman', async () => {
+      const savedEvent = await subject.addEvent(event);
+      const eventCount = eventRepository.count;
+
+      savedEvent.title = 'Changed Title';
+      const updatedEvent = await subject.addEvent(savedEvent);
+
+      expect(eventRepository.count).toBe(eventCount);
+      expect(eventRepository.hasItem(updatedEvent)).toBeTruthy();
+    });
   });
 });

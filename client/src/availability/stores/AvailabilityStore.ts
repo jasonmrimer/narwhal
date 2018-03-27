@@ -5,12 +5,25 @@ import { MissionFormStore } from '../../event/stores/MissionFormStore';
 import { AppointmentFormStore } from '../../event/stores/AppointmentFormStore';
 import { Moment } from 'moment';
 import { FormStore } from '../../widgets/stores/FormStore';
+import { EventActions } from '../../event/stores/EventActions';
+import { MissionStore } from '../../mission/stores/MissionStore';
+import { Repositories } from '../../Repositories';
 
-export class AvailabilityStore {
+interface RefreshAirmen {
+  refreshAirmen: (item: {airmanId: number}) => Promise<void>;
+}
+
+export class AvailabilityStore implements EventActions {
+  public appointmentFormStore: AppointmentFormStore;
+  public leaveFormStore: LeaveFormStore;
+  public missionFormStore: MissionFormStore;
+
   @observable private _shouldShowEventForm: boolean = false;
   @observable private _shouldShowEventTypeSelection: boolean = true;
   @observable private _eventFormType: EventType | string = '';
   @observable private _selectedDate: Moment;
+  @observable private _pendingDeleteEvent: EventModel | null = null;
+
   private eventTypeFormStoreMap: object;
 
   static callFormStoreFunction<T, S>(store: FormStore<T, S>,
@@ -19,9 +32,10 @@ export class AvailabilityStore {
     store[method].call(store, arg);
   }
 
-  constructor(public appointmentFormStore: AppointmentFormStore,
-              public leaveFormStore: LeaveFormStore,
-              public missionFormStore: MissionFormStore) {
+  constructor(private refreshAirmen: RefreshAirmen, missionStore: MissionStore, private repositories: Repositories) {
+    this.appointmentFormStore = new AppointmentFormStore(this);
+    this.leaveFormStore = new LeaveFormStore(this);
+    this.missionFormStore = new MissionFormStore(this, missionStore);
     this.eventTypeFormStoreMap = {
       [EventType.Mission]: this.missionFormStore,
       [EventType.Appointment]: this.appointmentFormStore,
@@ -84,6 +98,49 @@ export class AvailabilityStore {
     }
     this._shouldShowEventForm = false;
     this._eventFormType = '';
+  }
+
+  @action.bound
+  async addEvent(event: EventModel) {
+    try {
+      const addedEvent = await this.repositories.eventRepository.save(event);
+      await this.refreshAirmen.refreshAirmen(event);
+      this.closeEventForm();
+      return addedEvent;
+    } catch (e) {
+      this.setFormErrors(e);
+      return event;
+    }
+  }
+
+  @action.bound
+  removeEvent(event: EventModel) {
+    this._pendingDeleteEvent = event;
+  }
+
+  @computed
+  get pendingDeleteEvent() {
+    return this._pendingDeleteEvent;
+  }
+
+  @action.bound
+  cancelPendingDelete() {
+    this._pendingDeleteEvent = null;
+  }
+
+  @action.bound
+  async executePendingDelete() {
+    if (this._pendingDeleteEvent == null) {
+      return;
+    }
+    try {
+      await this.repositories.eventRepository.delete(this._pendingDeleteEvent);
+      await this.refreshAirmen.refreshAirmen(this._pendingDeleteEvent);
+      this.closeEventForm();
+    } catch (e) {
+      this.setFormErrors(e);
+    }
+    this._pendingDeleteEvent = null;
   }
 
   setFormErrors(errors: object[]) {

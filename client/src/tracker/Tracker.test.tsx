@@ -7,8 +7,6 @@ import { StyledLegend } from '../roster/Legend';
 import { TopLevelFilter } from '../widgets/Filter';
 import { StyledSidePanel } from './SidePanel';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
-import { StyledDeleteEventPopup } from '../event/DeleteEventPopup';
-import { EventModelFactory } from '../event/factories/EventModelFactory';
 import { TabType } from './stores/SidePanelStore';
 import { ClipLoader } from 'react-spinners';
 import { StyledRosterContainer } from '../roster/RosterContainer';
@@ -89,18 +87,6 @@ describe('Tracker', () => {
       trackerStore.setSelectedAirman(AirmanModelFactory.build(), TabType.AVAILABILITY);
       subject.update();
       expect(subject.find(StyledSidePanel).exists()).toBeTruthy();
-    });
-  });
-
-  describe('DeleteEventPopup', () => {
-    it('should not render a delete event popup when there is no pending delete event', () => {
-      expect(subject.find(StyledDeleteEventPopup).exists()).toBeFalsy();
-    });
-
-    it('should render a delete event popup when there is a pending delete event', () => {
-      trackerStore.removeEvent(EventModelFactory.build());
-      subject.update();
-      expect(subject.find(StyledDeleteEventPopup).exists()).toBeTruthy();
     });
   });
 });

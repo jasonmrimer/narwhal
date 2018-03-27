@@ -13,10 +13,10 @@ let subject: ShallowWrapper;
 describe('DeleteEventPopup', () => {
   beforeEach(async () => {
     const trackerStore = await makeFakeTrackerStore();
-    trackerStore.removeEvent(event);
+    trackerStore.availabilityStore.removeEvent(event);
     subject = shallow(
       <DeleteEventPopup
-        event={trackerStore.pendingDeleteEvent!}
+        event={trackerStore.availabilityStore.pendingDeleteEvent!}
         cancelPendingDeleteEvent={cancelPendingDeleteEvent}
         confirmPendingDeleteEvent={confirmPendingDeleteEvent}
       />

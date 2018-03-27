@@ -6,7 +6,6 @@ import { TopLevelFilter } from '../widgets/Filter';
 import { StyledSidePanel } from './SidePanel';
 import { StyledLegend } from '../roster/Legend';
 import { UserModel } from '../profile/models/ProfileModel';
-import { StyledDeleteEventPopup } from '../event/DeleteEventPopup';
 import { UnfilteredValue } from '../widgets/models/FilterOptionModel';
 import { ClipLoader } from 'react-spinners';
 import { StyledRosterContainer } from '../roster/RosterContainer';
@@ -76,14 +75,6 @@ export class Tracker extends React.Component<Props> {
           <StyledSidePanel
             trackerStore={trackerStore}
             sidePanelStore={sidePanelStore}
-          />
-        }
-        {
-          trackerStore.pendingDeleteEvent &&
-          <StyledDeleteEventPopup
-            event={trackerStore.pendingDeleteEvent}
-            cancelPendingDeleteEvent={trackerStore.cancelPendingDelete}
-            confirmPendingDeleteEvent={trackerStore.executePendingDelete}
           />
         }
       </div>
