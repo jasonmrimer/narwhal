@@ -57,9 +57,9 @@ public class UploadControllerTest extends BaseIntegrationTest {
       .basic("tytus", "password")
       .multiPart(file)
     .when()
-      .post(UploadController.URI + "/airman")
+      .post(UploadController.URI + "/airmen")
     .then()
-      .statusCode(302);
+      .statusCode(201);
     // @formatter:on
 
     assertThat(airmanRepository.count()).isEqualTo(count + 1);

@@ -10,16 +10,18 @@ import mil.af.us.narwhal.upload.certification.CertificationUploadCSVRow;
 import mil.af.us.narwhal.upload.certification.CertificationUploadService;
 import mil.af.us.narwhal.upload.qualification.QualificationUploadCSVRow;
 import mil.af.us.narwhal.upload.qualification.QualificationUploadService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.time.ZoneId;
+import java.util.List;
 
 @Controller
 @RequestMapping(UploadController.URI)
@@ -40,70 +42,90 @@ public class UploadController {
     this.certificationUploadService = certificationUploadService;
   }
 
-  @PostMapping("/airman")
+  @PostMapping("/airmen")
   @SuppressWarnings("unchecked")
-  public String importAirmanCSV(@RequestParam("file") MultipartFile file) throws IOException {
+  public ResponseEntity<Void> importAirmanCSV(@RequestParam("file") MultipartFile file) {
     try (Reader reader = new InputStreamReader(file.getInputStream())) {
-      CsvToBean csvToBean = new CsvToBeanBuilder<AirmanUploadCSVRow>(reader)
-        .withType(AirmanUploadCSVRow.class)
-        .withIgnoreLeadingWhiteSpace(true)
-        .build();
-      airmanUploadService.importToDatabase(csvToBean.parse());
-      return "redirect:/";
+      final List rows = getRows(reader, AirmanUploadCSVRow.class);
+      airmanUploadService.importToDatabase(rows);
+      return successResponse();
+    } catch (Exception e) {
+      return errorResponse();
     }
   }
 
-  @PostMapping("/qualification")
-  public String importQualificationCSV(@RequestParam("file") MultipartFile file) throws IOException {
+  @PostMapping("/qualifications")
+  public ResponseEntity<Void> importQualificationCSV(@RequestParam("file") MultipartFile file) {
     try (Reader reader = new InputStreamReader(file.getInputStream())) {
-      CsvToBean csvToBean = new CsvToBeanBuilder<QualificationUploadCSVRow>(reader)
-        .withType(QualificationUploadCSVRow.class)
-        .withIgnoreLeadingWhiteSpace(true)
-        .build();
-      qualificationUploadService.importToDatabase(csvToBean.parse());
-      return "redirect:/";
+      final List rows = getRows(reader, QualificationUploadCSVRow.class);
+      qualificationUploadService.importToDatabase(rows);
+      return successResponse();
+    } catch (Exception e) {
+      return errorResponse();
     }
   }
 
-  @PostMapping("/certification")
-  public String importCertificationCSV(@RequestParam("file") MultipartFile file) throws IOException {
+  @PostMapping("/certifications")
+  public ResponseEntity<Void> importCertificationCSV(@RequestParam("file") MultipartFile file) {
     try (Reader reader = new InputStreamReader(file.getInputStream())) {
-      CsvToBean csvToBean = new CsvToBeanBuilder<CertificationUploadCSVRow>(reader)
-        .withType(CertificationUploadCSVRow.class)
-        .withIgnoreLeadingWhiteSpace(true)
-        .build();
-      certificationUploadService.importToDatabase(csvToBean.parse());
-      return "redirect:/";
+      final List rows = getRows(reader, CertificationUploadCSVRow.class);
+      certificationUploadService.importToDatabase(rows);
+      return successResponse();
+    } catch (Exception e) {
+      return errorResponse();
     }
   }
 
   @PostMapping("/airmen/certifications")
-  public String attachCertificationsCSV(
+  public ResponseEntity<Void> attachCertificationsCSV(
     @RequestParam("file") MultipartFile file,
     @RequestParam("timezone") String timezone
-  ) throws IOException {
+  ) {
     try (Reader reader = new InputStreamReader(file.getInputStream())) {
-      CsvToBean csvToBean = new CsvToBeanBuilder<AttachCertificationCSVRow>(reader)
-        .withType(AttachCertificationCSVRow.class)
-        .withIgnoreLeadingWhiteSpace(true)
-        .build();
-      airmanUploadService.attachCertifications(csvToBean.parse(), ZoneId.of(timezone));
-      return "redirect:/";
+      final List rows = getRows(reader, AttachCertificationCSVRow.class);
+      airmanUploadService.attachCertifications(rows, ZoneId.of(timezone));
+      return successResponse();
+    } catch (Exception e) {
+      return errorResponse();
     }
   }
 
   @PostMapping("/airmen/qualifications")
-  public String attachQualificationsCSV(
+  public ResponseEntity<Void> attachQualificationsCSV(
     @RequestParam("file") MultipartFile file,
     @RequestParam("timezone") String timezone
-  ) throws IOException {
+  ) {
     try (Reader reader = new InputStreamReader(file.getInputStream())) {
-      CsvToBean csvToBean = new CsvToBeanBuilder<AttachQualificationCSVRow>(reader)
-        .withType(AttachQualificationCSVRow.class)
-        .withIgnoreLeadingWhiteSpace(true)
-        .build();
-      airmanUploadService.attachQualifications(csvToBean.parse(), ZoneId.of(timezone));
-      return "redirect:/";
+      final List rows = getRows(reader, AttachQualificationCSVRow.class);
+      airmanUploadService.attachQualifications(rows, ZoneId.of(timezone));
+      return successResponse();
+    } catch (Exception e) {
+      return errorResponse();
     }
+  }
+
+  private List getRows(Reader reader, Class cls) throws CSVParseException {
+    CsvToBean csvToBean = new CsvToBeanBuilder<>(reader)
+      .withType(cls)
+      .withIgnoreLeadingWhiteSpace(true)
+      .withThrowExceptions(false)
+      .build();
+
+    final List rows = csvToBean.parse();
+
+    final List exceptions = csvToBean.getCapturedExceptions();
+    if (exceptions.size() > 0) {
+      throw new CSVParseException(exceptions);
+    }
+
+    return rows;
+  }
+
+  private ResponseEntity<Void> successResponse() {
+    return new ResponseEntity<>(HttpStatus.CREATED);
+  }
+
+  private ResponseEntity<Void> errorResponse() {
+    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
   }
 }

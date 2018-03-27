@@ -71,4 +71,19 @@ export class HTTPClient {
       throw new Error('Failed to delete item');
     }
   }
+
+  async postFile(path: string, file: File, timezone: string) {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('timezone', timezone);
+    return await fetch(
+      urljoin(this.baseURL, path),
+      {
+        method: 'POST',
+        headers: [['X-XSRF-TOKEN', this.csrfToken]],
+        body: formData,
+        credentials: 'include'
+      }
+    );
+  }
 }

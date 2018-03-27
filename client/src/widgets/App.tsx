@@ -87,6 +87,7 @@ export class App extends React.Component<Props> {
             );
           }}
         />
+
         <Route
           exact={true}
           path="/"
