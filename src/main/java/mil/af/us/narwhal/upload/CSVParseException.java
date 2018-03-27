@@ -10,4 +10,16 @@ public class CSVParseException extends Exception {
   public CSVParseException(List<CsvException> exceptions) {
     this.exceptions = exceptions;
   }
+
+  @Override
+  public String toString() {
+    final StringBuilder sb = new StringBuilder("Upload was unsuccessful.\n");
+    for (CsvException e : exceptions) {
+      sb.append(e.getMessage());
+      sb.append(" at line ");
+      sb.append(e.getLineNumber());
+      sb.append(".\n");
+    }
+    return sb.toString();
+  }
 }

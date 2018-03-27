@@ -44,31 +44,45 @@ export class Upload extends React.Component<{}, State> {
     }
 
     const resp = await this.client.postFile(this.formMap[name].url, file, this.timezone);
-    if (resp.status < 200 || resp.status >= 300) {
-      this.setState({message: 'Something went wrong with your .CSV upload.'});
-    } else {
-      this.setState({message: 'Successfully uploaded file.'});
-    }
+    const message = await resp.text();
+    this.setState({message});
   }
 
   onChange = (e: any) => {
     this.setState({[e.target.name]: e.target.files[0]});
   }
 
+  renderMessage = () => {
+    if (this.state.message == null) {
+      return null;
+    }
+    return (
+      <h2
+        style={{background: Theme.yellow, color: Theme.darkest, padding: '1rem'}}
+        key="0">
+        {this.state.message.split('\n').map((text, index) => <div key={index}>{text}</div>)}
+      </h2>
+    );
+  }
+
   render() {
-    const out = this.state.message ?
-      [<h2 style={{background: Theme.yellow, color: Theme.darkest, padding: '1rem'}} key="0">{this.state.message}</h2>] :
-      [];
-    return out.concat(Object.keys(this.formMap).map((name: string, index: number) => {
-      return (
-        <div key={index + 1}>
-          <h3>{this.formMap[name].title}</h3>
-          <form name={name} onSubmit={this.onSubmit}>
-          <input type="file" name={name} onChange={this.onChange}/>
-          <input type="submit" value="Upload CSV"/>
-        </form>
-        </div>
-      );
-    }));
+    return (
+      <div>
+        {this.renderMessage()}
+        {
+          Object.keys(this.formMap).map((name: string, index: number) => {
+            return (
+              <div key={index}>
+                <h3>{this.formMap[name].title}</h3>
+                <form name={name} onSubmit={this.onSubmit}>
+                  <input type="file" name={name} onChange={this.onChange}/>
+                  <input type="submit" value="Upload CSV"/>
+                </form>
+              </div>
+            );
+          })
+        }
+      </div>
+    );
   }
 }

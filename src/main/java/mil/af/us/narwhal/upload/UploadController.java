@@ -2,6 +2,7 @@ package mil.af.us.narwhal.upload;
 
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
+import com.opencsv.exceptions.CsvException;
 import mil.af.us.narwhal.upload.airman.AirmanUploadCSVRow;
 import mil.af.us.narwhal.upload.airman.AirmanUploadService;
 import mil.af.us.narwhal.upload.airman.AttachCertificationCSVRow;
@@ -44,40 +45,47 @@ public class UploadController {
 
   @PostMapping("/airmen")
   @SuppressWarnings("unchecked")
-  public ResponseEntity<Void> importAirmanCSV(@RequestParam("file") MultipartFile file) {
+  public ResponseEntity<String> importAirmanCSV(@RequestParam("file") MultipartFile file) {
     try (Reader reader = new InputStreamReader(file.getInputStream())) {
       final List rows = getRows(reader, AirmanUploadCSVRow.class);
       airmanUploadService.importToDatabase(rows);
       return successResponse();
+    } catch (ImportException e) {
+      return errorResponse(
+        e.toString() +
+          "\nCheck that your sites and squadrons are identical to the ones on the tracker filters, " +
+          "eg. sites are formatted as DMS-TX and squadrons as 3 IS.");
+    } catch (CSVParseException e) {
+      return errorResponse(e.toString());
     } catch (Exception e) {
-      return errorResponse();
+      return errorResponse("Upload was unsuccessful. " + e.getCause().getMessage());
     }
   }
 
   @PostMapping("/qualifications")
-  public ResponseEntity<Void> importQualificationCSV(@RequestParam("file") MultipartFile file) {
+  public ResponseEntity<String> importQualificationCSV(@RequestParam("file") MultipartFile file) {
     try (Reader reader = new InputStreamReader(file.getInputStream())) {
       final List rows = getRows(reader, QualificationUploadCSVRow.class);
       qualificationUploadService.importToDatabase(rows);
       return successResponse();
     } catch (Exception e) {
-      return errorResponse();
+      return errorResponse("Something went wrong with your .CSV upload.");
     }
   }
 
   @PostMapping("/certifications")
-  public ResponseEntity<Void> importCertificationCSV(@RequestParam("file") MultipartFile file) {
+  public ResponseEntity<String> importCertificationCSV(@RequestParam("file") MultipartFile file) {
     try (Reader reader = new InputStreamReader(file.getInputStream())) {
       final List rows = getRows(reader, CertificationUploadCSVRow.class);
       certificationUploadService.importToDatabase(rows);
       return successResponse();
     } catch (Exception e) {
-      return errorResponse();
+      return errorResponse("Something went wrong with your .CSV upload.");
     }
   }
 
   @PostMapping("/airmen/certifications")
-  public ResponseEntity<Void> attachCertificationsCSV(
+  public ResponseEntity<String> attachCertificationsCSV(
     @RequestParam("file") MultipartFile file,
     @RequestParam("timezone") String timezone
   ) {
@@ -86,12 +94,12 @@ public class UploadController {
       airmanUploadService.attachCertifications(rows, ZoneId.of(timezone));
       return successResponse();
     } catch (Exception e) {
-      return errorResponse();
+      return errorResponse("Something went wrong with your .CSV upload.");
     }
   }
 
   @PostMapping("/airmen/qualifications")
-  public ResponseEntity<Void> attachQualificationsCSV(
+  public ResponseEntity<String> attachQualificationsCSV(
     @RequestParam("file") MultipartFile file,
     @RequestParam("timezone") String timezone
   ) {
@@ -100,7 +108,7 @@ public class UploadController {
       airmanUploadService.attachQualifications(rows, ZoneId.of(timezone));
       return successResponse();
     } catch (Exception e) {
-      return errorResponse();
+      return errorResponse("Something went wrong with your .CSV upload.");
     }
   }
 
@@ -121,11 +129,11 @@ public class UploadController {
     return rows;
   }
 
-  private ResponseEntity<Void> successResponse() {
-    return new ResponseEntity<>(HttpStatus.CREATED);
+  private ResponseEntity<String> successResponse() {
+    return new ResponseEntity<>("Successfully uploaded file.", HttpStatus.CREATED);
   }
 
-  private ResponseEntity<Void> errorResponse() {
-    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+  private ResponseEntity<String> errorResponse(String message) {
+    return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
   }
 }

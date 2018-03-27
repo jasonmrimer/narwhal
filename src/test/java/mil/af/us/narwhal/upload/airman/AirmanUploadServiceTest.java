@@ -1,5 +1,6 @@
 package mil.af.us.narwhal.upload.airman;
 
+import mil.af.us.narwhal.BaseIntegrationTest;
 import mil.af.us.narwhal.airman.Airman;
 import mil.af.us.narwhal.airman.AirmanCertification;
 import mil.af.us.narwhal.airman.AirmanQualification;
@@ -13,6 +14,8 @@ import mil.af.us.narwhal.skill.CertificationRepository;
 import mil.af.us.narwhal.skill.Qualification;
 import mil.af.us.narwhal.skill.QualificationRepository;
 import mil.af.us.narwhal.squadron.Squadron;
+import mil.af.us.narwhal.upload.ImportException;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +24,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZoneId;
 import java.util.List;
@@ -30,11 +34,8 @@ import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ActiveProfiles("test")
-@RunWith(SpringRunner.class)
-@DataJpaTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class AirmanUploadServiceTest {
+@Transactional
+public class AirmanUploadServiceTest extends BaseIntegrationTest {
   private final Flight flight = new Flight("FLIGHT1");
   private final Squadron squadron = new Squadron("SQUAD1");
   private final Site site = new Site("SITE1");
@@ -61,6 +62,11 @@ public class AirmanUploadServiceTest {
     );
   }
 
+  @After
+  public void tearDown() {
+    super.tearDown();
+  }
+
   @Test
   public void testImportToDatabase() throws Exception {
     final List<AirmanUploadCSVRow> rows = asList(
@@ -84,7 +90,7 @@ public class AirmanUploadServiceTest {
   }
 
   @Test
-  public void testImportToDatabase_createsUnknownFlights() {
+  public void testImportToDatabase_createsUnknownFlights() throws ImportException {
     final long count = flightRepository.count();
 
     subject.importToDatabase(singletonList(
@@ -95,7 +101,7 @@ public class AirmanUploadServiceTest {
   }
 
   @Test
-  public void testImportToDatabase_doesNotDuplicateFlights_whenTheFlightAppearsTwice() {
+  public void testImportToDatabase_doesNotDuplicateFlights_whenTheFlightAppearsTwice() throws ImportException {
     final long count = flightRepository.count();
 
     subject.importToDatabase(asList(
@@ -104,32 +110,6 @@ public class AirmanUploadServiceTest {
     ));
 
     assertThat(flightRepository.count()).isEqualTo(count + 1);
-  }
-
-  @Test
-  public void testImportToDatabase_doesNotCreateUnknownSites() {
-    final long airmanCount = airmanRepository.count();
-    final long flightCount = flightRepository.count();
-
-    subject.importToDatabase(singletonList(
-      new AirmanUploadCSVRow("first1", "last1", "unknown-site", "", "")
-    ));
-
-    assertThat(airmanRepository.count()).isEqualTo(airmanCount);
-    assertThat(flightRepository.count()).isEqualTo(flightCount);
-  }
-
-  @Test
-  public void testImportToDatabase_doesNotCreateUnknownSquadrons() {
-    final long airmanCount = airmanRepository.count();
-    final long flightCount = flightRepository.count();
-
-    subject.importToDatabase(singletonList(
-      new AirmanUploadCSVRow("first1", "last1", site.getName(), "unknown-squadron", "")
-    ));
-
-    assertThat(airmanRepository.count()).isEqualTo(airmanCount);
-    assertThat(flightRepository.count()).isEqualTo(flightCount);
   }
 
   @Test

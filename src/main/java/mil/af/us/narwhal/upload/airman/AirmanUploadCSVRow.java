@@ -9,11 +9,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AirmanUploadCSVRow {
-  @CsvBindByName private String firstName;
-  @CsvBindByName private String lastName;
-  @CsvBindByName private String site;
-  @CsvBindByName private String squadron;
-  @CsvBindByName private String flight;
+  @CsvBindByName(required = true) private String firstName;
+  @CsvBindByName(required = true) private String lastName;
+  @CsvBindByName(required = true) private String site;
+  @CsvBindByName(required = true) private String squadron;
+  @CsvBindByName(required = true) private String flight;
 
   public String getSite() {
     return site.toUpperCase();

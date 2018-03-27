@@ -13,14 +13,14 @@ import mil.af.us.narwhal.skill.CertificationRepository;
 import mil.af.us.narwhal.skill.Qualification;
 import mil.af.us.narwhal.skill.QualificationRepository;
 import mil.af.us.narwhal.squadron.Squadron;
+import mil.af.us.narwhal.upload.ImportException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class AirmanUploadService {
@@ -41,18 +41,32 @@ public class AirmanUploadService {
   }
 
   @Transactional
-  public void importToDatabase(List<AirmanUploadCSVRow> rows) {
-    for (AirmanUploadCSVRow row : rows) {
+  public void importToDatabase(List<AirmanUploadCSVRow> rows) throws ImportException {
+    List<Integer> failedRows = new ArrayList<>();
+
+    for (int i = 0; i < rows.size(); i++) {
+      final AirmanUploadCSVRow row = rows.get(i);
+
       Site site = siteRepository.findOneByName(row.getSite());
-      if (site == null) continue;
+      if (site == null){
+        failedRows.add(i + 1);
+        continue;
+      }
 
       Squadron squadron = getSquadron(row, site);
-      if (squadron == null) continue;
+      if (squadron == null){
+        failedRows.add(i + 1);
+        continue;
+      }
 
       Flight flight = getFlight(row, squadron);
 
       final Airman airman = new Airman(flight, row.getFirstName(), row.getLastName());
       airmanRepository.save(airman);
+    }
+
+    if (failedRows.size() > 0) {
+      throw new ImportException(failedRows);
     }
   }
 
