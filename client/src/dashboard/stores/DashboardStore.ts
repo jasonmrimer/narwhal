@@ -58,16 +58,19 @@ export class DashboardStore {
       {label: 'LONG RANGE', startTime: moment().add(24 * 14, 'hour'), endTime: moment().add(24 * 30, 'hour')},
     ];
 
-    return this._missions
-      .filter(msn => msn.site != null || this._siteId === UnfilteredValue)
-      .filter(msn => msn.site!.id === this._siteId || this._siteId === UnfilteredValue)
-      .reduce((accum, current) => {
-        intervals.forEach(interval => {
-          current.startDateTime.isBetween(interval.startTime, interval.endTime, 'minute', '[)') ?
-            (accum[interval.label] = accum[interval.label] || []).push(current) : accum;
-        });
+    const filteredMissions =
+      this._siteId !== UnfilteredValue ?
+        this._missions
+          .filter(msn => msn.site != null)
+          .filter(msn => msn.site!.id === this._siteId) :
+        this._missions;
 
-        return accum;
-      },      {});
+    return filteredMissions.reduce((accum, current) => {
+      intervals.forEach(interval => {
+        current.startDateTime.isBetween(interval.startTime, interval.endTime, 'minute', '[)') ?
+          (accum[interval.label] = accum[interval.label] || []).push(current) : accum;
+      });
+      return accum;
+    }, {});
   }
 }

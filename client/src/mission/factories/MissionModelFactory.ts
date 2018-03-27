@@ -171,8 +171,7 @@ const missionNineteen = new MissionModel(
   'missionId19',
   'ato19',
   time.clone().add(20, 'days'),
-  time.clone().add(20, 'days'),
-  new SiteModel(3, 'DMS-HI', [])
+  time.clone().add(20, 'days')
 );
 
 const missions = [

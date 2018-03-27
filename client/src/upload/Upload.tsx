@@ -59,7 +59,8 @@ export class Upload extends React.Component<{}, State> {
     return (
       <h2
         style={{background: Theme.yellow, color: Theme.darkest, padding: '1rem'}}
-        key="0">
+        key="0"
+      >
         {this.state.message.split('\n').map((text, index) => <div key={index}>{text}</div>)}
       </h2>
     );
