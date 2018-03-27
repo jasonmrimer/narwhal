@@ -5,6 +5,7 @@ import { action, computed, observable } from 'mobx';
 import { SiteModel } from '../../site/models/SiteModel';
 import { UnfilteredValue } from '../../widgets/models/FilterOptionModel';
 import { Repositories } from '../../Repositories';
+import * as moment from 'moment';
 
 export class DashboardStore {
   private siteRepository: SiteRepository;
@@ -31,16 +32,6 @@ export class DashboardStore {
   }
 
   @computed
-  get missions() {
-    if (this._siteId === UnfilteredValue) {
-      return this._missions;
-    }
-    return this._missions
-      .filter(msn => msn.site != null)
-      .filter(msn => msn.site!.id === this._siteId);
-  }
-
-  @computed
   get siteId() {
     return this._siteId;
   }
@@ -55,5 +46,28 @@ export class DashboardStore {
   @action.bound
   setSiteId(id: number) {
     this._siteId = id;
+  }
+
+  @computed
+  get missions() {
+    const intervals = [
+      {label: 'NEXT 24 HOURS', startTime: moment(), endTime: moment().add(24, 'hour')},
+      {label: 'NEXT 72 HOURS', startTime: moment().add(24, 'hour'), endTime: moment().add(24 * 3, 'hour')},
+      {label: 'THIS WEEK', startTime: moment().add(24 * 3, 'hour'), endTime: moment().add(24 * 7, 'hour')},
+      {label: 'NEXT WEEK', startTime: moment().add(24 * 7, 'hour'), endTime: moment().add(24 * 14, 'hour')},
+      {label: 'LONG RANGE', startTime: moment().add(24 * 14, 'hour'), endTime: moment().add(24 * 30, 'hour')},
+    ];
+
+    return this._missions
+      .filter(msn => msn.site != null || this._siteId === UnfilteredValue)
+      .filter(msn => msn.site!.id === this._siteId || this._siteId === UnfilteredValue)
+      .reduce((accum, current) => {
+        intervals.forEach(interval => {
+          current.startDateTime.isBetween(interval.startTime, interval.endTime, 'minute', '[)') ?
+            (accum[interval.label] = accum[interval.label] || []).push(current) : accum;
+        });
+
+        return accum;
+      },      {});
   }
 }

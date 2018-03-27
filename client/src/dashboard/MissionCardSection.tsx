@@ -1,36 +1,32 @@
 import * as React from 'react';
 import { MissionModel } from '../mission/models/MissionModel';
-import { Moment } from 'moment';
 import * as classNames from 'classnames';
 import { StyledMission } from '../mission/Mission';
 import styled from 'styled-components';
+import { observer } from 'mobx-react';
 
 interface Props {
   missions: MissionModel[];
   header: string;
-  intervalStart: Moment;
-  intervalEnd: Moment;
   className?: string;
 }
 
+@observer
 export class MissionCardSection extends React.Component<Props> {
-
   render() {
-    const filteredMissions = this.props.missions.filter((mission) =>
-      mission.startDateTime.isBetween(this.props.intervalStart, this.props.intervalEnd, 'minute', '[)'));
-    const count = filteredMissions.length;
+    const count = this.props.missions.length;
 
     return (
       <div className={classNames(this.props.className, 'section')}>
         <h2>
           <span>
             <span className="title">{this.props.header}</span>
-            <span className="count">{String(count)}</span>
+            <span className="count">{count}</span>
           </span>
         </h2>
         <div className="cards">
           {
-            filteredMissions.map((mission: MissionModel, index) => {
+            this.props.missions.map((mission: MissionModel, index) => {
               return <StyledMission mission={mission} key={index}/>;
             })
           }
