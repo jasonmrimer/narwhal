@@ -3,6 +3,7 @@ package mil.af.us.narwhal.upload.qualification;
 import mil.af.us.narwhal.skill.Qualification;
 import mil.af.us.narwhal.skill.QualificationRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -16,6 +17,7 @@ public class QualificationUploadService {
     this.qualificationRepository = qualificationRepository;
   }
 
+  @Transactional
   public void importToDatabase(List<QualificationUploadCSVRow> rows) {
     Set<Qualification> qualifications = new HashSet<>();
 

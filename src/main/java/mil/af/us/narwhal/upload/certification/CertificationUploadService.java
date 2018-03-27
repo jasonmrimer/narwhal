@@ -5,6 +5,7 @@ import mil.af.us.narwhal.site.SiteRepository;
 import mil.af.us.narwhal.skill.Certification;
 import mil.af.us.narwhal.skill.CertificationRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -20,6 +21,7 @@ public class CertificationUploadService {
     this.siteRepository = siteRepository;
   }
 
+  @Transactional
   public void importToDatabase(List<CertificationUploadCSVRow> rows) {
     Set<Certification> certifications = new HashSet<>();
 

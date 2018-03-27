@@ -14,6 +14,7 @@ import mil.af.us.narwhal.skill.Qualification;
 import mil.af.us.narwhal.skill.QualificationRepository;
 import mil.af.us.narwhal.squadron.Squadron;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
@@ -39,9 +40,8 @@ public class AirmanUploadService {
     this.qualificationRepository = qualificationRepository;
   }
 
+  @Transactional
   public void importToDatabase(List<AirmanUploadCSVRow> rows) {
-    Set<Airman> airmen = new HashSet<>();
-
     for (AirmanUploadCSVRow row : rows) {
       Site site = siteRepository.findOneByName(row.getSite());
       if (site == null) continue;
@@ -51,12 +51,12 @@ public class AirmanUploadService {
 
       Flight flight = getFlight(row, squadron);
 
-      airmen.add(new Airman(flight, row.getFirstName(), row.getLastName()));
+      final Airman airman = new Airman(flight, row.getFirstName(), row.getLastName());
+      airmanRepository.save(airman);
     }
-
-    if (!airmen.isEmpty()) airmanRepository.save(airmen);
   }
 
+  @Transactional
   public void attachCertifications(List<AttachCertificationCSVRow> rows, ZoneId zoneId) {
     for (AttachCertificationCSVRow row : rows) {
       final Airman airman = airmanRepository.findOneByFirstNameAndLastName(
@@ -79,6 +79,7 @@ public class AirmanUploadService {
     }
   }
 
+  @Transactional
   public void attachQualifications(List<AttachQualificationCSVRow> rows, ZoneId zoneId) {
     for (AttachQualificationCSVRow row : rows) {
       final Airman airman = airmanRepository.findOneByFirstNameAndLastName(
