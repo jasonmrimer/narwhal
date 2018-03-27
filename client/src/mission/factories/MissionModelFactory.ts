@@ -175,7 +175,27 @@ const missionNineteen = new MissionModel(
   new SiteModel(3, 'DMS-HI', [])
 );
 
-const missions = [missionOne, missionTwo, missionThree, missionFour, missionFive, missionSix, missionSeven, missionEight, missionNine, missionTen, missionEleven, missionTwelve, missionThirteen, missionFourteen, missionFifteen, missionSixteen, missionSeventeen, missionEightteen, missionNineteen];
+const missions = [
+  missionOne,
+  missionTwo,
+  missionThree,
+  missionFour,
+  missionFive,
+  missionSix,
+  missionSeven,
+  missionEight,
+  missionNine,
+  missionTen,
+  missionEleven,
+  missionTwelve,
+  missionThirteen,
+  missionFourteen,
+  missionFifteen,
+  missionSixteen,
+  missionSeventeen,
+  missionEightteen,
+  missionNineteen
+];
 
 export class MissionModelFactory {
   static buildList() {

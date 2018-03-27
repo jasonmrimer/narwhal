@@ -13,7 +13,7 @@ describe('AvailabilityStore', () => {
   beforeEach(() => {
     const refreshAirmen = {
       refreshAirmen: jest.fn()
-    }
+    };
 
     subject = new AvailabilityStore(
       refreshAirmen,

@@ -45,7 +45,11 @@ describe('RipItems', () => {
     const expirationDate = moment().startOf('day');
     const modifiedExpirationDate = expirationDate.clone().add(10, 'days');
 
-    subject.find(StyledDatePicker).at(0).simulate('change', {target: {value: modifiedExpirationDate.format('YYYY-MM-DD')}});
+    subject.find(StyledDatePicker).at(0).simulate('change',
+                                                  {
+        target: {value: modifiedExpirationDate.format('YYYY-MM-DD')}
+      }
+    );
 
     expect(store.updateRipItem).toHaveBeenCalled();
     const updatedDate = (store.updateRipItem as Mock).mock.calls[0][0].expirationDate;

@@ -2,9 +2,9 @@ import { action, computed, observable } from 'mobx';
 import { SkillFormStore } from '../../skills/stores/SkillFormStore';
 import { Skill } from '../../skills/models/Skill';
 import { AirmanRipItemFormStore } from '../../rip-items/stores/AirmanRipItemFormStore';
-import { RipItemRepository } from '../../airman/repositories/AirmanRipItemRepository';
 import { CertificationModel } from '../../skills/models/CertificationModel';
 import { QualificationModel } from '../../skills/models/QualificationModel';
+import { Repositories } from '../../Repositories';
 
 export enum CurrencyChild {
   SkillList,
@@ -12,12 +12,26 @@ export enum CurrencyChild {
   RipItemForm
 }
 
+interface RefreshAirmen {
+  refreshAirmen: (item: {airmanId: number}) => Promise<void>;
+}
+
+export interface SiteIdContainer {
+  selectedSite: number;
+}
+
 export class CurrencyStore {
   public airmanRipItemFormStore: AirmanRipItemFormStore;
+  public skillFormStore: SkillFormStore;
   @observable private _child: CurrencyChild = CurrencyChild.SkillList;
 
-  constructor(public skillFormStore: SkillFormStore, ripItemRepository: RipItemRepository) {
-    this.airmanRipItemFormStore = new AirmanRipItemFormStore(this, ripItemRepository);
+  constructor(
+    private refreshAirmen: RefreshAirmen,
+    siteIdContainer: SiteIdContainer,
+    private repositories: Repositories
+  ) {
+    this.airmanRipItemFormStore = new AirmanRipItemFormStore(this, repositories.ripItemRepository);
+    this.skillFormStore = new SkillFormStore(siteIdContainer, this);
   }
 
   hydrate(certifications: CertificationModel[], qualifications: QualificationModel[]) {
@@ -55,6 +69,26 @@ export class CurrencyStore {
   @action.bound
   closeAirmanRipItemForm() {
     this._child = CurrencyChild.SkillList;
+  }
+
+  @action.bound
+  async addSkill(skill: Skill) {
+    try {
+      await this.repositories.airmanRepository.saveSkill(skill);
+      await this.refreshAirmen.refreshAirmen(skill);
+    } catch (e) {
+      this.setFormErrors(e);
+    }
+  }
+
+  @action.bound
+  async removeSkill(skill: Skill) {
+    try {
+      await this.repositories.airmanRepository.deleteSkill(skill);
+      await this.refreshAirmen.refreshAirmen(skill);
+    } catch (e) {
+      this.setFormErrors(e);
+    }
   }
 
   setFormErrors(errors: object[]) {

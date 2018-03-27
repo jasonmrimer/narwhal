@@ -6,8 +6,6 @@ import { PlannerStore } from '../../roster/stores/PlannerStore';
 import { MissionStore } from '../../mission/stores/MissionStore';
 import { UnfilteredValue } from '../../widgets/models/FilterOptionModel';
 import { TimeService } from '../services/TimeService';
-import { SkillFormStore } from '../../skills/stores/SkillFormStore';
-import { Skill } from '../../skills/models/Skill';
 import { SidePanelStore, TabType } from './SidePanelStore';
 import { Moment } from 'moment';
 import { RosterHeaderStore } from '../../roster/stores/RosterHeaderStore';
@@ -35,10 +33,7 @@ export class TrackerStore {
     this.repositories = repositories;
     this.missionStore = new MissionStore(this.repositories.missionRepository);
     this.trackerFilterStore = new TrackerFilterStore();
-    this.currencyStore = new CurrencyStore(
-      new SkillFormStore(this.trackerFilterStore, this),
-      this.repositories.ripItemRepository
-    );
+    this.currencyStore = new CurrencyStore(this, this.trackerFilterStore, this.repositories);
     this.availabilityStore = new AvailabilityStore(this, this.missionStore, this.repositories);
     this.plannerStore = new PlannerStore(timeService);
     this.sidePanelStore = new SidePanelStore();
@@ -109,26 +104,6 @@ export class TrackerStore {
     this._selectedAirman = airman;
     this.sidePanelStore.setSelectedTab(TabType.AVAILABILITY);
     this.availabilityStore.showEventForm(date);
-  }
-
-  @action.bound
-  async addSkill(skill: Skill) {
-    try {
-      await this.repositories.airmanRepository.saveSkill(skill);
-      await this.refreshAirmen(skill);
-    } catch (e) {
-      this.currencyStore.setFormErrors(e);
-    }
-  }
-
-  @action.bound
-  async removeSkill(skill: Skill) {
-    try {
-      await this.repositories.airmanRepository.deleteSkill(skill);
-      await this.refreshAirmen(skill);
-    } catch (e) {
-      this.currencyStore.setFormErrors(e);
-    }
   }
 
   @action.bound

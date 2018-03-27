@@ -68,7 +68,9 @@ describe('App', () => {
           return Promise.resolve({user: user, classified: false});
         }
       };
-      profileStore = new ProfileSitePickerStore(Object.assign({}, DoubleRepositories, {profileRepository: profileRepo}));
+
+      const repositories = Object.assign({}, DoubleRepositories, {profileRepository: profileRepo});
+      profileStore = new ProfileSitePickerStore(repositories);
       await profileStore.hydrate();
 
       mountedSubject = mount(

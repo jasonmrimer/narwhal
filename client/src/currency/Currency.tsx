@@ -18,11 +18,11 @@ interface Props {
 
 @observer
 export class Currency extends React.Component<Props> {
-  async componentDidMount() {
+  componentDidMount() {
     this.props.currencyStore.closeSkillForm();
   }
 
-  async componentWillReceiveProps() {
+  componentWillReceiveProps() {
     this.props.currencyStore.closeSkillForm();
   }
 

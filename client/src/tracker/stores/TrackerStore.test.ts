@@ -3,8 +3,6 @@ import { AirmanModel, ShiftType } from '../../airman/models/AirmanModel';
 import * as moment from 'moment';
 import { toJS } from 'mobx';
 import { TimeServiceStub } from '../services/doubles/TimeServiceStub';
-import { SkillType } from '../../skills/models/SkillType';
-import { AirmanQualificationModel } from '../../airman/models/AirmanQualificationModel';
 import { DoubleRepositories } from '../../Repositories';
 import { FakeAirmanRepository } from '../../airman/repositories/doubles/FakeAirmanRepository';
 import { TabType } from './SidePanelStore';
@@ -34,65 +32,6 @@ describe('TrackerStore', () => {
 
       subject.clearSelectedAirman();
       expect(subject.plannerStore.sidePanelWeek[0].isSame(subject.plannerStore.plannerWeek[0])).toBeTruthy();
-    });
-  });
-
-  describe('skill', () => {
-    it('should add a qualification to an airman', async () => {
-      const airman = allAirmen[0];
-      const qualLength = airman.qualifications.length;
-
-      await subject.addSkill({
-        id: null,
-        type: SkillType.Qualification,
-        airmanId: airman.id,
-        skillId: 100,
-        earnDate: moment(),
-        expirationDate: moment()
-      });
-
-      const updatedAirman = (await airmanRepository.findAll())[0];
-      expect(updatedAirman.qualifications.length).toBeGreaterThan(qualLength);
-    });
-
-    it('should add a certification to an airman', async () => {
-      const airman = allAirmen[0];
-      const certLength = airman.certifications.length;
-
-      await subject.addSkill({
-        id: null,
-        type: SkillType.Certification,
-        airmanId: airman.id,
-        skillId: 100,
-        earnDate: moment(),
-        expirationDate: moment()
-      });
-
-      const updatedAirman = (await airmanRepository.findAll())[0];
-      expect(updatedAirman.certifications.length).toBeGreaterThan(certLength);
-    });
-
-    it('should delete a qualification from the airman', async () => {
-      const airman = allAirmen[0];
-      const skill = {
-        id: null,
-        type: SkillType.Qualification,
-        airmanId: airman.id,
-        skillId: 100,
-        earnDate: moment(),
-        expirationDate: moment()
-      };
-
-      await subject.addSkill(skill);
-
-      let updatedAirman = (await airmanRepository.findAll())[0];
-      const qualLength = updatedAirman.qualifications.length;
-      const id = updatedAirman.qualifications.find((q: AirmanQualificationModel) => q.skillId === 100)!.id;
-
-      await subject.removeSkill(Object.assign({}, skill, {id}));
-
-      updatedAirman = (await airmanRepository.findAll())[0];
-      expect(updatedAirman.qualifications.length).toBeLessThan(qualLength);
     });
   });
 

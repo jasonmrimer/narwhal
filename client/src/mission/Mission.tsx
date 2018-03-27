@@ -2,10 +2,6 @@ import * as React from 'react';
 import { MissionModel } from './models/MissionModel';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { StyledButton } from '../widgets/Button';
-
-function noop() {
-}
 
 interface Props {
   mission: MissionModel;
@@ -24,8 +20,8 @@ export const Mission = (props: Props) => {
           <div>MSN END: {endDateTime ? endDateTime.format('HHmm[L]') : 'TBD'}</div>
         </div>
         <Link className="crew-link" to={`/crew/${id}`}>
-        <StyledButton text="VIEW" onClick={noop}/>
-      </Link>
+          VIEW
+        </Link>
       </div>
     </span>
   );
@@ -51,6 +47,17 @@ export const StyledMission = styled(Mission)`
   }
   
   .crew-link {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border: 1px solid ${props => props.theme.fontColor};
+    color: ${props => props.theme.fontColor};
     text-decoration: none;
+    text-align: center;
+    font-size: 0.75rem;
+    font-weight: 400;
+    &:hover {
+      color: ${props => props.theme.dark};
+      background: ${props => props.theme.fontColor};    
+    }
   }
 `;
