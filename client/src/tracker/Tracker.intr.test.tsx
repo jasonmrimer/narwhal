@@ -52,17 +52,17 @@ describe('Tracker', () => {
       });
     });
 
-    describe('multiselect', () => {
-      let certificationMultiSelect: ReactWrapper;
-      let qualificationMultiSelect: ReactWrapper;
+    describe('multitypeahead', () => {
+      let certificationMultiTypeahead: ReactWrapper;
+      let qualificationMultiTypeahead: ReactWrapper;
 
       beforeEach(() => {
-        qualificationMultiSelect = subject.find('div.qualifications-multiselect');
-        certificationMultiSelect = subject.find('div.certifications-multiselect');
+        qualificationMultiTypeahead = subject.find('div.qualifications-multitypeahead');
+        certificationMultiTypeahead = subject.find('div.certifications-multitypeahead');
       });
 
-      it('calls the setSelectedQualifications when selecting a single qualification', () => {
-        const input = qualificationMultiSelect.find('input');
+      it('calls the setSelectedQualificationOptions when selecting a single qualification', () => {
+        const input = qualificationMultiTypeahead.find('input');
         input.simulate('click');
         input.simulate('keyDown', {keyCode: 40});
         input.simulate('keyDown', {keyCode: 13});
@@ -70,8 +70,8 @@ describe('Tracker', () => {
         expect(subject.find('tbody tr').length).toBeLessThan(12);
       });
 
-      it('calls the setSelectedCertifications when selecting a single certification', () => {
-        const input = certificationMultiSelect.find('input');
+      it('calls the setSelectedCertificationOptions when selecting a single certification', () => {
+        const input = certificationMultiTypeahead.find('input');
         input.simulate('click');
         input.simulate('keyDown', {keyCode: 40});
         input.simulate('keyDown', {keyCode: 13});

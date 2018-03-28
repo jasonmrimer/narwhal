@@ -212,6 +212,8 @@ class TrackerPage
     squadron_count = page.find_all('.airman-name').count
 
     filter('flight', 'DOB')
+    typeahead('Filter Qualifications', 'QB')
+    typeahead('Filter Certifications', 'Super Speed')
 
     click_on_airman('Spaceman, Corey')
     page.within('.side-panel') do
@@ -228,8 +230,15 @@ class TrackerPage
     expect(page).to have_select('site-filter', selected: 'DMS-MD')
     expect(page).to have_select('squadron-filter', selected: '94 IS')
     expect(page).to have_select('flight-filter', selected: 'DOB')
+    page.within('.qualifications-multitypeahead') do
+      expect(page.find('.rbt-token').text).to eq 'QB ×'
+    end
+    page.within('.certifications-multitypeahead') do
+      expect(page.find('.rbt-token').text).to eq 'Super Speed ×'
+    end
 
     filter('site', 'DMS-GA')
+
     click(find('a', text: 'MISSION'))
     click(find('a', text: 'AVAILABILITY'))
 

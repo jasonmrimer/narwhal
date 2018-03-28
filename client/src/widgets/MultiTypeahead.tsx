@@ -6,16 +6,16 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { caret } from '../utils/StyleUtils';
 
 /* tslint:disable:no-any*/
-interface  Props {
+interface Props {
   options: FilterOption[];
   onChange: (e: FilterOption[]) => void;
   placeholder: string;
   disabled?: boolean;
-  selected?: any;
+  selected?: FilterOption[];
   className?: string;
 }
 
-export const MultiTypeahead =  (props: Props) => {
+export const MultiTypeahead = (props: Props) => {
   return (
     <div className={props.className}>
       <Typeahead

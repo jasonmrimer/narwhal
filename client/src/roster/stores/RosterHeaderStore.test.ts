@@ -33,7 +33,7 @@ describe('RosterHeaderStore', () => {
 
   describe('filtering by certifications', () => {
     beforeEach(() => {
-      subject.setSelectedCertifications([
+      subject.setSelectedCertificationOptions([
         {value: 4, label: 'Certification 4'},
         {value: 5, label: 'Certification 5'}
       ]);
@@ -48,7 +48,7 @@ describe('RosterHeaderStore', () => {
 
   describe('filtering by qualifications', () => {
     beforeEach(() => {
-      subject.setSelectedQualifications([
+      subject.setSelectedQualificationOptions([
         {value: 1, label: 'qualification 1'},
         {value: 2, label: 'qualification 2'}
       ]);

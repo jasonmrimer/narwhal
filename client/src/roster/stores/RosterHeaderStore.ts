@@ -1,5 +1,5 @@
 import { FilterOption, UnfilteredValue } from '../../widgets/models/FilterOptionModel';
-import { action, computed, observable } from 'mobx';
+import { action, computed, observable, toJS } from 'mobx';
 import { QualificationModel } from '../../skills/models/QualificationModel';
 import { CertificationModel } from '../../skills/models/CertificationModel';
 import { AirmanModel, ShiftType } from '../../airman/models/AirmanModel';
@@ -10,8 +10,8 @@ interface SiteIdContainer {
 }
 
 export class RosterHeaderStore {
-  @observable private _selectedCertifications: number[] = [];
-  @observable private _selectedQualifications: number[] = [];
+  @observable private _selectedCertificationOptions: FilterOption[] = [];
+  @observable private _selectedQualificationOptions: FilterOption[] = [];
   @observable private _selectedShift: number = UnfilteredValue;
   @observable private _selectedLastName: string = '';
   @observable private _certifications: CertificationModel[] = [];
@@ -36,13 +36,13 @@ export class RosterHeaderStore {
   }
 
   @computed
-  get selectedCertifications() {
-    return this._selectedCertifications;
+  get selectedCertificationOptions() {
+    return toJS(this._selectedCertificationOptions);
   }
 
   @action.bound
-  setSelectedCertifications(options: FilterOption[]) {
-    this._selectedCertifications = options.map(option => Number(option.value));
+  setSelectedCertificationOptions(options: FilterOption[]) {
+    this._selectedCertificationOptions = options;
   }
 
   @computed
@@ -53,13 +53,13 @@ export class RosterHeaderStore {
   }
 
   @computed
-  get selectedQualifications() {
-    return this._selectedQualifications;
+  get selectedQualificationOptions() {
+    return toJS(this._selectedQualificationOptions);
   }
 
   @action.bound
-  setSelectedQualifications(options: FilterOption[]) {
-    this._selectedQualifications = options.map(option => Number(option.value));
+  setSelectedQualificationOptions(options: FilterOption[]) {
+    this._selectedQualificationOptions = options;
   }
 
   @computed
@@ -104,11 +104,15 @@ export class RosterHeaderStore {
   }
 
   private byQualifications = (airman: AirmanModel) => {
-    return this._selectedQualifications.every(val => airman.qualificationIds.includes(val));
+    return this._selectedQualificationOptions
+      .map(opt => opt.value)
+      .every((val: number) => airman.qualificationIds.includes(val));
   }
 
   private byCertifications = (airman: AirmanModel) => {
-    return this._selectedCertifications.every(val => airman.certificationIds.includes(val));
+    return this._selectedCertificationOptions
+      .map(opt => opt.value)
+      .every((val: number) => airman.certificationIds.includes(val));
   }
 
   private filterByLastName = (airmen: AirmanModel[]): AirmanModel[] => {

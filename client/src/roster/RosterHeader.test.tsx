@@ -36,13 +36,13 @@ describe('RosterHeader', () => {
 
     describe('filter by', () => {
       describe('airmen skill', () => {
-        let certificationMultiSelect: ShallowWrapper;
-        let qualificationMultiSelect: ShallowWrapper;
+        let certificationMultiTypeahead: ShallowWrapper;
+        let qualificationMultiTypeahead: ShallowWrapper;
 
         beforeEach(() => {
-          const multiselects = subject.find(StyledMultiTypeahead);
-          qualificationMultiSelect = findByClassName(multiselects, 'qualifications-multiselect');
-          certificationMultiSelect = findByClassName(multiselects, 'certifications-multiselect');
+          const multiTypeaheads = subject.find(StyledMultiTypeahead);
+          qualificationMultiTypeahead = findByClassName(multiTypeaheads, 'qualifications-multitypeahead');
+          certificationMultiTypeahead = findByClassName(multiTypeaheads, 'certifications-multitypeahead');
         });
 
         it('which renders multiple qualifications', () => {
@@ -50,14 +50,14 @@ describe('RosterHeader', () => {
             return {value: qualification.id, label: `${qualification.acronym}`};
           });
 
-          expect(qualificationMultiSelect.prop('options')).toEqual(qualificationOptions);
+          expect(qualificationMultiTypeahead.prop('options')).toEqual(qualificationOptions);
         });
 
         it('which renders multiple certifications', () => {
           const certificationOptions = certifications.map(certification => {
             return {value: certification.id, label: certification.title};
           });
-          expect(certificationMultiSelect.prop('options')).toEqual(certificationOptions);
+          expect(certificationMultiTypeahead.prop('options')).toEqual(certificationOptions);
         });
       });
 

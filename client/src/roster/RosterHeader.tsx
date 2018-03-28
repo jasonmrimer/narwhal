@@ -41,19 +41,21 @@ export class RosterHeader extends React.Component<Props> {
         <span>
           <div>QUALIFICATION</div>
           <StyledMultiTypeahead
-            onChange={rosterHeaderStore.setSelectedQualifications}
+            selected={rosterHeaderStore.selectedQualificationOptions}
+            onChange={rosterHeaderStore.setSelectedQualificationOptions}
             options={rosterHeaderStore.qualificationOptions}
             placeholder="Filter Qualifications"
-            className="qualifications-multiselect"
+            className="qualifications-multitypeahead"
           />
         </span>
         <span>
           <div>CERTIFICATION</div>
           <StyledMultiTypeahead
-            onChange={rosterHeaderStore.setSelectedCertifications}
+            selected={rosterHeaderStore.selectedCertificationOptions}
+            onChange={rosterHeaderStore.setSelectedCertificationOptions}
             options={rosterHeaderStore.certificationOptions}
             placeholder="Filter Certifications"
-            className="certifications-multiselect"
+            className="certifications-multitypeahead"
           />
         </span>
       </div>
