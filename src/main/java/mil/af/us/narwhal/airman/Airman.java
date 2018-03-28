@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import mil.af.us.narwhal.crew.CrewPosition;
 import mil.af.us.narwhal.event.Event;
 import mil.af.us.narwhal.flight.Flight;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -38,11 +40,13 @@ public class Airman {
   @Enumerated(EnumType.STRING)
   private ShiftType shift;
 
-  @OneToMany(mappedBy = "airmanId", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "airmanId", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+  @Fetch(value = FetchMode.SUBSELECT)
   @JsonManagedReference
   private List<AirmanQualification> qualifications = new ArrayList<>();
 
   @OneToMany(mappedBy = "airmanId", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+  @Fetch(value = FetchMode.SUBSELECT)
   @JsonManagedReference
   private List<AirmanCertification> certifications = new ArrayList<>();
 

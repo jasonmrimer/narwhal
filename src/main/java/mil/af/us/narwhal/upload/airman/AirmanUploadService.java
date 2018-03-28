@@ -123,21 +123,48 @@ public class AirmanUploadService {
 
   @Transactional
   public void attachQualifications(List<AttachQualificationCSVRow> rows, ZoneId zoneId) {
-    for (AttachQualificationCSVRow row : rows) {
+    Instant earnDate;
+    Instant expirationDate;
+    List<Integer> failedRows = new ArrayList<>();
+
+    for (int i = 0; i < rows.size(); i++) {
+      final AttachQualificationCSVRow row = rows.get(i);
       final Airman airman = airmanRepository.findOneByFirstNameAndLastName(
         row.getFirstName(),
         row.getLastName()
       );
 
+      if (airman == null) {
+        failedRows.add(i + 1);
+        continue;
+      }
+
       final Qualification qualification = qualificationRepository.findOneByTitle(row.getQualificationName());
+
+      if (qualification == null) {
+        failedRows.add(i + 1);
+        continue;
+      }
+
+      try {
+        earnDate = instantFromDateString(row.getEarnDate(), zoneId);
+        expirationDate = instantFromDateString(row.getExpirationDate(), zoneId);
+      } catch (DateTimeParseException e) {
+        failedRows.add(i + 1);
+        continue;
+      }
 
       airman.addQualification(new AirmanQualification(
         qualification,
-        instantFromDateString(row.getEarnDate(), zoneId),
-        instantFromDateString(row.getExpirationDate(), zoneId)
+        earnDate,
+        expirationDate
       ));
 
       airmanRepository.save(airman);
+    }
+
+    if (failedRows.size() > 0) {
+      throw new ImportException(failedRows);
     }
   }
 

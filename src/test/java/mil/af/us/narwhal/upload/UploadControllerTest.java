@@ -8,6 +8,8 @@ import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
 import mil.af.us.narwhal.skill.Certification;
 import mil.af.us.narwhal.skill.CertificationRepository;
+import mil.af.us.narwhal.skill.Qualification;
+import mil.af.us.narwhal.skill.QualificationRepository;
 import mil.af.us.narwhal.squadron.Squadron;
 import org.junit.After;
 import org.junit.Before;
@@ -26,6 +28,7 @@ public class UploadControllerTest extends BaseIntegrationTest {
   @Autowired private SiteRepository siteRepository;
   @Autowired private AirmanRepository airmanRepository;
   @Autowired private CertificationRepository certificationRepository;
+  @Autowired private QualificationRepository qualificationRepository;
   public Airman airman;
 
   @Before
@@ -41,6 +44,7 @@ public class UploadControllerTest extends BaseIntegrationTest {
     siteRepository.save(site);
 
     certificationRepository.save(new Certification("TITLE", site));
+    qualificationRepository.save(new Qualification("ACR", "TITLE"));
 
     airman = airmanRepository.save(new Airman(flight, "FIRST", "LAST"));
   }
@@ -357,5 +361,108 @@ public class UploadControllerTest extends BaseIntegrationTest {
       "The following required fields were not present for one record of the input: " +
       "expirationDate at line 1.");
     assertThat(certificationRepository.count()).isEqualTo(count);
+  }
+
+  @Test
+  public void testAttachQualificationsCSV_handlesNullValues() throws IOException {
+    final File file = File.createTempFile("test", "csv");
+    try (final FileOutputStream stream = new FileOutputStream(file)) {
+      stream.write(("firstName,lastName,qualificationName,earnDate,expirationDate\n" +
+        "FIRST?,LAST,TITLE,09/22/2018,09/22/2019\n" +
+        "FIRST,LAST?,TITLE,09/22/2018,09/22/2019\n" +
+        "FIRST,LAST,TITLE?,09/22/2018,09/22/2019\n" +
+        "FIRST,LAST,TITLE,09/22/2018?,09/22/2019\n" +
+        "FIRST,LAST,TITLE,09/22/2018,09/22/2019?").getBytes());
+    }
+
+    final int count = airmanRepository.findOne(airman.getId()).getQualifications().size();
+
+    // @formatter:off
+    final String message = given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .queryParam("timezone", "America/New_York")
+      .multiPart(file)
+    .when()
+      .post(UploadController.URI + "/airmen/qualifications")
+    .then()
+      .statusCode(400)
+      .extract()
+      .body()
+      .asString();
+    // @formatter:on
+
+    assertThat(message).isEqualTo("Upload was unsuccessful.\n" +
+      "Row(s) 1, 2, 3, 4, 5 contain errors.\n" +
+      "Check that your date is formatted as mm/dd/yyyy.\n" +
+      "Check that the qualifications have already been uploaded and spelled correctly. \n" +
+      "Check that all airmen have already been uploaded.");
+    assertThat(airmanRepository.findOne(airman.getId()).getQualifications().size()).isEqualTo(count);
+  }
+
+  @Test
+  public void testAttachQualificationsCSV_handlesBadHeaders() throws IOException {
+    final File file = File.createTempFile("test", "csv");
+    try (final FileOutputStream stream = new FileOutputStream(file)) {
+      stream.write(("firstName?,lastName?,qualificationName?,earnDate?,expirationDate?\n" +
+        "FIRST,LAST,TITLE,09/22/2018,09/22/2019").getBytes());
+    }
+
+    final long count = qualificationRepository.count();
+
+    // @formatter:off
+    final String message = given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .queryParam("timezone", "America/New_York")
+      .multiPart(file)
+    .when()
+      .post(UploadController.URI + "/airmen/qualifications")
+    .then()
+      .statusCode(400)
+      .extract()
+      .body()
+      .asString();
+    // @formatter:on
+
+    assertThat(message).isEqualTo("Upload was unsuccessful. Header is missing required fields [LASTNAME,EARNDATE,QUALIFICATIONNAME,FIRSTNAME,EXPIRATIONDATE]");
+    assertThat(qualificationRepository.count()).isEqualTo(count);
+  }
+
+  @Test
+  public void testAttachQualificationsCSV_handlesBadRows() throws IOException {
+    final File file = File.createTempFile("test", "csv");
+    try (final FileOutputStream stream = new FileOutputStream(file)) {
+      stream.write(("firstName,lastName,qualificationName,earnDate,expirationDate\n" +
+        "FIRST,LAST,TITLE,09/22/2018").getBytes());
+    }
+
+    final long count = qualificationRepository.count();
+
+    // @formatter:off
+    final String message = given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .queryParam("timezone", "America/New_York")
+      .multiPart(file)
+    .when()
+      .post(UploadController.URI + "/airmen/qualifications")
+    .then()
+      .statusCode(400)
+      .extract()
+      .body()
+      .asString();
+    // @formatter:on
+
+    assertThat(message).isEqualTo("Upload was unsuccessful.\n" +
+      "The following required fields were not present for one record of the input: " +
+      "expirationDate at line 1.");
+    assertThat(qualificationRepository.count()).isEqualTo(count);
   }
 }
