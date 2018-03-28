@@ -28,6 +28,16 @@ describe('CrewStore', () => {
     }
   });
 
+  it('should set loading until hydrate completes', async () => {
+    subject = new CrewStore(DoubleRepositories);
+
+    subject.setLoading(true);
+
+    await subject.hydrate(crew.id);
+
+    expect(subject.loading).toBeFalsy();
+  });
+
   it('has a list of all the airman', () => {
     expect(subject.airmen.length).toBe(12);
   });

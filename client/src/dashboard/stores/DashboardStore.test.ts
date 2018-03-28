@@ -49,4 +49,14 @@ describe('DashboardStore', () => {
 
     expect(subject.missions).toEqual(expectedMissions);
   });
+
+  it('should set loading until hydrate completes', async () => {
+    subject = new DashboardStore(DoubleRepositories);
+
+    subject.setLoading(true);
+
+    await subject.hydrate();
+
+    expect(subject.loading).toBeFalsy();
+  });
 });

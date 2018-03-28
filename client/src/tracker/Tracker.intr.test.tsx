@@ -8,6 +8,7 @@ import { AirmanModel } from '../airman/models/AirmanModel';
 import { MemoryRouter } from 'react-router';
 import { RosterBody } from '../roster/RosterBody';
 import { Theme } from '../themes/default';
+import { ThemeProvider } from 'styled-components';
 
 let trackerStore: TrackerStore;
 let subject: ReactWrapper;
@@ -17,13 +18,14 @@ describe('Tracker', () => {
   beforeEach(async () => {
     trackerStore = await makeFakeTrackerStore();
     subject = mount(
-      <MemoryRouter>
-        <Tracker
-          profile={{id: 1, username: 'Tytus', siteId: 1}}
-          trackerStore={trackerStore}
-          theme={Theme}
-        />
-      </MemoryRouter>
+      <ThemeProvider theme={Theme}>
+        <MemoryRouter>
+          <Tracker
+            profile={{id: 1, username: 'Tytus', siteId: 1}}
+            trackerStore={trackerStore}
+          />
+        </MemoryRouter>
+      </ThemeProvider>
     );
     await forIt();
     subject.update();

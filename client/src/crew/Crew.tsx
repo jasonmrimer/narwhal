@@ -9,6 +9,7 @@ import { StyledCheckbox } from '../widgets/Checkbox';
 import { Link } from 'react-router-dom';
 import { BackArrow } from '../icons/BackArrow';
 import { Theme } from '../themes/default';
+import { StyledLoadingOverlay } from '../widgets/LoadingOverlay';
 
 interface Props {
   crewId: number;
@@ -39,6 +40,7 @@ export class Crew extends React.Component<Props> {
   }
 
   render() {
+    const {crewStore} = this.props;
     const crew = this.props.crewStore.crew;
     if (crew == null) {
       return null;
@@ -46,6 +48,7 @@ export class Crew extends React.Component<Props> {
 
     return (
       <div className={this.props.className}>
+        {crewStore.loading && <StyledLoadingOverlay/>}
         <Link to="/">
           <BackArrow color={Theme.graySteel}/>
           <span>Back to Availability Roster</span>

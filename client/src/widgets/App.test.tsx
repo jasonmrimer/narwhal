@@ -14,14 +14,10 @@ import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore
 import { ThemeProvider } from 'styled-components';
 import { DoubleRepositories } from '../Repositories';
 import { UserModel } from '../profile/models/ProfileModel';
+import { Theme } from '../themes/default';
 
 describe('App', () => {
   let mountedSubject: ReactWrapper;
-
-  it('renders the Tracker component when the route is /', async () => {
-    mountedSubject = await createMountedPage('/');
-    expect(mountedSubject.find(Tracker).exists()).toBeTruthy();
-  });
 
   describe('ProfileSitePicker', () => {
     let profileStore: ProfileSitePickerStore;
@@ -48,7 +44,7 @@ describe('App', () => {
       await profileStore.hydrate();
 
       mountedSubject = mount(
-        <ThemeProvider theme={{}}>
+        <ThemeProvider theme={Theme}>
           <MemoryRouter initialEntries={['/']}>
             <App
               trackerStore={trackerStore}
@@ -82,6 +78,11 @@ describe('App', () => {
     });
   });
 
+  it('renders the Tracker component when the route is /', async () => {
+    mountedSubject = await createMountedPage('/');
+    expect(mountedSubject.find(Tracker).exists()).toBeTruthy();
+  });``
+
   it('renders the Dashboard component when the route is /dashboard', async () => {
     mountedSubject = await createMountedPage('/dashboard');
     expect(mountedSubject.find(Dashboard).exists()).toBeTruthy();
@@ -100,7 +101,7 @@ const createMountedPage = async (entry: string) => {
   const profileStore = new ProfileSitePickerStore(DoubleRepositories);
 
   const mountedRouter = mount(
-    <ThemeProvider theme={{}}>
+    <ThemeProvider theme={Theme}>
       <MemoryRouter initialEntries={[entry]}>
         <App
           trackerStore={trackerStore}

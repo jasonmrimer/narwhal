@@ -9,6 +9,7 @@ import { StyledButton } from '../widgets/Button';
 import { StyledCheckbox } from '../widgets/Checkbox';
 import { Link } from 'react-router-dom';
 import { DoubleRepositories } from '../Repositories';
+import { StyledLoadingOverlay } from '../widgets/LoadingOverlay';
 
 describe('Crew', () => {
   let repositorySpy: CrewRepositorySpy;
@@ -40,6 +41,15 @@ describe('Crew', () => {
     expect(subject.text()).toContain(`MSN DATE ${mission.displayDate}`);
     expect(subject.text()).toContain(`MSN START ${mission.displayStartTime}`);
     expect(subject.text()).toContain(`MSN END ${mission.displayEndTime}`);
+  });
+
+  it('should render the spinner only while loading', async () => {
+    subject.update();
+    expect(subject.find(StyledLoadingOverlay).exists()).toBeFalsy();
+
+    crewStore.setLoading(true);
+    subject.update();
+    expect(subject.find(StyledLoadingOverlay).exists()).toBeTruthy();
   });
 
   it('displays Airmen on the mission', () => {

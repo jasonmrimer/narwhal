@@ -8,28 +8,42 @@ import { StyledMission } from '../mission/Mission';
 import { MemoryRouter } from 'react-router';
 import { DoubleRepositories } from '../Repositories';
 import { StyledMissionCardSection } from './MissionCardSection';
+import { ClipLoader } from 'react-spinners';
+import { ThemeProvider } from 'styled-components';
+import { Theme } from '../themes/default';
 
 const missionRepositoryStub = DoubleRepositories.missionRepository;
 
 describe('Dashboard', () => {
   let missions: MissionModel[];
   let subject: ReactWrapper;
+  let dashboardStore: DashboardStore;
 
   beforeEach(async () => {
     missions = await missionRepositoryStub.findAll();
 
-    const dashboardStore = new DashboardStore(DoubleRepositories);
+    dashboardStore = new DashboardStore(DoubleRepositories);
 
     subject = mount(
-      <MemoryRouter>
-        <Dashboard
-          username="Tytus"
-          dashboardStore={dashboardStore}
-        />
-      </MemoryRouter>
+      <ThemeProvider theme={Theme}>
+        <MemoryRouter>
+          <Dashboard
+            username="Tytus"
+            dashboardStore={dashboardStore}
+          />
+        </MemoryRouter>
+      </ThemeProvider>
     );
     await forIt();
     subject.update();
+  });
+
+  it('should render the spinner only while loading', async () => {
+    expect(subject.find(ClipLoader).exists()).toBeFalsy();
+
+    dashboardStore.setLoading(true);
+    subject.update();
+    expect(subject.find(ClipLoader).exists()).toBeTruthy();
   });
 
   it('renders a Dashboard with all missions', () => {

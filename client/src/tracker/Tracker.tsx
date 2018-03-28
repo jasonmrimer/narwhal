@@ -1,5 +1,5 @@
 import * as React from 'react';
-import styled, { withTheme } from 'styled-components';
+import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import { TrackerStore } from './stores/TrackerStore';
 import { TopLevelFilter } from '../widgets/Filter';
@@ -7,13 +7,12 @@ import { StyledSidePanel } from './SidePanel';
 import { StyledLegend } from '../roster/Legend';
 import { UserModel } from '../profile/models/ProfileModel';
 import { UnfilteredValue } from '../widgets/models/FilterOptionModel';
-import { ClipLoader } from 'react-spinners';
 import { StyledRosterContainer } from '../roster/RosterContainer';
+import { StyledLoadingOverlay } from '../widgets/LoadingOverlay';
 
 interface Props {
   trackerStore: TrackerStore;
   profile: UserModel;
-  theme?: any;
   className?: string;
 }
 
@@ -24,16 +23,11 @@ export class Tracker extends React.Component<Props> {
   }
 
   render() {
-    const {trackerStore, className, theme} = this.props;
+    const {trackerStore, className} = this.props;
     const {trackerFilterStore, sidePanelStore} = trackerStore;
     return (
       <div className={className}>
-        {
-          trackerStore.loading &&
-          <div className="loader">
-            <ClipLoader color={theme!.yellow} size={100}/>
-          </div>
-        }
+        {trackerStore.loading && <StyledLoadingOverlay/>}
         <div className="main">
           <div className="filters">
             <TopLevelFilter
@@ -80,28 +74,12 @@ export class Tracker extends React.Component<Props> {
   }
 }
 
-export const StyledTracker = styled(withTheme(Tracker))`
+export const StyledTracker = styled(Tracker)`
   margin-left: 3rem;
   padding: 0.5rem;
   display: flex;
   color: white;
-  
-  .loader {
-    position: fixed;
-    background: ${props => props.theme.dark};
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    z-index: 999;
-    
-    & > * {
-      position: fixed; 
-      top: 50%; 
-      left: 47%;
-    }
-  }
-  
+
   .filters {
      &:after {
       content: "."; 

@@ -8,9 +8,9 @@ import { TopLevelFilter } from '../widgets/Filter';
 import { StyledSidePanel } from './SidePanel';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 import { TabType } from './stores/SidePanelStore';
-import { ClipLoader } from 'react-spinners';
 import { StyledRosterContainer } from '../roster/RosterContainer';
 import { UnfilteredValue } from '../widgets/models/FilterOptionModel';
+import { StyledLoadingOverlay } from '../widgets/LoadingOverlay';
 
 let trackerStore: TrackerStore;
 let subject: ShallowWrapper;
@@ -21,7 +21,6 @@ describe('Tracker', () => {
     subject = shallow(
       <Tracker
         trackerStore={trackerStore}
-        theme={{yellow: 'yellow'}}
         profile={{id: 1, username: 'Tytus', siteId: 1}}
       />
     );
@@ -29,12 +28,12 @@ describe('Tracker', () => {
     subject.update();
   });
 
-  it('should render the bar only while loading', async () => {
-    expect(subject.find(ClipLoader).exists()).toBeFalsy();
+  it('should render the spinner only while loading', async () => {
+    expect(subject.find(StyledLoadingOverlay).exists()).toBeFalsy();
 
     trackerStore.setLoading(true);
     subject.update();
-    expect(subject.find(ClipLoader).exists()).toBeTruthy();
+    expect(subject.find(StyledLoadingOverlay).exists()).toBeTruthy();
   });
 
   it('sets the trackerStores siteID and selectedSquadron', () => {

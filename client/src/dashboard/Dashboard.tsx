@@ -4,6 +4,7 @@ import { observer } from 'mobx-react';
 import { DashboardStore } from './stores/DashboardStore';
 import { TopLevelFilter } from '../widgets/Filter';
 import { StyledMissionCardSection } from './MissionCardSection';
+import { StyledLoadingOverlay } from '../widgets/LoadingOverlay';
 
 interface Props {
   dashboardStore: DashboardStore;
@@ -18,37 +19,35 @@ export class Dashboard extends React.Component<Props> {
   }
 
   render() {
+    const {dashboardStore, className} = this.props;
     return (
-      [
-        (
-          <div key="0" className={`${this.props.className} filter`}>
-            <div className="filter">
-              <TopLevelFilter
-                id="site-filter"
-                label="SITE"
-                unfilteredOptionLabel="All Sites"
-                value={this.props.dashboardStore.siteId}
-                callback={this.props.dashboardStore.setSiteId}
-                options={this.props.dashboardStore.siteOptions}
+      <div>
+        {dashboardStore.loading && <StyledLoadingOverlay/>}
+        <div className={`${className} filter`}>
+          <div className="filter">
+            <TopLevelFilter
+              id="site-filter"
+              label="SITE"
+              unfilteredOptionLabel="All Sites"
+              value={dashboardStore.siteId}
+              callback={dashboardStore.setSiteId}
+              options={dashboardStore.siteOptions}
+            />
+          </div>
+        </div>
+        <div className={`${className} missions`}>
+          {Object.keys(dashboardStore.missions).map((key: string, index: number) => {
+            return (
+              <StyledMissionCardSection
+                missions={dashboardStore.missions[key]}
+                header={key}
+                className={key}
+                key={index}
               />
-            </div>
-          </div>
-        ),
-        (
-          <div key="1" className={`${this.props.className} missions`}>
-            {Object.keys(this.props.dashboardStore.missions).map((key: string, index: number) => {
-              return (
-                <StyledMissionCardSection
-                  missions={this.props.dashboardStore.missions[key]}
-                  header={key}
-                  className={key}
-                  key={index}
-                />
-              );
-            })}
-          </div>
-        )
-      ]
+            );
+          })}
+        </div>
+      </div>
     );
   }
 }

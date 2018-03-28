@@ -18,6 +18,7 @@ export class CrewStore {
   @observable private _crew: CrewModel | null = null;
   @observable private _airmen: AirmanModel[] = [];
   @observable private _newEntry: NewEntry = {airmanName: '', title: '', critical: false};
+  @observable private _loading: boolean = false;
 
   constructor(repositories: Repositories) {
     this.airmanRepository = repositories.airmanRepository;
@@ -25,12 +26,26 @@ export class CrewStore {
   }
 
   async hydrate(crewId: number) {
+    this._loading = true;
+
     const [airmen, crew] = await Promise.all([
       this.airmanRepository.findAll(),
       this.crewRepository.findOne(crewId)
     ]);
     this._airmen = airmen;
     this._crew = crew;
+
+    this._loading = false;
+  }
+
+  @computed
+  get loading() {
+    return this._loading;
+  }
+
+  @action.bound
+  setLoading(loading: boolean) {
+    this._loading = loading;
   }
 
   @computed

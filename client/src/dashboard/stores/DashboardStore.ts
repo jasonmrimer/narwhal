@@ -13,6 +13,7 @@ export class DashboardStore {
   @observable private _sites: SiteModel[] = [];
   @observable private _missions: MissionModel[] = [];
   @observable private _siteId: number = UnfilteredValue;
+  @observable private _loading: boolean = false;
 
   constructor(repositories: Repositories) {
     this.siteRepository = repositories.siteRepository;
@@ -20,19 +21,32 @@ export class DashboardStore {
   }
 
   async hydrate() {
+    this._loading = true;
+
     const [sites, missions] = await Promise.all([
       this.siteRepository.findAll(),
       this.missionRepository.findAll()
     ]);
     this._sites = sites;
     this._missions = missions;
+
+    this._loading = false;
+  }
+
+  @computed
+  get loading() {
+    return this._loading;
+  }
+
+  @action.bound
+  setLoading(loading: boolean) {
+    this._loading = loading;
   }
 
   @computed
   get siteId() {
     return this._siteId;
   }
-
   @computed
   get siteOptions() {
     return this._sites.map(site => {
