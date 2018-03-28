@@ -7,6 +7,7 @@ import { TrackerStore } from './stores/TrackerStore';
 import { AirmanModel } from '../airman/models/AirmanModel';
 import { MemoryRouter } from 'react-router';
 import { RosterBody } from '../roster/RosterBody';
+import { Theme } from '../themes/default';
 
 let trackerStore: TrackerStore;
 let subject: ReactWrapper;
@@ -20,10 +21,13 @@ describe('Tracker', () => {
         <Tracker
           profile={{id: 1, username: 'Tytus', siteId: 1}}
           trackerStore={trackerStore}
+          theme={Theme}
         />
       </MemoryRouter>
     );
-    forIt();
+    await forIt();
+    subject.update();
+
     airman = trackerStore.airmen[0];
   });
 

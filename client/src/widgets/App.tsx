@@ -1,17 +1,12 @@
 import * as React from 'react';
-import { Route, Switch } from 'react-router-dom';
 import { CrewStore } from '../crew/stores/CrewStore';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { DashboardStore } from '../dashboard/stores/DashboardStore';
 import styled from 'styled-components';
-import { StyledTracker } from '../tracker/Tracker';
-import { StyledTopBar } from './TopBar';
-import { Upload } from '../upload/Upload';
-import { StyledDashboard } from '../dashboard/Dashboard';
-import { StyledCrew } from '../crew/Crew';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 import { observer } from 'mobx-react';
 import { StyledProfileSitePicker } from '../profile/ProfileSitePicker';
+import { Routes } from './Routes';
 
 interface Props {
   dashboardStore: DashboardStore;
@@ -27,86 +22,20 @@ export class App extends React.Component<Props> {
   }
 
   render() {
-    return (
-      <div>
-        {
-          this.props.profileStore.profile != null &&
-          <div>
-            <StyledClassificationBanner classified={this.props.profileStore.profile!.classified}/>
-            <StyledAuthorizationBanner/>
-            <div style={{marginTop: '7rem'}}>
-              {
-                this.profileHasSite() ?
-                  this.renderApp() :
-                  <StyledProfileSitePicker profileStore={this.props.profileStore}/>
-              }
-            </div>
+    return this.props.profileStore.profile ?
+      (
+        <div>
+          <StyledClassificationBanner classified={this.props.profileStore.profile!.classified}/>
+          <StyledAuthorizationBanner/>
+          <div style={{marginTop: '7rem'}}>
+            {
+              this.profileHasSite() ?
+                <Routes {...this.props} /> :
+                <StyledProfileSitePicker profileStore={this.props.profileStore}/>
+            }
           </div>
-        }
-      </div>
-    );
-  }
-
-  private renderApp() {
-    return (
-      <Switch>
-        <Route
-          path="/upload"
-          render={() => {
-            return <Upload/>;
-          }}
-        />
-
-        <Route
-          path="/dashboard"
-          render={() => {
-            return (
-              [
-                <StyledTopBar
-                  key="0"
-                  username={this.props.profileStore.profile!.user.username}
-                />,
-                <StyledDashboard
-                  key="1"
-                  username={this.props.profileStore.profile!.user.username}
-                  dashboardStore={this.props.dashboardStore}
-                />
-              ]
-            );
-          }}
-        />
-
-        <Route
-          path="/crew/:id"
-          render={({match}) => {
-            return (
-              <StyledCrew
-                crewId={match.params.id}
-                crewStore={this.props.crewStore}
-              />
-            );
-          }}
-        />
-
-        <Route
-          exact={true}
-          path="/"
-          render={() => {
-            return [
-              <StyledTopBar
-                key="0"
-                username={this.props.profileStore.profile!.user.username}
-              />,
-              <StyledTracker
-                key="1"
-                profile={this.props.profileStore.profile!.user}
-                trackerStore={this.props.trackerStore}
-              />
-            ];
-          }}
-        />
-      </Switch>
-    );
+        </div>
+      ) : null;
   }
 
   private profileHasSite() {

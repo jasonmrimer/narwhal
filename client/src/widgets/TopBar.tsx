@@ -1,20 +1,13 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import { StyledTopBarTab } from './TopBarTab';
+import { NavLink } from 'react-router-dom';
 
 interface Props {
   username: string;
   className?: string;
 }
 
-interface State {
-  isActive: LinkType;
-}
-
-export class TopBar extends React.Component<Props, State> {
-  state = {isActive: LinkType.AVAILABILITY};
-
+export class TopBar extends React.Component<Props> {
   render() {
     return (
       <div className={this.props.className}>
@@ -23,20 +16,21 @@ export class TopBar extends React.Component<Props, State> {
         <span>Narwhal</span>
       </span>
         <span className="navigation-tabs">
-          <Link to={`/dashboard`} className="dashboard-link">
-            <StyledTopBarTab
-             onClick={() => this.onClick(LinkType.DASHBOARD)}
-             title="MISSION"
-             isActive={this.state.isActive === LinkType.DASHBOARD}
-            />
-          </Link>
-          <Link to={`/`} className="availability-link">
-            <StyledTopBarTab
-              onClick={() => this.onClick(LinkType.AVAILABILITY)}
-              title="AVAILABILITY"
-              isActive={this.state.isActive === LinkType.AVAILABILITY}
-            />
-          </Link>
+          <NavLink
+            to="/dashboard"
+            activeClassName="selected"
+            className="dashboard-link"
+          >
+            MISSION
+          </NavLink>
+          <NavLink
+            to="/"
+            exact={true}
+            activeClassName="selected"
+            className="availability-link"
+          >
+            AVAILABILITY
+          </NavLink>
         </span>
         <span>
         {this.props.username}
@@ -44,15 +38,6 @@ export class TopBar extends React.Component<Props, State> {
       </div>
     );
   }
-
-  onClick = (linkType: LinkType) => {
-    this.setState({isActive: linkType});
-  }
-}
-
-export enum LinkType {
-  DASHBOARD,
-  AVAILABILITY
 }
 
 export const StyledTopBar = styled(TopBar)`
@@ -86,14 +71,28 @@ export const StyledTopBar = styled(TopBar)`
   }
   
   .navigation-tabs {
-   display: flex;
-   flex-direction: row;
-   height: 100%;
-   padding-top: calc(1rem - 2px);
-   
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    padding-top: calc(1rem - 2px);
+    position: relative;
+    top: 2px;
+     
     a {
+      border-bottom: none;
       text-decoration: none;
     }
+    
+    a.selected {
+      border-bottom: 2px solid ${props => props.theme.dark};
+      border-top: 2px solid ${props => props.theme.yellow};
+      border-left: 2px solid ${props => props.theme.yellow};
+      border-right: 2px solid ${props => props.theme.yellow};
+      background-color: ${props => props.theme.dark};
+      border-radius: 0.25rem 0.25rem 0 0;  
+      color: ${props => props.theme.yellow};
+    }  
+    
   }
   
   span:first-child {
@@ -104,5 +103,15 @@ export const StyledTopBar = styled(TopBar)`
   span:last-child {
     font-size: 1rem;
     margin-right: 1.5rem;
-  }  
+  }
+  
+  .dashboard-link, .availability-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem 1rem 0.6875rem 1rem;
+    color: ${props => props.theme.fontColor};
+    cursor: pointer;
+    width: 12rem;
+  }
 `;

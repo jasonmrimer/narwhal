@@ -1,8 +1,8 @@
-import { mount, ReactWrapper, shallow, ShallowWrapper } from 'enzyme';
+import { mount, ReactWrapper } from 'enzyme';
 import * as React from 'react';
 
 import { App, ClassificationBanner } from './App';
-import { MemoryRouter, Route } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import { Tracker } from '../tracker/Tracker';
 import { Dashboard } from '../dashboard/Dashboard';
 import { forIt, makeFakeTrackerStore } from '../utils/testUtils';
@@ -16,33 +16,7 @@ import { DoubleRepositories } from '../Repositories';
 import { UserModel } from '../profile/models/ProfileModel';
 
 describe('App', () => {
-  let subject: ShallowWrapper;
   let mountedSubject: ReactWrapper;
-
-  it('renders a route for the dashboard, roster and crew', async () => {
-    const trackerStore = await makeFakeTrackerStore();
-    const dashboardStore = new DashboardStore(DoubleRepositories);
-    const crewStore = new CrewStore(DoubleRepositories);
-    const profileStore = new ProfileSitePickerStore(DoubleRepositories);
-
-    subject = shallow(
-      <App
-        trackerStore={trackerStore}
-        profileStore={profileStore}
-        dashboardStore={dashboardStore}
-        crewStore={crewStore}
-      />
-    );
-    await forIt();
-    subject.update();
-
-    const routes = subject.find(Route);
-    expect(routes.length).toBe(4);
-    expect(routes.at(0).prop('path')).toBe('/upload');
-    expect(routes.at(1).prop('path')).toBe('/dashboard');
-    expect(routes.at(2).prop('path')).toBe('/crew/:id');
-    expect(routes.at(3).prop('path')).toBe('/');
-  });
 
   it('renders the Tracker component when the route is /', async () => {
     mountedSubject = await createMountedPage('/');
