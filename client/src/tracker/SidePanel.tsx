@@ -86,7 +86,7 @@ export const StyledSidePanel = styled(SidePanel)`
   position: fixed;
   right: 0;
   top: 7rem;
-  height: calc(100% - 8rem);
+  height: calc(100% - 7rem);
   overflow: auto;
   z-index: 999;
   
