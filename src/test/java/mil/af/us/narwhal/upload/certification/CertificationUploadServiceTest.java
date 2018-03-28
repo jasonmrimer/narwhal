@@ -5,6 +5,7 @@ import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
 import mil.af.us.narwhal.skill.Certification;
 import mil.af.us.narwhal.skill.CertificationRepository;
+import mil.af.us.narwhal.upload.ImportException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,7 +25,7 @@ public class CertificationUploadServiceTest extends BaseIntegrationTest {
   private CertificationUploadService subject;
 
   @Before
-  public void setUp() {
+  public void setUp() throws ImportException {
     siteRepository.save(asList(
       new Site("DMS-GA"),
       new Site("DMS-MD")
@@ -61,20 +62,14 @@ public class CertificationUploadServiceTest extends BaseIntegrationTest {
   }
 
   @Test
-  public void testImportToDatabase_canAddSameTitleToDifferentSite() {
+  public void testImportToDatabase_canAddSameTitleToDifferentSite() throws ImportException {
     subject.importToDatabase(singletonList(new CertificationUploadCSVRow("Cert C", "DMS-GA")));
     assertThat(certificationRepository.count()).isEqualTo(5);
   }
 
   @Test
-  public void testImportToDatabase_doesNotDuplicate() {
+  public void testImportToDatabase_doesNotDuplicate() throws ImportException {
     subject.importToDatabase(singletonList(new CertificationUploadCSVRow("Cert A", "DMS-GA")));
-    assertThat(certificationRepository.count()).isEqualTo(4);
-  }
-
-  @Test
-  public void testImportToDatabase_doesNotImportUnknownSite() {
-    subject.importToDatabase(singletonList(new CertificationUploadCSVRow("Cert A", "DMS-XX")));
     assertThat(certificationRepository.count()).isEqualTo(4);
   }
 }

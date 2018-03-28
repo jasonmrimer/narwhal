@@ -20,6 +20,7 @@ public class CSVParseException extends Exception {
       sb.append(e.getLineNumber());
       sb.append(".\n");
     }
+    sb.replace((sb.length() - 1), sb.length(), "");
     return sb.toString();
   }
 }

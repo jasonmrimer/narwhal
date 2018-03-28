@@ -5,6 +5,7 @@ import mil.af.us.narwhal.airman.AirmanRepository;
 import mil.af.us.narwhal.flight.Flight;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
+import mil.af.us.narwhal.skill.CertificationRepository;
 import mil.af.us.narwhal.squadron.Squadron;
 import org.junit.After;
 import org.junit.Before;
@@ -21,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class UploadControllerTest extends BaseIntegrationTest {
   @Autowired private SiteRepository siteRepository;
   @Autowired private AirmanRepository airmanRepository;
+  @Autowired private CertificationRepository certificationRepository;
 
   @Before
   public void setUp() {
@@ -154,5 +156,95 @@ public class UploadControllerTest extends BaseIntegrationTest {
 
     assertThat(message).isEqualTo("Upload was unsuccessful. Header is missing required fields [SITE,FLIGHT,LASTNAME,FIRSTNAME,SQUADRON]");
     assertThat(airmanRepository.count()).isEqualTo(count);
+  }
+
+  @Test
+  public void testImportCertificationCSV_handlesNullSite() throws IOException {
+    final File file = File.createTempFile("test", "csv");
+    try (final FileOutputStream stream = new FileOutputStream(file)) {
+      stream.write("title,site\nTitle,SITE?".getBytes());
+    }
+
+    final long count = certificationRepository.count();
+
+    // @formatter:off
+    final String message = given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .multiPart(file)
+    .when()
+      .post(UploadController.URI + "/certifications")
+    .then()
+      .statusCode(400)
+      .extract()
+      .body()
+      .asString();
+    // @formatter:on
+
+    assertThat(message).isEqualTo("Upload was unsuccessful.\n" +
+      "Row(s) 1 contain errors.\n" +
+      "Check that your sites are identical to the ones on the tracker filters, eg. sites are formatted as DMS-TX.");
+    assertThat(certificationRepository.count()).isEqualTo(count);
+  }
+
+  @Test
+  public void testImportCertificationCSV_handlesBadHeaders() throws IOException {
+    final File file = File.createTempFile("test", "csv");
+    try (final FileOutputStream stream = new FileOutputStream(file)) {
+      stream.write("title?,site?\nTitle,SITE".getBytes());
+    }
+
+    final long count = certificationRepository.count();
+
+    // @formatter:off
+    final String message = given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .multiPart(file)
+    .when()
+      .post(UploadController.URI + "/certifications")
+    .then()
+      .statusCode(400)
+      .extract()
+      .body()
+      .asString();
+    // @formatter:on
+
+    assertThat(message).isEqualTo("Upload was unsuccessful. Header is missing required fields [SITE,TITLE]");
+    assertThat(certificationRepository.count()).isEqualTo(count);
+  }
+
+  @Test
+  public void testImportCertificationCSV_handlesBadRows() throws IOException {
+    final File file = File.createTempFile("test", "csv");
+    try (final FileOutputStream stream = new FileOutputStream(file)) {
+      stream.write("title,site\nTitle".getBytes());
+    }
+
+    final long count = certificationRepository.count();
+
+    // @formatter:off
+    final String message = given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .multiPart(file)
+    .when()
+      .post(UploadController.URI + "/certifications")
+    .then()
+      .statusCode(400)
+      .extract()
+      .body()
+      .asString();
+    // @formatter:on
+
+    assertThat(message).isEqualTo("Upload was unsuccessful.\n" +
+      "The following required fields were not present for one record of the input: site at line 1.");
+    assertThat(certificationRepository.count()).isEqualTo(count);
   }
 }

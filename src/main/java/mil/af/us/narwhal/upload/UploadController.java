@@ -79,8 +79,15 @@ public class UploadController {
       final List rows = getRows(reader, CertificationUploadCSVRow.class);
       certificationUploadService.importToDatabase(rows);
       return successResponse();
+    } catch (ImportException e) {
+      return errorResponse(
+        e.toString() +
+          "\nCheck that your sites are identical to the ones on the tracker filters, " +
+          "eg. sites are formatted as DMS-TX.");
+    } catch (CSVParseException e) {
+      return errorResponse(e.toString());
     } catch (Exception e) {
-      return errorResponse("Something went wrong with your .CSV upload.");
+      return errorResponse("Upload was unsuccessful. " + e.getCause().getMessage());
     }
   }
 
@@ -122,6 +129,7 @@ public class UploadController {
     final List rows = csvToBean.parse();
 
     final List exceptions = csvToBean.getCapturedExceptions();
+
     if (exceptions.size() > 0) {
       throw new CSVParseException(exceptions);
     }
