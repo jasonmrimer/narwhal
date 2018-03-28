@@ -42,7 +42,7 @@ public class Airman {
   @JsonManagedReference
   private List<AirmanQualification> qualifications = new ArrayList<>();
 
-  @OneToMany(mappedBy = "airmanId", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OneToMany(mappedBy = "airmanId", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
   @JsonManagedReference
   private List<AirmanCertification> certifications = new ArrayList<>();
 

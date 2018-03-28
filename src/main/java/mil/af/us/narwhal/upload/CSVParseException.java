@@ -4,7 +4,7 @@ import com.opencsv.exceptions.CsvException;
 
 import java.util.List;
 
-public class CSVParseException extends Exception {
+public class CSVParseException extends RuntimeException {
   private List<CsvException> exceptions;
 
   public CSVParseException(List<CsvException> exceptions) {

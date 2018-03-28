@@ -2,7 +2,7 @@ package mil.af.us.narwhal.upload;
 
 import java.util.List;
 
-public class ImportException extends Exception {
+public class ImportException extends RuntimeException {
   private List<Integer> failedRows;
 
   public ImportException(List<Integer> failedRows) {

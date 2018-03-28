@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.*;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,13 +49,13 @@ public class AirmanUploadService {
       final AirmanUploadCSVRow row = rows.get(i);
 
       Site site = siteRepository.findOneByName(row.getSite());
-      if (site == null){
+      if (site == null) {
         failedRows.add(i + 1);
         continue;
       }
 
       Squadron squadron = getSquadron(row, site);
-      if (squadron == null){
+      if (squadron == null) {
         failedRows.add(i + 1);
         continue;
       }
@@ -71,25 +72,52 @@ public class AirmanUploadService {
   }
 
   @Transactional
-  public void attachCertifications(List<AttachCertificationCSVRow> rows, ZoneId zoneId) {
-    for (AttachCertificationCSVRow row : rows) {
+  public void attachCertifications(List<AttachCertificationCSVRow> rows, ZoneId zoneId) throws ImportException {
+    Instant earnDate;
+    Instant expirationDate;
+    List<Integer> failedRows = new ArrayList<>();
+
+    for (int i = 0; i < rows.size(); i++) {
+      final AttachCertificationCSVRow row = rows.get(i);
       final Airman airman = airmanRepository.findOneByFirstNameAndLastName(
         row.getFirstName(),
         row.getLastName()
       );
+
+      if (airman == null) {
+        failedRows.add(i + 1);
+        continue;
+      }
 
       final Certification certification = certificationRepository.findOneByTitleAndSiteId(
         row.getCertificationName(),
         airman.getSiteId()
       );
 
+      if (certification == null) {
+        failedRows.add(i + 1);
+        continue;
+      }
+
+      try {
+        earnDate = instantFromDateString(row.getEarnDate(), zoneId);
+        expirationDate = instantFromDateString(row.getExpirationDate(), zoneId);
+      } catch (DateTimeParseException e) {
+        failedRows.add(i + 1);
+        continue;
+      }
+
       airman.addCertification(new AirmanCertification(
         certification,
-        instantFromDateString(row.getEarnDate(), zoneId),
-        instantFromDateString(row.getExpirationDate(), zoneId)
+        earnDate,
+        expirationDate
       ));
 
       airmanRepository.save(airman);
+    }
+
+    if (failedRows.size() > 0) {
+      throw new ImportException(failedRows);
     }
   }
 

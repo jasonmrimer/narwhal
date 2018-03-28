@@ -113,7 +113,7 @@ public class AirmanUploadServiceTest extends BaseIntegrationTest {
   }
 
   @Test
-  public void testAttachAListOfCertifications() {
+  public void testAttachAListOfCertifications() throws ImportException {
     final Airman airman = new Airman(flight, "first1", "last1");
     airmanRepository.save(airman);
 

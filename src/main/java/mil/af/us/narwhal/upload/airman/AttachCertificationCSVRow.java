@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AttachCertificationCSVRow {
-  @CsvBindByName private String firstName;
-  @CsvBindByName private String lastName;
-  @CsvBindByName private String certificationName;
-  @CsvBindByName private String earnDate;
-  @CsvBindByName private String expirationDate;
+  @CsvBindByName(required = true) private String firstName;
+  @CsvBindByName(required = true) private String lastName;
+  @CsvBindByName(required = true) private String certificationName;
+  @CsvBindByName(required = true) private String earnDate;
+  @CsvBindByName(required = true) private String expirationDate;
 }

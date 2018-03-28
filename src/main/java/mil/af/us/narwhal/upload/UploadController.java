@@ -100,8 +100,16 @@ public class UploadController {
       final List rows = getRows(reader, AttachCertificationCSVRow.class);
       airmanUploadService.attachCertifications(rows, ZoneId.of(timezone));
       return successResponse();
+    } catch (ImportException e) {
+      return errorResponse(
+        e.toString() +
+          "\nCheck that your date is formatted as mm/dd/yyyy.\n" +
+          "Check that the certificates have already been uploaded and spelled correctly. \n" +
+          "Check that all airmen have already been uploaded.");
+    } catch (CSVParseException e) {
+      return errorResponse(e.toString());
     } catch (Exception e) {
-      return errorResponse("Something went wrong with your .CSV upload.");
+      return errorResponse("Upload was unsuccessful. " + e.getCause().getMessage());
     }
   }
 
