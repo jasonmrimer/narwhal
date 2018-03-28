@@ -60,7 +60,6 @@ describe('Availability', () => {
       <Availability
         selectedAirman={airman}
         availabilityStore={trackerStore.availabilityStore}
-        missionStore={trackerStore.missionStore}
         plannerStore={trackerStore.plannerStore}
       />
     );

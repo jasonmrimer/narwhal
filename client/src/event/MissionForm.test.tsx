@@ -8,7 +8,6 @@ import { StyledTimeInput } from '../widgets/TimeInput';
 import { StyledFieldValidation } from '../widgets/FieldValidation';
 import { StyledButton } from '../widgets/Button';
 import { EventModelFactory } from './factories/EventModelFactory';
-import { MissionStore } from '../mission/stores/MissionStore';
 import { MissionRepositoryStub } from '../mission/repositories/doubles/MissionRepositoryStub';
 import { MissionModel } from '../mission/models/MissionModel';
 import { StyledSubmitButton } from '../widgets/SubmitButton';
@@ -17,7 +16,6 @@ import { StyledSingleTypeahead } from '../widgets/SingleTypeahead';
 describe('MissionForm', () => {
   let mission: MissionModel;
   let missionFormStore: MissionFormStore;
-  let missionStore: MissionStore;
   let wrapper: ShallowWrapper;
   let subject: MissionForm;
   let eventActions: { addEvent: jest.Mock, removeEvent: jest.Mock };
@@ -28,16 +26,13 @@ describe('MissionForm', () => {
       removeEvent: jest.fn()
     };
 
-    missionStore = new MissionStore(new MissionRepositoryStub());
-    await missionStore.hydrate();
-    mission = missionStore.missions[1];
-
-    missionFormStore = new MissionFormStore(eventActions, missionStore);
+    missionFormStore = new MissionFormStore(eventActions);
+    missionFormStore.hydrate(await new MissionRepositoryStub().findAll());
+    mission = missionFormStore.missions[1];
 
     wrapper = shallow(
       <MissionForm
         airmanId={123}
-        missionStore={missionStore}
         missionFormStore={missionFormStore}
       />
     );

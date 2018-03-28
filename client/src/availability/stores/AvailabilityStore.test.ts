@@ -1,7 +1,6 @@
 import { AvailabilityStore } from './AvailabilityStore';
 import { EventModel, EventType } from '../../event/models/EventModel';
 import { EventModelFactory } from '../../event/factories/EventModelFactory';
-import { MissionStore } from '../../mission/stores/MissionStore';
 import { toJS } from 'mobx';
 import * as moment from 'moment';
 import { DoubleRepositories } from '../../Repositories';
@@ -15,11 +14,7 @@ describe('AvailabilityStore', () => {
       refreshAirmen: jest.fn()
     };
 
-    subject = new AvailabilityStore(
-      refreshAirmen,
-      new MissionStore(DoubleRepositories.missionRepository),
-      DoubleRepositories
-    );
+    subject = new AvailabilityStore(refreshAirmen, DoubleRepositories);
     eventRepository = (DoubleRepositories.eventRepository as EventRepositoryStub);
   });
 

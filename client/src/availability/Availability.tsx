@@ -14,14 +14,12 @@ import { StyledRadioButtons } from '../widgets/RadioButtons';
 import { StyledAppointmentForm } from '../event/AppointmentForm';
 import { StyledLeaveForm } from '../event/LeaveForm';
 import { StyledMissionForm } from '../event/MissionForm';
-import { MissionStore } from '../mission/stores/MissionStore';
 import { StyledBackButton } from '../widgets/BackButton';
 import { StyledDeleteEventPopup } from '../event/DeleteEventPopup';
 
 interface Props {
   selectedAirman: AirmanModel;
   availabilityStore: AvailabilityStore;
-  missionStore: MissionStore;
   plannerStore: PlannerStore;
   className?: string;
 }
@@ -79,7 +77,7 @@ export class Availability extends React.Component<Props> {
   }
 
   private renderEventForm() {
-    const {selectedAirman, availabilityStore, missionStore} = this.props;
+    const {selectedAirman, availabilityStore} = this.props;
     switch (availabilityStore.eventFormType) {
       case EventType.Appointment:
         return (
@@ -99,7 +97,6 @@ export class Availability extends React.Component<Props> {
         return (
           <StyledMissionForm
             airmanId={selectedAirman.id}
-            missionStore={missionStore}
             missionFormStore={availabilityStore.missionFormStore}
           />
         );

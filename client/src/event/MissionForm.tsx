@@ -7,7 +7,6 @@ import { StyledTimeInput } from '../widgets/TimeInput';
 import { StyledSubmitButton } from '../widgets/SubmitButton';
 import { StyledButton } from '../widgets/Button';
 import { StyledSingleTypeahead } from '../widgets/SingleTypeahead';
-import { MissionStore } from '../mission/stores/MissionStore';
 import { FilterOption } from '../widgets/models/FilterOptionModel';
 import { StyledFieldValidation } from '../widgets/FieldValidation';
 import { StyledForm, StyledFormRow } from '../widgets/Form';
@@ -19,7 +18,6 @@ function noop() {
 
 interface Props {
   airmanId: number;
-  missionStore: MissionStore;
   missionFormStore: MissionFormStore;
   className?: string;
 }
@@ -45,7 +43,7 @@ export class MissionForm extends React.Component<Props> {
   }
 
   render() {
-    const {missionOptions} = this.props.missionStore;
+    const {missionOptions} = this.props.missionFormStore;
     const {state, hasItem, errors} = this.props.missionFormStore;
     const selected = missionOptions.find(msn => msn.value === state.id);
 

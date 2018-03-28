@@ -25,12 +25,12 @@ export class CrewStore {
   }
 
   async hydrate(crewId: number) {
-    const results = await Promise.all([
+    const [airmen, crew] = await Promise.all([
       this.airmanRepository.findAll(),
       this.crewRepository.findOne(crewId)
     ]);
-    this._airmen = results[0];
-    this._crew = results[1];
+    this._airmen = airmen;
+    this._crew = crew;
   }
 
   @computed

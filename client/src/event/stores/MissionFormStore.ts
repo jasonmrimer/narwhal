@@ -1,8 +1,8 @@
 import { EventModel, EventType } from '../models/EventModel';
 import { FormStore } from '../../widgets/stores/FormStore';
 import { EventActions } from './EventActions';
-import { action } from 'mobx';
-import { MissionStore } from '../../mission/stores/MissionStore';
+import { action, computed, observable } from 'mobx';
+import { MissionModel } from '../../mission/models/MissionModel';
 
 interface State {
   id: number | null;
@@ -14,8 +14,9 @@ interface State {
 }
 
 export class MissionFormStore extends FormStore<EventModel, State> {
-  constructor(private eventActions: EventActions,
-              private missionStore: MissionStore) {
+  @observable private _missions: MissionModel[] = [];
+
+  constructor(private eventActions: EventActions) {
     super();
     this._state = {
       id: null,
@@ -27,12 +28,17 @@ export class MissionFormStore extends FormStore<EventModel, State> {
     };
   }
 
+  @action.bound
+  hydrate(missions: MissionModel[]) {
+    this._missions = missions;
+  }
+
   @action
   setState(state: Partial<State>) {
     if (state.id === null) {
       this._state = this.emptyState();
     } else {
-      const mission = this.missionStore.missions.find(msn => msn.id === state.id);
+      const mission = this._missions.find(msn => msn.id === state.id);
       if (mission != null) {
         this._state = {
           id: mission.id,
@@ -88,5 +94,17 @@ export class MissionFormStore extends FormStore<EventModel, State> {
     if (this.item != null) {
       this.eventActions.removeEvent(this.item);
     }
+  }
+
+  @computed
+  get missions() {
+    return this._missions;
+  }
+
+  @computed
+  get missionOptions() {
+    return this._missions.map(msn => {
+      return {value: msn.id, label: `${msn.displayDate} - ${msn.atoMissionNumber}`};
+    });
   }
 }

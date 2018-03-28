@@ -6,11 +6,11 @@ import { AppointmentFormStore } from '../../event/stores/AppointmentFormStore';
 import { Moment } from 'moment';
 import { FormStore } from '../../widgets/stores/FormStore';
 import { EventActions } from '../../event/stores/EventActions';
-import { MissionStore } from '../../mission/stores/MissionStore';
 import { Repositories } from '../../Repositories';
+import { MissionModel } from '../../mission/models/MissionModel';
 
 interface RefreshAirmen {
-  refreshAirmen: (item: {airmanId: number}) => Promise<void>;
+  refreshAirmen: (item: { airmanId: number }) => Promise<void>;
 }
 
 export class AvailabilityStore implements EventActions {
@@ -32,15 +32,19 @@ export class AvailabilityStore implements EventActions {
     store[method].call(store, arg);
   }
 
-  constructor(private refreshAirmen: RefreshAirmen, missionStore: MissionStore, private repositories: Repositories) {
+  constructor(private refreshAirmen: RefreshAirmen, private repositories: Repositories) {
     this.appointmentFormStore = new AppointmentFormStore(this);
     this.leaveFormStore = new LeaveFormStore(this);
-    this.missionFormStore = new MissionFormStore(this, missionStore);
+    this.missionFormStore = new MissionFormStore(this);
     this.eventTypeFormStoreMap = {
       [EventType.Mission]: this.missionFormStore,
       [EventType.Appointment]: this.appointmentFormStore,
       [EventType.Leave]: this.leaveFormStore,
     };
+  }
+
+  hydrate(missions: MissionModel[]) {
+    this.missionFormStore.hydrate(missions);
   }
 
   @computed

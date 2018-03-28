@@ -10,10 +10,8 @@ import * as moment from 'moment';
 export class DashboardStore {
   private siteRepository: SiteRepository;
   private missionRepository: MissionRepository;
-
   @observable private _sites: SiteModel[] = [];
   @observable private _missions: MissionModel[] = [];
-
   @observable private _siteId: number = UnfilteredValue;
 
   constructor(repositories: Repositories) {
@@ -22,13 +20,12 @@ export class DashboardStore {
   }
 
   async hydrate() {
-    const results = await Promise.all([
+    const [sites, missions] = await Promise.all([
       this.siteRepository.findAll(),
       this.missionRepository.findAll()
     ]);
-
-    this._sites = results[0];
-    this._missions = results[1];
+    this._sites = sites;
+    this._missions = missions;
   }
 
   @computed
@@ -68,7 +65,8 @@ export class DashboardStore {
     return filteredMissions.reduce((accum, current) => {
       intervals.forEach(interval => {
         current.startDateTime.isBetween(interval.startTime, interval.endTime, 'minute', '[)') ?
-          (accum[interval.label] = accum[interval.label] || []).push(current) : accum;
+          (accum[interval.label] = accum[interval.label] || []).push(current) :
+          accum;
       });
       return accum;
     }, {});

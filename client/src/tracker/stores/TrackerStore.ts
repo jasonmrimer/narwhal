@@ -3,7 +3,6 @@ import { action, computed, observable } from 'mobx';
 import { CurrencyStore } from '../../currency/stores/CurrencyStore';
 import { AvailabilityStore } from '../../availability/stores/AvailabilityStore';
 import { PlannerStore } from '../../roster/stores/PlannerStore';
-import { MissionStore } from '../../mission/stores/MissionStore';
 import { UnfilteredValue } from '../../widgets/models/FilterOptionModel';
 import { TimeService } from '../services/TimeService';
 import { SidePanelStore, TabType } from './SidePanelStore';
@@ -16,25 +15,20 @@ export class TrackerStore {
   public currencyStore: CurrencyStore;
   public availabilityStore: AvailabilityStore;
   public plannerStore: PlannerStore;
-  public missionStore: MissionStore;
   public sidePanelStore: SidePanelStore;
   public rosterHeaderStore: RosterHeaderStore;
   public trackerFilterStore: TrackerFilterStore;
 
   private repositories: Repositories;
-
   @observable private _loading: boolean = false;
-
   @observable private _airmen: AirmanModel[] = [];
-
   @observable private _selectedAirman: AirmanModel = AirmanModel.empty();
 
   constructor(repositories: Repositories, timeService: TimeService) {
     this.repositories = repositories;
-    this.missionStore = new MissionStore(this.repositories.missionRepository);
     this.trackerFilterStore = new TrackerFilterStore();
     this.currencyStore = new CurrencyStore(this, this.trackerFilterStore, this.repositories);
-    this.availabilityStore = new AvailabilityStore(this, this.missionStore, this.repositories);
+    this.availabilityStore = new AvailabilityStore(this, this.repositories);
     this.plannerStore = new PlannerStore(timeService);
     this.sidePanelStore = new SidePanelStore();
     this.rosterHeaderStore = new RosterHeaderStore(this.trackerFilterStore);
@@ -43,19 +37,19 @@ export class TrackerStore {
   async hydrate(siteId: number = UnfilteredValue) {
     this._loading = true;
 
-    const results = await Promise.all([
-      this.repositories.siteRepository.findAll(),
+    const [airmen, sites, certifications, qualifications, missions] = await Promise.all([
       this.repositories.airmanRepository.findAll(),
+      this.repositories.siteRepository.findAll(),
       this.repositories.skillRepository.findAllCertifications(),
       this.repositories.skillRepository.findAllQualifications(),
-      this.missionStore.hydrate(),
+      this.repositories.missionRepository.findAll()
     ]);
 
-    this._airmen = results[1];
-
-    this.trackerFilterStore.hydrate(siteId, results[0]);
-    this.rosterHeaderStore.hydrate(results[2], results[3]);
-    this.currencyStore.hydrate(results[2], results[3]);
+    this._airmen = airmen;
+    this.trackerFilterStore.hydrate(siteId, sites);
+    this.rosterHeaderStore.hydrate(certifications, qualifications);
+    this.currencyStore.hydrate(certifications, qualifications);
+    this.availabilityStore.hydrate(missions);
 
     this._loading = false;
   }

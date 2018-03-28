@@ -33,7 +33,6 @@ export class SidePanel extends React.Component<Props> {
           <StyledAvailability
             selectedAirman={this.props.trackerStore.selectedAirman}
             availabilityStore={this.props.trackerStore.availabilityStore}
-            missionStore={this.props.trackerStore.missionStore}
             plannerStore={this.props.trackerStore.plannerStore}
           />
         );

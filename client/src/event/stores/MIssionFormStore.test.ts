@@ -3,12 +3,12 @@ import { EventModel, EventType } from '../models/EventModel';
 import { EventModelFactory } from '../factories/EventModelFactory';
 import { MissionFormStore } from './MissionFormStore';
 import { MissionRepositoryStub } from '../../mission/repositories/doubles/MissionRepositoryStub';
-import { MissionStore } from '../../mission/stores/MissionStore';
+import { MissionModel } from '../../mission/models/MissionModel';
 
 describe('MissionFormStore', () => {
   const airmanId = 123;
   let eventActions: EventActions;
-  let missionStore: MissionStore;
+  let missions: MissionModel[];
   let subject: MissionFormStore;
   let event: EventModel;
 
@@ -21,10 +21,10 @@ describe('MissionFormStore', () => {
       removeEvent: jest.fn()
     };
 
-    missionStore = new MissionStore(new MissionRepositoryStub());
-    await missionStore.hydrate();
+    missions = await new MissionRepositoryStub().findAll();
 
-    subject = new MissionFormStore(eventActions, missionStore);
+    subject = new MissionFormStore(eventActions);
+    subject.hydrate(missions);
   });
 
   describe('open', () => {
@@ -71,7 +71,7 @@ describe('MissionFormStore', () => {
   });
 
   it('can add an event', () => {
-    const selectedMission = missionStore.missions[1];
+    const selectedMission = subject.missions[1];
     subject.setState({id: selectedMission.id});
     subject.addItem(airmanId);
 
@@ -94,7 +94,7 @@ describe('MissionFormStore', () => {
   });
 
   it('can clear the state', () => {
-    const selectedMission = missionStore.missions[0];
+    const selectedMission = subject.missions[0];
     subject.setState({id: selectedMission.id});
     expect(subject.state.id).toBe(selectedMission.id);
     expect(subject.state.title).toBe(selectedMission.atoMissionNumber);
@@ -122,5 +122,29 @@ describe('MissionFormStore', () => {
     subject.removeItem();
 
     expect(eventActions.removeEvent).toHaveBeenCalledWith(event);
+  });
+
+  it('returns a list of mission options', () => {
+    expect(subject.missionOptions).toEqual([
+      {value: 1, label: `${subject.missions[0].displayDate} - ato1`},
+      {value: 2, label: `${subject.missions[1].displayDate} - ato2`},
+      {value: 3, label: `${subject.missions[2].displayDate} - ato3`},
+      {value: 4, label: `${subject.missions[3].displayDate} - ato4`},
+      {value: 5, label: `${subject.missions[4].displayDate} - ato5`},
+      {value: 6, label: `${subject.missions[5].displayDate} - ato6`},
+      {value: 7, label: `${subject.missions[6].displayDate} - ato7`},
+      {value: 8, label: `${subject.missions[7].displayDate} - ato8`},
+      {value: 9, label: `${subject.missions[8].displayDate} - ato9`},
+      {value: 10, label: `${subject.missions[9].displayDate} - ato10`},
+      {value: 11, label: `${subject.missions[10].displayDate} - ato11`},
+      {value: 12, label: `${subject.missions[11].displayDate} - ato12`},
+      {value: 13, label: `${subject.missions[12].displayDate} - ato13`},
+      {value: 14, label: `${subject.missions[13].displayDate} - ato14`},
+      {value: 15, label: `${subject.missions[14].displayDate} - ato15`},
+      {value: 16, label: `${subject.missions[15].displayDate} - ato16`},
+      {value: 17, label: `${subject.missions[16].displayDate} - ato17`},
+      {value: 18, label: `${subject.missions[17].displayDate} - ato18`},
+      {value: 19, label: `${subject.missions[18].displayDate} - ato19`},
+    ]);
   });
 });
