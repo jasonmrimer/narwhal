@@ -206,15 +206,12 @@ class TrackerPage
     crew_page.add_new_crew_member
   end
 
-  def assert_return_to_tracker
+  def assert_return_to_tracker_with_previous_filter_values
     filter('site', 'DMS-MD')
     filter('squadron', '94 IS')
     squadron_count = page.find_all('.airman-name').count
 
     filter('flight', 'DOB')
-    expect(page).to have_css('.airman-name', maximum: squadron_count)
-    flight_count = page.find_all('.airman-name').count
-    expect(flight_count).to be < squadron_count
 
     click_on_airman('Spaceman, Corey')
     page.within('.side-panel') do
@@ -231,6 +228,12 @@ class TrackerPage
     expect(page).to have_select('site-filter', selected: 'DMS-MD')
     expect(page).to have_select('squadron-filter', selected: '94 IS')
     expect(page).to have_select('flight-filter', selected: 'DOB')
+
+    filter('site', 'DMS-GA')
+    click(find('a', text: 'MISSION'))
+    click(find('a', text: 'AVAILABILITY'))
+
+    expect(page).to have_select('site-filter', selected: 'DMS-GA')
   end
 
   private

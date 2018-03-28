@@ -27,7 +27,7 @@ export class TrackerFilterStore {
 
   hydrate(siteId: number, sites: SiteModel[]) {
     this._sites = sites;
-    if (this._selectedSite !== siteId) {
+    if (this._selectedSite === UnfilteredValue) {
       this.setSelectedSite(siteId);
     }
   }

@@ -11,6 +11,10 @@ describe 'Tracker page', type: :feature do
     it 'can navigate to the dashboard page' do
       tracker_page.assert_navigates_to_dashboard
     end
+
+    it 'can return to the tracker with previously selected filters' do
+      tracker_page.assert_return_to_tracker_with_previous_filter_values
+    end
   end
 
   describe 'filtering' do
@@ -80,10 +84,6 @@ describe 'Tracker page', type: :feature do
   describe 'crew creation' do
     it 'can add airmen to a mission and then view a created crew' do
       tracker_page.assert_create_and_view_crew
-    end
-
-    it 'can return to the tracker with previously selected filters' do
-      tracker_page.assert_return_to_tracker
     end
   end
 end
