@@ -21,6 +21,11 @@ public class Site {
 
   private String name;
 
+  @Enumerated(EnumType.STRING)
+  private SiteType siteType;
+
+  private String fullName;
+
   @OneToMany(mappedBy = "site", cascade = CascadeType.ALL)
   @JsonManagedReference
   private List<Squadron> squadrons = new ArrayList<>();

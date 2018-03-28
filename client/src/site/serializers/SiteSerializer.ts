@@ -14,7 +14,9 @@ export class SiteSerializer implements Serializer<SiteModel> {
     return new SiteModel(
       item.id,
       item.name,
-      item.squadrons.map((squad: any) => this.squadronSerializer.deserialize(squad))
+      item.squadrons.map((squad: any) => this.squadronSerializer.deserialize(squad)),
+      item.siteType,
+      item.fullName
     );
   }
 }

@@ -23,7 +23,9 @@ public class SiteControllerTest extends BaseIntegrationTest {
     squad1.addFlight(flight1);
 
     final Site site1 = new Site("site1");
+    site1.setFullName("siteOne");
     site1.addSquadron(squad1);
+    site1.setSiteType(SiteType.DGSCoreSite);
 
     final Flight flight2 = new Flight("flight2");
 
@@ -38,8 +40,10 @@ public class SiteControllerTest extends BaseIntegrationTest {
     squad3.addFlight(flight4);
 
     final Site site2 = new Site("site2");
+    site2.setFullName("siteTwo");
     site2.addSquadron(squad2);
     site2.addSquadron(squad3);
+    site2.setSiteType(SiteType.DMSSite);
 
     siteRepository.save(asList(site1, site2));
   }
@@ -64,9 +68,13 @@ public class SiteControllerTest extends BaseIntegrationTest {
       .body("$.size()", equalTo(2))
       .body("[0].squadrons.size()", equalTo(1))
       .body("[0].squadrons[0].flights.size()", equalTo(1))
+      .body("[0].siteType", equalTo("DGSCoreSite"))
+      .body("[0].fullName", equalTo("siteOne"))
       .body("[1].squadrons.size()", equalTo(2))
       .body("[1].squadrons[0].flights.size()", equalTo(1))
-      .body("[1].squadrons[1].flights.size()", equalTo(2));
+      .body("[1].squadrons[1].flights.size()", equalTo(2))
+      .body("[1].siteType", equalTo("DMSSite"))
+      .body("[1].fullName", equalTo("siteTwo"));
     // @formatter:on
   }
 }

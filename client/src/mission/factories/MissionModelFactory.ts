@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import { SiteModel } from '../../site/models/SiteModel';
+import { SiteModel, SiteType } from '../../site/models/SiteModel';
 import { MissionModel } from '../models/MissionModel';
 
 const time = moment();
@@ -10,7 +10,7 @@ const missionOne = new MissionModel(
   'ato1',
   time,
   time,
-  new SiteModel(1, 'DMS-GA', [])
+  new SiteModel(1, 'DMS-GA', [], SiteType.DGSCoreSite, 'DMS Georgia')
 );
 
 const missionTwo = new MissionModel(
@@ -19,7 +19,7 @@ const missionTwo = new MissionModel(
   'ato2',
   time,
   time,
-  new SiteModel(1, 'DMS-GA', [])
+  new SiteModel(1, 'DMS-GA', [], SiteType.DGSCoreSite, 'DMS Georgia')
 );
 
 const missionThree = new MissionModel(
@@ -28,7 +28,7 @@ const missionThree = new MissionModel(
   'ato3',
   time.clone().add(1, 'days'),
   time.clone().add(1, 'days'),
-  new SiteModel(2, 'DMS-MD', [])
+  new SiteModel(2, 'DMS-MD', [], SiteType.DMSSite, 'DMS Maryland')
 );
 
 const missionFour = new MissionModel(
@@ -37,7 +37,7 @@ const missionFour = new MissionModel(
   'ato4',
   time.clone().add(2, 'days'),
   time.clone().add(2, 'days'),
-  new SiteModel(3, 'DMS-HI', [])
+  new SiteModel(3, 'DMS-HI', [], SiteType.GuardSite, 'DMS Hawaii')
 );
 
 const missionFive = new MissionModel(
@@ -46,7 +46,7 @@ const missionFive = new MissionModel(
   'ato5',
   time.clone().add(4, 'days'),
   time.clone().add(4, 'days'),
-  new SiteModel(3, 'DMS-HI', [])
+  new SiteModel(3, 'DMS-HI', [], SiteType.GuardSite, 'DMS Hawaii')
 );
 
 const missionSix = new MissionModel(
@@ -55,7 +55,7 @@ const missionSix = new MissionModel(
   'ato6',
   time.clone().add(8, 'days'),
   time.clone().add(8, 'days'),
-  new SiteModel(3, 'DMS-HI', [])
+  new SiteModel(3, 'DMS-HI', [], SiteType.GuardSite, 'DMS Hawaii')
 );
 
 const missionSeven = new MissionModel(
@@ -64,7 +64,7 @@ const missionSeven = new MissionModel(
   'ato7',
   time.clone().add(20, 'days'),
   time.clone().add(20, 'days'),
-  new SiteModel(3, 'DMS-HI', [])
+  new SiteModel(3, 'DMS-HI', [], SiteType.GuardSite, 'DMS Hawaii')
 );
 
 const missionEight = new MissionModel(
@@ -73,7 +73,7 @@ const missionEight = new MissionModel(
   'ato8',
   time.clone().add(20, 'days'),
   time.clone().add(20, 'days'),
-  new SiteModel(3, 'DMS-HI', [])
+  new SiteModel(3, 'DMS-HI', [], SiteType.GuardSite, 'DMS Hawaii')
 );
 
 const missionNine = new MissionModel(
@@ -82,7 +82,7 @@ const missionNine = new MissionModel(
   'ato9',
   time.clone().add(20, 'days'),
   time.clone().add(20, 'days'),
-  new SiteModel(3, 'DMS-HI', [])
+  new SiteModel(3, 'DMS-HI', [], SiteType.GuardSite, 'DMS Hawaii')
 );
 
 const missionTen = new MissionModel(
@@ -91,7 +91,7 @@ const missionTen = new MissionModel(
   'ato10',
   time.clone().add(20, 'days'),
   time.clone().add(20, 'days'),
-  new SiteModel(3, 'DMS-HI', [])
+  new SiteModel(3, 'DMS-HI', [], SiteType.GuardSite, 'DMS Hawaii')
 );
 
 const missionEleven = new MissionModel(
@@ -100,7 +100,7 @@ const missionEleven = new MissionModel(
   'ato11',
   time.clone().add(20, 'days'),
   time.clone().add(20, 'days'),
-  new SiteModel(3, 'DMS-HI', [])
+  new SiteModel(3, 'DMS-HI', [], SiteType.GuardSite, 'DMS Hawaii')
 );
 
 const missionTwelve = new MissionModel(
@@ -109,7 +109,7 @@ const missionTwelve = new MissionModel(
   'ato12',
   time.clone().add(20, 'days'),
   time.clone().add(20, 'days'),
-  new SiteModel(3, 'DMS-HI', [])
+  new SiteModel(3, 'DMS-HI', [], SiteType.GuardSite, 'DMS Hawaii')
 );
 
 const missionThirteen = new MissionModel(
@@ -118,7 +118,7 @@ const missionThirteen = new MissionModel(
   'ato13',
   time.clone().add(20, 'days'),
   time.clone().add(20, 'days'),
-  new SiteModel(3, 'DMS-HI', [])
+  new SiteModel(3, 'DMS-HI', [], SiteType.GuardSite, 'DMS Hawaii')
 );
 
 const missionFourteen = new MissionModel(
@@ -127,7 +127,7 @@ const missionFourteen = new MissionModel(
   'ato14',
   time.clone().add(20, 'days'),
   time.clone().add(20, 'days'),
-  new SiteModel(3, 'DMS-HI', [])
+  new SiteModel(3, 'DMS-HI', [], SiteType.GuardSite, 'DMS Hawaii')
 );
 
 const missionFifteen = new MissionModel(
@@ -136,7 +136,7 @@ const missionFifteen = new MissionModel(
   'ato15',
   time.clone().add(20, 'days'),
   time.clone().add(20, 'days'),
-  new SiteModel(3, 'DMS-HI', [])
+  new SiteModel(3, 'DMS-HI', [], SiteType.GuardSite, 'DMS Hawaii')
 );
 
 const missionSixteen = new MissionModel(
@@ -145,7 +145,7 @@ const missionSixteen = new MissionModel(
   'ato16',
   time.clone().add(20, 'days'),
   time.clone().add(20, 'days'),
-  new SiteModel(3, 'DMS-HI', [])
+  new SiteModel(3, 'DMS-HI', [], SiteType.GuardSite, 'DMS Hawaii')
 );
 
 const missionSeventeen = new MissionModel(
@@ -154,7 +154,7 @@ const missionSeventeen = new MissionModel(
   'ato17',
   time.clone().add(20, 'days'),
   time.clone().add(20, 'days'),
-  new SiteModel(3, 'DMS-HI', [])
+  new SiteModel(3, 'DMS-HI', [], SiteType.GuardSite, 'DMS Hawaii')
 );
 
 const missionEightteen = new MissionModel(
@@ -163,7 +163,7 @@ const missionEightteen = new MissionModel(
   'ato18',
   time.clone().add(20, 'days'),
   time.clone().add(20, 'days'),
-  new SiteModel(3, 'DMS-HI', [])
+  new SiteModel(3, 'DMS-HI', [], SiteType.GuardSite, 'DMS Hawaii')
 );
 
 const missionNineteen = new MissionModel(

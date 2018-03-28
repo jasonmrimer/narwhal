@@ -1013,6 +1013,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/resources/db/migration/V17__Add_site_type_to_site.sql">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/resources/db/migration/V1__Create_and_populate_airman.sql">
           <value>
             <set />

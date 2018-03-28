@@ -2,7 +2,7 @@ import { action, computed, observable } from 'mobx';
 import { ProfileModel } from '../models/ProfileModel';
 import ProfileRepository from '../repositories/ProfileRepository';
 import { SiteRepository } from '../../site/repositories/SiteRepository';
-import { SiteModel } from '../../site/models/SiteModel';
+import { SiteModel, SiteType } from '../../site/models/SiteModel';
 import { Repositories } from '../../Repositories';
 
 export class ProfileSitePickerStore {
@@ -10,6 +10,7 @@ export class ProfileSitePickerStore {
   private profileRepository: ProfileRepository;
   @observable private _profile: ProfileModel | null = null;
   @observable private _sites: SiteModel[];
+  @observable private _pendingSite: SiteModel | null = null;
 
   constructor(repositories: Repositories) {
     this.siteRepository = repositories.siteRepository;
@@ -28,11 +29,41 @@ export class ProfileSitePickerStore {
   }
 
   @action.bound
-  async saveSiteId(siteId: number) {
-    if (this._profile) {
-      const user = Object.assign({}, this._profile.user, {siteId: siteId});
+  async savePendingSite() {
+    if (this._profile && this._pendingSite) {
+      const user = Object.assign({}, this._profile.user, {siteId: this._pendingSite.id});
       this._profile = await this.profileRepository.save(user);
     }
+  }
+
+  @computed
+  get pendingSite() {
+    return this._pendingSite;
+  }
+
+  @action.bound
+  setPendingSite(site: SiteModel) {
+    this._pendingSite = site;
+  }
+
+  @action.bound
+  cancelPendingSite() {
+    this._pendingSite = null;
+  }
+
+  @computed
+  get dgsCoreSites() {
+    return this._sites.filter(site => site.siteType === SiteType.DGSCoreSite);
+  }
+
+  @computed
+  get dmsSites() {
+    return this._sites.filter(site => site.siteType === SiteType.DMSSite);
+  }
+
+  @computed
+  get guardSites() {
+    return this._sites.filter(site => site.siteType === SiteType.GuardSite);
   }
 
   getSiteByName(name: string) {
