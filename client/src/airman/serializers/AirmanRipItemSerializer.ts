@@ -10,7 +10,6 @@ export class AirmanRipItemSerializer implements Serializer<AirmanRipItemModel> {
     return JSON.stringify(item);
   }
 
-  /* tslint:disable:no-any*/
   deserialize(item: any): AirmanRipItemModel {
     return new AirmanRipItemModel(
       item.id,

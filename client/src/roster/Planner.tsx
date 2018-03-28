@@ -11,6 +11,7 @@ import { EventModel, EventType } from '../event/models/EventModel';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { AirmanModel } from '../airman/models/AirmanModel';
 import { TabType } from '../tracker/stores/SidePanelStore';
+import { TDYDeploymentIcon } from '../icons/TDYDeploymentIcon';
 
 interface Props {
   week: Moment[];
@@ -27,6 +28,8 @@ const renderEventType = (type: EventType, key: number) => {
       return <MissionIcon key={key}/>;
     case EventType.Leave:
       return <LeaveIcon key={key}/>;
+    case EventType.TDY_DEPLOYMENT:
+      return <TDYDeploymentIcon key={key}/>;
     default:
       return null;
   }

@@ -28,7 +28,6 @@ export class SkillsForm extends React.Component<Props> {
     this.props.skillFormStore.removeItem();
   }
 
-  /* tslint:disable:no-any*/
   handleSubmit = (e: any) => {
     e.preventDefault();
     this.props.skillFormStore.addItem(this.props.airmanId);

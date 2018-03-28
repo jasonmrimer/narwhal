@@ -8,6 +8,7 @@ import { FormStore } from '../../widgets/stores/FormStore';
 import { EventActions } from '../../event/stores/EventActions';
 import { Repositories } from '../../Repositories';
 import { MissionModel } from '../../mission/models/MissionModel';
+import { TDYDeploymentFormStore } from '../../event/stores/TDYDeploymentFormStore';
 
 interface RefreshAirmen {
   refreshAirmen: (item: { airmanId: number }) => Promise<void>;
@@ -17,6 +18,7 @@ export class AvailabilityStore implements EventActions {
   public appointmentFormStore: AppointmentFormStore;
   public leaveFormStore: LeaveFormStore;
   public missionFormStore: MissionFormStore;
+  public tdyDeploymentFormStore: TDYDeploymentFormStore;
 
   @observable private _shouldShowEventForm: boolean = false;
   @observable private _shouldShowEventTypeSelection: boolean = true;
@@ -36,10 +38,12 @@ export class AvailabilityStore implements EventActions {
     this.appointmentFormStore = new AppointmentFormStore(this);
     this.leaveFormStore = new LeaveFormStore(this);
     this.missionFormStore = new MissionFormStore(this);
+    this.tdyDeploymentFormStore = new TDYDeploymentFormStore(this);
     this.eventTypeFormStoreMap = {
       [EventType.Mission]: this.missionFormStore,
       [EventType.Appointment]: this.appointmentFormStore,
       [EventType.Leave]: this.leaveFormStore,
+      [EventType.TDY_DEPLOYMENT]: this.tdyDeploymentFormStore,
     };
   }
 

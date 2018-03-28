@@ -83,6 +83,6 @@ export class DashboardStore {
           accum;
       });
       return accum;
-    }, {});
+    },                             {});
   }
 }

@@ -4,7 +4,7 @@ export enum EventType {
   Mission = 'MISSION',
   Appointment = 'APPOINTMENT',
   Leave = 'LEAVE',
-  TDY_DEPLOYMENT = 'TDY/DEPLOYMENT'
+  TDY_DEPLOYMENT = 'TDY_DEPLOYMENT'
 }
 
 export class EventModel {

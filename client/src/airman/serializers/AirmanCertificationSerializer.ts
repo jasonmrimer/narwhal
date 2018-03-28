@@ -9,7 +9,6 @@ export class AirmanCertificationSerializer implements Serializer<AirmanCertifica
     return JSON.stringify(item);
   }
 
-  /* tslint:disable:no-any*/
   deserialize(item: any): AirmanCertificationModel {
     return new AirmanCertificationModel(
       item.airmanId,

@@ -36,7 +36,6 @@ export class MissionForm extends React.Component<Props> {
     this.props.missionFormStore.removeItem();
   }
 
-  /* tslint:disable:no-any*/
   handleSubmit = (e: any) => {
     e.preventDefault();
     this.props.missionFormStore.addItem(this.props.airmanId);

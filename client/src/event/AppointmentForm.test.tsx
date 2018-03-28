@@ -96,7 +96,6 @@ describe('AppointmentForm', () => {
   });
 });
 
-/* tslint:disable:no-any*/
 function findInputValueByName(subject: ShallowWrapper, component: any, name: string) {
   return subject.find(component).findWhere(c => c.prop('name') === name).prop('value');
 }

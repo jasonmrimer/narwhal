@@ -11,7 +11,6 @@ export class CrewSerializer implements Serializer<CrewModel> {
     throw new Error('Not Implemented');
   }
 
-  /* tslint:disable:no-any*/
   deserialize(item: any): CrewModel {
     return new CrewModel(
       item.id,

@@ -15,6 +15,7 @@ import { EventModelFactory } from '../event/factories/EventModelFactory';
 import { TabType } from '../tracker/stores/SidePanelStore';
 import { StyledBackButton } from '../widgets/BackButton';
 import { StyledDeleteEventPopup } from '../event/DeleteEventPopup';
+import { StyledTDYDeploymentForm } from '../event/TDYDeploymentForm';
 
 let trackerStore: TrackerStore;
 let airman: AirmanModel;
@@ -22,6 +23,7 @@ let subject: ShallowWrapper;
 let eventOne: EventModel;
 let eventTwo: EventModel;
 let eventThree: EventModel;
+let eventFour: EventModel;
 
 describe('Availability', () => {
   beforeEach(async () => {
@@ -50,8 +52,16 @@ describe('Availability', () => {
       1,
       EventType.Leave
     );
+    eventFour = new EventModel(
+      'Event Four',
+      '',
+      moment('2017-11-30'),
+      moment('2017-12-25'),
+      1,
+      EventType.TDY_DEPLOYMENT
+    );
 
-    airman.events = [eventOne, eventTwo, eventThree];
+    airman.events = [eventOne, eventTwo, eventThree, eventFour];
 
     trackerStore = await makeFakeTrackerStore();
     trackerStore.setSelectedAirman(airman, TabType.AVAILABILITY);
@@ -92,7 +102,7 @@ describe('Availability', () => {
   });
 
   it('renders a list of events', () => {
-    expect(subject.find(StyledAvailabilityTile).length).toBe(6);
+    expect(subject.find(StyledAvailabilityTile).length).toBe(9);
   });
 
   it('renders all the scheduled events for the given day', () => {
@@ -146,6 +156,14 @@ describe('Availability', () => {
       expect(subject.find(StyledRadioButtons).prop('value')).toBe(EventType.Leave);
       expect(subject.find(StyledLeaveForm).exists()).toBeTruthy();
     });
+
+    it('shows a tdy/deployment form', () => {
+      trackerStore.availabilityStore.openCreateEventForm(EventType.TDY_DEPLOYMENT, airman.id);
+      subject.update();
+
+      expect(subject.find(StyledRadioButtons).prop('value')).toBe(EventType.TDY_DEPLOYMENT);
+      expect(subject.find(StyledTDYDeploymentForm).exists()).toBeTruthy();
+    });
   });
 
   describe('edit event form', () => {
@@ -171,6 +189,15 @@ describe('Availability', () => {
 
       expect(subject.find(StyledRadioButtons).exists()).toBeFalsy();
       expect(subject.find(StyledLeaveForm).exists()).toBeTruthy();
+    });
+
+    it('shows a tdy/deployment form', () => {
+      event.type = EventType.TDY_DEPLOYMENT;
+      trackerStore.availabilityStore.openEditEventForm(event);
+      subject.update();
+
+      expect(subject.find(StyledRadioButtons).exists()).toBeFalsy();
+      expect(subject.find(StyledTDYDeploymentForm).exists()).toBeTruthy();
     });
   });
 

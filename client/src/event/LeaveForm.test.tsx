@@ -79,19 +79,18 @@ describe('LeaveForm', () => {
     expect(findInputValueByName(wrapper, StyledTimeInput, 'endTime')).toEqual(store.state.endTime);
   });
 
-  it('add an Leave', () => {
+  it('adds a Leave', () => {
     subject.handleSubmit(eventStub);
     expect(eventActions.addEvent).toHaveBeenCalled();
   });
 
-  it('remove an Leave', () => {
+  it('removes a Leave', () => {
     store.open(EventModelFactory.build());
     subject.handleDelete();
     expect(eventActions.removeEvent).toHaveBeenCalled();
   });
 });
 
-/* tslint:disable:no-any*/
 function findInputValueByName(subject: ShallowWrapper, component: any, name: string) {
   return subject.find(component).findWhere(c => c.prop('name') === name).prop('value');
 }

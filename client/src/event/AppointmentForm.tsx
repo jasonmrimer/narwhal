@@ -19,7 +19,7 @@ interface Props {
 
 @observer
 export class AppointmentForm extends React.Component<Props> {
-  /* tslint:disable:no-any*/
+  
   handleChange = ({target}: any) => {
     this.props.appointmentFormStore.setState({[target.name]: target.value});
   }
@@ -28,7 +28,6 @@ export class AppointmentForm extends React.Component<Props> {
     this.props.appointmentFormStore.removeItem();
   }
 
-  /* tslint:disable:no-any*/
   handleSubmit = (e: any) => {
     e.preventDefault();
     this.props.appointmentFormStore.addItem(this.props.airmanId);

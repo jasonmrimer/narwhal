@@ -7,7 +7,6 @@ export class MissionSerializer implements Serializer<MissionModel> {
     throw new Error('Not implemented');
   }
 
-  /* tslint:disable:no-any*/
   deserialize(item: any): MissionModel {
     return new MissionModel(
       item.id,

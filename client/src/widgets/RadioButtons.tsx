@@ -25,7 +25,7 @@ export const RadioButtons = (props: Props) => {
               onChange={props.onChange}
               checked={isChecked}
             />
-            {option}
+            {option.replace('_', '/')}
           </label>
         );
       })}

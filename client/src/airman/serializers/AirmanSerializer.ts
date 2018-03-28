@@ -15,7 +15,6 @@ export class AirmanSerializer implements Serializer<AirmanModel> {
     throw new Error('Not implemented');
   }
 
-  /* tslint:disable:no-any*/
   deserialize(item: any): AirmanModel {
     return new AirmanModel(
       item.id,

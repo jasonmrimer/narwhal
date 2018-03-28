@@ -6,7 +6,6 @@ export class FlightSerializer implements Serializer<FlightModel> {
     throw new Error('Not Implemented');
   }
 
-  /* tslint:disable:no-any*/
   deserialize(item: any): FlightModel {
     return new FlightModel(
       item.id,

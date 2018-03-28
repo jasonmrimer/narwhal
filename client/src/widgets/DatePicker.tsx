@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
 
-/* tslint:disable:no-any*/
 interface Props {
   id?: string;
   value: string;

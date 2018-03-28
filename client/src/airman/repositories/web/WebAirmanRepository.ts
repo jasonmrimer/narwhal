@@ -5,7 +5,6 @@ import { SkillType } from '../../../skills/models/SkillType';
 import { Skill } from '../../../skills/models/Skill';
 import { HTTPClient } from '../../../HTTPClient';
 
-/* tslint:disable:no-any*/
 export class WebAirmanRepository implements AirmanRepository {
   private serializer = new AirmanSerializer();
 

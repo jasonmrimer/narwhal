@@ -7,7 +7,6 @@ export class EventSerializer implements Serializer<EventModel> {
     return JSON.stringify(item);
   }
 
-  /* tslint:disable:no-any*/
   deserialize(item: any): EventModel {
     return new EventModel(
       item.title,

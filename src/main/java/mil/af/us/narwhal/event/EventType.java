@@ -4,5 +4,5 @@ public enum EventType {
   APPOINTMENT,
   MISSION,
   LEAVE,
-  TDY_DEPLOYMENT
+  TDY_DEPLOYMENT,
 }

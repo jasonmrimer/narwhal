@@ -81,7 +81,7 @@ describe('App', () => {
   it('renders the Tracker component when the route is /', async () => {
     mountedSubject = await createMountedPage('/');
     expect(mountedSubject.find(Tracker).exists()).toBeTruthy();
-  });``
+  });
 
   it('renders the Dashboard component when the route is /dashboard', async () => {
     mountedSubject = await createMountedPage('/dashboard');

@@ -4,7 +4,6 @@ import { FilterOption } from './models/FilterOptionModel';
 import styled from 'styled-components';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 
-/* tslint:disable:no-any*/
 interface  Props {
   options: FilterOption[];
   onChange: (opt: FilterOption | null) => void;

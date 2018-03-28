@@ -16,6 +16,7 @@ import { StyledLeaveForm } from '../event/LeaveForm';
 import { StyledMissionForm } from '../event/MissionForm';
 import { StyledBackButton } from '../widgets/BackButton';
 import { StyledDeleteEventPopup } from '../event/DeleteEventPopup';
+import { StyledTDYDeploymentForm } from '../event/TDYDeploymentForm';
 
 interface Props {
   selectedAirman: AirmanModel;
@@ -42,7 +43,6 @@ export class Availability extends React.Component<Props> {
     );
   }
 
-  /* tslint:disable:no-any*/
   private renderEventFormContainer = () => {
     const {availabilityStore, selectedAirman} = this.props;
     return (
@@ -98,6 +98,13 @@ export class Availability extends React.Component<Props> {
           <StyledMissionForm
             airmanId={selectedAirman.id}
             missionFormStore={availabilityStore.missionFormStore}
+          />
+        );
+      case EventType.TDY_DEPLOYMENT:
+        return (
+          <StyledTDYDeploymentForm
+            airmanId={selectedAirman.id}
+            tdyDeploymentFormStore={availabilityStore.tdyDeploymentFormStore}
           />
         );
       default:

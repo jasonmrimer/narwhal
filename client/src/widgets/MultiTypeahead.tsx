@@ -5,8 +5,7 @@ import styled from 'styled-components';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
 import { caret } from '../utils/StyleUtils';
 
-/* tslint:disable:no-any*/
-interface Props {
+interface  Props {
   options: FilterOption[];
   onChange: (e: FilterOption[]) => void;
   placeholder: string;

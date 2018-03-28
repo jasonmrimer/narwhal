@@ -1,41 +1,50 @@
-import * as React from 'react';
 import styled from 'styled-components';
-import { LeaveFormStore } from './stores/LeaveFormStore';
+import * as React from 'react';
 import { observer } from 'mobx-react';
-import { StyledTextInput } from '../widgets/TextInput';
-import { StyledDatePicker } from '../widgets/DatePicker';
-import { StyledTimeInput } from '../widgets/TimeInput';
-import { StyledSubmitButton } from '../widgets/SubmitButton';
-import { StyledFieldValidation } from '../widgets/FieldValidation';
-import { StyledButton } from '../widgets/Button';
 import { StyledForm, StyledFormRow } from '../widgets/Form';
+import { StyledTextInput } from '../widgets/TextInput';
+import { StyledFieldValidation } from '../widgets/FieldValidation';
+import { StyledDatePicker } from '../widgets/DatePicker';
+import { StyledSubmitButton } from '../widgets/SubmitButton';
+import { StyledButton } from '../widgets/Button';
 import { DeleteIcon } from '../icons/DeleteIcon';
+import { TDYDeploymentFormStore } from './stores/TDYDeploymentFormStore';
 
 interface Props {
   airmanId: number;
-  leaveFormStore: LeaveFormStore;
+  tdyDeploymentFormStore: TDYDeploymentFormStore;
   className?: string;
 }
 
 @observer
-export class LeaveForm extends React.Component<Props> {
+export class TDYDeploymentForm extends React.Component<Props> {
   handleChange = ({target}: any) => {
-    this.props.leaveFormStore.setState({[target.name]: target.value});
+    this.props.tdyDeploymentFormStore.setState({[target.name]: target.value});
   }
 
   handleDelete = () => {
-    this.props.leaveFormStore.removeItem();
+    this.props.tdyDeploymentFormStore.removeItem();
   }
 
   handleSubmit = (e: any) => {
     e.preventDefault();
-    this.props.leaveFormStore.addItem(this.props.airmanId);
+    this.props.tdyDeploymentFormStore.addItem(this.props.airmanId);
   }
 
   render() {
-    const {state, errors, hasItem} = this.props.leaveFormStore;
+    const {state, errors, hasItem} = this.props.tdyDeploymentFormStore;
     return (
       <StyledForm onSubmit={this.handleSubmit}>
+        <StyledFormRow>
+          <StyledFieldValidation name="title" errors={errors}>
+            <StyledTextInput
+              name="title"
+              onChange={this.handleChange}
+              placeholder="Title"
+              value={state.title}
+            />
+          </StyledFieldValidation>
+        </StyledFormRow>
         <StyledFormRow>
           <StyledTextInput
             name="description"
@@ -48,26 +57,15 @@ export class LeaveForm extends React.Component<Props> {
           <StyledFieldValidation name="startTime" errors={errors}>
             <StyledFormRow>
               <StyledDatePicker
-                name="startDate"
-                onChange={this.handleChange}
-                value={state.startDate}
-              />
-              <StyledTimeInput
                 name="startTime"
                 onChange={this.handleChange}
                 value={state.startTime}
               />
             </StyledFormRow>
           </StyledFieldValidation>
-
           <StyledFieldValidation name="endTime" errors={errors}>
             <StyledFormRow>
               <StyledDatePicker
-                name="endDate"
-                onChange={this.handleChange}
-                value={state.endDate}
-              />
-              <StyledTimeInput
                 name="endTime"
                 onChange={this.handleChange}
                 value={state.endTime}
@@ -91,6 +89,6 @@ export class LeaveForm extends React.Component<Props> {
   }
 }
 
-export const StyledLeaveForm = styled(LeaveForm)`
+export const StyledTDYDeploymentForm = styled(TDYDeploymentForm)`
   min-width: ${props => props.theme.sidePanelWidth};
 `;
