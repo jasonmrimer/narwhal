@@ -5,6 +5,7 @@ import * as React from 'react';
 import { AppointmentIcon } from '../icons/AppointmentIcon';
 import { MissionIcon } from '../icons/MissionIcon';
 import { LeaveIcon } from '../icons/LeaveIcon';
+import { TDYDeploymentIcon } from '../icons/TDYDeploymentIcon';
 
 describe('Legend', () => {
   const subject = shallow(<Legend />);
@@ -20,5 +21,8 @@ describe('Legend', () => {
 
     expect(subject.text()).toContain('LEAVE');
     expect(subject.find(LeaveIcon).exists).toBeTruthy();
+
+    expect(subject.text()).toContain('TDY/DEPLOYMENT');
+    expect(subject.find(TDYDeploymentIcon).exists).toBeTruthy();
   });
 });

@@ -4,6 +4,7 @@ import { LeaveIcon } from '../icons/LeaveIcon';
 import { MissionIcon } from '../icons/MissionIcon';
 import { AvailableIcon } from '../icons/AvailableIcon';
 import styled from 'styled-components';
+import { TDYDeploymentIcon } from '../icons/TDYDeploymentIcon';
 
 interface Props {
   className?: string;
@@ -12,6 +13,10 @@ interface Props {
 export const Legend = (props: Props) => {
   return (
     <div className={props.className}>
+      <div>
+        <TDYDeploymentIcon/>
+        <span>TDY/DEPLOYMENT</span>
+      </div>
       <div>
         <AppointmentIcon/>
         <span>APPOINTMENT</span>
