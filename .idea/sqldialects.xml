@@ -2,6 +2,7 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/scripts/seed_data.sql" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/scripts/seed_lots_of_data.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/scripts/truncate_data.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V10__Add_site_to_certification.sql" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/db/migration/V12__Create_Rip_Item_table.sql" dialect="MySQL" />

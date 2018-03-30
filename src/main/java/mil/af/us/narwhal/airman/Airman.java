@@ -58,8 +58,8 @@ public class Airman {
   @JsonBackReference
   private List<CrewPosition> crewPositions = new ArrayList<>();
 
-  @OneToMany(mappedBy = "airman", cascade = CascadeType.ALL, orphanRemoval = true)
-  @JsonManagedReference
+  @OneToMany(mappedBy = "airman", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  @JsonIgnore
   private List<AirmanRipItem> ripItems = new ArrayList<>();
 
   public Airman(Flight flight, String firstName, String lastName) {

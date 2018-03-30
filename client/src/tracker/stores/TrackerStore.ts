@@ -76,21 +76,28 @@ export class TrackerStore {
   }
 
   @action.bound
-  setSelectedAirman(airman: AirmanModel, tab: TabType) {
+  async setSelectedAirman(airman: AirmanModel, tab: TabType) {
     this._selectedAirman = airman;
-    this.currencyStore.airmanRipItemFormStore.setRipItems(airman.ripItems);
+
+    const ripItems = await this.repositories.ripItemRepository.findBySelectedAirman(airman.id);
+    this.currencyStore.airmanRipItemFormStore.setRipItems(ripItems);
+
     this.sidePanelStore.setSelectedTab(tab);
-    this.plannerStore.setSidePanelWeek(
-      airman.isEmpty ?
-        this.plannerStore.plannerWeek :
-        this.plannerStore.sidePanelWeek
-    );
+
+    this.plannerStore.setSidePanelWeek(this.plannerStore.sidePanelWeek);
   }
 
   @action.bound
   clearSelectedAirman() {
+    this._selectedAirman = AirmanModel.empty();
+
+    this.currencyStore.airmanRipItemFormStore.setRipItems([]);
+
+    this.sidePanelStore.setSelectedTab(TabType.AVAILABILITY);
+
+    this.plannerStore.setSidePanelWeek(this.plannerStore.plannerWeek);
+
     this.availabilityStore.closeEventForm();
-    this.setSelectedAirman(AirmanModel.empty(), TabType.AVAILABILITY);
   }
 
   @action.bound

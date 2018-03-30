@@ -4,7 +4,7 @@ import { TrackerStore } from './stores/TrackerStore';
 import { AirmanDatum } from './AirmanDatum';
 import { TabType } from './stores/SidePanelStore';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
-import { eventStub, makeFakeTrackerStore } from '../utils/testUtils';
+import { eventStub, forIt, makeFakeTrackerStore } from '../utils/testUtils';
 
 describe('AirmanDatum', () => {
   let subject: ShallowWrapper;
@@ -24,8 +24,9 @@ describe('AirmanDatum', () => {
     );
   });
 
-  it('calls the selectAirman when clicking on an airman', () => {
+  it('calls the selectAirman when clicking on an airman', async () => {
     subject.simulate('click', eventStub);
+    await forIt();
     expect(trackerStore.selectedAirman).toEqual(airman);
     expect(trackerStore.sidePanelStore.selectedTab).toEqual(TabType.CURRENCY);
   });
