@@ -23,8 +23,8 @@ document.body.style.backgroundColor = Theme.dark;
 
 const dashboardStore = new DashboardStore(WebRepositories);
 const trackerStore = new TrackerStore(WebRepositories, new MomentTimeService());
-const crewStore = new CrewStore(WebRepositories);
 const profileStore = new ProfileSitePickerStore(WebRepositories);
+const crewStore = new CrewStore(WebRepositories, profileStore);
 
 const AppWithRouter = withRouter((App as any)) as typeof App;
 

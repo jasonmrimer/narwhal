@@ -2,14 +2,18 @@ import { CrewStore } from './CrewStore';
 import { CrewModelFactory } from '../factories/CrewModelFactory';
 import { CrewModel } from '../models/CrewModel';
 import { DoubleRepositories } from '../../Repositories';
+import { ProfileSitePickerStore } from '../../profile/stores/ProfileSitePickerStore';
 
 describe('CrewStore', () => {
   let crew: CrewModel;
   let subject: CrewStore;
+  let profileStore: ProfileSitePickerStore;
 
   beforeEach(async () => {
     crew = CrewModelFactory.build();
-    subject = new CrewStore(DoubleRepositories);
+    profileStore = new ProfileSitePickerStore(DoubleRepositories);
+    await profileStore.hydrate();
+    subject = new CrewStore(DoubleRepositories, profileStore);
     await subject.hydrate(crew.id);
 
   });
@@ -29,7 +33,7 @@ describe('CrewStore', () => {
   });
 
   it('should set loading until hydrate completes', async () => {
-    subject = new CrewStore(DoubleRepositories);
+    subject = new CrewStore(DoubleRepositories, profileStore);
 
     subject.setLoading(true);
 
@@ -38,8 +42,8 @@ describe('CrewStore', () => {
     expect(subject.loading).toBeFalsy();
   });
 
-  it('has a list of all the airman', () => {
-    expect(subject.airmen.length).toBe(12);
+  it('has a list of airmen belonging to the users site', () => {
+    expect(subject.airmen.length).toBe(10);
   });
 
   it('should set a new crew member', () => {
@@ -55,5 +59,13 @@ describe('CrewStore', () => {
 
     expect(lastCrewPosition.airman.firstName).toBe(randomAirman.firstName);
     expect(lastCrewPosition.airman.lastName).toBe(randomAirman.lastName);
+  });
+
+  it('should have a list of airmen options related to the users site', () => {
+    const filteredAirmen = subject.airmen.filter(airman => airman.siteId === 1)
+
+    expect(subject.airmenOptions.length).toEqual(filteredAirmen.length)
+    subject.airmenOptions.map((airmanOption, index) =>
+      expect(airmanOption.label).toBe(`${filteredAirmen[index].lastName}, ${filteredAirmen[index].firstName}`));
   });
 });

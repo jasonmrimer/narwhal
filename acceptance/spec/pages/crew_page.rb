@@ -27,7 +27,8 @@ class CrewPage
   end
 
   def add_new_crew_member
-    fill_in 'airmanName', with: 'Munoz, Diana'
+    find(:css, ".rbt-input-main").set("Munoz, Diana")
+    click_link('Munoz, Diana')
     click_button 'SAVE'
 
     page.refresh

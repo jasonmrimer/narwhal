@@ -55,6 +55,7 @@ export class MissionForm extends React.Component<Props> {
               disabled={hasItem}
               options={missionOptions}
               onChange={this.handleChange}
+              clearButton={true}
               placeholder="Mission ID"
             />
           </StyledFormRow>

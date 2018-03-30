@@ -8,6 +8,7 @@ interface  Props {
   options: FilterOption[];
   onChange: (opt: FilterOption | null) => void;
   placeholder: string;
+  clearButton: boolean;
   disabled?: boolean;
   selected?: FilterOption | null;
   className?: string;
@@ -24,7 +25,7 @@ export const SingleTypeahead =  (props: Props) => {
         onChange={(opt: FilterOption[]) => props.onChange(opt.length === 1 ? opt[0] : null)}
         options={props.options}
         placeholder={props.placeholder}
-        clearButton={true}
+        clearButton={props.clearButton}
       />
     </div>
   );
@@ -40,8 +41,7 @@ export const StyledSingleTypeahead = styled(SingleTypeahead)`
         
     .rbt-input {
       border-bottom: 1px solid ${props => props.theme.graySteel} !important;
-      padding: 0.5rem 0.5rem 0.5rem 0 !important;
-      //height: 1rem;
+      padding: 0.5rem 0.5rem 0.5rem 0;
         
       input {
         font-size: 1rem;

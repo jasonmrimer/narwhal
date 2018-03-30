@@ -25,7 +25,7 @@ describe('App', () => {
     beforeEach(async () => {
       const trackerStore = await makeFakeTrackerStore();
       const dashboardStore = new DashboardStore(DoubleRepositories);
-      const crewStore = new CrewStore(DoubleRepositories);
+      const crewStore = new CrewStore(DoubleRepositories, profileStore);
       const profileRepo = {
         findOne: () => {
           return Promise.resolve({
@@ -98,8 +98,8 @@ describe('App', () => {
 const createMountedPage = async (entry: string) => {
   const trackerStore = await makeFakeTrackerStore();
   const dashboardStore = new DashboardStore(DoubleRepositories);
-  const crewStore = new CrewStore(DoubleRepositories);
   const profileStore = new ProfileSitePickerStore(DoubleRepositories);
+  const crewStore = new CrewStore(DoubleRepositories, profileStore);
 
   const mountedRouter = mount(
     <ThemeProvider theme={Theme}>

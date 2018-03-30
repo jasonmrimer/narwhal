@@ -10,6 +10,8 @@ import { Link } from 'react-router-dom';
 import { BackArrow } from '../icons/BackArrow';
 import { Theme } from '../themes/default';
 import { StyledLoadingOverlay } from '../widgets/LoadingOverlay';
+import { StyledSingleTypeahead } from '../widgets/SingleTypeahead';
+import { FilterOption } from '../widgets/models/FilterOptionModel';
 
 interface Props {
   crewId: number;
@@ -37,6 +39,14 @@ export class Crew extends React.Component<Props> {
 
   handleNewEntryCheck = (e: any) => {
     this.props.crewStore.setNewEntry({[e.target.name]: e.target.checked});
+  }
+
+  handleTypeahead = (opt: FilterOption) => {
+    if (opt) {
+      this.props.crewStore.setNewEntry({airmanName: opt.label});
+    } else {
+      this.props.crewStore.setNewEntry({airmanName: ''});
+    }
   }
 
   render() {
@@ -115,8 +125,18 @@ export class Crew extends React.Component<Props> {
   }
 
   private renderCrewInput = () => {
+    const selectedAirmanOption = this.props.crewStore.airmenOptions.find(opt => {
+      return opt.label === this.props.crewStore.newEntry.airmanName;
+    });
+
     return (
-      <tr>
+      <tr
+        onKeyPress={async (e) => {
+          if (e.key === 'Enter') {
+            await this.props.crewStore.save();
+          }
+        }}
+      >
         <td>
           <label htmlFor={`critical-new-entry`}>
             <StyledCheckbox
@@ -135,15 +155,13 @@ export class Crew extends React.Component<Props> {
           />
         </td>
         <td>
-          <StyledTextInput
-            name="airmanName"
-            onChange={this.handleNewEntryChange}
-            onKeyPress={async (e) => {
-              if (e.key === 'Enter') {
-                await this.props.crewStore.save();
-              }
-            }}
-            value={this.props.crewStore.newEntry.airmanName}
+          <StyledSingleTypeahead
+            className="airmanSelect"
+            options={this.props.crewStore.airmenOptions}
+            onChange={this.handleTypeahead}
+            placeholder={''}
+            selected={selectedAirmanOption ? selectedAirmanOption : {value: '', label: ''}}
+            clearButton={!!selectedAirmanOption}
           />
         </td>
       </tr>
@@ -193,7 +211,7 @@ export const StyledCrew = styled(Crew)`
     padding: 0.75rem;
   }
   
-  button {
+  & > button {
     margin-bottom: 1.5rem;
   }
   
@@ -208,5 +226,9 @@ export const StyledCrew = styled(Crew)`
     span {
       margin-left: 0.5rem;
     }
+  }
+  
+  .rbt .rbt-input {
+    padding: 0;
   }
 `;

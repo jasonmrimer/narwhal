@@ -193,6 +193,7 @@ export function FormStory() {
             {value: '4', label: 'donut'},
             {value: '5', label: 'pizza'}]}
           placeholder="Favorite Food?"
+          clearButton={true}
         />
       );
     });

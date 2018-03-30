@@ -5,6 +5,7 @@ import { CrewPositionModel } from '../models/CrewPositionModel';
 import { AirmanRepository } from '../../airman/repositories/AirmanRepository';
 import { AirmanModel } from '../../airman/models/AirmanModel';
 import { Repositories } from '../../Repositories';
+import { ProfileSitePickerStore } from '../../profile/stores/ProfileSitePickerStore';
 
 interface NewEntry {
   airmanName: string;
@@ -15,12 +16,13 @@ interface NewEntry {
 export class CrewStore {
   private airmanRepository: AirmanRepository;
   private crewRepository: CrewRepository;
+
   @observable private _crew: CrewModel | null = null;
   @observable private _airmen: AirmanModel[] = [];
   @observable private _newEntry: NewEntry = {airmanName: '', title: '', critical: false};
   @observable private _loading: boolean = false;
 
-  constructor(repositories: Repositories) {
+  constructor(repositories: Repositories, private _profileStore: ProfileSitePickerStore) {
     this.airmanRepository = repositories.airmanRepository;
     this.crewRepository = repositories.crewRepository;
   }
@@ -32,7 +34,7 @@ export class CrewStore {
       this.airmanRepository.findAll(),
       this.crewRepository.findOne(crewId)
     ]);
-    this._airmen = airmen;
+    this._airmen = airmen.filter(airman => airman.siteId === this._profileStore.profile!.user.siteId);
     this._crew = crew;
 
     this._loading = false;
@@ -51,6 +53,13 @@ export class CrewStore {
   @computed
   get airmen() {
     return this._airmen;
+  }
+
+  @computed
+  get airmenOptions() {
+    return this._airmen.map((airman) => {
+      return {value: airman.id, label: `${airman.lastName}, ${airman.firstName}`};
+    });
   }
 
   @computed
@@ -97,5 +106,10 @@ export class CrewStore {
     }
 
     this._crew = await this.crewRepository.update(this._crew);
+  }
+
+  @computed
+  get profileStore() {
+    return this._profileStore;
   }
 }

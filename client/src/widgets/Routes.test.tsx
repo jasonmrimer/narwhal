@@ -12,8 +12,8 @@ describe('Routes', () => {
   it('should support 4 routes', async () => {
     const trackerStore = await makeFakeTrackerStore();
     const dashboardStore = new DashboardStore(DoubleRepositories);
-    const crewStore = new CrewStore(DoubleRepositories);
     const profileStore = new ProfileSitePickerStore(DoubleRepositories);
+    const crewStore = new CrewStore(DoubleRepositories, profileStore);
 
     const subject = shallow(
       <Routes
