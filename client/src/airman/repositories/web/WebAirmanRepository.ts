@@ -16,16 +16,6 @@ export class WebAirmanRepository implements AirmanRepository {
     return json.map((item: any) => this.serializer.deserialize(item));
   }
 
-  async findBySquadron(id: number) {
-    const json = await this.client.getJSON(`/api/airmen?squadron=${id}`);
-    return json.map((item: any) => this.serializer.deserialize(item));
-  }
-
-  async findByFlight(id: number) {
-    const json = await this.client.getJSON(`/api/airmen?flight=${id}`);
-    return json.map((item: any) => this.serializer.deserialize(item));
-  }
-
   async saveAirman(airman: AirmanModel): Promise<AirmanModel> {
     const json = await this.client.postJSON('/api/airmen', JSON.stringify(airman));
     return this.serializer.deserialize(json);

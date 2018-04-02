@@ -168,6 +168,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/client/src/airman/repositories/AirmanRepository.ts">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/client/src/airman/repositories/AirmanRepositoryContract.ts">
           <value>
             <set />

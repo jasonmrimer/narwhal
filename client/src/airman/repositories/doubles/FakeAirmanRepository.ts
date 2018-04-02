@@ -28,20 +28,9 @@ const airmen = [
   af.build(12, 6, 2, 2, [AirmanQualificationModelFactory.build(3)], [AirmanCertificationModelFactory.build(7, 2)])
 ];
 
-const squadrons = {'1': airmen.slice(0, 6), '2': airmen.slice(6, 12)};
-
 export class FakeAirmanRepository implements AirmanRepository {
   findAll() {
     return Promise.resolve(airmen);
-  }
-
-  findBySquadron(id: number) {
-    return Promise.resolve(squadrons[String(id)]);
-  }
-
-  findByFlight(id: number): Promise<AirmanModel[]> {
-    const airmenForFlight = airmen.filter(airman => id === airman.flightId);
-    return Promise.resolve(airmenForFlight);
   }
 
   saveSkill(skill: Skill): Promise<AirmanModel> {

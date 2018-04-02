@@ -37,33 +37,6 @@ export function airmanRepositoryContract(subject: AirmanRepository) {
     });
   });
 
-  describe('findBySquadron', () => {
-    it('returns airmen filtered by squadron', async () => {
-      const filteredAirmen = await subject.findBySquadron(1);
-      expect(filteredAirmen).toBeDefined();
-
-      const uniqueIds = filteredAirmen.map(airman => airman.id).filter((el, i, a) => i === a.indexOf(el));
-      expect(uniqueIds.length).toEqual(filteredAirmen.length);
-
-      expect(filteredAirmen.length).toBeLessThan(airmen.length);
-    });
-  });
-
-  describe('findByFlight', () => {
-    it('returns airmen filtered by flight', async () => {
-      const filteredAirmen = await subject.findByFlight(1);
-
-      const uniqueIds = filteredAirmen.map(airman => airman.id).filter((el, i, a) => i === a.indexOf(el));
-      expect(uniqueIds.length).toEqual(filteredAirmen.length);
-
-      expect(filteredAirmen.length).toBeLessThan(airmen.length);
-
-      filteredAirmen.forEach(airman => {
-        expect(airman.flightId).toEqual(1);
-      });
-    });
-  });
-
   describe('save', () => {
     it('saves a certification with a unique id', async () => {
       const certId = 3;

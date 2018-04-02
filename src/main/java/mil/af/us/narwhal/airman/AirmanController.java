@@ -31,16 +31,6 @@ public class AirmanController {
     return repository.findAllAndByOrderByLastName();
   }
 
-  @GetMapping(params = {"squadron"})
-  public List<Airman> indexSquadronId(@RequestParam("squadron") Long squadronId) {
-    return repository.findBySquadronId(squadronId);
-  }
-
-  @GetMapping(params = {"flight"})
-  public List<Airman> indexByFlightId(@RequestParam("flight") Long flightId) {
-    return repository.findByFlightId(flightId);
-  }
-
   @PostMapping
   public Airman update(@RequestBody AirmanJSON airmanJSON) {
     Airman airman = repository.findOne(airmanJSON.getId());

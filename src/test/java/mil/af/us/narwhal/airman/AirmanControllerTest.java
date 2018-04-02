@@ -87,40 +87,6 @@ public class AirmanControllerTest extends BaseIntegrationTest {
   }
 
   @Test
-  public void indexBySquadronIdTest() {
-    // @formatter:off
-    given()
-      .port(port)
-      .auth()
-      .preemptive()
-      .basic("tytus", "password")
-      .queryParam("squadron", squadron2.getId())
-    .when()
-      .get(AirmanController.URI)
-    .then()
-      .statusCode(200)
-      .body("$.size()", equalTo(2));
-    // @formatter:on
-  }
-
-  @Test
-  public void indexByFlightIdTest() {
-    // @formatter:off
-    given()
-      .port(port)
-      .auth()
-      .preemptive()
-      .basic("tytus", "password")
-      .queryParam("flight", flight1.getId())
-    .when()
-      .get(AirmanController.URI)
-    .then()
-      .statusCode(200)
-      .body("$.size()", equalTo(1));
-    // @formatter:on
-  }
-
-  @Test
   public void createAirmanQualificationTest() throws JsonProcessingException {
     final String json = objectMapper.writeValueAsString(
       new AirmanSkillJSON(qualification1.getId(), Instant.now(), Instant.now())
