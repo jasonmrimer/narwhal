@@ -49,6 +49,10 @@ export class Crew extends React.Component<Props> {
     }
   }
 
+  handleDeleteChange = (e: any, id: number) => {
+    this.props.crewStore.clearPosition(id);
+  }
+
   render() {
     const {crewStore} = this.props;
     const crew = this.props.crewStore.crew;
@@ -73,19 +77,17 @@ export class Crew extends React.Component<Props> {
           text="SAVE"
           onClick={this.props.crewStore.save}
         />
-        <table>
-          <thead>
-          <tr>
-            <td>CRITICAL</td>
-            <td>POSITION</td>
-            <td>ASSIGNED CREW MEMBER</td>
-          </tr>
-          </thead>
-          <tbody>
-          {this.renderCrew()}
-          {this.renderCrewInput()}
-          </tbody>
-        </table>
+        <div className="crew">
+          <div className="header">
+            <span className="critical">CRITICAL</span>
+            <span className="position">POSITION</span>
+            <span className="member">ASSIGNED CREW MEMBER</span>
+          </div>
+          <div className="crew-positions">
+            {this.renderCrew()}
+            {this.renderCrewInput()}
+          </div>
+        </div>
       </div>
     );
   }
@@ -98,28 +100,30 @@ export class Crew extends React.Component<Props> {
 
     return crew.crewPositions.map((position: CrewPositionModel, index: number) => {
       return (
-        <tr key={index}>
-          <td>
-            <label htmlFor={`critical-${index}`}>
+        <div key={index} className="crew-position">
+          <span className="critical">
               <StyledCheckbox
                 id={`critical-${index}`}
                 name="critical"
                 onChange={(e) => this.onCheck(e, position.id!)}
                 checked={position.critical}
               />
-            </label>
-          </td>
-          <td>
+          </span>
+          <span className="position">
             <StyledTextInput
               name="title"
-              value={position.title}
+              value={position.title || ''}
               onChange={(e) => this.onChange(e, position.id!)}
             />
-          </td>
-          <td>
-            {position.displayFullName}
-          </td>
-        </tr>
+          </span>
+          <span className="member">
+            <span className="airman">{position.displayFullName}</span>
+            {
+              position.displayFullName !== '' &&
+              <button onClick={(e) => this.handleDeleteChange(e, position.id!)}>×</button>
+            }
+          </span>
+        </div>
       );
     });
   }
@@ -130,14 +134,15 @@ export class Crew extends React.Component<Props> {
     });
 
     return (
-      <tr
+      <div
         onKeyPress={async (e) => {
           if (e.key === 'Enter') {
             await this.props.crewStore.save();
           }
         }}
+        className="crew-position"
       >
-        <td>
+        <span className="critical">
           <label htmlFor={`critical-new-entry`}>
             <StyledCheckbox
               id={`critical-new-entry`}
@@ -146,15 +151,15 @@ export class Crew extends React.Component<Props> {
               checked={this.props.crewStore.newEntry.critical}
             />
           </label>
-        </td>
-        <td>
+        </span>
+        <span className="position">
           <StyledTextInput
             name="title"
             onChange={this.handleNewEntryChange}
             value={this.props.crewStore.newEntry.title}
           />
-        </td>
-        <td>
+        </span>
+        <span className="member">
           <StyledSingleTypeahead
             className="airmanSelect"
             options={this.props.crewStore.airmenOptions}
@@ -163,8 +168,8 @@ export class Crew extends React.Component<Props> {
             selected={selectedAirmanOption ? selectedAirmanOption : {value: '', label: ''}}
             clearButton={!!selectedAirmanOption}
           />
-        </td>
-      </tr>
+        </span>
+      </div>
     );
   }
 }
@@ -174,41 +179,10 @@ export const StyledCrew = styled(Crew)`
   
   .mission-details {
     margin-bottom: 3rem;
-  }
-  
-  span {
-    margin-right: 1.5rem;
-  }
-  
-  table { 
-    border: 1px solid ${props => props.theme.graySteel};
-    border-collapse: collapse;
-    background-color: ${props => props.theme.dark};
-    width: 80%;
-  }
-  
-  caption {
-    display: none;
-  }
-  
-  thead {
-    background-color: ${props => props.theme.lighter};
-    text-align: left;
-    vertical-align: top;
     
-    th {
-      font-size: 0.875rem;
-      font-weight: 400;
+    span {
+      margin-right: 2rem;
     }
-  }
-   
-  tbody tr:nth-child(even) {
-    background-color: ${props => props.theme.light};
-  }
-  
-  td, 
-  th {
-    padding: 0.75rem;
   }
   
   & > button {
@@ -229,6 +203,85 @@ export const StyledCrew = styled(Crew)`
   }
   
   .rbt .rbt-input {
+    box-sizing: border-box;
     padding: 0;
+    
+    input {
+      font-weight: 300;
+      font-family: 'Roboto', sans-serif;
+    }
+    
+    .rbt-input-main {
+      height: unset;
+    }
+  }
+  
+  .rbt .close {
+    float: none;
+    position: unset;
+  }
+  
+  .crew {
+    min-width: 800px;
+    width: 80%;
+    border: 1px solid ${props => props.theme.graySteel};
+  }
+  
+  .header {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    background: ${props => props.theme.lighter};
+    padding: 0.75rem;
+  }
+  
+  .crew-positions {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .crew-position {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 0.75rem;
+ 
+    .member {
+      display: flex;
+      justify-content: space-between;
+      
+      button {
+        background: none;
+        color: ${props => props.theme.fontColor};
+        border: none;
+        font-size: 1.25rem;
+        font-weight: 300;
+        padding: 0;
+        cursor: pointer;
+      }
+    }
+    
+    &:nth-child(odd) {
+      background: ${props => props.theme.dark};
+    }
+    
+    &:nth-child(even) {
+      background: ${props => props.theme.light};
+    }
+  }
+  
+  .critical {
+    width: 10%;
+    padding: 0 1rem 0 0;
+  }
+  
+  .position {
+    width: 40%;
+    padding: 0 1rem 0 0;
+  }
+  
+  .member {
+    width: 50%;
   }
 `;

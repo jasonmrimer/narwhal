@@ -83,7 +83,7 @@ describe 'Tracker page', type: :feature do
 
   describe 'crew creation' do
     it 'can add airmen to a mission and then view a created crew' do
-      tracker_page.assert_create_and_view_crew
+      tracker_page.assert_create_view_and_delete_crew
     end
   end
 end

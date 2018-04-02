@@ -58,18 +58,22 @@ export class HTTPClient {
     return await resp.json();
   }
 
-  async delete(path: string) {
+  async delete(path: string, body?: string) {
     const resp = await fetch(
       urljoin(this.baseURL, path),
       {
         method: 'DELETE',
-        headers: [['X-XSRF-TOKEN', this.csrfToken]],
+        body: body ? body : null,
+        headers: [['Content-Type', 'application/json'], ['X-XSRF-TOKEN', this.csrfToken]],
         credentials: 'include'
       }
     );
-    if (resp.status < 200 || resp.status >= 300) {
+
+    if (resp
+      .status < 200 || resp.status >= 300) {
       throw new Error('Failed to delete item');
     }
+
   }
 
   async postFile(path: string, file: File, timezone: string) {

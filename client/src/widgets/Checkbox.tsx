@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import * as classNames from 'classnames';
 
 interface Props {
   name: string;
@@ -11,53 +12,71 @@ interface Props {
 
 export const Checkbox = (props: Props) => {
   return (
-    <input
-      type="checkbox"
-      id={props.id}
-      className={props.className}
-      name={props.name}
-      onChange={props.onChange}
-      checked={props.checked}
-    />
+    <label
+      className={classNames("container", props.className)}>
+      <input
+        type="checkbox"
+        id={props.id}
+        name={props.name}
+        onChange={props.onChange}
+        checked={props.checked}
+      />
+      <span className="checkmark"/>
+    </label>
   );
 };
 
 export const StyledCheckbox = styled(Checkbox)`
-  visibility: hidden;
+  display: block;
   position: relative;
-  left: 3px;
-  
-  &:before{
-    content: ' ';
-    visibility: visible;
-    border: 1px solid #ccc;
-    width: 16px;
-    height: 16px;
-    display: inline-block;
-    position: relative;
-    top: -5px;
-    right: 5px;
-  }
+  padding-left: 16px;
+  cursor: pointer;
+  user-select: none;
 
-  &:after{
+
+  input {
+    position: absolute;
     opacity: 0;
-    box-sizing: border-box;
-    content: '\\2713 ';
-    visibility: visible;
-    display: inline-block;
-    width: 16px;
-    height: 16px;
-    font-size: 18px;
-    position: relative;
-    left: -4px;
-    top: -24px;
-    color: black;
-    background: white;
-    text-align: center;
-    //line-height: 1.03;
+    cursor: pointer;
   }
 
-  &:checked:after{
-    opacity: 1;
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 15px;
+    width: 15px;
+    background-color: transparent;
+    border: 1px solid white;
+  }
+
+  &:hover input ~ .checkmark {
+    background-color: ${props => props.theme.graySteel};
+  }
+
+  input:checked ~ .checkmark {
+    background-color: ${props => props.theme.fontColor};
+  }
+
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+
+  input:checked ~ .checkmark:after {
+    display: block;
+  }
+
+  .checkmark:after {
+    left: 3px;
+    top: -1px;
+    width: 5px;
+    height: 10px;
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
   }
 `;

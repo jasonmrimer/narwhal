@@ -17,7 +17,7 @@ class CrewPage
 
   def fill_in_position_and_make_critical
     page.first('input[name="title"]').set 'Chimichanga'
-    page.find('label[for="critical-0"]').click
+    page.find('#critical-0', visible: false).set(true)
     click_button 'SAVE'
 
     page.refresh
@@ -34,6 +34,12 @@ class CrewPage
     page.refresh
 
     expect(page).to have_text 'Munoz, Diana'
+  end
+
+  def delete_crew_member
+    expect(page).to have_text 'Munoz, Diana'
+    click(page.all('button').last)
+    expect(page).not_to have_text 'Munoz, Diana'
   end
 
   def click(element)

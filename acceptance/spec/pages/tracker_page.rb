@@ -191,7 +191,7 @@ class TrackerPage
     expect(page.has_content?('This field is required.')).to be true
   end
 
-  def assert_create_and_view_crew
+  def assert_create_view_and_delete_crew
     click_on_airman('Spaceman, Corey')
     msn_assignment = MsnAssignment.new
     msn_assignment.create
@@ -200,11 +200,13 @@ class TrackerPage
     msn_assignment = MsnAssignment.new
     msn_assignment.create
 
+    click_on_airman('Spaceman, Corey')
     crew_page = CrewPage.new(msn_assignment.msn_title)
     crew_page.assert_has_assigned_airmen('Spaceman, Corey', 'Keeter, Tracy')
 
     crew_page.fill_in_position_and_make_critical
     crew_page.add_new_crew_member
+    crew_page.delete_crew_member
   end
 
   def assert_return_to_tracker_with_previous_filter_values
@@ -216,17 +218,13 @@ class TrackerPage
     typeahead('Filter Qualifications', 'QB')
     typeahead('Filter Certifications', 'Super Speed')
 
-    click_on_airman('Spaceman, Corey')
-    page.within('.side-panel') do
-      find('a', text: 'AVAILABILITY').click
-      page.within('.event-title', text: 'XXX-FAKE-MISSION-1') do
-        click(find('a'))
-      end
-    end
+    click(find('a', text: 'MISSION'))
 
-    expect(page).to have_content('XXX-FAKE-MISSION-1')
-    click(find('a', text: 'Back to Availability Roster'))
 
+    expect(page).to have_css('a.selected', text: 'MISSION')
+    click(find('a', text: 'AVAILABILITY'))
+
+    expect(page).to have_css('a.selected', text: 'AVAILABILITY')
     expect(page.find_all('.airman-name').count).to be < squadron_count
     expect(page).to have_select('site-filter', selected: 'DMS-MD')
     expect(page).to have_select('squadron-filter', selected: '94 IS')
@@ -237,13 +235,6 @@ class TrackerPage
     page.within('.certifications-multitypeahead') do
       expect(page.find('.rbt-token').text).to eq 'Super Speed ×'
     end
-
-    filter('site', 'DMS-GA')
-
-    click(find('a', text: 'MISSION'))
-    click(find('a', text: 'AVAILABILITY'))
-
-    expect(page).to have_select('site-filter', selected: 'DMS-GA')
   end
 
   private

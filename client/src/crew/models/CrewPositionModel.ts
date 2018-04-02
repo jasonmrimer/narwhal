@@ -14,6 +14,7 @@ export class CrewPositionModel {
   }
 
   get displayFullName() {
-    return `${this.airman.lastName}, ${this.airman.firstName}`;
+    return (this.airman.lastName === '' && this.airman.firstName === '') ?
+      '' : `${this.airman.lastName}, ${this.airman.firstName}`;
   }
 }

@@ -2,7 +2,6 @@ import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { Crew } from './Crew';
 import { CrewStore } from './stores/CrewStore';
-import { CrewRepositorySpy } from './repositories/doubles/CrewRepositorySpy';
 import { CrewModelFactory } from './factories/CrewModelFactory';
 import { StyledTextInput } from '../widgets/TextInput';
 import { StyledButton } from '../widgets/Button';
@@ -14,8 +13,8 @@ import { StyledSingleTypeahead } from '../widgets/SingleTypeahead';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 
 describe('Crew', () => {
-  let repositorySpy: CrewRepositorySpy;
   let crewStore: CrewStore;
+  let crewStoreSpy = jest.fn();
   let subject: ShallowWrapper;
   let profileStore: ProfileSitePickerStore;
 
@@ -24,13 +23,12 @@ describe('Crew', () => {
   const crewPositions = crewModel.crewPositions;
 
   beforeEach(async () => {
-    repositorySpy = (DoubleRepositories.crewRepository as CrewRepositorySpy);
-    repositorySpy.setCrew(crewModel);
     profileStore = new ProfileSitePickerStore(DoubleRepositories);
     await profileStore.hydrate();
 
     crewStore = new CrewStore(DoubleRepositories, profileStore);
     await crewStore.hydrate(crewModel.id);
+    crewStore.save = crewStoreSpy;
 
     subject = shallow(
       <Crew
@@ -59,12 +57,12 @@ describe('Crew', () => {
 
   it('displays Airmen on the mission', () => {
     subject.update();
-    crewPositions.forEach(crewPosition => expect(subject.text()).toContain(crewPosition.airman.lastName));
+    crewPositions.forEach((crewPosition, index) => expect(subject.find('.airman').at(index).text()).toContain(crewPosition.airman.lastName));
   });
 
   it('renders an input for each crew member', () => {
     expect(subject.find(StyledTextInput).length).toBe(crewPositions.length + 1);
-    expect(subject.find(StyledSingleTypeahead).length).toBe(1);
+    expect(subject.find('.airman').length).toBe(crewPositions.length);
   });
 
   it('renders a link back to Tracker', () => {
@@ -86,10 +84,9 @@ describe('Crew', () => {
     expect(position.critical).toBeTruthy();
   });
 
-  it('submits crew on submitCrews', () => {
+  it('submits crew positions on submitCrew', () => {
     subject.find(StyledButton).simulate('click');
-    const [crew] = repositorySpy.saveCalls.slice(-1);
-    expect(crew).toEqual(crewStore.crew);
+    expect(crewStoreSpy).toHaveBeenCalled();
   });
 
   it('sets a new crew member', () => {
@@ -97,6 +94,13 @@ describe('Crew', () => {
     subject.find(StyledTextInput).at(2).simulate('change', {target: {value: 'QB', name: 'title'}});
     subject.find(StyledSingleTypeahead).simulate('change', {value: 1, label: 'Munoz, Diana'});
     expect(crewStore.newEntry.airmanName).toBe('Munoz, Diana');
+  });
+
+  it('clears the position title and airman', () => {
+    const airmenCount = subject.find('.airman').length;
+    subject.find('button').at(0).simulate('click');
+    subject.update();
+    expect(subject.find('.airman').length).toBeLessThan(airmenCount)
   });
 
   describe('SingleTypeahead', () => {

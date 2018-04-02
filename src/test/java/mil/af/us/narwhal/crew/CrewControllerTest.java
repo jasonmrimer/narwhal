@@ -75,60 +75,6 @@ public class CrewControllerTest extends BaseIntegrationTest {
   }
 
   @Test
-  public void addAirmanTest() throws JsonProcessingException {
-    final Airman newAirman = new Airman(flight, "B", "C");
-    airmanRepository.save(newAirman);
-
-    final String json = objectMapper.writeValueAsString(singletonList(
-      new CrewPositionJSON(null, "", false, newAirman.getId())
-    ));
-
-    // @formatter:off
-    given()
-      .port(port)
-      .auth()
-      .preemptive()
-      .basic("tytus", "password")
-      .contentType("application/json")
-      .body(json)
-    .when()
-      .put(CrewController.URI + "/" + mission.getId() + "/positions")
-    .then()
-      .statusCode(200)
-      .body("crewPositions.size()", equalTo(2))
-      .body("crewPositions[1].airman.id", equalTo(newAirman.getId().intValue()));
-    // @formatter:on
-  }
-
-  @Test
-  public void updateTest() throws JsonProcessingException {
-    final CrewPosition crewPosition = mission.getCrewPositions().get(0);
-    final String json = objectMapper.writeValueAsString(singletonList(
-      new CrewPositionJSON(
-        crewPosition.getId(),
-        "GOOBER",
-        true,
-        crewPosition.getAirman().getId())
-    ));
-
-    // @formatter:off
-    given()
-      .port(port)
-      .auth()
-      .preemptive()
-      .basic("tytus", "password")
-      .contentType("application/json")
-      .body(json)
-    .when()
-      .put(CrewController.URI + "/" + mission.getId() + "/positions")
-    .then()
-      .statusCode(200)
-      .body("crewPositions[0].title", equalTo("GOOBER"))
-      .body("crewPositions[0].critical", equalTo(true));
-   // @formatter:on
-  }
-
-  @Test
   public void deleteTest() {
     long count = crewPositionRepository.count();
 

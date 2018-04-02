@@ -24,6 +24,9 @@ import { CrewRepositorySpy } from './crew/repositories/doubles/CrewRepositorySpy
 import ProfileRepository from './profile/repositories/ProfileRepository';
 import { WebProfileRepository } from './profile/repositories/web/WebProfileRepository';
 import { ProfileRepositoryStub } from './profile/repositories/doubles/ProfileRepositoryStub';
+import { CrewPositionRepository } from './crew/repositories/CrewPositionRepository';
+import { WebCrewPositionRepository } from './crew/repositories/web/WebCrewPositionRepository';
+import { CrewPositionRepositorySpy } from './crew/repositories/doubles/CrewPositionRepositorySpy';
 
 export interface Repositories {
   airmanRepository: AirmanRepository;
@@ -33,6 +36,7 @@ export interface Repositories {
   missionRepository: MissionRepository;
   ripItemRepository: RipItemRepository;
   crewRepository: CrewRepository;
+  crewPositionRepository: CrewPositionRepository;
   profileRepository: ProfileRepository;
 }
 
@@ -46,10 +50,11 @@ export const WebRepositories: Repositories = Object.freeze({
   missionRepository: new WebMissionRepository(client),
   ripItemRepository: new WebRipItemRepository(client),
   crewRepository: new WebCrewRepository(client),
+  crewPositionRepository: new WebCrewPositionRepository(client),
   profileRepository: new WebProfileRepository(client),
 });
 
-export const DoubleRepositories: Repositories = Object.freeze({
+export const DoubleRepositories: Repositories = {
   airmanRepository: new FakeAirmanRepository(),
   siteRepository: new SiteRepositoryStub(),
   skillRepository: new SkillRepositoryStub(),
@@ -57,5 +62,6 @@ export const DoubleRepositories: Repositories = Object.freeze({
   missionRepository: new MissionRepositoryStub(),
   ripItemRepository: new RipItemRepositoryStub(),
   crewRepository: new CrewRepositorySpy(),
+  crewPositionRepository: new CrewPositionRepositorySpy(),
   profileRepository: new ProfileRepositoryStub()
-});
+};

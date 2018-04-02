@@ -6,6 +6,7 @@ import { AirmanRepository } from '../../airman/repositories/AirmanRepository';
 import { AirmanModel } from '../../airman/models/AirmanModel';
 import { Repositories } from '../../Repositories';
 import { ProfileSitePickerStore } from '../../profile/stores/ProfileSitePickerStore';
+import { CrewPositionRepository } from '../repositories/CrewPositionRepository';
 
 interface NewEntry {
   airmanName: string;
@@ -16,6 +17,8 @@ interface NewEntry {
 export class CrewStore {
   private airmanRepository: AirmanRepository;
   private crewRepository: CrewRepository;
+  private crewPositionRepository: CrewPositionRepository;
+  private pendingDeletePositions: CrewPositionModel[] = [];
 
   @observable private _crew: CrewModel | null = null;
   @observable private _airmen: AirmanModel[] = [];
@@ -25,6 +28,7 @@ export class CrewStore {
   constructor(repositories: Repositories, private _profileStore: ProfileSitePickerStore) {
     this.airmanRepository = repositories.airmanRepository;
     this.crewRepository = repositories.crewRepository;
+    this.crewPositionRepository = repositories.crewPositionRepository;
   }
 
   async hydrate(crewId: number) {
@@ -98,6 +102,12 @@ export class CrewStore {
       return;
     }
 
+    if (this.pendingDeletePositions.length > 0) {
+      await this.crewPositionRepository.delete(this.pendingDeletePositions);
+      this.pendingDeletePositions = [];
+
+    }
+
     const name = this._newEntry.airmanName.split(', ');
     const airman = this._airmen.find((a) => a.lastName === name[0] && a.firstName === name[1]);
     if (airman) {
@@ -105,11 +115,21 @@ export class CrewStore {
       this._newEntry = {airmanName: '', title: '', critical: false};
     }
 
-    this._crew = await this.crewRepository.update(this._crew);
+    this._crew.crewPositions =
+      await this.crewPositionRepository.update(this._crew.crewPositions, this._crew.mission.id);
   }
 
   @computed
   get profileStore() {
     return this._profileStore;
+  }
+
+  @action.bound
+  clearPosition(id: number) {
+    const crewPosition = this._crew!.crewPositions.find(crewPos => crewPos.id === id);
+    this.pendingDeletePositions.push(crewPosition!);
+
+    const crewPositionIndex = this._crew!.crewPositions.findIndex(crewPos => crewPos.id === id);
+    this._crew!.crewPositions.splice(crewPositionIndex, 1);
   }
 }

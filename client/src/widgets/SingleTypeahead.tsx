@@ -22,7 +22,9 @@ export const SingleTypeahead =  (props: Props) => {
         disabled={props.disabled}
         highlightOnlyResult={true}
         selectHintOnEnter={true}
-        onChange={(opt: FilterOption[]) => props.onChange(opt.length === 1 ? opt[0] : null)}
+        onChange={(opt: FilterOption[]) => {
+          props.onChange(opt.length === 1 ? opt[0] : null);
+        }}
         options={props.options}
         placeholder={props.placeholder}
         clearButton={props.clearButton}
