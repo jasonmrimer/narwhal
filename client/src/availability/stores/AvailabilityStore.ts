@@ -25,6 +25,7 @@ export class AvailabilityStore implements EventActions {
   @observable private _eventFormType: EventType | string = '';
   @observable private _selectedDate: Moment;
   @observable private _pendingDeleteEvent: EventModel | null = null;
+  @observable private _airmanEvents: EventModel[] = [];
 
   private eventTypeFormStoreMap: object;
 
@@ -49,6 +50,16 @@ export class AvailabilityStore implements EventActions {
 
   hydrate(missions: MissionModel[]) {
     this.missionFormStore.hydrate(missions);
+  }
+
+  @computed
+  get airmanEvents(): EventModel[] {
+    return this._airmanEvents;
+  }
+
+  @action.bound
+  setAirmanEvents(events: EventModel[]) {
+    this._airmanEvents = events;
   }
 
   @computed

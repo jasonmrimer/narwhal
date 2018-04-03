@@ -1,10 +1,9 @@
 import { AirmanQualificationModel } from './AirmanQualificationModel';
-import { EventModel } from '../../event/models/EventModel';
 import { AirmanCertificationModel } from './AirmanCertificationModel';
 
 export class AirmanModel {
   static empty(): AirmanModel {
-    return new AirmanModel(-1, -1, -1, -1, '', '', [], [], []);
+    return new AirmanModel(-1, -1, -1, -1, '', '', [], []);
   }
 
   constructor(public id: number,
@@ -15,7 +14,6 @@ export class AirmanModel {
               public lastName: string,
               public qualifications: AirmanQualificationModel[] = [],
               public certifications: AirmanCertificationModel[] = [],
-              public events: EventModel[] = [],
               public shift?: ShiftType) {
   }
 

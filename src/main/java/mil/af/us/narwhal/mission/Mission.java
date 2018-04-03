@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mil.af.us.narwhal.airman.Airman;
 import mil.af.us.narwhal.crew.CrewJSON;
 import mil.af.us.narwhal.crew.CrewPosition;
 import mil.af.us.narwhal.event.Event;
@@ -16,6 +17,7 @@ import javax.persistence.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Data
@@ -100,6 +102,15 @@ public class Mission {
       airmanId
     );
   }
+
+  public List<Event> toAllEvents() {
+    return this.crewPositions.stream()
+      .map(CrewPosition::getAirman)
+      .map(Airman::getId)
+      .map(this::toEvent)
+      .collect(Collectors.toList());
+  }
+
 
   public CrewJSON toCrewJSON() {
     return new CrewJSON(id, this, crewPositions);

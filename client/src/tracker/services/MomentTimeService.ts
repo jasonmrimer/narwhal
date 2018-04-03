@@ -12,7 +12,7 @@ export class MomentTimeService implements TimeService {
       sunday.clone().add(3, 'day'),
       sunday.clone().add(4, 'day'),
       sunday.clone().add(5, 'day'),
-      sunday.clone().add(6, 'day')
+      sunday.clone().add(6, 'day').endOf('day')
     ];
   }
   incrementWeek(week: Moment[]): Moment[] {
@@ -24,7 +24,7 @@ export class MomentTimeService implements TimeService {
       sunday.clone().add(3, 'day'),
       sunday.clone().add(4, 'day'),
       sunday.clone().add(5, 'day'),
-      sunday.clone().add(6, 'day')
+      sunday.clone().add(6, 'day').endOf('day')
     ];
   }
 
@@ -37,7 +37,7 @@ export class MomentTimeService implements TimeService {
       sunday.clone().add(3, 'day'),
       sunday.clone().add(4, 'day'),
       sunday.clone().add(5, 'day'),
-      sunday.clone().add(6, 'day')
+      sunday.clone().add(6, 'day').endOf('day')
     ];
   }
 }

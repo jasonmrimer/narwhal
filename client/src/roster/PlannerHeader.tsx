@@ -35,14 +35,14 @@ export const PlannerHeader = observer((props: Props) => {
       </div>
       <span className="planner-day-navigation">
         <span className="button-header">
-          <button className="last-week" onClick={props.plannerStore.decrementPlannerWeek}>
+          <button className="last-week" onClick={async () => await props.plannerStore.decrementPlannerWeek()}>
             <BackIcon height={14} width={14}/>
           </button>
         </span>
 
         {renderWeek(props.plannerStore.plannerWeek)}
         <span className="button-header">
-          <button className="next-week" onClick={props.plannerStore.incrementPlannerWeek}>
+          <button className="next-week" onClick={async () => await props.plannerStore.incrementPlannerWeek()}>
             <NextIcon height={14} width={14}/>
           </button>
         </span>

@@ -61,10 +61,12 @@ describe('Availability', () => {
       EventType.TDY_DEPLOYMENT
     );
 
-    airman.events = [eventOne, eventTwo, eventThree, eventFour];
+    const eventList = [eventOne, eventTwo, eventThree, eventFour];
 
     trackerStore = await makeFakeTrackerStore();
-    trackerStore.setSelectedAirman(airman, TabType.AVAILABILITY);
+    await trackerStore.setSelectedAirman(airman, TabType.AVAILABILITY);
+
+    trackerStore.availabilityStore.setAirmanEvents(eventList);
 
     subject = shallow(
       <Availability

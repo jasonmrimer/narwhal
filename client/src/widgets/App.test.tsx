@@ -72,7 +72,7 @@ describe('App', () => {
     });
 
     it('should render the Tracker page after saving a profile', async () => {
-      profileStore.setPendingSite(profileStore.dgsCoreSites[0])
+      profileStore.setPendingSite(profileStore.dgsCoreSites[0]);
       await profileStore.savePendingSite();
       mountedSubject.update();
       expect(mountedSubject.find(Tracker).exists()).toBeTruthy();

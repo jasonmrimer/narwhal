@@ -23,10 +23,7 @@ public class CrewService {
   public Event save(Event event) {
     Airman airman = airmanRepository.findOne(event.getAirmanId());
     Mission mission = missionRepository.findOne(event.getId());
-
-    CrewPosition position = new CrewPosition(airman);
-    mission.addCrewPosition(position);
-
+    mission.addCrewPosition(new CrewPosition(airman));
     return missionRepository.save(mission).toEvent(event.getAirmanId());
   }
 }

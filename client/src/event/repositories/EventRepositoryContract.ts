@@ -9,6 +9,15 @@ export function EventRepositoryContract(subject: EventRepository) {
 
     beforeEach(async () => {
       const event1 = new EventModel('title1', 'description1', dateTime, dateTime, 1, EventType.Leave);
+      const eventOne = new EventModel(
+        'titleOne',
+        'descriptionOne',
+        dateTime.add(1, 'year'),
+        dateTime.add(1, 'year'),
+        1,
+        EventType.Leave
+      );
+      await subject.save(eventOne);
       savedEvent1 = await subject.save(event1);
     });
 
@@ -77,4 +86,30 @@ export function EventRepositoryContract(subject: EventRepository) {
     });
   });
 
+  describe('findAllWithinPeriod', () => {
+    it('should return events for all airmen within the week', async () => {
+      const start = moment().startOf('week');
+      const end = moment().endOf('week');
+      const events = await subject.findAllWithinPeriod(start, end);
+      if (events.length > 0) {
+        events.forEach(event => {
+          expect(event.startTime.isBetween(start, end));
+        });
+      }
+    });
+  });
+
+  describe('findAllByAirmanIdAndWithinPeriod', () => {
+    it('should return events for the selected airmen within the week', async () => {
+      const start = moment().startOf('week');
+      const end = moment().endOf('week');
+      const events = await subject.findAllByAirmanIdAndWithinPeriod(1, start, end);
+      if (events.length > 0) {
+        events.forEach(event => {
+          expect(event.airmanId).toBe(1);
+          expect(event.startTime.isBetween(start, end));
+        });
+      }
+    });
+  });
 }

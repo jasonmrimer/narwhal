@@ -1,6 +1,7 @@
 package mil.af.us.narwhal.event;
 
 import mil.af.us.narwhal.crew.CrewService;
+import mil.af.us.narwhal.mission.MissionRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,6 +21,7 @@ import static org.mockito.Mockito.when;
 public class EventServiceTest {
 
   @Mock private EventRepository eventRepository;
+  @Mock private MissionRepository missionRepository;
   @Captor private ArgumentCaptor<Event> eventArgumentCaptor;
   private EventService subject;
   private Event event;
@@ -42,7 +44,7 @@ public class EventServiceTest {
     when(eventRepository.save(event))
       .thenReturn(event);
 
-    subject = new EventService(eventRepository, crewService);
+    subject = new EventService(eventRepository, crewService, missionRepository);
 
     subject.save(event);
 
@@ -64,7 +66,7 @@ public class EventServiceTest {
     when(crewService.save(any(Event.class)))
       .thenReturn(missionEvent);
 
-    subject = new EventService(eventRepository, crewService);
+    subject = new EventService(eventRepository, crewService, missionRepository);
 
     final Event event = subject.save(missionEvent);
 

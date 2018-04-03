@@ -1,9 +1,7 @@
 package mil.af.us.narwhal.airman;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import mil.af.us.narwhal.crew.CrewPosition;
@@ -17,8 +15,6 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Entity
 @Data
@@ -50,12 +46,12 @@ public class Airman {
   @JsonManagedReference
   private List<AirmanCertification> certifications = new ArrayList<>();
 
-  @OneToMany(mappedBy = "airmanId")
+  @OneToMany(mappedBy = "airmanId", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   @JsonIgnore
   private List<Event> events = new ArrayList<>();
 
-  @OneToMany(mappedBy = "airman")
-  @JsonBackReference
+  @OneToMany(mappedBy = "airman", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  @JsonIgnore
   private List<CrewPosition> crewPositions = new ArrayList<>();
 
   @OneToMany(mappedBy = "airman", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
@@ -78,16 +74,6 @@ public class Airman {
 
   public Long getSiteId() {
     return flight.getSquadron().getSite().getId();
-  }
-
-  @JsonProperty("events")
-  public List<Event> getEvents() {
-    return Stream.concat(
-      this.crewPositions.stream()
-        .map(CrewPosition::getMission)
-        .map(mission -> mission.toEvent(this.getId())),
-      this.events.stream()
-    ).collect(Collectors.toList());
   }
 
   public boolean addRipItem(AirmanRipItem airmanRipItem) {

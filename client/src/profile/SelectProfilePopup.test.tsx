@@ -22,15 +22,16 @@ describe('SelectProfilePopup', () => {
         backFromPendingSiteSelection={profileStore.cancelPendingSite}
         continuePendingSiteSelection={profileStore.savePendingSite}
       />
-    )
+    );
   });
 
   it('should renders with a title', () => {
-    expect(subject.find('.title').text()).toBe('Site Selection')
+    expect(subject.find('.title').text()).toBe('Site Selection');
   });
 
   it('should render a prompt', () => {
-    expect(subject.find('.description').text()).toBe(`This will set ${site.fullName.toUpperCase()} as your home site. This cannot currently be undone.`)
+    expect(subject.find('.description').text())
+      .toBe(`This will set ${site.fullName.toUpperCase()} as your home site. This cannot currently be undone.`);
   });
 
   it('should render two buttons with text', () => {

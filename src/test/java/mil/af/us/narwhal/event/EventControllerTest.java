@@ -3,7 +3,10 @@ package mil.af.us.narwhal.event;
 import mil.af.us.narwhal.BaseIntegrationTest;
 import mil.af.us.narwhal.airman.Airman;
 import mil.af.us.narwhal.airman.AirmanRepository;
+import mil.af.us.narwhal.crew.CrewPosition;
 import mil.af.us.narwhal.flight.Flight;
+import mil.af.us.narwhal.mission.Mission;
+import mil.af.us.narwhal.mission.MissionRepository;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
 import mil.af.us.narwhal.squadron.Squadron;
@@ -13,17 +16,21 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 
 import static io.restassured.RestAssured.given;
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 
 public class EventControllerTest extends BaseIntegrationTest {
+  private Site site;
   private Airman airman;
+  private Airman airman2;
   @Autowired private SiteRepository siteRepository;
   @Autowired private AirmanRepository airmanRepository;
   @Autowired private EventRepository eventRepository;
+  @Autowired private MissionRepository missionRepository;
 
   @Before
   public void setUp() {
@@ -32,12 +39,12 @@ public class EventControllerTest extends BaseIntegrationTest {
     final Squadron squadron = new Squadron("squadron");
     squadron.addFlight(flight);
 
-    final Site site = new Site("site");
+    site = new Site("site");
     site.addSquadron(squadron);
     siteRepository.save(site);
 
-    airman = new Airman(flight, "first", "last");
-    airman = airmanRepository.save(airman);
+    airman = airmanRepository.save(new Airman(flight, "first", "last"));
+    airman2 = airmanRepository.save(new Airman(flight, "first2", "last2"));
   }
 
   @After
@@ -188,5 +195,91 @@ public class EventControllerTest extends BaseIntegrationTest {
     // @formatter:on
 
     assertThat(eventRepository.findOne(event.getId())).isNull();
+  }
+
+
+  @Test
+  public void findAllWithinPeriod() {
+    Instant start = Instant.parse("2018-04-02T10:30:00.00Z");
+    final Event event1 = new Event(
+      "New Event",
+      "New Description",
+      start,
+      start,
+      EventType.APPOINTMENT,
+      airman.getId()
+    );
+    final Event event2 = new Event(
+      "New Event",
+      "New Description",
+      start.minus(30, ChronoUnit.DAYS),
+      start.minus(30, ChronoUnit.DAYS),
+      EventType.APPOINTMENT,
+      airman.getId()
+    );
+    eventRepository.save(asList(event1, event2));
+
+    Mission mission = new Mission("A", "B", start, start, site);
+    mission.addCrewPosition(new CrewPosition(airman));
+    missionRepository.save(mission);
+
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .queryParam("start", "2018-04-02T10:30:00.00Z")
+      .queryParam("end", "2018-04-09T10:30:00.00Z")
+    .when()
+      .get(EventController.URI)
+    .then()
+      .statusCode(200)
+      .body("$.size()", equalTo(2))
+      .body("id", hasItems(event1.getId().intValue(), mission.getId().intValue()));
+    // @formatter:on
+  }
+
+  @Test
+  public void findAllByAirmanIdAndWithinPeriod() {
+    Instant start = Instant.parse("2018-04-02T10:30:00.00Z");
+    final Event event1 = new Event(
+      "New Event",
+      "New Description",
+      start,
+      start,
+      EventType.APPOINTMENT,
+      airman2.getId()
+    );
+    final Event event2 = new Event(
+      "New Event",
+      "New Description",
+      start.minus(30, ChronoUnit.DAYS),
+      start.minus(30, ChronoUnit.DAYS),
+      EventType.APPOINTMENT,
+      airman.getId()
+    );
+    eventRepository.save(asList(event1, event2));
+
+    Mission mission = new Mission("A", "B", start, start, site);
+    mission.addCrewPosition(new CrewPosition(airman));
+    missionRepository.save(mission);
+
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .queryParam("airmanId", airman2.getId())
+      .queryParam("start", "2018-04-02T10:30:00.00Z")
+      .queryParam("end", "2018-04-09T10:30:00.00Z")
+    .when()
+      .get(EventController.URI)
+    .then()
+      .statusCode(200)
+      .body("$.size()", equalTo(1))
+      .body("id", hasItem(event1.getId().intValue()));
+    // @formatter:on
   }
 }

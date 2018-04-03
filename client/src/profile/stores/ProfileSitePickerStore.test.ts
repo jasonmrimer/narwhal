@@ -19,7 +19,7 @@ describe('ProfileSitePickerStore', () => {
   });
 
   it('should save the selected site it to the profile', async () => {
-    subject.setPendingSite(subject.guardSites[0])
+    subject.setPendingSite(subject.guardSites[0]);
     await subject.savePendingSite();
     expect(subject.profile!.user.siteId).toEqual(3);
   });

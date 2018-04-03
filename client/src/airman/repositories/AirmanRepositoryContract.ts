@@ -30,10 +30,6 @@ export function airmanRepositoryContract(subject: AirmanRepository) {
       airmen.forEach(({certifications}) => {
         expect(Array.isArray(certifications)).toBeTruthy();
       });
-
-      airmen.forEach(({events}) => {
-        expect(Array.isArray(events)).toBeTruthy();
-      });
     });
   });
 

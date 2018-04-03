@@ -283,6 +283,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/client/src/roster/Planner.test.tsx">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/client/src/roster/Roster.tsx">
           <value>
             <set />
@@ -294,6 +299,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/client/src/roster/RosterBody.tsx">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/client/src/roster/stores/PlannerStore.ts">
           <value>
             <set />
           </value>
@@ -314,6 +324,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/client/src/stories/Form.stories.tsx">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/client/src/stories/Profile.stories.tsx">
           <value>
             <set />
           </value>
@@ -778,6 +793,11 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/event/EventService.java">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/event/EventType.java">
           <value>
             <set />
@@ -1174,6 +1194,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/test/java/mil/af/us/narwhal/event/EventControllerTest.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/test/java/mil/af/us/narwhal/event/EventServiceTest.java">
           <value>
             <set />
           </value>

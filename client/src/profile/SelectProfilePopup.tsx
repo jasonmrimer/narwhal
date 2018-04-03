@@ -79,14 +79,6 @@ export const StyledSelectProfilePopup = styled(SelectProfilePopup)`
       padding: 0 0.5rem;
     }
     
-    // & > div {
-    //   background: ${props => props.theme.dark};
-    //   padding: 0.45rem;
-    //   font-size: 1rem;
-    //   border-top-left-radius: 2%;      
-    //   border-top-right-radius: 2%;      
-    // }
-    
     button {
       font-size: 0.75rem;
       padding: 0.5rem 1.5rem;

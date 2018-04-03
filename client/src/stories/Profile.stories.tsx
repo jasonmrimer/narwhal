@@ -22,9 +22,9 @@ export function ProfileStory() {
     .addDecorator(story => wrapper(story))
     .add('StyledProfileSitePicker', () => {
       const store = new ProfileSitePickerStore(DoubleRepositories);
-      store.getSiteByName = (name: string) => {
+      store.getSiteByName = () => {
         return new SiteModel(1, 'A', [], SiteType.DGSCoreSite, 'A');
-      }
+      };
       return (
         <StyledProfileSitePicker
           profileStore={store}

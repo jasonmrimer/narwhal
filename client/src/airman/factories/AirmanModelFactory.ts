@@ -2,8 +2,6 @@ import { AirmanCertificationModel } from '../models/AirmanCertificationModel';
 import { AirmanQualificationModel } from '../models/AirmanQualificationModel';
 import { AirmanModel, ShiftType } from '../models/AirmanModel';
 import { randomText } from '../../utils/randomizer';
-import { EventModel, EventType } from '../../event/models/EventModel';
-import * as moment from 'moment';
 
 export class AirmanModelFactory {
   static build(id: number = 1,
@@ -21,15 +19,6 @@ export class AirmanModelFactory {
       randomText(5),
       qualifications,
       certifications,
-      [
-        new EventModel(
-          'Fake Event',
-          '',
-          moment('2017-11-27T05:00:00.000Z'),
-          moment('2017-11-27T10:00:00.000Z'),
-          id,
-          EventType.Mission)
-      ],
       randomShiftType()
     );
   }

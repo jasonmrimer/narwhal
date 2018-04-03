@@ -113,7 +113,7 @@ export class Availability extends React.Component<Props> {
   }
 
   private renderAvailability = () => {
-    const {selectedAirman, availabilityStore, plannerStore} = this.props;
+    const {availabilityStore, plannerStore} = this.props;
     const week = plannerStore.sidePanelWeek;
     return (
       <div>
@@ -124,7 +124,7 @@ export class Availability extends React.Component<Props> {
         </div>
 
         <div className="nav-row">
-          <button className="last-week" onClick={plannerStore.decrementSidePanelWeek}>
+          <button className="last-week" onClick={async () => await plannerStore.decrementSidePanelWeek()}>
             <BackIcon width={12} height={12}/>
           </button>
 
@@ -132,7 +132,7 @@ export class Availability extends React.Component<Props> {
             {week[0].format('DD MMM').toUpperCase()} - {week[6].format('DD MMM').toUpperCase()}
           </h3>
 
-          <button className="next-week" onClick={plannerStore.incrementSidePanelWeek}>
+          <button className="next-week" onClick={async () => await plannerStore.incrementSidePanelWeek()}>
             <NextIcon width={12} height={12}/>
           </button>
         </div>
@@ -153,7 +153,7 @@ export class Availability extends React.Component<Props> {
                       + Add Event
                     </span>
                   </div>
-                  {this.scheduledEventsForDate(day, selectedAirman.events)}
+                  {this.scheduledEventsForDate(day, availabilityStore.airmanEvents)}
                 </div>
               );
             })

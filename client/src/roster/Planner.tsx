@@ -12,6 +12,7 @@ import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { AirmanModel } from '../airman/models/AirmanModel';
 import { TabType } from '../tracker/stores/SidePanelStore';
 import { TDYDeploymentIcon } from '../icons/TDYDeploymentIcon';
+import { observer } from 'mobx-react';
 
 interface Props {
   week: Moment[];
@@ -54,7 +55,7 @@ const renderEvents = (day: Moment,
   }
 };
 
-export const Planner = (props: Props) => {
+export const Planner = observer((props: Props) => {
   const {airman, week, trackerStore} = props;
   return (
     <div
@@ -63,12 +64,18 @@ export const Planner = (props: Props) => {
     >
       <span className="blank"/>
       <div>
-        {week.map((day, index) => renderEvents(day, airman.events, index, airman, trackerStore))}
+        {week.map((day, index) => renderEvents(
+          day,
+          trackerStore.getEventsByAirmanId(airman.id),
+          index,
+          airman,
+          trackerStore))
+        }
       </div>
       <span className="blank"/>
     </div>
   );
-};
+});
 
 export const StyledPlanner = styled(Planner)`
   display: flex;

@@ -8,7 +8,16 @@ describe('PlannerHeader', () => {
   let subject: ShallowWrapper;
 
   beforeEach(() => {
-    subject = shallow(<PlannerHeader plannerStore={new PlannerStore(new TimeServiceStub())}/>);
+    const eventsRefresher = {
+      refreshEvents() {
+        return Promise.resolve();
+      },
+      refreshAirmanEvents() {
+        return Promise.resolve();
+      }
+    };
+    const store = new PlannerStore(new TimeServiceStub(), eventsRefresher);
+    subject = shallow(<PlannerHeader plannerStore={store}/>);
   });
 
   it('should render header text', () => {

@@ -7,11 +7,12 @@ import { LeaveIcon } from '../icons/LeaveIcon';
 import { MissionIcon } from '../icons/MissionIcon';
 import { AvailableIcon } from '../icons/AvailableIcon';
 import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
-import { EventModel, EventType } from '../event/models/EventModel';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 import { makeFakeTrackerStore } from '../utils/testUtils';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { AirmanModel } from '../airman/models/AirmanModel';
+import { EventModel, EventType } from '../event/models/EventModel';
+import { DoubleRepositories } from '../Repositories';
 
 describe('Planner', () => {
   let subject: ShallowWrapper;
@@ -23,47 +24,43 @@ describe('Planner', () => {
     const appointment = new EventModel(
       'Appointment',
       '',
-      moment('2017-11-26T05:00:00.000Z'),
-      moment('2017-11-26T06:00:00.000Z'),
+      moment('2017-11-29'),
+      moment('2017-11-29'),
       1,
-      EventType.Appointment,
-      1
+      EventType.Appointment
     );
 
     const mission = new EventModel(
       'Mission',
       '',
-      moment('2017-11-27T05:00:00.000Z'),
-      moment('2017-11-28T06:00:00.000Z'),
+      moment('2017-11-27'),
+      moment('2017-11-28'),
       1,
-      EventType.Mission,
-      2
+      EventType.Mission
     );
 
     const leave = new EventModel(
       'Leave',
       '',
-      moment('2017-11-27T05:00:00.000Z'),
-      moment('2017-11-30T05:00:00.000Z'),
+      moment('2017-11-27'),
+      moment('2017-11-30'),
       1,
-      EventType.Leave,
-      3
+      EventType.Leave
     );
 
     airman = AirmanModelFactory.build();
-    airman.events = [
-      appointment,
-      leave,
-      mission,
-    ];
 
-    const week = new TimeServiceStub().getCurrentWeek();
+    await DoubleRepositories.eventRepository.save(appointment);
+    await DoubleRepositories.eventRepository.save(leave);
+    await DoubleRepositories.eventRepository.save(mission);
+
     trackerStore = await makeFakeTrackerStore();
     trackerStore.newEvent = newEventSpy;
+
     subject = shallow(
       <Planner
         airman={airman}
-        week={week}
+        week={new TimeServiceStub().getCurrentWeek()}
         trackerStore={trackerStore}
       />);
   });
@@ -71,8 +68,8 @@ describe('Planner', () => {
   it('renders airmen high-level availability', () => {
     expect(subject.find(AppointmentIcon).length).toBe(1);
     expect(subject.find(MissionIcon).length).toBe(1);
-    expect(subject.find(LeaveIcon).length).toBe(3);
-    expect(subject.find(AvailableIcon).length).toBe(2);
+    expect(subject.find(LeaveIcon).length).toBe(2);
+    expect(subject.find(AvailableIcon).length).toBe(3);
   });
 
   it('give higher importance to mission Event Type than the others', () => {
@@ -84,7 +81,7 @@ describe('Planner', () => {
     emptyBubble.simulate('click');
 
     const calledMoment = (newEventSpy.mock.calls[0][1]).startOf('day');
-    const expectedMoment = moment('2017-12-01T05:00:00.000').startOf('day');
+    const expectedMoment = moment('2017-11-26').startOf('day');
 
     expect(calledMoment.isSame(expectedMoment)).toBeTruthy();
     expect(newEventSpy.mock.calls[0][0]).toEqual(airman);
