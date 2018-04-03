@@ -135,6 +135,7 @@ export const StyledSingleTypeahead = styled(SingleTypeahead)`
       position: absolute;
       width: 100%;
       background-color: ${props => props.theme.light};
+      z-index: 1;
     }
   }
 `;

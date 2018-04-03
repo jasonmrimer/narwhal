@@ -83,6 +83,6 @@ export const StyledRosterHeader = styled(RosterHeader)`
   }
   
   .shift {
-   width: 2rem;
+   width: 5rem;
   }
 `;

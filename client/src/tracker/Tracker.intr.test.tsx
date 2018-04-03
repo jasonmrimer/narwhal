@@ -6,7 +6,7 @@ import { SidePanel } from './SidePanel';
 import { TrackerStore } from './stores/TrackerStore';
 import { AirmanModel } from '../airman/models/AirmanModel';
 import { MemoryRouter } from 'react-router';
-import { RosterBody } from '../roster/RosterBody';
+import { Roster } from '../roster/Roster';
 import { Theme } from '../themes/default';
 import { ThemeProvider } from 'styled-components';
 
@@ -83,7 +83,7 @@ describe('Tracker', () => {
 
   describe('SidePanel', () => {
     it('populates the side panelStore with the selected airman', () => {
-      clickOnFirstAirman(subject.find(RosterBody));
+      clickOnFirstAirman(subject.find(Roster));
       const sidePanel = subject.find(SidePanel);
       expect(sidePanel.exists()).toBeTruthy();
       expect(sidePanel.text()).toContain(airman.lastName);
@@ -91,7 +91,7 @@ describe('Tracker', () => {
     });
 
     it('closes the sidepanel', () => {
-      clickOnFirstAirman(subject.find(RosterBody));
+      clickOnFirstAirman(subject.find(Roster));
       clickButtonByName(subject, SidePanel, 'close');
       expect(subject.find(SidePanel).exists()).toBeFalsy();
     });

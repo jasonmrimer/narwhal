@@ -7,8 +7,8 @@ import { StyledSidePanel } from './SidePanel';
 import { StyledLegend } from '../roster/Legend';
 import { UserModel } from '../profile/models/ProfileModel';
 import { UnfilteredValue } from '../widgets/models/FilterOptionModel';
-import { StyledRosterContainer } from '../roster/RosterContainer';
 import { StyledLoadingOverlay } from '../widgets/LoadingOverlay';
+import { StyledRosterContainer } from '../roster/RosterContainer';
 
 interface Props {
   trackerStore: TrackerStore;
@@ -91,7 +91,6 @@ export const StyledTracker = styled(Tracker)`
   }
   
   .main {
-    width: 75%;
-    min-width: 1400px;
+    width: 1400px;
   }
  `;

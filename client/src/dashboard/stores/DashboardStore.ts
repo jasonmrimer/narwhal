@@ -47,6 +47,7 @@ export class DashboardStore {
   get siteId() {
     return this._siteId;
   }
+
   @computed
   get siteOptions() {
     return this._sites.map(site => {
@@ -76,13 +77,16 @@ export class DashboardStore {
           .filter(msn => msn.site!.id === this._siteId) :
         this._missions;
 
-    return filteredMissions.reduce((accum, current) => {
-      intervals.forEach(interval => {
-        current.startDateTime.isBetween(interval.startTime, interval.endTime, 'minute', '[)') ?
-          (accum[interval.label] = accum[interval.label] || []).push(current) :
-          accum;
-      });
-      return accum;
-    },                             {});
+    return filteredMissions.reduce(
+      (accum, current) => {
+        intervals.forEach(interval => {
+          if (current.startDateTime.isBetween(interval.startTime, interval.endTime, 'minute', '[)')) {
+            (accum[interval.label] = accum[interval.label] || []).push(current);
+          }
+        });
+        return accum;
+      },
+      {}
+    );
   }
 }

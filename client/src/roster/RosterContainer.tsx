@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { StyledRosterBody } from './RosterBody';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import styled from 'styled-components';
 import { StyledRosterHeader } from './RosterHeader';
 import { StyledPlannerHeader } from './PlannerHeader';
 import { observer } from 'mobx-react';
+import { StyledRoster } from './Roster';
 
 interface Props {
   trackerStore: TrackerStore;
@@ -24,26 +24,16 @@ export class RosterContainer extends React.Component<Props, State> {
           <StyledRosterHeader rosterHeaderStore={this.props.trackerStore.rosterHeaderStore}/>
           <StyledPlannerHeader plannerStore={this.props.trackerStore.plannerStore}/>
         </div>
-        <div className="roster-body">
-          <StyledRosterBody
-            trackerStore={this.props.trackerStore}
-          />
-        </div>
+        <StyledRoster trackerStore={this.props.trackerStore}/>
       </div>
     );
   }
 }
 
 export const StyledRosterContainer = styled(RosterContainer)`
-  
-  .roster-header, .roster-body {
+  .roster-header {
     display: flex;
+    border-bottom: 1px solid ${props => props.theme.graySteel};
   }
-  
-  .roster-body {
-    max-height: 900px;
-    overflow: auto;
-    border: 1px solid ${props => props.theme.graySteel};
-    border-top: none;
-  }
+ 
 `;

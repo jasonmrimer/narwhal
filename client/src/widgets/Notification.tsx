@@ -13,6 +13,9 @@ export const Notification: React.SFC<Props> = (props) => {
 
 export const StyledNotification = styled(Notification)`
   font-weight: 400;
-  margin: 2.5rem 0;
+  padding: 2.5rem 0;
   text-align: center;
+  border: 1px solid ${props => props.theme.graySteel};
+  border-top: none;
+  margin-top: 0;
 `;
