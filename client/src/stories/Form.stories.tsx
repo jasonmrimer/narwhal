@@ -240,12 +240,4 @@ export function FormStory() {
         />
       );
     });
-
-  // storiesOf('SVGDropdown', module)
-  //   .addDecorator(story => wrapper(story))
-  //   .add('shift', () => {
-  //     return (
-  //       <ShiftDropdown trackerStore={}/>
-  //     );
-  //   });
 }

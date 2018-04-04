@@ -32,7 +32,8 @@ class Skill
       find('a', text: 'CURRENCY').click
       scroll_to(page.find('.currency-title', text: @qual_title))
       page.find('.currency-title', text: @qual_title).click
-      fill_in 'expirationDate', with: @expiration.strftime('%m/%d/%Y')
+      page.all('.DateInput_input')[1].set('')
+      page.all('.DateInput_input')[1].set(@expiration.strftime('%m/%d/%Y'))
       find('input[type="submit"]').click
     end
   end
@@ -77,7 +78,8 @@ class Skill
       find('a', text: 'CURRENCY').click
       scroll_to(page.find('.currency-title', text: @cert_title))
       page.find('.currency-title', text: @cert_title).click
-      fill_in 'expirationDate', with: @expiration.strftime('%m/%d/%Y')
+      page.all('.DateInput_input')[1].set('')
+      page.all('.DateInput_input')[1].set(@expiration.strftime('%m/%d/%Y'))
       find('input[type="submit"]').click
     end
   end
@@ -116,8 +118,10 @@ class Skill
   end
 
   def continue_submission
-    fill_in 'earnDate', with: @earn.strftime('%m/%d/%Y')
-    fill_in 'expirationDate', with: @expiration.strftime('%m/%d/%Y')
+    page.all('.DateInput_input')[0].set('')
+    page.all('.DateInput_input')[0].set(@earn.strftime('%m/%d/%Y'))
+    page.all('.DateInput_input')[1].set('')
+    page.all('.DateInput_input')[1].set(@expiration.strftime('%m/%d/%Y'))
     find('input[type="submit"]').click
   end
 

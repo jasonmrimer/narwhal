@@ -8,7 +8,8 @@ export class EventModelFactory {
                startTime: Moment = moment(),
                endTime: Moment = moment(),
                airmanId: number = 1,
-               type: EventType = EventType.Leave) {
-    return new EventModel(title, description, startTime, endTime, airmanId, type);
+               type: EventType = EventType.Leave,
+               id: number | null = 1) {
+    return new EventModel(title, description, startTime, endTime, airmanId, type, id);
   }
 }

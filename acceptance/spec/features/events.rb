@@ -25,9 +25,10 @@ class Event
       find('label', text: 'APPOINTMENT').click
 
       fill_in 'title', with: @title
-      fill_in 'startDate', with: @start.strftime('%m/%d/%Y')
+      page.all('.DateInput_input')[0].set(@start.strftime('%m/%d/%Y'))
       fill_in 'startTime', with: @start.strftime('%H:%M')
-      fill_in 'endDate', with: @end.strftime('%m/%d/%Y')
+      page.all('.DateInput_input')[1].set('')
+      page.all('.DateInput_input')[1].set(@end.strftime('%m/%d/%Y'))
       fill_in 'endTime', with: @end.strftime('%H:%M')
       click(find('input[type="submit"]'))
     end
@@ -42,9 +43,11 @@ class Event
       set_attrs
 
       fill_in 'title', with: @title
-      fill_in 'startDate', with: @start.strftime('%m/%d/%Y')
-      fill_in 'endDate', with: @end.strftime('%m/%d/%Y')
+      page.all('.DateInput_input')[0].set('')
+      page.all('.DateInput_input')[0].set(@start.strftime('%m/%d/%Y'))
       fill_in 'startTime', with: @start.strftime('%H:%M')
+      page.all('.DateInput_input')[1].set('')
+      page.all('.DateInput_input')[1].set(@end.strftime('%m/%d/%Y'))
       fill_in 'endTime', with: @end.strftime('%H:%M')
       click(find('input[type="submit"]'))
     end

@@ -9,7 +9,7 @@ import { EventModelFactory } from '../event/factories/EventModelFactory';
 const wrapper = (story: any) => {
   return (
     <ThemeProvider theme={Theme}>
-      <div style={{backgroundColor: Theme.light, width: 400, height: '100%', padding: 16}}>
+      <div style={{backgroundColor: Theme.lighter, width: 400, height: '100%', padding: 16}}>
         {story()}
       </div>
     </ThemeProvider>

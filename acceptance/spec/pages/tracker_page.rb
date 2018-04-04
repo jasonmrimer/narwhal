@@ -135,10 +135,11 @@ class TrackerPage
   def assert_view_update_RIP
     expiration = DateTime.now + 90
     open_rip_page
-    first('input[name="DCGS Mission"]').set(expiration.strftime('%m/%d/%Y'))
+    page.all('.DateInput_input')[0].set('')
+    page.all('.DateInput_input')[0].set(expiration.strftime('%m/%d/%Y'))
     find('input[type="submit"]').click
     open_rip_page
-    expect(find('input[name="DCGS Mission"]').value).to eq(expiration.strftime('%Y-%m-%d'))
+    expect(page.all('.DateInput_input')[0].value).to eq(expiration.strftime('%m/%d/%Y'))
   end
 
   def assert_delete_create_update_qualification

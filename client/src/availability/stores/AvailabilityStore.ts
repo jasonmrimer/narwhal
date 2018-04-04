@@ -4,7 +4,7 @@ import { LeaveFormStore } from '../../event/stores/LeaveFormStore';
 import { MissionFormStore } from '../../event/stores/MissionFormStore';
 import { AppointmentFormStore } from '../../event/stores/AppointmentFormStore';
 import { Moment } from 'moment';
-import { FormStore } from '../../widgets/stores/FormStore';
+import { FormStore, UniqueItem } from '../../widgets/stores/FormStore';
 import { EventActions } from '../../event/stores/EventActions';
 import { Repositories } from '../../Repositories';
 import { MissionModel } from '../../mission/models/MissionModel';
@@ -29,9 +29,9 @@ export class AvailabilityStore implements EventActions {
 
   private eventTypeFormStoreMap: object;
 
-  static callFormStoreFunction<T, S>(store: FormStore<T, S>,
-                                     method: string,
-                                     arg?: EventModel | object[] | null) {
+  static callFormStoreFunction<T extends UniqueItem, S>(store: FormStore<T, S>,
+                                                        method: string,
+                                                        arg?: EventModel | object[] | null) {
     store[method].call(store, arg);
   }
 

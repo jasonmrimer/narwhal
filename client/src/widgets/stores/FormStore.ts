@@ -1,7 +1,11 @@
 import { action, computed, observable } from 'mobx';
 import * as moment from 'moment';
 
-export abstract class FormStore<T, S> {
+export interface UniqueItem {
+  id: number | null;
+}
+
+export abstract class FormStore<T extends UniqueItem, S> {
   @observable protected item: T | null = null;
   @observable protected _state: S;
   @observable protected _errors: object[] = [];
@@ -50,7 +54,7 @@ export abstract class FormStore<T, S> {
 
   @computed
   get hasItem() {
-    return this.item != null;
+    return this.item != null && this.item!.id != null;
   }
 
   protected makeMoment(date: string, time: string) {
