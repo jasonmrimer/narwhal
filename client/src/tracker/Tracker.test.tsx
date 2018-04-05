@@ -104,4 +104,3 @@ describe('Tracker', () => {
     expect(subject.find(StyledDeleteEventPopup).exists()).toBeTruthy();
   });
 });
-

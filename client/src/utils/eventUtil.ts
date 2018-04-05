@@ -7,7 +7,7 @@ export const doesDayHaveEvent = (day: Moment, event: EventModel) => {
 };
 
 export const doesMissionStartOnDay = (day: Moment, event: EventModel) => {
-  return day.isSame(event.startTime.format('YYYY-MM-DD'));
+  return day.clone().startOf('day').isSame(event.startTime.clone().startOf('day'));
 };
 
 export const findEventsForDay = (events: EventModel[], day: Moment) => {

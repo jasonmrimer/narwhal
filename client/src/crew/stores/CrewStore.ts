@@ -1,12 +1,12 @@
-import {action, computed, observable} from 'mobx';
-import {CrewModel} from '../models/CrewModel';
-import {CrewRepository} from '../repositories/CrewRepository';
-import {CrewPositionModel} from '../models/CrewPositionModel';
-import {AirmanRepository} from '../../airman/repositories/AirmanRepository';
-import {AirmanModel} from '../../airman/models/AirmanModel';
-import {Repositories} from '../../Repositories';
-import {ProfileSitePickerStore} from '../../profile/stores/ProfileSitePickerStore';
-import {CrewPositionRepository} from '../repositories/CrewPositionRepository';
+import { action, computed, observable } from 'mobx';
+import { CrewModel } from '../models/CrewModel';
+import { CrewRepository } from '../repositories/CrewRepository';
+import { CrewPositionModel } from '../models/CrewPositionModel';
+import { AirmanRepository } from '../../airman/repositories/AirmanRepository';
+import { AirmanModel } from '../../airman/models/AirmanModel';
+import { Repositories } from '../../Repositories';
+import { ProfileSitePickerStore } from '../../profile/stores/ProfileSitePickerStore';
+import { CrewPositionRepository } from '../repositories/CrewPositionRepository';
 
 interface NewEntry {
   airmanName: string;

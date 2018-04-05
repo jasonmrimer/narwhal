@@ -57,7 +57,8 @@ describe('Crew', () => {
 
   it('displays Airmen on the mission', () => {
     subject.update();
-    crewPositions.forEach((crewPosition, index) => expect(subject.find('.airman').at(index).text()).toContain(crewPosition.airman.lastName));
+    crewPositions.forEach((crewPosition, index) =>
+      expect(subject.find('.airman').at(index).text()).toContain(crewPosition.airman.lastName));
   });
 
   it('renders an input for each crew member', () => {
@@ -100,7 +101,7 @@ describe('Crew', () => {
     const airmenCount = subject.find('.airman').length;
     subject.find('button').at(0).simulate('click');
     subject.update();
-    expect(subject.find('.airman').length).toBeLessThan(airmenCount)
+    expect(subject.find('.airman').length).toBeLessThan(airmenCount);
   });
 
   describe('SingleTypeahead', () => {

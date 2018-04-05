@@ -1,10 +1,10 @@
-import {CurrencyChild, CurrencyStore} from './CurrencyStore';
+import { CurrencyChild, CurrencyStore } from './CurrencyStore';
 import * as moment from 'moment';
-import {SkillType} from '../../skills/models/SkillType';
-import {DoubleRepositories} from '../../Repositories';
-import {FakeAirmanRepository} from '../../airman/repositories/doubles/FakeAirmanRepository';
-import {AirmanModel} from '../../airman/models/AirmanModel';
-import {AirmanQualificationModel} from '../../airman/models/AirmanQualificationModel';
+import { SkillType } from '../../skills/models/SkillType';
+import { DoubleRepositories } from '../../Repositories';
+import { FakeAirmanRepository } from '../../airman/repositories/doubles/FakeAirmanRepository';
+import { AirmanModel } from '../../airman/models/AirmanModel';
+import { AirmanQualificationModel } from '../../airman/models/AirmanQualificationModel';
 
 describe('CurrencyStore', () => {
   const siteId = 14;

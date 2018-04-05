@@ -8,9 +8,9 @@ describe('DatePicker', () => {
     const onChangeSpy = jest.fn();
     const subject = shallow(
       <DatePicker
-      name="test"
-      value=""
-      onChange={onChangeSpy}
+        name="test"
+        value=""
+        onChange={onChangeSpy}
       />
     );
     const instance = (subject.instance() as DatePicker);
