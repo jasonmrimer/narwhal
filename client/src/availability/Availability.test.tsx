@@ -14,7 +14,6 @@ import { StyledLeaveForm } from '../event/LeaveForm';
 import { EventModelFactory } from '../event/factories/EventModelFactory';
 import { TabType } from '../tracker/stores/SidePanelStore';
 import { StyledBackButton } from '../widgets/BackButton';
-import { StyledDeleteEventPopup } from '../event/DeleteEventPopup';
 import { StyledTDYDeploymentForm } from '../event/TDYDeploymentForm';
 
 let trackerStore: TrackerStore;
@@ -209,16 +208,5 @@ describe('Availability', () => {
 
     subject.find(StyledBackButton).simulate('click');
     expect(trackerStore.availabilityStore.shouldShowEventForm).toBeFalsy();
-  });
-
-  it('renders a delete popup when there is a pending delete event', () => {
-    const event = new EventModel('Title', 'Description', moment(), moment(), 1, EventType.Appointment);
-
-    trackerStore.availabilityStore.showEventForm();
-    expect(subject.find(StyledDeleteEventPopup).exists()).toBeFalsy();
-
-    trackerStore.availabilityStore.removeEvent(event);
-    subject.update();
-    expect(subject.find(StyledDeleteEventPopup).exists()).toBeTruthy();
   });
 });

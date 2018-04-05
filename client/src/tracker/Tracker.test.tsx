@@ -11,6 +11,9 @@ import { TabType } from './stores/SidePanelStore';
 import { StyledRosterContainer } from '../roster/RosterContainer';
 import { UnfilteredValue } from '../widgets/models/FilterOptionModel';
 import { StyledLoadingOverlay } from '../widgets/LoadingOverlay';
+import { EventModel, EventType } from '../event/models/EventModel';
+import * as moment from 'moment';
+import { StyledDeleteEventPopup } from '../event/DeleteEventPopup';
 
 let trackerStore: TrackerStore;
 let subject: ShallowWrapper;
@@ -87,6 +90,17 @@ describe('Tracker', () => {
       subject.update();
       expect(subject.find(StyledSidePanel).exists()).toBeTruthy();
     });
+  });
+
+  it('renders a delete popup when there is a pending delete event', () => {
+    const event = new EventModel('Title', 'Description', moment(), moment(), 1, EventType.Appointment);
+
+    trackerStore.availabilityStore.showEventForm();
+    expect(subject.find(StyledDeleteEventPopup).exists()).toBeFalsy();
+
+    trackerStore.availabilityStore.removeEvent(event);
+    subject.update();
+    expect(subject.find(StyledDeleteEventPopup).exists()).toBeTruthy();
   });
 });
 

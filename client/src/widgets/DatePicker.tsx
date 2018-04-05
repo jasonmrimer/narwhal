@@ -161,6 +161,10 @@ export const StyledDatePicker = styled(DatePicker)`
     &::placeholder {
       color: ${props => props.theme.graySteel};
     }
+    
+    &:disabled {
+      color: ${props => props.theme.graySteel};
+    }
   }
   
   .SingleDatePickerInput_clearDate {

@@ -19,7 +19,6 @@ interface Props {
 
 @observer
 export class SkillsForm extends React.Component<Props> {
-  /* tslint:disable:no-any */
   handleChange = ({target}: any) => {
     this.props.skillFormStore.setState({[target.name]: target.value});
   }

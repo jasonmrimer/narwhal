@@ -15,7 +15,6 @@ import { StyledAppointmentForm } from '../event/AppointmentForm';
 import { StyledLeaveForm } from '../event/LeaveForm';
 import { StyledMissionForm } from '../event/MissionForm';
 import { StyledBackButton } from '../widgets/BackButton';
-import { StyledDeleteEventPopup } from '../event/DeleteEventPopup';
 import { StyledTDYDeploymentForm } from '../event/TDYDeploymentForm';
 
 interface Props {
@@ -53,25 +52,17 @@ export class Availability extends React.Component<Props> {
         />
         {
           availabilityStore.shouldShowEventTypeSelection &&
-        <div className="form-wrapper">
-          <div>Select Event Type:</div>
-          <StyledRadioButtons
-            name="eventType"
-            options={Object.keys(EventType).map(key => EventType[key])}
-            value={availabilityStore.eventFormType}
-            onChange={(e: any) => availabilityStore.openCreateEventForm(e.target.value, selectedAirman.id)}
-          />
-        </div>
+          <div className="form-wrapper">
+            <div>Select Event Type:</div>
+            <StyledRadioButtons
+              name="eventType"
+              options={Object.keys(EventType).map(key => EventType[key])}
+              value={availabilityStore.eventFormType}
+              onChange={(e: any) => availabilityStore.openCreateEventForm(e.target.value, selectedAirman.id)}
+            />
+          </div>
         }
         {this.renderEventForm()}
-        {
-          availabilityStore.pendingDeleteEvent &&
-          <StyledDeleteEventPopup
-            event={availabilityStore.pendingDeleteEvent}
-            cancelPendingDeleteEvent={availabilityStore.cancelPendingDelete}
-            confirmPendingDeleteEvent={availabilityStore.executePendingDelete}
-          />
-        }
       </div>
     );
   }

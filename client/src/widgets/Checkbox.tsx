@@ -13,7 +13,8 @@ interface Props {
 export const Checkbox = (props: Props) => {
   return (
     <label
-      className={classNames("container", props.className)}>
+      className={classNames('container', props.className)}
+    >
       <input
         type="checkbox"
         id={props.id}
