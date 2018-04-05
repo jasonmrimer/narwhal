@@ -54,14 +54,6 @@ class Skill
     end
   end
 
-  def qualification_correct_date?
-    page.within('.side-panel') do
-      return page.has_content?('CURRENCY') &&
-          page.has_text?("#{@expiration.mjd - @earn.mjd} days until expiration.") &&
-          page.has_content?(@qual_title)
-    end
-  end
-
   def create_certification
     page.within('.side-panel') do
       find('a', text: 'CURRENCY').click
@@ -97,14 +89,6 @@ class Skill
   def certification_exists?
     page.within('.side-panel') do
       return page.has_content?('CURRENCY') && page.has_content?(@cert_title)
-    end
-  end
-
-  def certification_correct_date?
-    page.within('.side-panel') do
-      return page.has_content?('CURRENCY') &&
-          page.has_text?("#{@expiration.mjd - @earn.mjd} days until expiration.") &&
-          page.has_content?(@cert_title)
     end
   end
 

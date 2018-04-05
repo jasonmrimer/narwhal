@@ -157,7 +157,6 @@ class TrackerPage
 
     skill.update_qualification
     expect(skill.qualification_exists?).to be true
-    expect(skill.qualification_correct_date?).to be true
 
     skill.delete_qualification
     expect(skill.qualification_exists?).to be false
@@ -177,7 +176,6 @@ class TrackerPage
 
     skill.update_certification
     expect(skill.certification_exists?).to be true
-    expect(skill.certification_correct_date?).to be true
 
     skill.delete_certification
     expect(skill.certification_exists?).to be false
