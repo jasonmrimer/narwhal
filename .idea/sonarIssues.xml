@@ -228,6 +228,16 @@
             <set />
           </value>
         </entry>
+        <entry key="$PROJECT_DIR$/client/src/currency/stores/CurrencyStore.test.ts">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/client/src/currency/stores/CurrencyStore.ts">
+          <value>
+            <set />
+          </value>
+        </entry>
         <entry key="$PROJECT_DIR$/client/src/dashboard/Dashboard.test.tsx">
           <value>
             <set />
@@ -399,6 +409,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/client/src/widgets/App.tsx">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/client/src/widgets/Dropdown.tsx">
           <value>
             <set />
           </value>
@@ -789,6 +804,11 @@
           </value>
         </entry>
         <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/event/EventController.java">
+          <value>
+            <set />
+          </value>
+        </entry>
+        <entry key="$PROJECT_DIR$/src/main/java/mil/af/us/narwhal/event/EventJSON.java">
           <value>
             <set />
           </value>

@@ -1,69 +1,70 @@
 import { UnfilteredValue } from '../../widgets/models/FilterOptionModel';
-import { TrackerFilterStore } from './TrackerFilterStore';
+import { AllAirmenRefresher, TrackerFilterStore } from './TrackerFilterStore';
 import { FakeAirmanRepository } from '../../airman/repositories/doubles/FakeAirmanRepository';
 import { AirmanModel } from '../../airman/models/AirmanModel';
 import { SiteRepositoryStub } from '../../site/repositories/doubles/SiteRepositoryStub';
+import { SiteModel } from '../../site/models/SiteModel';
 
 describe('TrackerFilterStore', () => {
   const siteRepositoryStub = new SiteRepositoryStub();
   const airmanRepository: FakeAirmanRepository = new FakeAirmanRepository();
   let allAirmen: AirmanModel[];
+  let sites: SiteModel[];
   let subject: TrackerFilterStore;
+  let refreshAllAirmenSpy: AllAirmenRefresher;
 
   beforeEach(async () => {
-    allAirmen = await airmanRepository.findAll();
-    subject = new TrackerFilterStore();
-    const sites = await siteRepositoryStub.findAll();
+    refreshAllAirmenSpy = {
+      refreshAllAirmen: jest.fn()
+    };
+    allAirmen = await airmanRepository.findBySiteId(14);
+    subject = new TrackerFilterStore(refreshAllAirmenSpy);
+    sites = await siteRepositoryStub.findAll();
     subject.hydrate(3, sites);
+  });
+
+  it('should not reset the flight or squadron filters when re-hydrating with the same site', () => {
+    subject.setSelectedSquadron(2);
+    subject.setSelectedFlight(2);
+    subject.hydrate(3, sites);
+    expect(subject.selectedSquadron).toBe(2);
+    expect(subject.selectedFlight).toBe(2);
+  });
+
+  it('setting the site Id refreshes all airmen', async () => {
+    await subject.setSelectedSite(2);
+    expect(refreshAllAirmenSpy.refreshAllAirmen).toHaveBeenCalled();
   });
 
   it('returns a list of site options', () => {
     expect(subject.siteOptions).toEqual([
-      {value: 1, label: 'DMS-GA'},
+      {value: 14, label: 'DMS-GA'},
       {value: 2, label: 'DMS-MD'},
       {value: 3, label: 'DMS-HI'}
     ]);
   });
 
-  it('returns an empty list of squadron options', () => {
-    subject.setSelectedSite(UnfilteredValue);
-    expect(subject.squadronOptions).toEqual([]);
-  });
-
-  it('returns an empty list of flight options', () => {
-    subject.setSelectedSite(UnfilteredValue);
-    expect(subject.flightOptions).toEqual([]);
-  });
-
   describe('filtering by site', () => {
-    it('returns airmen for the site', () => {
-      subject.setSelectedSite(1);
-      const filteredAirmen = subject.filterAirmen(allAirmen);
-      expect(filteredAirmen.length).toBeLessThan(allAirmen.length);
-      expect(filteredAirmen.map(airman => airman.flightId)
-        .filter((el, i, a) => i === a.indexOf(el))).toEqual([1, 2, 3, 4]);
-    });
-
-    it('returns a list of squadron options for the site', () => {
-      subject.setSelectedSite(1);
+    it('returns a list of squadron options for the site', async () => {
+      await subject.setSelectedSite(14);
       expect(subject.squadronOptions).toEqual([
         {value: 1, label: 'Squad 1'},
         {value: 2, label: 'Squad 2'}
       ]);
     });
 
-    it('resets squadron and flight when it sets a new site', () => {
-      subject.setSelectedSite(1);
+    it('resets squadron and flight when it sets a new site', async () => {
+      await subject.setSelectedSite(1);
       subject.setSelectedSquadron(2);
       subject.setSelectedFlight(1);
-      subject.setSelectedSite(2);
+      await subject.setSelectedSite(2);
       expect(subject.selectedSquadron).toBe(UnfilteredValue);
       expect(subject.selectedFlight).toBe(UnfilteredValue);
     });
 
     describe('when a site only has one squadron', () => {
-      it('sets the squadron id on selection', () => {
-        subject.setSelectedSite(3);
+      it('sets the squadron id on selection', async () => {
+        await subject.setSelectedSite(3);
         expect(subject.selectedSquadron).toBe(5);
       });
 
@@ -74,8 +75,8 @@ describe('TrackerFilterStore', () => {
   });
 
   describe('filtering by squadron', () => {
-    beforeEach(() => {
-      subject.setSelectedSite(1);
+    beforeEach(async () => {
+      await subject.setSelectedSite(14);
       subject.setSelectedSquadron(1);
     });
 
@@ -101,8 +102,8 @@ describe('TrackerFilterStore', () => {
   });
 
   describe('filtering by flight', () => {
-    beforeEach(() => {
-      subject.setSelectedSite(1);
+    beforeEach(async () => {
+      await subject.setSelectedSite(1);
       subject.setSelectedSquadron(1);
       subject.setSelectedFlight(1);
     });

@@ -13,7 +13,7 @@ describe('ProfileSitePickerStore', () => {
 
   it('should return profile', async () => {
     expect(subject.profile).toEqual({
-      user: {id: 1, username: 'FontFace', siteId: 1},
+      user: {id: 1, username: 'FontFace', siteId: 14},
       classified: false
     });
   });

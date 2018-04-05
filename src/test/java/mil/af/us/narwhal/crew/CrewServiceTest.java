@@ -2,7 +2,7 @@ package mil.af.us.narwhal.crew;
 
 import mil.af.us.narwhal.airman.Airman;
 import mil.af.us.narwhal.airman.AirmanRepository;
-import mil.af.us.narwhal.event.Event;
+import mil.af.us.narwhal.event.EventJSON;
 import mil.af.us.narwhal.event.EventType;
 import mil.af.us.narwhal.mission.Mission;
 import mil.af.us.narwhal.mission.MissionRepository;
@@ -33,7 +33,7 @@ public class CrewServiceTest {
     Airman airman = new Airman();
     airman.setId(1L);
 
-    Mission mission =  new Mission(
+    Mission mission = new Mission(
       1L,
       "mission-id-1",
       "MISNUM1",
@@ -42,7 +42,7 @@ public class CrewServiceTest {
       new Site("Site-1")
     );
 
-    Event event = new Event(
+    EventJSON json = new EventJSON(
       mission.getId(),
       mission.getAtoMissionNumber(),
       "Crazy Mission",
@@ -53,11 +53,11 @@ public class CrewServiceTest {
     );
 
     when(missionRepository.save(any(Mission.class))).thenReturn(mission);
-    when(missionRepository.findOne(event.getId())).thenReturn(mission);
-    when(airmanRepository.findOne(event.getAirmanId())).thenReturn(airman);
+    when(missionRepository.findOne(json.getId())).thenReturn(mission);
+    when(airmanRepository.findOne(json.getAirmanId())).thenReturn(airman);
 
     CrewService subject = new CrewService(missionRepository, airmanRepository);
-    subject.save(event);
+    subject.save(json);
 
     verify(missionRepository).save(captor.capture());
     Mission value = captor.getValue();

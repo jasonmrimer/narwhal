@@ -3,7 +3,6 @@ import { action, computed, observable } from 'mobx';
 import { CurrencyStore } from '../../currency/stores/CurrencyStore';
 import { AvailabilityStore } from '../../availability/stores/AvailabilityStore';
 import { PlannerStore } from '../../roster/stores/PlannerStore';
-import { UnfilteredValue } from '../../widgets/models/FilterOptionModel';
 import { TimeService } from '../services/TimeService';
 import { SidePanelStore, TabType } from './SidePanelStore';
 import { Moment } from 'moment';
@@ -28,7 +27,7 @@ export class TrackerStore {
 
   constructor(repositories: Repositories, timeService: TimeService) {
     this.repositories = repositories;
-    this.trackerFilterStore = new TrackerFilterStore();
+    this.trackerFilterStore = new TrackerFilterStore(this);
     this.currencyStore = new CurrencyStore(this, this.trackerFilterStore, this.repositories);
     this.availabilityStore = new AvailabilityStore(this, this.repositories);
     this.plannerStore = new PlannerStore(timeService, this);
@@ -36,13 +35,13 @@ export class TrackerStore {
     this.rosterHeaderStore = new RosterHeaderStore(this.trackerFilterStore);
   }
 
-  async hydrate(siteId: number = UnfilteredValue) {
+  async hydrate(siteId: number) {
     this._loading = true;
 
     const week = this.plannerStore.plannerWeek;
     const [airmen, events, sites, certifications, qualifications, missions] = await Promise.all([
-      this.repositories.airmanRepository.findAll(),
-      this.repositories.eventRepository.findAllWithinPeriod(week[0], week[6]),
+      this.repositories.airmanRepository.findBySiteId(siteId),
+      this.repositories.eventRepository.findAllBySiteIdAndWithinPeriod(siteId, week[0], week[6]),
       this.repositories.siteRepository.findAll(),
       this.repositories.skillRepository.findAllCertifications(),
       this.repositories.skillRepository.findAllQualifications(),
@@ -125,20 +124,27 @@ export class TrackerStore {
   async updateAirmanShift(airman: AirmanModel, shiftType: ShiftType) {
     const updatedAirman = Object.assign({}, airman, {shift: shiftType});
     await this.repositories.airmanRepository.saveAirman(updatedAirman);
-    this._airmen = await this.repositories.airmanRepository.findAll();
+    this._airmen = await this.repositories.airmanRepository.findBySiteId(this.trackerFilterStore.selectedSite);
+  }
+
+  async refreshAllAirmen() {
+    this._airmen = await this.repositories.airmanRepository.findBySiteId(this.trackerFilterStore.selectedSite);
+    await this.refreshEvents();
+    await this.refreshAirmanEvents();
   }
 
   async refreshAirmen(item: { airmanId: number }) {
-    this._airmen = await this.repositories.airmanRepository.findAll();
+    this._airmen = await this.repositories.airmanRepository.findBySiteId(this.trackerFilterStore.selectedSite);
     await this.refreshEvents();
 
-    this._selectedAirman = this._airmen.find(a => a.id === item.airmanId)!;
+    this._selectedAirman = this._airmen.find(a => a.id === item.airmanId) || AirmanModel.empty();
     await this.refreshAirmanEvents();
   }
 
   async refreshEvents() {
     const week = this.plannerStore.plannerWeek;
-    this._events = await this.repositories.eventRepository.findAllWithinPeriod(week[0], week[6]);
+    this._events = await this.repositories.eventRepository
+      .findAllBySiteIdAndWithinPeriod(this.trackerFilterStore.selectedSite, week[0], week[6]);
   }
 
   async refreshAirmanEvents() {

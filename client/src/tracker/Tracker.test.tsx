@@ -14,6 +14,7 @@ import { StyledLoadingOverlay } from '../widgets/LoadingOverlay';
 import { EventModel, EventType } from '../event/models/EventModel';
 import * as moment from 'moment';
 import { StyledDeleteEventPopup } from '../event/DeleteEventPopup';
+import { StyledDropdown } from '../widgets/Dropdown';
 
 let trackerStore: TrackerStore;
 let subject: ShallowWrapper;
@@ -54,25 +55,25 @@ describe('Tracker', () => {
 
   describe('TopLevelFilter', () => {
     it('renders filters for site, squadron, and flight', () => {
-      expect(subject.find(TopLevelFilter).length).toBe(3);
+      expect(subject.find(StyledDropdown).length).toBe(1);
+      expect(subject.find(TopLevelFilter).length).toBe(2);
     });
 
     it('should render a site filter with the correct props', () => {
-      const wrapper = findTopLevelFilterById(subject, '#site-filter');
+      const wrapper = subject.find('#site-filter');
       expect(wrapper.prop('value')).toEqual(trackerStore.trackerFilterStore.selectedSite);
-      expect(wrapper.prop('callback')).toEqual(trackerStore.trackerFilterStore.setSelectedSite);
       expect(wrapper.prop('options')).toEqual(trackerStore.trackerFilterStore.siteOptions);
     });
 
     it('should render a squadron filter with the correct props', () => {
-      const wrapper = findTopLevelFilterById(subject, '#squadron-filter');
+      const wrapper = subject.find('#squadron-filter');
       expect(wrapper.prop('value')).toEqual(trackerStore.trackerFilterStore.selectedSquadron);
       expect(wrapper.prop('callback')).toEqual(trackerStore.trackerFilterStore.setSelectedSquadron);
       expect(wrapper.prop('options')).toEqual(trackerStore.trackerFilterStore.squadronOptions);
     });
 
     it('should render a flight filter with the correct props', () => {
-      const wrapper = findTopLevelFilterById(subject, '#flight-filter');
+      const wrapper = subject.find('#flight-filter');
       expect(wrapper.prop('value')).toEqual(trackerStore.trackerFilterStore.selectedFlight);
       expect(wrapper.prop('callback')).toEqual(trackerStore.trackerFilterStore.setSelectedFlight);
       expect(wrapper.prop('options')).toEqual(trackerStore.trackerFilterStore.flightOptions);
@@ -104,6 +105,3 @@ describe('Tracker', () => {
   });
 });
 
-const findTopLevelFilterById = (wrapper: ShallowWrapper, id: string) => {
-  return wrapper.find(id);
-};

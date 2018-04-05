@@ -12,8 +12,7 @@ class TrackerPage
   EXPECTED_AVAILABILITY_DAYS = %w(SUN MON TUE WED THU FRI SAT).freeze
 
   def initialize
-    expect(page).to have_content('All Sites')
-
+    expect(page).to have_content('DMS-MD')
     @all_airmen_count = page.find_all('.airman-name').count
   end
 
@@ -31,8 +30,8 @@ class TrackerPage
   end
 
   def assert_filters_by_site
-    expect(page).to have_content('All Sites')
-    filter('site', 'DMS-MD')
+    expect(page).to have_content('DMS-MD')
+    filter('site', 'DMS-GA')
     expect(page).to have_css('tbody tr', maximum: @all_airmen_count)
   end
 
@@ -63,7 +62,6 @@ class TrackerPage
     last_name.split("").each do
       page.find('input[name=last-name]').native.send_key(:backspace)
     end
-
     expect(page).to have_css('.airman-name', count: @all_airmen_count)
   end
 

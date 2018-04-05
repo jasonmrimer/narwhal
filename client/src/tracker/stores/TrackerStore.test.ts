@@ -10,14 +10,15 @@ import { TabType } from './SidePanelStore';
 describe('TrackerStore', () => {
   const timeServiceStub = new TimeServiceStub();
   const airmanRepository = (DoubleRepositories.airmanRepository as FakeAirmanRepository);
+  const siteId = 14;
 
   let allAirmen: AirmanModel[];
   let subject: TrackerStore;
 
   beforeEach(async () => {
-    allAirmen = await airmanRepository.findAll();
+    allAirmen = await airmanRepository.findBySiteId(siteId);
     subject = new TrackerStore(DoubleRepositories, timeServiceStub);
-    await subject.hydrate();
+    await subject.hydrate(siteId);
   });
 
   it('returns a list of all airmen', async () => {
@@ -25,9 +26,9 @@ describe('TrackerStore', () => {
   });
 
   describe('selecting an airman', () => {
-    it('resets the side panel week', () => {
+    it('resets the side panel week', async () => {
       expect(subject.plannerStore.sidePanelWeek[0].isSame(subject.plannerStore.plannerWeek[0])).toBeTruthy();
-      subject.plannerStore.incrementSidePanelWeek();
+      await subject.plannerStore.incrementSidePanelWeek();
       expect(subject.plannerStore.sidePanelWeek[0].isSame(subject.plannerStore.plannerWeek[0])).toBeFalsy();
 
       subject.clearSelectedAirman();
@@ -48,7 +49,7 @@ describe('TrackerStore', () => {
 
     subject.setLoading(true);
 
-    await subject.hydrate();
+    await subject.hydrate(siteId);
 
     expect(subject.loading).toBeFalsy();
   });

@@ -46,7 +46,7 @@ public class Airman {
   @JsonManagedReference
   private List<AirmanCertification> certifications = new ArrayList<>();
 
-  @OneToMany(mappedBy = "airmanId", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "airman", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   @JsonIgnore
   private List<Event> events = new ArrayList<>();
 

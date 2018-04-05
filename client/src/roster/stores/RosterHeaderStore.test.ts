@@ -10,7 +10,7 @@ describe('RosterHeaderStore', () => {
   let subject: RosterHeaderStore;
 
   beforeEach(async () => {
-    allAirmen = await airmanRepository.findAll();
+    allAirmen = await airmanRepository.findBySiteId(14);
     subject = new RosterHeaderStore({selectedSite: 1});
     subject.hydrate(CertificationModelFactory.buildList(3, 1), QualificationModelFactory.buildList(3));
   });

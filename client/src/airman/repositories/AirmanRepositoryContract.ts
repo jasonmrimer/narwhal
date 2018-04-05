@@ -5,19 +5,23 @@ import { SkillType } from '../../skills/models/SkillType';
 import * as assert from 'assert';
 
 export function airmanRepositoryContract(subject: AirmanRepository) {
+  const siteId = 14;
   let airmen: AirmanModel[];
 
   beforeEach(async () => {
-    airmen = await subject.findAll();
+    airmen = await subject.findBySiteId(siteId);
     expect(airmen).toBeDefined();
   });
 
-  describe('findAll', () => {
+  describe('findBySiteId', () => {
     it('returns airmen', () => {
       expect(airmen.length).toBeGreaterThan(0);
 
       const uniqueIds = airmen.map(airman => airman.id).filter((el, i, a) => i === a.indexOf(el));
       expect(uniqueIds.length).toEqual(airmen.length);
+
+      const siteIds = airmen.map(airman => airman.siteId);
+      expect(siteIds.every(id => id === siteId)).toBeTruthy();
 
       airmen.forEach(({shift}) => {
         expect(shift).toBeDefined();

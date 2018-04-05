@@ -5,7 +5,7 @@ import { FlightModel } from '../../../flight/model/FlightModel';
 
 const sites = [
   new SiteModel(
-    1,
+    14,
     'DMS-GA',
     [
       new SquadronModel(1, 'Squad 1', [

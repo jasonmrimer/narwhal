@@ -5,9 +5,10 @@ import { ReactWrapper } from 'enzyme';
 import { DoubleRepositories } from '../Repositories';
 
 export async function makeFakeTrackerStore(shouldHydrateState: boolean = true) {
+  const siteId = 14;
   const store = new TrackerStore(DoubleRepositories, new TimeServiceStub());
   if (shouldHydrateState) {
-    await store.hydrate();
+    await store.hydrate(siteId);
   }
   return store;
 }

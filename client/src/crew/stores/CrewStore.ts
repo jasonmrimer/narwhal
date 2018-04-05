@@ -1,12 +1,12 @@
-import { action, computed, observable } from 'mobx';
-import { CrewModel } from '../models/CrewModel';
-import { CrewRepository } from '../repositories/CrewRepository';
-import { CrewPositionModel } from '../models/CrewPositionModel';
-import { AirmanRepository } from '../../airman/repositories/AirmanRepository';
-import { AirmanModel } from '../../airman/models/AirmanModel';
-import { Repositories } from '../../Repositories';
-import { ProfileSitePickerStore } from '../../profile/stores/ProfileSitePickerStore';
-import { CrewPositionRepository } from '../repositories/CrewPositionRepository';
+import {action, computed, observable} from 'mobx';
+import {CrewModel} from '../models/CrewModel';
+import {CrewRepository} from '../repositories/CrewRepository';
+import {CrewPositionModel} from '../models/CrewPositionModel';
+import {AirmanRepository} from '../../airman/repositories/AirmanRepository';
+import {AirmanModel} from '../../airman/models/AirmanModel';
+import {Repositories} from '../../Repositories';
+import {ProfileSitePickerStore} from '../../profile/stores/ProfileSitePickerStore';
+import {CrewPositionRepository} from '../repositories/CrewPositionRepository';
 
 interface NewEntry {
   airmanName: string;
@@ -35,10 +35,10 @@ export class CrewStore {
     this._loading = true;
 
     const [airmen, crew] = await Promise.all([
-      this.airmanRepository.findAll(),
+      this.airmanRepository.findBySiteId(this._profileStore.profile!.user.siteId!),
       this.crewRepository.findOne(crewId)
     ]);
-    this._airmen = airmen.filter(airman => airman.siteId === this._profileStore.profile!.user.siteId);
+    this._airmen = airmen;
     this._crew = crew;
 
     this._loading = false;

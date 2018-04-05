@@ -1,6 +1,7 @@
 package mil.af.us.narwhal.event;
 
-import mil.af.us.narwhal.mission.MissionRepository;
+import mil.af.us.narwhal.airman.Airman;
+import mil.af.us.narwhal.airman.AirmanRepository;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -13,30 +14,24 @@ public class EventController {
   public static final String URI = "/api/events";
 
   private EventRepository eventRepository;
+  private AirmanRepository airmanRepository;
   private EventService service;
-  private MissionRepository missionRepository;
 
-  public EventController(
-    EventRepository eventRepository,
-    EventService service,
-    MissionRepository missionRepository
-  ) {
+  public EventController(EventRepository eventRepository, AirmanRepository airmanRepository, EventService service) {
     this.eventRepository = eventRepository;
+    this.airmanRepository = airmanRepository;
     this.service = service;
-    this.missionRepository = missionRepository;
   }
 
   @PostMapping
-  public Event create(@Valid @RequestBody Event event) {
-    return service.save(event);
+  public Event create(@Valid @RequestBody EventJSON json) {
+    final Airman airman = airmanRepository.findOne(json.getAirmanId());
+    return eventRepository.save(Event.fromJSON(json, airman));
   }
 
   @PutMapping(value = "{id}")
-  public Event update(@PathVariable Long id, @Valid @RequestBody Event event) {
-    if (event.getType() == EventType.MISSION) {
-      return service.save(event);
-    }
-    return eventRepository.save(event);
+  public Event update(@PathVariable Long id, @Valid @RequestBody EventJSON json) {
+    return service.update(json);
   }
 
   @DeleteMapping(value = "/{id}")
@@ -48,10 +43,11 @@ public class EventController {
   public List<Event> index(
     @RequestParam Instant start,
     @RequestParam Instant end,
+    @RequestParam(required = false) Long siteId,
     @RequestParam(required = false) Long airmanId
   ) {
     return airmanId == null ?
-      service.combineCrewsAndEvents(start, end) :
-      service.combineCrewsAndEvents(airmanId, start, end);
+      service.combineCrewsAndEventsBySite(siteId, start, end) :
+      service.combineCrewsAndEventsByAirman(airmanId, start, end);
   }
 }

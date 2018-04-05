@@ -27,6 +27,7 @@ public class EventControllerTest extends BaseIntegrationTest {
   private Site site;
   private Airman airman;
   private Airman airman2;
+  private Airman airman3;
   @Autowired private SiteRepository siteRepository;
   @Autowired private AirmanRepository airmanRepository;
   @Autowired private EventRepository eventRepository;
@@ -43,8 +44,18 @@ public class EventControllerTest extends BaseIntegrationTest {
     site.addSquadron(squadron);
     siteRepository.save(site);
 
+    final Flight flight2 = new Flight("flight2");
+
+    final Squadron squadron2 = new Squadron("squadron2");
+    squadron2.addFlight(flight2);
+
+    final Site site2 = new Site("site2");
+    site2.addSquadron(squadron2);
+    siteRepository.save(site2);
+
     airman = airmanRepository.save(new Airman(flight, "first", "last"));
     airman2 = airmanRepository.save(new Airman(flight, "first2", "last2"));
+    airman3 = airmanRepository.save(new Airman(flight2, "first3", "last3"));
   }
 
   @After
@@ -60,7 +71,7 @@ public class EventControllerTest extends BaseIntegrationTest {
       Instant.now(),
       Instant.now(),
       EventType.APPOINTMENT,
-      airman.getId()
+      airman
     );
     final String json = objectMapper.writeValueAsString(event);
 
@@ -88,7 +99,7 @@ public class EventControllerTest extends BaseIntegrationTest {
       null,
       null,
       EventType.APPOINTMENT,
-      airman.getId()
+      airman
     );
 
     final String json = objectMapper.writeValueAsString(event);
@@ -118,7 +129,7 @@ public class EventControllerTest extends BaseIntegrationTest {
       now,
       now.minusSeconds(100),
       EventType.APPOINTMENT,
-      airman.getId()
+      airman
     );
 
     final String json = objectMapper.writeValueAsString(event);
@@ -147,7 +158,7 @@ public class EventControllerTest extends BaseIntegrationTest {
       Instant.now(),
       Instant.now(),
       EventType.APPOINTMENT,
-      airman.getId()
+      airman
     );
     existingEvent = eventRepository.save(existingEvent);
     final String json = objectMapper.writeValueAsString(existingEvent);
@@ -176,7 +187,7 @@ public class EventControllerTest extends BaseIntegrationTest {
       Instant.now(),
       Instant.now(),
       EventType.APPOINTMENT,
-      airman.getId()
+      airman
     );
     event = eventRepository.save(event);
 
@@ -199,7 +210,7 @@ public class EventControllerTest extends BaseIntegrationTest {
 
 
   @Test
-  public void findAllWithinPeriod() {
+  public void findAllBySiteIdAndWithinPeriod() {
     Instant start = Instant.parse("2018-04-02T10:30:00.00Z");
     final Event event1 = new Event(
       "New Event",
@@ -207,7 +218,7 @@ public class EventControllerTest extends BaseIntegrationTest {
       start,
       start,
       EventType.APPOINTMENT,
-      airman.getId()
+      airman
     );
     final Event event2 = new Event(
       "New Event",
@@ -215,9 +226,17 @@ public class EventControllerTest extends BaseIntegrationTest {
       start.minus(30, ChronoUnit.DAYS),
       start.minus(30, ChronoUnit.DAYS),
       EventType.APPOINTMENT,
-      airman.getId()
+      airman
     );
-    eventRepository.save(asList(event1, event2));
+    final Event event3 = new Event(
+      "New Event",
+      "New Description",
+      start,
+      start,
+      EventType.APPOINTMENT,
+      airman3
+    );
+    eventRepository.save(asList(event1, event2, event3));
 
     Mission mission = new Mission("A", "B", start, start, site);
     mission.addCrewPosition(new CrewPosition(airman));
@@ -229,6 +248,7 @@ public class EventControllerTest extends BaseIntegrationTest {
       .auth()
       .preemptive()
       .basic("tytus", "password")
+      .queryParam("siteId", site.getId())
       .queryParam("start", "2018-04-02T10:30:00.00Z")
       .queryParam("end", "2018-04-09T10:30:00.00Z")
     .when()
@@ -249,7 +269,7 @@ public class EventControllerTest extends BaseIntegrationTest {
       start,
       start,
       EventType.APPOINTMENT,
-      airman2.getId()
+      airman2
     );
     final Event event2 = new Event(
       "New Event",
@@ -257,7 +277,7 @@ public class EventControllerTest extends BaseIntegrationTest {
       start.minus(30, ChronoUnit.DAYS),
       start.minus(30, ChronoUnit.DAYS),
       EventType.APPOINTMENT,
-      airman.getId()
+      airman
     );
     eventRepository.save(asList(event1, event2));
 

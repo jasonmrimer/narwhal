@@ -92,6 +92,12 @@ public class Mission {
   }
 
   public Event toEvent(Long airmanId) {
+    final Airman airman = this.crewPositions.stream()
+      .map(CrewPosition::getAirman)
+      .filter(a -> a.getId().equals(airmanId))
+      .findFirst()
+      .get();
+
     return new Event(
       this.id,
       this.getAtoMissionNumber(),
@@ -99,7 +105,7 @@ public class Mission {
       this.getStartDateTime(),
       this.getEndDateTime(),
       EventType.MISSION,
-      airmanId
+      airman
     );
   }
 

@@ -27,8 +27,8 @@ public class AirmanController {
   }
 
   @GetMapping
-  public List<Airman> index() {
-    return repository.findAllAndByOrderByLastName();
+  public List<Airman> index(@RequestParam Long siteId) {
+    return repository.findAllBySiteIdAndByOrderByLastName(siteId);
   }
 
   @PostMapping

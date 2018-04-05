@@ -5,30 +5,23 @@ import { AirmanModel } from '../../airman/models/AirmanModel';
 import { SquadronModel } from '../../squadron/models/SquadronModel';
 import { FlightModel } from '../../flight/model/FlightModel';
 
-type FilterableItems = SiteModel | SquadronModel | FlightModel;
-
-function findById<T extends FilterableItems>(items: T[], id: number) {
-  const item = items.find(itm => itm.id === id);
-  if (item) {
-    if (item instanceof SiteModel) {
-      return item.squadrons;
-    } else if (item instanceof SquadronModel) {
-      return item.flights;
-    }
-  }
-  return [];
+export interface AllAirmenRefresher {
+  refreshAllAirmen: () => Promise<void>;
 }
 
 export class TrackerFilterStore {
   @observable private _sites: SiteModel[] = [];
-  @observable private _selectedSite: number = UnfilteredValue;
+  @observable private _selectedSite: number;
   @observable private _selectedSquadron: number = UnfilteredValue;
   @observable private _selectedFlight: number = UnfilteredValue;
 
+  constructor(private allAirmenRefresher: AllAirmenRefresher) {
+  }
+
   hydrate(siteId: number, sites: SiteModel[]) {
     this._sites = sites;
-    if (this._selectedSite === UnfilteredValue) {
-      this.setSelectedSite(siteId);
+    if (this._selectedSite !== siteId) {
+      this.setSiteId(siteId);
     }
   }
 
@@ -38,14 +31,9 @@ export class TrackerFilterStore {
   }
 
   @action.bound
-  setSelectedSite(id: number) {
-    this._selectedSite = id;
-    const squadrons = findById(this._sites, this._selectedSite);
-    if (squadrons.length === 1) {
-      this.setSelectedSquadron(squadrons[0].id);
-    } else {
-      this.setSelectedSquadron(UnfilteredValue);
-    }
+  async setSelectedSite(id: number) {
+    this.setSiteId(id);
+    await this.allAirmenRefresher.refreshAllAirmen();
   }
 
   @computed
@@ -95,13 +83,8 @@ export class TrackerFilterStore {
 
   filterAirmen(airmen: AirmanModel[]) {
     return airmen
-      .filter(this.bySite)
       .filter(this.bySquadron)
       .filter(this.byFlight);
-  }
-
-  private bySite = (airman: AirmanModel) => {
-    return (airman.siteId === this._selectedSite || this._selectedSite === UnfilteredValue);
   }
 
   private bySquadron = (airman: AirmanModel) => {
@@ -111,4 +94,28 @@ export class TrackerFilterStore {
   private byFlight = (airman: AirmanModel) => {
     return (airman.flightId === this._selectedFlight || this._selectedFlight === UnfilteredValue);
   }
+
+  private setSiteId(siteId: number) {
+    this._selectedSite = siteId;
+    const squadrons = findById(this._sites, this._selectedSite);
+    if (squadrons.length === 1) {
+      this.setSelectedSquadron(squadrons[0].id);
+    } else {
+      this.setSelectedSquadron(UnfilteredValue);
+    }
+  }
+}
+
+type FilterableItems = SiteModel | SquadronModel | FlightModel;
+
+function findById<T extends FilterableItems>(items: T[], id: number) {
+  const item = items.find(itm => itm.id === id);
+  if (item) {
+    if (item instanceof SiteModel) {
+      return item.squadrons;
+    } else if (item instanceof SquadronModel) {
+      return item.flights;
+    }
+  }
+  return [];
 }

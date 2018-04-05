@@ -72,7 +72,7 @@ describe('CrewStore', () => {
   });
 
   it('should have a list of airmen options related to the users site', () => {
-    const filteredAirmen = subject.airmen.filter(airman => airman.siteId === 1);
+    const filteredAirmen = subject.airmen.filter(airman => airman.siteId === 14);
 
     expect(subject.airmenOptions.length).toEqual(filteredAirmen.length);
     subject.airmenOptions.map((airmanOption, index) =>

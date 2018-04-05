@@ -1,12 +1,13 @@
-import { CurrencyChild, CurrencyStore } from './CurrencyStore';
+import {CurrencyChild, CurrencyStore} from './CurrencyStore';
 import * as moment from 'moment';
-import { SkillType } from '../../skills/models/SkillType';
-import { DoubleRepositories } from '../../Repositories';
-import { FakeAirmanRepository } from '../../airman/repositories/doubles/FakeAirmanRepository';
-import { AirmanModel } from '../../airman/models/AirmanModel';
-import { AirmanQualificationModel } from '../../airman/models/AirmanQualificationModel';
+import {SkillType} from '../../skills/models/SkillType';
+import {DoubleRepositories} from '../../Repositories';
+import {FakeAirmanRepository} from '../../airman/repositories/doubles/FakeAirmanRepository';
+import {AirmanModel} from '../../airman/models/AirmanModel';
+import {AirmanQualificationModel} from '../../airman/models/AirmanQualificationModel';
 
 describe('CurrencyStore', () => {
+  const siteId = 14;
   const airmanRepository = (DoubleRepositories.airmanRepository as FakeAirmanRepository);
   let allAirmen: AirmanModel[];
 
@@ -22,14 +23,14 @@ describe('CurrencyStore', () => {
   let subject: CurrencyStore;
 
   beforeEach(async () => {
-    allAirmen = await airmanRepository.findAll();
+    allAirmen = await airmanRepository.findBySiteId(siteId);
 
     const refreshAirmen = {
       refreshAirmen: jest.fn()
     };
 
     const selectedSiteContainer = {
-      selectedSite: 1
+      selectedSite: siteId
     };
 
     subject = new CurrencyStore(refreshAirmen, selectedSiteContainer, DoubleRepositories);
@@ -78,7 +79,7 @@ describe('CurrencyStore', () => {
         expirationDate: moment()
       });
 
-      const updatedAirman = (await airmanRepository.findAll())[0];
+      const updatedAirman = (await airmanRepository.findBySiteId(siteId))[0];
       expect(updatedAirman.qualifications.length).toBeGreaterThan(qualLength);
     });
 
@@ -95,7 +96,7 @@ describe('CurrencyStore', () => {
         expirationDate: moment()
       });
 
-      const updatedAirman = (await airmanRepository.findAll())[0];
+      const updatedAirman = (await airmanRepository.findBySiteId(siteId))[0];
       expect(updatedAirman.certifications.length).toBeGreaterThan(certLength);
     });
 
@@ -112,13 +113,13 @@ describe('CurrencyStore', () => {
 
       await subject.addSkill(newSkill);
 
-      let updatedAirman = (await airmanRepository.findAll())[0];
+      let updatedAirman = (await airmanRepository.findBySiteId(siteId))[0];
       const qualLength = updatedAirman.qualifications.length;
       const id = updatedAirman.qualifications.find((q: AirmanQualificationModel) => q.skillId === 100)!.id;
 
       await subject.removeSkill(Object.assign({}, newSkill, {id}));
 
-      updatedAirman = (await airmanRepository.findAll())[0];
+      updatedAirman = (await airmanRepository.findBySiteId(siteId))[0];
       expect(updatedAirman.qualifications.length).toBeLessThan(qualLength);
     });
   });

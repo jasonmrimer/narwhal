@@ -3,6 +3,7 @@ package mil.af.us.narwhal.crew;
 import mil.af.us.narwhal.airman.Airman;
 import mil.af.us.narwhal.airman.AirmanRepository;
 import mil.af.us.narwhal.event.Event;
+import mil.af.us.narwhal.event.EventJSON;
 import mil.af.us.narwhal.mission.Mission;
 import mil.af.us.narwhal.mission.MissionRepository;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class CrewService {
     this.airmanRepository = airmanRepository;
   }
 
-  public Event save(Event event) {
+  public Event save(EventJSON event) {
     Airman airman = airmanRepository.findOne(event.getAirmanId());
     Mission mission = missionRepository.findOne(event.getId());
     mission.addCrewPosition(new CrewPosition(airman));

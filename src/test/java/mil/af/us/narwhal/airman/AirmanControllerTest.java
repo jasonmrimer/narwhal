@@ -23,8 +23,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 public class AirmanControllerTest extends BaseIntegrationTest {
   private Airman airman1;
-  private Squadron squadron2;
-  private Flight flight1;
+  private Site site;
   private Qualification qualification1;
   private Certification certification1;
   @Autowired private SiteRepository siteRepository;
@@ -34,26 +33,34 @@ public class AirmanControllerTest extends BaseIntegrationTest {
 
   @Before
   public void setUp() {
-    flight1 = new Flight("flight1");
-    Squadron squadron1 = new Squadron("squadron1");
+    final Flight flight1 = new Flight("flight1");
+    final Squadron squadron1 = new Squadron("squadron1");
     squadron1.addFlight(flight1);
 
     final Flight flight2 = new Flight("flight2");
-    squadron2 = new Squadron("squadron2");
+    final Squadron squadron2 = new Squadron("squadron2");
     squadron2.addFlight(flight2);
 
-    final Site site = new Site("site");
+    site = new Site("site");
     site.addSquadron(squadron1);
     site.addSquadron(squadron2);
 
-    siteRepository.save(site);
+    final Flight flight3 = new Flight("flight3");
+    final Squadron squadron3 = new Squadron("squadron3");
+    squadron3.addFlight(flight3);
+
+    final Site site2 = new Site("site2");
+    site2.addSquadron(squadron3);
+
+    siteRepository.save(asList(site, site2));
 
     airman1 = new Airman(flight1, "first1", "last1");
     airman1.setShift(ShiftType.Day);
     final Airman airman2 = new Airman(flight2, "first2", "last2");
     final Airman airman3 = new Airman(flight2, "first3", "last3");
+    final Airman airman4 = new Airman(flight3, "first4", "last4");
 
-    airmanRepository.save(asList(airman1, airman2, airman3));
+    airmanRepository.save(asList(airman1, airman2, airman3, airman4));
 
     qualification1 = new Qualification("Q1", "qualification1");
     qualificationRepository.save(qualification1);
@@ -75,6 +82,7 @@ public class AirmanControllerTest extends BaseIntegrationTest {
       .auth()
       .preemptive()
       .basic("tytus", "password")
+      .queryParam("siteId", site.getId())
     .when()
       .get(AirmanController.URI)
     .then()

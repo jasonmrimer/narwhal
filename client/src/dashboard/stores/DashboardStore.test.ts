@@ -16,7 +16,7 @@ describe('DashboardStore', () => {
 
   it('returns a list of site options', () => {
     expect(subject.siteOptions).toEqual([
-      {value: 1, label: 'DMS-GA'},
+      {value: 14, label: 'DMS-GA'},
       {value: 2, label: 'DMS-MD'},
       {value: 3, label: 'DMS-HI'}
     ]);

@@ -11,8 +11,8 @@ export class WebAirmanRepository implements AirmanRepository {
   constructor(private client: HTTPClient) {
   }
 
-  async findAll() {
-    const json = await this.client.getJSON('/api/airmen');
+  async findBySiteId(siteId: number) {
+    const json = await this.client.getJSON(`/api/airmen?siteId=${siteId}`);
     return json.map((item: any) => this.serializer.deserialize(item));
   }
 

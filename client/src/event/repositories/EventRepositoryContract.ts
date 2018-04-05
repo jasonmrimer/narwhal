@@ -86,11 +86,12 @@ export function EventRepositoryContract(subject: EventRepository) {
     });
   });
 
-  describe('findAllWithinPeriod', () => {
-    it('should return events for all airmen within the week', async () => {
+  describe('findAllBySiteIdAndWithinPeriod', () => {
+    it('should return events for all airmen from a specific site within the week', async () => {
       const start = moment().startOf('week');
       const end = moment().endOf('week');
-      const events = await subject.findAllWithinPeriod(start, end);
+      const siteId = 14;
+      const events = await subject.findAllBySiteIdAndWithinPeriod(siteId, start, end);
       if (events.length > 0) {
         events.forEach(event => {
           expect(event.startTime.isBetween(start, end));

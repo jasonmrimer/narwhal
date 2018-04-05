@@ -1,6 +1,7 @@
 import { EventRepository } from '../EventRepository';
 import { EventModel } from '../../models/EventModel';
 import { Moment } from 'moment';
+import { FakeAirmanRepository } from '../../../airman/repositories/doubles/FakeAirmanRepository';
 
 export class EventRepositoryStub implements EventRepository {
   private static counter: number = 0;
@@ -37,8 +38,13 @@ export class EventRepositoryStub implements EventRepository {
     return Promise.resolve();
   }
 
-  findAllWithinPeriod(start: Moment, end: Moment): Promise<EventModel[]> {
-    return Promise.resolve(this._events.filter(event => event.startTime.isBetween(start, end)));
+  async findAllBySiteIdAndWithinPeriod(id: number, start: Moment, end: Moment): Promise<EventModel[]> {
+    const airmenIds = (await new FakeAirmanRepository().findBySiteId(id)).map(a => a.id);
+    return Promise.resolve(
+      this._events
+        .filter(event => airmenIds.includes(event.airmanId))
+        .filter(event => event.startTime.isBetween(start, end))
+    );
   }
 
   findAllByAirmanIdAndWithinPeriod(id: number, start: Moment, end: Moment): Promise<EventModel[]> {

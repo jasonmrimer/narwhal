@@ -141,9 +141,11 @@ export const StyledDatePicker = styled(DatePicker)`
     background-color: ${props => props.theme.lighter};
     border: none;
   }
+  
   .DateInput {
     background: none; 
   }
+  
   .DateInput_fang {
     top: 20px !important;
     left: 0px !important;

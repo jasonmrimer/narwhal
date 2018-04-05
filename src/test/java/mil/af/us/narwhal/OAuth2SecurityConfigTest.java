@@ -46,7 +46,7 @@ public class OAuth2SecurityConfigTest {
 
   @Test
   public void testSuccessfulAuth() throws Exception {
-    mockMvc.perform(MockMvcRequestBuilders.get("/api/airmen")
+    mockMvc.perform(MockMvcRequestBuilders.get("/api/airmen?siteId=1")
       .with(authentication(getOauthGoodTestAuthentication()))
       .sessionAttr("scopedTarget.oauth2ClientContext", getOauth2ClientContext()))
       .andExpect(status().isOk());
@@ -54,7 +54,7 @@ public class OAuth2SecurityConfigTest {
 
   @Test
   public void testUnsuccessfulAuth() throws Exception {
-    mockMvc.perform(MockMvcRequestBuilders.get("/api/airmen")
+    mockMvc.perform(MockMvcRequestBuilders.get("/api/airmen?siteId=1")
       .with(authentication(getOauthBadTestAuthentication()))
       .sessionAttr("scopedTarget.oauth2ClientContext", getOauth2ClientContext()))
       .andExpect(status().is3xxRedirection());

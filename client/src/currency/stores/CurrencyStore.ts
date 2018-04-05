@@ -1,10 +1,10 @@
-import { action, computed, observable } from 'mobx';
-import { SkillFormStore } from '../../skills/stores/SkillFormStore';
-import { Skill } from '../../skills/models/Skill';
-import { AirmanRipItemFormStore } from '../../rip-items/stores/AirmanRipItemFormStore';
-import { CertificationModel } from '../../skills/models/CertificationModel';
-import { QualificationModel } from '../../skills/models/QualificationModel';
-import { Repositories } from '../../Repositories';
+import {action, computed, observable} from 'mobx';
+import {SkillFormStore} from '../../skills/stores/SkillFormStore';
+import {Skill} from '../../skills/models/Skill';
+import {AirmanRipItemFormStore} from '../../rip-items/stores/AirmanRipItemFormStore';
+import {CertificationModel} from '../../skills/models/CertificationModel';
+import {QualificationModel} from '../../skills/models/QualificationModel';
+import {Repositories} from '../../Repositories';
 
 export enum CurrencyChild {
   SkillList,
@@ -12,7 +12,7 @@ export enum CurrencyChild {
   RipItemForm
 }
 
-interface RefreshAirmen {
+interface AirmenRefresher {
   refreshAirmen: (item: {airmanId: number}) => Promise<void>;
 }
 
@@ -26,7 +26,7 @@ export class CurrencyStore {
   @observable private _child: CurrencyChild = CurrencyChild.SkillList;
 
   constructor(
-    private refreshAirmen: RefreshAirmen,
+    private airmenRefresher: AirmenRefresher,
     siteIdContainer: SiteIdContainer,
     private repositories: Repositories
   ) {
@@ -75,7 +75,7 @@ export class CurrencyStore {
   async addSkill(skill: Skill) {
     try {
       await this.repositories.airmanRepository.saveSkill(skill);
-      await this.refreshAirmen.refreshAirmen(skill);
+      await this.airmenRefresher.refreshAirmen(skill);
     } catch (e) {
       this.setFormErrors(e);
     }
@@ -85,7 +85,7 @@ export class CurrencyStore {
   async removeSkill(skill: Skill) {
     try {
       await this.repositories.airmanRepository.deleteSkill(skill);
-      await this.refreshAirmen.refreshAirmen(skill);
+      await this.airmenRefresher.refreshAirmen(skill);
     } catch (e) {
       this.setFormErrors(e);
     }

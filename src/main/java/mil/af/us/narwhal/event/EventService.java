@@ -23,25 +23,30 @@ public class EventService {
     this.missionRepository = missionRepository;
   }
 
-  public Event save(Event event) {
-    if (event.getType().equals(EventType.MISSION)) {
-      return crewService.save(event);
+  public Event update(EventJSON json) {
+    if (json.getType().equals(EventType.MISSION)) {
+      return crewService.save(json);
     }
-    return eventRepository.save(event);
+    final Event event = eventRepository.findOne(json.getId());
+    return eventRepository.save(event.update(json));
   }
 
-  public List<Event> combineCrewsAndEvents(Instant start, Instant end) {
-    List<Mission> missions = this.missionRepository.findAllOverlappingDuration(start, end);
-    List<Event> events = this.eventRepository.findAllOverlappingDuration(start, end);
+  public List<Event> combineCrewsAndEventsBySite(Long siteId, Instant start, Instant end) {
+    List<Mission> missions = this.missionRepository
+      .findAllBySiteIdAndOverlappingDuration(siteId, start, end);
+    List<Event> events = this.eventRepository
+      .findAllBySiteIdAndOverlappingDuration(siteId, start, end);
     return Stream.concat(
       missions.stream().map(Mission::toAllEvents).flatMap(Collection::stream),
       events.stream()
     ).collect(Collectors.toList());
   }
 
-  public List<Event> combineCrewsAndEvents(Long airmanId, Instant start, Instant end) {
-    List<Mission> missions = this.missionRepository.findAllByAirmanIdAndOverlappingDuration(airmanId, start, end);
-    List<Event> events = this.eventRepository.findAllByAirmanIdAndOverlappingDuration(airmanId, start, end);
+  public List<Event> combineCrewsAndEventsByAirman(Long airmanId, Instant start, Instant end) {
+    List<Mission> missions = this.missionRepository
+      .findAllByAirmanIdAndOverlappingDuration(airmanId, start, end);
+    List<Event> events = this.eventRepository
+      .findAllByAirmanIdAndOverlappingDuration(airmanId, start, end);
     return Stream.concat(
       missions.stream().map(m -> m.toEvent(airmanId)),
       events.stream()
