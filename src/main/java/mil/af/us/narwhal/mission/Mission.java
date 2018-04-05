@@ -17,6 +17,7 @@ import javax.persistence.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Entity
@@ -92,13 +93,12 @@ public class Mission {
   }
 
   public Event toEvent(Long airmanId) {
-    final Airman airman = this.crewPositions.stream()
+    Optional<Airman> optionalAirman = this.crewPositions.stream()
       .map(CrewPosition::getAirman)
       .filter(a -> a.getId().equals(airmanId))
-      .findFirst()
-      .get();
+      .findFirst();
 
-    return new Event(
+    return optionalAirman.map(airman -> new Event(
       this.id,
       this.getAtoMissionNumber(),
       "",
@@ -106,7 +106,7 @@ public class Mission {
       this.getEndDateTime(),
       EventType.MISSION,
       airman
-    );
+    )).orElse(null);
   }
 
   public List<Event> toAllEvents() {
