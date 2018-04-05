@@ -4,6 +4,7 @@ import 'react-dates/lib/css/_datepicker.css';
 import { SingleDatePicker } from 'react-dates';
 import styled from 'styled-components';
 import * as moment from 'moment';
+import { Moment } from 'moment';
 import { randomText } from '../utils/randomizer';
 
 interface Props {
@@ -22,24 +23,26 @@ interface State {
 export class DatePicker extends React.Component<Props, State> {
   state = {focused: false};
 
+  onChange = (date: Moment | null) => {
+    if (date == null) {
+      this.props.onChange({target: {name: this.props.name, value: ''}});
+    } else {
+      this.props.onChange({target: {name: this.props.name, value: date.startOf('day').toISOString()}});
+    }
+  }
+
   render() {
     return (
       <div className={this.props.className}>
         <SingleDatePicker
           id={this.props.id || `date-picker-${randomText(10)}`}
           date={this.props.value !== '' ? moment(this.props.value) : null}
-          onDateChange={(date) => {
-            if (date == null) {
-              this.props.onChange({target: {name: this.props.name, value: ''}});
-            } else {
-              this.props.onChange({target: {name: this.props.name, value: date.toISOString()}});
-            }
-          }}
+          onDateChange={this.onChange}
           focused={this.state.focused || false}
           onFocusChange={({focused}) => this.setState({focused})}
           disabled={this.props.disabled}
           numberOfMonths={1}
-          showClearDate={true}
+          showClearDate={!this.props.disabled}
           hideKeyboardShortcutsPanel={true}
           isOutsideRange={() => false}
           placeholder="MM/DD/YYYY"
@@ -164,20 +167,25 @@ export const StyledDatePicker = styled(DatePicker)`
     
     &:disabled {
       color: ${props => props.theme.graySteel};
+      cursor: initial;
     }
+  }
+  
+  .SingleDatePickerInput__showClearDate {
+    padding: 0;
   }
   
   .SingleDatePickerInput_clearDate {
     margin: 0;
     top: 44%;
-    right: 13%;
+    right: -9%;
     
     & > svg {
       fill: ${props => props.theme.fontColor};
       height: 10px;
     }
     
-    &:hover {
+    &:hover, &:focus {
       background: none;
     }
   }

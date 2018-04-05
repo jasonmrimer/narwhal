@@ -31,6 +31,12 @@ export const StyledTimeInput = styled(TimeInput)`
     color: ${props => props.theme.graySteel};
   }
   
+  &:disabled {
+    color: ${props => props.theme.graySteel};
+    cursor: initial;
+    font-style: italic;
+  }
+  
   background: none;
   color: ${props => props.theme.fontColor};
   border: none;
@@ -39,5 +45,4 @@ export const StyledTimeInput = styled(TimeInput)`
   font: inherit;
   font-weight: 300;
   cursor: pointer;
-  //height: 1.25rem;
 `;
