@@ -6,6 +6,7 @@ import { observer } from 'mobx-react';
 interface Props {
   onClick: () => void;
   title: string;
+  assignedItemCount: number;
   hasExpiredRipItem: boolean;
   className?: string;
 }
@@ -18,11 +19,11 @@ export const RipItemsTile = observer((props: Props) => {
     >
       <div className="rip-item-tile-title">
         <span>{props.title}</span>
-        {props.hasExpiredRipItem &&
-        <StyledExpirationSleeve/>
-        }
+        {props.hasExpiredRipItem && <StyledExpirationSleeve/>}
       </div>
-      <div className="rip-item-tile-description"/>
+      <div className="rip-item-tile-description">
+        <span>{`${props.assignedItemCount} task(s) assigned`}</span>
+      </div>
     </div>
   );
 });

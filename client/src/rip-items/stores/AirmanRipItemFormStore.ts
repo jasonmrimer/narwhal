@@ -39,4 +39,11 @@ export class AirmanRipItemFormStore {
   get hasExpiredItem() {
     return this._airmanRipItems.filter(item => item.isExpired).length > 0;
   }
+
+  @computed
+  get assignedItemCount() {
+    return this._airmanRipItems
+      .filter(item => item.expirationDate != null && item.expirationDate.isValid())
+      .length;
+  }
 }

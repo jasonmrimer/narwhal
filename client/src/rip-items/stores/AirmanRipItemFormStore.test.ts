@@ -41,4 +41,8 @@ describe('AirmanRipItemFormStore', () => {
   it('should return true when hasExpiredItem in rip items array', () => {
     expect(subject.hasExpiredItem).toBeTruthy();
   });
+
+  it('should return the count of assigned RIP items', () => {
+    expect(subject.assignedItemCount).toBe(1);
+  });
 });

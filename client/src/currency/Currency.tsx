@@ -66,7 +66,7 @@ export class Currency extends React.Component<Props> {
             + Add Skill
           </button>
         </div>
-        {this.renderRip()}
+        {this.renderRipTile()}
         {this.renderQualifications()}
         {this.renderCertifications()}
         {this.renderSkillNotification()}
@@ -74,12 +74,14 @@ export class Currency extends React.Component<Props> {
     );
   }
 
-  private renderRip = () => {
+  private renderRipTile = () => {
+    const currencyStore = this.props.currencyStore;
     return (
       <StyledRipItemsTile
         title="RIP TASKS"
-        onClick={this.props.currencyStore.openAirmanRipItemForm}
-        hasExpiredRipItem={this.props.currencyStore.airmanRipItemFormStore.hasExpiredItem}
+        onClick={currencyStore.openAirmanRipItemForm}
+        assignedItemCount={currencyStore.airmanRipItemFormStore.assignedItemCount}
+        hasExpiredRipItem={currencyStore.airmanRipItemFormStore.hasExpiredItem}
       />
     );
   }

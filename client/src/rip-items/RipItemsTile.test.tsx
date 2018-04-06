@@ -14,6 +14,7 @@ describe('RipItemsTile', () => {
       <RipItemsTile
         title="title"
         onClick={onClickSpy}
+        assignedItemCount={10}
         hasExpiredRipItem={false}
       />
     );
@@ -28,5 +29,13 @@ describe('RipItemsTile', () => {
     expect(subject.find(StyledExpirationSleeve).exists()).toBeFalsy();
     subject.setProps({hasExpiredRipItem: true});
     expect(subject.find(StyledExpirationSleeve).exists()).toBeTruthy();
+  });
+
+  it('should render the title', () => {
+    expect(subject.find('span').at(0).text()).toBe('title');
+  });
+
+  it('should render the number of assigned items', () => {
+    expect(subject.find('span').at(1).text()).toBe('10 task(s) assigned')
   });
 });
