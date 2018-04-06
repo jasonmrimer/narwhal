@@ -22,7 +22,7 @@ describe('LeaveFormStore', () => {
   describe('open', () => {
     it('should have an empty state', () => {
       subject.open();
-      expect(subject.hasItem).toBeFalsy();
+      expect(subject.hasModel).toBeFalsy();
       expect(subject.state.description).toBe('');
       expect(subject.state.startDate).toBe('');
       expect(subject.state.startTime).toBe('0000');
@@ -33,7 +33,7 @@ describe('LeaveFormStore', () => {
 
     it('should set the state with the given event', () => {
       subject.open(event);
-      expect(subject.hasItem).toBeTruthy();
+      expect(subject.hasModel).toBeTruthy();
       expect(subject.state.description).toBe(event.description);
       expect(subject.state.startDate).toBe(event.startTime.format('YYYY-MM-DD'));
       expect(subject.state.startTime).toBe(event.startTime.format('HHmm'));
@@ -46,7 +46,7 @@ describe('LeaveFormStore', () => {
   describe('close', () => {
     it('should clear the state', () => {
       subject.open(event);
-      expect(subject.hasItem).toBeTruthy();
+      expect(subject.hasModel).toBeTruthy();
 
       subject.close();
       expect(subject.state.description).toBe('');
@@ -55,20 +55,18 @@ describe('LeaveFormStore', () => {
       expect(subject.state.endDate).toBe('');
       expect(subject.state.endTime).toBe('2359');
       expect(subject.errors.length).toBe(0);
-      expect(subject.hasItem).toBeFalsy();
+      expect(subject.hasModel).toBeFalsy();
     });
   });
 
   it('can add an event', () => {
-    subject.setState({
-      description: 'Description',
-      startDate: '2018-02-22',
-      startTime: '0000',
-      endDate: '2018-02-22',
-      endTime: '2359'
-    });
+    subject.setState('description', 'Description');
+    subject.setState('startDate', '2018-02-22');
+    subject.setState('startTime', '0000');
+    subject.setState('endDate', '2018-02-22');
+    subject.setState('endTime', '2359');
 
-    subject.addItem(airmanId);
+    subject.addModel(airmanId);
 
     const expectedEvent = new EventModel(
       'Leave',
@@ -83,15 +81,11 @@ describe('LeaveFormStore', () => {
   });
 
   it('ensures that at least dates are included in the leave submission', () => {
-    subject.setState({
-      description: 'Description',
-      startDate: '',
-      startTime: '0000',
-      endDate: '2018-02-22',
-      endTime: '2359'
-    });
+    subject.setState('description', 'Description');
+    subject.setState('endDate', '2018-02-22');
+    subject.setState('endTime', '2359');
 
-    subject.addItem(airmanId);
+    subject.addModel(airmanId);
 
     expect((eventActions.addEvent as jest.Mock).mock.calls[0][0].startTime.isValid()).toBeFalsy();
   });
@@ -99,19 +93,20 @@ describe('LeaveFormStore', () => {
   it('can remove an event', () => {
     subject.open(event);
 
-    subject.removeItem();
+    subject.removeModel();
 
     expect(eventActions.removeEvent).toHaveBeenCalledWith(event);
   });
 
   it('should auto-populate empty end data field when setting start date', () => {
-    subject.setState({startDate: '2018-02-22'});
+    subject.setState('startDate', '2018-02-22');
     expect(subject.state.endDate).toEqual('2018-02-22');
   });
 
   it('should keep the end date when modifying the start date', () => {
-    subject.setState({startDate: '2018-02-22', endDate: '2018-02-23'});
-    subject.setState({startDate: '2018-02-25'});
+    subject.setState('startDate', '2018-02-22')
+    subject.setState('endDate', '2018-02-23');
+    subject.setState('startDate', '2018-02-25');
     expect(subject.state.endDate).toEqual('2018-02-23');
   });
 });

@@ -27,7 +27,7 @@ export const StyledForm = styled(Form)`
 `;
 
 interface FormRowProps {
-  children: JSX.Element | JSX.Element[] | (false | JSX.Element)[] | (null | JSX.Element)[];
+  children: any;
   reversed?: boolean;
   direction?: string;
   className?: string;

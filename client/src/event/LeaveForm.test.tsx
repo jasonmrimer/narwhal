@@ -62,13 +62,11 @@ describe('LeaveForm', () => {
   });
 
   it('populates the fields with values from LeaveFormStore', () => {
-    store.setState({
-      description: 'Description',
-      startDate: '2018-02-22',
-      startTime: '1200',
-      endDate: '2018-02-22',
-      endTime: '1300'
-    });
+    store.setState('description', 'Description');
+    store.setState('startDate', '2018-02-22');
+    store.setState('startTime', '1200');
+    store.setState('endDate', '2018-02-22');
+    store.setState('endTime', '1300');
 
     wrapper.update();
 

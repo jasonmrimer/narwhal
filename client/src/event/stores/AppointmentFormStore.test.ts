@@ -22,7 +22,7 @@ describe('AppointmenFormStore', () => {
   describe('open', () => {
     it('should have an empty state', () => {
       subject.open();
-      expect(subject.hasItem).toBeFalsy();
+      expect(subject.hasModel).toBeFalsy();
       expect(subject.state.title).toBe('');
       expect(subject.state.description).toBe('');
       expect(subject.state.startDate).toBe('');
@@ -34,7 +34,7 @@ describe('AppointmenFormStore', () => {
 
     it('should set the state with the given event', () => {
       subject.open(event);
-      expect(subject.hasItem).toBeTruthy();
+      expect(subject.hasModel).toBeTruthy();
       expect(subject.state.title).toBe(event.title);
       expect(subject.state.description).toBe(event.description);
       expect(subject.state.startDate).toBe(event.startTime.format('YYYY-MM-DD'));
@@ -48,7 +48,7 @@ describe('AppointmenFormStore', () => {
   describe('close', () => {
     it('should clear the state', () => {
       subject.open(event);
-      expect(subject.hasItem).toBeTruthy();
+      expect(subject.hasModel).toBeTruthy();
 
       subject.close();
       expect(subject.state.title).toBe('');
@@ -58,21 +58,19 @@ describe('AppointmenFormStore', () => {
       expect(subject.state.endDate).toBe('');
       expect(subject.state.endTime).toBe('');
       expect(subject.errors.length).toBe(0);
-      expect(subject.hasItem).toBeFalsy();
+      expect(subject.hasModel).toBeFalsy();
     });
   });
 
   it('can add an event', () => {
-    subject.setState({
-      title: 'Title',
-      description: 'Description',
-      startDate: '2018-02-22',
-      startTime: '1200',
-      endDate: '2018-02-22',
-      endTime: '1300'
-    });
+    subject.setState('title', 'Title');
+    subject.setState('description', 'Description');
+    subject.setState('startDate', '2018-02-22');
+    subject.setState('startTime', '1200');
+    subject.setState('endDate', '2018-02-22');
+    subject.setState('endTime', '1300');
 
-    subject.addItem(airmanId);
+    subject.addModel(airmanId);
 
     const expectedEvent = new EventModel(
       'Title',
@@ -87,16 +85,14 @@ describe('AppointmenFormStore', () => {
   });
 
   it('ensures that at least dates are included in the appointment submission', () => {
-    subject.setState({
-      title: 'Title',
-      description: 'Description',
-      startDate: '',
-      startTime: '0000',
-      endDate: '2018-02-22',
-      endTime: '2359'
-    });
+    subject.setState('title', 'Title');
+    subject.setState('description', 'Description');
+    subject.setState('startDate', '');
+    subject.setState('startTime', '0000');
+    subject.setState('endDate', '2018-02-22');
+    subject.setState('endTime', '2359');
 
-    subject.addItem(airmanId);
+    subject.addModel(airmanId);
 
     expect((eventActions.addEvent as jest.Mock).mock.calls[0][0].startTime.isValid()).toBeFalsy();
   });
@@ -104,36 +100,38 @@ describe('AppointmenFormStore', () => {
   it('can remove an event', () => {
     subject.open(event);
 
-    subject.removeItem();
+    subject.removeModel();
 
     expect(eventActions.removeEvent).toHaveBeenCalledWith(event);
   });
 
   describe('auto-populating date and time fields', () => {
     it('should auto-populate empty end data field when setting start date', () => {
-      subject.setState({startDate: '2018-02-22'});
+      subject.setState('startDate', '2018-02-22');
       expect(subject.state.endDate).toEqual('2018-02-22');
     });
 
     it('should auto-populate empty end time field when setting start time', () => {
-      subject.setState({startTime: '0800'});
+      subject.setState('startTime', '0800');
       expect(subject.state.endTime).toEqual('0900');
     });
 
     it('should not populate the end time if the start time is incomplete', () => {
-      subject.setState({startTime: '08'});
+      subject.setState('startTime', '08');
       expect(subject.state.endTime).toEqual('');
     });
 
     it('should keep the end date when modifying the start date', () => {
-      subject.setState({startDate: '2018-02-22', endDate: '2018-02-23'});
-      subject.setState({startDate: '2018-02-25'});
+      subject.setState('startDate', '2018-02-22');
+      subject.setState('endDate', '2018-02-23');
+      subject.setState('startDate', '2018-02-25');
       expect(subject.state.endDate).toEqual('2018-02-23');
     });
 
     it('should keep the end time when modifying the start time', () => {
-      subject.setState({startTime: '0800', endTime: '0900'});
-      subject.setState({startTime: '1000'});
+      subject.setState('startTime', '0800');
+      subject.setState('endTime', '0900');
+      subject.setState('startTime', '1000');
       expect(subject.state.endTime).toEqual('0900');
     });
   });

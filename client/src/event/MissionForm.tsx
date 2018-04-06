@@ -26,25 +26,25 @@ interface Props {
 export class MissionForm extends React.Component<Props> {
   handleChange = (opt: FilterOption | null) => {
     if (opt == null) {
-      this.props.missionFormStore.setState({id: null});
+      this.props.missionFormStore.setState('id', '');
     } else {
-      this.props.missionFormStore.setState({id: Number(opt.value)});
+      this.props.missionFormStore.setState('id', String(opt.value));
     }
   }
 
   handleDelete = () => {
-    this.props.missionFormStore.removeItem();
+    this.props.missionFormStore.removeModel();
   }
 
   handleSubmit = (e: any) => {
     e.preventDefault();
-    this.props.missionFormStore.addItem(this.props.airmanId);
+    this.props.missionFormStore.addModel(this.props.airmanId);
   }
 
   render() {
     const {missionOptions} = this.props.missionFormStore;
-    const {state, hasItem, errors} = this.props.missionFormStore;
-    const selected = missionOptions.find(msn => msn.value === state.id);
+    const {state, hasModel, errors} = this.props.missionFormStore;
+    const selected = missionOptions.find(msn => msn.value === Number(state.id));
 
     return (
       <StyledForm onSubmit={this.handleSubmit}>
@@ -52,7 +52,7 @@ export class MissionForm extends React.Component<Props> {
           <StyledFormRow>
             <StyledSingleTypeahead
               selected={selected}
-              disabled={hasItem}
+              disabled={hasModel}
               options={missionOptions}
               onChange={this.handleChange}
               clearButton={true}
@@ -93,16 +93,16 @@ export class MissionForm extends React.Component<Props> {
           </StyledFormRow>
         </StyledFieldValidation>
 
-        <StyledFormRow reversed={!hasItem}>
+        <StyledFormRow reversed={!hasModel}>
           {
-            hasItem &&
+            hasModel &&
             <StyledButton
               text="DELETE"
               onClick={this.handleDelete}
               renderIcon={() => <DeleteIcon/>}
             />
           }
-          {!hasItem && <StyledSubmitButton text="CONFIRM"/>}
+          {!hasModel && <StyledSubmitButton text="CONFIRM"/>}
         </StyledFormRow>
       </StyledForm>
     );

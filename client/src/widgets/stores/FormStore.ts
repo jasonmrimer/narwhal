@@ -1,34 +1,34 @@
 import { action, computed, observable } from 'mobx';
 import * as moment from 'moment';
 
-export interface UniqueItem {
+export interface UniqueModel {
   id: number | null;
 }
 
-export abstract class FormStore<T extends UniqueItem, S> {
-  @observable protected item: T | null = null;
+export abstract class FormStore<T extends UniqueModel, S> {
+  @observable protected model: T | null = null;
   @observable protected _state: S;
   @observable protected _errors: object[] = [];
 
-  protected abstract itemToState(item: T | null): S;
+  protected abstract modelToState(model: T | null): S;
 
   protected abstract emptyState(): S;
 
-  public abstract addItem(airmanId: number): void;
+  public abstract addModel(airmanId: number): void;
 
-  public abstract removeItem(): void;
+  public abstract removeModel(): void;
 
   @action
-  open(item: T | null = null) {
+  open(model: T | null = null) {
     this._errors = [];
-    this.item = item;
-    this._state = this.itemToState(item);
+    this.model = model;
+    this._state = this.modelToState(model);
   }
 
   @action
   close() {
     this._errors = [];
-    this.item = null;
+    this.model = null;
     this._state = this.emptyState();
   }
 
@@ -38,8 +38,8 @@ export abstract class FormStore<T extends UniqueItem, S> {
   }
 
   @action
-  setState(state: Partial<S>) {
-    this._state = Object.assign({}, this._state, state);
+  setState(key: keyof S, value: string) {
+    this._state = Object.assign({}, this._state, {[key]: value});
   }
 
   @computed
@@ -53,8 +53,8 @@ export abstract class FormStore<T extends UniqueItem, S> {
   }
 
   @computed
-  get hasItem() {
-    return this.item != null && this.item!.id != null;
+  get hasModel() {
+    return this.model != null && this.model!.id != null;
   }
 
   protected makeMoment(date: string, time: string) {

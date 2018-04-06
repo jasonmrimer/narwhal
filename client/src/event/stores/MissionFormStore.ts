@@ -5,7 +5,7 @@ import { action, computed, observable } from 'mobx';
 import { MissionModel } from '../../mission/models/MissionModel';
 
 interface State {
-  id: number | null;
+  id: string;
   title: string;
   startDate: string;
   startTime: string;
@@ -19,7 +19,7 @@ export class MissionFormStore extends FormStore<EventModel, State> {
   constructor(private eventActions: EventActions) {
     super();
     this._state = {
-      id: null,
+      id: '',
       title: '',
       startDate: '',
       startTime: '',
@@ -34,41 +34,48 @@ export class MissionFormStore extends FormStore<EventModel, State> {
   }
 
   @action
-  setState(state: Partial<State>) {
-    if (state.id === null) {
-      this._state = this.emptyState();
-    } else {
-      const mission = this._missions.find(msn => msn.id === state.id);
-      if (mission != null) {
-        this._state = {
-          id: mission.id,
-          title: mission.atoMissionNumber,
-          startDate: mission.startDateTime.format('YYYY-MM-DD'),
-          startTime: mission.startDateTime.format('HHmm'),
-          endDate: mission.endDateTime ? mission.endDateTime.format('YYYY-MM-DD') : '',
-          endTime: mission.endDateTime ? mission.endDateTime.format('HHmm') : ''
-        };
-      }
+  setState(key: keyof State, value: string) {
+    if (key !== 'id') {
+      return;
     }
+
+    if (value === '') {
+      this._state = this.emptyState();
+      return;
+    }
+
+    const mission = this._missions.find(msn => msn.id === Number(value));
+    if (mission == null) {
+      return;
+    }
+
+    this._state = {
+      id: String(mission.id),
+      title: mission.atoMissionNumber,
+      startDate: mission.startDateTime.format('YYYY-MM-DD'),
+      startTime: mission.startDateTime.format('HHmm'),
+      endDate: mission.endDateTime ? mission.endDateTime.format('YYYY-MM-DD') : '',
+      endTime: mission.endDateTime ? mission.endDateTime.format('HHmm') : ''
+    };
   }
 
-  protected itemToState(item: EventModel | null): State {
-    if (item == null) {
+  protected modelToState(model: EventModel | null): State {
+    if (model == null) {
       return this.emptyState();
     }
     return {
-      id: item.id,
-      title: item.title,
-      startDate: item.startTime.format('YYYY-MM-DD'),
-      startTime: item.startTime.format('HHmm'),
-      endDate: item.endTime.format('YYYY-MM-DD'),
-      endTime: item.endTime.format('HHmm')
+      id: String(model.id),
+      title: model.title,
+      startDate: model.startTime.format('YYYY-MM-DD'),
+      startTime: model.startTime.format('HHmm'),
+      endDate: model.endTime.format('YYYY-MM-DD'),
+      endTime: model.endTime.format('HHmm')
     };
   }
 
   protected emptyState(): State {
     return {
-      id: null,
+      id: '',
       title: '',
       startDate: '',
       startTime: '',
@@ -77,7 +84,7 @@ export class MissionFormStore extends FormStore<EventModel, State> {
     };
   }
 
-  addItem(airmanId: number): void {
+  addModel(airmanId: number): void {
     const event = new EventModel(
       this._state.title,
       '',
@@ -85,14 +92,14 @@ export class MissionFormStore extends FormStore<EventModel, State> {
       this.makeMoment(this._state.endDate, this._state.endTime),
       airmanId,
       EventType.Mission,
-      this.item ? this.item.id : this._state.id
+      this.model ? Number(this.model.id) : Number(this._state.id)
     );
     this.eventActions.addEvent(event);
   }
 
-  removeItem(): void {
-    if (this.item != null) {
-      this.eventActions.removeEvent(this.item);
+  removeModel(): void {
+    if (this.model != null) {
+      this.eventActions.removeEvent(this.model);
     }
   }
 

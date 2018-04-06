@@ -11,7 +11,7 @@ import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import * as classNames from 'classnames';
 import { StyledShiftDropdown } from '../ShiftDropdown';
-import { StyledNotification } from '../widgets/Notification';
+import { BorderedNotification } from '../widgets/Notification';
 
 interface Props {
   trackerStore: TrackerStore;
@@ -108,7 +108,7 @@ export class Roster extends React.Component<Props> {
         overscanRowCount={15}
         deferredMeasurementCache={cache}
         noRowsRenderer={() => {
-          return <StyledNotification>No members at this location match your search.</StyledNotification>;
+          return <BorderedNotification>No members at this location match your search.</BorderedNotification>;
         }}
         rowRenderer={(props: ListRowProps) => {
           const airman = trackerStore.airmen[props.index];

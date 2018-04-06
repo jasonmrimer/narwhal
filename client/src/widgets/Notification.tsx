@@ -15,6 +15,13 @@ export const StyledNotification = styled(Notification)`
   font-weight: 400;
   padding: 2.5rem 0;
   text-align: center;
+  margin-top: 0;
+`;
+
+export const BorderedNotification = styled(Notification)`
+  font-weight: 400;
+  padding: 2.5rem 0;
+  text-align: center;
   border: 1px solid ${props => props.theme.graySteel};
   border-top: none;
   margin-top: 0;

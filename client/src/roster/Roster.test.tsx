@@ -1,6 +1,6 @@
 import { makeFakeTrackerStore } from '../utils/testUtils';
 import { mount, ReactWrapper } from 'enzyme';
-import { StyledNotification } from '../widgets/Notification';
+import { BorderedNotification } from '../widgets/Notification';
 import { Roster, StyledRow } from './Roster';
 import { AirmanDatum } from '../tracker/AirmanDatum';
 import { TabType } from '../tracker/stores/SidePanelStore';
@@ -22,7 +22,7 @@ describe('Roster', () => {
 
     it('should return a message', () => {
       expect(trackerStore.airmen.length).toBe(0);
-      expect(subject.find(StyledNotification).exists()).toBeTruthy();
+      expect(subject.find(BorderedNotification).exists()).toBeTruthy();
     });
 
   });

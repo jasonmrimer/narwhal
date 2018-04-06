@@ -20,26 +20,26 @@ interface Props {
 @observer
 export class SkillsForm extends React.Component<Props> {
   handleChange = ({target}: any) => {
-    this.props.skillFormStore.setState({[target.name]: target.value});
+    this.props.skillFormStore.setState(target.name, target.value);
   }
 
   handleDelete = () => {
-    this.props.skillFormStore.removeItem();
+    this.props.skillFormStore.removeModel();
   }
 
   handleSubmit = (e: any) => {
     e.preventDefault();
-    this.props.skillFormStore.addItem(this.props.airmanId);
+    this.props.skillFormStore.addModel(this.props.airmanId);
   }
 
   render() {
-    const {state, errors, hasItem} = this.props.skillFormStore;
-    const disabled = hasItem;
+    const {state, errors, hasModel} = this.props.skillFormStore;
+    const disabled = hasModel;
     return (
       <StyledForm onSubmit={this.handleSubmit}>
         <div>
           {
-            !hasItem &&
+            !hasModel &&
             <div style={{marginTop: '1rem'}}>
               Add Skill:
             </div>
@@ -98,7 +98,7 @@ export class SkillsForm extends React.Component<Props> {
         <StyledFormRow reversed={true}>
           <StyledSubmitButton text="CONFIRM"/>
           {
-            hasItem &&
+            hasModel &&
             <StyledButton
               text="DELETE"
               onClick={this.handleDelete}

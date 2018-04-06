@@ -22,7 +22,7 @@ describe('TDYDeploymentFormStore', () => {
   describe('open', () => {
     it('should have an empty state', () => {
       subject.open();
-      expect(subject.hasItem).toBeFalsy();
+      expect(subject.hasModel).toBeFalsy();
       expect(subject.state.title).toBe('');
       expect(subject.state.description).toBe('');
       expect(subject.state.startTime).toBe('');
@@ -32,7 +32,7 @@ describe('TDYDeploymentFormStore', () => {
 
     it('should set the state with the given event', () => {
       subject.open(event);
-      expect(subject.hasItem).toBeTruthy();
+      expect(subject.hasModel).toBeTruthy();
       expect(subject.state.title).toBe(event.title);
       expect(subject.state.description).toBe(event.description);
       expect(subject.state.startTime).toBe(event.startTime.format('YYYY-MM-DD'));
@@ -44,7 +44,7 @@ describe('TDYDeploymentFormStore', () => {
   describe('close', () => {
     it('should clear the state', () => {
       subject.open(event);
-      expect(subject.hasItem).toBeTruthy();
+      expect(subject.hasModel).toBeTruthy();
 
       subject.close();
       expect(subject.state.title).toBe('');
@@ -52,19 +52,17 @@ describe('TDYDeploymentFormStore', () => {
       expect(subject.state.startTime).toBe('');
       expect(subject.state.endTime).toBe('');
       expect(subject.errors.length).toBe(0);
-      expect(subject.hasItem).toBeFalsy();
+      expect(subject.hasModel).toBeFalsy();
     });
   });
 
   it('can add an event', () => {
-    subject.setState({
-      title: 'TDYDeployment',
-      description: 'Description',
-      startTime: '2018-02-22',
-      endTime: '2018-02-22',
-    });
+    subject.setState('title', 'TDYDeployment');
+    subject.setState('description', 'Description');
+    subject.setState('startTime', '2018-02-22');
+    subject.setState('endTime', '2018-02-22');
 
-    subject.addItem(airmanId);
+    subject.addModel(airmanId);
 
     const expectedEvent = new EventModel(
       'TDYDeployment',
@@ -79,14 +77,12 @@ describe('TDYDeploymentFormStore', () => {
   });
 
   it('ensures that at least dates are included in the TDY/Deployment submission', () => {
-    subject.setState({
-      title: 'Title',
-      description: 'Description',
-      startTime: '',
-      endTime: '2018-02-22',
-    });
+    subject.setState('title', 'Title');
+    subject.setState('description', 'Description');
+    subject.setState('startTime', '');
+    subject.setState('endTime', '2018-02-22');
 
-    subject.addItem(airmanId);
+    subject.addModel(airmanId);
 
     expect((eventActions.addEvent as jest.Mock).mock.calls[0][0].startTime.isValid()).toBeFalsy();
   });
@@ -94,19 +90,20 @@ describe('TDYDeploymentFormStore', () => {
   it('can remove an event', () => {
     subject.open(event);
 
-    subject.removeItem();
+    subject.removeModel();
 
     expect(eventActions.removeEvent).toHaveBeenCalledWith(event);
   });
 
   it('should auto-populate empty end data field when setting start date', () => {
-    subject.setState({startTime: '2018-02-22'});
+    subject.setState('startTime', '2018-02-22');
     expect(subject.state.endTime).toEqual('2018-02-22');
   });
 
   it('should keep the end date when modifying the start date', () => {
-    subject.setState({startTime: '2018-02-22', endTime: '2018-02-23'});
-    subject.setState({startTime: '2018-02-25'});
+    subject.setState('startTime', '2018-02-22')
+    subject.setState('endTime', '2018-02-23');
+    subject.setState('startTime', '2018-02-25');
     expect(subject.state.endTime).toEqual('2018-02-23');
   });
 });

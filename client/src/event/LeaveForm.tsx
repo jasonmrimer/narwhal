@@ -20,20 +20,20 @@ interface Props {
 @observer
 export class LeaveForm extends React.Component<Props> {
   handleChange = ({target}: any) => {
-    this.props.leaveFormStore.setState({[target.name]: target.value});
+    this.props.leaveFormStore.setState(target.name, target.value);
   }
 
   handleDelete = () => {
-    this.props.leaveFormStore.removeItem();
+    this.props.leaveFormStore.removeModel();
   }
 
   handleSubmit = (e: any) => {
     e.preventDefault();
-    this.props.leaveFormStore.addItem(this.props.airmanId);
+    this.props.leaveFormStore.addModel(this.props.airmanId);
   }
 
   render() {
-    const {state, errors, hasItem} = this.props.leaveFormStore;
+    const {state, errors, hasModel} = this.props.leaveFormStore;
     return (
       <StyledForm onSubmit={this.handleSubmit}>
         <StyledFormRow>
@@ -78,7 +78,7 @@ export class LeaveForm extends React.Component<Props> {
         <StyledFormRow reversed={true}>
           <StyledSubmitButton text="CONFIRM"/>
           {
-            hasItem &&
+            hasModel &&
             <StyledButton
               text="DELETE"
               onClick={this.handleDelete}

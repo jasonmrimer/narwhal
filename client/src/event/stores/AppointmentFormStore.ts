@@ -27,31 +27,26 @@ export class AppointmentFormStore extends FormStore<EventModel, State> {
   }
 
   @action
-  setState(state: Partial<State>) {
-    if (state.startDate && !this._state.endDate) {
-      state.endDate = state.endDate || state.startDate;
+  setState(key: keyof State, value: string) {
+    if (key === 'startDate' && !this._state.endDate) {
+      super.setState('endDate', value);
+    } else if (key === 'startTime' && !this._state.endTime && value.length === 4) {
+      super.setState('endTime', moment(value, 'HHmm').add(1, 'h').format('HHmm'));
     }
-
-    if (state.startTime && !this._state.endTime) {
-      if (state.startTime.length === 4) {
-        state.endTime = state.endTime || moment(state.startTime, 'HHmm').add(1, 'h').format('HHmm');
-      }
-    }
-
-    super.setState(state);
+    super.setState(key, value);
   }
 
-  protected itemToState(item: EventModel | null): State {
-    if (item == null) {
+  protected modelToState(model: EventModel | null): State {
+    if (model == null) {
       return this.emptyState();
     }
     return {
-      title: item.title,
-      description: item.description,
-      startDate: item.startTime.format('YYYY-MM-DD'),
-      startTime: item.startTime.format('HHmm'),
-      endDate: item.endTime.format('YYYY-MM-DD'),
-      endTime: item.endTime.format('HHmm')
+      title: model.title,
+      description: model.description,
+      startDate: model.startTime.format('YYYY-MM-DD'),
+      startTime: model.startTime.format('HHmm'),
+      endDate: model.endTime.format('YYYY-MM-DD'),
+      endTime: model.endTime.format('HHmm')
     };
   }
 
@@ -67,7 +62,7 @@ export class AppointmentFormStore extends FormStore<EventModel, State> {
   }
 
   @action.bound
-  addItem(airmanId: number): void {
+  addModel(airmanId: number): void {
     const event = new EventModel(
       this._state.title,
       this._state.description,
@@ -75,15 +70,15 @@ export class AppointmentFormStore extends FormStore<EventModel, State> {
       this.makeMoment(this._state.endDate, this._state.endTime),
       airmanId,
       EventType.Appointment,
-      this.item ? this.item.id : null
+      this.model ? this.model.id : null
     );
     this.eventActions.addEvent(event);
   }
 
   @action.bound
-  removeItem(): void {
-    if (this.item != null) {
-      this.eventActions.removeEvent(this.item);
+  removeModel(): void {
+    if (this.model != null) {
+      this.eventActions.removeEvent(this.model);
     }
   }
 }

@@ -2,7 +2,6 @@ import { FormStore } from '../../widgets/stores/FormStore';
 import { Skill } from '../models/Skill';
 import * as moment from 'moment';
 import { SkillType } from '../models/SkillType';
-import { FilterOption } from '../../widgets/models/FilterOptionModel';
 import { action, computed, observable } from 'mobx';
 import { QualificationModel } from '../models/QualificationModel';
 import { CertificationModel } from '../models/CertificationModel';
@@ -45,30 +44,30 @@ export class SkillFormStore extends FormStore<Skill, State> {
   }
 
   @action.bound
-  setState(state: Partial<State>) {
-    super.setState(state);
-
-    let options: FilterOption[] = [];
-    if (state.skillType === SkillType.Qualification) {
-      options = this.qualificationOptions;
-    } else if (state.skillType === SkillType.Certification) {
-      options = this.certificationOptions;
+  setState(key: keyof State, value: string) {
+    if (key === 'skillType') {
+      const options = (value === SkillType.Qualification) ?
+        this.qualificationOptions :
+        this.certificationOptions;
+      if (options.length > 0) {
+        super.setState('skillId', String(options[0].value));
+      }
+    } else if (key === 'earnDate' && this._state.skillType === SkillType.Qualification) {
+      super.setState('expirationDate', moment(value).startOf('day').add(2, 'y').format('YYYY-MM-DD'));
     }
 
-    if (state.skillId == null && options.length > 0) {
-      this._state = Object.assign({}, this._state, {skillId: String(options[0].value)});
-    }
+    super.setState(key, value);
   }
 
-  protected itemToState(item: Skill | null): State {
-    if (item == null) {
+  protected modelToState(model: Skill | null): State {
+    if (model == null) {
       return this.emptyState();
     }
     return {
-      skillType: item.type,
-      skillId: String(item.skillId),
-      earnDate: item.earnDate.format('YYYY-MM-DD'),
-      expirationDate: item.expirationDate.format('YYYY-MM-DD'),
+      skillType: model.type,
+      skillId: String(model.skillId),
+      earnDate: model.earnDate.format('YYYY-MM-DD'),
+      expirationDate: model.expirationDate.format('YYYY-MM-DD'),
     };
   }
 
@@ -82,21 +81,21 @@ export class SkillFormStore extends FormStore<Skill, State> {
     };
   }
 
-  addItem(airmanId: number): void {
+  addModel(airmanId: number): void {
     const skill = {
       type: this._state.skillType as SkillType,
       airmanId: airmanId,
       skillId: Number(this._state.skillId),
       earnDate: moment(this._state.earnDate),
       expirationDate: moment(this._state.expirationDate),
-      id: this.item ? this.item.id : null,
+      id: this.model ? this.model.id : null,
     };
     this.skillActions.addSkill(skill);
   }
 
-  removeItem(): void {
-    if (this.item != null) {
-      this.skillActions.removeSkill(this.item);
+  removeModel(): void {
+    if (this.model != null) {
+      this.skillActions.removeSkill(this.model);
     }
   }
 

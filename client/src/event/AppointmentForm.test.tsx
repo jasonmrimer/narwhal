@@ -14,7 +14,7 @@ describe('AppointmentForm', () => {
   let store: AppointmentFormStore;
   let wrapper: ShallowWrapper;
   let subject: AppointmentForm;
-  let eventActions: {addEvent: jest.Mock, removeEvent: jest.Mock};
+  let eventActions: { addEvent: jest.Mock, removeEvent: jest.Mock };
 
   beforeEach(() => {
     eventActions = {
@@ -65,14 +65,12 @@ describe('AppointmentForm', () => {
   });
 
   it('populates the fields with values from AppointmentFormStore', () => {
-    store.setState({
-      title: 'Title',
-      description: 'Description',
-      startDate: '2018-02-22',
-      startTime: '1200',
-      endDate: '2018-02-22',
-      endTime: '1300'
-    });
+    store.setState('title', 'Title');
+    store.setState('description', 'Description');
+    store.setState('startDate', '2018-02-22');
+    store.setState('startTime', '1200');
+    store.setState('endDate', '2018-02-22');
+    store.setState('endTime', '1300');
 
     wrapper.update();
 

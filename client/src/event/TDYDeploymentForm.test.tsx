@@ -52,12 +52,10 @@ describe('TDYDeploymentForm', () => {
   });
 
   it('populates the fields with values from TDYDeploymentFormStore', () => {
-    store.setState({
-      title: 'Title',
-      description: 'Description',
-      startTime: '2018-02-22',
-      endTime: '2018-02-22',
-    });
+    store.setState('title', 'Title');
+    store.setState('description', 'Description');
+    store.setState('startTime', '2018-02-22');
+    store.setState('endTime', '2018-02-22');
 
     wrapper.update();
 

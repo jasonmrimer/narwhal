@@ -84,7 +84,7 @@ describe('Currency', () => {
     subject.update();
 
     const store = trackerStore.currencyStore.skillFormStore;
-    expect(store.hasItem).toBeTruthy();
+    expect(store.hasModel).toBeTruthy();
     expect(Number(store.state.skillId)).toBe(airman.qualifications[0].skillId);
   });
 

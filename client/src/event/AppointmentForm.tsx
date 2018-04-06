@@ -21,20 +21,20 @@ interface Props {
 export class AppointmentForm extends React.Component<Props> {
   
   handleChange = ({target}: any) => {
-    this.props.appointmentFormStore.setState({[target.name]: target.value});
+    this.props.appointmentFormStore.setState(target.name, target.value);
   }
 
   handleDelete = () => {
-    this.props.appointmentFormStore.removeItem();
+    this.props.appointmentFormStore.removeModel();
   }
 
   handleSubmit = (e: any) => {
     e.preventDefault();
-    this.props.appointmentFormStore.addItem(this.props.airmanId);
+    this.props.appointmentFormStore.addModel(this.props.airmanId);
   }
 
   render() {
-    const {state, errors, hasItem} = this.props.appointmentFormStore;
+    const {state, errors, hasModel} = this.props.appointmentFormStore;
     return (
       <StyledForm onSubmit={this.handleSubmit}>
         <StyledFieldValidation name="title" errors={errors}>
@@ -92,7 +92,7 @@ export class AppointmentForm extends React.Component<Props> {
         <StyledFormRow reversed={true}>
           <StyledSubmitButton text="CONFIRM"/>
           {
-            hasItem &&
+            hasModel &&
             <StyledButton
               text="DELETE"
               onClick={this.handleDelete}

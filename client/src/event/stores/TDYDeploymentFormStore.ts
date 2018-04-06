@@ -22,15 +22,14 @@ export class TDYDeploymentFormStore extends FormStore<EventModel, State> {
   }
 
   @action
-  setState(state: Partial<State>): void {
-    if (state.startTime && !this._state.endTime) {
-      state.endTime = state.endTime || state.startTime;
+  setState(key: keyof State, value: string): void {
+    if (key === 'startTime' && !this._state.endTime) {
+      super.setState('endTime', value);
     }
-
-    super.setState(state);
+    super.setState(key, value);
   }
 
-  protected itemToState(item: EventModel | null): State {
+  protected modelToState(item: EventModel | null): State {
     if (item == null) {
       return this.emptyState();
     }
@@ -51,7 +50,7 @@ export class TDYDeploymentFormStore extends FormStore<EventModel, State> {
     };
   }
 
-  addItem(airmanId: number): void {
+  addModel(airmanId: number): void {
     const event = new EventModel(
       this._state.title,
       this._state.description,
@@ -59,14 +58,14 @@ export class TDYDeploymentFormStore extends FormStore<EventModel, State> {
       this.makeMoment(this._state.endTime, '2359'),
       airmanId,
       EventType.TDY_DEPLOYMENT,
-      this.item ? this.item.id : null
+      this.model ? this.model.id : null
     );
     this.eventActions.addEvent(event);
   }
 
-  removeItem(): void {
-    if (this.item != null) {
-      this.eventActions.removeEvent(this.item);
+  removeModel(): void {
+    if (this.model != null) {
+      this.eventActions.removeEvent(this.model);
     }
   }
 }

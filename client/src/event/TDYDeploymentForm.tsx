@@ -19,20 +19,20 @@ interface Props {
 @observer
 export class TDYDeploymentForm extends React.Component<Props> {
   handleChange = ({target}: any) => {
-    this.props.tdyDeploymentFormStore.setState({[target.name]: target.value});
+    this.props.tdyDeploymentFormStore.setState(target.name, target.value);
   }
 
   handleDelete = () => {
-    this.props.tdyDeploymentFormStore.removeItem();
+    this.props.tdyDeploymentFormStore.removeModel();
   }
 
   handleSubmit = (e: any) => {
     e.preventDefault();
-    this.props.tdyDeploymentFormStore.addItem(this.props.airmanId);
+    this.props.tdyDeploymentFormStore.addModel(this.props.airmanId);
   }
 
   render() {
-    const {state, errors, hasItem} = this.props.tdyDeploymentFormStore;
+    const {state, errors, hasModel} = this.props.tdyDeploymentFormStore;
     return (
       <StyledForm onSubmit={this.handleSubmit}>
         <StyledFormRow>
@@ -76,7 +76,7 @@ export class TDYDeploymentForm extends React.Component<Props> {
         <StyledFormRow reversed={true}>
           <StyledSubmitButton text="CONFIRM"/>
           {
-            hasItem &&
+            hasModel &&
             <StyledButton
               text="DELETE"
               onClick={this.handleDelete}

@@ -44,7 +44,7 @@ describe('MissionForm', () => {
     subject.handleChange({value: mission.id, label: mission.atoMissionNumber});
 
     expect(missionFormStore.state).toEqual({
-      id: mission.id,
+      id: String(mission.id),
       title: mission.atoMissionNumber,
       startDate: mission.startDateTime.format('YYYY-MM-DD'),
       startTime: mission.startDateTime.format('HHmm'),
@@ -72,7 +72,7 @@ describe('MissionForm', () => {
   });
 
   it('populates the fields with values from MissionFormStore', () => {
-    missionFormStore.setState(mission);
+    missionFormStore.setState('id', String(mission.id));
 
     wrapper.update();
 
@@ -85,7 +85,7 @@ describe('MissionForm', () => {
 
   it('clears the state when there is no selected mission', () => {
     mission.missionId = mission.atoMissionNumber;
-    missionFormStore.setState(mission);
+    missionFormStore.setState('id', '1');
     wrapper.update();
 
     subject.handleChange(null);

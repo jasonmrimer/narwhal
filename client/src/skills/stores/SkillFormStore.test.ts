@@ -40,17 +40,17 @@ describe('SkillFormStore', () => {
   });
 
   it('should set the skillId when setting the skillType', () => {
-    subject.setState({skillType: SkillType.Qualification});
+    subject.setState('skillType', SkillType.Qualification);
     expect(subject.state.skillId).toEqual('0');
 
-    subject.setState({skillType: SkillType.Certification});
+    subject.setState('skillType', SkillType.Certification);
     expect(subject.state.skillId).toEqual('0');
   });
 
   describe('open', () => {
     it('should have an empty state', () => {
       subject.open();
-      expect(subject.hasItem).toBeFalsy();
+      expect(subject.hasModel).toBeFalsy();
       expect(subject.state.skillType).toBe(SkillType.Qualification);
       expect(subject.state.skillId).toBe('0');
       expect(subject.state.earnDate).toBe('');
@@ -60,7 +60,7 @@ describe('SkillFormStore', () => {
 
     it('should set the state with the given skill', () => {
       subject.open(skill);
-      expect(subject.hasItem).toBeTruthy();
+      expect(subject.hasModel).toBeTruthy();
       expect(subject.state.skillType).toBe(skill.type);
       expect(subject.state.skillId).toBe(String(skill.skillId));
       expect(subject.state.earnDate).toBe(skill.earnDate.format('YYYY-MM-DD'));
@@ -72,7 +72,7 @@ describe('SkillFormStore', () => {
   describe('close', () => {
     it('should clear the state', () => {
       subject.open(skill);
-      expect(subject.hasItem).toBeTruthy();
+      expect(subject.hasModel).toBeTruthy();
 
       subject.close();
       expect(subject.state.skillType).toBe(SkillType.Qualification);
@@ -80,29 +80,29 @@ describe('SkillFormStore', () => {
       expect(subject.state.earnDate).toBe('');
       expect(subject.state.expirationDate).toBe('');
       expect(subject.errors.length).toBe(0);
-      expect(subject.hasItem).toBeFalsy();
+      expect(subject.hasModel).toBeFalsy();
     });
   });
 
-  it('can add an skill', () => {
-    subject.setState({
-      skillType: skill.type,
-      skillId: String(skill.skillId),
-      earnDate: skill.earnDate.format('YYYY-MM-DD'),
-      expirationDate: skill.expirationDate.format('YYYY-MM-DD'),
-    });
+  it('can add a skill', () => {
+    subject.setState('skillType', skill.type);
+    subject.setState('skillId', String(skill.skillId));
 
-    subject.addItem(airmanId);
+    subject.addModel(airmanId);
 
     const addedSkill = (skillActions.addSkill as jest.Mock).mock.calls[0][0];
     expect(addedSkill.skillId).toEqual(skill.skillId);
   });
 
-  it('can remove an skill', () => {
+  it('should set the expirationDate 24 months ahead when adding an earnDate for quals', () => {
+    subject.setState('skillType', SkillType.Qualification);
+    subject.setState('earnDate', skill.earnDate.format('YYYY-MM-DD'));
+    expect(subject.state.expirationDate).toBe(skill.earnDate.clone().startOf('day').add(2, 'y').format('YYYY-MM-DD'));
+  });
+
+  it('can remove a skill', () => {
     subject.open(skill);
-
-    subject.removeItem();
-
+    subject.removeModel();
     expect(skillActions.removeSkill).toHaveBeenCalledWith(skill);
   });
 

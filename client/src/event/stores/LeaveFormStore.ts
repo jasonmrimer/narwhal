@@ -24,15 +24,14 @@ export class LeaveFormStore extends FormStore<EventModel, State> {
   }
 
   @action
-  setState(state: Partial<State>): void {
-    if (state.startDate && !this._state.endDate) {
-      state.endDate = state.endDate || state.startDate;
+  setState(key: keyof State, value: string): void {
+    if (key === 'startDate' && !this._state.endDate) {
+      super.setState('endDate', value);
     }
-
-    super.setState(state);
+    super.setState(key, value);
   }
 
-  protected itemToState(item: EventModel | null): State {
+  protected modelToState(item: EventModel | null): State {
     if (item == null) {
       return this.emptyState();
     }
@@ -55,7 +54,7 @@ export class LeaveFormStore extends FormStore<EventModel, State> {
     };
   }
 
-  addItem(airmanId: number): void {
+  addModel(airmanId: number): void {
     const event = new EventModel(
       'Leave',
       this._state.description,
@@ -63,14 +62,14 @@ export class LeaveFormStore extends FormStore<EventModel, State> {
       this.makeMoment(this._state.endDate, this._state.endTime),
       airmanId,
       EventType.Leave,
-      this.item ? this.item.id : null
+      this.model ? this.model.id : null
     );
     this.eventActions.addEvent(event);
   }
 
-  removeItem(): void {
-    if (this.item != null) {
-      this.eventActions.removeEvent(this.item);
+  removeModel(): void {
+    if (this.model != null) {
+      this.eventActions.removeEvent(this.model);
     }
   }
 }
