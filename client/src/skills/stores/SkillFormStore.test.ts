@@ -100,6 +100,25 @@ describe('SkillFormStore', () => {
     expect(subject.state.expirationDate).toBe(skill.earnDate.clone().startOf('day').add(2, 'y').format('YYYY-MM-DD'));
   });
 
+  it('should set the expirationDate 90 days ahead when adding an earnDate for certs', () => {
+    subject.setState('skillType', SkillType.Certification);
+    subject.setState('earnDate', skill.earnDate.format('YYYY-MM-DD'));
+    expect(subject.state.expirationDate).toBe(skill.earnDate.clone().startOf('day').add(90, 'd').format('YYYY-MM-DD'));
+  });
+
+  it('should not set the expirationDate when adding a blank earnDate for quals', () => {
+    subject.setState('skillType', SkillType.Qualification);
+    subject.setState('earnDate', '');
+    expect(subject.state.expirationDate).toBe('');
+  });
+
+  it('should not set the expirationDate when adding a blank earnDate for certs', () => {
+    subject.setState('skillType', SkillType.Certification);
+    subject.setState('earnDate', '');
+    expect(subject.state.expirationDate).toBe('');
+  });
+
+
   it('can remove a skill', () => {
     subject.open(skill);
     subject.removeModel();

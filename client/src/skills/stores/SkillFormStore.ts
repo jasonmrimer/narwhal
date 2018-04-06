@@ -46,16 +46,10 @@ export class SkillFormStore extends FormStore<Skill, State> {
   @action.bound
   setState(key: keyof State, value: string) {
     if (key === 'skillType') {
-      const options = (value === SkillType.Qualification) ?
-        this.qualificationOptions :
-        this.certificationOptions;
-      if (options.length > 0) {
-        super.setState('skillId', String(options[0].value));
-      }
-    } else if (key === 'earnDate' && this._state.skillType === SkillType.Qualification) {
-      super.setState('expirationDate', moment(value).startOf('day').add(2, 'y').format('YYYY-MM-DD'));
+      this.setDefaultSkillSelection(value);
+    } else if (key === 'earnDate') {
+      this.setExpirationDate(value);
     }
-
     super.setState(key, value);
   }
 
@@ -109,5 +103,20 @@ export class SkillFormStore extends FormStore<Skill, State> {
   @computed
   get certificationOptions() {
     return filterOptionsBy(this._certifications, this.siteIdContainer.selectedSite);
+  }
+
+  private setDefaultSkillSelection(value: string) {
+    const options = (value === SkillType.Qualification) ?
+      this.qualificationOptions :
+      this.certificationOptions;
+    if (options.length > 0) super.setState('skillId', String(options[0].value));
+  }
+
+  private setExpirationDate(value: string) {
+    const expirationDate = (this._state.skillType === SkillType.Qualification) ?
+      moment(value).startOf('day').add(2, 'y') :
+      moment(value).startOf('day').add(90, 'd');
+
+    if (expirationDate.isValid()) super.setState('expirationDate', expirationDate.format('YYYY-MM-DD'));
   }
 }
