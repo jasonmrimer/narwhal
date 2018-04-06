@@ -7,7 +7,7 @@ interface Props {
   onClick: () => void;
   title: string;
   assignedItemCount: number;
-  hasExpiredRipItem: boolean;
+  expiredItemCount: number;
   className?: string;
 }
 
@@ -19,10 +19,17 @@ export const RipItemsTile = observer((props: Props) => {
     >
       <div className="rip-item-tile-title">
         <span>{props.title}</span>
-        {props.hasExpiredRipItem && <StyledExpirationSleeve/>}
+        {
+          props.expiredItemCount > 0 &&
+          <StyledExpirationSleeve/>
+        }
       </div>
       <div className="rip-item-tile-description">
         <span>{`${props.assignedItemCount} task(s) assigned`}</span>
+        {
+          props.expiredItemCount > 0 &&
+          <span>{`${props.expiredItemCount} task(s) expired`}</span>
+        }
       </div>
     </div>
   );
@@ -49,7 +56,9 @@ export const StyledRipItemsTile = styled(RipItemsTile)`
   }
 
   .rip-item-tile-description {
-   border-top: solid ${props => props.theme.blueSteel} 1px;
+    display: flex;
+    justify-content: space-between;
+    border-top: solid ${props => props.theme.blueSteel} 1px;
     background: ${props => props.theme.lighter};
     font-size: 0.75rem;
     padding: 0.35rem;

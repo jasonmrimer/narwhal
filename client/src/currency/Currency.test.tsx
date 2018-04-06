@@ -13,10 +13,6 @@ import { StyledBackButton } from '../widgets/BackButton';
 import { StyledNotification } from '../widgets/Notification';
 import { StyledRipItems } from '../rip-items/AirmanRipItemForm';
 import { CurrencyChild } from './stores/CurrencyStore';
-import { StyledRipItemsTile } from '../rip-items/RipItemsTile';
-import { AirmanRipItemModel } from '../airman/models/AirmanRipItemModel';
-import { RipItemModel } from '../rip-items/models/RipItemModel';
-import * as moment from 'moment';
 
 describe('Currency', () => {
   const airman = AirmanModelFactory.build(
@@ -63,15 +59,6 @@ describe('Currency', () => {
     subject.update();
 
     expect(subject.find(StyledRipItems).exists()).toBeTruthy();
-  });
-
-  it('should send a hasExpired prop to the RipItemTile', () => {
-    trackerStore.currencyStore.airmanRipItemFormStore.setRipItems([
-      new AirmanRipItemModel(1, 1, new RipItemModel(1, '1'), moment())
-    ]);
-
-    subject.update();
-    expect(subject.find(StyledRipItemsTile).prop('hasExpiredRipItem')).toBe(true);
   });
 
   it('opens skill form on + Add Skill click', () => {

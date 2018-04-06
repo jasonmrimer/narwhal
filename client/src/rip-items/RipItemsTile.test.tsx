@@ -15,7 +15,7 @@ describe('RipItemsTile', () => {
         title="title"
         onClick={onClickSpy}
         assignedItemCount={10}
-        hasExpiredRipItem={false}
+        expiredItemCount={0}
       />
     );
   });
@@ -25,11 +25,20 @@ describe('RipItemsTile', () => {
     expect(onClickSpy).toBeCalled();
   });
 
-  it('should render an ExpirationAlert when hasExpiredRipItem is true', () => {
-    expect(subject.find(StyledExpirationSleeve).exists()).toBeFalsy();
-    subject.setProps({hasExpiredRipItem: true});
-    expect(subject.find(StyledExpirationSleeve).exists()).toBeTruthy();
-  });
+  describe('expired items', () => {
+    it('should render an ExpirationAlert when expiredItemCount is greater than 0', () => {
+      expect(subject.find(StyledExpirationSleeve).exists()).toBeFalsy();
+      subject.setProps({expiredItemCount: 20});
+      expect(subject.find(StyledExpirationSleeve).exists()).toBeTruthy();
+    });
+
+    it('should render the number of expired items when expiredItemCount is greater than 0', () => {
+      expect(subject.find('span').length).toBe(2);
+      subject.setProps({expiredItemCount: 20});
+      expect(subject.find('span').length).toBe(3);
+      expect(subject.find('span').at(2).text()).toBe('20 task(s) expired')
+    });
+  })
 
   it('should render the title', () => {
     expect(subject.find('span').at(0).text()).toBe('title');

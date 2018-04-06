@@ -81,7 +81,7 @@ export class Currency extends React.Component<Props> {
         title="RIP TASKS"
         onClick={currencyStore.openAirmanRipItemForm}
         assignedItemCount={currencyStore.airmanRipItemFormStore.assignedItemCount}
-        hasExpiredRipItem={currencyStore.airmanRipItemFormStore.hasExpiredItem}
+        expiredItemCount={currencyStore.airmanRipItemFormStore.expiredItemCount}
       />
     );
   }
