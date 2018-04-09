@@ -37,12 +37,9 @@ const convertToSkill = (skill: AirmanQualificationModel | AirmanCertificationMod
 };
 
 export const timeToExpire = (expirationDate: Moment) => {
-  const result = expirationDate.diff(moment(), 'days');
-  if (result > 0) {
-    return result;
-  } else {
-    return 0;
-  }
+  return expirationDate.diff(moment(), 'days') > 0 ?
+    `Expires ${moment().to(expirationDate)}` :
+    `Expired ${moment().to(expirationDate)}`;
 };
 
 export const SkillTile = (props: Props) => {
@@ -54,9 +51,9 @@ export const SkillTile = (props: Props) => {
     >
       <div className="currency-title">
         <span>{skill.title}</span>
-        {skill.isExpired && <StyledExpirationSleeve />}
+        {skill.isExpired && <StyledExpirationSleeve/>}
       </div>
-      <div className="currency-description"> {timeToExpire(skill.expirationDate)} days until expiration.</div>
+      <div className="currency-description">{timeToExpire(skill.expirationDate)}.</div>
     </div>
   );
 };

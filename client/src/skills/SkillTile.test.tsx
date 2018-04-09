@@ -24,7 +24,7 @@ describe('SkillTile', () => {
     const expirationDate = timeToExpire(skill.expirationDate);
 
     expect(subject.text()).toContain(skill.title);
-    expect(subject.text()).toContain(`${expirationDate} days until expiration.`);
+    expect(subject.text()).toContain(`${expirationDate}`);
   });
 
   it('calls the onClick callback', () => {
