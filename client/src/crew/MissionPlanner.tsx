@@ -123,6 +123,7 @@ export const StyledMissionPlanner = styled(MissionPlanner)`
   .filters {
     width: 50%;
     display: flex;
+    align-items: flex-end;
     justify-content: flex-end;
     
     & > * {

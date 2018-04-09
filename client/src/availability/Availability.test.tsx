@@ -70,6 +70,8 @@ describe('Availability', () => {
     subject = shallow(
       <Availability
         selectedAirman={airman}
+        selectedDate={null}
+        createEvent={trackerStore.newEvent}
         availabilityStore={trackerStore.availabilityStore}
         plannerStore={trackerStore.plannerStore}
       />
@@ -99,7 +101,7 @@ describe('Availability', () => {
   it('calls the createEvent on date click', () => {
     subject.find('.event-date').at(0).simulate('click');
     expect(trackerStore.availabilityStore.shouldShowEventForm).toBeTruthy();
-    expect(trackerStore.availabilityStore.selectedDate).toEqual(moment('2017-11-26'));
+    expect(trackerStore.selectedDate).toEqual(moment('2017-11-26'));
   });
 
   it('renders a list of events', () => {
@@ -143,7 +145,7 @@ describe('Availability', () => {
     });
 
     it('shows an appointment form', () => {
-      trackerStore.availabilityStore.openCreateEventForm(EventType.Appointment, airman.id);
+      trackerStore.availabilityStore.openCreateEventForm(EventType.Appointment, airman.id, null);
       subject.update();
 
       expect(subject.find(StyledRadioButtons).prop('value')).toBe(EventType.Appointment);
@@ -151,7 +153,7 @@ describe('Availability', () => {
     });
 
     it('shows a leave form', () => {
-      trackerStore.availabilityStore.openCreateEventForm(EventType.Leave, airman.id);
+      trackerStore.availabilityStore.openCreateEventForm(EventType.Leave, airman.id, null);
       subject.update();
 
       expect(subject.find(StyledRadioButtons).prop('value')).toBe(EventType.Leave);
@@ -159,7 +161,7 @@ describe('Availability', () => {
     });
 
     it('shows a tdy/deployment form', () => {
-      trackerStore.availabilityStore.openCreateEventForm(EventType.TDY_DEPLOYMENT, airman.id);
+      trackerStore.availabilityStore.openCreateEventForm(EventType.TDY_DEPLOYMENT, airman.id, null);
       subject.update();
 
       expect(subject.find(StyledRadioButtons).prop('value')).toBe(EventType.TDY_DEPLOYMENT);

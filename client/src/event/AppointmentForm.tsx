@@ -19,7 +19,6 @@ interface Props {
 
 @observer
 export class AppointmentForm extends React.Component<Props> {
-  
   handleChange = ({target}: any) => {
     this.props.appointmentFormStore.setState(target.name, target.value);
   }

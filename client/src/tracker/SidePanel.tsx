@@ -19,21 +19,24 @@ interface Props {
 export class SidePanel extends React.Component<Props> {
 
   renderSelectedTab = () => {
-    switch (this.props.sidePanelStore.selectedTab) {
+    const {sidePanelStore, trackerStore} = this.props;
+    switch (sidePanelStore.selectedTab) {
       case TabType.CURRENCY:
         return (
           <StyledCurrency
-            selectedAirman={this.props.trackerStore.selectedAirman}
-            currencyStore={this.props.trackerStore.currencyStore}
+            selectedAirman={trackerStore.selectedAirman}
+            currencyStore={trackerStore.currencyStore}
           />
         );
       case TabType.AVAILABILITY:
       default:
         return (
           <StyledAvailability
-            selectedAirman={this.props.trackerStore.selectedAirman}
-            availabilityStore={this.props.trackerStore.availabilityStore}
-            plannerStore={this.props.trackerStore.plannerStore}
+            selectedAirman={trackerStore.selectedAirman}
+            selectedDate={trackerStore.selectedDate}
+            createEvent={trackerStore.newEvent}
+            availabilityStore={trackerStore.availabilityStore}
+            plannerStore={trackerStore.plannerStore}
           />
         );
     }

@@ -19,6 +19,8 @@ import { StyledTDYDeploymentForm } from '../event/TDYDeploymentForm';
 
 interface Props {
   selectedAirman: AirmanModel;
+  selectedDate: Moment | null;
+  createEvent: (airman: AirmanModel, date: Moment | null) => void;
   availabilityStore: AvailabilityStore;
   plannerStore: PlannerStore;
   className?: string;
@@ -39,7 +41,7 @@ export class Availability extends React.Component<Props> {
   }
 
   private renderEventFormContainer = () => {
-    const {availabilityStore, selectedAirman} = this.props;
+    const {availabilityStore, selectedAirman, selectedDate} = this.props;
     return (
       <div>
         <StyledBackButton
@@ -54,7 +56,9 @@ export class Availability extends React.Component<Props> {
               name="eventType"
               options={Object.keys(EventType).map(key => EventType[key])}
               value={availabilityStore.eventFormType}
-              onChange={(e: any) => availabilityStore.openCreateEventForm(e.target.value, selectedAirman.id)}
+              onChange={(e: any) => {
+                availabilityStore.openCreateEventForm(e.target.value, selectedAirman.id, selectedDate);
+              }}
             />
           </div>
         }
@@ -100,12 +104,12 @@ export class Availability extends React.Component<Props> {
   }
 
   private renderAvailability = () => {
-    const {availabilityStore, plannerStore} = this.props;
+    const {availabilityStore, plannerStore, createEvent, selectedAirman} = this.props;
     const week = plannerStore.sidePanelWeek;
     return (
       <div>
         <div className="event-control-row">
-          <button className="add-event" onClick={() => availabilityStore.showEventForm()}>
+          <button className="add-event" onClick={() => createEvent(selectedAirman, null)}>
             + Add Event
           </button>
         </div>
@@ -131,7 +135,7 @@ export class Availability extends React.Component<Props> {
                 <div id={`day-${index}`} key={index}>
                   <div
                     className="event-date"
-                    onClick={() => availabilityStore.showEventForm(day)}
+                    onClick={() => createEvent(selectedAirman, day)}
                   >
                     <span>
                       {day.format('ddd, DD MMM YY').toUpperCase()}

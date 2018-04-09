@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 interface Props {
-  onClick?: () => void;
+  onClick?: (e: any) => void;
 }
 /* tslint:disable:max-line-length */
 export const AvailableIcon = (props: Props) => {

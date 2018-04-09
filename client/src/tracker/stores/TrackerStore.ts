@@ -20,10 +20,12 @@ export class TrackerStore implements AllAirmenRefresher, RefreshAirmen {
   public locationFilterStore: LocationFilterStore;
 
   private repositories: Repositories;
+
   @observable private _loading: boolean = false;
   @observable private _airmen: AirmanModel[] = [];
   @observable private _events: EventModel[] = [];
   @observable private _selectedAirman: AirmanModel = AirmanModel.empty();
+  @observable private _selectedDate: Moment | null = null;
 
   constructor(repositories: Repositories, timeService: TimeService) {
     this.repositories = repositories;
@@ -80,6 +82,11 @@ export class TrackerStore implements AllAirmenRefresher, RefreshAirmen {
   }
 
   @computed
+  get selectedDate() {
+    return this._selectedDate;
+  }
+
+  @computed
   get events() {
     return this._events;
   }
@@ -95,6 +102,7 @@ export class TrackerStore implements AllAirmenRefresher, RefreshAirmen {
       this.currencyStore.closeSkillForm();
     }
     this._selectedAirman = airman;
+    this._selectedDate = null;
     this.sidePanelStore.setSelectedTab(tab);
     await this.refreshAirmanRipItems();
     await this.refreshAirmanEvents();
@@ -107,10 +115,11 @@ export class TrackerStore implements AllAirmenRefresher, RefreshAirmen {
   }
 
   @action.bound
-  newEvent(airman: AirmanModel, date: Moment) {
+  async newEvent(airman: AirmanModel, date: Moment | null) {
     this._selectedAirman = airman;
     this.sidePanelStore.setSelectedTab(TabType.AVAILABILITY);
-    this.availabilityStore.showEventForm(date);
+    this._selectedDate = date;
+    this.availabilityStore.showEventForm();
   }
 
   @action.bound

@@ -87,7 +87,8 @@ export const TopLevelFilter = styled(Filter)`
 
   label {
     font-size: 0.875rem;
-    font-weight: 300;  
+    font-weight: 300; 
+    color: ${props => props.theme.purpleSteel}; 
   }
 
   &:after {
@@ -146,7 +147,7 @@ export const RosterLevelFilter = styled(Filter)`
     right: -8px;
     height: 14px;
     width: 20px;
-    top: 11px;
+    top: 14px;
     position: absolute;
     pointer-events: none;
   }

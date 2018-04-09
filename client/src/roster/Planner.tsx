@@ -51,7 +51,15 @@ const renderEvents = (day: Moment,
 
     return renderEventType(matchedEvents[0].type, key);
   } else {
-    return <AvailableIcon key={key} onClick={() => trackerStore.newEvent(airman, day)}/>;
+    return (
+      <AvailableIcon
+        key={key}
+        onClick={(e: any) => {
+          e.stopPropagation();
+          trackerStore.newEvent(airman, day);
+        }}
+      />
+    );
   }
 };
 

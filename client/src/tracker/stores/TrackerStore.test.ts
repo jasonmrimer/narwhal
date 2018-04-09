@@ -37,7 +37,7 @@ describe('TrackerStore', () => {
     });
   });
 
-  describe('setting a selectedAirman', () => {
+  describe('setting the selectedAirman', () => {
     const airman = AirmanModelFactory.build();
 
     it('should set the selected airman property', async () => {
@@ -72,6 +72,13 @@ describe('TrackerStore', () => {
       expect(subject.availabilityStore.closeEventForm).toHaveBeenCalled();
       expect(subject.currencyStore.closeSkillForm).toHaveBeenCalled();
     });
+
+    it('should clear the selected date', async () => {
+      subject.newEvent(AirmanModelFactory.build(123), moment());
+
+      await subject.setSelectedAirman(AirmanModelFactory.build(456), TabType.AVAILABILITY);
+      expect(subject.selectedDate).toBeNull();
+    });
   });
 
   it('should update airman shift', async () => {
@@ -97,7 +104,7 @@ describe('TrackerStore', () => {
     const date = moment.utc();
     subject.newEvent(airman, date);
     expect(subject.selectedAirman.id).toEqual(airman.id);
-    expect(subject.availabilityStore.selectedDate.isSame(date)).toBeTruthy();
+    expect(subject.selectedDate!.isSame(date)).toBeTruthy();
     expect(subject.availabilityStore.shouldShowEventForm).toBeTruthy();
     expect(subject.availabilityStore.shouldShowEventTypeSelection).toBeTruthy();
     expect(subject.sidePanelStore.selectedTab).toBe(TabType.AVAILABILITY);

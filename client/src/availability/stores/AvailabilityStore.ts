@@ -4,7 +4,6 @@ import { LeaveFormStore } from '../../event/stores/LeaveFormStore';
 import { MissionFormStore } from '../../event/stores/MissionFormStore';
 import { AppointmentFormStore } from '../../event/stores/AppointmentFormStore';
 import { Moment } from 'moment';
-import { FormStore, UniqueModel } from '../../widgets/stores/FormStore';
 import { EventActions } from '../../event/stores/EventActions';
 import { Repositories } from '../../Repositories';
 import { MissionModel } from '../../mission/models/MissionModel';
@@ -20,27 +19,22 @@ export class AvailabilityStore implements EventActions {
   public missionFormStore: MissionFormStore;
   public tdyDeploymentFormStore: TDYDeploymentFormStore;
 
+  readonly formStores: {
+    [key: string]: AppointmentFormStore | MissionFormStore | LeaveFormStore | TDYDeploymentFormStore
+  };
+
   @observable private _shouldShowEventForm: boolean = false;
   @observable private _shouldShowEventTypeSelection: boolean = true;
   @observable private _eventFormType: EventType | string = '';
-  @observable private _selectedDate: Moment;
   @observable private _pendingDeleteEvent: EventModel | null = null;
   @observable private _airmanEvents: EventModel[] = [];
-
-  private eventTypeFormStoreMap: object;
-
-  static callFormStoreFunction<T extends UniqueModel, S>(store: FormStore<T, S>,
-                                                         method: string,
-                                                         arg?: EventModel | object[] | null) {
-    store[method].call(store, arg);
-  }
 
   constructor(private refreshAirmen: RefreshAirmen, private repositories: Repositories) {
     this.appointmentFormStore = new AppointmentFormStore(this);
     this.leaveFormStore = new LeaveFormStore(this);
     this.missionFormStore = new MissionFormStore(this);
     this.tdyDeploymentFormStore = new TDYDeploymentFormStore(this);
-    this.eventTypeFormStoreMap = {
+    this.formStores = {
       [EventType.Mission]: this.missionFormStore,
       [EventType.Appointment]: this.appointmentFormStore,
       [EventType.Leave]: this.leaveFormStore,
@@ -77,45 +71,38 @@ export class AvailabilityStore implements EventActions {
     return this._shouldShowEventTypeSelection;
   }
 
-  @computed
-  get selectedDate() {
-    return this._selectedDate;
-  }
-
   @action.bound
-  showEventForm(selectedDate?: Moment) {
-    this._shouldShowEventTypeSelection = true;
-    if (selectedDate) {
-      this._selectedDate = this._selectedDate = selectedDate;
-    }
+  showEventForm() {
+    this.closeEventForm();
     this._shouldShowEventForm = true;
+    this._shouldShowEventTypeSelection = true;
   }
 
   @action.bound
-  openCreateEventForm(eventType: EventType, airmanId: number) {
+  openCreateEventForm(eventType: EventType, airmanId: number, date: Moment | null) {
     this._eventFormType = eventType;
-
-    const event = this._selectedDate && eventType !== EventType.Mission ?
-      new EventModel('', '', this._selectedDate, this._selectedDate, airmanId, eventType)
-      : null;
-
-    AvailabilityStore.callFormStoreFunction(this.eventTypeFormStoreMap[eventType], 'open', event);
+    if (date && eventType !== EventType.Mission) {
+      this.formStores[eventType].open(new EventModel('', '', date, date, airmanId, eventType));
+    } else {
+      this.formStores[eventType].open();
+    }
   }
 
   @action.bound
   openEditEventForm(event: EventModel) {
-    this._shouldShowEventTypeSelection = false;
     this._shouldShowEventForm = true;
+    this._shouldShowEventTypeSelection = false;
     this._eventFormType = event.type;
-    AvailabilityStore.callFormStoreFunction(this.eventTypeFormStoreMap[event.type], 'open', event);
+    this.formStores[event.type].open(event);
   }
 
   @action.bound
   closeEventForm() {
     if (this.eventFormType.length > 0) {
-      AvailabilityStore.callFormStoreFunction(this.eventTypeFormStoreMap[this.eventFormType], 'close');
+      this.formStores[this.eventFormType].close();
     }
     this._shouldShowEventForm = false;
+    this._shouldShowEventTypeSelection = false;
     this._eventFormType = '';
   }
 
@@ -163,6 +150,6 @@ export class AvailabilityStore implements EventActions {
   }
 
   setFormErrors(errors: object[]) {
-    AvailabilityStore.callFormStoreFunction(this.eventTypeFormStoreMap[this.eventFormType], 'setErrors', errors);
+    this.formStores[this.eventFormType].setErrors(errors);
   }
 }

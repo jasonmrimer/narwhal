@@ -30,7 +30,7 @@ describe('SidePanel', () => {
     airman.certifications.push(certification);
 
     trackerStore = await makeFakeTrackerStore();
-    trackerStore.setSelectedAirman(airman, TabType.AVAILABILITY);
+    await trackerStore.setSelectedAirman(airman, TabType.AVAILABILITY);
     sidePanelStore = new SidePanelStore();
 
     subject = shallow(

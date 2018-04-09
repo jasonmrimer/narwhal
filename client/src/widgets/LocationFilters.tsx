@@ -53,12 +53,6 @@ export const LocationFilters = observer((props: Props) => {
 
 export const StyledLocationFilters = styled(LocationFilters)`
   .filters {
-    label {
-      font-size: 0.875rem;
-      font-weight: 300;
-      color: ${props => props.theme.purpleSteel};
-    }
-    
     &:after {
       content: "."; 
       visibility: hidden; 
@@ -74,6 +68,9 @@ export const StyledLocationFilters = styled(LocationFilters)`
     position: relative;
     float: left;
     z-index: 9;
+    font-size: 0.875rem;
+    font-weight: 300;
+    color: ${props => props.theme.purpleSteel};
 
     &:after {
       content: ' ';
@@ -81,7 +78,7 @@ export const StyledLocationFilters = styled(LocationFilters)`
       right: 0;
       height: 14px;
       width: 20px;
-      top: 43px;
+      top: 40px;
       position: absolute;
       pointer-events: none;
     }

@@ -60,7 +60,6 @@ export const StyledTracker = styled(Tracker)`
   margin-left: 3rem;
   padding: 0.5rem;
   display: flex;
-  color: white;
   
   .main {
     width: 1400px;
@@ -71,6 +70,7 @@ export const StyledTracker = styled(Tracker)`
   .filters {
     width: 50%;
     display: flex;
+    align-items: flex-end;
     justify-content: space-between;
   }
  `;

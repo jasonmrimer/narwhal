@@ -38,10 +38,10 @@ describe('AvailabilityStore', () => {
       const openAppointmentSpy = jest.fn();
       subject.appointmentFormStore.open = openAppointmentSpy;
 
-      subject.showEventForm(moment('2017-11-26'));
-      const event = new EventModel('', '', subject.selectedDate, subject.selectedDate, 1, EventType.Appointment);
+      const selectedDate = moment();
+      const event = new EventModel('', '', selectedDate, selectedDate, 1, EventType.Appointment);
 
-      subject.openCreateEventForm(EventType.Appointment, 1);
+      subject.openCreateEventForm(EventType.Appointment, 1, selectedDate);
       expect(openAppointmentSpy).toHaveBeenCalledWith(event);
     });
 
@@ -49,28 +49,26 @@ describe('AvailabilityStore', () => {
       const openMissionSpy = jest.fn();
       subject.missionFormStore.open = openMissionSpy;
 
-      subject.showEventForm(moment('2017-11-26'));
-
-      subject.openCreateEventForm(EventType.Mission, 1);
-      expect(openMissionSpy).toHaveBeenCalledWith(null);
+      subject.openCreateEventForm(EventType.Mission, 1, moment());
+      expect(openMissionSpy).toHaveBeenCalledWith();
     });
 
     it('opens leave', () => {
-      subject.openCreateEventForm(EventType.Leave, 1);
+      subject.openCreateEventForm(EventType.Leave, 1, null);
 
       expect(subject.shouldShowEventForm).toBeFalsy();
       expect(subject.eventFormType).toBe(EventType.Leave);
     });
 
     it('opens appointment', () => {
-      subject.openCreateEventForm(EventType.Appointment, 1);
+      subject.openCreateEventForm(EventType.Appointment, 1, null);
 
       expect(subject.shouldShowEventForm).toBeFalsy();
       expect(subject.eventFormType).toBe(EventType.Appointment);
     });
 
     it('opens mission', () => {
-      subject.openCreateEventForm(EventType.Mission, 1);
+      subject.openCreateEventForm(EventType.Mission, 1, null);
 
       expect(subject.shouldShowEventForm).toBeFalsy();
       expect(subject.eventFormType).toBe(EventType.Mission);
@@ -136,7 +134,7 @@ describe('AvailabilityStore', () => {
   });
 
   it('should set errors on children stores when it calls setFormErrors', () => {
-    subject.openCreateEventForm(EventType.Appointment, 1);
+    subject.openCreateEventForm(EventType.Appointment, 1, null);
     subject.setFormErrors([{title: 'This field is required.'}]);
     expect(toJS(subject.appointmentFormStore.errors)).toEqual([{title: 'This field is required.'}]);
   });

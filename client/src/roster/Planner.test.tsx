@@ -8,7 +8,7 @@ import { MissionIcon } from '../icons/MissionIcon';
 import { AvailableIcon } from '../icons/AvailableIcon';
 import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
-import { makeFakeTrackerStore } from '../utils/testUtils';
+import { eventStub, makeFakeTrackerStore } from '../utils/testUtils';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { AirmanModel } from '../airman/models/AirmanModel';
 import { EventModel, EventType } from '../event/models/EventModel';
@@ -78,7 +78,7 @@ describe('Planner', () => {
 
   it('calls the newEvent when clicking on an empty bubble', () => {
     const emptyBubble = subject.find(AvailableIcon).at(0);
-    emptyBubble.simulate('click');
+    emptyBubble.simulate('click', eventStub);
 
     const calledMoment = (newEventSpy.mock.calls[0][1]).startOf('day');
     const expectedMoment = moment('2017-11-26').startOf('day');
