@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { CrewStore } from '../crew/stores/CrewStore';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { DashboardStore } from '../dashboard/stores/DashboardStore';
 import styled from 'styled-components';
@@ -7,11 +6,12 @@ import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore
 import { observer } from 'mobx-react';
 import { StyledProfileSitePicker } from '../profile/ProfileSitePicker';
 import { Routes } from './Routes';
+import { MissionPlannerStore } from '../crew/stores/MissionPlannerStore';
 
 interface Props {
   dashboardStore: DashboardStore;
   trackerStore: TrackerStore;
-  crewStore: CrewStore;
+  missionPlannerStore: MissionPlannerStore;
   profileStore: ProfileSitePickerStore;
 }
 

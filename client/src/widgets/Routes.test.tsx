@@ -3,24 +3,24 @@ import { Route, Switch } from 'react-router';
 import { shallow } from 'enzyme';
 import { Routes } from './Routes';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
-import { CrewStore } from '../crew/stores/CrewStore';
 import { DashboardStore } from '../dashboard/stores/DashboardStore';
 import { makeFakeTrackerStore } from '../utils/testUtils';
 import { DoubleRepositories } from '../Repositories';
+import { MissionPlannerStore } from '../crew/stores/MissionPlannerStore';
 
 describe('Routes', () => {
   it('should support 4 routes', async () => {
     const trackerStore = await makeFakeTrackerStore();
     const dashboardStore = new DashboardStore(DoubleRepositories);
     const profileStore = new ProfileSitePickerStore(DoubleRepositories);
-    const crewStore = new CrewStore(DoubleRepositories, profileStore);
+    const missionPlannerStore = new MissionPlannerStore(DoubleRepositories, profileStore);
 
     const subject = shallow(
       <Routes
         dashboardStore={dashboardStore}
         trackerStore={trackerStore}
-        crewStore={crewStore}
         profileStore={profileStore}
+        missionPlannerStore={missionPlannerStore}
       />
     );
     expect(subject.find(Switch).children().length).toBe(4);

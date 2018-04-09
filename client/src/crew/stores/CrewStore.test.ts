@@ -5,12 +5,14 @@ import { DoubleRepositories } from '../../Repositories';
 import { ProfileSitePickerStore } from '../../profile/stores/ProfileSitePickerStore';
 import { CrewPositionModel } from '../models/CrewPositionModel';
 import { CrewRepositorySpy } from '../repositories/doubles/CrewRepositorySpy';
+import { AirmanModel } from '../../airman/models/AirmanModel';
 
 describe('CrewStore', () => {
   let crew: CrewModel;
   let subject: CrewStore;
   let crewPositions: CrewPositionModel[];
   let profileStore: ProfileSitePickerStore;
+  let airmen: AirmanModel[];
 
   beforeEach(async () => {
     DoubleRepositories.crewRepository = new CrewRepositorySpy();
@@ -20,7 +22,9 @@ describe('CrewStore', () => {
     await profileStore.hydrate();
 
     subject = new CrewStore(DoubleRepositories, profileStore);
-    await subject.hydrate(crew.id);
+
+    airmen = await DoubleRepositories.airmanRepository.findBySiteId(profileStore.profile!.user.siteId!);
+    await subject.hydrate(crew.id, airmen);
 
     crew.crewPositions[0].title = 'Title1';
     crew.crewPositions[0].critical = true;
@@ -42,41 +46,25 @@ describe('CrewStore', () => {
     }
   });
 
-  it('should set loading until hydrate completes', async () => {
-    subject = new CrewStore(DoubleRepositories, profileStore);
-
-    subject.setLoading(true);
-
-    await subject.hydrate(crew.id);
-
-    expect(subject.loading).toBeFalsy();
-  });
-
-  it('has a list of airmen belonging to the users site', () => {
-    expect(subject.airmen.length).toBe(10);
-  });
-
   it('should set a new crew member', () => {
     subject.setNewEntry({airmanName: 'pizza face'});
     expect(subject.newEntry.airmanName).toBe('pizza face');
   });
 
   it('should save the new crew member set in newEntry', async () => {
-    const randomAirman = subject.airmen[1];
-    subject.setNewEntry({airmanName: `${randomAirman.lastName}, ${randomAirman.firstName}`});
+    const airmanDisplayName = subject.airmenOptions[1].label;
+    subject.setNewEntry({airmanName: `${airmanDisplayName}`});
     await subject.save();
     const [lastCrewPosition] = crewPositions.slice(-1);
 
-    expect(lastCrewPosition.airman.firstName).toBe(randomAirman.firstName);
-    expect(lastCrewPosition.airman.lastName).toBe(randomAirman.lastName);
+    expect(lastCrewPosition.airman.firstName).toBe(airmanDisplayName.split(', ', 2)[1]);
+    expect(lastCrewPosition.airman.lastName).toBe(airmanDisplayName.split(', ', 2)[0]);
   });
 
   it('should have a list of airmen options related to the users site', () => {
-    const filteredAirmen = subject.airmen.filter(airman => airman.siteId === 14);
-
-    expect(subject.airmenOptions.length).toEqual(filteredAirmen.length);
+    expect(subject.airmenOptions.length).toEqual(airmen.length);
     subject.airmenOptions.map((airmanOption, index) =>
-      expect(airmanOption.label).toBe(`${filteredAirmen[index].lastName}, ${filteredAirmen[index].firstName}`));
+      expect(airmanOption.label).toBe(`${airmen[index].lastName}, ${airmen[index].firstName}`));
   });
 
   it('should clear an airman, title, and critical by id', () => {

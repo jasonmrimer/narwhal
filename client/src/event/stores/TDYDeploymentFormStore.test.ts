@@ -101,7 +101,7 @@ describe('TDYDeploymentFormStore', () => {
   });
 
   it('should keep the end date when modifying the start date', () => {
-    subject.setState('startTime', '2018-02-22')
+    subject.setState('startTime', '2018-02-22');
     subject.setState('endTime', '2018-02-23');
     subject.setState('startTime', '2018-02-25');
     expect(subject.state.endTime).toEqual('2018-02-23');

@@ -27,7 +27,7 @@ class CrewPage
   end
 
   def add_new_crew_member
-    find(:css, ".rbt-input-main").set("Munoz, Diana")
+    find(:css, ".crew-list .rbt-input-main").set("Munoz, Diana")
     click_link('Munoz, Diana')
     click_button 'SAVE'
 
@@ -39,7 +39,17 @@ class CrewPage
   def delete_crew_member
     expect(page).to have_text 'Munoz, Diana'
     click(page.all('button').last)
-    expect(page).not_to have_text 'Munoz, Diana'
+    expect(page).to have_text 'Spaceman, Corey'
+    click(page.all('button').last)
+    expect(page).to have_text 'Keeter, Tracy'
+    click(page.all('button').last)
+    click_button 'SAVE'
+
+    page.refresh
+
+    expect(page.find('.crew-list')).not_to have_text 'Munoz, Diana'
+    expect(page.find('.crew-list')).not_to have_text 'Spaceman, Corey'
+    expect(page.find('.crew-list')).not_to have_text 'Keeter, Tracy'
   end
 
   def click(element)

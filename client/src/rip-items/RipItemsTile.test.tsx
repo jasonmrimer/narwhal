@@ -36,15 +36,15 @@ describe('RipItemsTile', () => {
       expect(subject.find('span').length).toBe(2);
       subject.setProps({expiredItemCount: 20});
       expect(subject.find('span').length).toBe(3);
-      expect(subject.find('span').at(2).text()).toBe('20 task(s) expired')
+      expect(subject.find('span').at(2).text()).toBe('20 task(s) expired');
     });
-  })
+  });
 
   it('should render the title', () => {
     expect(subject.find('span').at(0).text()).toBe('title');
   });
 
   it('should render the number of assigned items', () => {
-    expect(subject.find('span').at(1).text()).toBe('10 task(s) assigned')
+    expect(subject.find('span').at(1).text()).toBe('10 task(s) assigned');
   });
 });

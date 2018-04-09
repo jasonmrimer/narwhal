@@ -104,7 +104,7 @@ describe('LeaveFormStore', () => {
   });
 
   it('should keep the end date when modifying the start date', () => {
-    subject.setState('startDate', '2018-02-22')
+    subject.setState('startDate', '2018-02-22');
     subject.setState('endDate', '2018-02-23');
     subject.setState('startDate', '2018-02-25');
     expect(subject.state.endDate).toEqual('2018-02-23');

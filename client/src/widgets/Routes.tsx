@@ -2,18 +2,18 @@ import * as React from 'react';
 import { Route, Switch } from 'react-router';
 import { Upload as UploadPage } from '../upload/Upload';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
-import { CrewStore } from '../crew/stores/CrewStore';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { DashboardStore } from '../dashboard/stores/DashboardStore';
 import { observer } from 'mobx-react/custom';
 import { TrackerPage } from './pages/TrackerPage';
 import { CrewPage } from './pages/CrewPage';
 import { DashboardPage } from './pages/DashboardPage';
+import { MissionPlannerStore } from '../crew/stores/MissionPlannerStore';
 
 interface Props {
   dashboardStore: DashboardStore;
   trackerStore: TrackerStore;
-  crewStore: CrewStore;
+  missionPlannerStore: MissionPlannerStore;
   profileStore: ProfileSitePickerStore;
 }
 

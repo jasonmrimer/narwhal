@@ -118,7 +118,6 @@ describe('SkillFormStore', () => {
     expect(subject.state.expirationDate).toBe('');
   });
 
-
   it('can remove a skill', () => {
     subject.open(skill);
     subject.removeModel();

@@ -11,10 +11,10 @@ import { ThemeProvider } from 'styled-components';
 import { MomentTimeService } from './tracker/services/MomentTimeService';
 import { TrackerStore } from './tracker/stores/TrackerStore';
 import { DashboardStore } from './dashboard/stores/DashboardStore';
-import { CrewStore } from './crew/stores/CrewStore';
 import { ProfileSitePickerStore } from './profile/stores/ProfileSitePickerStore';
 import { withRouter } from 'react-router';
 import { WebRepositories } from './Repositories';
+import { MissionPlannerStore } from './crew/stores/MissionPlannerStore';
 
 document.body.style.fontFamily = Theme.fontFamily;
 document.body.style.fontWeight = Theme.fontWeight;
@@ -24,8 +24,7 @@ document.body.style.backgroundColor = Theme.dark;
 const dashboardStore = new DashboardStore(WebRepositories);
 const trackerStore = new TrackerStore(WebRepositories, new MomentTimeService());
 const profileStore = new ProfileSitePickerStore(WebRepositories);
-const crewStore = new CrewStore(WebRepositories, profileStore);
-
+const missionPlannerStore = new MissionPlannerStore(WebRepositories, profileStore);
 const AppWithRouter = withRouter((App as any)) as typeof App;
 
 ReactDOM.render(
@@ -34,7 +33,7 @@ ReactDOM.render(
       <AppWithRouter
         dashboardStore={dashboardStore}
         trackerStore={trackerStore}
-        crewStore={crewStore}
+        missionPlannerStore={missionPlannerStore}
         profileStore={profileStore}
       />
     </BrowserRouter>

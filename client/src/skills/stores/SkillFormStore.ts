@@ -109,7 +109,9 @@ export class SkillFormStore extends FormStore<Skill, State> {
     const options = (value === SkillType.Qualification) ?
       this.qualificationOptions :
       this.certificationOptions;
-    if (options.length > 0) super.setState('skillId', String(options[0].value));
+    if (options.length > 0) {
+      super.setState('skillId', String(options[0].value));
+    }
   }
 
   private setExpirationDate(value: string) {
@@ -117,6 +119,8 @@ export class SkillFormStore extends FormStore<Skill, State> {
       moment(value).startOf('day').add(2, 'y') :
       moment(value).startOf('day').add(90, 'd');
 
-    if (expirationDate.isValid()) super.setState('expirationDate', expirationDate.format('YYYY-MM-DD'));
+    if (expirationDate.isValid()) {
+      super.setState('expirationDate', expirationDate.format('YYYY-MM-DD'));
+    }
   }
 }

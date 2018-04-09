@@ -2,7 +2,6 @@ import { action, computed, observable } from 'mobx';
 import { CrewModel } from '../models/CrewModel';
 import { CrewRepository } from '../repositories/CrewRepository';
 import { CrewPositionModel } from '../models/CrewPositionModel';
-import { AirmanRepository } from '../../airman/repositories/AirmanRepository';
 import { AirmanModel } from '../../airman/models/AirmanModel';
 import { Repositories } from '../../Repositories';
 import { ProfileSitePickerStore } from '../../profile/stores/ProfileSitePickerStore';
@@ -15,7 +14,6 @@ interface NewEntry {
 }
 
 export class CrewStore {
-  private airmanRepository: AirmanRepository;
   private crewRepository: CrewRepository;
   private crewPositionRepository: CrewPositionRepository;
   private pendingDeletePositions: CrewPositionModel[] = [];
@@ -23,40 +21,15 @@ export class CrewStore {
   @observable private _crew: CrewModel | null = null;
   @observable private _airmen: AirmanModel[] = [];
   @observable private _newEntry: NewEntry = {airmanName: '', title: '', critical: false};
-  @observable private _loading: boolean = false;
 
   constructor(repositories: Repositories, private _profileStore: ProfileSitePickerStore) {
-    this.airmanRepository = repositories.airmanRepository;
     this.crewRepository = repositories.crewRepository;
     this.crewPositionRepository = repositories.crewPositionRepository;
   }
 
-  async hydrate(crewId: number) {
-    this._loading = true;
-
-    const [airmen, crew] = await Promise.all([
-      this.airmanRepository.findBySiteId(this._profileStore.profile!.user.siteId!),
-      this.crewRepository.findOne(crewId)
-    ]);
+  async hydrate(crewId: number, airmen: AirmanModel[]) {
     this._airmen = airmen;
-    this._crew = crew;
-
-    this._loading = false;
-  }
-
-  @computed
-  get loading() {
-    return this._loading;
-  }
-
-  @action.bound
-  setLoading(loading: boolean) {
-    this._loading = loading;
-  }
-
-  @computed
-  get airmen() {
-    return this._airmen;
+    this._crew = await this.crewRepository.findOne(crewId);
   }
 
   @computed
@@ -105,13 +78,18 @@ export class CrewStore {
     if (this.pendingDeletePositions.length > 0) {
       await this.crewPositionRepository.delete(this.pendingDeletePositions);
       this.pendingDeletePositions = [];
-
     }
 
     const name = this._newEntry.airmanName.split(', ');
     const airman = this._airmen.find((a) => a.lastName === name[0] && a.firstName === name[1]);
+
     if (airman) {
-      this._crew.crewPositions.push(new CrewPositionModel(airman, this._newEntry.title, this._newEntry.critical));
+      this._crew.crewPositions.push(
+        new CrewPositionModel(
+          airman,
+          this._newEntry.title,
+          this._newEntry.critical
+        ));
       this._newEntry = {airmanName: '', title: '', critical: false};
     }
 

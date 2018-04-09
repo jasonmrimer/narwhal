@@ -1,18 +1,18 @@
 import * as React from 'react';
-import { StyledCrew } from '../../crew/Crew';
-import { CrewStore } from '../../crew/stores/CrewStore';
+import { StyledMissionPlanner } from '../../crew/MissionPlanner';
 import { observer } from 'mobx-react';
+import { MissionPlannerStore } from '../../crew/stores/MissionPlannerStore';
 
 interface Props {
-  crewStore: CrewStore;
+  missionPlannerStore: MissionPlannerStore;
   crewId: number;
 }
 
 export const CrewPage = observer((props: Props) => {
   return (
-    <StyledCrew
+    <StyledMissionPlanner
       crewId={props.crewId}
-      crewStore={props.crewStore}
+      missionPlannerStore={props.missionPlannerStore}
     />
   );
 });

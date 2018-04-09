@@ -7,14 +7,14 @@ import { Tracker } from '../tracker/Tracker';
 import { Dashboard } from '../dashboard/Dashboard';
 import { forIt, makeFakeTrackerStore } from '../utils/testUtils';
 import { DashboardStore } from '../dashboard/stores/DashboardStore';
-import { CrewStore } from '../crew/stores/CrewStore';
-import { Crew } from '../crew/Crew';
+import { MissionPlanner } from '../crew/MissionPlanner';
 import { StyledProfileSitePicker } from '../profile/ProfileSitePicker';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 import { ThemeProvider } from 'styled-components';
 import { DoubleRepositories } from '../Repositories';
 import { UserModel } from '../profile/models/ProfileModel';
 import { Theme } from '../themes/default';
+import { MissionPlannerStore } from '../crew/stores/MissionPlannerStore';
 
 describe('App', () => {
   let mountedSubject: ReactWrapper;
@@ -25,7 +25,7 @@ describe('App', () => {
     beforeEach(async () => {
       const trackerStore = await makeFakeTrackerStore();
       const dashboardStore = new DashboardStore(DoubleRepositories);
-      const crewStore = new CrewStore(DoubleRepositories, profileStore);
+      const missionPlannerStore = new MissionPlannerStore(DoubleRepositories, profileStore);
       const profileRepo = {
         findOne: () => {
           return Promise.resolve({
@@ -50,7 +50,7 @@ describe('App', () => {
               trackerStore={trackerStore}
               profileStore={profileStore}
               dashboardStore={dashboardStore}
-              crewStore={crewStore}
+              missionPlannerStore={missionPlannerStore}
             />
           </MemoryRouter>
         </ThemeProvider>
@@ -89,9 +89,9 @@ describe('App', () => {
     expect(mountedSubject.find(Dashboard).exists()).toBeTruthy();
   });
 
-  it('renders the Crew component when the route is /crew', async () => {
+  it('renders the MissionPlanner component when the route is /crew', async () => {
     mountedSubject = await createMountedPage('/crew/1');
-    expect(mountedSubject.find(Crew).exists()).toBeTruthy();
+    expect(mountedSubject.find(MissionPlanner).exists()).toBeTruthy();
   });
 });
 
@@ -99,7 +99,7 @@ const createMountedPage = async (entry: string) => {
   const trackerStore = await makeFakeTrackerStore();
   const dashboardStore = new DashboardStore(DoubleRepositories);
   const profileStore = new ProfileSitePickerStore(DoubleRepositories);
-  const crewStore = new CrewStore(DoubleRepositories, profileStore);
+  const missionPlannerStore = new MissionPlannerStore(DoubleRepositories, profileStore);
 
   const mountedRouter = mount(
     <ThemeProvider theme={Theme}>
@@ -108,7 +108,7 @@ const createMountedPage = async (entry: string) => {
           trackerStore={trackerStore}
           profileStore={profileStore}
           dashboardStore={dashboardStore}
-          crewStore={crewStore}
+          missionPlannerStore={missionPlannerStore}
         />
       </MemoryRouter>
     </ThemeProvider>

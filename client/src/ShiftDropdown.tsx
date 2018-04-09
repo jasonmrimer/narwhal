@@ -38,7 +38,7 @@ export const ShiftDropdown = observer((props: Props) => {
             }
           }}
         />
-      </span>
+    </span>
   );
 });
 
