@@ -2,16 +2,14 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import { TrackerStore } from './stores/TrackerStore';
-import { TopLevelFilter } from '../widgets/Filter';
 import { StyledSidePanel } from './SidePanel';
 import { StyledLegend } from '../roster/Legend';
 import { UserModel } from '../profile/models/ProfileModel';
 import { UnfilteredValue } from '../widgets/models/FilterOptionModel';
 import { StyledLoadingOverlay } from '../widgets/LoadingOverlay';
 import { StyledRosterContainer } from '../roster/RosterContainer';
-import { StyledDropdown } from '../widgets/Dropdown';
 import { StyledDeleteEventPopup } from '../event/DeleteEventPopup';
-import { caret } from '../utils/StyleUtils';
+import { StyledLocationFilters } from '../widgets/LocationFilters';
 
 interface Props {
   trackerStore: TrackerStore;
@@ -27,44 +25,12 @@ export class Tracker extends React.Component<Props> {
 
   render() {
     const {trackerStore, className} = this.props;
-    const {trackerFilterStore, sidePanelStore} = trackerStore;
+    const {locationFilterStore, sidePanelStore} = trackerStore;
     return (
       <div className={className}>
         {trackerStore.loading && <StyledLoadingOverlay/>}
         <div className="main">
-          <div className="filters">
-            <div id="site-filter-container">
-              <label htmlFor="site-filter">SITE</label>
-              <br/>
-              <StyledDropdown
-                id="site-filter"
-                name="siteId"
-                options={trackerFilterStore.siteOptions}
-                value={trackerFilterStore.selectedSite}
-                onChange={async (e: any) => {
-                  await trackerFilterStore.setSelectedSite(Number(e.target.value));
-                }}
-              />
-            </div>
-            <TopLevelFilter
-              id="squadron-filter"
-              label="SQUADRON"
-              unfilteredOptionLabel="All Squadrons"
-              value={trackerFilterStore.selectedSquadron}
-              callback={trackerFilterStore.setSelectedSquadron}
-              options={trackerFilterStore.squadronOptions}
-              notification="Please select a site first."
-            />
-            <TopLevelFilter
-              id="flight-filter"
-              label="FLIGHT"
-              unfilteredOptionLabel="All Flights"
-              value={trackerFilterStore.selectedFlight}
-              callback={trackerFilterStore.setSelectedFlight}
-              options={trackerFilterStore.flightOptions}
-              notification="Please select a squadron first."
-            />
-          </div>
+          <StyledLocationFilters locationFilterStore={locationFilterStore}/>
           <div>
             <StyledLegend/>
           </div>
@@ -95,63 +61,16 @@ export const StyledTracker = styled(Tracker)`
   padding: 0.5rem;
   display: flex;
   color: white;
-
-  .filters {
-    label {
-      font-size: 0.875rem;
-      font-weight: 300;
-      color: ${props => props.theme.purpleSteel};
-    }
-  }
-  
-  .filters {
-     &:after {
-      content: "."; 
-      visibility: hidden; 
-      display: block; 
-      height: 0;
-      clear: both;
-     }
-  }
-  
-  #site-filter-container {
-    min-width: 20%;
-    display: inline-block;
-    position: relative;
-    float: left;
-    z-index: 9;
-    margin: 0 32px 0 0;
-    
-      &:after {
-    content: ' ';
-    background: ${props => caret(false)};
-    right: 0;
-    height: 14px;
-    width: 20px;
-    top: 43px;
-    position: absolute;
-    pointer-events: none;
-  }
-    
-  }
-  
-  #site-filter {
-    background: transparent;
-    display: block;
-    width: 100%;
-    height: 48px;
-    float: right;
-    margin: 0 0 5px 0;
-    font-size: 1rem;
-    font-weight: 300;
-    border: none;
-    border-bottom: 1px solid ${props => props.theme.purpleSteel};
-    color: ${props => props.theme.fontColor};
-    border-radius: 0;
-    cursor: pointer;
-  }
   
   .main {
     width: 1400px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .filters {
+    width: 50%;
+    display: flex;
+    justify-content: space-between;
   }
  `;

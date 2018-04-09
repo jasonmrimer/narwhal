@@ -10,6 +10,7 @@ describe('MissionPlannerStore', () => {
       const profileStore = new ProfileSitePickerStore(DoubleRepositories);
       await profileStore.hydrate();
       subject = new MissionPlannerStore(DoubleRepositories, profileStore);
+      subject.locationFilterStore.hydrate = jest.fn();
       await subject.hydrate(1);
     });
 
@@ -19,28 +20,32 @@ describe('MissionPlannerStore', () => {
       expect(subject.loading).toBeFalsy();
     });
 
-    it('should retrieve and set airmen', async () => {
-      let crewStoreHydrateSpy = jest.fn();
-      subject.crewStore.hydrate = crewStoreHydrateSpy;
-      await subject.hydrate(1);
-      expect(subject.airmen.length).toBe(10);
-      expect(crewStoreHydrateSpy).toHaveBeenCalledWith(1, subject.airmen);
+    it('should call LocationFilterStores hydrate', async () => {
+      expect(subject.locationFilterStore.hydrate).toBeCalledWith(14, await DoubleRepositories.siteRepository.findAll());
     });
+  });
 
-    it('has a list of airmen belonging to the users site', () => {
-      expect(subject.airmen.length).toBe(10);
-      subject.airmen.map((airman) => expect(airman.siteId).toBe(14));
-    });
+  it('should retrieve and set airmen', async () => {
+    let crewStoreHydrateSpy = jest.fn();
+    subject.crewStore.hydrate = crewStoreHydrateSpy;
+    await subject.hydrate(1);
+    expect(subject.airmen.length).toBe(10);
+    expect(crewStoreHydrateSpy).toHaveBeenCalledWith(1, subject.airmen);
+  });
 
-    it('should have a separate airmen list based on filters', () => {
-      const qualification = subject.airmen[0].qualifications[0].qualification;
+  it('has a list of airmen belonging to the users site', () => {
+    expect(subject.airmen.length).toBe(10);
+    subject.airmen.map((airman) => expect(airman.siteId).toBe(14));
+  });
 
-      subject.rosterHeaderStore.setSelectedQualificationOptions(
-        [{value: qualification.id, label: qualification.acronym}]
-      );
+  it('should have a separate airmen list based on filters', () => {
+    const qualification = subject.airmen[0].qualifications[0].qualification;
 
-      expect(subject.filteredAirmen.length).toBe(4);
-      expect(subject.airmen.length).toBe(10);
-    });
+    subject.rosterHeaderStore.setSelectedQualificationOptions(
+      [{value: qualification.id, label: qualification.acronym}]
+    );
+
+    expect(subject.filteredAirmen.length).toBe(4);
+    expect(subject.airmen.length).toBe(10);
   });
 });

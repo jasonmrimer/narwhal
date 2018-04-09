@@ -84,7 +84,6 @@ export const TopLevelFilter = styled(Filter)`
   position: relative;
   float: left;
   z-index: 9;
-  margin: 0 32px 0 0;
 
   label {
     font-size: 0.875rem;

@@ -1,6 +1,6 @@
 import { action, computed, observable } from 'mobx';
 import { SiteModel } from '../../site/models/SiteModel';
-import { UnfilteredValue } from '../../widgets/models/FilterOptionModel';
+import { UnfilteredValue } from '../models/FilterOptionModel';
 import { AirmanModel } from '../../airman/models/AirmanModel';
 import { SquadronModel } from '../../squadron/models/SquadronModel';
 import { FlightModel } from '../../flight/model/FlightModel';
@@ -9,7 +9,7 @@ export interface AllAirmenRefresher {
   refreshAllAirmen: () => Promise<void>;
 }
 
-export class TrackerFilterStore {
+export class LocationFilterStore {
   @observable private _sites: SiteModel[] = [];
   @observable private _selectedSite: number;
   @observable private _selectedSquadron: number = UnfilteredValue;

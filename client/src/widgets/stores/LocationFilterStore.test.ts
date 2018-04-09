@@ -1,16 +1,16 @@
-import { UnfilteredValue } from '../../widgets/models/FilterOptionModel';
-import { AllAirmenRefresher, TrackerFilterStore } from './TrackerFilterStore';
+import { UnfilteredValue } from '../models/FilterOptionModel';
+import { AllAirmenRefresher, LocationFilterStore } from './LocationFilterStore';
 import { FakeAirmanRepository } from '../../airman/repositories/doubles/FakeAirmanRepository';
 import { AirmanModel } from '../../airman/models/AirmanModel';
 import { SiteRepositoryStub } from '../../site/repositories/doubles/SiteRepositoryStub';
 import { SiteModel } from '../../site/models/SiteModel';
 
-describe('TrackerFilterStore', () => {
+describe('LocationFilterStore', () => {
   const siteRepositoryStub = new SiteRepositoryStub();
   const airmanRepository: FakeAirmanRepository = new FakeAirmanRepository();
   let allAirmen: AirmanModel[];
   let sites: SiteModel[];
-  let subject: TrackerFilterStore;
+  let subject: LocationFilterStore;
   let refreshAllAirmenSpy: AllAirmenRefresher;
 
   beforeEach(async () => {
@@ -18,7 +18,7 @@ describe('TrackerFilterStore', () => {
       refreshAllAirmen: jest.fn()
     };
     allAirmen = await airmanRepository.findBySiteId(14);
-    subject = new TrackerFilterStore(refreshAllAirmenSpy);
+    subject = new LocationFilterStore(refreshAllAirmenSpy);
     sites = await siteRepositoryStub.findAll();
     subject.hydrate(3, sites);
   });

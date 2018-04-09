@@ -10,6 +10,7 @@ import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore
 import { StyledCrew } from './Crew';
 import { StyledMissionPlannerRosterContainer } from './MissionPlannerRosterContainer';
 import { MissionPlannerStore } from './stores/MissionPlannerStore';
+import { StyledLocationFilters } from '../widgets/LocationFilters';
 
 describe('MissionPlanner', () => {
   let subject: ShallowWrapper;
@@ -55,6 +56,10 @@ describe('MissionPlanner', () => {
   it('renders a link back to Tracker', () => {
     expect(subject.find(Link).exists()).toBeTruthy();
     expect(subject.find(Link).prop('to')).toBe('/');
+  });
+
+  it('should render location filters', () => {
+    expect(subject.find(StyledLocationFilters).exists()).toBeTruthy();
   });
 
   it('should render a crew', () => {

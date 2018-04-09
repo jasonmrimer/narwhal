@@ -4,7 +4,6 @@ import { Tracker } from './Tracker';
 import { forIt, makeFakeTrackerStore } from '../utils/testUtils';
 import { TrackerStore } from './stores/TrackerStore';
 import { StyledLegend } from '../roster/Legend';
-import { TopLevelFilter } from '../widgets/Filter';
 import { StyledSidePanel } from './SidePanel';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 import { TabType } from './stores/SidePanelStore';
@@ -14,7 +13,7 @@ import { StyledLoadingOverlay } from '../widgets/LoadingOverlay';
 import { EventModel, EventType } from '../event/models/EventModel';
 import * as moment from 'moment';
 import { StyledDeleteEventPopup } from '../event/DeleteEventPopup';
-import { StyledDropdown } from '../widgets/Dropdown';
+import { StyledLocationFilters } from '../widgets/LocationFilters';
 
 let trackerStore: TrackerStore;
 let subject: ShallowWrapper;
@@ -41,8 +40,12 @@ describe('Tracker', () => {
   });
 
   it('sets the trackerStores siteID and selectedSquadron', () => {
-    expect(trackerStore.trackerFilterStore.selectedSite).toBe(1);
-    expect(trackerStore.trackerFilterStore.selectedSquadron).toBe(UnfilteredValue);
+    expect(trackerStore.locationFilterStore.selectedSite).toBe(1);
+    expect(trackerStore.locationFilterStore.selectedSquadron).toBe(UnfilteredValue);
+  });
+
+  it('should render location filters', () => {
+    expect(subject.find(StyledLocationFilters).exists()).toBeTruthy();
   });
 
   it('should render a legend', () => {
@@ -51,33 +54,6 @@ describe('Tracker', () => {
 
   it('should render a roster', () => {
     expect(subject.find(StyledRosterContainer).prop('trackerStore')).toBe(trackerStore);
-  });
-
-  describe('TopLevelFilter', () => {
-    it('renders filters for site, squadron, and flight', () => {
-      expect(subject.find(StyledDropdown).length).toBe(1);
-      expect(subject.find(TopLevelFilter).length).toBe(2);
-    });
-
-    it('should render a site filter with the correct props', () => {
-      const wrapper = subject.find('#site-filter');
-      expect(wrapper.prop('value')).toEqual(trackerStore.trackerFilterStore.selectedSite);
-      expect(wrapper.prop('options')).toEqual(trackerStore.trackerFilterStore.siteOptions);
-    });
-
-    it('should render a squadron filter with the correct props', () => {
-      const wrapper = subject.find('#squadron-filter');
-      expect(wrapper.prop('value')).toEqual(trackerStore.trackerFilterStore.selectedSquadron);
-      expect(wrapper.prop('callback')).toEqual(trackerStore.trackerFilterStore.setSelectedSquadron);
-      expect(wrapper.prop('options')).toEqual(trackerStore.trackerFilterStore.squadronOptions);
-    });
-
-    it('should render a flight filter with the correct props', () => {
-      const wrapper = subject.find('#flight-filter');
-      expect(wrapper.prop('value')).toEqual(trackerStore.trackerFilterStore.selectedFlight);
-      expect(wrapper.prop('callback')).toEqual(trackerStore.trackerFilterStore.setSelectedFlight);
-      expect(wrapper.prop('options')).toEqual(trackerStore.trackerFilterStore.flightOptions);
-    });
   });
 
   describe('SidePanel', () => {

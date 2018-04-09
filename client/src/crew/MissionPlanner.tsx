@@ -9,6 +9,7 @@ import { StyledLoadingOverlay } from '../widgets/LoadingOverlay';
 import { StyledCrew } from './Crew';
 import { StyledMissionPlannerRosterContainer } from './MissionPlannerRosterContainer';
 import { MissionPlannerStore } from './stores/MissionPlannerStore';
+import { StyledLocationFilters } from '../widgets/LocationFilters';
 
 interface Props {
   crewId: number;
@@ -43,10 +44,15 @@ export class MissionPlanner extends React.Component<Props> {
           <span>MSN START {crew.mission.displayStartTime}</span>
           <span>MSN END {crew.mission.displayEndTime}</span>
         </div>
-        <StyledButton
-          text="SAVE"
-          onClick={missionPlannerStore.crewStore.save}
-        />
+        <div className="mission-header">
+          <StyledButton
+            text="SAVE"
+            onClick={missionPlannerStore.crewStore.save}
+          />
+          <StyledLocationFilters
+            locationFilterStore={missionPlannerStore.locationFilterStore}
+          />
+        </div>
         <div className="mission-planner">
           <StyledCrew
             crewStore={missionPlannerStore.crewStore}
@@ -63,9 +69,10 @@ export class MissionPlanner extends React.Component<Props> {
 
 export const StyledMissionPlanner = styled(MissionPlanner)`
   margin-left: 3rem;
+  width: 1698px;
   
   .mission-details {
-    margin-bottom: 3rem;
+    margin-bottom: 2rem;
     
     span {
       margin-right: 2rem;
@@ -93,7 +100,34 @@ export const StyledMissionPlanner = styled(MissionPlanner)`
     display: flex;
     flex-direction: row;
   }
+  
   .crew-list {
     margin-right: 2rem;
+  }
+  
+  .mission-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    
+    & > button {
+      padding: 0.5rem 3.25rem;
+      height: 2.125rem;
+      border: 1px solid ${props => props.theme.yellow};
+      color: ${props => props.theme.yellow};
+    }
+  }
+  
+  .filters {
+    width: 50%;
+    display: flex;
+    justify-content: flex-end;
+    
+    & > * {
+      margin-left: 2rem;
+      margin-right: 0;
+    }
   }
 `;

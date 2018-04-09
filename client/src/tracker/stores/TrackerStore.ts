@@ -7,7 +7,7 @@ import { TimeService } from '../services/TimeService';
 import { SidePanelStore, TabType } from './SidePanelStore';
 import { Moment } from 'moment';
 import { RosterHeaderStore } from '../../roster/stores/RosterHeaderStore';
-import { AllAirmenRefresher, TrackerFilterStore } from './TrackerFilterStore';
+import { AllAirmenRefresher, LocationFilterStore } from '../../widgets/stores/LocationFilterStore';
 import { Repositories } from '../../Repositories';
 import { EventModel } from '../../event/models/EventModel';
 
@@ -17,7 +17,7 @@ export class TrackerStore implements AllAirmenRefresher, RefreshAirmen {
   public plannerStore: PlannerStore;
   public sidePanelStore: SidePanelStore;
   public rosterHeaderStore: RosterHeaderStore;
-  public trackerFilterStore: TrackerFilterStore;
+  public locationFilterStore: LocationFilterStore;
 
   private repositories: Repositories;
   @observable private _loading: boolean = false;
@@ -27,12 +27,12 @@ export class TrackerStore implements AllAirmenRefresher, RefreshAirmen {
 
   constructor(repositories: Repositories, timeService: TimeService) {
     this.repositories = repositories;
-    this.trackerFilterStore = new TrackerFilterStore(this);
-    this.currencyStore = new CurrencyStore(this, this.trackerFilterStore, this.repositories);
+    this.locationFilterStore = new LocationFilterStore(this);
+    this.currencyStore = new CurrencyStore(this, this.locationFilterStore, this.repositories);
     this.availabilityStore = new AvailabilityStore(this, this.repositories);
     this.plannerStore = new PlannerStore(timeService, this);
     this.sidePanelStore = new SidePanelStore();
-    this.rosterHeaderStore = new RosterHeaderStore(this.trackerFilterStore);
+    this.rosterHeaderStore = new RosterHeaderStore(this.locationFilterStore);
   }
 
   async hydrate(siteId: number) {
@@ -50,7 +50,7 @@ export class TrackerStore implements AllAirmenRefresher, RefreshAirmen {
 
     this._airmen = airmen;
     this._events = events;
-    this.trackerFilterStore.hydrate(siteId, sites);
+    this.locationFilterStore.hydrate(siteId, sites);
     this.rosterHeaderStore.hydrate(certifications, qualifications);
     this.currencyStore.hydrate(certifications, qualifications);
     this.availabilityStore.hydrate(missions);
@@ -70,7 +70,7 @@ export class TrackerStore implements AllAirmenRefresher, RefreshAirmen {
 
   @computed
   get airmen() {
-    const airmen = this.trackerFilterStore.filterAirmen(this._airmen);
+    const airmen = this.locationFilterStore.filterAirmen(this._airmen);
     return this.rosterHeaderStore.filterAirmen(airmen);
   }
 
@@ -117,17 +117,17 @@ export class TrackerStore implements AllAirmenRefresher, RefreshAirmen {
   async updateAirmanShift(airman: AirmanModel, shiftType: ShiftType) {
     const updatedAirman = Object.assign({}, airman, {shift: shiftType});
     await this.repositories.airmanRepository.saveAirman(updatedAirman);
-    this._airmen = await this.repositories.airmanRepository.findBySiteId(this.trackerFilterStore.selectedSite);
+    this._airmen = await this.repositories.airmanRepository.findBySiteId(this.locationFilterStore.selectedSite);
   }
 
   async refreshAllAirmen() {
-    this._airmen = await this.repositories.airmanRepository.findBySiteId(this.trackerFilterStore.selectedSite);
+    this._airmen = await this.repositories.airmanRepository.findBySiteId(this.locationFilterStore.selectedSite);
     await this.refreshEvents();
     await this.refreshAirmanEvents();
   }
 
   async refreshAirmen(item: { airmanId: number }) {
-    this._airmen = await this.repositories.airmanRepository.findBySiteId(this.trackerFilterStore.selectedSite);
+    this._airmen = await this.repositories.airmanRepository.findBySiteId(this.locationFilterStore.selectedSite);
     await this.refreshEvents();
 
     this._selectedAirman = this._airmen.find(a => a.id === item.airmanId) || AirmanModel.empty();
@@ -137,7 +137,7 @@ export class TrackerStore implements AllAirmenRefresher, RefreshAirmen {
   async refreshEvents() {
     const week = this.plannerStore.plannerWeek;
     this._events = await this.repositories.eventRepository
-      .findAllBySiteIdAndWithinPeriod(this.trackerFilterStore.selectedSite, week[0], week[6]);
+      .findAllBySiteIdAndWithinPeriod(this.locationFilterStore.selectedSite, week[0], week[6]);
   }
 
   async refreshAirmanEvents() {
