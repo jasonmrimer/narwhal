@@ -101,7 +101,7 @@ export class Roster extends React.Component<Props> {
     return (
       <List
         className={className}
-        height={900}
+        height={855}
         rowHeight={(props) => cache.rowHeight(props)! || 60}
         rowCount={trackerStore.airmen.length}
         width={1400}

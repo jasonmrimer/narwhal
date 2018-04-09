@@ -22,7 +22,10 @@ const unsetShiftOptions = [{value: -1, label: ''}, ...shiftOptions];
 
 export const ShiftDropdown = observer((props: Props) => {
   return (
-    <span className={props.className}>
+    <span
+      onClick={(e: any) => e.stopPropagation()}
+      className={props.className}
+    >
         <ShiftDisplay shift={props.airman.shift}/>
         <StyledDropdown
           name="shift"

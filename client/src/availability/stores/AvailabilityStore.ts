@@ -10,7 +10,7 @@ import { Repositories } from '../../Repositories';
 import { MissionModel } from '../../mission/models/MissionModel';
 import { TDYDeploymentFormStore } from '../../event/stores/TDYDeploymentFormStore';
 
-interface RefreshAirmen {
+export interface RefreshAirmen {
   refreshAirmen: (item: { airmanId: number }) => Promise<void>;
 }
 

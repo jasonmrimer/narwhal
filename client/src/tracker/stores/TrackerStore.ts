@@ -1,17 +1,17 @@
 import { AirmanModel, ShiftType } from '../../airman/models/AirmanModel';
 import { action, computed, observable } from 'mobx';
 import { CurrencyStore } from '../../currency/stores/CurrencyStore';
-import { AvailabilityStore } from '../../availability/stores/AvailabilityStore';
+import { AvailabilityStore, RefreshAirmen } from '../../availability/stores/AvailabilityStore';
 import { PlannerStore } from '../../roster/stores/PlannerStore';
 import { TimeService } from '../services/TimeService';
 import { SidePanelStore, TabType } from './SidePanelStore';
 import { Moment } from 'moment';
 import { RosterHeaderStore } from '../../roster/stores/RosterHeaderStore';
-import { TrackerFilterStore } from './TrackerFilterStore';
+import { AllAirmenRefresher, TrackerFilterStore } from './TrackerFilterStore';
 import { Repositories } from '../../Repositories';
 import { EventModel } from '../../event/models/EventModel';
 
-export class TrackerStore {
+export class TrackerStore implements AllAirmenRefresher, RefreshAirmen {
   public currencyStore: CurrencyStore;
   public availabilityStore: AvailabilityStore;
   public plannerStore: PlannerStore;
@@ -90,27 +90,20 @@ export class TrackerStore {
 
   @action.bound
   async setSelectedAirman(airman: AirmanModel, tab: TabType) {
+    if (this._selectedAirman.id !== airman.id) {
+      this.availabilityStore.closeEventForm();
+      this.currencyStore.closeSkillForm();
+    }
     this._selectedAirman = airman;
-
-    const ripItems = await this.repositories.ripItemRepository.findBySelectedAirman(airman.id);
-    this.currencyStore.airmanRipItemFormStore.setRipItems(ripItems);
-
-    await this.refreshAirmanEvents();
-
     this.sidePanelStore.setSelectedTab(tab);
+    await this.refreshAirmanRipItems();
+    await this.refreshAirmanEvents();
   }
 
   @action.bound
   clearSelectedAirman() {
     this._selectedAirman = AirmanModel.empty();
-
-    this.currencyStore.airmanRipItemFormStore.setRipItems([]);
-
-    this.sidePanelStore.setSelectedTab(TabType.AVAILABILITY);
-
     this.plannerStore.setSidePanelWeek(this.plannerStore.plannerWeek);
-
-    this.availabilityStore.closeEventForm();
   }
 
   @action.bound
@@ -155,5 +148,14 @@ export class TrackerStore {
     const airmanEvents = await this.repositories.eventRepository
       .findAllByAirmanIdAndWithinPeriod(this.selectedAirman.id, week[0], week[6]);
     this.availabilityStore.setAirmanEvents(airmanEvents);
+  }
+
+  async refreshAirmanRipItems() {
+    if (this.selectedAirman.isEmpty) {
+      return;
+    }
+    const ripItems = await this.repositories.ripItemRepository
+      .findBySelectedAirman(this.selectedAirman.id);
+    this.currencyStore.airmanRipItemFormStore.setRipItems(ripItems);
   }
 }
