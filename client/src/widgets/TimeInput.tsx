@@ -35,6 +35,7 @@ export const StyledTimeInput = styled(TimeInput)`
     color: ${props => props.theme.graySteel};
     cursor: initial;
     font-style: italic;
+    border: none;
   }
   
   background: none;

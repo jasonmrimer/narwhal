@@ -45,7 +45,7 @@ const Row = observer((props: RowProps) => {
     >
       <div
         className={classNames(className, {selected: airman.id === trackerStore.selectedAirman.id})}
-        style={props.style}
+        style={Object.assign({}, props.style, {width: '1400px'})}
       >
         <div
           className="left"
@@ -138,7 +138,11 @@ export const StyledRow = styled(Row)`
   border-top: none;
   
   &:nth-child(even) {
-    background-color: ${props => props.theme.lighter};
+    background-color: ${props => props.theme.light};
+  } 
+  
+  &:nth-child(odd) {
+    background-color: ${props => props.theme.dark};
   }
   
   &:hover {
@@ -165,6 +169,7 @@ export const StyledRow = styled(Row)`
     align-items: center;
     padding: 0.75rem;
     cursor: pointer;
+    width: 530px;
   }
   
   .shift {

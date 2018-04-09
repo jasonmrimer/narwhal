@@ -86,13 +86,18 @@ export const TopLevelFilter = styled(Filter)`
   z-index: 9;
   margin: 0 32px 0 0;
 
+  label {
+    font-size: 0.875rem;
+    font-weight: 300;  
+  }
+
   &:after {
     content: ' ';
     background: ${props => caret(props.options.length === 0)};
     right: 0;
     height: 14px;
     width: 20px;
-    top: 45px;
+    top: 43px;
     position: absolute;
     pointer-events: none;
   }
@@ -109,13 +114,13 @@ export const TopLevelFilter = styled(Filter)`
     
     display: block;
     width: 100%;
-    height: 50px;
+    height: 48px;
     float: right;
-    margin: 5px 0px;
-    font-size: 16px;
-    line-height: 1.75;
+    margin: 0 0 5px 0;
+    font-size: 1rem;
+    font-weight: 300;
     border: none;
-    border-bottom: 1px solid ${props => props.theme.fontColor};
+    border-bottom: 1px solid ${props => props.theme.purpleSteel};
     color: ${props => props.theme.fontColor};
     border-radius: 0;
     cursor: pointer;
@@ -163,7 +168,7 @@ export const RosterLevelFilter = styled(Filter)`
     width: 100%;
     
     border: none;
-    border-bottom: 1px solid ${props => props.theme.fontColor};
+    border-bottom: 1px solid ${props => props.theme.purpleSteel};
     color: ${props => props.theme.fontColor};
     border-radius: 0;
     cursor: pointer;

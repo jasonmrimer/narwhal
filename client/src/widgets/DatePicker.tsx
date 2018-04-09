@@ -54,19 +54,20 @@ export class DatePicker extends React.Component<Props, State> {
 
 export const StyledDatePicker = styled(DatePicker)`
   .DateInput_fangShape {
-    fill: ${props => props.theme.dark};
+    fill: ${props => props.theme.light};
   }
   
    .DateInput_fangStroke {
-    stroke: ${props => props.theme.dark};
+    stroke: ${props => props.theme.light};
    }
 
    // buttons
   .DayPickerNavigation_button {
-    background-color: ${props => props.theme.dark};
+    background-color: ${props => props.theme.light};
     border: 1px solid ${props => props.theme.graySteel};
     
     &:hover {
+      background-color: ${props => props.theme.light};
       border: 1px solid ${props => props.theme.yellowHover};
       
       & > svg {
@@ -89,7 +90,7 @@ export const StyledDatePicker = styled(DatePicker)`
   }
 
   .CalendarMonth {
-    background-color: ${props => props.theme.dark};
+    background-color: ${props => props.theme.light};
   }
   
   .CalendarMonth_caption {
@@ -102,16 +103,16 @@ export const StyledDatePicker = styled(DatePicker)`
   }
   
   .CalendarMonthGrid {
-    background-color: ${props => props.theme.dark};
+    background-color: ${props => props.theme.light};
   }
   
   .CalendarDay {
-    background-color: ${props => props.theme.dark};
+    background-color: ${props => props.theme.light};
     color: ${props => props.theme.fontColor};
     border: 1px solid ${props => props.theme.graySteel};
     
     &:hover {
-      background-color: ${props => props.theme.dark};
+      background-color: ${props => props.theme.light};
       color: ${props => props.theme.yellow};
       border: 1px double ${props => props.theme.yellowHover};
     }
@@ -130,7 +131,7 @@ export const StyledDatePicker = styled(DatePicker)`
   }
   
   .DayPicker > div {
-    background-color: ${props => props.theme.dark};
+    background-color: ${props => props.theme.light};
   }
   
   .DayPicker_weekHeader {
@@ -170,6 +171,7 @@ export const StyledDatePicker = styled(DatePicker)`
     &:disabled {
       color: ${props => props.theme.graySteel};
       cursor: initial;
+      border: none;
     }
   }
   

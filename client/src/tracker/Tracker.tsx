@@ -97,6 +97,14 @@ export const StyledTracker = styled(Tracker)`
   color: white;
 
   .filters {
+    label {
+      font-size: 0.875rem;
+      font-weight: 300;
+      color: ${props => props.theme.purpleSteel};
+    }
+  }
+  
+  .filters {
      &:after {
       content: "."; 
       visibility: hidden; 
@@ -120,7 +128,7 @@ export const StyledTracker = styled(Tracker)`
     right: 0;
     height: 14px;
     width: 20px;
-    top: 45px;
+    top: 43px;
     position: absolute;
     pointer-events: none;
   }
@@ -131,14 +139,14 @@ export const StyledTracker = styled(Tracker)`
     background: transparent;
     display: block;
     width: 100%;
-    height: 50px;
+    height: 48px;
     float: right;
-    margin: 5px 0px;
-    font-size: 16px;
-    line-height: 1.75;
+    margin: 0 0 5px 0;
+    font-size: 1rem;
+    font-weight: 300;
     border: none;
-    border-bottom: 1px solid #fff;
-    color: #fff;
+    border-bottom: 1px solid ${props => props.theme.purpleSteel};
+    color: ${props => props.theme.fontColor};
     border-radius: 0;
     cursor: pointer;
   }

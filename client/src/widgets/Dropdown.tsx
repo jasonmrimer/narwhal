@@ -40,14 +40,14 @@ export const Dropdown = (props: Props) => {
 };
 
 export const StyledDropdown = styled(Dropdown)`
-  background: ${props => caret(props.theme.fontColor)};
+  background: ${props => caret(props.disabled || false)};
   background-position: 98%;
   background-size: 0.75rem;
   color: ${props => props.theme.fontColor};
   height: 2rem;
   border: none;
   font-size: 1rem;
-  border-bottom: 1px solid ${props => props.theme.fontColor};
+  border-bottom: 1px solid ${props => props.theme.purpleSteel};
   -webkit-appearance: none;
   -webkit-border-radius: 0;
   width: 75%;

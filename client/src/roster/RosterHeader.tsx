@@ -19,7 +19,7 @@ export class RosterHeader extends React.Component<Props> {
     return (
       <div className={classNames('thead', className)}>
         <span className="shift">
-          <div>SHIFT</div>
+          <div className="header-column-title">SHIFT</div>
           <RosterLevelFilter
             id="shift-filter"
             unfilteredOptionLabel="All"
@@ -29,7 +29,7 @@ export class RosterHeader extends React.Component<Props> {
           />
         </span>
         <span>
-          <div>NAME</div>
+          <div className="header-column-title">NAME</div>
           <StyledTextInput
             value={rosterHeaderStore.selectedLastName}
             name="last-name"
@@ -39,7 +39,7 @@ export class RosterHeader extends React.Component<Props> {
           />
         </span>
         <span>
-          <div>QUALIFICATION</div>
+          <div className="header-column-title">QUALIFICATION</div>
           <StyledMultiTypeahead
             selected={rosterHeaderStore.selectedQualificationOptions}
             onChange={rosterHeaderStore.setSelectedQualificationOptions}
@@ -49,7 +49,7 @@ export class RosterHeader extends React.Component<Props> {
           />
         </span>
         <span>
-          <div>CERTIFICATION</div>
+          <div className="header-column-title">CERTIFICATION</div>
           <StyledMultiTypeahead
             selected={rosterHeaderStore.selectedCertificationOptions}
             onChange={rosterHeaderStore.setSelectedCertificationOptions}
@@ -74,9 +74,14 @@ export const StyledRosterHeader = styled(RosterHeader)`
   max-width: 868px;
   min-width: 837px;
   
+  .header-column-title {
+    font-size: 0.875rem;
+    font-weight: 500;  
+  }
+  
   & > span {
     width: 23%;
-    
+      
     & > input, select {
       padding: 0.5rem 0;
     }  
@@ -85,4 +90,6 @@ export const StyledRosterHeader = styled(RosterHeader)`
   .shift {
    width: 5rem;
   }
+  
+  
 `;

@@ -18,7 +18,7 @@ const shiftOptions = [
   {value: ShiftType.Swing, label: ShiftType.Swing}
 ];
 
-const unsetShiftOptions = [{value: -1, label: ''}, ...shiftOptions];
+const unsetShiftOptions = [{value: -1, label: 'None'}, ...shiftOptions];
 
 export const ShiftDropdown = observer((props: Props) => {
   return (
@@ -53,5 +53,9 @@ export const StyledShiftDropdown = styled(ShiftDropdown)`
   & > div {
     width: 1rem;
     margin-right: 0.25rem;
+  }
+  
+  & > select {
+    border-bottom: none;
   }
 `;

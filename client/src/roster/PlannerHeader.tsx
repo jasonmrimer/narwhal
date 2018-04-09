@@ -84,10 +84,24 @@ export const StyledPlannerHeader = styled(PlannerHeader)`
     display: flex;
     justify-content: space-between;
     flex-grow: 2;
+    
+    span {
+      div:first-child {
+        font-size: 0.875rem;
+        font-weight: 500; 
+      }
+     
+      div:last-child {
+        font-size: 0.625rem;
+        font-weight: 300; 
+      }
+    }
   }
   
   .month-header {
     margin-bottom: 7px;
+    font-size: 0.875rem;
+    font-weight: 500;  
   }
 
 `;

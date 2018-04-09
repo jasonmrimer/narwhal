@@ -26,7 +26,7 @@ export const Button = (props: Props) => {
 
 export const StyledButton = styled(Button)`
   display: flex;
-  align-items: unset;
+  align-items: center;
   
   font: inherit;
   font-size: 0.75rem;
@@ -44,6 +44,8 @@ export const StyledButton = styled(Button)`
   padding: 0.5rem 1rem;
   
   cursor: pointer;
+  
+  letter-spacing: 1px;
   
   i {
     margin-right: 0.25rem;

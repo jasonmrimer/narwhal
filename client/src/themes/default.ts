@@ -17,7 +17,7 @@ export const Theme = Object.freeze({
   tealSteel: '#347289',
   skySteel: '#5b7ca4',
   graySteel: '#ADADAD',
-  grayishBlueSteel: '#BDC9D6',
+  purpleSteel: '#BDC9D6',
   blueSteel: '#5C6977',
   hoverBlueSteel: '#475767',
 

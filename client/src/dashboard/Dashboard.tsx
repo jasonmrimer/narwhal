@@ -21,7 +21,7 @@ export class Dashboard extends React.Component<Props> {
   render() {
     const {dashboardStore, className} = this.props;
     return (
-      <div>
+      <div style={{margin: '0 3rem', padding: '0.5rem'}}>
         {dashboardStore.loading && <StyledLoadingOverlay/>}
         <div className={`${className} filter`}>
           <div className="filter">
@@ -62,7 +62,28 @@ export const StyledDashboard = styled(Dashboard)`
   
   .filter {
     min-width: 40%;
-    padding-top: 0.75rem;
-    padding-bottom: 2.5rem;
   }
+  
+  label {
+    font-size: 0.875rem;
+    font-weight: 300;
+    color: ${props => props.theme.purpleSteel};
+  }
+  
+  #site-filter {
+    background: transparent;
+    display: block;
+    width: 100%;
+    height: 48px;
+    float: right;
+    margin: 0 0 5px 0;
+    font-size: 1rem;
+    font-weight: 300;
+    border: none;
+    border-bottom: 1px solid ${props => props.theme.purpleSteel};
+    color: ${props => props.theme.fontColor};
+    border-radius: 0;
+    cursor: pointer;
+  }
+  
 `;

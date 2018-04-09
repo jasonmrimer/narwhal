@@ -9,6 +9,7 @@ import { StyledForm, StyledFormRow } from '../widgets/Form';
 import { AirmanRipItemFormStore } from './stores/AirmanRipItemFormStore';
 import { StyledButton } from '../widgets/Button';
 import * as classNames from 'classnames';
+import { ResetIcon } from '../icons/ResetIcon';
 
 interface Props {
   selectedAirmanId: number;
@@ -51,8 +52,9 @@ export class AirmanRipItems extends React.Component<Props> {
                   />
                   <StyledButton
                     className="item-date-button"
-                    text="+ 90 DAYS"
+                    text="90 DAYS"
                     onClick={() => this.onClick(item)}
+                    renderIcon={ResetIcon}
                   />
                 </div>
               </StyledFormRow>
@@ -76,7 +78,7 @@ export const StyledRipItems = styled(AirmanRipItems)`
 
   .item {
     margin: 0 0 0.5rem 0;
-    color: ${props => props.theme.grayishBlueSteel};
+    color: ${props => props.theme.purpleSteel};
   }
   
   .item-date-controls {
@@ -95,4 +97,16 @@ export const StyledRipItems = styled(AirmanRipItems)`
   .expired {
     color: ${props => props.theme.yellow};
   }
+  
+  button {
+    &:hover {
+      background: ${props => props.theme.fontColor};
+      color: ${props => props.theme.darkest};
+      
+      svg > g {
+        fill: ${props => props.theme.darkest};
+      }
+    }
+  }
+  
 `;
