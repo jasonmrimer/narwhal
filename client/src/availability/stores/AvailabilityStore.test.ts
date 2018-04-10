@@ -4,18 +4,18 @@ import { EventModelFactory } from '../../event/factories/EventModelFactory';
 import { toJS } from 'mobx';
 import * as moment from 'moment';
 import { DoubleRepositories } from '../../utils/Repositories';
-import { EventRepositoryStub } from '../../event/repositories/doubles/EventRepositoryStub';
+import { FakeEventRepository } from '../../event/repositories/doubles/FakeEventRepository';
 
 describe('AvailabilityStore', () => {
   let subject: AvailabilityStore;
-  let eventRepository: EventRepositoryStub;
+  let eventRepository: FakeEventRepository;
   beforeEach(() => {
     const refreshAirmen = {
       refreshAirmen: jest.fn()
     };
 
     subject = new AvailabilityStore(refreshAirmen, DoubleRepositories);
-    eventRepository = (DoubleRepositories.eventRepository as EventRepositoryStub);
+    eventRepository = (DoubleRepositories.eventRepository as FakeEventRepository);
   });
 
   it('should show the event form without an event', () => {

@@ -9,7 +9,7 @@ const missionOne = new MissionModel(
   'missionId1',
   'ato1',
   time,
-  time,
+  time.clone().add(4, 'hours'),
   new SiteModel(1, 'DMS-GA', [], SiteType.DGSCoreSite, 'DMS Georgia')
 );
 

@@ -46,7 +46,7 @@ describe('MissionPlanner', () => {
   it('should render a roster header that filters', () => {
     expect(subject.find(RosterHeader).exists()).toBeTruthy();
 
-    const certification = missionPlannerStore.airmen[0].certifications[0].certification;
+    const certification = missionPlannerStore.availableAirmen[0].certifications[0].certification;
     missionPlannerStore.rosterHeaderStore.setSelectedCertificationOptions([
       {
         value: certification.id,
@@ -59,7 +59,7 @@ describe('MissionPlanner', () => {
   });
 
   it('submits crew positions on submitCrew', async () => {
-    const airman = missionPlannerStore.airmen[0];
+    const airman = missionPlannerStore.availableAirmen[0];
     missionPlannerStore.crewStore.setNewEntry(
       {
         airmanName: `${airman.lastName}, ${airman.firstName}`,

@@ -3,7 +3,7 @@ import { EventModel } from '../../models/EventModel';
 import { Moment } from 'moment';
 import { FakeAirmanRepository } from '../../../airman/repositories/doubles/FakeAirmanRepository';
 
-export class EventRepositoryStub implements EventRepository {
+export class FakeEventRepository implements EventRepository {
   private static counter: number = 0;
   private _events: EventModel[] = [];
 
@@ -11,7 +11,7 @@ export class EventRepositoryStub implements EventRepository {
     let copy = Object.assign({}, event);
 
     if (!event.id) {
-      copy.id = ++EventRepositoryStub.counter;
+      copy.id = ++FakeEventRepository.counter;
       this._events.push(copy);
     }
 

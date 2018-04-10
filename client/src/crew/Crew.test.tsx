@@ -19,7 +19,7 @@ describe('Crew', () => {
   beforeEach(async () => {
     DoubleRepositories.crewRepository = new CrewRepositorySpy();
 
-    crewStore = new CrewStore(DoubleRepositories);
+    crewStore = new CrewStore(DoubleRepositories, {refreshAllEvents: jest.fn()});
     await crewStore.hydrate(crew, []);
     crewStore.save = crewStoreSpy;
 

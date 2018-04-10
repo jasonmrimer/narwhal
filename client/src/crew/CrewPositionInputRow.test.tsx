@@ -5,9 +5,9 @@ import { CrewPositionInputRow } from './CrewPositionInputRow';
 import { CrewStore } from './stores/CrewStore';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 import { DoubleRepositories } from '../utils/Repositories';
-import Mock = jest.Mock;
 import { StyledCheckbox } from '../widgets/Checkbox';
 import { StyledTextInput } from '../widgets/TextInput';
+import Mock = jest.Mock;
 
 describe('CrewPositionInputRow', () => {
   let crewStore: CrewStore;
@@ -25,7 +25,7 @@ describe('CrewPositionInputRow', () => {
     const airmen = await DoubleRepositories.airmanRepository.findBySiteId(14);
 
     await profileStore.hydrate();
-    crewStore = new CrewStore(DoubleRepositories);
+    crewStore = new CrewStore(DoubleRepositories, {refreshAllEvents: jest.fn()});
     await crewStore.hydrate(await DoubleRepositories.crewRepository.findOne(1), airmen);
 
     subject = shallow(

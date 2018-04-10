@@ -37,12 +37,17 @@ class CrewPage
   end
 
   def delete_crew_member
-    expect(page).to have_text 'Munoz, Diana'
+    expect(page).to have_selector('.crew-position', count: 3)
     click(page.all('button').last)
-    expect(page).to have_text 'Spaceman, Corey'
+
+    expect(page).to have_selector('.crew-position', count: 2)
     click(page.all('button').last)
-    expect(page).to have_text 'Keeter, Tracy'
+
+    expect(page).to have_selector('.crew-position', count: 1)
     click(page.all('button').last)
+
+    expect(page).to have_selector('.crew-position', count: 0)
+
     click_button 'SAVE'
 
     page.refresh

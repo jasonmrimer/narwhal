@@ -14,7 +14,7 @@ import { WebMissionRepository } from '../mission/repositories/web/WebMissionRepo
 import { WebRipItemRepository } from '../airman/repositories/web/WebAirmanRipItemRepository';
 import SkillRepositoryStub from '../skills/repositories/doubles/SkillRepositoryStub';
 import { FakeAirmanRepository } from '../airman/repositories/doubles/FakeAirmanRepository';
-import { EventRepositoryStub } from '../event/repositories/doubles/EventRepositoryStub';
+import { FakeEventRepository } from '../event/repositories/doubles/FakeEventRepository';
 import { MissionRepositoryStub } from '../mission/repositories/doubles/MissionRepositoryStub';
 import { SiteRepositoryStub } from '../site/repositories/doubles/SiteRepositoryStub';
 import { RipItemRepositoryStub } from '../airman/repositories/doubles/AirmanRipItemRepositoryStub';
@@ -58,7 +58,7 @@ export const DoubleRepositories: Repositories = {
   airmanRepository: new FakeAirmanRepository(),
   siteRepository: new SiteRepositoryStub(),
   skillRepository: new SkillRepositoryStub(),
-  eventRepository: new EventRepositoryStub(),
+  eventRepository: new FakeEventRepository(),
   missionRepository: new MissionRepositoryStub(),
   ripItemRepository: new RipItemRepositoryStub(),
   crewRepository: new CrewRepositorySpy(),

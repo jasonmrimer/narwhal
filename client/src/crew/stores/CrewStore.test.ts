@@ -1,4 +1,4 @@
-import { CrewStore } from './CrewStore';
+import { AllEventsRefresher, CrewStore } from './CrewStore';
 import { CrewModelFactory } from '../factories/CrewModelFactory';
 import { CrewModel } from '../models/CrewModel';
 import { DoubleRepositories } from '../../utils/Repositories';
@@ -8,15 +8,20 @@ import { AirmanModel } from '../../airman/models/AirmanModel';
 
 describe('CrewStore', () => {
   let crew: CrewModel;
-  let subject: CrewStore;
   let crewPositions: CrewPositionModel[];
   let airmen: AirmanModel[];
+  let refresherSpy: AllEventsRefresher;
+  let subject: CrewStore;
 
   beforeEach(async () => {
     DoubleRepositories.crewRepository = new CrewRepositorySpy();
     crew = CrewModelFactory.build();
 
-    subject = new CrewStore(DoubleRepositories);
+    refresherSpy = {
+      refreshAllEvents: jest.fn()
+    };
+
+    subject = new CrewStore(DoubleRepositories, refresherSpy);
 
     airmen = await DoubleRepositories.airmanRepository.findBySiteId(14);
     await subject.hydrate(crew, airmen);
@@ -73,8 +78,15 @@ describe('CrewStore', () => {
     const deletePositions = [crewPositions[0], crewPositions[1]];
     subject.clearPosition(1);
     subject.clearPosition(2);
+
     await subject.save();
+
     expect(DoubleRepositories.crewPositionRepository.delete).toHaveBeenCalledWith(deletePositions);
     expect(crewPositions.length).toBe(0);
+  });
+
+  it('should refresh events after saving', async () => {
+    await subject.save();
+    expect(refresherSpy.refreshAllEvents).toHaveBeenCalled();
   });
 });

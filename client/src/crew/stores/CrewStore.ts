@@ -11,6 +11,10 @@ interface NewEntry {
   critical: boolean;
 }
 
+export interface AllEventsRefresher {
+  refreshAllEvents: () => Promise<void>;
+}
+
 export class CrewStore {
   private crewPositionRepository: CrewPositionRepository;
   private pendingDeletePositions: CrewPositionModel[] = [];
@@ -19,7 +23,7 @@ export class CrewStore {
   @observable private _airmen: AirmanModel[] = [];
   @observable private _newEntry: NewEntry = {airmanName: '', title: '', critical: false};
 
-  constructor(repositories: Repositories) {
+  constructor(repositories: Repositories, private eventsRefresher: AllEventsRefresher) {
     this.crewPositionRepository = repositories.crewPositionRepository;
   }
 
@@ -96,6 +100,8 @@ export class CrewStore {
 
     this._crew.crewPositions =
       await this.crewPositionRepository.update(this._crew.crewPositions, this._crew.mission.id);
+
+    await this.eventsRefresher.refreshAllEvents();
   }
 
   @action.bound

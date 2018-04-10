@@ -19,7 +19,11 @@ export class MissionPlannerRosterContainer extends React.Component<Props> {
         <div className="roster-header">
           <StyledRosterHeader rosterHeaderStore={this.props.missionPlannerStore.rosterHeaderStore}/>
         </div>
-        <StyledMissionPlannerRoster airmen={this.props.missionPlannerStore.filteredAirmen}/>
+        <StyledMissionPlannerRoster
+          availableAirmen={this.props.missionPlannerStore.availableAirmen}
+          unavailableAirmen={this.props.missionPlannerStore.unavailableAirmen}
+          mission={this.props.missionPlannerStore.crewStore.crew!.mission}
+        />
       </div>
     );
   }
@@ -36,12 +40,10 @@ export const StyledMissionPlannerRosterContainer = styled(MissionPlannerRosterCo
     }
   }
   
- 
  .header-top {
     height: 2rem;
     width: 100%;
     background: ${props => props.theme.blueSteel};
     border: 1px solid ${props => props.theme.graySteel};
  }
- 
 `;
