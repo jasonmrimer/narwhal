@@ -12,7 +12,6 @@ interface FormProps {
   className?: string;
 }
 
-
 export const Form = (props: FormProps) => {
   const onSubmit = async (e: any) => {
     if (!props.setLoading) {
@@ -22,7 +21,7 @@ export const Form = (props: FormProps) => {
       await props.onSubmit(e);
       props.setLoading!(false);
     }
-  }
+  };
 
   return (
     <form className={props.className} onSubmit={onSubmit}>

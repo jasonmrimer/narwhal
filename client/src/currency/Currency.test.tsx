@@ -14,6 +14,7 @@ import { StyledNotification } from '../widgets/Notification';
 import { StyledRipItems } from '../rip-items/AirmanRipItemForm';
 import { CurrencyChild } from './stores/CurrencyStore';
 
+/* tslint:disable:no-empty*/
 describe('Currency', () => {
   const airman = AirmanModelFactory.build(
     1,

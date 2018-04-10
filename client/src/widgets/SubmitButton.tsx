@@ -27,5 +27,6 @@ export const StyledSubmitButton = styled(SubmitButton)`
   &:hover {
     background: ${props => props.theme.yellowHover};
     color: ${props => props.theme.darkest};
+    text-decoration: underline;
   }
 `;

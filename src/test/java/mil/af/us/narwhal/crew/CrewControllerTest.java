@@ -46,7 +46,7 @@ public class CrewControllerTest extends BaseIntegrationTest {
     airman = new Airman(flight, "A", "B");
     airmanRepository.save(airman);
 
-    mission = new Mission("A", "B", Instant.now(), Instant.now(), site);
+    mission = new Mission("A", "B", Instant.now(), Instant.now(), "U-2", site);
     mission.addCrewPosition(new CrewPosition(airman));
     missionRepository.save(mission);
   }

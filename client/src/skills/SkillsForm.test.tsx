@@ -10,6 +10,7 @@ import { SkillActions, SkillFormStore } from './stores/SkillFormStore';
 import { StyledButton } from '../widgets/Button';
 import Mock = jest.Mock;
 
+/* tslint:disable:no-empty*/
 describe('SkillsForm', () => {
   let skillActions: SkillActions;
   let subject: ShallowWrapper;
@@ -37,7 +38,6 @@ describe('SkillsForm', () => {
         setLoading={setLoading}
       />);
   });
-
 
   it('should render a Form', () => {
     expect(subject.find(StyledForm).prop('setLoading')).toBe(setLoading);

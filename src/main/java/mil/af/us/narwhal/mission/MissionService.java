@@ -37,6 +37,7 @@ public class MissionService {
     Mission foundMission = missionRepository.findOneByMissionId(metaData.getMissionid());
     if (foundMission != null) {
       foundMission.setAtoMissionNumber(metaData.getAtomissionnumber());
+      foundMission.setPlatform(metaData.getPlatform());
       foundMission.setSite(site);
       foundMission.setStartDateTime(metaData.getStartdttime().toGregorianCalendar().getTime().toInstant());
       if (metaData.getEnddttime() != null) {
@@ -48,6 +49,7 @@ public class MissionService {
         .missionId(metaData.getMissionid())
         .atoMissionNumber(metaData.getAtomissionnumber())
         .startDateTime(metaData.getStartdttime().toGregorianCalendar().getTime().toInstant())
+        .platform(metaData.getPlatform())
         .site(site);
       if (metaData.getEnddttime() != null) {
         builder.endDateTime(metaData.getEnddttime().toGregorianCalendar().getTime().toInstant());

@@ -54,6 +54,7 @@ export const StyledButton = styled(Button)`
   &:hover {
     background: ${props => props.theme.fontColor};
     color: ${props => props.theme.darkest};
+    text-decoration: underline;
     
     svg > path {
       fill: ${props => props.theme.darkest};

@@ -7,7 +7,8 @@ export class MissionModel {
               public atoMissionNumber: string,
               public startDateTime: Moment,
               public endDateTime: Moment | null = null,
-              public site?: SiteModel) {
+              public platform: string,
+              public site?: SiteModel, ) {
   }
 
   get displayDate() {

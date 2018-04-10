@@ -4,8 +4,8 @@ import { ThemeProvider } from 'styled-components';
 import { storiesOf } from '@storybook/react';
 import { StyledProfileSitePicker } from '../profile/ProfileSitePicker';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
-import { DoubleRepositories } from '../utils/Repositories';
 import { SiteModel, SiteType } from '../site/models/SiteModel';
+import { DoubleRepositories } from '../utils/Repositories';
 
 const wrapper = (story: any) => {
   return (

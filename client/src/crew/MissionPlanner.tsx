@@ -46,8 +46,8 @@ export class MissionPlanner extends React.Component<Props> {
           <span>MSN END {crew.mission.displayEndTime}</span>
         </div>
         <StyledForm
-          onSubmit={async (e) =>{
-            e.preventDefault()
+          onSubmit={async (e) => {
+            e.preventDefault();
             await this.props.missionPlannerStore.crewStore.save();
           }}
           setLoading={missionPlannerStore.setLoading}

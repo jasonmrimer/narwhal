@@ -39,6 +39,7 @@ public class CrewServiceTest {
       "MISNUM1",
       Instant.parse("2017-12-12T09:00:00Z"),
       Instant.parse("2017-12-12T15:00:00Z"),
+      "U-2",
       new Site("Site-1")
     );
 

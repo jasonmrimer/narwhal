@@ -11,6 +11,7 @@ import { EventModelFactory } from './factories/EventModelFactory';
 import { AppointmentFormStore } from './stores/AppointmentFormStore';
 import { StyledForm } from '../widgets/Form';
 
+/* tslint:disable:no-empty*/
 describe('AppointmentForm', () => {
   let store: AppointmentFormStore;
   let wrapper: ShallowWrapper;

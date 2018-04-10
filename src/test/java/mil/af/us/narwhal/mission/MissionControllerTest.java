@@ -36,6 +36,7 @@ public class MissionControllerTest extends BaseIntegrationTest {
         "MISNUM2",
         Instant.parse("2017-12-12T09:00:00Z"),
         Instant.parse("2017-12-12T15:00:00Z"),
+        "U-2",
         site2
       ),
       new Mission(
@@ -43,6 +44,7 @@ public class MissionControllerTest extends BaseIntegrationTest {
         "MISNUM3",
         future,
         future,
+        "U-2",
         site2
       ),
       new Mission(
@@ -50,6 +52,7 @@ public class MissionControllerTest extends BaseIntegrationTest {
         "MISNUM1",
         time,
         time,
+        "Global Hawk",
         site1
       )
     );
@@ -86,7 +89,8 @@ public class MissionControllerTest extends BaseIntegrationTest {
       .body("[1].atoMissionNumber", equalTo("MISNUM3"))
       .body("[1].startDateTime", equalTo(future.toString()))
       .body("[1].endDateTime", equalTo(future.toString()))
-      .body("[1].site.id", equalTo(site2.getId().intValue()));
+      .body("[1].site.id", equalTo(site2.getId().intValue()))
+      .body("[1].platform", equalTo("U-2"));
     // @formatter:on
   }
 }

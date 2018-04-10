@@ -13,13 +13,14 @@ describe('Mission', () => {
       '123',
       'fakeMission',
       moment('2017-12-12T09:00:00Z'),
-      moment('2017-12-12T15:00:00Z')
+      moment('2017-12-12T15:00:00Z'),
+      'U-2'
     );
     const subject = shallow(<Mission mission={mission}/>);
     expect(subject.text()).toContain(mission.atoMissionNumber);
-    expect(subject.text()).toContain('MSN DATE:');
-    expect(subject.text()).toContain('MSN START:');
-    expect(subject.text()).toContain('MSN END:');
+    expect(subject.text()).toContain('Date:');
+    expect(subject.text()).toContain('Start time:');
+    expect(subject.text()).toContain('End time:');
   });
 
   it('renders TBD when mission endDate not provided', () => {
@@ -27,10 +28,12 @@ describe('Mission', () => {
       1,
       '123',
       'fakeMission',
-      moment('2017-12-12T09:00:00Z')
+      moment('2017-12-12T09:00:00Z'),
+      null,
+      'U-2'
     );
     const subject = shallow(<Mission mission={mission}/>);
-    expect(subject.text()).toContain('MSN END: TBD');
+    expect(subject.text()).toContain('End time: TBD');
   });
 
   it('renders a link to the related crew page', () => {
@@ -39,7 +42,8 @@ describe('Mission', () => {
       '123',
       'fakeMission',
       moment('2017-12-12T09:00:00Z'),
-      moment('2017-12-12T15:00:00Z')
+      moment('2017-12-12T15:00:00Z'),
+      'U-2'
     );
     const subject = mount(
       <MemoryRouter>
@@ -48,5 +52,23 @@ describe('Mission', () => {
     );
 
     expect(subject.find(Link).prop('to')).toBe(`/crew/${mission.id}`);
+  });
+
+  it('renders platform', () => {
+    const mission = new MissionModel(
+      1,
+      '123',
+      'fakeMission',
+      moment('2017-12-12T09:00:00Z'),
+      moment('2017-12-12T15:00:00Z'),
+      'U-2'
+    );
+    const subject = mount(
+      <MemoryRouter>
+        <Mission mission={mission}/>
+      </MemoryRouter>
+    );
+
+    expect(subject.text()).toContain('Platform: U-2');
   });
 });

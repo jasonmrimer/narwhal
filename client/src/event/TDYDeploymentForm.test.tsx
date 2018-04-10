@@ -9,6 +9,7 @@ import { eventStub } from '../utils/testUtils';
 import { TDYDeploymentForm } from './TDYDeploymentForm';
 import { StyledForm } from '../widgets/Form';
 
+/* tslint:disable:no-empty*/
 describe('TDYDeploymentForm', () => {
   let store: TDYDeploymentFormStore;
   let wrapper: ShallowWrapper;
@@ -33,7 +34,6 @@ describe('TDYDeploymentForm', () => {
 
     subject = (wrapper.instance() as TDYDeploymentForm);
   });
-
 
   it('should render a Form', () => {
     expect(wrapper.find(StyledForm).prop('setLoading')).toBe(setLoading);

@@ -11,6 +11,7 @@ import { StyledButton } from '../widgets/Button';
 import { EventModelFactory } from './factories/EventModelFactory';
 import { StyledForm } from '../widgets/Form';
 
+/* tslint:disable:no-empty*/
 describe('LeaveForm', () => {
   let store: LeaveFormStore;
   let wrapper: ShallowWrapper;

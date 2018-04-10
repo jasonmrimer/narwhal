@@ -9,15 +9,28 @@ interface Props {
 }
 
 export const Mission = (props: Props) => {
-  const {id, atoMissionNumber, startDateTime, endDateTime} = props.mission;
+  const {id, atoMissionNumber, startDateTime, endDateTime, platform} = props.mission;
   return (
     <span className={`${props.className} mission-card`}>
       <h3>{atoMissionNumber}</h3>
       <div>
         <div>
-          <div>MSN DATE: {startDateTime.format('DD MMM YY').toUpperCase()}</div>
-          <div>MSN START: {startDateTime.format('HHmm[L]')}</div>
-          <div>MSN END: {endDateTime ? endDateTime.format('HHmm[L]') : 'TBD'}</div>
+          <div className="mission-info">
+            <span>Platform:</span>
+            <span>{platform}</span>
+          </div>
+          <div className="mission-info">
+            <span>Date:</span>
+            <span>{startDateTime.format('DD MMM YY').toUpperCase()}</span>
+          </div>
+          <div className="mission-info">
+            <span>Start time:</span>
+            <span>{startDateTime.format('HHmm[L]')}</span>
+          </div>
+          <div className="mission-info">
+            <span>End time:</span>
+            <span>{endDateTime ? endDateTime.format('HHmm[L]') : 'TBD'}</span>
+          </div>
         </div>
         <Link className="crew-link" to={`/crew/${id}`}>
           VIEW
@@ -46,6 +59,12 @@ export const StyledMission = styled(Mission)`
     justify-content: space-between;
   }
   
+  .mission-info {
+    width: 150%;
+    display: flex;
+    justify-content: space-between;
+  }
+  
   .crew-link {
     display: inline-block;
     padding: 0.5rem 1rem;
@@ -57,7 +76,8 @@ export const StyledMission = styled(Mission)`
     font-weight: 400;
     &:hover {
       color: ${props => props.theme.dark};
-      background: ${props => props.theme.fontColor};    
+      background: ${props => props.theme.fontColor};
+      text-decoration: underline;    
     }
   }
 `;

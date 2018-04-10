@@ -39,6 +39,8 @@ public class Mission {
 
   private Instant endDateTime;
 
+  private String platform;
+
   @ManyToOne
   @JsonManagedReference
   private Site site;
@@ -53,6 +55,7 @@ public class Mission {
     String atoMissionNumber,
     Instant startDateTime,
     Instant endDateTime,
+    String platform,
     Site site
   ) {
     this.id = id;
@@ -60,6 +63,7 @@ public class Mission {
     this.atoMissionNumber = atoMissionNumber;
     this.startDateTime = startDateTime;
     this.endDateTime = endDateTime;
+    this.platform = platform;
     this.site = site;
   }
 
@@ -68,12 +72,14 @@ public class Mission {
     String atoMissionNumber,
     Instant startDateTime,
     Instant endDateTime,
+    String platform,
     Site site
   ) {
     this.missionId = missionId;
     this.atoMissionNumber = atoMissionNumber;
     this.startDateTime = startDateTime;
     this.endDateTime = endDateTime;
+    this.platform = platform;
     this.site = site;
   }
 

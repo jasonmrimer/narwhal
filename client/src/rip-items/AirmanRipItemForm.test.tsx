@@ -12,6 +12,7 @@ import { AirmanRipItemModel } from '../airman/models/AirmanRipItemModel';
 import { RipItemModel } from './models/RipItemModel';
 import { StyledForm } from '../widgets/Form';
 
+/* tslint:disable:no-empty*/
 describe('RipItems', () => {
   let store: AirmanRipItemFormStore;
   let subject: ShallowWrapper;
@@ -40,7 +41,6 @@ describe('RipItems', () => {
       />
     );
   });
-
 
   it('should render a Form', () => {
     expect(subject.find(StyledForm).prop('setLoading')).toBe(setLoading);

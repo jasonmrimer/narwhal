@@ -14,6 +14,7 @@ import { StyledSubmitButton } from '../widgets/SubmitButton';
 import { StyledSingleTypeahead } from '../widgets/SingleTypeahead';
 import { StyledForm } from '../widgets/Form';
 
+/* tslint:disable:no-empty*/
 describe('MissionForm', () => {
   let mission: MissionModel;
   let missionFormStore: MissionFormStore;

@@ -34,8 +34,6 @@ public class MissionServiceTest {
   @Captor private ArgumentCaptor<List<Mission>> captor;
   private MissionService subject;
 
-  private MissionClientStub client = new MissionClientStub();
-
   @Before
   public void setUp() {
     when(siteRepository.findOneByName(site1.getName())).thenReturn(site1);
@@ -57,7 +55,7 @@ public class MissionServiceTest {
       "        <enddttime>12-12-2017T04:29:00.0Z</enddttime>\n" +
       "        <primaryorg>DGS-1</primaryorg>\n" +
       "        <callsign>Spaceman</callsign>\n" +
-      "        <platform>U2</platform>\n" +
+      "        <platform>U-2</platform>\n" +
       "        <tailnumber>NW1</tailnumber>\n" +
       "        <missionstatickmllink>\n" +
       "          http://codweb1.leidoshost.com/UNICORN.NET/webservices/googleearth.asmx/getkmzformissionbyato?ato=HGZ3W09&amp;streaming=false\n" +
@@ -92,6 +90,7 @@ public class MissionServiceTest {
     assertThat(value.get(0).getMissionId()).isEqualTo("70497d73-a7e4-4000-879a-feaf9099bfa1");
     assertThat(value.get(0).getStartDateTime()).isEqualTo(Instant.parse("2017-12-12T04:29:00Z"));
     assertThat(value.get(0).getEndDateTime()).isEqualTo(Instant.parse("2017-12-12T04:29:00Z"));
+    assertThat(value.get(0).getPlatform()).isEqualTo("U-2");
     assertThat(value.get(0).getSite()).isEqualTo(site1);
   }
 
@@ -185,7 +184,7 @@ public class MissionServiceTest {
 
   @Test
   public void updatesExistingMissions() {
-    Mission mission = new Mission(1L, "ABC-123", "ATOMSN", Instant.now(), Instant.now(), site1);
+    Mission mission = new Mission(1L, "ABC-123", "ATOMSN", Instant.now(), Instant.now(), "U-2", site1);
 
     //language=XML
     String xml = "<GetMissionMetaDataResponse xmlns=\"Unicorn\">\n" +
@@ -203,7 +202,7 @@ public class MissionServiceTest {
       "        <enddttime>12-12-2017T04:29:00.0Z</enddttime>\n" +
       "        <primaryorg>XBOW</primaryorg>\n" +
       "        <callsign>Spaceman</callsign>\n" +
-      "        <platform>U2</platform>\n" +
+      "        <platform>U-2</platform>\n" +
       "        <tailnumber>NW1</tailnumber>\n" +
       "        <missionstatickmllink>\n" +
       "          http://codweb1.leidoshost.com/UNICORN.NET/webservices/googleearth.asmx/getkmzformissionbyato?ato=HGZ3W09&amp;streaming=false\n" +

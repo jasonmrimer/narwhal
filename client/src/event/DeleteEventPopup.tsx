@@ -84,6 +84,7 @@ export const StyledDeleteEventPopup = styled(DeleteEventPopup)`
       &:hover {
         background: ${props => props.theme.fontColor};
         color: ${props => props.theme.darkest};
+        text-decoration: underline;
         
         &.cancel{
           background: ${props => props.theme.yellowHover};

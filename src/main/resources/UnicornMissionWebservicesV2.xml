@@ -34,6 +34,7 @@
                   </s:element>
                   <s:element name="atomissionnumber" type="s:string"/>
                   <s:element name="primaryorg" type="s:string"/>
+                  <s:element name="platform" type="s:string"/>
                 </s:sequence>
               </s:complexType>
             </s:element>

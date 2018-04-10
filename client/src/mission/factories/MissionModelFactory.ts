@@ -10,6 +10,7 @@ const missionOne = new MissionModel(
   'ato1',
   time,
   time.clone().add(4, 'hours'),
+  'U-2',
   new SiteModel(1, 'DMS-GA', [], SiteType.DGSCoreSite, 'DMS Georgia')
 );
 
@@ -19,6 +20,7 @@ const missionTwo = new MissionModel(
   'ato2',
   time,
   time,
+  'U-2',
   new SiteModel(1, 'DMS-GA', [], SiteType.DGSCoreSite, 'DMS Georgia')
 );
 
@@ -28,6 +30,7 @@ const missionThree = new MissionModel(
   'ato3',
   time.clone().add(1, 'days'),
   time.clone().add(1, 'days'),
+  'U-2',
   new SiteModel(2, 'DMS-MD', [], SiteType.DMSSite, 'DMS Maryland')
 );
 
@@ -37,6 +40,7 @@ const missionFour = new MissionModel(
   'ato4',
   time.clone().add(2, 'days'),
   time.clone().add(2, 'days'),
+  'U-2',
   new SiteModel(3, 'DMS-HI', [], SiteType.GuardSite, 'DMS Hawaii')
 );
 
@@ -46,6 +50,7 @@ const missionFive = new MissionModel(
   'ato5',
   time.clone().add(4, 'days'),
   time.clone().add(4, 'days'),
+  'U-2',
   new SiteModel(3, 'DMS-HI', [], SiteType.GuardSite, 'DMS Hawaii')
 );
 
@@ -55,6 +60,7 @@ const missionSix = new MissionModel(
   'ato6',
   time.clone().add(8, 'days'),
   time.clone().add(8, 'days'),
+  'U-2',
   new SiteModel(3, 'DMS-HI', [], SiteType.GuardSite, 'DMS Hawaii')
 );
 
@@ -64,6 +70,7 @@ const missionSeven = new MissionModel(
   'ato7',
   time.clone().add(20, 'days'),
   time.clone().add(20, 'days'),
+  'U-2',
   new SiteModel(3, 'DMS-HI', [], SiteType.GuardSite, 'DMS Hawaii')
 );
 
@@ -73,6 +80,7 @@ const missionEight = new MissionModel(
   'ato8',
   time.clone().add(20, 'days'),
   time.clone().add(20, 'days'),
+  'U-2',
   new SiteModel(3, 'DMS-HI', [], SiteType.GuardSite, 'DMS Hawaii')
 );
 
@@ -82,6 +90,7 @@ const missionNine = new MissionModel(
   'ato9',
   time.clone().add(20, 'days'),
   time.clone().add(20, 'days'),
+  'U-2',
   new SiteModel(3, 'DMS-HI', [], SiteType.GuardSite, 'DMS Hawaii')
 );
 
@@ -91,6 +100,7 @@ const missionTen = new MissionModel(
   'ato10',
   time.clone().add(20, 'days'),
   time.clone().add(20, 'days'),
+  'U-2',
   new SiteModel(3, 'DMS-HI', [], SiteType.GuardSite, 'DMS Hawaii')
 );
 
@@ -100,6 +110,7 @@ const missionEleven = new MissionModel(
   'ato11',
   time.clone().add(20, 'days'),
   time.clone().add(20, 'days'),
+  'U-2',
   new SiteModel(3, 'DMS-HI', [], SiteType.GuardSite, 'DMS Hawaii')
 );
 
@@ -109,6 +120,7 @@ const missionTwelve = new MissionModel(
   'ato12',
   time.clone().add(20, 'days'),
   time.clone().add(20, 'days'),
+  'U-2',
   new SiteModel(3, 'DMS-HI', [], SiteType.GuardSite, 'DMS Hawaii')
 );
 
@@ -118,6 +130,7 @@ const missionThirteen = new MissionModel(
   'ato13',
   time.clone().add(20, 'days'),
   time.clone().add(20, 'days'),
+  'U-2',
   new SiteModel(3, 'DMS-HI', [], SiteType.GuardSite, 'DMS Hawaii')
 );
 
@@ -127,6 +140,7 @@ const missionFourteen = new MissionModel(
   'ato14',
   time.clone().add(20, 'days'),
   time.clone().add(20, 'days'),
+  'U-2',
   new SiteModel(3, 'DMS-HI', [], SiteType.GuardSite, 'DMS Hawaii')
 );
 
@@ -136,6 +150,7 @@ const missionFifteen = new MissionModel(
   'ato15',
   time.clone().add(20, 'days'),
   time.clone().add(20, 'days'),
+  'U-2',
   new SiteModel(3, 'DMS-HI', [], SiteType.GuardSite, 'DMS Hawaii')
 );
 
@@ -145,6 +160,7 @@ const missionSixteen = new MissionModel(
   'ato16',
   time.clone().add(20, 'days'),
   time.clone().add(20, 'days'),
+  'U-2',
   new SiteModel(3, 'DMS-HI', [], SiteType.GuardSite, 'DMS Hawaii')
 );
 
@@ -154,6 +170,7 @@ const missionSeventeen = new MissionModel(
   'ato17',
   time.clone().add(20, 'days'),
   time.clone().add(20, 'days'),
+  'U-2',
   new SiteModel(3, 'DMS-HI', [], SiteType.GuardSite, 'DMS Hawaii')
 );
 
@@ -163,6 +180,7 @@ const missionEightteen = new MissionModel(
   'ato18',
   time.clone().add(20, 'days'),
   time.clone().add(20, 'days'),
+  'U-2',
   new SiteModel(3, 'DMS-HI', [], SiteType.GuardSite, 'DMS Hawaii')
 );
 
@@ -171,7 +189,8 @@ const missionNineteen = new MissionModel(
   'missionId19',
   'ato19',
   time.clone().add(20, 'days'),
-  time.clone().add(20, 'days')
+  time.clone().add(20, 'days'),
+  'U-2'
 );
 
 const missions = [
