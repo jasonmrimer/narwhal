@@ -33,7 +33,7 @@ describe('Mission', () => {
       'U-2'
     );
     const subject = shallow(<Mission mission={mission}/>);
-    expect(subject.text()).toContain('End time: TBD');
+    expect(subject.text()).toContain('End time:TBD');
   });
 
   it('renders a link to the related crew page', () => {
@@ -69,6 +69,6 @@ describe('Mission', () => {
       </MemoryRouter>
     );
 
-    expect(subject.text()).toContain('Platform: U-2');
+    expect(subject.text()).toContain('Platform:U-2');
   });
 });
