@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { AirmanModel, ShiftType } from './airman/models/AirmanModel';
-import { TrackerStore } from './tracker/stores/TrackerStore';
-import { StyledDropdown } from './widgets/Dropdown';
+import { AirmanModel, ShiftType } from '../airman/models/AirmanModel';
+import { TrackerStore } from './stores/TrackerStore';
+import { StyledDropdown } from '../widgets/Dropdown';
 import styled from 'styled-components';
-import { ShiftDisplay } from './roster/ShiftDisplay';
+import { ShiftDisplay } from '../roster/ShiftDisplay';
 import { observer } from 'mobx-react';
 
 interface Props {

@@ -13,7 +13,7 @@ import { TrackerStore } from './tracker/stores/TrackerStore';
 import { DashboardStore } from './dashboard/stores/DashboardStore';
 import { ProfileSitePickerStore } from './profile/stores/ProfileSitePickerStore';
 import { withRouter } from 'react-router';
-import { WebRepositories } from './Repositories';
+import { WebRepositories } from './utils/Repositories';
 import { MissionPlannerStore } from './crew/stores/MissionPlannerStore';
 
 document.body.style.fontFamily = Theme.fontFamily;

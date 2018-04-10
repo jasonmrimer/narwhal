@@ -2,7 +2,7 @@ import { Filter } from '../widgets/Filter';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
 import { ReactWrapper } from 'enzyme';
-import { DoubleRepositories } from '../Repositories';
+import { DoubleRepositories } from './Repositories';
 
 export async function makeFakeTrackerStore(shouldHydrateState: boolean = true) {
   const siteId = 14;

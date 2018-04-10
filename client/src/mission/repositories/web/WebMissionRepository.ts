@@ -1,7 +1,7 @@
 import { MissionRepository } from '../MissionRepository';
 import { MissionModel } from '../../models/MissionModel';
 import { MissionSerializer } from '../../serializers/MissionSerializer';
-import { HTTPClient } from '../../../HTTPClient';
+import { HTTPClient } from '../../../utils/HTTPClient';
 
 export class WebMissionRepository implements MissionRepository {
   private serializer: MissionSerializer = new MissionSerializer();

@@ -1,8 +1,7 @@
 import { CrewStore } from './CrewStore';
 import { CrewModelFactory } from '../factories/CrewModelFactory';
 import { CrewModel } from '../models/CrewModel';
-import { DoubleRepositories } from '../../Repositories';
-import { ProfileSitePickerStore } from '../../profile/stores/ProfileSitePickerStore';
+import { DoubleRepositories } from '../../utils/Repositories';
 import { CrewPositionModel } from '../models/CrewPositionModel';
 import { CrewRepositorySpy } from '../repositories/doubles/CrewRepositorySpy';
 import { AirmanModel } from '../../airman/models/AirmanModel';
@@ -11,20 +10,16 @@ describe('CrewStore', () => {
   let crew: CrewModel;
   let subject: CrewStore;
   let crewPositions: CrewPositionModel[];
-  let profileStore: ProfileSitePickerStore;
   let airmen: AirmanModel[];
 
   beforeEach(async () => {
     DoubleRepositories.crewRepository = new CrewRepositorySpy();
     crew = CrewModelFactory.build();
 
-    profileStore = new ProfileSitePickerStore(DoubleRepositories);
-    await profileStore.hydrate();
+    subject = new CrewStore(DoubleRepositories);
 
-    subject = new CrewStore(DoubleRepositories, profileStore);
-
-    airmen = await DoubleRepositories.airmanRepository.findBySiteId(profileStore.profile!.user.siteId!);
-    await subject.hydrate(crew.id, airmen);
+    airmen = await DoubleRepositories.airmanRepository.findBySiteId(14);
+    await subject.hydrate(crew, airmen);
 
     crew.crewPositions[0].title = 'Title1';
     crew.crewPositions[0].critical = true;

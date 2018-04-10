@@ -5,7 +5,7 @@ import { FilterOption } from '../widgets/models/FilterOptionModel';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import { StyledCrewPositionRow } from './CrewPositionRow';
-import { StyledCrewPositionInputRow } from '../CrewPositionInputRow';
+import { StyledCrewPositionInputRow } from './CrewPositionInputRow';
 
 interface Props {
   crewStore: CrewStore;

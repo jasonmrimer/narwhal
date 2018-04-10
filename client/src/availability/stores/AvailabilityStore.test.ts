@@ -3,7 +3,7 @@ import { EventModel, EventType } from '../../event/models/EventModel';
 import { EventModelFactory } from '../../event/factories/EventModelFactory';
 import { toJS } from 'mobx';
 import * as moment from 'moment';
-import { DoubleRepositories } from '../../Repositories';
+import { DoubleRepositories } from '../../utils/Repositories';
 import { EventRepositoryStub } from '../../event/repositories/doubles/EventRepositoryStub';
 
 describe('AvailabilityStore', () => {

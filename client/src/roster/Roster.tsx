@@ -10,7 +10,7 @@ import { StyledPlanner } from './Planner';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import * as classNames from 'classnames';
-import { StyledShiftDropdown } from '../ShiftDropdown';
+import { StyledShiftDropdown } from '../tracker/ShiftDropdown';
 import { BorderedNotification } from '../widgets/Notification';
 
 interface Props {

@@ -3,7 +3,7 @@ import { AirmanSerializer } from '../../serializers/AirmanSerializer';
 import { AirmanModel } from '../../models/AirmanModel';
 import { SkillType } from '../../../skills/models/SkillType';
 import { Skill } from '../../../skills/models/Skill';
-import { HTTPClient } from '../../../HTTPClient';
+import { HTTPClient } from '../../../utils/HTTPClient';
 
 export class WebAirmanRepository implements AirmanRepository {
   private serializer = new AirmanSerializer();

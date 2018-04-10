@@ -1,10 +1,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { StyledCheckbox } from './widgets/Checkbox';
-import { StyledTextInput } from './widgets/TextInput';
-import { StyledSingleTypeahead } from './widgets/SingleTypeahead';
-import { CrewStore } from './crew/stores/CrewStore';
-import { FilterOption } from './widgets/models/FilterOptionModel';
+import { StyledCheckbox } from '../widgets/Checkbox';
+import { StyledTextInput } from '../widgets/TextInput';
+import { StyledSingleTypeahead } from '../widgets/SingleTypeahead';
+import { CrewStore } from './stores/CrewStore';
+import { FilterOption } from '../widgets/models/FilterOptionModel';
 import { observer } from 'mobx-react';
 
 interface Props {

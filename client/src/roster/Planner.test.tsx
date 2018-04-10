@@ -12,7 +12,7 @@ import { eventStub, makeFakeTrackerStore } from '../utils/testUtils';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { AirmanModel } from '../airman/models/AirmanModel';
 import { EventModel, EventType } from '../event/models/EventModel';
-import { DoubleRepositories } from '../Repositories';
+import { DoubleRepositories } from '../utils/Repositories';
 
 describe('Planner', () => {
   let subject: ShallowWrapper;

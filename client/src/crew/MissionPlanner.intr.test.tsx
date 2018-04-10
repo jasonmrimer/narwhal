@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { MissionPlanner } from './MissionPlanner';
 import { mount, ReactWrapper } from 'enzyme';
-import { DoubleRepositories } from '../Repositories';
+import { DoubleRepositories } from '../utils/Repositories';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 import { MissionPlannerStore } from './stores/MissionPlannerStore';
 import { Crew } from './Crew';

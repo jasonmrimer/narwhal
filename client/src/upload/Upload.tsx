@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as moment from 'moment-timezone';
-import { HTTPClient } from '../HTTPClient';
+import { HTTPClient } from '../utils/HTTPClient';
 import { Theme } from '../themes/default';
 
 interface State {

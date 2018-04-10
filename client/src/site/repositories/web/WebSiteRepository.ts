@@ -1,7 +1,7 @@
 import { SiteRepository } from '../SiteRepository';
 import { SiteModel } from '../../models/SiteModel';
 import { SiteSerializer } from '../../serializers/SiteSerializer';
-import { HTTPClient } from '../../../HTTPClient';
+import { HTTPClient } from '../../../utils/HTTPClient';
 
 export class WebSiteRepository implements SiteRepository {
   private siteSerializer: SiteSerializer = new SiteSerializer();

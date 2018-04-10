@@ -4,7 +4,7 @@ import { MissionModel } from '../../mission/models/MissionModel';
 import { action, computed, observable } from 'mobx';
 import { SiteModel } from '../../site/models/SiteModel';
 import { UnfilteredValue } from '../../widgets/models/FilterOptionModel';
-import { Repositories } from '../../Repositories';
+import { Repositories } from '../../utils/Repositories';
 import * as moment from 'moment';
 
 export class DashboardStore {

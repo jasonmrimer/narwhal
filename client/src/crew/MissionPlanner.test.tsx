@@ -4,7 +4,7 @@ import { MissionPlanner } from './MissionPlanner';
 import { CrewModelFactory } from './factories/CrewModelFactory';
 import { StyledButton } from '../widgets/Button';
 import { Link } from 'react-router-dom';
-import { DoubleRepositories } from '../Repositories';
+import { DoubleRepositories } from '../utils/Repositories';
 import { StyledLoadingOverlay } from '../widgets/LoadingOverlay';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 import { StyledCrew } from './Crew';

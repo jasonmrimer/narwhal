@@ -3,7 +3,7 @@ import { ProfileModel } from '../models/ProfileModel';
 import ProfileRepository from '../repositories/ProfileRepository';
 import { SiteRepository } from '../../site/repositories/SiteRepository';
 import { SiteModel, SiteType } from '../../site/models/SiteModel';
-import { Repositories } from '../../Repositories';
+import { Repositories } from '../../utils/Repositories';
 
 export class ProfileSitePickerStore {
   private siteRepository: SiteRepository;

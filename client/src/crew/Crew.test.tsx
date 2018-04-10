@@ -2,18 +2,16 @@ import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { CrewModelFactory } from './factories/CrewModelFactory';
 import { CrewStore } from './stores/CrewStore';
-import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
-import { DoubleRepositories } from '../Repositories';
+import { DoubleRepositories } from '../utils/Repositories';
 import { Crew } from './Crew';
 import { CrewRepositorySpy } from './repositories/doubles/CrewRepositorySpy';
 import { StyledCrewPositionRow } from './CrewPositionRow';
-import { StyledCrewPositionInputRow } from '../CrewPositionInputRow';
+import { StyledCrewPositionInputRow } from './CrewPositionInputRow';
 
 describe('Crew', () => {
   let crewStore: CrewStore;
   let crewStoreSpy = jest.fn();
   let subject: ShallowWrapper;
-  let profileStore: ProfileSitePickerStore;
   let instance: Crew;
   const crew = CrewModelFactory.build();
   const crewPositions = crew.crewPositions;
@@ -21,11 +19,8 @@ describe('Crew', () => {
   beforeEach(async () => {
     DoubleRepositories.crewRepository = new CrewRepositorySpy();
 
-    profileStore = new ProfileSitePickerStore(DoubleRepositories);
-    await profileStore.hydrate();
-
-    crewStore = new CrewStore(DoubleRepositories, profileStore);
-    await crewStore.hydrate(crew.id, []);
+    crewStore = new CrewStore(DoubleRepositories);
+    await crewStore.hydrate(crew, []);
     crewStore.save = crewStoreSpy;
 
     subject = shallow(

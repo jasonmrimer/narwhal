@@ -8,7 +8,7 @@ import { SidePanelStore, TabType } from './SidePanelStore';
 import { Moment } from 'moment';
 import { RosterHeaderStore } from '../../roster/stores/RosterHeaderStore';
 import { AllAirmenRefresher, LocationFilterStore } from '../../widgets/stores/LocationFilterStore';
-import { Repositories } from '../../Repositories';
+import { Repositories } from '../../utils/Repositories';
 import { EventModel } from '../../event/models/EventModel';
 
 export class TrackerStore implements AllAirmenRefresher, RefreshAirmen {

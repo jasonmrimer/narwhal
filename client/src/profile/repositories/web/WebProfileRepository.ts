@@ -1,6 +1,6 @@
 import ProfileRepository from '../ProfileRepository';
 import { ProfileModel, UserModel } from '../../models/ProfileModel';
-import { HTTPClient } from '../../../HTTPClient';
+import { HTTPClient } from '../../../utils/HTTPClient';
 
 export class WebProfileRepository implements ProfileRepository {
 

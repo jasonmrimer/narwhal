@@ -6,7 +6,7 @@ import { MissionModel } from '../mission/models/MissionModel';
 import { DashboardStore } from './stores/DashboardStore';
 import { StyledMission } from '../mission/Mission';
 import { MemoryRouter } from 'react-router';
-import { DoubleRepositories } from '../Repositories';
+import { DoubleRepositories } from '../utils/Repositories';
 import { StyledMissionCardSection } from './MissionCardSection';
 import { ClipLoader } from 'react-spinners';
 import { ThemeProvider } from 'styled-components';

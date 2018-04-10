@@ -1,6 +1,6 @@
 import { ProfileSitePickerStore } from './ProfileSitePickerStore';
 import { forIt } from '../../utils/testUtils';
-import { DoubleRepositories } from '../../Repositories';
+import { DoubleRepositories } from '../../utils/Repositories';
 import { SiteType } from '../../site/models/SiteModel';
 
 describe('ProfileSitePickerStore', () => {

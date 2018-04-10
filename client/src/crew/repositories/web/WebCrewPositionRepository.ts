@@ -1,4 +1,4 @@
-import { HTTPClient } from '../../../HTTPClient';
+import { HTTPClient } from '../../../utils/HTTPClient';
 import { CrewPositionRepository } from '../CrewPositionRepository';
 import { CrewPositionSerializer } from '../../serializers/CrewPositionSerializer';
 import { CrewPositionModel } from '../../models/CrewPositionModel';

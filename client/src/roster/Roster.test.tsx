@@ -7,7 +7,7 @@ import { TabType } from '../tracker/stores/SidePanelStore';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import * as React from 'react';
 import { AirmanModel } from '../airman/models/AirmanModel';
-import { StyledShiftDropdown } from '../ShiftDropdown';
+import { StyledShiftDropdown } from '../tracker/ShiftDropdown';
 
 describe('Roster', () => {
   let trackerStore: TrackerStore;

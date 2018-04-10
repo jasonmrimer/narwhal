@@ -1,6 +1,6 @@
 import { CrewRepository } from '../CrewRepository';
 import { CrewSerializer } from '../../serializers/CrewSerializer';
-import { HTTPClient } from '../../../HTTPClient';
+import { HTTPClient } from '../../../utils/HTTPClient';
 
 export class WebCrewRepository implements CrewRepository {
   private serializer = new CrewSerializer();

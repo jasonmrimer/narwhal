@@ -5,7 +5,7 @@ import { Routes } from './Routes';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 import { DashboardStore } from '../dashboard/stores/DashboardStore';
 import { makeFakeTrackerStore } from '../utils/testUtils';
-import { DoubleRepositories } from '../Repositories';
+import { DoubleRepositories } from '../utils/Repositories';
 import { MissionPlannerStore } from '../crew/stores/MissionPlannerStore';
 
 describe('Routes', () => {

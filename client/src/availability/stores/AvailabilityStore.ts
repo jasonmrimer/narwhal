@@ -5,7 +5,7 @@ import { MissionFormStore } from '../../event/stores/MissionFormStore';
 import { AppointmentFormStore } from '../../event/stores/AppointmentFormStore';
 import { Moment } from 'moment';
 import { EventActions } from '../../event/stores/EventActions';
-import { Repositories } from '../../Repositories';
+import { Repositories } from '../../utils/Repositories';
 import { MissionModel } from '../../mission/models/MissionModel';
 import { TDYDeploymentFormStore } from '../../event/stores/TDYDeploymentFormStore';
 

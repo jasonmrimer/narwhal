@@ -1,6 +1,6 @@
 import { DashboardStore } from './DashboardStore';
 import { MissionModel } from '../../mission/models/MissionModel';
-import { DoubleRepositories } from '../../Repositories';
+import { DoubleRepositories } from '../../utils/Repositories';
 
 describe('DashboardStore', () => {
   const missionRepository = DoubleRepositories.missionRepository;

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { ShiftDropdown } from './ShiftDropdown';
-import { AirmanModel, ShiftType } from './airman/models/AirmanModel';
-import { TrackerStore } from './tracker/stores/TrackerStore';
-import { makeFakeTrackerStore } from './utils/testUtils';
-import { StyledDropdown } from './widgets/Dropdown';
+import { AirmanModel, ShiftType } from '../airman/models/AirmanModel';
+import { TrackerStore } from './stores/TrackerStore';
+import { makeFakeTrackerStore } from '../utils/testUtils';
+import { StyledDropdown } from '../widgets/Dropdown';
 
 describe('ShiftDropdown', () => {
   let subject: ShallowWrapper;

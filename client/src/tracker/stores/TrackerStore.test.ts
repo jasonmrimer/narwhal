@@ -3,7 +3,7 @@ import { AirmanModel, ShiftType } from '../../airman/models/AirmanModel';
 import * as moment from 'moment';
 import { toJS } from 'mobx';
 import { TimeServiceStub } from '../services/doubles/TimeServiceStub';
-import { DoubleRepositories } from '../../Repositories';
+import { DoubleRepositories } from '../../utils/Repositories';
 import { FakeAirmanRepository } from '../../airman/repositories/doubles/FakeAirmanRepository';
 import { TabType } from './SidePanelStore';
 import { AirmanModelFactory } from '../../airman/factories/AirmanModelFactory';

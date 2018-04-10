@@ -1,6 +1,6 @@
 import { SkillRepositoryContract } from '../SkillRepositoryContract';
 import { WebSkillRepository } from './WebSkillRepository';
-import { HTTPClient } from '../../../HTTPClient';
+import { HTTPClient } from '../../../utils/HTTPClient';
 
 describe('WebSkillRepository', () => {
   const client = new HTTPClient(process.env.REACT_APP_HOST || 'http://localhost:8080');

@@ -1,10 +1,8 @@
 import { action, computed, observable } from 'mobx';
 import { CrewModel } from '../models/CrewModel';
-import { CrewRepository } from '../repositories/CrewRepository';
 import { CrewPositionModel } from '../models/CrewPositionModel';
 import { AirmanModel } from '../../airman/models/AirmanModel';
-import { Repositories } from '../../Repositories';
-import { ProfileSitePickerStore } from '../../profile/stores/ProfileSitePickerStore';
+import { Repositories } from '../../utils/Repositories';
 import { CrewPositionRepository } from '../repositories/CrewPositionRepository';
 
 interface NewEntry {
@@ -14,7 +12,6 @@ interface NewEntry {
 }
 
 export class CrewStore {
-  private crewRepository: CrewRepository;
   private crewPositionRepository: CrewPositionRepository;
   private pendingDeletePositions: CrewPositionModel[] = [];
 
@@ -22,14 +19,18 @@ export class CrewStore {
   @observable private _airmen: AirmanModel[] = [];
   @observable private _newEntry: NewEntry = {airmanName: '', title: '', critical: false};
 
-  constructor(repositories: Repositories, private _profileStore: ProfileSitePickerStore) {
-    this.crewRepository = repositories.crewRepository;
+  constructor(repositories: Repositories) {
     this.crewPositionRepository = repositories.crewPositionRepository;
   }
 
-  async hydrate(crewId: number, airmen: AirmanModel[]) {
+  hydrate(crew: CrewModel, airmen: AirmanModel[]) {
+    this._crew = crew;
     this._airmen = airmen;
-    this._crew = await this.crewRepository.findOne(crewId);
+  }
+
+  @computed
+  get airmen() {
+    return this._airmen;
   }
 
   @computed
@@ -95,11 +96,6 @@ export class CrewStore {
 
     this._crew.crewPositions =
       await this.crewPositionRepository.update(this._crew.crewPositions, this._crew.mission.id);
-  }
-
-  @computed
-  get profileStore() {
-    return this._profileStore;
   }
 
   @action.bound

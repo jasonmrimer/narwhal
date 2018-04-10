@@ -1,7 +1,7 @@
 import { EventRepository } from '../EventRepository';
 import { EventModel, EventType } from '../../models/EventModel';
 import { EventSerializer } from '../../serializers/EventSerializer';
-import { HTTPClient } from '../../../HTTPClient';
+import { HTTPClient } from '../../../utils/HTTPClient';
 import { Moment } from 'moment';
 
 export class WebEventRepository implements EventRepository {

@@ -5,7 +5,7 @@ import { CertificationModel } from '../../skills/models/CertificationModel';
 import { AirmanModel, ShiftType } from '../../airman/models/AirmanModel';
 import * as Fuse from 'fuse.js';
 
-interface SiteIdContainer {
+export interface SiteIdContainer {
   selectedSite: number;
 }
 

@@ -11,7 +11,7 @@ import { MissionPlanner } from '../crew/MissionPlanner';
 import { StyledProfileSitePicker } from '../profile/ProfileSitePicker';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 import { ThemeProvider } from 'styled-components';
-import { DoubleRepositories } from '../Repositories';
+import { DoubleRepositories } from '../utils/Repositories';
 import { UserModel } from '../profile/models/ProfileModel';
 import { Theme } from '../themes/default';
 import { MissionPlannerStore } from '../crew/stores/MissionPlannerStore';

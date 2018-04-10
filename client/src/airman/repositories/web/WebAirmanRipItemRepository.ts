@@ -1,5 +1,5 @@
 import { RipItemRepository } from '../AirmanRipItemRepository';
-import { HTTPClient } from '../../../HTTPClient';
+import { HTTPClient } from '../../../utils/HTTPClient';
 import { AirmanRipItemSerializer } from '../../serializers/AirmanRipItemSerializer';
 import { AirmanRipItemModel } from '../../models/AirmanRipItemModel';
 

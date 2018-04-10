@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { StyledSingleTypeahead } from '../widgets/SingleTypeahead';
 import { shallow, ShallowWrapper } from 'enzyme';
-import { CrewPositionInputRow } from '../CrewPositionInputRow';
+import { CrewPositionInputRow } from './CrewPositionInputRow';
 import { CrewStore } from './stores/CrewStore';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
-import { DoubleRepositories } from '../Repositories';
+import { DoubleRepositories } from '../utils/Repositories';
 import Mock = jest.Mock;
 import { StyledCheckbox } from '../widgets/Checkbox';
 import { StyledTextInput } from '../widgets/TextInput';
@@ -25,8 +25,8 @@ describe('CrewPositionInputRow', () => {
     const airmen = await DoubleRepositories.airmanRepository.findBySiteId(14);
 
     await profileStore.hydrate();
-    crewStore = new CrewStore(DoubleRepositories, profileStore);
-    await crewStore.hydrate(1, airmen);
+    crewStore = new CrewStore(DoubleRepositories);
+    await crewStore.hydrate(await DoubleRepositories.crewRepository.findOne(1), airmen);
 
     subject = shallow(
       <CrewPositionInputRow

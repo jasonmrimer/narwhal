@@ -3,7 +3,7 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import { SelectProfilePopup } from './SelectProfilePopup';
 import { SiteModel } from '../site/models/SiteModel';
 import { ProfileSitePickerStore } from './stores/ProfileSitePickerStore';
-import { DoubleRepositories } from '../Repositories';
+import { DoubleRepositories } from '../utils/Repositories';
 import { forIt } from '../utils/testUtils';
 
 describe('SelectProfilePopup', () => {
