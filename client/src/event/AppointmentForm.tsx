@@ -14,6 +14,7 @@ import { AppointmentFormStore } from './stores/AppointmentFormStore';
 interface Props {
   airmanId: number;
   appointmentFormStore: AppointmentFormStore;
+  setLoading: (loading: boolean) => void;
   className?: string;
 }
 
@@ -27,15 +28,15 @@ export class AppointmentForm extends React.Component<Props> {
     this.props.appointmentFormStore.removeModel();
   }
 
-  handleSubmit = (e: any) => {
+  handleSubmit = async (e: any) => {
     e.preventDefault();
-    this.props.appointmentFormStore.addModel(this.props.airmanId);
+    await this.props.appointmentFormStore.addModel(this.props.airmanId);
   }
 
   render() {
     const {state, errors, hasModel} = this.props.appointmentFormStore;
     return (
-      <StyledForm onSubmit={this.handleSubmit}>
+      <StyledForm onSubmit={this.handleSubmit} setLoading={this.props.setLoading}>
         <StyledFieldValidation name="title" errors={errors}>
           <StyledFormRow>
             <StyledTextInput

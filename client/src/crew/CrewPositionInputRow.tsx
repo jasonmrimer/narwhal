@@ -21,14 +21,7 @@ export const CrewPositionInputRow = observer((props: Props) => {
   });
 
   return (
-    <div
-      className={props.className}
-      onKeyPress={async (e) => {
-        if (e.key === 'Enter') {
-          await props.crewStore.save();
-        }
-      }}
-    >
+    <div className={props.className}>
       <span className="critical">
         <label htmlFor={`critical-new-entry`}>
           <StyledCheckbox

@@ -14,6 +14,7 @@ import { ResetIcon } from '../icons/ResetIcon';
 interface Props {
   selectedAirmanId: number;
   store: AirmanRipItemFormStore;
+  setLoading: (loading: boolean) => void;
   className?: string;
 }
 
@@ -30,14 +31,18 @@ export class AirmanRipItems extends React.Component<Props> {
     this.props.store.updateRipItem(item);
   }
 
-  onSubmit = (e: any) => {
+  onSubmit = async (e: any) => {
     e.preventDefault();
-    this.props.store.submitRipItems();
+    await this.props.store.submitRipItems();
   }
 
   render() {
     return (
-      <StyledForm className={this.props.className} onSubmit={this.onSubmit}>
+      <StyledForm
+          className={this.props.className}
+          onSubmit={this.onSubmit}
+          setLoading={this.props.setLoading}
+      >
         <h3>RIP TASKS</h3>
         {this.props.store.ripItems.map((item: AirmanRipItemModel, index: number) => {
             return (

@@ -84,7 +84,7 @@ export class MissionFormStore extends FormStore<EventModel, State> {
     };
   }
 
-  addModel(airmanId: number): void {
+  async addModel(airmanId: number) {
     const event = new EventModel(
       this._state.title,
       '',
@@ -94,7 +94,7 @@ export class MissionFormStore extends FormStore<EventModel, State> {
       EventType.Mission,
       this.model ? Number(this.model.id) : Number(this._state.id)
     );
-    this.eventActions.addEvent(event);
+    await this.eventActions.addEvent(event);
   }
 
   removeModel(): void {

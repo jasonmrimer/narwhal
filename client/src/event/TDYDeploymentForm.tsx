@@ -13,6 +13,7 @@ import { TDYDeploymentFormStore } from './stores/TDYDeploymentFormStore';
 interface Props {
   airmanId: number;
   tdyDeploymentFormStore: TDYDeploymentFormStore;
+  setLoading: (loading: boolean) => void;
   className?: string;
 }
 
@@ -26,15 +27,15 @@ export class TDYDeploymentForm extends React.Component<Props> {
     this.props.tdyDeploymentFormStore.removeModel();
   }
 
-  handleSubmit = (e: any) => {
+  handleSubmit = async (e: any) => {
     e.preventDefault();
-    this.props.tdyDeploymentFormStore.addModel(this.props.airmanId);
+    await this.props.tdyDeploymentFormStore.addModel(this.props.airmanId);
   }
 
   render() {
     const {state, errors, hasModel} = this.props.tdyDeploymentFormStore;
     return (
-      <StyledForm onSubmit={this.handleSubmit}>
+      <StyledForm onSubmit={this.handleSubmit} setLoading={this.props.setLoading}>
         <StyledFormRow>
           <StyledFieldValidation name="title" errors={errors}>
             <StyledTextInput

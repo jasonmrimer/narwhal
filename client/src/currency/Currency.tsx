@@ -13,6 +13,7 @@ import { StyledRipItemsTile } from '../rip-items/RipItemsTile';
 interface Props {
   selectedAirman: AirmanModel;
   currencyStore: CurrencyStore;
+  setLoading: (loading: boolean) => void;
   className?: string;
 }
 
@@ -53,6 +54,7 @@ export class Currency extends React.Component<Props> {
         <StyledSkillsForm
           airmanId={this.props.selectedAirman.id}
           skillFormStore={this.props.currencyStore.skillFormStore}
+          setLoading={this.props.setLoading}
         />
       </div>
     );
@@ -93,6 +95,7 @@ export class Currency extends React.Component<Props> {
         <StyledRipItems
           selectedAirmanId={this.props.selectedAirman.id}
           store={this.props.currencyStore.airmanRipItemFormStore}
+          setLoading={this.props.setLoading}
         />
       </div>
     );

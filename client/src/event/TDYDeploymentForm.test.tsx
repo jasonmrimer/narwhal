@@ -7,12 +7,14 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import { StyledTextInput } from '../widgets/TextInput';
 import { eventStub } from '../utils/testUtils';
 import { TDYDeploymentForm } from './TDYDeploymentForm';
+import { StyledForm } from '../widgets/Form';
 
 describe('TDYDeploymentForm', () => {
   let store: TDYDeploymentFormStore;
   let wrapper: ShallowWrapper;
   let subject: TDYDeploymentForm;
   let eventActions: { addEvent: jest.Mock, removeEvent: jest.Mock };
+  let setLoading = () => {};
 
   beforeEach(() => {
     eventActions = {
@@ -25,10 +27,16 @@ describe('TDYDeploymentForm', () => {
       <TDYDeploymentForm
         airmanId={123}
         tdyDeploymentFormStore={store}
+        setLoading={setLoading}
       />
     );
 
     subject = (wrapper.instance() as TDYDeploymentForm);
+  });
+
+
+  it('should render a Form', () => {
+    expect(wrapper.find(StyledForm).prop('setLoading')).toBe(setLoading);
   });
 
   it('manages the state via form changes', () => {

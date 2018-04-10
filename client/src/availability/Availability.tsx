@@ -23,6 +23,7 @@ interface Props {
   createEvent: (airman: AirmanModel, date: Moment | null) => void;
   availabilityStore: AvailabilityStore;
   plannerStore: PlannerStore;
+  setLoading: (loading: boolean) => void;
   className?: string;
 }
 
@@ -75,6 +76,7 @@ export class Availability extends React.Component<Props> {
           <StyledAppointmentForm
             airmanId={selectedAirman.id}
             appointmentFormStore={availabilityStore.appointmentFormStore}
+            setLoading={this.props.setLoading}
           />
         );
       case EventType.Leave:
@@ -82,6 +84,7 @@ export class Availability extends React.Component<Props> {
           <StyledLeaveForm
             airmanId={selectedAirman.id}
             leaveFormStore={availabilityStore.leaveFormStore}
+            setLoading={this.props.setLoading}
           />
         );
       case EventType.Mission:
@@ -89,6 +92,7 @@ export class Availability extends React.Component<Props> {
           <StyledMissionForm
             airmanId={selectedAirman.id}
             missionFormStore={availabilityStore.missionFormStore}
+            setLoading={this.props.setLoading}
           />
         );
       case EventType.TDY_DEPLOYMENT:
@@ -96,6 +100,7 @@ export class Availability extends React.Component<Props> {
           <StyledTDYDeploymentForm
             airmanId={selectedAirman.id}
             tdyDeploymentFormStore={availabilityStore.tdyDeploymentFormStore}
+            setLoading={this.props.setLoading}
           />
         );
       default:

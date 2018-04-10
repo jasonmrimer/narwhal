@@ -50,7 +50,7 @@ export class TDYDeploymentFormStore extends FormStore<EventModel, State> {
     };
   }
 
-  addModel(airmanId: number): void {
+  async addModel(airmanId: number) {
     const event = new EventModel(
       this._state.title,
       this._state.description,
@@ -60,7 +60,7 @@ export class TDYDeploymentFormStore extends FormStore<EventModel, State> {
       EventType.TDY_DEPLOYMENT,
       this.model ? this.model.id : null
     );
-    this.eventActions.addEvent(event);
+    await this.eventActions.addEvent(event);
   }
 
   removeModel(): void {

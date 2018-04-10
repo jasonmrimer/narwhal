@@ -9,12 +9,14 @@ import { StyledTimeInput } from '../widgets/TimeInput';
 import { StyledFieldValidation } from '../widgets/FieldValidation';
 import { StyledButton } from '../widgets/Button';
 import { EventModelFactory } from './factories/EventModelFactory';
+import { StyledForm } from '../widgets/Form';
 
 describe('LeaveForm', () => {
   let store: LeaveFormStore;
   let wrapper: ShallowWrapper;
   let subject: LeaveForm;
   let eventActions: { addEvent: jest.Mock, removeEvent: jest.Mock };
+  let setLoading = () => {};
 
   beforeEach(() => {
     eventActions = {
@@ -27,10 +29,15 @@ describe('LeaveForm', () => {
       <LeaveForm
         airmanId={123}
         leaveFormStore={store}
+        setLoading={setLoading}
       />
     );
 
     subject = (wrapper.instance() as LeaveForm);
+  });
+
+  it('should render a Form', () => {
+    expect(wrapper.find(StyledForm).prop('setLoading')).toBe(setLoading);
   });
 
   it('manages the state via form changes', () => {

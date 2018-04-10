@@ -54,7 +54,7 @@ export class LeaveFormStore extends FormStore<EventModel, State> {
     };
   }
 
-  addModel(airmanId: number): void {
+  async addModel(airmanId: number) {
     const event = new EventModel(
       'Leave',
       this._state.description,
@@ -64,7 +64,7 @@ export class LeaveFormStore extends FormStore<EventModel, State> {
       EventType.Leave,
       this.model ? this.model.id : null
     );
-    this.eventActions.addEvent(event);
+    await this.eventActions.addEvent(event);
   }
 
   removeModel(): void {

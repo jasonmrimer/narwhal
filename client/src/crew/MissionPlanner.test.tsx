@@ -2,7 +2,6 @@ import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { MissionPlanner } from './MissionPlanner';
 import { CrewModelFactory } from './factories/CrewModelFactory';
-import { StyledButton } from '../widgets/Button';
 import { Link } from 'react-router-dom';
 import { DoubleRepositories } from '../utils/Repositories';
 import { StyledLoadingOverlay } from '../widgets/LoadingOverlay';
@@ -11,6 +10,9 @@ import { StyledCrew } from './Crew';
 import { StyledMissionPlannerRosterContainer } from './MissionPlannerRosterContainer';
 import { MissionPlannerStore } from './stores/MissionPlannerStore';
 import { StyledLocationFilters } from '../widgets/LocationFilters';
+import { StyledSubmitButton } from '../widgets/SubmitButton';
+import { StyledForm } from '../widgets/Form';
+import { eventStub } from '../utils/testUtils';
 
 describe('MissionPlanner', () => {
   let subject: ShallowWrapper;
@@ -71,6 +73,13 @@ describe('MissionPlanner', () => {
   });
 
   it('should render a save button', () => {
-    expect(subject.find(StyledButton).length).toBe(1);
+    expect(subject.find(StyledSubmitButton).length).toBe(1);
+  });
+
+  it('should call crewStore save onSubmit', () => {
+    missionPlannerStore.crewStore.save = jest.fn();
+    subject.setProps({'missionPlannerStore': missionPlannerStore});
+    subject.find(StyledForm).simulate('submit', eventStub);
+    expect(missionPlannerStore.crewStore.save).toHaveBeenCalled();
   });
 });

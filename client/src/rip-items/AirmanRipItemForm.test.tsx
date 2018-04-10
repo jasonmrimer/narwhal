@@ -10,11 +10,13 @@ import { StyledButton } from '../widgets/Button';
 import Mock = jest.Mock;
 import { AirmanRipItemModel } from '../airman/models/AirmanRipItemModel';
 import { RipItemModel } from './models/RipItemModel';
+import { StyledForm } from '../widgets/Form';
 
 describe('RipItems', () => {
   let store: AirmanRipItemFormStore;
   let subject: ShallowWrapper;
   let closeSpy: Mock;
+  let setLoading = () => {};
 
   beforeEach(async () => {
     closeSpy = jest.fn();
@@ -30,7 +32,18 @@ describe('RipItems', () => {
     store.updateRipItem = jest.fn();
     store.submitRipItems = jest.fn();
 
-    subject = shallow(<AirmanRipItems store={store} selectedAirmanId={1}/>);
+    subject = shallow(
+      <AirmanRipItems
+        store={store}
+        selectedAirmanId={1}
+        setLoading={setLoading}
+      />
+    );
+  });
+
+
+  it('should render a Form', () => {
+    expect(subject.find(StyledForm).prop('setLoading')).toBe(setLoading);
   });
 
   it('should render the attributes of a RipItem', () => {

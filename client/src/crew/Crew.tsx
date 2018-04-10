@@ -23,6 +23,7 @@ export class Crew extends React.Component<Props> {
   }
 
   handleDeleteChange = (e: any, id: number) => {
+    e.preventDefault();
     this.props.crewStore.clearPosition(id);
   }
 

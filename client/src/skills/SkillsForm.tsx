@@ -14,6 +14,7 @@ import { SkillFormStore } from './stores/SkillFormStore';
 interface Props {
   airmanId: number;
   skillFormStore: SkillFormStore;
+  setLoading: (loading: boolean) => void;
   className?: string;
 }
 
@@ -27,16 +28,16 @@ export class SkillsForm extends React.Component<Props> {
     this.props.skillFormStore.removeModel();
   }
 
-  handleSubmit = (e: any) => {
+  handleSubmit = async (e: any) => {
     e.preventDefault();
-    this.props.skillFormStore.addModel(this.props.airmanId);
+    await this.props.skillFormStore.addModel(this.props.airmanId);
   }
 
   render() {
     const {state, errors, hasModel} = this.props.skillFormStore;
     const disabled = hasModel;
     return (
-      <StyledForm onSubmit={this.handleSubmit}>
+      <StyledForm onSubmit={this.handleSubmit} setLoading={this.props.setLoading}>
         <div>
           {
             !hasModel &&

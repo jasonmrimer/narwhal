@@ -14,12 +14,13 @@ describe('SkillsForm', () => {
   let skillActions: SkillActions;
   let subject: ShallowWrapper;
   let mountedSubject: ReactWrapper;
+  let setLoading = () => {};
 
   const earnDate = moment('2018-02-01');
   const expirationDate = moment('2019-02-01');
 
   beforeEach(() => {
-    const selectedSiteContatiner = {
+    const selectedSiteContainer = {
       selectedSite: 1,
     };
 
@@ -28,8 +29,18 @@ describe('SkillsForm', () => {
       removeSkill: jest.fn(),
     };
 
-    const store = new SkillFormStore(selectedSiteContatiner, skillActions);
-    subject = shallow(<SkillsForm airmanId={1} skillFormStore={store}/>);
+    const store = new SkillFormStore(selectedSiteContainer, skillActions);
+    subject = shallow(
+      <SkillsForm
+        airmanId={1}
+        skillFormStore={store}
+        setLoading={setLoading}
+      />);
+  });
+
+
+  it('should render a Form', () => {
+    expect(subject.find(StyledForm).prop('setLoading')).toBe(setLoading);
   });
 
   it('calls handleSubmit with a Qualification on submission', () => {
@@ -93,7 +104,12 @@ describe('SkillsForm', () => {
       const store = new SkillFormStore(selectedSiteContatiner, skillActions);
       store.open(skill);
 
-      mountedSubject = mount(<SkillsForm airmanId={1} skillFormStore={store}/>);
+      mountedSubject = mount(
+        <SkillsForm
+          airmanId={1}
+          skillFormStore={store}
+          setLoading={setLoading}
+        />);
     });
 
     it('should only allow the edit of the expiration date', () => {

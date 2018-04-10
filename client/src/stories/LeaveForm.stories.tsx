@@ -32,6 +32,7 @@ export function LeaveFormStory() {
         <StyledLeaveForm
           airmanId={1}
           leaveFormStore={new LeaveFormStore(eventActions)}
+          setLoading={() => {}}
         />
       );
     })
@@ -42,6 +43,7 @@ export function LeaveFormStory() {
         <StyledLeaveForm
           airmanId={1}
           leaveFormStore={store}
+          setLoading={() => {}}
         />
       );
     });

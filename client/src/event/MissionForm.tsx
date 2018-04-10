@@ -19,6 +19,7 @@ function noop() {
 interface Props {
   airmanId: number;
   missionFormStore: MissionFormStore;
+  setLoading: (loading: boolean) => void;
   className?: string;
 }
 
@@ -36,9 +37,9 @@ export class MissionForm extends React.Component<Props> {
     this.props.missionFormStore.removeModel();
   }
 
-  handleSubmit = (e: any) => {
+  handleSubmit = async (e: any) => {
     e.preventDefault();
-    this.props.missionFormStore.addModel(this.props.airmanId);
+    await this.props.missionFormStore.addModel(this.props.airmanId);
   }
 
   render() {
@@ -47,7 +48,7 @@ export class MissionForm extends React.Component<Props> {
     const selected = missionOptions.find(msn => msn.value === Number(state.id));
 
     return (
-      <StyledForm onSubmit={this.handleSubmit}>
+      <StyledForm onSubmit={this.handleSubmit} setLoading={this.props.setLoading}>
         <StyledFieldValidation name="title" errors={errors}>
           <StyledFormRow>
             <StyledSingleTypeahead

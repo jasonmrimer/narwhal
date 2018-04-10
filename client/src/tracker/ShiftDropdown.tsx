@@ -21,20 +21,21 @@ const shiftOptions = [
 const unsetShiftOptions = [{value: -1, label: 'None'}, ...shiftOptions];
 
 export const ShiftDropdown = observer((props: Props) => {
+  const {airman, className, trackerStore} = props;
   return (
     <span
       onClick={(e: any) => e.stopPropagation()}
-      className={props.className}
+      className={className}
     >
-        <ShiftDisplay shift={props.airman.shift}/>
+        <ShiftDisplay shift={airman.shift}/>
         <StyledDropdown
           name="shift"
-          options={props.airman.shift ? shiftOptions : unsetShiftOptions}
-          value={props.airman.shift || -1}
+          options={airman.shift ? shiftOptions : unsetShiftOptions}
+          value={airman.shift || -1}
           onChange={async (e: any) => {
             const shiftType = e.target.value;
-            if (props.airman.shift !== shiftType) {
-              await props.trackerStore.updateAirmanShift(props.airman, shiftType);
+            if (airman.shift !== shiftType) {
+              await trackerStore.updateAirmanShift(airman, shiftType);
             }
           }}
         />

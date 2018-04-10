@@ -74,6 +74,7 @@ describe('Availability', () => {
         createEvent={trackerStore.newEvent}
         availabilityStore={trackerStore.availabilityStore}
         plannerStore={trackerStore.plannerStore}
+        setLoading={trackerStore.setLoading}
       />
     );
   });

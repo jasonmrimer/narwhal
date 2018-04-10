@@ -12,6 +12,7 @@ import { MissionRepositoryStub } from '../mission/repositories/doubles/MissionRe
 import { MissionModel } from '../mission/models/MissionModel';
 import { StyledSubmitButton } from '../widgets/SubmitButton';
 import { StyledSingleTypeahead } from '../widgets/SingleTypeahead';
+import { StyledForm } from '../widgets/Form';
 
 describe('MissionForm', () => {
   let mission: MissionModel;
@@ -19,11 +20,12 @@ describe('MissionForm', () => {
   let wrapper: ShallowWrapper;
   let subject: MissionForm;
   let eventActions: { addEvent: jest.Mock, removeEvent: jest.Mock };
+  let setLoading = () => {};
 
   beforeEach(async () => {
     eventActions = {
       addEvent: jest.fn(),
-      removeEvent: jest.fn()
+      removeEvent: jest.fn(),
     };
 
     missionFormStore = new MissionFormStore(eventActions);
@@ -34,6 +36,7 @@ describe('MissionForm', () => {
       <MissionForm
         airmanId={123}
         missionFormStore={missionFormStore}
+        setLoading={setLoading}
       />
     );
 
@@ -51,6 +54,10 @@ describe('MissionForm', () => {
       endDate: mission.endDateTime!.format('YYYY-MM-DD'),
       endTime: mission.endDateTime!.format('HHmm')
     });
+  });
+
+  it('should render a Form', () => {
+    expect(wrapper.find(StyledForm).prop('setLoading')).toBe(setLoading);
   });
 
   it('should render a delete button when there is an event', () => {

@@ -75,7 +75,7 @@ export class SkillFormStore extends FormStore<Skill, State> {
     };
   }
 
-  addModel(airmanId: number): void {
+  async addModel(airmanId: number) {
     const skill = {
       type: this._state.skillType as SkillType,
       airmanId: airmanId,
@@ -84,7 +84,7 @@ export class SkillFormStore extends FormStore<Skill, State> {
       expirationDate: moment(this._state.expirationDate),
       id: this.model ? this.model.id : null,
     };
-    this.skillActions.addSkill(skill);
+    await this.skillActions.addSkill(skill);
   }
 
   removeModel(): void {

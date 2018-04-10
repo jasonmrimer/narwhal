@@ -8,12 +8,24 @@ interface SubmitEvent {
 interface FormProps {
   children: any;
   onSubmit: (event: SubmitEvent) => void;
+  setLoading?: (loading: boolean) => void;
   className?: string;
 }
 
+
 export const Form = (props: FormProps) => {
+  const onSubmit = async (e: any) => {
+    if (!props.setLoading) {
+      props.onSubmit(e);
+    } else {
+      props.setLoading!(true);
+      await props.onSubmit(e);
+      props.setLoading!(false);
+    }
+  }
+
   return (
-    <form className={props.className} onSubmit={props.onSubmit}>
+    <form className={props.className} onSubmit={onSubmit}>
       {props.children}
     </form>
   );

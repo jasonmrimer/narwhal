@@ -16,8 +16,8 @@ export const LoadingOverlay = (props: Props) => {
 };
 
 export const StyledLoadingOverlay = styled(withTheme(LoadingOverlay))`
-  position: fixed;
-  background: ${props => props.theme.dark};
+  position: absolute;
+  background: rgba(0, 0, 0, 0.4);
   top: 0;
   left: 0;
   height: 100%;

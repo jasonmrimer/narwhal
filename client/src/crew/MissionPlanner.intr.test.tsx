@@ -4,14 +4,14 @@ import { mount, ReactWrapper } from 'enzyme';
 import { DoubleRepositories } from '../utils/Repositories';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 import { MissionPlannerStore } from './stores/MissionPlannerStore';
-import { Crew } from './Crew';
 import { Theme } from '../themes/default';
 import { MemoryRouter } from 'react-router';
 import { ThemeProvider } from 'styled-components';
 import { forIt } from '../utils/testUtils';
-import { Button } from '../widgets/Button';
 import { MissionPlannerRoster, Row } from './MissionPlannerRoster';
 import { RosterHeader } from '../roster/RosterHeader';
+import { CrewPositionRow } from './CrewPositionRow';
+import { Form } from '../widgets/Form';
 
 describe('MissionPlanner', () => {
   let subject: ReactWrapper;
@@ -67,8 +67,9 @@ describe('MissionPlanner', () => {
         critical: false
       });
 
-    subject.find(Button).simulate('click');
-    expect(subject.find(Crew).prop('crewStore').crew!.crewPositions[2].airman).toBe(airman);
+    await subject.find(Form).simulate('submit');
+
+    expect(subject.find(CrewPositionRow).at(2).text()).toContain(`${airman.lastName}, ${airman.firstName}`);
   });
 
 });

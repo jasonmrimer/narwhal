@@ -26,6 +26,7 @@ export class SidePanel extends React.Component<Props> {
           <StyledCurrency
             selectedAirman={trackerStore.selectedAirman}
             currencyStore={trackerStore.currencyStore}
+            setLoading={trackerStore.setLoading}
           />
         );
       case TabType.AVAILABILITY:
@@ -37,6 +38,7 @@ export class SidePanel extends React.Component<Props> {
             createEvent={trackerStore.newEvent}
             availabilityStore={trackerStore.availabilityStore}
             plannerStore={trackerStore.plannerStore}
+            setLoading={trackerStore.setLoading}
           />
         );
     }

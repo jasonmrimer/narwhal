@@ -26,6 +26,8 @@ describe('Currency', () => {
 
   let trackerStore: TrackerStore;
   let subject: ShallowWrapper;
+  let setLoading = () => {};
+
   beforeEach(async () => {
     trackerStore = await makeFakeTrackerStore();
     trackerStore.setSelectedAirman(airman, TabType.AVAILABILITY);
@@ -33,6 +35,7 @@ describe('Currency', () => {
       <Currency
         selectedAirman={trackerStore.selectedAirman}
         currencyStore={trackerStore.currencyStore}
+        setLoading={setLoading}
       />
     );
   });
@@ -73,6 +76,7 @@ describe('Currency', () => {
     const store = trackerStore.currencyStore.skillFormStore;
     expect(store.hasModel).toBeTruthy();
     expect(Number(store.state.skillId)).toBe(airman.qualifications[0].skillId);
+    expect(subject.find(StyledSkillsForm).prop('setLoading')).toBe(setLoading);
   });
 
   it('can exit out of a skill form', () => {

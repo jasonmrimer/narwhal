@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
-import { StyledButton } from '../widgets/Button';
 import { Link } from 'react-router-dom';
 import { BackArrow } from '../icons/BackArrow';
 import { Theme } from '../themes/default';
@@ -10,6 +9,8 @@ import { StyledCrew } from './Crew';
 import { StyledMissionPlannerRosterContainer } from './MissionPlannerRosterContainer';
 import { MissionPlannerStore } from './stores/MissionPlannerStore';
 import { StyledLocationFilters } from '../widgets/LocationFilters';
+import { StyledSubmitButton } from '../widgets/SubmitButton';
+import { StyledForm } from '../widgets/Form';
 
 interface Props {
   crewId: number;
@@ -44,24 +45,31 @@ export class MissionPlanner extends React.Component<Props> {
           <span>MSN START {crew.mission.displayStartTime}</span>
           <span>MSN END {crew.mission.displayEndTime}</span>
         </div>
-        <div className="mission-header">
-          <StyledButton
-            text="SAVE"
-            onClick={missionPlannerStore.crewStore.save}
-          />
-          <StyledLocationFilters
-            locationFilterStore={missionPlannerStore.locationFilterStore}
-          />
-        </div>
-        <div className="mission-planner">
-          <StyledCrew
-            crewStore={missionPlannerStore.crewStore}
-            className="crew-list"
-          />
-          <StyledMissionPlannerRosterContainer
-            missionPlannerStore={missionPlannerStore}
-          />
-        </div>
+        <StyledForm
+          onSubmit={async (e) =>{
+            e.preventDefault()
+            await this.props.missionPlannerStore.crewStore.save();
+          }}
+          setLoading={missionPlannerStore.setLoading}
+        >
+          <div className="mission-header">
+            <StyledSubmitButton
+              text="SAVE"
+            />
+            <StyledLocationFilters
+              locationFilterStore={missionPlannerStore.locationFilterStore}
+            />
+          </div>
+          <div className="mission-planner">
+            <StyledCrew
+              crewStore={missionPlannerStore.crewStore}
+              className="crew-list"
+            />
+            <StyledMissionPlannerRosterContainer
+              missionPlannerStore={missionPlannerStore}
+            />
+          </div>
+        </StyledForm>
       </div>
     );
   }
@@ -130,5 +138,9 @@ export const StyledMissionPlanner = styled(MissionPlanner)`
       margin-left: 2rem;
       margin-right: 0;
     }
+  }
+  
+  form {
+    color: ${props => props.theme.fontColor};
   }
 `;

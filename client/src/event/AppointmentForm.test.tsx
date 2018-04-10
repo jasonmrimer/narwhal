@@ -9,12 +9,14 @@ import { StyledFieldValidation } from '../widgets/FieldValidation';
 import { StyledButton } from '../widgets/Button';
 import { EventModelFactory } from './factories/EventModelFactory';
 import { AppointmentFormStore } from './stores/AppointmentFormStore';
+import { StyledForm } from '../widgets/Form';
 
 describe('AppointmentForm', () => {
   let store: AppointmentFormStore;
   let wrapper: ShallowWrapper;
   let subject: AppointmentForm;
   let eventActions: { addEvent: jest.Mock, removeEvent: jest.Mock };
+  let setLoading = () => {};
 
   beforeEach(() => {
     eventActions = {
@@ -27,10 +29,15 @@ describe('AppointmentForm', () => {
       <AppointmentForm
         airmanId={123}
         appointmentFormStore={store}
+        setLoading={setLoading}
       />
     );
 
     subject = (wrapper.instance() as AppointmentForm);
+  });
+
+  it('should render a Form', () => {
+    expect(wrapper.find(StyledForm).prop('setLoading')).toBe(setLoading);
   });
 
   it('manages the state via form changes', () => {

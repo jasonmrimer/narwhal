@@ -62,7 +62,7 @@ export class AppointmentFormStore extends FormStore<EventModel, State> {
   }
 
   @action.bound
-  addModel(airmanId: number): void {
+  async addModel(airmanId: number) {
     const event = new EventModel(
       this._state.title,
       this._state.description,
@@ -72,7 +72,7 @@ export class AppointmentFormStore extends FormStore<EventModel, State> {
       EventType.Appointment,
       this.model ? this.model.id : null
     );
-    this.eventActions.addEvent(event);
+    await this.eventActions.addEvent(event);
   }
 
   @action.bound

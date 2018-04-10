@@ -48,6 +48,7 @@ export function FormStory() {
         <StyledSkillsForm
           airmanId={1}
           skillFormStore={new SkillFormStore(siteIdContainer, skillsActions)}
+          setLoading={() => {}}
         />
       );
     })
@@ -60,6 +61,7 @@ export function FormStory() {
         <StyledSkillsForm
           airmanId={1}
           skillFormStore={store}
+          setLoading={() => {}}
         />
       );
     });

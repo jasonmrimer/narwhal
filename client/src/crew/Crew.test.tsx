@@ -7,6 +7,7 @@ import { Crew } from './Crew';
 import { CrewRepositorySpy } from './repositories/doubles/CrewRepositorySpy';
 import { StyledCrewPositionRow } from './CrewPositionRow';
 import { StyledCrewPositionInputRow } from './CrewPositionInputRow';
+import { eventStub } from '../utils/testUtils';
 
 describe('Crew', () => {
   let crewStore: CrewStore;
@@ -48,7 +49,7 @@ describe('Crew', () => {
   });
 
   it('clears a crew position row', () => {
-    instance.handleDeleteChange({}, 1);
+    instance.handleDeleteChange(eventStub, 1);
     subject.update();
     expect(subject.find(StyledCrewPositionRow).length).toBe(1);
   });

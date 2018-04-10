@@ -14,6 +14,7 @@ import { DeleteIcon } from '../icons/DeleteIcon';
 interface Props {
   airmanId: number;
   leaveFormStore: LeaveFormStore;
+  setLoading: (loading: boolean) => void;
   className?: string;
 }
 
@@ -27,15 +28,15 @@ export class LeaveForm extends React.Component<Props> {
     this.props.leaveFormStore.removeModel();
   }
 
-  handleSubmit = (e: any) => {
+  handleSubmit = async (e: any) => {
     e.preventDefault();
-    this.props.leaveFormStore.addModel(this.props.airmanId);
+    await this.props.leaveFormStore.addModel(this.props.airmanId);
   }
 
   render() {
     const {state, errors, hasModel} = this.props.leaveFormStore;
     return (
-      <StyledForm onSubmit={this.handleSubmit}>
+      <StyledForm onSubmit={this.handleSubmit} setLoading={this.props.setLoading}>
         <StyledFormRow>
           <StyledTextInput
             name="description"
