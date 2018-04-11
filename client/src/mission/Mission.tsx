@@ -9,7 +9,7 @@ interface Props {
 }
 
 export const Mission = (props: Props) => {
-  const {id, atoMissionNumber, startDateTime, endDateTime, platform} = props.mission;
+  const {id, atoMissionNumber, platform, displayDate, displayStartTime, displayEndTime} = props.mission;
   return (
     <span className={`${props.className} mission-card`}>
       <h3>{atoMissionNumber}</h3>
@@ -21,15 +21,15 @@ export const Mission = (props: Props) => {
           </div>
           <div className="mission-info">
             <span>Date:</span>
-            <span>{startDateTime.format('DD MMM YY').toUpperCase()}</span>
+            <span>{displayDate}</span>
           </div>
           <div className="mission-info">
             <span>Start time:</span>
-            <span>{startDateTime.format('HHmm[L]')}</span>
+            <span>{displayStartTime}</span>
           </div>
           <div className="mission-info">
             <span>End time:</span>
-            <span>{endDateTime ? endDateTime.format('HHmm[L]') : 'TBD'}</span>
+            <span>{displayEndTime}</span>
           </div>
         </div>
         <Link className="crew-link" to={`/crew/${id}`}>

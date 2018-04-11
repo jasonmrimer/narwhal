@@ -10,7 +10,7 @@ describe('PrintabelMissionPlanner', () => {
   beforeEach(() => {
     subject = shallow(
       <PrintableMissionPlanner crew={crew}/>
-    )
+    );
   });
 
   it('should render mission details', () => {

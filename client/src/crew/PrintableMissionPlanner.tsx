@@ -17,13 +17,12 @@ export class PrintableMissionPlanner extends React.Component<Props, {}> {
 
   componentDidMount() {
     const beforePrint = () => {
-      document.getElementById('classification-banner')!.style.display = "none";
+      document.getElementById('classification-banner')!.style.display = 'none';
     };
 
     const afterPrint = () => {
-      document.getElementById('classification-banner')!.style.display = "block";
+      document.getElementById('classification-banner')!.style.display = 'block';
     };
-
 
     if (window.matchMedia) {
       const mediaQueryList = window.matchMedia('print');
@@ -43,7 +42,7 @@ export class PrintableMissionPlanner extends React.Component<Props, {}> {
   renderRows = () => {
     let positions = this.props.crew.crewPositions;
     positions = positions.concat(Array(PrintableMissionPlanner.emptyRows)
-      .fill(new CrewPositionModel(AirmanModel.empty())))
+      .fill(new CrewPositionModel(AirmanModel.empty())));
 
     return positions.map((position, index) => {
       return (
@@ -57,7 +56,6 @@ export class PrintableMissionPlanner extends React.Component<Props, {}> {
       );
     });
   }
-
 
   render() {
     const {crew, className} = this.props;
@@ -125,7 +123,6 @@ export const StyledPrintableMissionPlanner = styled(PrintableMissionPlanner)`
   
     span {
       margin-right: 1rem;
-      font-size: 0.10in;
     }
   }
   
@@ -136,10 +133,10 @@ export const StyledPrintableMissionPlanner = styled(PrintableMissionPlanner)`
   }
   
   .location-details {
-    font-size: 0.08in;
+    font-size: 0.10in;
     border: 1px solid black;
     padding: 0 0.25in 0.25in 0;
-    width: ${1/3 * 100}%;
+    width: ${1 / 3 * 100}%;
     display: inline-block;
     
     &:nth-child(2) {
@@ -174,6 +171,7 @@ export const StyledPrintableMissionPlanner = styled(PrintableMissionPlanner)`
     height: 0.16in;
     page-break-before: auto;
     page-break-after: avoid;
+    page-break-inside: avoid;
   }
   
   .critical-col {
@@ -216,10 +214,11 @@ export const StyledPrintableMissionPlanner = styled(PrintableMissionPlanner)`
     page-break-after: avoid;
     page-break-before: auto;
     page-break-inside: avoid;
+    font-size: 0.12in;
   }
     
   .signature-box {
-    font-size: 0.08in;
+    font-size: 0.10in;
     border: 1px solid black;
     padding: 0 1in 1in 0;
     display: inline-block;
