@@ -13,21 +13,17 @@ export class MissionModel {
 
   get displayDate() {
     return this.startDateTime
-      .clone()
-      .utc()
       .format('DD MMM YY')
       .toUpperCase();
   }
 
   get displayStartTime() {
-    return (
-      `${this.startDateTime.clone().utc().format('HHmm')}Z (${this.startDateTime.clone().local().format('HHmm')}L)`
-    );
+    return `${this.startDateTime.format('HHmm')}L`;
   }
 
   get displayEndTime() {
     return this.endDateTime != null ?
-      `${this.startDateTime.clone().utc().format('HHmm')}Z (${this.endDateTime.clone().local().format('HHmm')}L)` :
+      `${this.endDateTime.format('HHmm')}L` :
       'TBD';
   }
 }
