@@ -27,6 +27,6 @@ describe('Routes', () => {
     expect(subject.find(Route).at(0).prop('path')).toBe('/');
     expect(subject.find(Route).at(1).prop('path')).toBe('/upload');
     expect(subject.find(Route).at(2).prop('path')).toBe('/dashboard');
-    expect(subject.find(Route).at(3).prop('path')).toBe('/crew/:id');
+    expect(subject.find(Route).at(3).prop('path')).toBe('/dashboard/crew/:id');
   });
 });

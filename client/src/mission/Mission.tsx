@@ -32,7 +32,7 @@ export const Mission = (props: Props) => {
             <span>{displayEndTime}</span>
           </div>
         </div>
-        <Link className="crew-link" to={`/crew/${id}`}>
+        <Link className="crew-link" to={`/dashboard/crew/${id}`}>
           VIEW
         </Link>
       </div>

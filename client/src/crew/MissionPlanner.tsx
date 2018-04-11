@@ -80,6 +80,7 @@ export class MissionPlanner extends React.Component<Props> {
 }
 
 export const StyledMissionPlanner = styled(MissionPlanner)`
+  padding: 0.5rem;
   margin-left: 3rem;
   width: 1698px;
   

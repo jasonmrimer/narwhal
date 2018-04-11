@@ -32,6 +32,6 @@ describe('AvailabilityTile', () => {
 
   it('renders a button that links to the missions crew if the event is a mission', () => {
     expect(subject.find(Link).exists()).toBeTruthy();
-    expect(subject.find(Link).prop('to')).toBe(`/crew/${event.id}`);
+    expect(subject.find(Link).prop('to')).toBe(`/dashboard/crew/${event.id}`);
   });
 });

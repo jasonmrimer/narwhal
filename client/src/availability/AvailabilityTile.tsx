@@ -18,7 +18,7 @@ export const AvailabilityTile = observer((props: Props) => {
         <span>{props.event.title}</span>
         {
           props.event.type === EventType.Mission &&
-          <Link to={`/crew/${props.event.id}`} className="mission-list">
+          <Link to={`/dashboard/crew/${props.event.id}`} className="mission-list">
             <LookingGlass /> Mission List
           </Link>
         }

@@ -20,7 +20,9 @@ export class MissionModel {
   }
 
   get displayStartTime() {
-    return `${this.startDateTime.clone().utc().format('HHmm')}Z (${this.startDateTime.clone().local().format('HHmm')}L)`;
+    return (
+      `${this.startDateTime.clone().utc().format('HHmm')}Z (${this.startDateTime.clone().local().format('HHmm')}L)`
+    );
   }
 
   get displayEndTime() {

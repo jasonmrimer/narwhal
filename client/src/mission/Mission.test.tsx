@@ -51,7 +51,7 @@ describe('Mission', () => {
       </MemoryRouter>
     );
 
-    expect(subject.find(Link).prop('to')).toBe(`/crew/${mission.id}`);
+    expect(subject.find(Link).prop('to')).toBe(`/dashboard/crew/${mission.id}`);
   });
 
   it('renders platform', () => {

@@ -12,7 +12,7 @@ export class TopBar extends React.Component<Props> {
     return (
       <div className={this.props.className}>
       <span className="logo">
-        <img src="sally.png"/>
+        <img src="/sally.png"/>
         <span>Narwhal</span>
       </span>
         <span className="navigation-tabs">
@@ -113,5 +113,9 @@ export const StyledTopBar = styled(TopBar)`
     color: ${props => props.theme.fontColor};
     cursor: pointer;
     width: 12rem;
+  }
+  
+  @media print {
+    display: none;
   }
 `;

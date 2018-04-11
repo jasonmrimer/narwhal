@@ -90,7 +90,7 @@ describe('App', () => {
   });
 
   it('renders the MissionPlanner component when the route is /crew', async () => {
-    mountedSubject = await createMountedPage('/crew/1');
+    mountedSubject = await createMountedPage('/dashboard/crew/1');
     expect(mountedSubject.find(MissionPlanner).exists()).toBeTruthy();
   });
 });

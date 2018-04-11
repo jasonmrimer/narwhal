@@ -24,8 +24,19 @@ export class Routes extends React.Component<Props> {
       <Switch>
         <Route exact={true} path="/" render={() => <TrackerPage {...this.props}/>}/>
         <Route path="/upload" render={() => <UploadPage/>}/>
-        <Route path="/dashboard" render={() => <DashboardPage {...this.props}/>}/>
-        <Route path="/crew/:id" render={({match}) => <CrewPage {...this.props} crewId={match.params.id}/>}/>
+        <Route exact={true} path="/dashboard" render={() => <DashboardPage {...this.props}/>}/>
+        <Route
+          path="/dashboard/crew/:id"
+          render={({match}) => {
+            return (
+              <CrewPage
+                username={this.props.profileStore.profile!.user.username}
+                crewId={match.params.id}
+                missionPlannerStore={this.props.missionPlannerStore}
+              />
+            );
+          }}
+        />
       </Switch>
     );
   }
