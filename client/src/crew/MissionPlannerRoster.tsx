@@ -84,16 +84,14 @@ export class MissionPlannerRoster extends React.Component<Props> {
       return (
         <StyledSubHeaderRow
           {...props}
-          text={`PERSONNEL BELOW ARE AVAILABLE FOR MISSION ON ${mission.startDateTime.format('DD MMM YY')
-            .toUpperCase()}`}
+          text={`PERSONNEL BELOW ARE AVAILABLE FOR MISSION ON ${mission.displayDate}`}
         />
       );
     } else if (props.index === availableAirmen.length + 1) {
       return (
         <StyledSubHeaderRow
           {...props}
-          text={`PERSONNEL BELOW ARE UNAVAILABLE FOR MISSION ON ${mission.startDateTime.format('DD MMM YY')
-            .toUpperCase()}`}
+          text={`PERSONNEL BELOW ARE UNAVAILABLE FOR MISSION ON ${mission.displayDate}`}
         />
       );
     }

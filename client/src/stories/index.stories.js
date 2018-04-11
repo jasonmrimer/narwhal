@@ -6,6 +6,7 @@ import {NotificationStory} from './Notification.stories';
 import {LeaveFormStory} from "./LeaveForm.stories";
 import {IconStory} from "./Icon.stories";
 import {ProfileStory} from "./Profile.stories";
+import {PrintableMissionPlannerStory} from "./PrintableMissionPlanner.stories";
 
 document.body.style.fontFamily = Theme.fontFamily;
 document.body.style.color = Theme.fontColor;
@@ -17,3 +18,4 @@ NotificationStory();
 LeaveFormStory();
 IconStory();
 ProfileStory();
+PrintableMissionPlannerStory();

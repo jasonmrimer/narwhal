@@ -25,9 +25,11 @@ export class App extends React.Component<Props> {
     return this.props.profileStore.profile ?
       (
         <div>
-          <StyledClassificationBanner classified={this.props.profileStore.profile!.classified}/>
-          <StyledAuthorizationBanner/>
-          <div style={{marginTop: '7rem'}}>
+          <div id="classification-banner" style={{marginBottom: '7rem'}}>
+            <StyledClassificationBanner classified={this.props.profileStore.profile!.classified}/>
+            <StyledAuthorizationBanner/>
+          </div>
+          <div>
             {
               this.profileHasSite() ?
                 <Routes {...this.props} /> :
@@ -45,7 +47,7 @@ export class App extends React.Component<Props> {
 
 export const ClassificationBanner = (props: { classified: boolean, className?: string }) => {
   return (
-    <div className={props.className}>
+    <div className={props.className} id="classification-banner">
       {props.classified ?
         'Dynamic Classification Highest Possible Classification: TS//SI//REL TO USA, FVEY' :
         'Not Actual Classification. Prototype Only'
