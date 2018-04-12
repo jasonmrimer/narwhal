@@ -16,7 +16,7 @@ describe('PrintabelMissionPlanner', () => {
   it('should render mission details', () => {
     expect(subject.find('h3').text()).toContain(crew.mission.atoMissionNumber);
     const missionDetails = subject.find('.mission-details');
-    expect(missionDetails.find('span').at(0).text()).toContain(crew.mission.displayDate);
+    expect(missionDetails.find('span').at(0).text()).toContain(crew.mission.displayDateZulu);
     expect(missionDetails.find('span').at(1).text()).toContain(crew.mission.displayStartTime);
     expect(missionDetails.find('span').at(2).text()).toContain(crew.mission.displayEndTime);
   });

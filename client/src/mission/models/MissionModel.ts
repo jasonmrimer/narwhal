@@ -8,22 +8,33 @@ export class MissionModel {
               public startDateTime: Moment,
               public endDateTime: Moment | null = null,
               public platform: string,
-              public site?: SiteModel, ) {
+              public site?: SiteModel,) {
   }
 
-  get displayDate() {
-    return this.startDateTime
-      .format('DD MMM YY')
-      .toUpperCase();
+  get displayDateZulu() {
+    return `${this.startDateTime.clone().utc().format('DD MMM YY').toUpperCase()}`;
+  }
+
+  get displayDateLocal() {
+    return `${this.startDateTime.format('DD MMM YY').toUpperCase()}`;
   }
 
   get displayStartTime() {
-    return `${this.startDateTime.format('HHmm')}L`;
+    return `${this.startDateTime.clone().utc().format('HHmm')}Z (${this.startDateTime.format('HHmm')}L)`;
   }
 
   get displayEndTime() {
     return this.endDateTime != null ?
-      `${this.endDateTime.format('HHmm')}L` :
+      `${this.endDateTime.clone().utc().format('HHmm')}Z (${this.endDateTime.format('HHmm')}L)` :
       'TBD';
+  }
+
+  get displayStartAndEndTime() {
+    const startZulu = `${this.startDateTime.clone().utc().format('HHmm')}Z`;
+    const endZulu = this.endDateTime ? `${this.endDateTime.clone().utc().format('HHmm')}Z` : 'TBD';
+    const startLocal = `${this.startDateTime.format('HHmm')}L`;
+    const endLocal = this.endDateTime ? `${this.endDateTime.format('HHmm')}L` : 'TBD';
+
+    return `${startZulu} - ${endZulu} (${startLocal} - ${endLocal})`;
   }
 }

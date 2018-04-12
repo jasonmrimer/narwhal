@@ -111,7 +111,7 @@ export class MissionFormStore extends FormStore<EventModel, State> {
   @computed
   get missionOptions() {
     return this._missions.map(msn => {
-      return {value: msn.id, label: `${msn.displayDate} - ${msn.atoMissionNumber}`};
+      return {value: msn.id, label: `${msn.displayDateLocal} - ${msn.atoMissionNumber}`};
     });
   }
 }

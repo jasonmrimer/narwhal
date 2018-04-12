@@ -43,9 +43,9 @@ export class MissionPlanner extends React.Component<Props> {
           </Link>
           <div className="mission-details">
             <h1>{crew.mission.atoMissionNumber}</h1>
-            <span>MSN DATE {crew.mission.displayDate}</span>
-            <span>MSN START {crew.mission.displayStartTime}</span>
-            <span>MSN END {crew.mission.displayEndTime}</span>
+            <span>MSN DATE: {crew.mission.displayDateZulu}</span>
+            <span>MSN START: {crew.mission.displayStartTime}</span>
+            <span>MSN END: {crew.mission.displayEndTime}</span>
           </div>
           <StyledForm
             onSubmit={async (e) => {

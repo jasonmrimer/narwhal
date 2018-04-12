@@ -40,9 +40,9 @@ describe('MissionPlanner', () => {
   it('displays the mission details', () => {
     subject.update();
     expect(subject.text()).toContain(mission.atoMissionNumber);
-    expect(subject.text()).toContain(`MSN DATE ${mission.displayDate}`);
-    expect(subject.text()).toContain(`MSN START ${mission.displayStartTime}`);
-    expect(subject.text()).toContain(`MSN END ${mission.displayEndTime}`);
+    expect(subject.text()).toContain(`MSN DATE: ${mission.displayDateZulu}`);
+    expect(subject.text()).toContain(`MSN START: ${mission.displayStartTime}`);
+    expect(subject.text()).toContain(`MSN END: ${mission.displayEndTime}`);
   });
 
   it('should render the spinner only while loading', async () => {

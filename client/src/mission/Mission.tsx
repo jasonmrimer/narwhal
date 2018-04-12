@@ -9,28 +9,14 @@ interface Props {
 }
 
 export const Mission = (props: Props) => {
-  const {id, atoMissionNumber, platform, displayDate, displayStartTime, displayEndTime} = props.mission;
+  const {id, atoMissionNumber, displayDateZulu, displayStartAndEndTime} = props.mission;
   return (
     <span className={`${props.className} mission-card`}>
       <h3>{atoMissionNumber}</h3>
       <div>
         <div>
-          <div className="mission-info">
-            <span>Platform:</span>
-            <span>{platform}</span>
-          </div>
-          <div className="mission-info">
-            <span>Date:</span>
-            <span>{displayDate}</span>
-          </div>
-          <div className="mission-info">
-            <span>Start time:</span>
-            <span>{displayStartTime}</span>
-          </div>
-          <div className="mission-info">
-            <span>End time:</span>
-            <span>{displayEndTime}</span>
-          </div>
+            <div>{displayDateZulu}</div>
+            <div>{displayStartAndEndTime}</div>
         </div>
         <Link className="crew-link" to={`/dashboard/crew/${id}`}>
           VIEW
@@ -56,12 +42,6 @@ export const StyledMission = styled(Mission)`
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
-  }
-  
-  .mission-info {
-    width: 150%;
-    display: flex;
     justify-content: space-between;
   }
   

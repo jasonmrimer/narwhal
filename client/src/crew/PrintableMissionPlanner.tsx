@@ -63,7 +63,7 @@ export class PrintableMissionPlanner extends React.Component<Props, {}> {
       <div id="printable-mission-planner" className={className}>
         <h3 className="mission-name">{crew.mission.atoMissionNumber}</h3>
         <div className="mission-details">
-          <span>{`MSN DATE: ${crew.mission.displayDate}`}</span>
+          <span>{`MSN DATE: ${crew.mission.displayDateZulu}`}</span>
           <span>{`MSN START: ${crew.mission.displayStartTime}`}</span>
           <span>{`MSN END: ${crew.mission.displayEndTime}`}</span>
         </div>
