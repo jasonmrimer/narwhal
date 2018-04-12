@@ -11,6 +11,7 @@ import { StyledMissionCardSection } from './MissionCardSection';
 import { ClipLoader } from 'react-spinners';
 import { ThemeProvider } from 'styled-components';
 import { Theme } from '../themes/default';
+import { StyledMultiTypeahead } from '../widgets/MultiTypeahead';
 
 const missionRepositoryStub = DoubleRepositories.missionRepository;
 
@@ -51,6 +52,10 @@ describe('Dashboard', () => {
     expect(dashboardMissions(subject)).toEqual(missions);
   });
 
+  it('should render a platform filter with options', () => {
+    expect(subject.find(StyledMultiTypeahead).prop('options')).toBe(dashboardStore.platformOptions);
+  });
+
   describe('sorting', () => {
     it('should render 5 Mission Card Sections', () => {
       expect(subject.find(StyledMissionCardSection).length).toBe(5);
@@ -86,10 +91,8 @@ describe('Dashboard', () => {
       expect(section.find('.mission-card').length).toBe(13);
     });
   });
-
   describe('filtering', () => {
-    const siteId = 1;
-
+    const siteId = 3;
     beforeEach(async () => {
       const filter = findFilterById(subject, 'site-filter');
       await selectOption(subject, filter, siteId);
@@ -99,6 +102,16 @@ describe('Dashboard', () => {
       dashboardMissions(subject).map(mission => {
         expect(mission.site!.id).toEqual(siteId);
       });
+    });
+
+    it('filters the setSelectedPlatformOptions when selecting a single qualification', () => {
+      const platformMultiTypeahead = subject.find(StyledMultiTypeahead);
+      const input = platformMultiTypeahead.find('input');
+      input.simulate('click');
+      input.simulate('keyDown', {keyCode: 40});
+      input.simulate('keyDown', {keyCode: 13});
+
+      expect(subject.find(StyledMission).length).toBe(9);
     });
   });
 });

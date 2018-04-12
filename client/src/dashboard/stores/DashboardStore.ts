@@ -1,9 +1,9 @@
 import { MissionRepository } from '../../mission/repositories/MissionRepository';
 import { SiteRepository } from '../../site/repositories/SiteRepository';
 import { MissionModel } from '../../mission/models/MissionModel';
-import { action, computed, observable } from 'mobx';
+import { action, computed, observable, toJS } from 'mobx';
 import { SiteModel } from '../../site/models/SiteModel';
-import { UnfilteredValue } from '../../widgets/models/FilterOptionModel';
+import { FilterOption, UnfilteredValue } from '../../widgets/models/FilterOptionModel';
 import { Repositories } from '../../utils/Repositories';
 import * as moment from 'moment';
 
@@ -14,6 +14,8 @@ export class DashboardStore {
   @observable private _missions: MissionModel[] = [];
   @observable private _siteId: number = UnfilteredValue;
   @observable private _loading: boolean = false;
+  @observable private _platforms: string[] = [];
+  @observable private _selectedPlatformOptions: FilterOption[] = [];
 
   constructor(repositories: Repositories) {
     this.siteRepository = repositories.siteRepository;
@@ -23,12 +25,14 @@ export class DashboardStore {
   async hydrate() {
     this._loading = true;
 
-    const [sites, missions] = await Promise.all([
+    const [sites, missions, platforms] = await Promise.all([
       this.siteRepository.findAll(),
-      this.missionRepository.findAll()
+      this.missionRepository.findAll(),
+      this.missionRepository.findPlatforms(this._siteId)
     ]);
     this._sites = sites;
     this._missions = missions;
+    this._platforms = platforms;
 
     this._loading = false;
   }
@@ -55,9 +59,27 @@ export class DashboardStore {
     });
   }
 
+  @computed
+  get platformOptions() {
+    return this._platforms.map((obj: string, index: number) => {
+      return {label: obj, value: index};
+    });
+  }
+
   @action.bound
-  setSiteId(id: number) {
+  setSelectedPlatformOptions(selectedOptions: FilterOption[]) {
+    this._selectedPlatformOptions = selectedOptions;
+  }
+
+  @computed
+  get selectedPlatformOptions() {
+    return toJS(this._selectedPlatformOptions);
+  }
+
+  @action.bound
+  async setSiteId(id: number) {
     this._siteId = id;
+    this._platforms = await this.missionRepository.findPlatforms(this._siteId);
   }
 
   @computed
@@ -74,8 +96,10 @@ export class DashboardStore {
       this._siteId !== UnfilteredValue ?
         this._missions
           .filter(msn => msn.site != null)
-          .filter(msn => msn.site!.id === this._siteId) :
-        this._missions;
+          .filter(msn => msn.site!.id === this._siteId)
+          .filter(this.byPlatforms) :
+        this._missions
+          .filter(this.byPlatforms);
 
     return filteredMissions.reduce(
       (accum, current) => {
@@ -88,5 +112,15 @@ export class DashboardStore {
       },
       {}
     );
+  }
+
+  private byPlatforms = (mission: MissionModel) => {
+    if (this._selectedPlatformOptions.length === 0) {
+      return true;
+    } else {
+      return this._selectedPlatformOptions
+        .map(opt => opt.label)
+        .some((label: string) => mission.platform.includes(label));
+    }
   }
 }

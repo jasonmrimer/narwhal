@@ -66,7 +66,6 @@ export const StyledLocationFilters = styled(LocationFilters)`
     min-width: 20%;
     display: inline-block;
     position: relative;
-    float: left;
     z-index: 9;
     font-size: 0.875rem;
     font-weight: 300;

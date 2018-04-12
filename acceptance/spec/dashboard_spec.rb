@@ -13,8 +13,10 @@ describe 'Dashboard page', type: :feature do
   end
 
   it 'filters missions by site' do
-    dashboard_page.assert_shows_site('All Sites')
-    dashboard_page.filter_by(site: 'DGS-1')
-    dashboard_page.assert_shows_site('DGS-1')
+    dashboard_page.assert_filters_by_site
+  end
+
+  it 'filters mission cards by platform' do
+    dashboard_page.assert_filters_by_platform
   end
 end

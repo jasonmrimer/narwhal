@@ -15,6 +15,7 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.nullValue;
 
 public class MissionControllerTest extends BaseIntegrationTest {
   private Site site1;
@@ -91,6 +92,45 @@ public class MissionControllerTest extends BaseIntegrationTest {
       .body("[1].endDateTime", equalTo(future.toString()))
       .body("[1].site.id", equalTo(site2.getId().intValue()))
       .body("[1].platform", equalTo("U-2"));
+    // @formatter:on
+  }
+
+  @Test
+  public void findPlatforms() {
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .queryParam("siteId", site2.getId())
+      .queryParam("startDateTime", time.toString())
+      .queryParam("endDateTime", future.toString())
+    .when()
+      .get(MissionController.URI + "/platforms")
+    .then()
+      .statusCode(200)
+      .body("[0]", equalTo("U-2"));
+    // @formatter:on
+  }
+
+  @Test
+  public void findAllPlatforms() {
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .queryParam("startDateTime", time.toString())
+      .queryParam("endDateTime", future.toString())
+    .when()
+      .get(MissionController.URI + "/platforms")
+    .then()
+      .statusCode(200)
+      .body("[0]", equalTo("U-2"))
+      .body("[1]", equalTo("Global Hawk"))
+      .body("[2]", nullValue());
     // @formatter:on
   }
 }

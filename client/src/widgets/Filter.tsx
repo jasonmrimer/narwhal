@@ -82,7 +82,6 @@ export const TopLevelFilter = styled(Filter)`
   min-width: 20%;
   display: inline-block;
   position: relative;
-  float: left;
   z-index: 9;
 
   label {

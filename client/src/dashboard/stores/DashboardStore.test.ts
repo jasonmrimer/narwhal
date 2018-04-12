@@ -8,6 +8,12 @@ describe('DashboardStore', () => {
   let allMissions: MissionModel[];
   let subject: DashboardStore;
 
+  const filteredMissions = (missionList: any) => {
+    return Object.keys(missionList).map(key => {
+      return missionList[key];
+    }).reduce((acc, val) => acc.concat(val), []) as MissionModel[];
+  };
+
   beforeEach(async () => {
     allMissions = await missionRepository.findAll();
     subject = new DashboardStore(DoubleRepositories);
@@ -22,19 +28,45 @@ describe('DashboardStore', () => {
     ]);
   });
 
-  describe('filtering by site', () => {
-    beforeEach(() => {
+  it('returns a list of platform options given a site', async () => {
+    await subject.setSiteId(1);
+    expect(subject.platformOptions.length).toBe(1);
+    expect(subject.platformOptions[0]).toEqual({value: 0, label: 'U-2'});
+  });
+
+  it('returns a list of platform options for all sites', async () => {
+    await subject.setSiteId(-1);
+
+    expect(subject.platformOptions.length).toBe(2);
+    expect(subject.platformOptions[0]).toEqual({value: 0, label: 'U-2'});
+    expect(subject.platformOptions[1]).toEqual({value: 1, label: 'Global Hawk'});
+  });
+
+  describe('filtering ', () => {
+    it('returns missions for the site', () => {
       subject.setSiteId(1);
+      const missions = filteredMissions(subject.missions);
+
+      expect(missions.length).toBeLessThan(allMissions.length);
+      expect(missions.map(msn => msn.site!.id)
+        .filter((el, i, a) => i === a.indexOf(el))).toEqual([1]);
     });
 
-    it('returns missions for the site', () => {
-      const filteredMissions: MissionModel[] = Object.keys(subject.missions).map(key => {
-        return subject.missions[key];
-      }).reduce((acc, val) => acc.concat(val), []);
+    it('returns missions filtered by the selected platform', async () => {
+      await subject.setSiteId(3);
 
-      expect(filteredMissions.length).toBeLessThan(allMissions.length);
-      expect(filteredMissions.map(msn => msn.site!.id)
-        .filter((el, i, a) => i === a.indexOf(el))).toEqual([1]);
+      subject.setSelectedPlatformOptions([]);
+      let missions = filteredMissions(subject.missions);
+      expect(missions.length).toBe(15);
+
+      subject.setSelectedPlatformOptions([{value: 0, label: 'U-2'}]);
+      missions = filteredMissions(subject.missions);
+      expect(missions.length).toBe(9);
+
+      subject.setSelectedPlatformOptions([{value: 0, label: 'U-2'}, {value: 1, label: 'Global Hawk'}]);
+      missions = filteredMissions(subject.missions);
+      expect(missions.length).toBe(15);
+
     });
   });
 

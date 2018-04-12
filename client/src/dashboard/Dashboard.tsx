@@ -5,6 +5,7 @@ import { DashboardStore } from './stores/DashboardStore';
 import { TopLevelFilter } from '../widgets/Filter';
 import { StyledMissionCardSection } from './MissionCardSection';
 import { StyledLoadingOverlay } from '../widgets/LoadingOverlay';
+import { StyledMultiTypeahead } from '../widgets/MultiTypeahead';
 
 interface Props {
   dashboardStore: DashboardStore;
@@ -21,21 +22,30 @@ export class Dashboard extends React.Component<Props> {
   render() {
     const {dashboardStore, className} = this.props;
     return (
-      <div style={{margin: '0 3rem', padding: '0.5rem'}}>
+      <div className={className}>
         {dashboardStore.loading && <StyledLoadingOverlay/>}
-        <div className={`${className} filter`}>
-          <div className="filter">
-            <TopLevelFilter
-              id="site-filter"
-              label="SITE"
-              unfilteredOptionLabel="All Sites"
-              value={dashboardStore.siteId}
-              callback={dashboardStore.setSiteId}
-              options={dashboardStore.siteOptions}
+        <div className="filters">
+          <TopLevelFilter
+            id="site-filter"
+            label="SITE"
+            unfilteredOptionLabel="All Sites"
+            value={dashboardStore.siteId}
+            callback={dashboardStore.setSiteId}
+            options={dashboardStore.siteOptions}
+          />
+          <div className="platform-filter">
+            <label>PLATFORM</label>
+            <br/>
+            <StyledMultiTypeahead
+              options={dashboardStore.platformOptions}
+              onChange={dashboardStore.setSelectedPlatformOptions}
+              selected={dashboardStore.selectedPlatformOptions}
+              placeholder="Filter Platform"
+              className={'platform-typeahead'}
             />
           </div>
         </div>
-        <div className={`${className} missions`}>
+        <div className="missions">
           {Object.keys(dashboardStore.missions).map((key: string, index: number) => {
             return (
               <StyledMissionCardSection
@@ -53,37 +63,35 @@ export class Dashboard extends React.Component<Props> {
 }
 
 export const StyledDashboard = styled(Dashboard)`
+  padding: 0.5rem;
+  margin: 0 auto;
+  width: 1200px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  width: 1200px;
-  margin: 0 auto;
   
-  .filter {
-    min-width: 40%;
+  .filters {
+    display: flex;
   }
   
-  label {
-    font-size: 0.875rem;
-    font-weight: 300;
-    color: ${props => props.theme.purpleSteel};
+  .platform-filter {
+    width: 20%;
+    margin-left: 1rem;
+    
+    label {
+      font-size: 0.875rem;
+      font-weight: 300;
+      color: ${props => props.theme.purpleSteel};
+    }
+   
+    .platform-typeahead {
+      margin-top: 0.7rem;
+    } 
   }
   
-  #site-filter {
-    background: transparent;
-    display: block;
-    width: 100%;
-    height: 48px;
-    float: right;
-    margin: 0 0 5px 0;
-    font-size: 1rem;
-    font-weight: 300;
-    border: none;
-    border-bottom: 1px solid ${props => props.theme.purpleSteel};
-    color: ${props => props.theme.fontColor};
-    border-radius: 0;
-    cursor: pointer;
+  .missions {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    flex-wrap: wrap;
   }
-  
 `;

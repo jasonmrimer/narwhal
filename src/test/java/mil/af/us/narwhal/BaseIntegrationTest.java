@@ -35,6 +35,7 @@ public abstract class BaseIntegrationTest {
   @Autowired public CrewPositionRepository crewPositionRepository;
   public Mission mission;
   public Flight flight;
+  public Site site;
   protected final static ObjectMapper objectMapper = new ObjectMapper();
   protected final static JavaTimeModule module = new JavaTimeModule();
 
@@ -59,7 +60,7 @@ public abstract class BaseIntegrationTest {
     final Squadron squadron = new Squadron("squadron");
     squadron.addFlight(flight);
 
-    Site site = new Site("site");
+    site = new Site("site");
     site.addSquadron(squadron);
 
     siteRepository.save(site);
