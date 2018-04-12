@@ -45,7 +45,7 @@ export const StyledMission = styled(Mission)`
   width: calc(94% / 3);
   min-height: 8rem;
   padding: 1rem;
-  margin: 1% 1%;
+  margin: 10px;
   
   h3 {
     margin: 0 0 1rem 0;

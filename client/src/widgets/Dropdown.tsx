@@ -48,8 +48,8 @@ export const StyledDropdown = styled(Dropdown)`
   border: none;
   font-size: 1rem;
   border-bottom: 1px solid ${props => props.theme.purpleSteel};
-  -webkit-appearance: none;
-  -webkit-border-radius: 0;
+  appearance: none;
+  border-radius: 0;
   width: 75%;
   
   &:disabled {
@@ -59,18 +59,10 @@ export const StyledDropdown = styled(Dropdown)`
   }
   
   option {
-    padding: 0.25rem 0;    
-    
-    :hover {
-      background-color: ${props => props.theme.light};
-    }
-    
-    :nth-child(odd) {
-      background-color: ${props => props.theme.lighter};
-    }
-    
-    :nth-child(even) {
-      background-color: ${props => props.theme.lightest};
-    }  
+    color: black;
+  }
+  
+  &::-ms-expand {
+    display: none;
   }
 `;

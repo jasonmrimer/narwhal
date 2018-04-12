@@ -76,8 +76,6 @@ export const StyledCheckbox = styled(Checkbox)`
     height: 10px;
     border: solid black;
     border-width: 0 3px 3px 0;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
     transform: rotate(45deg);
   }
 `;

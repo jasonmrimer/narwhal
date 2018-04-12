@@ -106,8 +106,6 @@ export const TopLevelFilter = styled(Filter)`
   }
   
   select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
     appearance: none;
     background: transparent;
     
@@ -156,8 +154,6 @@ export const RosterLevelFilter = styled(Filter)`
   }
   
   select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
     appearance: none;
     background: transparent;
     
