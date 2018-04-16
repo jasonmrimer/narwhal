@@ -39,7 +39,11 @@ export class CrewStore {
 
   @computed
   get airmenOptions() {
-    return this._airmen.map((airman) => {
+    const airmenIds = this._crew!.crewPositions.map(({airman}) => airman.id);
+
+    return this._airmen.filter((airman) => {
+      return airmenIds.indexOf(airman.id) === -1;
+    }).map((airman) => {
       return {value: airman.id, label: `${airman.lastName}, ${airman.firstName}`};
     });
   }

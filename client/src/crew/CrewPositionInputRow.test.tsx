@@ -7,6 +7,7 @@ import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore
 import { DoubleRepositories } from '../utils/Repositories';
 import { StyledCheckbox } from '../widgets/Checkbox';
 import { StyledTextInput } from '../widgets/TextInput';
+import { AirmanModel } from '../airman/models/AirmanModel';
 import Mock = jest.Mock;
 
 describe('CrewPositionInputRow', () => {
@@ -16,13 +17,14 @@ describe('CrewPositionInputRow', () => {
   let handleNewEntryChange: Mock;
   let handleNewEntryCheck: Mock;
   let handleTypeahead: Mock;
+  let airmen: AirmanModel[];
 
   beforeEach(async () => {
     profileStore = new ProfileSitePickerStore(DoubleRepositories);
     handleNewEntryChange = jest.fn();
     handleNewEntryCheck = jest.fn();
     handleTypeahead = jest.fn();
-    const airmen = await DoubleRepositories.airmanRepository.findBySiteId(14);
+    airmen = await DoubleRepositories.airmanRepository.findBySiteId(14);
 
     await profileStore.hydrate();
     crewStore = new CrewStore(DoubleRepositories, {refreshAllEvents: jest.fn()});
@@ -38,8 +40,12 @@ describe('CrewPositionInputRow', () => {
     );
   });
 
-  it('should have all airmen options in the typeahead', () => {
-    expect(subject.find(StyledSingleTypeahead).prop('options').length).toBe(10);
+  it('should have only airmen options in the typeahead who are not on the mission', async () => {
+    crewStore.setNewEntry({airmanName: `${airmen[2].lastName}, ${airmen[2].firstName}`})
+    await crewStore.save();
+    subject.update();
+
+    expect(subject.find(StyledSingleTypeahead).prop('options').length).toBe(7);
   });
 
   it('should handle call backs for each input type', () => {

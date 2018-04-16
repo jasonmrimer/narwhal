@@ -3,6 +3,7 @@ pairs:
   jr: Jason Rimer; jrimer
   cs: Corey Speisman; cspeisman
   te: Travis Edwards; tedwards
+  jk: Joshua Kincaid; jkincaid
 email:
   prefix: pair
   domain: pivotal.io

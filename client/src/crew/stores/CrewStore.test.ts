@@ -61,10 +61,8 @@ describe('CrewStore', () => {
     expect(lastCrewPosition.airman.lastName).toBe(airmanDisplayName.split(', ', 2)[0]);
   });
 
-  it('should have a list of airmen options related to the users site', () => {
-    expect(subject.airmenOptions.length).toEqual(airmen.length);
-    subject.airmenOptions.map((airmanOption, index) =>
-      expect(airmanOption.label).toBe(`${airmen[index].lastName}, ${airmen[index].firstName}`));
+  it('should have a list of airmen options related to the users site who are not on the crew positions', () => {
+    expect(subject.airmenOptions.length).toEqual(8);
   });
 
   it('should clear an airman, title, and critical by id', () => {
