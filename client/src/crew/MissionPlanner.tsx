@@ -12,6 +12,7 @@ import { StyledLocationFilters } from '../widgets/LocationFilters';
 import { StyledPrintableMissionPlanner } from './PrintableMissionPlanner';
 import { StyledSubmitButton } from '../widgets/SubmitButton';
 import { StyledForm } from '../widgets/Form';
+import { StyledButton } from '../widgets/Button';
 
 interface Props {
   crewId: number;
@@ -57,6 +58,10 @@ export class MissionPlanner extends React.Component<Props> {
             <div className="mission-header">
               <StyledSubmitButton
                 text="SAVE"
+              />
+              <StyledButton
+                text="PRINT"
+                onClick={window.print}
               />
               <StyledLocationFilters
                 locationFilterStore={missionPlannerStore.locationFilterStore}
@@ -125,15 +130,11 @@ export const StyledMissionPlanner = styled(MissionPlanner)`
   .mission-header {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
     align-items: center;
     margin-bottom: 0.75rem;
     
     & > button {
-      padding: 0.5rem 3.25rem;
-      height: 2.125rem;
-      border: 1px solid ${props => props.theme.yellow};
-      color: ${props => props.theme.yellow};
+      margin-left: 1rem;
     }
   }
   
@@ -142,6 +143,7 @@ export const StyledMissionPlanner = styled(MissionPlanner)`
     display: flex;
     align-items: flex-end;
     justify-content: flex-end;
+    margin-left: auto;
     
     & > * {
       margin-left: 2rem;

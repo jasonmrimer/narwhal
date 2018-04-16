@@ -13,28 +13,37 @@ import { StyledLocationFilters } from '../widgets/LocationFilters';
 import { StyledSubmitButton } from '../widgets/SubmitButton';
 import { StyledForm } from '../widgets/Form';
 import { eventStub } from '../utils/testUtils';
+import { StyledButton } from '../widgets/Button';
 
 describe('MissionPlanner', () => {
   let subject: ShallowWrapper;
   let profileStore: ProfileSitePickerStore;
   let missionPlannerStore: MissionPlannerStore;
+  let windowPrintFunction: any;
 
   const crewModel = CrewModelFactory.build();
   const mission = crewModel.mission;
 
   beforeEach(async () => {
+    windowPrintFunction = window.print;
+    window.print = jest.fn();
+
     profileStore = new ProfileSitePickerStore(DoubleRepositories);
     await profileStore.hydrate();
 
     missionPlannerStore = new MissionPlannerStore(DoubleRepositories, profileStore);
-
     await missionPlannerStore.hydrate(1);
+
     subject = shallow(
       <MissionPlanner
         crewId={crewModel.id}
         missionPlannerStore={missionPlannerStore}
       />
     );
+  });
+
+  afterEach(() => {
+    window.print = windowPrintFunction;
   });
 
   it('displays the mission details', () => {
@@ -74,6 +83,16 @@ describe('MissionPlanner', () => {
 
   it('should render a save button', () => {
     expect(subject.find(StyledSubmitButton).length).toBe(1);
+  });
+
+  it('should render a print button', () => {
+    expect(subject.find(StyledButton).prop('text')).toBe('PRINT');
+  });
+
+  it('should open print window when print button is clicked', () => {
+    const printButton = subject.find(StyledButton).findWhere(elem => elem.prop('text') === 'PRINT');
+    printButton.simulate('click');
+    expect(window.print).toHaveBeenCalled();
   });
 
   it('should call crewStore save onSubmit', () => {

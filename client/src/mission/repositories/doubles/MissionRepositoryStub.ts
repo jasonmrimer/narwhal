@@ -16,7 +16,7 @@ export class MissionRepositoryStub implements MissionRepository {
       platforms = missions
         .filter((mission) => {
           if (mission.site) {
-            return mission.site!.id === siteId
+            return mission.site!.id === siteId;
           }
           return false;
         })
