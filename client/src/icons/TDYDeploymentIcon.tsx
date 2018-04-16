@@ -5,7 +5,7 @@ export const TDYDeploymentIcon = () => {
   return (
     <svg
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      width="19"
+      width="36"
       height="19"
       viewBox="0 0 24 24"
     >

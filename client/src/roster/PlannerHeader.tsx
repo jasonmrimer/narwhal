@@ -85,7 +85,12 @@ export const StyledPlannerHeader = styled(PlannerHeader)`
     justify-content: space-between;
     flex-grow: 2;
     
-    span {
+    & > span {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 36px;
+      
       div:first-child {
         font-size: 0.875rem;
         font-weight: 500; 

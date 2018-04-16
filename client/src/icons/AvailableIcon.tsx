@@ -9,9 +9,9 @@ export const AvailableIcon = (props: Props) => {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      width="19"
-      height="19"
-      viewBox="0 0 24 24"
+      width="36"
+      height="24"
+      viewBox="0 0 24 29"
       onClick={props.onClick}
     >
       <defs>

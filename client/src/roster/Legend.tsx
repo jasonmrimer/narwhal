@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { AppointmentIcon } from '../icons/AppointmentIcon';
 import { LeaveIcon } from '../icons/LeaveIcon';
-import { MissionIcon } from '../icons/MissionIcon';
 import { AvailableIcon } from '../icons/AvailableIcon';
 import styled from 'styled-components';
 import { TDYDeploymentIcon } from '../icons/TDYDeploymentIcon';
+import { MissionIcon } from '../icons/MissionIcon';
 
 interface Props {
   className?: string;
@@ -26,7 +26,7 @@ export const Legend = (props: Props) => {
         <span>LEAVE</span>
       </div>
       <div>
-        <MissionIcon/>
+        <MissionIcon title="XYZ" viewBox="0 0 36 25"/>
         <span>MISSION</span>
       </div>
       <div>

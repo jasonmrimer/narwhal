@@ -21,16 +21,16 @@ interface Props {
   className?: string;
 }
 
-const renderEventType = (type: EventType, key: number) => {
+const renderEventType = (type: EventType, key: number, event?: EventModel) => {
   switch (type) {
     case EventType.Appointment:
-      return <AppointmentIcon key={key}/>;
+      return <AppointmentIcon key={key} />;
     case EventType.Mission:
-      return <MissionIcon key={key}/>;
+      return event && <MissionIcon key={key} title={event.title.substring(0, 3)} viewBox="0 2 36 25"/>;
     case EventType.Leave:
-      return <LeaveIcon key={key}/>;
+      return <LeaveIcon key={key} />;
     case EventType.TDY_DEPLOYMENT:
-      return <TDYDeploymentIcon key={key}/>;
+      return <TDYDeploymentIcon key={key} />;
     default:
       return null;
   }
@@ -46,7 +46,8 @@ const renderEvents = (day: Moment,
     const eventType = matchedEvents.map(event => event.type);
 
     if (eventType.includes(EventType.Mission)) {
-      return renderEventType(EventType.Mission, key);
+      const event = matchedEvents.find(event => event.type === EventType.Mission);
+      return renderEventType(EventType.Mission, key, event);
     }
 
     return renderEventType(matchedEvents[0].type, key);

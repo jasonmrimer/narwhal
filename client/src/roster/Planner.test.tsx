@@ -31,7 +31,7 @@ describe('Planner', () => {
     );
 
     const mission = new EventModel(
-      'Mission',
+      'ABC',
       '',
       moment('2017-11-27'),
       moment('2017-11-28'),
@@ -68,6 +68,7 @@ describe('Planner', () => {
   it('renders airmen high-level availability', () => {
     expect(subject.find(AppointmentIcon).length).toBe(1);
     expect(subject.find(MissionIcon).length).toBe(1);
+    expect(subject.find(MissionIcon).prop('title')).toBe('ABC');
     expect(subject.find(LeaveIcon).length).toBe(2);
     expect(subject.find(AvailableIcon).length).toBe(3);
   });
