@@ -15,7 +15,7 @@ describe('Tab', () => {
     expect(subject.find(ActiveBorder).children().text()).toBe('Title');
   });
 
-  it('calls the onClick callback when clicked', () => {
+  it('calls the onConfirm callback when clicked', () => {
     subject.find(InactiveBorder).simulate('click');
     expect(clickSpy).toHaveBeenCalled();
   });

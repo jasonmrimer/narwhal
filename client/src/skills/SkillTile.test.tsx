@@ -27,7 +27,7 @@ describe('SkillTile', () => {
     expect(subject.text()).toContain(`${expirationDate}`);
   });
 
-  it('calls the onClick callback', () => {
+  it('calls the onConfirm callback', () => {
     subject.simulate('click');
     expect(onClickSpy).toBeCalledWith({
       id: skill.id,

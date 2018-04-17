@@ -41,7 +41,7 @@ describe('AirmanDatum', () => {
   });
 
   it('should render children', () => {
-    expect(subject.text()).toContain('Lazer Vision')
+    expect(subject.text()).toContain('Lazer Vision');
     expect(subject.find('span').length).toBe(2);
     expect(subject.find('span').at(1).prop('className')).toContain('expired');
   });

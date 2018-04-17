@@ -1,34 +1,46 @@
 import * as React from 'react';
-import { EventModel } from './models/EventModel';
-import { observer } from 'mobx-react/custom';
 import styled from 'styled-components';
+import { EventModel } from '../event/models/EventModel';
+import { Skill } from '../skills/models/Skill';
+import { SkillType } from '../skills/models/SkillType';
+import { AirmanCertificationModel } from '../airman/models/AirmanCertificationModel';
+import { AirmanQualificationModel } from '../airman/models/AirmanQualificationModel';
+import { StyledButton } from './Button';
 
 interface Props {
-  event: EventModel;
-  cancelPendingDeleteEvent: (event: null) => void;
-  confirmPendingDeleteEvent: () => void;
+  item: EventModel | Skill;
+  onConfirm: () => void;
+  onCancel: (item: EventModel | Skill | null) => void;
   className?: string;
 }
 
-export const DeleteEventPopup = observer((props: Props) => {
-  const event = props.event!;
+export const renderItemInformation = (item: EventModel | Skill) => {
   const format = 'DD MMM YY HH:mm';
+  if (item.type in SkillType) {
+    const skill = item as (AirmanCertificationModel | AirmanQualificationModel);
+    return `Remove ${skill.title}?`;
+  } else {
+    const event = item as EventModel;
+    return `Remove ${event.title}, from ${event.startTime.format(format)} - ${event.endTime.format(format)}?`;
+  }
+};
 
+export const DeletePopup = (props: Props) => {
   return (
     <div className={props.className}>
       <div className="delete-confirmation">
         <div>REMOVE EVENT</div>
-        <span>Remove {event.title}, from {event.startTime.format(format)} - {event.endTime.format(format)}?</span>
-        <span>
-          <button className="cancel" onClick={() => props.cancelPendingDeleteEvent(null)}>CANCEL</button>
-          <button className="confirm" onClick={props.confirmPendingDeleteEvent}>REMOVE</button>
+        <span>{renderItemInformation(props.item)}</span>
+        <span className="actions">
+          <StyledButton className="cancel" onClick={(e) => props.onCancel(null)} text="CANCEL"/>
+          <StyledButton className="confirm" onClick={(e) => props.onConfirm()} text="REMOVE"/>
         </span>
       </div>
     </div>
   );
-});
+};
 
-export const StyledDeleteEventPopup = styled(DeleteEventPopup)`
+export const StyledDeletePopup = styled(DeletePopup)`
   position: fixed;
   background: rgba(0, 0, 0, 0.5);
   top: 0;
@@ -37,6 +49,7 @@ export const StyledDeleteEventPopup = styled(DeleteEventPopup)`
   width: 100%;
   font-size: 1rem;
   z-index: 1001;
+  text-align: left;
   
   .delete-confirmation {
     background: ${props => props.theme.blueSteel};
@@ -57,7 +70,11 @@ export const StyledDeleteEventPopup = styled(DeleteEventPopup)`
       border-top-right-radius: 2%;      
     }
     
-    span {
+    & > span {
+      padding: 1rem;
+    }
+    
+    .actions {
       padding: 1rem;
       display: flex;
       flex-direction: row;
@@ -93,4 +110,4 @@ export const StyledDeleteEventPopup = styled(DeleteEventPopup)`
       }
     }
   }
-  `;
+`;

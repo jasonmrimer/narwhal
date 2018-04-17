@@ -20,7 +20,7 @@ describe('RipItemsTile', () => {
     );
   });
 
-  it('should give feedback for onClick', () => {
+  it('should give feedback for onConfirm', () => {
     subject.simulate('click');
     expect(onClickSpy).toBeCalled();
   });

@@ -36,7 +36,7 @@ const siteIdContainer = {
 const skillsActions = {
   addSkill: () => {
   },
-  removeSkill: () => {
+  setPendingDeleteSkill: () => {
   },
 };
 

@@ -13,7 +13,7 @@ export interface SiteIdContainer {
 
 export interface SkillActions {
   addSkill: (skill: Skill) => void;
-  removeSkill: (skill: Skill) => void;
+  setPendingDeleteSkill: (skill: Skill) => void;
 }
 
 interface State {
@@ -89,7 +89,7 @@ export class SkillFormStore extends FormStore<Skill, State> {
 
   removeModel(): void {
     if (this.model != null) {
-      this.skillActions.removeSkill(this.model);
+      this.skillActions.setPendingDeleteSkill(this.model);
     }
   }
 

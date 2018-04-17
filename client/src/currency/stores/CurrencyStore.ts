@@ -24,6 +24,7 @@ export class CurrencyStore {
   public airmanRipItemFormStore: AirmanRipItemFormStore;
   public skillFormStore: SkillFormStore;
   @observable private _child: CurrencyChild = CurrencyChild.SkillList;
+  @observable private _pendingDeleteSkill: Skill | null = null;
 
   constructor(
     private airmenRefresher: AirmenRefresher,
@@ -82,13 +83,26 @@ export class CurrencyStore {
   }
 
   @action.bound
-  async removeSkill(skill: Skill) {
-    try {
-      await this.repositories.airmanRepository.deleteSkill(skill);
-      await this.airmenRefresher.refreshAirmen(skill);
-    } catch (e) {
-      this.setFormErrors(e);
+  async removeSkill() {
+    if (this._pendingDeleteSkill) {
+      try {
+        await this.repositories.airmanRepository.deleteSkill(this._pendingDeleteSkill);
+        await this.airmenRefresher.refreshAirmen(this._pendingDeleteSkill);
+      } catch (e) {
+        this.setFormErrors(e);
+      }
+      this.setPendingDeleteSkill(null);
     }
+  }
+
+  @computed
+  get pendingDeleteSkill() {
+    return this._pendingDeleteSkill;
+  }
+
+  @action.bound
+  setPendingDeleteSkill(skill: Skill | null) {
+    this._pendingDeleteSkill = skill;
   }
 
   setFormErrors(errors: object[]) {

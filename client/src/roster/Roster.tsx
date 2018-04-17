@@ -78,9 +78,9 @@ const Row = observer((props: RowProps) => {
                     >
                       {qual.acronym}
                     </span>
-                    {!(index == airman.qualifications.length - 1) && <span> / </span>}
+                    {!(index === airman.qualifications.length - 1) && <span> / </span>}
                   </React.Fragment>
-                )
+                );
               })}
           </StyledAirmanDatum>
           <StyledAirmanDatum
@@ -93,10 +93,11 @@ const Row = observer((props: RowProps) => {
               return (
                 <React.Fragment key={index}>
                 <span
-                  className={classNames({expired: certification.isExpired})}>
+                  className={classNames({expired: certification.isExpired})}
+                >
                   {certification.title}
                 </span>
-                  {!(index == airman.certifications.length - 1) && <span key={index}> / </span>}
+                  {!(index === airman.certifications.length - 1) && <span key={index}> / </span>}
                 </React.Fragment>
               );
             })}

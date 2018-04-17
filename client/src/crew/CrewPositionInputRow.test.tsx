@@ -41,7 +41,7 @@ describe('CrewPositionInputRow', () => {
   });
 
   it('should have only airmen options in the typeahead who are not on the mission', async () => {
-    crewStore.setNewEntry({airmanName: `${airmen[2].lastName}, ${airmen[2].firstName}`})
+    crewStore.setNewEntry({airmanName: `${airmen[2].lastName}, ${airmen[2].firstName}`});
     await crewStore.save();
     subject.update();
 

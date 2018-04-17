@@ -25,7 +25,8 @@ export class WebMissionRepository implements MissionRepository {
         `api/missions/platforms?startDateTime=${startDateTime.toISOString()}&endDateTime=${endDateTime.toISOString()}`
       ) :
       await this.client.getJSON(
-        `api/missions/platforms?siteId=${siteId}&startDateTime=${startDateTime.toISOString()}&endDateTime=${endDateTime.toISOString()}`
+        `api/missions/platforms?siteId=${siteId}&startDateTime=${startDateTime.toISOString()}` +
+        `&endDateTime=${endDateTime.toISOString()}`
       );
   }
 }

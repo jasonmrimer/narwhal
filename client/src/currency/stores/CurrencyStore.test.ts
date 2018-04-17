@@ -5,6 +5,7 @@ import { DoubleRepositories } from '../../utils/Repositories';
 import { FakeAirmanRepository } from '../../airman/repositories/doubles/FakeAirmanRepository';
 import { AirmanModel } from '../../airman/models/AirmanModel';
 import { AirmanQualificationModel } from '../../airman/models/AirmanQualificationModel';
+import { AirmanCertificationModelFactory } from '../../airman/factories/AirmanCertificationModelFactory';
 
 describe('CurrencyStore', () => {
   const siteId = 14;
@@ -59,9 +60,19 @@ describe('CurrencyStore', () => {
     expect(subject.currencyChild).toBe(CurrencyChild.SkillList);
   });
 
+  it('should toggle pending delete', () => {
+    const cert = AirmanCertificationModelFactory.build(1, 1);
+    expect(subject.pendingDeleteSkill).toBeNull();
+
+    subject.setPendingDeleteSkill(cert);
+    expect(subject.pendingDeleteSkill).toBe(cert);
+
+    subject.setPendingDeleteSkill(null);
+    expect(subject.pendingDeleteSkill).toBeNull();
+  });
+
   it('should open the RipItems form', () => {
     subject.openAirmanRipItemForm();
-
     expect(subject.currencyChild).toBe(CurrencyChild.RipItemForm);
   });
 
@@ -116,11 +127,12 @@ describe('CurrencyStore', () => {
       let updatedAirman = (await airmanRepository.findBySiteId(siteId))[0];
       const qualLength = updatedAirman.qualifications.length;
       const id = updatedAirman.qualifications.find((q: AirmanQualificationModel) => q.skillId === 100)!.id;
-
-      await subject.removeSkill(Object.assign({}, newSkill, {id}));
+      subject.setPendingDeleteSkill(Object.assign({}, newSkill, {id}));
+      await subject.removeSkill();
 
       updatedAirman = (await airmanRepository.findBySiteId(siteId))[0];
       expect(updatedAirman.qualifications.length).toBeLessThan(qualLength);
+      expect(subject.pendingDeleteSkill).toBeNull();
     });
   });
 });

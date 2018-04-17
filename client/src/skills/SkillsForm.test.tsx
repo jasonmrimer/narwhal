@@ -27,7 +27,7 @@ describe('SkillsForm', () => {
 
     skillActions = {
       addSkill: jest.fn(),
-      removeSkill: jest.fn(),
+      setPendingDeleteSkill: jest.fn(),
     };
 
     const store = new SkillFormStore(selectedSiteContainer, skillActions);
@@ -98,7 +98,7 @@ describe('SkillsForm', () => {
 
       skillActions = {
         addSkill: jest.fn(),
-        removeSkill: jest.fn()
+        setPendingDeleteSkill: jest.fn()
       };
 
       const store = new SkillFormStore(selectedSiteContatiner, skillActions);
@@ -129,7 +129,7 @@ describe('SkillsForm', () => {
 
     it('calls handleDelete when clicking the delete button', () => {
       mountedSubject.find(StyledButton).simulate('click');
-      expect(skillActions.removeSkill).toHaveBeenCalledWith(skill);
+      expect(skillActions.setPendingDeleteSkill).toHaveBeenCalledWith(skill);
     });
   });
 });

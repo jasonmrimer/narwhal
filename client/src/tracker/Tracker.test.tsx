@@ -12,8 +12,9 @@ import { UnfilteredValue } from '../widgets/models/FilterOptionModel';
 import { StyledLoadingOverlay } from '../widgets/LoadingOverlay';
 import { EventModel, EventType } from '../event/models/EventModel';
 import * as moment from 'moment';
-import { StyledDeleteEventPopup } from '../event/DeleteEventPopup';
 import { StyledLocationFilters } from '../widgets/LocationFilters';
+import { StyledDeletePopup } from '../widgets/DeletePopup';
+import { AirmanCertificationModelFactory } from '../airman/factories/AirmanCertificationModelFactory';
 
 let trackerStore: TrackerStore;
 let subject: ShallowWrapper;
@@ -73,10 +74,23 @@ describe('Tracker', () => {
     const event = new EventModel('Title', 'Description', moment(), moment(), 1, EventType.Appointment);
 
     trackerStore.availabilityStore.showEventForm();
-    expect(subject.find(StyledDeleteEventPopup).exists()).toBeFalsy();
+    expect(subject.find(StyledDeletePopup).exists()).toBeFalsy();
 
     trackerStore.availabilityStore.removeEvent(event);
     subject.update();
-    expect(subject.find(StyledDeleteEventPopup).exists()).toBeTruthy();
+    expect(subject.find(StyledDeletePopup).exists()).toBeTruthy();
+  });
+
+  it('render a delete popup when there is a pending delete skill', async () => {
+    expect(subject.find(StyledDeletePopup).exists()).toBeFalsy();
+    trackerStore.currencyStore.setPendingDeleteSkill(AirmanCertificationModelFactory.build(1, 1));
+    subject.update();
+    expect(subject.find(StyledDeletePopup).prop('onConfirm')).toBe(trackerStore.currencyStore.removeSkill);
+    expect(subject.find(StyledDeletePopup).prop('onCancel')).toBe(trackerStore.currencyStore.setPendingDeleteSkill);
+    expect(subject.find(StyledDeletePopup).exists()).toBeTruthy();
+
+    await trackerStore.currencyStore.removeSkill();
+    subject.update();
+    expect(subject.find(StyledDeletePopup).exists()).toBeFalsy();
   });
 });

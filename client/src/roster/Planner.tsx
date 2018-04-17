@@ -46,7 +46,7 @@ const renderEvents = (day: Moment,
     const eventType = matchedEvents.map(event => event.type);
 
     if (eventType.includes(EventType.Mission)) {
-      const event = matchedEvents.find(event => event.type === EventType.Mission);
+      const event = matchedEvents.find(e => e.type === EventType.Mission);
       return renderEventType(EventType.Mission, key, event);
     }
 

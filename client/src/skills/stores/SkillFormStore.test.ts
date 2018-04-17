@@ -26,7 +26,7 @@ describe('SkillFormStore', () => {
 
     skillActions = {
       addSkill: jest.fn(),
-      removeSkill: jest.fn(),
+      setPendingDeleteSkill: jest.fn(),
     };
 
     const certifications = [
@@ -121,7 +121,7 @@ describe('SkillFormStore', () => {
   it('can remove a skill', () => {
     subject.open(skill);
     subject.removeModel();
-    expect(skillActions.removeSkill).toHaveBeenCalledWith(skill);
+    expect(skillActions.setPendingDeleteSkill).toHaveBeenCalledWith(skill);
   });
 
   it('should render certification options based off the site of the selected airman', () => {
