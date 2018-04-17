@@ -48,7 +48,7 @@ describe('Roster', () => {
       const expectedFullNames = airmen.map(airman => `${airman.lastName}, ${airman.firstName}`);
       subject.find(StyledRow).forEach((airman: ReactWrapper, index: number) => {
         expect(airman.find(AirmanDatum).at(0).prop('airman')).toEqual(airmen[index]);
-        expect(airman.find(AirmanDatum).at(0).prop('text')).toEqual(expectedFullNames[index]);
+        expect(airman.find(AirmanDatum).at(0).children().text()).toEqual(expectedFullNames[index]);
         expect(airman.find(AirmanDatum).at(0).prop('tab')).toEqual(TabType.AVAILABILITY);
       });
     });
@@ -57,7 +57,7 @@ describe('Roster', () => {
       subject.find(StyledRow).forEach((row: ReactWrapper, index: number) => {
         const expectedQualifications = airmen[index].qualifications.map(qual => qual.qualification.acronym).join(' / ');
         expect(row.find(AirmanDatum).at(1).prop('airman')).toEqual(airmen[index]);
-        expect(row.find(AirmanDatum).at(1).prop('text')).toEqual(expectedQualifications);
+        expect(row.find(AirmanDatum).at(1).children().text()).toEqual(expectedQualifications);
         expect(row.find(AirmanDatum).at(1).prop('tab')).toEqual(TabType.CURRENCY);
       });
     });
@@ -66,7 +66,7 @@ describe('Roster', () => {
       subject.find(StyledRow).forEach((row: ReactWrapper, index: number) => {
         const expectedCertification = airmen[index].certifications.map(cert => cert.title).join(' / ');
         expect(row.find(AirmanDatum).at(2).prop('airman')).toEqual(airmen[index]);
-        expect(row.find(AirmanDatum).at(2).prop('text')).toEqual(expectedCertification);
+        expect(row.find(AirmanDatum).at(2).children().text()).toEqual(expectedCertification);
         expect(row.find(AirmanDatum).at(2).prop('tab')).toEqual(TabType.CURRENCY);
       });
     });

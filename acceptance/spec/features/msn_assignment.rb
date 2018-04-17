@@ -4,7 +4,7 @@ class MsnAssignment
   attr_reader :msn_title
 
   def initialize
-    @msn_title = 'XXX-FAKE-MISSION-1'
+    @msn_title = 'XXX1F01'
   end
 
   def create

@@ -3,9 +3,8 @@ import * as React from 'react';
 import { CellMeasurer, CellMeasurerCache, List, ListRowProps } from 'react-virtualized';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { AirmanModel } from '../airman/models/AirmanModel';
-import { formatAttributes } from '../utils/StyleUtils';
 import { TabType } from '../tracker/stores/SidePanelStore';
-import { AirmanDatum } from '../tracker/AirmanDatum';
+import { StyledAirmanDatum } from '../tracker/AirmanDatum';
 import { StyledPlanner } from './Planner';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
@@ -56,27 +55,52 @@ const Row = observer((props: RowProps) => {
             trackerStore={trackerStore}
             className="shift"
           />
-          <AirmanDatum
+          <StyledAirmanDatum
             trackerStore={trackerStore}
             airman={airman}
-            text={`${airman.lastName}, ${airman.firstName}`}
             tab={TabType.AVAILABILITY}
             className="airman-name"
-          />
-          <AirmanDatum
+          >
+            <span>{airman.lastName}, {airman.firstName}</span>
+          </StyledAirmanDatum>
+          <StyledAirmanDatum
             trackerStore={trackerStore}
             airman={airman}
-            text={formatAttributes(airman.qualifications, 'acronym')}
             tab={TabType.CURRENCY}
             className="airman-qual"
-          />
-          <AirmanDatum
+          >
+            {airman.qualifications.map(
+              (qual, index) => {
+                return (
+                  <React.Fragment key={index}>
+                    <span
+                      className={classNames({expired: qual.isExpired})}
+                    >
+                      {qual.acronym}
+                    </span>
+                    {!(index == airman.qualifications.length - 1) && <span> / </span>}
+                  </React.Fragment>
+                )
+              })}
+          </StyledAirmanDatum>
+          <StyledAirmanDatum
             trackerStore={trackerStore}
             airman={airman}
-            text={formatAttributes(airman.certifications, 'title')}
             tab={TabType.CURRENCY}
             className="airman-cert"
-          />
+          >
+            {airman.certifications.map((certification, index) => {
+              return (
+                <React.Fragment key={index}>
+                <span
+                  className={classNames({expired: certification.isExpired})}>
+                  {certification.title}
+                </span>
+                  {!(index == airman.certifications.length - 1) && <span key={index}> / </span>}
+                </React.Fragment>
+              );
+            })}
+          </StyledAirmanDatum>
         </div>
         <div
           className="right"

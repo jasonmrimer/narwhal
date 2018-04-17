@@ -237,7 +237,7 @@ class TrackerPage
 
   def click_on_airman(name)
     fill_in('last-name', with: name.split(',')[0])
-    page.find(:xpath, "//*[text()='#{name}']").click
+    page.first('span', text: name).click
     page.within '.side-panel' do
       expect(page).to have_content name
     end

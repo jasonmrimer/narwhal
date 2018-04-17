@@ -17,10 +17,11 @@ describe('AirmanDatum', () => {
       <AirmanDatum
         trackerStore={trackerStore}
         airman={airman}
-        text="whatever"
         tab={TabType.CURRENCY}
         className="class"
-      />
+      >
+        <span className="expired">Lazer Vision</span>
+      </AirmanDatum>
     );
   });
 
@@ -32,10 +33,16 @@ describe('AirmanDatum', () => {
   });
 
   it('should render its given text', () => {
-    expect(subject.text()).toBe('whatever');
+    expect(subject.text()).toBe('Lazer Vision');
   });
 
   it('should set the given className', () => {
     expect(subject.prop('className')).toBe('class');
+  });
+
+  it('should render children', () => {
+    expect(subject.text()).toContain('Lazer Vision')
+    expect(subject.find('span').length).toBe(2);
+    expect(subject.find('span').at(1).prop('className')).toContain('expired');
   });
 });
