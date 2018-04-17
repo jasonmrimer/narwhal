@@ -28,6 +28,8 @@ public class CrewPositionControllerTest extends BaseIntegrationTest {
 
   @Before
   public void setup() {
+    super.setUp();
+
     super.buildAirman();
   }
 

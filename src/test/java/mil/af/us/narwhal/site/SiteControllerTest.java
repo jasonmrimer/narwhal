@@ -17,6 +17,8 @@ public class SiteControllerTest extends BaseIntegrationTest {
 
   @Before
   public void setUp() {
+    super.setUp();
+
     final Flight flight1 = new Flight("flight1");
 
     final Squadron squad1 = new Squadron("squad1");

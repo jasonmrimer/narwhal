@@ -33,6 +33,8 @@ public class RipItemControllerTest extends BaseIntegrationTest {
 
   @Before
   public void setup() {
+    super.setUp();
+
     Flight flight = new Flight();
 
     Squadron squadron = new Squadron();

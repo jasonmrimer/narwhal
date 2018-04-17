@@ -1,9 +1,9 @@
-import { action, computed, observable } from 'mobx';
-import { ProfileModel } from '../models/ProfileModel';
+import {action, computed, observable} from 'mobx';
+import {ProfileModel} from '../models/ProfileModel';
 import ProfileRepository from '../repositories/ProfileRepository';
-import { SiteRepository } from '../../site/repositories/SiteRepository';
-import { SiteModel, SiteType } from '../../site/models/SiteModel';
-import { Repositories } from '../../utils/Repositories';
+import {SiteRepository} from '../../site/repositories/SiteRepository';
+import {SiteModel, SiteType} from '../../site/models/SiteModel';
+import {Repositories} from '../../utils/Repositories';
 
 export class ProfileSitePickerStore {
   private siteRepository: SiteRepository;
@@ -31,8 +31,8 @@ export class ProfileSitePickerStore {
   @action.bound
   async savePendingSite() {
     if (this._profile && this._pendingSite) {
-      const user = Object.assign({}, this._profile.user, {siteId: this._pendingSite.id});
-      this._profile = await this.profileRepository.save(user);
+      const profile = Object.assign({}, this._profile, {siteId: this._pendingSite.id});
+      this._profile = await this.profileRepository.save(profile);
     }
   }
 

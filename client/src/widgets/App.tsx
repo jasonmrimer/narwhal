@@ -41,7 +41,7 @@ export class App extends React.Component<Props> {
   }
 
   private profileHasSite() {
-    return this.props.profileStore.profile!.user.siteId != null;
+    return this.props.profileStore.profile!.siteId != null;
   }
 }
 

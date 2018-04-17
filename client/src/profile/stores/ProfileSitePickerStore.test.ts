@@ -7,13 +7,16 @@ describe('ProfileSitePickerStore', () => {
   let subject: ProfileSitePickerStore;
   beforeEach(async () => {
     subject = new ProfileSitePickerStore(DoubleRepositories);
-    subject.hydrate();
+    await subject.hydrate();
     await forIt();
   });
 
   it('should return profile', async () => {
     expect(subject.profile).toEqual({
-      user: {id: 1, username: 'FontFace', siteId: 14},
+      id: 1,
+      username: 'FontFace',
+      siteId: 14,
+      role: 'ADMIN',
       classified: false
     });
   });
@@ -21,7 +24,7 @@ describe('ProfileSitePickerStore', () => {
   it('should save the selected site it to the profile', async () => {
     subject.setPendingSite(subject.guardSites[0]);
     await subject.savePendingSite();
-    expect(subject.profile!.user.siteId).toEqual(3);
+    expect(subject.profile!.siteId).toEqual(3);
   });
 
   it('should separate sites by site types', () => {

@@ -9,7 +9,6 @@ import { StyledMultiTypeahead } from '../widgets/MultiTypeahead';
 
 interface Props {
   dashboardStore: DashboardStore;
-  username: string;
   className?: string;
 }
 

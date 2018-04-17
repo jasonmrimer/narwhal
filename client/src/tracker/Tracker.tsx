@@ -4,16 +4,16 @@ import { observer } from 'mobx-react';
 import { TrackerStore } from './stores/TrackerStore';
 import { StyledSidePanel } from './SidePanel';
 import { StyledLegend } from '../roster/Legend';
-import { UserModel } from '../profile/models/ProfileModel';
 import { UnfilteredValue } from '../widgets/models/FilterOptionModel';
 import { StyledLoadingOverlay } from '../widgets/LoadingOverlay';
 import { StyledRosterContainer } from '../roster/RosterContainer';
 import { StyledLocationFilters } from '../widgets/LocationFilters';
 import { StyledDeletePopup } from '../widgets/DeletePopup';
+import { ProfileModel } from '../profile/models/ProfileModel';
 
 interface Props {
   trackerStore: TrackerStore;
-  profile: UserModel;
+  profile: ProfileModel;
   className?: string;
 }
 

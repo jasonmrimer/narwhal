@@ -14,10 +14,9 @@ export const DashboardPage = observer((props: Props) => {
   return (
     <React.Fragment>
       <StyledTopBar
-        username={props.profileStore.profile!.user.username}
+        profile={props.profileStore.profile!}
       />
       <StyledDashboard
-        username={props.profileStore.profile!.user.username}
         dashboardStore={props.dashboardStore}
       />
     </React.Fragment>

@@ -33,6 +33,8 @@ public class UploadControllerTest extends BaseIntegrationTest {
 
   @Before
   public void setUp() {
+    super.setUp();
+
     final Flight flight = new Flight("FLIGHT");
 
     final Squadron squad = new Squadron("SQUADRON");

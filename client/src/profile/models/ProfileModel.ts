@@ -1,10 +1,7 @@
 export interface ProfileModel {
-  user: UserModel;
-  classified: boolean;
-}
-
-export interface UserModel {
-  id?: number;
+  id: number;
   username: string;
   siteId: number | null;
+  role: string;
+  classified: boolean;
 }

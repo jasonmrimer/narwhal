@@ -1,9 +1,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
+import { ProfileModel } from '../profile/models/ProfileModel';
 
 interface Props {
-  username: string;
+  profile: ProfileModel;
   className?: string;
 }
 
@@ -33,8 +34,8 @@ export class TopBar extends React.Component<Props> {
           </NavLink>
         </span>
         <span>
-        {this.props.username}
-      </span>
+        {`${this.props.profile.username} (${this.props.profile.role})`}
+        </span>
       </div>
     );
   }

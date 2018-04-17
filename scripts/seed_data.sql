@@ -193,13 +193,21 @@ INSERT INTO mission VALUES
   ('19', 'BBB1F03', NOW() + INTERVAL 20 DAY, NOW() + INTERVAL 20 DAY, 2, 19, 'Global Hawk');
 
 
-INSERT INTO profile (username, site_id) VALUES
-  ('tytus', (SELECT id
-             FROM site
-             WHERE name = 'DMS-MD'));
+INSERT INTO profile (username, site_id, role_id) VALUES
+  (
+    'tytus',
+    (SELECT id
+     FROM site
+     WHERE name = 'DMS-MD'),
+    (SELECT id
+     FROM role
+     WHERE name = 'ADMIN')
+  );
 
 INSERT INTO join_airman_rip_item (airman_id, rip_item_id)
-  SELECT a.id, ri.id
+  SELECT
+    a.id,
+    ri.id
   FROM airman a
     JOIN rip_item ri
       ON 1 = 1;

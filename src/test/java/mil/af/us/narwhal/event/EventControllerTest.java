@@ -35,6 +35,8 @@ public class EventControllerTest extends BaseIntegrationTest {
 
   @Before
   public void setUp() {
+    super.setUp();
+
     final Flight flight = new Flight("flight");
 
     final Squadron squadron = new Squadron("squadron");

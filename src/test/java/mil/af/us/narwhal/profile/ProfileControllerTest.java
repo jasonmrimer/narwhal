@@ -1,9 +1,9 @@
 package mil.af.us.narwhal.profile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import mil.af.us.narwhal.BaseIntegrationTest;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -13,6 +13,11 @@ import static org.hamcrest.Matchers.equalTo;
 public class ProfileControllerTest extends BaseIntegrationTest {
   @Autowired private ProfileRepository profileRepository;
 
+  @Before
+  public void setUp() {
+    super.setUp();
+  }
+
   @After
   public void tearDown() {
     super.tearDown();
@@ -20,7 +25,7 @@ public class ProfileControllerTest extends BaseIntegrationTest {
 
   @Test
   public void showTest() {
-    final Profile profile = profileRepository.save(new Profile("tytus", 123L));
+    final Profile profile = profileRepository.save(new Profile("tytus", 123L, role));
 
     // @formatter:off
     given()
@@ -32,8 +37,8 @@ public class ProfileControllerTest extends BaseIntegrationTest {
       .get(ProfileController.URI)
     .then()
       .statusCode(200)
-      .body("profile.username", equalTo("tytus"))
-      .body("profile.siteId", equalTo(profile.getSiteId().intValue()))
+      .body("username", equalTo("tytus"))
+      .body("siteId", equalTo(profile.getSiteId().intValue()))
       .body("classified", equalTo(false));
     // @formatter:on
   }
@@ -50,28 +55,26 @@ public class ProfileControllerTest extends BaseIntegrationTest {
       .get(ProfileController.URI)
     .then()
       .statusCode(200)
-      .body("profile.username", equalTo("tytus"))
-      .body("profile.siteId", equalTo(null));
+      .body("username", equalTo("tytus"))
+      .body("siteId", equalTo(null));
     // @formatter:on
   }
 
   @Test
   public void updateProfileTest() throws JsonProcessingException {
-    ObjectMapper objectMapper = new ObjectMapper();
     // @formatter:off
     given()
       .port(port)
       .auth()
       .preemptive()
       .basic("tytus", "password")
-      .body(objectMapper.writeValueAsString(new Profile("FooFace", 1L)))
-      .contentType("application/json")
+      .param("siteId", 9001L)
     .when()
       .put(ProfileController.URI)
     .then()
       .statusCode(200)
-      .body("profile.username", equalTo("FooFace"))
-      .body("profile.siteId", equalTo(1));
+      .body("username", equalTo("tytus"))
+      .body("siteId", equalTo(9001));
     // @formatter:on
   }
 }

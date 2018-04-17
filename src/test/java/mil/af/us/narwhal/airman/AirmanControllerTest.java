@@ -33,6 +33,8 @@ public class AirmanControllerTest extends BaseIntegrationTest {
 
   @Before
   public void setUp() {
+    super.setUp();
+
     final Flight flight1 = new Flight("flight1");
     final Squadron squadron1 = new Squadron("squadron1");
     squadron1.addFlight(flight1);

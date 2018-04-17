@@ -29,7 +29,6 @@ describe('Dashboard', () => {
       <ThemeProvider theme={Theme}>
         <MemoryRouter>
           <Dashboard
-            username="Tytus"
             dashboardStore={dashboardStore}
           />
         </MemoryRouter>

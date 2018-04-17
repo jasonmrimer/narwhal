@@ -10,6 +10,9 @@ import mil.af.us.narwhal.flight.Flight;
 import mil.af.us.narwhal.flight.FlightRepository;
 import mil.af.us.narwhal.mission.Mission;
 import mil.af.us.narwhal.mission.MissionRepository;
+import mil.af.us.narwhal.profile.Role;
+import mil.af.us.narwhal.profile.RoleName;
+import mil.af.us.narwhal.profile.RoleRepository;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
 import mil.af.us.narwhal.squadron.Squadron;
@@ -32,10 +35,12 @@ public abstract class BaseIntegrationTest {
   @Autowired MissionRepository missionRepository;
   @Autowired AirmanRepository airmanRepository;
   @Autowired FlightRepository flightRepository;
+  @Autowired private RoleRepository roleRepository;
   @Autowired public CrewPositionRepository crewPositionRepository;
-  public Mission mission;
-  public Flight flight;
-  public Site site;
+  protected Mission mission;
+  protected Flight flight;
+  protected Site site;
+  protected Role role;
   protected final static ObjectMapper objectMapper = new ObjectMapper();
   protected final static JavaTimeModule module = new JavaTimeModule();
 
@@ -45,6 +50,10 @@ public abstract class BaseIntegrationTest {
 
   @Autowired private JdbcTemplate template;
   @LocalServerPort protected int port;
+
+  public void setUp() {
+    role = roleRepository.save(new Role(RoleName.READER));
+  }
 
   public void tearDown() {
     template.execute("SET REFERENTIAL_INTEGRITY FALSE");

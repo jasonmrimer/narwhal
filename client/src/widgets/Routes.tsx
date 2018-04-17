@@ -30,7 +30,7 @@ export class Routes extends React.Component<Props> {
           render={({match}) => {
             return (
               <CrewPage
-                username={this.props.profileStore.profile!.user.username}
+                profile={this.props.profileStore.profile!}
                 crewId={match.params.id}
                 missionPlannerStore={this.props.missionPlannerStore}
               />

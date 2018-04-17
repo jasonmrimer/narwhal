@@ -26,6 +26,8 @@ public class CertificationUploadServiceTest extends BaseIntegrationTest {
 
   @Before
   public void setUp() throws ImportException {
+    super.setUp();
+
     siteRepository.save(asList(
       new Site("DMS-GA"),
       new Site("DMS-MD")

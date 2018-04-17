@@ -14,10 +14,10 @@ export const TrackerPage = observer((props: Props) => {
   return (
     <React.Fragment>
       <StyledTopBar
-        username={props.profileStore.profile!.user.username}
+        profile={props.profileStore.profile!}
       />
       <StyledTracker
-        profile={props.profileStore.profile!.user}
+        profile={props.profileStore.profile!}
         trackerStore={props.trackerStore}
       />
     </React.Fragment>

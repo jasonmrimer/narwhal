@@ -27,6 +27,8 @@ public class MissionControllerTest extends BaseIntegrationTest {
 
   @Before
   public void setUp() {
+    super.setUp();
+
     site1 = new Site("Site-1");
     site2 = new Site("Site-2");
     siteRepository.save(asList(site1, site2));

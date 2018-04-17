@@ -2,16 +2,20 @@ import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { TopBar } from './TopBar';
 import { NavLink } from 'react-router-dom';
+import { ProfileModel } from '../profile/models/ProfileModel';
 
 describe('TopBar', () => {
   let subject: ShallowWrapper;
-
+  let profile: ProfileModel;
   beforeEach(() => {
-    subject = shallow(<TopBar username="Tytus"/>);
+
+    profile = {id: 1, username: 'Tytus', siteId: 14, role: 'ADMIN', classified: false}
+    subject = shallow(<TopBar profile={profile}/>);
   });
 
-  it('renders the username', () => {
+  it('renders the username with role', () => {
     expect(subject.text()).toContain('Tytus');
+    expect(subject.text()).toContain('(ADMIN)');
   });
 
   it('renders the page title', () => {

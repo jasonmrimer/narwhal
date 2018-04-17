@@ -1,6 +1,5 @@
 package mil.af.us.narwhal.crew;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import mil.af.us.narwhal.BaseIntegrationTest;
 import mil.af.us.narwhal.airman.Airman;
 import mil.af.us.narwhal.airman.AirmanRepository;
@@ -18,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.time.Instant;
 
 import static io.restassured.RestAssured.given;
-import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -34,6 +32,8 @@ public class CrewControllerTest extends BaseIntegrationTest {
 
   @Before
   public void setUp() {
+    super.setUp();
+
     flight = new Flight();
 
     Squadron squadron = new Squadron();

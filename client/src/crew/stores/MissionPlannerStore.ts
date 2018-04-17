@@ -90,7 +90,7 @@ export class MissionPlannerStore implements AllAirmenRefresher, SiteIdContainer,
   }
 
   get selectedSite() {
-    return this._profileStore.profile!.user.siteId!;
+    return this._profileStore.profile!.siteId!;
   }
 
   async refreshAllAirmen() {

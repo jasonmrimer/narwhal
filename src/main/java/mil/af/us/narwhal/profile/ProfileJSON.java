@@ -6,6 +6,9 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class ProfileJSON {
-  Profile profile;
-  Boolean classified;
+  private Long id;
+  private String username;
+  private Long siteId;
+  private String role;
+  private boolean classified;
 }

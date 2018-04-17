@@ -46,6 +46,22 @@ export class HTTPClient {
     return json;
   }
 
+  async put(path: string) {
+    const resp = await fetch(
+      urljoin(this.baseURL, path),
+      {
+        method: 'PUT',
+        headers: [['X-XSRF-TOKEN', this.csrfToken]],
+        credentials: 'include',
+      }
+    );
+    const json = await resp.json();
+    if (resp.status < 200 || resp.status >= 300) {
+      throw json;
+    }
+    return json;
+  }
+
   async deleteJSON(path: string) {
     const resp = await fetch(
       urljoin(this.baseURL, path),

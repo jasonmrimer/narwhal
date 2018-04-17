@@ -1,22 +1,22 @@
-import { mount, ReactWrapper } from 'enzyme';
+import {mount, ReactWrapper} from 'enzyme';
 import * as React from 'react';
 
-import { App, ClassificationBanner } from './App';
-import { MemoryRouter } from 'react-router-dom';
-import { Tracker } from '../tracker/Tracker';
-import { Dashboard } from '../dashboard/Dashboard';
-import { forIt, makeFakeTrackerStore } from '../utils/testUtils';
-import { DashboardStore } from '../dashboard/stores/DashboardStore';
-import { MissionPlanner } from '../crew/MissionPlanner';
-import { StyledProfileSitePicker } from '../profile/ProfileSitePicker';
-import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
-import { ThemeProvider } from 'styled-components';
-import { DoubleRepositories } from '../utils/Repositories';
-import { UserModel } from '../profile/models/ProfileModel';
-import { Theme } from '../themes/default';
-import { MissionPlannerStore } from '../crew/stores/MissionPlannerStore';
+import {App, ClassificationBanner} from './App';
+import {MemoryRouter} from 'react-router-dom';
+import {Tracker} from '../tracker/Tracker';
+import {Dashboard} from '../dashboard/Dashboard';
+import {forIt, makeFakeTrackerStore} from '../utils/testUtils';
+import {DashboardStore} from '../dashboard/stores/DashboardStore';
+import {MissionPlanner} from '../crew/MissionPlanner';
+import {StyledProfileSitePicker} from '../profile/ProfileSitePicker';
+import {ProfileSitePickerStore} from '../profile/stores/ProfileSitePickerStore';
+import {ThemeProvider} from 'styled-components';
+import {DoubleRepositories} from '../utils/Repositories';
+import {Theme} from '../themes/default';
+import {MissionPlannerStore} from '../crew/stores/MissionPlannerStore';
+import {ProfileModel} from "../profile/models/ProfileModel";
 
-describe('App', () => {
+  describe('App', () => {
   let mountedSubject: ReactWrapper;
 
   describe('ProfileSitePicker', () => {
@@ -29,13 +29,16 @@ describe('App', () => {
       const profileRepo = {
         findOne: () => {
           return Promise.resolve({
-            user: {id: 1, username: 'FontFace', siteId: null},
+            id: 1,
+            username: 'FontFace',
+            siteId: null,
+            role: 'ADMIN',
             classified: false
           });
         },
 
-        save: (user: UserModel) => {
-          return Promise.resolve({user: user, classified: false});
+        save: (profile: ProfileModel) => {
+          return Promise.resolve(profile);
         }
       };
 

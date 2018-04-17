@@ -49,7 +49,7 @@ describe('SelectProfilePopup', () => {
     profileStore.setPendingSite(site);
     subject.find('button.continue').simulate('click');
     await forIt();
-    expect(profileStore.profile!.user.siteId).toBe(site.id);
+    expect(profileStore.profile!.siteId).toBe(site.id);
   });
 
 });

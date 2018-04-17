@@ -3,10 +3,11 @@ import { StyledMissionPlanner } from '../../crew/MissionPlanner';
 import { observer } from 'mobx-react';
 import { MissionPlannerStore } from '../../crew/stores/MissionPlannerStore';
 import { StyledTopBar } from '../TopBar';
+import { ProfileModel } from '../../profile/models/ProfileModel';
 
 interface Props {
   missionPlannerStore: MissionPlannerStore;
-  username: string;
+  profile: ProfileModel;
   crewId: number;
 }
 
@@ -14,7 +15,7 @@ export const CrewPage = observer((props: Props) => {
   return (
     <React.Fragment>
       <StyledTopBar
-        username={props.username}
+        profile={props.profile}
       />
       <StyledMissionPlanner
         crewId={props.crewId}

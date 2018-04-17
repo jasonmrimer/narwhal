@@ -1,5 +1,5 @@
 import ProfileRepository from '../ProfileRepository';
-import { ProfileModel, UserModel } from '../../models/ProfileModel';
+import { ProfileModel } from '../../models/ProfileModel';
 import { HTTPClient } from '../../../utils/HTTPClient';
 
 export class WebProfileRepository implements ProfileRepository {
@@ -8,12 +8,10 @@ export class WebProfileRepository implements ProfileRepository {
   }
 
   async findOne(): Promise<ProfileModel> {
-    const json = await this.client.getJSON('api/profiles');
-    return {user: json.profile, classified: json.classified};
+    return (await this.client.getJSON('api/profiles'));
   }
 
-  async save(user: UserModel): Promise<ProfileModel> {
-    const json = await this.client.putJSON('api/profiles', JSON.stringify(user));
-    return {user: json.profile, classified: json.classified};
+  async save(profile: ProfileModel): Promise<ProfileModel> {
+    return (await this.client.put(`api/profiles?siteId=${profile.siteId}`));
   }
 }

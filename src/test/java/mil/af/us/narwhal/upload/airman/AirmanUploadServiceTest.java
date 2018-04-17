@@ -49,6 +49,8 @@ public class AirmanUploadServiceTest extends BaseIntegrationTest {
 
   @Before
   public void setUp() {
+    super.setUp();
+
     squadron.addFlight(flight);
     site.addSquadron(squadron);
     siteRepository.save(site);
