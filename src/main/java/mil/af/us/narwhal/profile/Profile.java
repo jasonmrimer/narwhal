@@ -32,7 +32,7 @@ public class Profile implements UserDetails {
   private Role role;
 
   @Transient
-  private String password = "";
+  private String password;
 
   public Profile(String username, Role role) {
     this.username = username;
