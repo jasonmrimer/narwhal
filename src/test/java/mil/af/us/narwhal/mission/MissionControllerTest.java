@@ -1,8 +1,13 @@
 package mil.af.us.narwhal.mission;
 
 import mil.af.us.narwhal.BaseIntegrationTest;
+import mil.af.us.narwhal.airman.Airman;
+import mil.af.us.narwhal.airman.AirmanRepository;
+import mil.af.us.narwhal.crew.CrewPosition;
+import mil.af.us.narwhal.flight.Flight;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
+import mil.af.us.narwhal.squadron.Squadron;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,15 +29,38 @@ public class MissionControllerTest extends BaseIntegrationTest {
   private Instant future = Instant.now().plus(2, ChronoUnit.DAYS);
   @Autowired private SiteRepository siteRepository;
   @Autowired private MissionRepository missionRepository;
+  @Autowired private AirmanRepository airmanRepository;
 
   @Before
   public void setUp() {
     super.setUp();
 
+    Flight flight = new Flight("flight");
+
+    final Squadron squadron = new Squadron("squadron");
+    squadron.addFlight(flight);
+
     site1 = new Site("Site-1");
     site2 = new Site("Site-2");
+
+    site1.addSquadron(squadron);
+
     siteRepository.save(asList(site1, site2));
 
+    Airman airman = new Airman(flight, "FIRST", "LAST");
+    airmanRepository.save(airman);
+
+    CrewPosition crewPosition = new CrewPosition(airman);
+    final Mission missionWithCrew = new Mission(
+      "mission-id-3",
+      "MISNUM3",
+      future,
+      future,
+      "U-2",
+      site2
+    );
+
+    missionWithCrew.addCrewPosition(crewPosition);
     final List<Mission> missions = asList(
       new Mission(
         "mission-id-2",
@@ -42,14 +70,7 @@ public class MissionControllerTest extends BaseIntegrationTest {
         "U-2",
         site2
       ),
-      new Mission(
-        "mission-id-3",
-        "MISNUM3",
-        future,
-        future,
-        "U-2",
-        site2
-      ),
+      missionWithCrew,
       new Mission(
         "mission-id-1",
         "MISNUM1",
@@ -87,13 +108,14 @@ public class MissionControllerTest extends BaseIntegrationTest {
       .body("[0].startDateTime", equalTo(time.toString()))
       .body("[0].endDateTime", equalTo(time.toString()))
       .body("[0].site.id", equalTo(site1.getId().intValue()))
-
+      .body("[0].hasCrew", equalTo(false))
       .body("[1].missionId", equalTo("mission-id-3"))
       .body("[1].atoMissionNumber", equalTo("MISNUM3"))
       .body("[1].startDateTime", equalTo(future.toString()))
       .body("[1].endDateTime", equalTo(future.toString()))
       .body("[1].site.id", equalTo(site2.getId().intValue()))
-      .body("[1].platform", equalTo("U-2"));
+      .body("[1].platform", equalTo("U-2"))
+      .body("[1].hasCrew", equalTo(true));
     // @formatter:on
   }
 

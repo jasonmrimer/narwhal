@@ -39,7 +39,7 @@ export const renderTitle = (item: EventModel | Skill) => {
     default:
       return 'REMOVE ITEM';
   }
-}
+};
 
 export const DeletePopup = (props: Props) => {
   return (

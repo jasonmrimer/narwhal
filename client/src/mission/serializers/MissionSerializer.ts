@@ -15,6 +15,7 @@ export class MissionSerializer implements Serializer<MissionModel> {
       moment(item.startDateTime),
       item.endDateTime ? moment(item.endDateTime) : null,
       item.platform,
+      item.hasCrew,
       item.site
     );
   }

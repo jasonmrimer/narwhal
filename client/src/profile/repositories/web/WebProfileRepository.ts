@@ -1,4 +1,4 @@
-import ProfileRepository from '../ProfileRepository';
+import { ProfileRepository } from '../ProfileRepository';
 import { ProfileModel } from '../../models/ProfileModel';
 import { HTTPClient } from '../../../utils/HTTPClient';
 

@@ -2,6 +2,7 @@ package mil.af.us.narwhal.mission;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -126,5 +127,10 @@ public class Mission {
 
   public CrewJSON toCrewJSON() {
     return new CrewJSON(id, this, crewPositions);
+  }
+
+  @JsonProperty
+  public boolean hasCrew() {
+    return crewPositions.size() > 0;
   }
 }

@@ -1,4 +1,4 @@
-import ProfileRepository from './ProfileRepository';
+import { ProfileRepository } from './ProfileRepository';
 
 export function ProfileRepositoryContract(subject: ProfileRepository) {
   describe('findOne', () => {

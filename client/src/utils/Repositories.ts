@@ -21,7 +21,7 @@ import { RipItemRepositoryStub } from '../airman/repositories/doubles/AirmanRipI
 import { CrewRepository } from '../crew/repositories/CrewRepository';
 import { WebCrewRepository } from '../crew/repositories/web/WebCrewRepository';
 import { CrewRepositorySpy } from '../crew/repositories/doubles/CrewRepositorySpy';
-import ProfileRepository from '../profile/repositories/ProfileRepository';
+import { ProfileRepository } from '../profile/repositories/ProfileRepository';
 import { WebProfileRepository } from '../profile/repositories/web/WebProfileRepository';
 import { ProfileRepositoryStub } from '../profile/repositories/doubles/ProfileRepositoryStub';
 import { CrewPositionRepository } from '../crew/repositories/CrewPositionRepository';

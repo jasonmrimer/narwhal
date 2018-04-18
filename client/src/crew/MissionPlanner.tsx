@@ -13,7 +13,7 @@ import { StyledPrintableMissionPlanner } from './PrintableMissionPlanner';
 import { StyledSubmitButton } from '../widgets/SubmitButton';
 import { StyledForm } from '../widgets/Form';
 import { StyledButton } from '../widgets/Button';
-import * as classNames from 'classnames';
+import { StyledCrewStatus } from '../widgets/CrewStatus';
 
 interface Props {
   crewId: number;
@@ -46,9 +46,9 @@ export class MissionPlanner extends React.Component<Props> {
           <div className="mission-details">
             <div className="mission-status">
               <h1>{crew.mission.atoMissionNumber}</h1>
-              <span className={classNames({drafting: crew.hasCrewPositions}, 'status')}>
-              {crew.hasCrewPositions ? "DRAFTING" : "NO CREW"}
-              </span>
+              <StyledCrewStatus
+                hasCrew={crew.crewPositions.length > 0}
+              />
             </div>
             <span>MSN DATE: {crew.mission.displayDateZulu}</span>
             <span>MSN START: {crew.mission.displayStartTime}</span>
@@ -166,22 +166,5 @@ export const StyledMissionPlanner = styled(MissionPlanner)`
     flex-direction: row;
     width: 16%;
     justify-content: space-between;
-  }
-  
-  .status, .drafting {
-    height: 100%;
-    width: 5.3125rem;
-    align-self: center;
-    padding: .3125rem;
-  }
-  
-  .status {
-    background: ${props => props.theme.fontColor};
-    color: ${props => props.theme.darkest};
-  }
-  
-  .drafting {
-    background: ${props => props.theme.copper};
-    color: ${props => props.theme.fontColor};
   }
 `;

@@ -8,7 +8,9 @@ export class MissionModel {
               public startDateTime: Moment,
               public endDateTime: Moment | null = null,
               public platform: string,
-              public site?: SiteModel, ) {
+              public hasCrew: boolean = false,
+              public site?: SiteModel,
+              ) {
   }
 
   get displayDateZulu() {
