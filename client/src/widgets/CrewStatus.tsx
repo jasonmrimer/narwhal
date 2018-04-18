@@ -14,8 +14,8 @@ export const CrewStatus = (props: Props) => {
     <div className={classNames(className, {drafting: hasCrew})}>
       {hasCrew ? 'DRAFTING' : 'NO CREW'}
     </div>
-  )
-}
+  );
+};
 
 export const StyledCrewStatus = styled(CrewStatus)`
   font-weight: 500;

@@ -1,4 +1,6 @@
 import { CrewPositionModel } from '../../models/CrewPositionModel';
+import { CrewModel } from '../../models/CrewModel';
+import { MissionModelFactory } from '../../../mission/factories/MissionModelFactory';
 
 export class CrewPositionRepositorySpy {
   delete(crewPositions: CrewPositionModel[]) {
@@ -6,6 +8,6 @@ export class CrewPositionRepositorySpy {
   }
 
   update(crewPositions: CrewPositionModel[], id: number) {
-    return Promise.resolve(crewPositions);
+    return Promise.resolve(new CrewModel(id, MissionModelFactory.build(), crewPositions));
   }
 }

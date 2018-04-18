@@ -8,6 +8,7 @@ export class MissionModel {
               public startDateTime: Moment,
               public endDateTime: Moment | null = null,
               public platform: string,
+              public updatedAt: Moment,
               public hasCrew: boolean = false,
               public site?: SiteModel,
               ) {
@@ -38,5 +39,9 @@ export class MissionModel {
     const endLocal = this.endDateTime ? `${this.endDateTime.format('HHmm')}L` : 'TBD';
 
     return `${startZulu} - ${endZulu} (${startLocal} - ${endLocal})`;
+  }
+
+  get displayUpdatedAt() {
+    return `${this.updatedAt.clone().utc().format('YYYY-MM-DD HHmm')}Z`;
   }
 }

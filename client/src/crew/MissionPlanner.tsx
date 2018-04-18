@@ -53,6 +53,7 @@ export class MissionPlanner extends React.Component<Props> {
             <span>MSN DATE: {crew.mission.displayDateZulu}</span>
             <span>MSN START: {crew.mission.displayStartTime}</span>
             <span>MSN END: {crew.mission.displayEndTime}</span>
+            <div className="last-update">Last updated at {crew.mission.displayUpdatedAt}</div>
           </div>
           <StyledForm
             onSubmit={async (e) => {
@@ -166,5 +167,10 @@ export const StyledMissionPlanner = styled(MissionPlanner)`
     flex-direction: row;
     width: 16%;
     justify-content: space-between;
+  }
+  
+  .last-update {
+    margin-top: 1rem;
+    font-size: 0.75rem;
   }
 `;

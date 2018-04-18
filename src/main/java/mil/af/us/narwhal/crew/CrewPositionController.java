@@ -6,6 +6,7 @@ import mil.af.us.narwhal.mission.Mission;
 import mil.af.us.narwhal.mission.MissionRepository;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -29,23 +30,26 @@ public class CrewPositionController {
   }
 
   @PutMapping(value = "/{id}")
-  public List<CrewPosition> update(@PathVariable Long id, @RequestBody List<CrewPositionJSON> positions) {
+  public CrewJSON update(@PathVariable Long id, @RequestBody List<CrewPositionJSON> positions) {
     Mission mission = missionRepository.findOne(id);
+    mission.getCrewPositions().clear();
 
-    return crewPositionRepository.save(positions.stream()
-      .map(position -> {
-        CrewPosition crewPosition = new CrewPosition();
-        crewPosition.setTitle(position.getTitle());
-        crewPosition.setCritical(position.isCritical());
-        Airman airman = airmanRepository.findOne(position.getAirmanId());
-        crewPosition.setAirman(airman);
-        crewPosition.setMission(mission);
+    positions.forEach(position -> {
+      final Airman airman = airmanRepository.findOne(position.getAirmanId());
+      CrewPosition crewPosition = new CrewPosition();
+      crewPosition.setTitle(position.getTitle());
+      crewPosition.setCritical(position.isCritical());
+      crewPosition.setAirman(airman);
+      crewPosition.setMission(mission);
 
-        if (position.getId() != null) crewPosition.setId(position.getId());
+      if (position.getId() != null) crewPosition.setId(position.getId());
+      mission.addCrewPosition(crewPosition);
+    });
 
-        return crewPosition;
-      })
-      .collect(toList()));
+    mission.setUpdatedAt(Instant.now());
+    missionRepository.save(mission);
+
+    return mission.toCrewJSON();
   }
 
   @DeleteMapping(value = "/")

@@ -77,7 +77,7 @@ public abstract class BaseIntegrationTest {
     Airman airman = new Airman(flight, "FIRST", "LAST");
     airmanRepository.save(airman);
 
-    mission = new Mission("MISSION_ID", "MISSION_NUMBER", Instant.now(), Instant.now(), "U-2", site);
+    mission = new Mission("MISSION_ID", "MISSION_NUMBER", Instant.now(), Instant.now(), "U-2", site, Instant.now());
     missionRepository.save(mission);
 
     CrewPosition crewPosition = new CrewPosition(airman, "TITLE", false);

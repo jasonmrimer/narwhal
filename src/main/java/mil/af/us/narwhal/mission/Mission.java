@@ -50,6 +50,9 @@ public class Mission {
   @JsonIgnore
   private List<CrewPosition> crewPositions = new ArrayList<>();
 
+  @Column(name = "updated_at")
+  private Instant updatedAt;
+
   public Mission(
     Long id,
     String missionId,
@@ -57,7 +60,8 @@ public class Mission {
     Instant startDateTime,
     Instant endDateTime,
     String platform,
-    Site site
+    Site site,
+    Instant updatedAt
   ) {
     this.id = id;
     this.missionId = missionId;
@@ -66,6 +70,7 @@ public class Mission {
     this.endDateTime = endDateTime;
     this.platform = platform;
     this.site = site;
+    this.updatedAt = updatedAt;
   }
 
   public Mission(
@@ -74,7 +79,8 @@ public class Mission {
     Instant startDateTime,
     Instant endDateTime,
     String platform,
-    Site site
+    Site site,
+    Instant updatedAt
   ) {
     this.missionId = missionId;
     this.atoMissionNumber = atoMissionNumber;
@@ -82,6 +88,7 @@ public class Mission {
     this.endDateTime = endDateTime;
     this.platform = platform;
     this.site = site;
+    this.updatedAt = updatedAt;
   }
 
   public void addCrewPosition(CrewPosition position) {

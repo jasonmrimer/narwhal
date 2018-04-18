@@ -20,6 +20,7 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 
 public class MissionControllerTest extends BaseIntegrationTest {
@@ -57,7 +58,8 @@ public class MissionControllerTest extends BaseIntegrationTest {
       future,
       future,
       "U-2",
-      site2
+      site2,
+      Instant.now()
     );
 
     missionWithCrew.addCrewPosition(crewPosition);
@@ -68,7 +70,8 @@ public class MissionControllerTest extends BaseIntegrationTest {
         Instant.parse("2017-12-12T09:00:00Z"),
         Instant.parse("2017-12-12T15:00:00Z"),
         "U-2",
-        site2
+        site2,
+        Instant.now()
       ),
       missionWithCrew,
       new Mission(
@@ -77,7 +80,8 @@ public class MissionControllerTest extends BaseIntegrationTest {
         time,
         time,
         "Global Hawk",
-        site1
+        site1,
+        Instant.now()
       )
     );
     missionRepository.save(missions);
@@ -109,13 +113,15 @@ public class MissionControllerTest extends BaseIntegrationTest {
       .body("[0].endDateTime", equalTo(time.toString()))
       .body("[0].site.id", equalTo(site1.getId().intValue()))
       .body("[0].hasCrew", equalTo(false))
+      .body("[0].updatedAt", notNullValue())
       .body("[1].missionId", equalTo("mission-id-3"))
       .body("[1].atoMissionNumber", equalTo("MISNUM3"))
       .body("[1].startDateTime", equalTo(future.toString()))
       .body("[1].endDateTime", equalTo(future.toString()))
       .body("[1].site.id", equalTo(site2.getId().intValue()))
       .body("[1].platform", equalTo("U-2"))
-      .body("[1].hasCrew", equalTo(true));
+      .body("[1].hasCrew", equalTo(true))
+      .body("[1].updatedAt", notNullValue());
     // @formatter:on
   }
 

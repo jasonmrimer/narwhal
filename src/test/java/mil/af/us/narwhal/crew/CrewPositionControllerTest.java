@@ -86,7 +86,7 @@ public class CrewPositionControllerTest extends BaseIntegrationTest {
       .put(CrewPositionController.URI + "/" + mission.getId())
     .then()
       .statusCode(200)
-      .body("[0].title", equalTo("UPDATED CREW POSITION"));
+      .body("crewPositions[0].title", equalTo("UPDATED CREW POSITION"));
     // @formatter:on
   }
 

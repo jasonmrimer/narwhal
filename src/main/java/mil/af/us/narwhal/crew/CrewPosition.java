@@ -7,8 +7,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import mil.af.us.narwhal.airman.Airman;
 import mil.af.us.narwhal.mission.Mission;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Entity
 @Data
@@ -36,6 +39,14 @@ public class CrewPosition {
   private String title;
 
   private Boolean critical;
+
+  @Column
+  @CreationTimestamp
+  private Timestamp createdAt;
+
+  @Column
+  @UpdateTimestamp
+  private Timestamp updatedAt;
 
   public CrewPosition(Airman airman) {
     this.airman = airman;

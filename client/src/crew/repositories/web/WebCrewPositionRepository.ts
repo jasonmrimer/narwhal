@@ -2,9 +2,11 @@ import { HTTPClient } from '../../../utils/HTTPClient';
 import { CrewPositionRepository } from '../CrewPositionRepository';
 import { CrewPositionSerializer } from '../../serializers/CrewPositionSerializer';
 import { CrewPositionModel } from '../../models/CrewPositionModel';
+import { CrewSerializer } from '../../serializers/CrewSerializer';
 
 export class WebCrewPositionRepository implements CrewPositionRepository {
   private crewPositionSerializer = new CrewPositionSerializer();
+  private crewSerializer = new CrewSerializer();
 
   constructor(private client: HTTPClient) {
   }
@@ -17,8 +19,6 @@ export class WebCrewPositionRepository implements CrewPositionRepository {
   async update(crewPositions: CrewPositionModel[], missionId: number) {
     const body = JSON.stringify(crewPositions.map(this.crewPositionSerializer.serialize));
     const json = await this.client.putJSON(`/api/crew_positions/${missionId}`, body);
-    return json.map((position: any) => {
-      return this.crewPositionSerializer.deserialize(position);
-    });
+    return this.crewSerializer.deserialize(json);
   }
 }

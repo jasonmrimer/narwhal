@@ -19,6 +19,8 @@ import java.time.Instant;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
 
 public class CrewControllerTest extends BaseIntegrationTest {
   private Site site;
@@ -46,7 +48,7 @@ public class CrewControllerTest extends BaseIntegrationTest {
     airman = new Airman(flight, "A", "B");
     airmanRepository.save(airman);
 
-    mission = new Mission("A", "B", Instant.now(), Instant.now(), "U-2", site);
+    mission = new Mission("A", "B", Instant.now(), Instant.now(), "U-2", site, Instant.now());
     mission.addCrewPosition(new CrewPosition(airman));
     missionRepository.save(mission);
   }
@@ -70,6 +72,7 @@ public class CrewControllerTest extends BaseIntegrationTest {
       .statusCode(200)
       .body("id", equalTo(mission.getId().intValue()))
       .body("crewPositions.size()", equalTo(1))
+      .body("crewPositions[0].updatedAt", notNullValue())
       .body("crewPositions[0].airman.id", equalTo(airman.getId().intValue()));
     // @formatter:on
   }

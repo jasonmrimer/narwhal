@@ -17,7 +17,7 @@ describe('Mission', () => {
       moment('2017-12-12T09:00:00Z'),
       null,
       'U-2',
-      false
+      moment('2017-12-11T12:00:00Z')
     );
     subject = shallow(<Mission mission={mission}/>);
   });

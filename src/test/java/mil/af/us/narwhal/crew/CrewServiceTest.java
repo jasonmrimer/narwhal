@@ -40,7 +40,8 @@ public class CrewServiceTest {
       Instant.parse("2017-12-12T09:00:00Z"),
       Instant.parse("2017-12-12T15:00:00Z"),
       "U-2",
-      new Site("Site-1")
+      new Site("Site-1"),
+      Instant.now()
     );
 
     EventJSON json = new EventJSON(

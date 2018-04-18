@@ -240,7 +240,7 @@ public class EventControllerTest extends BaseIntegrationTest {
     );
     eventRepository.save(asList(event1, event2, event3));
 
-    Mission mission = new Mission("A", "B", start, start, "U-2", site);
+    Mission mission = new Mission("A", "B", start, start, "U-2", site, Instant.now());
     mission.addCrewPosition(new CrewPosition(airman));
     missionRepository.save(mission);
 
@@ -283,7 +283,7 @@ public class EventControllerTest extends BaseIntegrationTest {
     );
     eventRepository.save(asList(event1, event2));
 
-    Mission mission = new Mission("A", "B", start, start, "U-2", site);
+    Mission mission = new Mission("A", "B", start, start, "U-2", site, Instant.now());
     mission.addCrewPosition(new CrewPosition(airman));
     missionRepository.save(mission);
 

@@ -171,7 +171,7 @@ VALUES
   (38, 13, '2019-02-25', '2019-02-25'),
   (39, 14, '2019-03-25', '2019-02-25');
 
-INSERT INTO mission VALUES
+INSERT INTO mission(mission_id, ato_mission_number, start_date_time, end_date_time, site_id, id, platform) VALUES
   ('1', 'XXX1F01', NOW() + INTERVAL 6 HOUR, NOW() + INTERVAL 6 HOUR, 1, 1, 'U-2'),
   ('2', 'XXX1F02', NOW() + INTERVAL 6 HOUR, NOW() + INTERVAL 6 HOUR, 1, 2, 'U-2'),
   ('3', 'XXX1F03', NOW() + INTERVAL 6 HOUR, NOW() + INTERVAL 6 HOUR, 1, 3, 'U-2'),

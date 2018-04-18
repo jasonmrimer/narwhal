@@ -102,7 +102,7 @@ export class CrewStore {
       this._newEntry = {airmanName: '', title: '', critical: false};
     }
 
-    this._crew.crewPositions =
+    this._crew =
       await this.crewPositionRepository.update(this._crew.crewPositions, this._crew.mission.id);
 
     await this.eventsRefresher.refreshAllEvents();

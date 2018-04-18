@@ -184,7 +184,7 @@ public class MissionServiceTest {
 
   @Test
   public void updatesExistingMissions() {
-    Mission mission = new Mission(1L, "ABC-123", "ATOMSN", Instant.now(), Instant.now(), "U-2", site1);
+    Mission mission = new Mission(1L, "ABC-123", "ATOMSN", Instant.now(), Instant.now(), "U-2", site1, Instant.now());
 
     //language=XML
     String xml = "<GetMissionMetaDataResponse xmlns=\"Unicorn\">\n" +
