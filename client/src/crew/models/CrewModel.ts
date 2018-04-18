@@ -10,4 +10,8 @@ export class CrewModel {
               crewPositions: CrewPositionModel[]) {
     this.crewPositions = crewPositions;
   }
+
+  get hasCrewPositions() {
+    return this.crewPositions.length !== 0;
+  }
 }

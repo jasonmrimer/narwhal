@@ -52,6 +52,7 @@ describe('MissionPlanner', () => {
     expect(subject.text()).toContain(`MSN DATE: ${mission.displayDateZulu}`);
     expect(subject.text()).toContain(`MSN START: ${mission.displayStartTime}`);
     expect(subject.text()).toContain(`MSN END: ${mission.displayEndTime}`);
+    expect(subject.text()).toContain('DRAFTING');
   });
 
   it('should render the spinner only while loading', async () => {
@@ -101,4 +102,6 @@ describe('MissionPlanner', () => {
     subject.find(StyledForm).simulate('submit', eventStub);
     expect(missionPlannerStore.crewStore.save).toHaveBeenCalled();
   });
+
+
 });
