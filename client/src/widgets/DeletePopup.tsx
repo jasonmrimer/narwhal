@@ -2,7 +2,6 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { EventModel } from '../event/models/EventModel';
 import { Skill } from '../skills/models/Skill';
-import { SkillType } from '../skills/models/SkillType';
 import { AirmanCertificationModel } from '../airman/models/AirmanCertificationModel';
 import { AirmanQualificationModel } from '../airman/models/AirmanQualificationModel';
 import { StyledButton } from './Button';
@@ -16,20 +15,37 @@ interface Props {
 
 export const renderItemInformation = (item: EventModel | Skill) => {
   const format = 'DD MMM YY HH:mm';
-  if (item.type in SkillType) {
-    const skill = item as (AirmanCertificationModel | AirmanQualificationModel);
-    return `Remove ${skill.title}?`;
-  } else {
-    const event = item as EventModel;
-    return `Remove ${event.title}, from ${event.startTime.format(format)} - ${event.endTime.format(format)}?`;
+  switch (item.constructor) {
+    case EventModel:
+      const event = item as EventModel;
+      return `Remove ${event.title}, from ${event.startTime.format(format)} - ${event.endTime.format(format)}?`;
+    case AirmanCertificationModel:
+      return `Remove ${(item as AirmanCertificationModel).title}?`;
+    case AirmanQualificationModel:
+      return `Remove ${(item as AirmanQualificationModel).acronym}?`;
+    default:
+      return 'REMOVE ITEM';
   }
 };
+
+export const renderTitle = (item: EventModel | Skill) => {
+  switch (item.constructor) {
+    case EventModel:
+      return 'REMOVE EVENT';
+    case AirmanCertificationModel:
+      return 'REMOVE CERTIFICATION';
+    case AirmanQualificationModel:
+      return 'REMOVE QUALIFICATION';
+    default:
+      return 'REMOVE ITEM';
+  }
+}
 
 export const DeletePopup = (props: Props) => {
   return (
     <div className={props.className}>
       <div className="delete-confirmation">
-        <div>REMOVE EVENT</div>
+        <div className="title">{renderTitle(props.item)}</div>
         <span>{renderItemInformation(props.item)}</span>
         <span className="actions">
           <StyledButton className="cancel" onClick={(e) => props.onCancel(null)} text="CANCEL"/>

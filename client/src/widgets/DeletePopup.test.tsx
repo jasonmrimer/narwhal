@@ -32,10 +32,14 @@ describe('DeletePopup', () => {
     expect(onCancelSpy).toHaveBeenCalled();
   });
 
+  it('should render the title text', () => {
+    expect(subject.find('.title').text()).toBe('REMOVE CERTIFICATION')
+  });
+
   describe('renderItemInformation', () => {
     it('should render the correct information based the item type', () => {
       expect(renderItemInformation(AirmanCertificationModelFactory.build(1, 1))).toBe('Remove 1?');
-      expect(renderItemInformation(AirmanQualificationModelFactory.build(2))).toContain('Remove 2');
+      expect(renderItemInformation(AirmanQualificationModelFactory.build(2))).toContain('Remove 2?');
     });
   });
 });

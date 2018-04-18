@@ -14,8 +14,8 @@ public class ProfileService {
 
   public Profile getProfile(String username) {
     Profile profile = profileRepository.findOneByUsername(username);
-    Role role = roleRepository.findByName(RoleName.READER);
     if (profile == null) {
+      final Role role = roleRepository.findByName(RoleName.READER);
       profile = profileRepository.save(new Profile(username, role));
     }
     return profile;
