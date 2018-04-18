@@ -13,6 +13,10 @@ export interface RefreshAirmen {
   refreshAirmen: (item: { airmanId: number }) => Promise<void>;
 }
 
+export interface PlannerActions {
+  navigateToWeek: (date: Moment) => void;
+}
+
 export class AvailabilityStore implements EventActions {
   public appointmentFormStore: AppointmentFormStore;
   public leaveFormStore: LeaveFormStore;
@@ -29,7 +33,11 @@ export class AvailabilityStore implements EventActions {
   @observable private _pendingDeleteEvent: EventModel | null = null;
   @observable private _airmanEvents: EventModel[] = [];
 
-  constructor(private refreshAirmen: RefreshAirmen, private repositories: Repositories) {
+  constructor(
+    private refreshAirmen: RefreshAirmen,
+    private repositories: Repositories,
+    private plannerActions: PlannerActions
+  ) {
     this.appointmentFormStore = new AppointmentFormStore(this);
     this.leaveFormStore = new LeaveFormStore(this);
     this.missionFormStore = new MissionFormStore(this);
@@ -110,6 +118,7 @@ export class AvailabilityStore implements EventActions {
   async addEvent(event: EventModel) {
     try {
       const addedEvent = await this.repositories.eventRepository.save(event);
+      await this.plannerActions.navigateToWeek(event.startTime);
       await this.refreshAirmen.refreshAirmen(event);
       this.closeEventForm();
       return addedEvent;

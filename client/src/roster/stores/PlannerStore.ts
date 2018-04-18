@@ -53,6 +53,11 @@ export class PlannerStore {
   }
 
   @action.bound
+  async navigateToWeek(date: Moment) {
+    this._sidePanelWeek = this.timeService.navigateToWeek(date);
+  }
+
+  @action.bound
   async incrementSidePanelWeek() {
     this._sidePanelWeek = this.timeService.incrementWeek(this._sidePanelWeek);
     await this.eventsRefresher.refreshAirmanEvents();

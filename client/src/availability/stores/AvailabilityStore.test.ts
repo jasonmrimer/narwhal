@@ -1,4 +1,4 @@
-import { AvailabilityStore } from './AvailabilityStore';
+import { AvailabilityStore, PlannerActions } from './AvailabilityStore';
 import { EventModel, EventType } from '../../event/models/EventModel';
 import { EventModelFactory } from '../../event/factories/EventModelFactory';
 import { toJS } from 'mobx';
@@ -9,12 +9,17 @@ import { FakeEventRepository } from '../../event/repositories/doubles/FakeEventR
 describe('AvailabilityStore', () => {
   let subject: AvailabilityStore;
   let eventRepository: FakeEventRepository;
+  let plannerActions: PlannerActions;
   beforeEach(() => {
     const refreshAirmen = {
       refreshAirmen: jest.fn()
     };
 
-    subject = new AvailabilityStore(refreshAirmen, DoubleRepositories);
+    plannerActions = {
+      navigateToWeek: jest.fn()
+    };
+
+    subject = new AvailabilityStore(refreshAirmen, DoubleRepositories, plannerActions);
     eventRepository = (DoubleRepositories.eventRepository as FakeEventRepository);
   });
 
@@ -172,6 +177,7 @@ describe('AvailabilityStore', () => {
       it('should add an event to an airman', async () => {
         const savedEvent = await subject.addEvent(event);
         expect(eventRepository.hasItem(savedEvent)).toBeTruthy();
+        expect(plannerActions.navigateToWeek).toHaveBeenCalledWith(event.startTime);
       });
 
       it('should call set form errors on Availability Stores when catching errors from add event', async () => {

@@ -31,8 +31,8 @@ export class TrackerStore implements AllAirmenRefresher, RefreshAirmen {
     this.repositories = repositories;
     this.locationFilterStore = new LocationFilterStore(this);
     this.currencyStore = new CurrencyStore(this, this.locationFilterStore, this.repositories);
-    this.availabilityStore = new AvailabilityStore(this, this.repositories);
     this.plannerStore = new PlannerStore(timeService, this);
+    this.availabilityStore = new AvailabilityStore(this, this.repositories, this.plannerStore);
     this.sidePanelStore = new SidePanelStore();
     this.rosterHeaderStore = new RosterHeaderStore(this.locationFilterStore);
   }

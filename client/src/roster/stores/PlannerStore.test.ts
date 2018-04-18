@@ -39,4 +39,9 @@ describe('PlannerStore', () => {
     await subject.decrementPlannerWeek();
     expect(subject.plannerWeek[0].isSame(moment('2017-11-19'))).toBeTruthy();
   });
+
+  it('should navigate to the given week', () => {
+    subject.navigateToWeek(moment('2018-04-17'));
+    expect(subject.sidePanelWeek[0].isSame(moment('2018-04-15'))).toBeTruthy();
+  });
 });
