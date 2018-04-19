@@ -22,7 +22,7 @@ export const MissionIcon = (props: Props) => {
         >
           <tspan x="50%" y="16">{props.title}</tspan>
         </text>
-        <rect width="35.5" height="17.5" x=".25" y="3.25" stroke="#FFF" strokeWidth=".5" rx="8"/>
+        <rect width="35.5" height="17.5" x=".25" y="3.25" stroke="#FFF" strokeWidth="1.5" rx="8"/>
       </g>
     </svg>
   );
