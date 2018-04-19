@@ -40,14 +40,6 @@ public class CrewPosition {
 
   private Boolean critical;
 
-  @Column
-  @CreationTimestamp
-  private Timestamp createdAt;
-
-  @Column
-  @UpdateTimestamp
-  private Timestamp updatedAt;
-
   public CrewPosition(Airman airman) {
     this.airman = airman;
   }

@@ -72,7 +72,6 @@ public class CrewControllerTest extends BaseIntegrationTest {
       .statusCode(200)
       .body("id", equalTo(mission.getId().intValue()))
       .body("crewPositions.size()", equalTo(1))
-      .body("crewPositions[0].updatedAt", notNullValue())
       .body("crewPositions[0].airman.id", equalTo(airman.getId().intValue()));
     // @formatter:on
   }
