@@ -10,7 +10,16 @@ interface Props {
 }
 
 export const Mission = (props: Props) => {
-  const {id, atoMissionNumber, displayDateZulu, displayStartAndEndTime, hasCrew} = props.mission;
+  const {
+    id,
+    atoMissionNumber,
+    displayDateZulu,
+    displayStartAndEndTime,
+    hasCrew,
+    updatedAt,
+    displayUpdatedAt
+  } = props.mission;
+
   return (
     <span className={`${props.className} mission-card`}>
       <div className="left">
@@ -21,6 +30,10 @@ export const Mission = (props: Props) => {
         <div>
             <div>{displayDateZulu}</div>
             <div>{displayStartAndEndTime}</div>
+          {
+            updatedAt &&
+            <div className="last-update">Last updated {displayUpdatedAt}.</div>
+          }
         </div>
       </div>
       <Link className="right" to={`/dashboard/crew/${id}`}>
@@ -34,13 +47,16 @@ export const StyledMission = styled(Mission)`
   background-color: ${props => props.theme.lighter};
   width: calc(94% / 3);
   min-height: 8rem;
-  padding: 1rem;
+  padding: 1rem 1rem 0;
   margin: 10px;
   display: flex;
   justify-content: space-between;
   
   div {
     margin-bottom: 0.5rem;
+    &.left {
+      margin-bottom: 0;
+    }
   }
   
   .right {
@@ -60,6 +76,11 @@ export const StyledMission = styled(Mission)`
     }
   }
   
+  .last-update {
+    font-size: 0.75rem;
+    margin: 1rem 0 0;
+  }
+   
   .ato {
     font-size: 20px;
   }

@@ -26,6 +26,10 @@ describe('Mission', () => {
     expect(subject.text()).toContain(mission.atoMissionNumber);
   });
 
+  it('renders the mission last updated', () => {
+    expect(subject.text()).toContain(`Last updated ${mission.displayUpdatedAt}.`);
+  });
+
   it('renders TBD when mission endDate not provided', () => {
     expect(subject.text()).toContain('TBD');
   });

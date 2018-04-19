@@ -35,7 +35,8 @@ export class ProfileList extends React.Component<Props> {
           !this.props.store.hasError &&
           <div className="profile-table">
             <div
-              className="profile-header">
+              className="profile-header"
+            >
               <span>Name</span>
               <span>Site</span>
               <span>Role</span>
@@ -45,7 +46,6 @@ export class ProfileList extends React.Component<Props> {
 
                 this.props.store.profiles.map((profile) => {
                   return (
-
 
                     <div
                       className="profile-row"

@@ -3,7 +3,7 @@ import * as moment from 'moment';
 import { MissionModel } from './MissionModel';
 
 describe('MissionModel', () => {
-  let subject: MissionModel
+  let subject: MissionModel;
 
   beforeEach(() => {
     subject = MissionModelFactory.build();
