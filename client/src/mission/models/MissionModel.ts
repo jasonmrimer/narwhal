@@ -1,5 +1,6 @@
 import { Moment } from 'moment';
 import { SiteModel } from '../../site/models/SiteModel';
+import * as moment from 'moment';
 
 export class MissionModel {
   constructor(public id: number,
@@ -43,7 +44,7 @@ export class MissionModel {
 
   get displayUpdatedAt() {
     if (this.updatedAt) {
-      return `${this.updatedAt.clone().utc().format('YYYY-MM-DD HHmm')}Z`;
+      return `${moment().to(this.updatedAt)}`;
     }
     return;
   }

@@ -55,7 +55,7 @@ export class MissionPlanner extends React.Component<Props> {
             <span>MSN END: {crew.mission.displayEndTime}</span>
             {
               crew.mission.updatedAt &&
-              <div className="last-update">Last updated at {crew.mission.displayUpdatedAt}</div>
+              <div className="last-update">Last updated {crew.mission.displayUpdatedAt}.</div>
             }
           </div>
           <StyledForm
