@@ -27,22 +27,25 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.time.Instant;
 import java.util.Map;
 
+import static java.util.Arrays.asList;
+
 @ActiveProfiles("test")
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public abstract class BaseIntegrationTest {
-  @Autowired SiteRepository siteRepository;
-  @Autowired MissionRepository missionRepository;
-  @Autowired AirmanRepository airmanRepository;
-  @Autowired FlightRepository flightRepository;
-  @Autowired private RoleRepository roleRepository;
-  @Autowired public CrewPositionRepository crewPositionRepository;
+  protected final static ObjectMapper objectMapper = new ObjectMapper();
+  protected final static JavaTimeModule module = new JavaTimeModule();
+
+  @Autowired protected SiteRepository siteRepository;
+  @Autowired protected MissionRepository missionRepository;
+  @Autowired protected AirmanRepository airmanRepository;
+  @Autowired protected FlightRepository flightRepository;
+  @Autowired protected RoleRepository roleRepository;
+  @Autowired protected CrewPositionRepository crewPositionRepository;
   protected Mission mission;
   protected Flight flight;
   protected Site site;
-  protected Role role;
-  protected final static ObjectMapper objectMapper = new ObjectMapper();
-  protected final static JavaTimeModule module = new JavaTimeModule();
+  protected Role adminRole;
 
   static {
     objectMapper.registerModule(module);
@@ -52,7 +55,8 @@ public abstract class BaseIntegrationTest {
   @LocalServerPort protected int port;
 
   public void setUp() {
-    role = roleRepository.save(new Role(RoleName.READER));
+    roleRepository.save(asList(new Role(RoleName.READER), new Role(RoleName.WRITER)));
+    adminRole = roleRepository.save(new Role(RoleName.ADMIN));
   }
 
   public void tearDown() {

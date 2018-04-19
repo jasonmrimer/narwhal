@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 @org.springframework.context.annotation.Profile({"!cloud", "!prod"})
-@Service("userDetailsService")
+@Service
 public class DevUserDetailsServices implements UserDetailsService {
   private ProfileService profileService;
 

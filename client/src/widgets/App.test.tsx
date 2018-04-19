@@ -1,22 +1,23 @@
-import {mount, ReactWrapper} from 'enzyme';
+import { mount, ReactWrapper } from 'enzyme';
 import * as React from 'react';
 
-import {App, ClassificationBanner} from './App';
-import {MemoryRouter} from 'react-router-dom';
-import {Tracker} from '../tracker/Tracker';
-import {Dashboard} from '../dashboard/Dashboard';
-import {forIt, makeFakeTrackerStore} from '../utils/testUtils';
-import {DashboardStore} from '../dashboard/stores/DashboardStore';
-import {MissionPlanner} from '../crew/MissionPlanner';
-import {StyledProfileSitePicker} from '../profile/ProfileSitePicker';
-import {ProfileSitePickerStore} from '../profile/stores/ProfileSitePickerStore';
-import {ThemeProvider} from 'styled-components';
-import {DoubleRepositories} from '../utils/Repositories';
-import {Theme} from '../themes/default';
-import {MissionPlannerStore} from '../crew/stores/MissionPlannerStore';
-import {ProfileModel} from "../profile/models/ProfileModel";
+import { App, ClassificationBanner } from './App';
+import { MemoryRouter } from 'react-router-dom';
+import { Tracker } from '../tracker/Tracker';
+import { Dashboard } from '../dashboard/Dashboard';
+import { forIt, makeFakeTrackerStore } from '../utils/testUtils';
+import { DashboardStore } from '../dashboard/stores/DashboardStore';
+import { MissionPlanner } from '../crew/MissionPlanner';
+import { StyledProfileSitePicker } from '../profile/ProfileSitePicker';
+import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
+import { ThemeProvider } from 'styled-components';
+import { DoubleRepositories } from '../utils/Repositories';
+import { Theme } from '../themes/default';
+import { MissionPlannerStore } from '../crew/stores/MissionPlannerStore';
+import { ProfileModel } from '../profile/models/ProfileModel';
+import { AdminStore } from '../admin/stores/AdminStore';
 
-  describe('App', () => {
+describe('App', () => {
   let mountedSubject: ReactWrapper;
 
   describe('ProfileSitePicker', () => {
@@ -26,6 +27,8 @@ import {ProfileModel} from "../profile/models/ProfileModel";
       const trackerStore = await makeFakeTrackerStore();
       const dashboardStore = new DashboardStore(DoubleRepositories);
       const missionPlannerStore = new MissionPlannerStore(DoubleRepositories, profileStore);
+      const adminStore = new AdminStore(DoubleRepositories.profileRepository);
+
       const profileRepo = {
         findOne: () => {
           return Promise.resolve({
@@ -54,6 +57,7 @@ import {ProfileModel} from "../profile/models/ProfileModel";
               profileStore={profileStore}
               dashboardStore={dashboardStore}
               missionPlannerStore={missionPlannerStore}
+              adminStore={adminStore}
             />
           </MemoryRouter>
         </ThemeProvider>
@@ -103,6 +107,7 @@ const createMountedPage = async (entry: string) => {
   const dashboardStore = new DashboardStore(DoubleRepositories);
   const profileStore = new ProfileSitePickerStore(DoubleRepositories);
   const missionPlannerStore = new MissionPlannerStore(DoubleRepositories, profileStore);
+  const adminStore = new AdminStore(DoubleRepositories.profileRepository);
 
   const mountedRouter = mount(
     <ThemeProvider theme={Theme}>
@@ -112,6 +117,7 @@ const createMountedPage = async (entry: string) => {
           profileStore={profileStore}
           dashboardStore={dashboardStore}
           missionPlannerStore={missionPlannerStore}
+          adminStore={adminStore}
         />
       </MemoryRouter>
     </ThemeProvider>

@@ -16,6 +16,7 @@ describe('ProfileSitePickerStore', () => {
       id: 1,
       username: 'FontFace',
       siteId: 14,
+      siteName: 'SITE 14',
       role: 'ADMIN',
       classified: false
     });

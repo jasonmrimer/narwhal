@@ -33,7 +33,7 @@ describe('DeletePopup', () => {
   });
 
   it('should render the title text', () => {
-    expect(subject.find('.title').text()).toBe('REMOVE CERTIFICATION')
+    expect(subject.find('.title').text()).toBe('REMOVE CERTIFICATION');
   });
 
   describe('renderItemInformation', () => {

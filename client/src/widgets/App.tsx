@@ -7,12 +7,14 @@ import { observer } from 'mobx-react';
 import { StyledProfileSitePicker } from '../profile/ProfileSitePicker';
 import { Routes } from './Routes';
 import { MissionPlannerStore } from '../crew/stores/MissionPlannerStore';
+import { AdminStore } from '../admin/stores/AdminStore';
 
 interface Props {
   dashboardStore: DashboardStore;
   trackerStore: TrackerStore;
   missionPlannerStore: MissionPlannerStore;
   profileStore: ProfileSitePickerStore;
+  adminStore: AdminStore;
 }
 
 @observer

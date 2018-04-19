@@ -9,12 +9,15 @@ import { TrackerPage } from './pages/TrackerPage';
 import { CrewPage } from './pages/CrewPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { MissionPlannerStore } from '../crew/stores/MissionPlannerStore';
+import { AdminPage } from './pages/AdminPage';
+import { AdminStore } from '../admin/stores/AdminStore';
 
 interface Props {
   dashboardStore: DashboardStore;
   trackerStore: TrackerStore;
   missionPlannerStore: MissionPlannerStore;
   profileStore: ProfileSitePickerStore;
+  adminStore: AdminStore;
 }
 
 @observer
@@ -37,6 +40,7 @@ export class Routes extends React.Component<Props> {
             );
           }}
         />
+        <Route exact={true} path="/admin" render={() => <AdminPage {...this.props}/>}/>
       </Switch>
     );
   }

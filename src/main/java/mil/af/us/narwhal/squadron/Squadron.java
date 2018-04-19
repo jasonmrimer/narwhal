@@ -27,7 +27,7 @@ public class Squadron {
 
   private String name;
 
-  @OneToMany(mappedBy = "squadron", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "squadron", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   @JsonManagedReference
   List<Flight> flights = new ArrayList<>();
 
@@ -45,5 +45,15 @@ public class Squadron {
   public void addFlight(Flight flight) {
     flight.setSquadron(this);
     this.flights.add(flight);
+  }
+
+  @Override
+  public String toString() {
+    return "Squadron{" +
+      "id=" + id +
+      ", site=" + site.getId() +
+      ", name='" + name + '\'' +
+      ", flights=" + flights +
+      '}';
   }
 }

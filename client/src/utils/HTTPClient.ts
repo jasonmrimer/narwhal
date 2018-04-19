@@ -1,6 +1,16 @@
 import * as Cookie from 'js-cookie';
 import * as urljoin from 'url-join';
 
+export class ErrorResponse {
+  constructor(public message: string) {
+
+  }
+}
+
+export class UnauthorizedErrorResponse extends ErrorResponse {
+
+}
+
 export class HTTPClient {
   private csrfToken: string = Cookie.get('XSRF-TOKEN') || '';
 
@@ -9,6 +19,9 @@ export class HTTPClient {
 
   async getJSON(path: string) {
     const resp = await fetch(urljoin(this.baseURL, path), {credentials: 'include'});
+    if (resp.status === 403) {
+      return new UnauthorizedErrorResponse('You are not authorized to access this resource');
+    }
     return await resp.json();
   }
 

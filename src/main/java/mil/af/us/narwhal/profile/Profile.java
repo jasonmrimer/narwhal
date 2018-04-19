@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mil.af.us.narwhal.site.Site;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,8 +25,9 @@ public class Profile implements UserDetails {
   @Column(unique = true, nullable = false)
   private String username;
 
-  @Column(name = "site_id")
-  private Long siteId;
+  @ManyToOne
+  @JoinColumn(name = "site_id")
+  private Site site;
 
   @ManyToOne
   @JoinColumn(name = "role_id", nullable = false)
@@ -39,14 +41,14 @@ public class Profile implements UserDetails {
     this.role = role;
   }
 
-  public Profile(String username, Long siteId) {
+  public Profile(String username, Site site) {
     this.username = username;
-    this.siteId = siteId;
+    this.site = site;
   }
 
-  public Profile(String username, Long siteId, Role role) {
+  public Profile(String username, Site site, Role role) {
     this.username = username;
-    this.siteId = siteId;
+    this.site = site;
     this.role = role;
   }
 
@@ -54,6 +56,13 @@ public class Profile implements UserDetails {
     this.id = id;
     this.username = username;
     this.role = role;
+  }
+
+  public Profile(String username, Site site, Role role, String password) {
+    this.username = username;
+    this.site = site;
+    this.role = role;
+    this.password = password;
   }
 
   @Override
@@ -87,10 +96,13 @@ public class Profile implements UserDetails {
   }
 
   public ProfileJSON toProfileJSON(boolean classified) {
+    final Long siteId = site == null ? null : site.getId();
+    final String siteName = site == null ? "" : site.getFullName();
     return new ProfileJSON(
       id,
       username,
       siteId,
+      siteName,
       role.getShortName(),
       classified
     );

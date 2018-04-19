@@ -9,8 +9,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.Collections.emptyList;
-
 @Entity
 @Data
 @NoArgsConstructor
@@ -26,7 +24,7 @@ public class Site {
 
   private String fullName;
 
-  @OneToMany(mappedBy = "site", cascade = CascadeType.ALL)
+  @OneToMany(mappedBy = "site", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   @JsonManagedReference
   private List<Squadron> squadrons = new ArrayList<>();
 
@@ -37,7 +35,7 @@ public class Site {
   }
 
   public Site(String name) {
-    this(null, name, emptyList());
+    this(null, name, new ArrayList<>());
   }
 
   public void addSquadron(Squadron squad) {

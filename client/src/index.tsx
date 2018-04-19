@@ -15,6 +15,7 @@ import { ProfileSitePickerStore } from './profile/stores/ProfileSitePickerStore'
 import { withRouter } from 'react-router';
 import { WebRepositories } from './utils/Repositories';
 import { MissionPlannerStore } from './crew/stores/MissionPlannerStore';
+import { AdminStore } from './admin/stores/AdminStore';
 
 document.body.style.fontFamily = Theme.fontFamily;
 document.body.style.fontWeight = Theme.fontWeight;
@@ -25,6 +26,7 @@ const dashboardStore = new DashboardStore(WebRepositories);
 const trackerStore = new TrackerStore(WebRepositories, new MomentTimeService());
 const profileStore = new ProfileSitePickerStore(WebRepositories);
 const missionPlannerStore = new MissionPlannerStore(WebRepositories, profileStore);
+const adminStore = new AdminStore(WebRepositories.profileRepository);
 const AppWithRouter = withRouter((App as any)) as typeof App;
 
 ReactDOM.render(
@@ -35,6 +37,7 @@ ReactDOM.render(
         trackerStore={trackerStore}
         missionPlannerStore={missionPlannerStore}
         profileStore={profileStore}
+        adminStore={adminStore}
       />
     </BrowserRouter>
   </ThemeProvider>,

@@ -29,4 +29,13 @@ public class Flight {
   public Flight(String name) {
     this.name = name;
   }
+
+  @Override
+  public String toString() {
+    return "Flight{" +
+      "id=" + id +
+      ", squadron=" + squadron.getId() +
+      ", name='" + name + '\'' +
+      '}';
+  }
 }

@@ -25,7 +25,7 @@ describe('Tracker', () => {
     subject = shallow(
       <Tracker
         trackerStore={trackerStore}
-        profile={{id: 1, username: 'Tytus', siteId: 1, role: 'ADMIN', classified: false}}
+        profile={{id: 1, username: 'Tytus', siteId: 1, siteName: '1', role: 'ADMIN', classified: false}}
       />
     );
     await forIt();
