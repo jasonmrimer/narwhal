@@ -23,11 +23,11 @@ CI=true yarn test
 yarn build
 popd
 
-if [ "$NARWHAL_CI" = "true" ]
+if [ "$NARWHAL_MIL" = "true" ]
 then
-    ./gradlew --stop
-    ./gradlew test
+    ./gradlew test -PexcludeTests=**/UnicornMissionClientTest.class
 else
+    ./gradlew --stop
     ./gradlew test
 fi
 

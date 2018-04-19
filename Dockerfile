@@ -1,7 +1,7 @@
 FROM cloudfoundry/cflinuxfs2
 
 # install mysql
-RUN apt-get -y install mysql-server
+RUN apt-get -y install mysql-server-5.6
 
 # install java
 RUN apt-get -y install software-properties-common

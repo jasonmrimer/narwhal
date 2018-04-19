@@ -5,6 +5,7 @@ import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,6 +40,7 @@ public class MissionService {
       foundMission.setAtoMissionNumber(metaData.getAtomissionnumber());
       foundMission.setPlatform(metaData.getPlatform());
       foundMission.setSite(site);
+      foundMission.setUpdatedAt(Instant.now());
       foundMission.setStartDateTime(metaData.getStartdttime().toGregorianCalendar().getTime().toInstant());
       if (metaData.getEnddttime() != null) {
         foundMission.setEndDateTime(metaData.getEnddttime().toGregorianCalendar().getTime().toInstant());
@@ -50,6 +52,7 @@ public class MissionService {
         .atoMissionNumber(metaData.getAtomissionnumber())
         .startDateTime(metaData.getStartdttime().toGregorianCalendar().getTime().toInstant())
         .platform(metaData.getPlatform())
+        .updatedAt(Instant.now())
         .site(site);
       if (metaData.getEnddttime() != null) {
         builder.endDateTime(metaData.getEnddttime().toGregorianCalendar().getTime().toInstant());

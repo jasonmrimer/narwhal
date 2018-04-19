@@ -8,10 +8,10 @@ export class MissionModel {
               public startDateTime: Moment,
               public endDateTime: Moment | null = null,
               public platform: string,
-              public updatedAt: Moment,
+              public updatedAt: Moment | null = null,
               public hasCrew: boolean = false,
               public site?: SiteModel,
-              ) {
+  ) {
   }
 
   get displayDateZulu() {
@@ -42,6 +42,9 @@ export class MissionModel {
   }
 
   get displayUpdatedAt() {
-    return `${this.updatedAt.clone().utc().format('YYYY-MM-DD HHmm')}Z`;
+    if (this.updatedAt) {
+      return `${this.updatedAt.clone().utc().format('YYYY-MM-DD HHmm')}Z`;
+    }
+    return;
   }
 }
