@@ -21,7 +21,7 @@ describe('Tracker', () => {
       <ThemeProvider theme={Theme}>
         <MemoryRouter>
           <Tracker
-            profile={{id: 1, username: 'Tytus', siteId: 1, siteName: '1', role: 'ADMIN', classified: false}}
+            profile={{id: 1, username: 'Tytus', siteId: 1, siteName: '1', roleName: 'ADMIN', roleId: 1, classified: false}}
             trackerStore={trackerStore}
           />
         </MemoryRouter>

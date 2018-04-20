@@ -6,5 +6,9 @@ export interface ProfileRepository {
 
   findOne(): Promise<ProfileModel>;
 
+  updateSite(siteId: number): Promise<ProfileModel>;
+
   save(profile: ProfileModel): Promise<ProfileModel>;
+
+  findAllRoles(): Promise<{ id: number, name: string }[]>;
 }

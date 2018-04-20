@@ -31,8 +31,7 @@ export class ProfileSitePickerStore {
   @action.bound
   async savePendingSite() {
     if (this._profile && this._pendingSite) {
-      const profile = Object.assign({}, this._profile, {siteId: this._pendingSite.id});
-      this._profile = await this.profileRepository.save(profile);
+      this._profile = await this.profileRepository.updateSite(this._pendingSite.id);
     }
   }
 

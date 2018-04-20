@@ -9,7 +9,8 @@ export class ProfileRepositoryStub implements ProfileRepository {
         username: 'FontFace',
         siteId: 14,
         siteName: 'SITE 14',
-        role: 'ADMIN',
+        roleId: 1,
+        roleName: 'ADMIN',
         classified: false,
       },
       {
@@ -17,7 +18,8 @@ export class ProfileRepositoryStub implements ProfileRepository {
         username: 'Mr. Roboto',
         siteId: 14,
         siteName: 'SITE 14',
-        role: 'ADMIN',
+        roleId: 1,
+        roleName: 'ADMIN',
         classified: false,
       },
       {
@@ -25,7 +27,8 @@ export class ProfileRepositoryStub implements ProfileRepository {
         username: 'Mr. None Adminface',
         siteId: 42,
         siteName: 'SITE 42',
-        role: 'READER',
+        roleId: 3,
+        roleName: 'READER',
         classified: false
       }
     ]);
@@ -37,7 +40,20 @@ export class ProfileRepositoryStub implements ProfileRepository {
       username: 'FontFace',
       siteId: 14,
       siteName: 'SITE 14',
-      role: 'ADMIN',
+      roleId: 1,
+      roleName: 'ADMIN',
+      classified: false,
+    });
+  }
+
+  updateSite(siteId: number): Promise<ProfileModel> {
+    return Promise.resolve({
+      id: 1,
+      username: 'FontFace',
+      siteId: siteId,
+      siteName: 'SITE 14',
+      roleId: 1,
+      roleName: 'ADMIN',
       classified: false,
     });
   }
@@ -45,4 +61,13 @@ export class ProfileRepositoryStub implements ProfileRepository {
   save(profile: ProfileModel): Promise<ProfileModel> {
     return Promise.resolve(profile);
   }
+
+  findAllRoles(): Promise<{ id: number; name: string }[]> {
+    return Promise.resolve([
+      {id: 1, name: 'ADMIN'},
+      {id: 2, name: 'WRITER'},
+      {id: 3, name: 'READER'}
+    ]);
+  }
+
 }

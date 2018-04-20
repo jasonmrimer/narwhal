@@ -39,6 +39,15 @@ describe('App', () => {
             classified: false
           });
         },
+        updateSite: (siteId: number) => {
+          return Promise.resolve({
+            id: 1,
+            username: 'FontFace',
+            siteId: siteId,
+            role: 'ADMIN',
+            classified: false
+          });
+        },
 
         save: (profile: ProfileModel) => {
           return Promise.resolve(profile);

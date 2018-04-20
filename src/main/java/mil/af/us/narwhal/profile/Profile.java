@@ -67,7 +67,7 @@ public class Profile implements UserDetails {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return AuthorityUtils.createAuthorityList(role.getName());
+    return AuthorityUtils.createAuthorityList(role.getFullName());
   }
 
   @Override
@@ -103,7 +103,8 @@ public class Profile implements UserDetails {
       username,
       siteId,
       siteName,
-      role.getShortName(),
+      role.getId(),
+      role.getName().name(),
       classified
     );
   }

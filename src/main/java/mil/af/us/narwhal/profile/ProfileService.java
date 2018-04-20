@@ -22,6 +22,10 @@ public class ProfileService {
     this.siteRepository = siteRepository;
   }
 
+  public List<Profile> getAllProfiles() {
+    return profileRepository.findAll();
+  }
+
   public Profile getProfile(String username) {
     Profile profile = profileRepository.findOneByUsername(username);
     if (profile == null) {
@@ -31,13 +35,25 @@ public class ProfileService {
     return profile;
   }
 
-  public List<Profile> getAllProfiles() {
-    return profileRepository.findAll();
+  public Profile setSite(Profile profile, Long siteId) {
+    final Site site = siteRepository.findOne(siteId);
+    if (site != null) {
+      profile.setSite(site);
+    }
+    return profileRepository.save(profile);
   }
 
-  public Profile updateSiteId(Profile profile, Long siteId) {
-    final Site site = this.siteRepository.findOne(siteId);
-    profile.setSite(site);
+  public Profile update(ProfileJSON json) {
+    Profile profile = profileRepository.findOne(json.getId());
+    if (profile == null) {
+      return null;
+    }
+
+    final Role role = roleRepository.findOne(json.getRoleId());
+    if (role != null) {
+      profile.setRole(role);
+    }
+
     return profileRepository.save(profile);
   }
 }

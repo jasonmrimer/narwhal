@@ -10,6 +10,7 @@ public class ProfileJSON {
   private String username;
   private Long siteId;
   private String siteName;
-  private String role;
+  private Long roleId;
+  private String roleName;
   private boolean classified;
 }

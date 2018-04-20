@@ -9,7 +9,7 @@ describe('TopBar', () => {
   let profile: ProfileModel;
   beforeEach(() => {
 
-    profile = {id: 1, username: 'Tytus', siteId: 14, siteName: '14', role: 'ADMIN', classified: false};
+    profile = {id: 1, username: 'Tytus', siteId: 14, siteName: '14', roleName: 'ADMIN', roleId: 1, classified: false};
     subject = shallow(<TopBar profile={profile}/>);
   });
 

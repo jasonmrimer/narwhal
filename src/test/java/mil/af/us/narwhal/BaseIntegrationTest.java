@@ -27,8 +27,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.time.Instant;
 import java.util.Map;
 
-import static java.util.Arrays.asList;
-
 @ActiveProfiles("test")
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -46,6 +44,8 @@ public abstract class BaseIntegrationTest {
   protected Flight flight;
   protected Site site;
   protected Role adminRole;
+  protected Role readerRole;
+  protected Role writerRole;
 
   static {
     objectMapper.registerModule(module);
@@ -55,7 +55,8 @@ public abstract class BaseIntegrationTest {
   @LocalServerPort protected int port;
 
   public void setUp() {
-    roleRepository.save(asList(new Role(RoleName.READER), new Role(RoleName.WRITER)));
+    readerRole = roleRepository.save(new Role(RoleName.READER));
+    writerRole = roleRepository.save(new Role(RoleName.WRITER));
     adminRole = roleRepository.save(new Role(RoleName.ADMIN));
   }
 

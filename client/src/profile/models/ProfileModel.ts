@@ -3,6 +3,7 @@ export interface ProfileModel {
   username: string;
   siteId: number | null;
   siteName: string;
-  role: string;
+  roleId: number;
+  roleName: string;
   classified: boolean;
 }

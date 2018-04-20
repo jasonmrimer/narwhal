@@ -15,7 +15,16 @@ export class WebProfileRepository implements ProfileRepository {
     return (await this.client.getJSON('api/profiles/me'));
   }
 
-  async save(profile: ProfileModel): Promise<ProfileModel> {
-    return (await this.client.put(`api/profiles?siteId=${profile.siteId}`));
+  async updateSite(siteId: number): Promise<ProfileModel> {
+    return (await this.client.put(`api/profiles/me?siteId=${siteId}`));
   }
+
+  async save(profile: ProfileModel): Promise<ProfileModel> {
+    return (await this.client.putJSON(`api/profiles`, JSON.stringify(profile)));
+  }
+
+  async findAllRoles(): Promise<{ id: number; name: string }[]> {
+    return (await this.client.getJSON('api/profiles/roles'));
+  }
+
 }

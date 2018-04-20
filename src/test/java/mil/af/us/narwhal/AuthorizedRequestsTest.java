@@ -28,6 +28,7 @@ import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -48,17 +49,35 @@ public class AuthorizedRequestsTest {
 
   @Test
   public void testAdminProtectedRoutes() throws Exception {
-    List<Object[]> getRequests = asList(new Object[][]{
+    Object[][] getRequests = new Object[][]{
       {"/api/profiles", RoleName.ADMIN, 200},
       {"/api/profiles", RoleName.READER, 403},
       {"/api/profiles", RoleName.WRITER, 403},
-    });
+    };
 
     for (Object[] req : getRequests) {
       mockMvc.perform(MockMvcRequestBuilders.get((String) req[0])
         .with(authentication(getOauthGoodTestAuthentication((RoleName) req[1])))
         .sessionAttr("scopedTarget.oauth2ClientContext", getOauth2ClientContext()))
         .andExpect(status().is((int) req[2]));
+    }
+
+    Object[][] putRequests = new Object[][]{
+      {"/api/profiles", RoleName.ADMIN, 400},
+      {"/api/profiles", RoleName.READER, 403},
+      {"/api/profiles", RoleName.WRITER, 403},
+    };
+
+    for (Object[] req : putRequests) {
+      mockMvc.perform(
+        MockMvcRequestBuilders
+          .put((String) req[0])
+          .with(csrf())
+          .with(authentication(getOauthGoodTestAuthentication((RoleName) req[1])))
+          .sessionAttr("scopedTarget.oauth2ClientContext", getOauth2ClientContext())
+      ).andExpect(
+        status().is((int) req[2])
+      );
     }
   }
 

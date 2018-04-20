@@ -1,10 +1,9 @@
 package mil.af.us.narwhal.profile;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.codehaus.jackson.annotate.JsonIgnore;
-import org.codehaus.jackson.annotate.JsonProperty;
 
 import javax.persistence.*;
 
@@ -17,7 +16,6 @@ public class Role {
   @GeneratedValue
   private Long id;
 
-  @JsonIgnore
   @Column(nullable = false, unique = true)
   @Enumerated(EnumType.STRING)
   private RoleName name;
@@ -26,12 +24,8 @@ public class Role {
     this.name = name;
   }
 
-  public String getName() {
+  @JsonIgnore
+  public String getFullName() {
     return "ROLE_" + name.name();
-  }
-
-  @JsonProperty("name")
-  public String getShortName() {
-    return name.name();
   }
 }

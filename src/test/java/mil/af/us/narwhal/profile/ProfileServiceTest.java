@@ -45,17 +45,42 @@ public class ProfileServiceTest {
   }
 
   @Test
-  public void updatesSiteIdOnProfile() {
-    final Role role = new Role(134L, RoleName.READER);
-    Profile profile = new Profile(1L, "username", role);
-
+  public void updateSite() {
     final Site site = new Site(2L, "Test Site", emptyList());
-    when(siteRepository.findOne(2L))
+    final Profile profile = new Profile(1L, "username", new Role(123L, RoleName.READER));
+
+    when(profileRepository.findOne(profile.getId()))
+      .thenReturn(profile);
+
+    when(siteRepository.findOne(site.getId()))
       .thenReturn(site);
 
-    subject.updateSiteId(profile, 2L);
+    subject.setSite(profile, site.getId());
 
     profile.setSite(site);
+    verify(profileRepository).save(profile);
+  }
+
+  @Test
+  public void updateRole() {
+    final Role updatedRole = new Role(456L, RoleName.WRITER);
+    final Profile profile = new Profile(
+      1L,
+      "Joshua",
+      new Role(123L, RoleName.READER)
+    );
+
+    when(profileRepository.findOne(profile.getId()))
+      .thenReturn(profile);
+
+    when(roleRepository.findOne(updatedRole.getId()))
+      .thenReturn(updatedRole);
+
+    ProfileJSON json = profile.toProfileJSON(true);
+    json.setRoleId(updatedRole.getId());
+    subject.update(json);
+
+    profile.setRole(updatedRole);
     verify(profileRepository).save(profile);
   }
 }

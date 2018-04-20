@@ -16,7 +16,10 @@ export const AdminPage = observer((props: Props) => {
       <StyledTopBar
         profile={props.profileStore.profile!}
       />
-      <StyledProfileList store={props.adminStore}/>
+      <StyledProfileList
+        profile={props.profileStore.profile!}
+        store={props.adminStore}
+      />
     </React.Fragment>
   );
 });

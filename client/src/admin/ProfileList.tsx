@@ -3,15 +3,20 @@ import styled from 'styled-components';
 import { ProfileModel } from '../profile/models/ProfileModel';
 import { observer } from 'mobx-react';
 import { ErrorResponse } from '../utils/HTTPClient';
+import { FilterOption } from '../widgets/models/FilterOptionModel';
+import { StyledDropdown } from '../widgets/Dropdown';
 
 export interface ProfileListStore {
   hydrate: () => Promise<void>;
   profiles: ProfileModel[];
   hasError: boolean;
   error: ErrorResponse | null;
+  roleOptions: FilterOption[];
+  setProfileRole: (profile: ProfileModel, roleId: number) => void;
 }
 
 interface Props {
+  profile: ProfileModel;
   store: ProfileListStore;
   className?: string;
 }
@@ -43,17 +48,21 @@ export class ProfileList extends React.Component<Props> {
             </div>
             <div>
               {
-
                 this.props.store.profiles.map((profile) => {
                   return (
-
                     <div
                       className="profile-row"
                       key={profile.id}
                     >
                       <span>{profile.username}</span>
                       <span>{profile.siteName}</span>
-                      <span>{profile.role}</span>
+                      <StyledDropdown
+                        disabled={profile.id === this.props.profile.id}
+                        name="roleId"
+                        options={this.props.store.roleOptions}
+                        value={profile.roleId}
+                        onChange={(evt: any) => this.props.store.setProfileRole(profile, evt.target.value)}
+                      />
                     </div>
                   );
                 })
@@ -85,7 +94,7 @@ export const StyledProfileList = styled(ProfileList)`
     .profile-row, .profile-header {
       padding: 1rem;
       
-      & > span {
+      & > span, & > select {
         width: 33%;
         display: inline-block;
        }

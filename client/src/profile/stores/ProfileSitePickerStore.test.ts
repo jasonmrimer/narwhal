@@ -17,7 +17,8 @@ describe('ProfileSitePickerStore', () => {
       username: 'FontFace',
       siteId: 14,
       siteName: 'SITE 14',
-      role: 'ADMIN',
+      roleId: 1,
+      roleName: 'ADMIN',
       classified: false
     });
   });

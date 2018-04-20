@@ -34,7 +34,7 @@ export class TopBar extends React.Component<Props> {
           </NavLink>
         </span>
         <span>
-        {`${this.props.profile.username} (${this.props.profile.role})`}
+        {`${this.props.profile.username} (${this.props.profile.roleName})`}
         </span>
       </div>
     );
