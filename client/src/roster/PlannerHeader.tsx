@@ -34,15 +34,15 @@ export const PlannerHeader = observer((props: Props) => {
         {props.plannerStore.plannerWeek[0].format('MMMM YYYY').toUpperCase()}
       </div>
       <span className="planner-day-navigation">
-        <span className="button-header">
-          <button className="last-week" onClick={async () => await props.plannerStore.decrementPlannerWeek()}>
+        <span className="button-header" onClick={async () => await props.plannerStore.decrementPlannerWeek()}>
+          <button className="last-week" >
             <BackIcon height={14} width={14}/>
           </button>
         </span>
 
         {renderWeek(props.plannerStore.plannerWeek)}
-        <span className="button-header">
-          <button className="next-week" onClick={async () => await props.plannerStore.incrementPlannerWeek()}>
+        <span className="button-header" onClick={async () => await props.plannerStore.incrementPlannerWeek()}>
+          <button className="next-week" >
             <NextIcon height={14} width={14}/>
           </button>
         </span>
@@ -67,7 +67,10 @@ export const StyledPlannerHeader = styled(PlannerHeader)`
   .next-week, .last-week {
     background: none;
     border: none;
-    padding: 0;
+   }
+   
+   .button-header{
+    cursor: pointer;
    }
    
   .last-week {

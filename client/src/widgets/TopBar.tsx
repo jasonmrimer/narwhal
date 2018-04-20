@@ -11,35 +11,42 @@ interface Props {
 export class TopBar extends React.Component<Props> {
   render() {
     return (
-      <div className={this.props.className}>
-      <span className="logo">
-        <img src="/sally.png"/>
-        <span>Narwhal</span>
-      </span>
-        <span className="navigation-tabs">
-          <NavLink
-            to="/dashboard"
-            activeClassName="selected"
-            className="dashboard-link"
-          >
-            MISSION
-          </NavLink>
-          <NavLink
-            to="/"
-            exact={true}
-            activeClassName="selected"
-            className="availability-link"
-          >
-            AVAILABILITY
-          </NavLink>
-        </span>
-        <span>
-        {`${this.props.profile.username} (${this.props.profile.roleName})`}
-        </span>
-      </div>
+      <React.Fragment>
+        <div className={this.props.className}>
+          <span className="logo">
+            <img src="/sally.png"/>
+            <span>Narwhal</span>
+          </span>
+          <span className="navigation-tabs">
+            <NavLink
+              to="/dashboard"
+              activeClassName="selected"
+              className="dashboard-link"
+            >
+              MISSION
+            </NavLink>
+            <NavLink
+              to="/"
+              exact={true}
+              activeClassName="selected"
+              className="availability-link"
+            >
+              AVAILABILITY
+            </NavLink>
+          </span>
+          <span>
+          {`${this.props.profile.username} (${this.props.profile.roleName})`}
+          </span>
+        </div>
+        <TopBarSpacer />
+      </React.Fragment>
     );
   }
 }
+
+const TopBarSpacer = styled('div')`
+  margin-bottom: 9rem;
+`;
 
 export const StyledTopBar = styled(TopBar)`
   border-collapse: collapse;
@@ -60,7 +67,7 @@ export const StyledTopBar = styled(TopBar)`
   height: 4rem;
   
   z-index: 1000;
-  
+   
   .logo {
     display: flex;
     align-items: center;

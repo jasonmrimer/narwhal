@@ -35,6 +35,7 @@ export const CrewPositionInputRow = observer((props: Props) => {
       <span className="position">
         <StyledTextInput
           name="title"
+          placeholder="Enter Airman's Position"
           onChange={props.handleNewEntryChange}
           value={props.crewStore.newEntry.title}
         />
@@ -44,8 +45,8 @@ export const CrewPositionInputRow = observer((props: Props) => {
           className="airmanSelect"
           options={props.crewStore.airmenOptions}
           onChange={props.handleTypeahead}
-          placeholder={''}
-          selected={selectedAirmanOption ? selectedAirmanOption : {value: '', label: ''}}
+          placeholder="Enter Airman's Name"
+          selected={selectedAirmanOption ? selectedAirmanOption : null}
           clearButton={!!selectedAirmanOption}
         />
         </span>
