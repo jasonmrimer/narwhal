@@ -1,4 +1,4 @@
-import { SkillActions, SkillFormStore } from './SkillFormStore';
+import { SkillFormStore } from './SkillFormStore';
 import { Skill } from '../models/Skill';
 import { SkillType } from '../models/SkillType';
 import * as moment from 'moment';
@@ -16,18 +16,9 @@ describe('SkillFormStore', () => {
     expirationDate: moment()
   };
 
-  let skillActions: SkillActions;
   let subject: SkillFormStore;
 
   beforeEach(() => {
-    const siteIdContainer = {
-      selectedSite: 1
-  };
-
-    skillActions = {
-      addSkill: jest.fn(),
-      setPendingDeleteSkill: jest.fn(),
-    };
 
     const certifications = [
       ...CertificationModelFactory.buildList(3, 1),
@@ -35,8 +26,8 @@ describe('SkillFormStore', () => {
     ];
     const qualifications = QualificationModelFactory.buildList(3);
 
-    subject = new SkillFormStore(siteIdContainer, skillActions);
-    subject.hydrate(certifications, qualifications);
+    subject = new SkillFormStore();
+    subject.hydrate(certifications, qualifications, 1);
   });
 
   it('should set the skillId when setting the skillType', () => {
@@ -84,14 +75,13 @@ describe('SkillFormStore', () => {
     });
   });
 
-  it('can add a skill', () => {
+  it('returns a skill type from the state', () => {
     subject.setState('skillType', skill.type);
     subject.setState('skillId', String(skill.skillId));
 
-    subject.addModel(airmanId);
-
-    const addedSkill = (skillActions.addSkill as jest.Mock).mock.calls[0][0];
-    expect(addedSkill.skillId).toEqual(skill.skillId);
+    const model = subject.addModel(airmanId);
+    expect(model.type).toBe(skill.type);
+    expect(model.skillId).toBe(skill.skillId);
   });
 
   it('should set the expirationDate 24 months ahead when adding an earnDate for quals', () => {
@@ -116,12 +106,6 @@ describe('SkillFormStore', () => {
     subject.setState('skillType', SkillType.Certification);
     subject.setState('earnDate', '');
     expect(subject.state.expirationDate).toBe('');
-  });
-
-  it('can remove a skill', () => {
-    subject.open(skill);
-    subject.removeModel();
-    expect(skillActions.setPendingDeleteSkill).toHaveBeenCalledWith(skill);
   });
 
   it('should render certification options based off the site of the selected airman', () => {

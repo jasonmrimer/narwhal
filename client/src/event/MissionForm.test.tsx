@@ -8,11 +8,14 @@ import { StyledTimeInput } from '../widgets/TimeInput';
 import { StyledFieldValidation } from '../widgets/FieldValidation';
 import { StyledButton } from '../widgets/Button';
 import { EventModelFactory } from './factories/EventModelFactory';
-import { MissionRepositoryStub } from '../mission/repositories/doubles/MissionRepositoryStub';
 import { MissionModel } from '../mission/models/MissionModel';
 import { StyledSubmitButton } from '../widgets/SubmitButton';
 import { StyledSingleTypeahead } from '../widgets/SingleTypeahead';
 import { StyledForm } from '../widgets/Form';
+import { MissionModelFactory } from '../mission/factories/MissionModelFactory';
+import { TrackerStore } from '../tracker/stores/TrackerStore';
+import { DoubleRepositories } from '../utils/Repositories';
+import { EventActions } from './EventActions';
 
 /* tslint:disable:no-empty*/
 describe('MissionForm', () => {
@@ -20,24 +23,22 @@ describe('MissionForm', () => {
   let missionFormStore: MissionFormStore;
   let wrapper: ShallowWrapper;
   let subject: MissionForm;
-  let eventActions: { addEvent: jest.Mock, removeEvent: jest.Mock };
-  let setLoading = () => {};
+  let trackerStore: TrackerStore;
 
   beforeEach(async () => {
-    eventActions = {
-      addEvent: jest.fn(),
-      removeEvent: jest.fn(),
-    };
+    trackerStore = new TrackerStore(DoubleRepositories);
 
-    missionFormStore = new MissionFormStore(eventActions);
-    missionFormStore.hydrate(await new MissionRepositoryStub().findAll());
-    mission = missionFormStore.missions[1];
+    missionFormStore = new MissionFormStore();
+    missionFormStore.hydrate([MissionModelFactory.build()]);
+    mission = missionFormStore.missions[0];
 
+    EventActions.handleFormSubmit = jest.fn();
+    EventActions.handleDeleteEvent = jest.fn();
     wrapper = shallow(
       <MissionForm
         airmanId={123}
         missionFormStore={missionFormStore}
-        setLoading={setLoading}
+        trackerStore={trackerStore}
       />
     );
 
@@ -58,7 +59,7 @@ describe('MissionForm', () => {
   });
 
   it('should render a Form', () => {
-    expect(wrapper.find(StyledForm).prop('setLoading')).toBe(setLoading);
+    expect(wrapper.find(StyledForm).prop('setLoading')).toBe(trackerStore.setLoading);
   });
 
   it('should render a delete button when there is an event', () => {
@@ -108,13 +109,13 @@ describe('MissionForm', () => {
 
   it('add a Mission', () => {
     subject.handleSubmit(eventStub);
-    expect(eventActions.addEvent).toHaveBeenCalled();
+    expect(EventActions.handleFormSubmit).toHaveBeenCalled();
   });
 
   it('remove an Mission', () => {
     missionFormStore.open(EventModelFactory.build());
     subject.handleDelete();
-    expect(eventActions.removeEvent).toHaveBeenCalled();
+    expect(EventActions.handleDeleteEvent).toHaveBeenCalled();
   });
 });
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { MissionFormStore } from './stores/MissionFormStore';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { StyledDatePicker } from '../widgets/DatePicker';
 import { StyledTimeInput } from '../widgets/TimeInput';
 import { StyledSubmitButton } from '../widgets/SubmitButton';
@@ -11,44 +11,51 @@ import { FilterOption } from '../widgets/models/FilterOptionModel';
 import { StyledFieldValidation } from '../widgets/FieldValidation';
 import { StyledForm, StyledFormRow } from '../widgets/Form';
 import { DeleteIcon } from '../icons/DeleteIcon';
+import { EventModel } from './models/EventModel';
+import { TrackerStore } from '../tracker/stores/TrackerStore';
+import { EventActions } from './EventActions';
 
 /* tslint:disable:no-empty*/
 function noop() {
 }
 
 interface Props {
+  missionFormStore?: MissionFormStore;
+  trackerStore?: TrackerStore;
   airmanId: number;
-  missionFormStore: MissionFormStore;
-  setLoading: (loading: boolean) => void;
+  event?: EventModel;
   className?: string;
 }
 
 @observer
 export class MissionForm extends React.Component<Props> {
+  componentDidMount() {
+    this.props.missionFormStore!.open(this.props.event);
+  }
+
   handleChange = (opt: FilterOption | null) => {
     if (opt == null) {
-      this.props.missionFormStore.setState('id', '');
+      this.props.missionFormStore!.setState('id', '');
     } else {
-      this.props.missionFormStore.setState('id', String(opt.value));
+      this.props.missionFormStore!.setState('id', String(opt.value));
     }
   }
 
-  handleDelete = () => {
-    this.props.missionFormStore.removeModel();
+  handleDelete = async () => {
+    await EventActions.handleDeleteEvent(this.props.missionFormStore!.model!);
   }
 
   handleSubmit = async (e: any) => {
     e.preventDefault();
-    await this.props.missionFormStore.addModel(this.props.airmanId);
+    await EventActions.handleFormSubmit(this.props.airmanId, this.props.missionFormStore!);
   }
 
   render() {
-    const {missionOptions} = this.props.missionFormStore;
-    const {state, hasModel, errors} = this.props.missionFormStore;
+    const {trackerStore, missionFormStore} = this.props;
+    const {missionOptions, state, hasModel, errors} = missionFormStore!;
     const selected = missionOptions.find(msn => msn.value === Number(state.id));
-
     return (
-      <StyledForm onSubmit={this.handleSubmit} setLoading={this.props.setLoading}>
+      <StyledForm onSubmit={this.handleSubmit} setLoading={trackerStore!.setLoading}>
         <StyledFieldValidation name="title" errors={errors}>
           <StyledFormRow>
             <StyledSingleTypeahead
@@ -110,6 +117,6 @@ export class MissionForm extends React.Component<Props> {
   }
 }
 
-export const StyledMissionForm = styled(MissionForm)`
+export const StyledMissionForm = inject('missionFormStore', 'trackerStore')(styled(MissionForm)`
   min-width: ${props => props.theme.sidePanelWidth};
-`;
+`);

@@ -1,5 +1,5 @@
 import { UnfilteredValue } from '../models/FilterOptionModel';
-import { AllAirmenRefresher, LocationFilterStore } from './LocationFilterStore';
+import { LocationFilterStore } from './LocationFilterStore';
 import { FakeAirmanRepository } from '../../airman/repositories/doubles/FakeAirmanRepository';
 import { AirmanModel } from '../../airman/models/AirmanModel';
 import { SiteRepositoryStub } from '../../site/repositories/doubles/SiteRepositoryStub';
@@ -11,14 +11,10 @@ describe('LocationFilterStore', () => {
   let allAirmen: AirmanModel[];
   let sites: SiteModel[];
   let subject: LocationFilterStore;
-  let refreshAllAirmenSpy: AllAirmenRefresher;
 
   beforeEach(async () => {
-    refreshAllAirmenSpy = {
-      refreshAllAirmen: jest.fn()
-    };
     allAirmen = await airmanRepository.findBySiteId(14);
-    subject = new LocationFilterStore(refreshAllAirmenSpy);
+    subject = new LocationFilterStore();
     sites = await siteRepositoryStub.findAll();
     subject.hydrate(3, sites);
   });
@@ -29,11 +25,6 @@ describe('LocationFilterStore', () => {
     subject.hydrate(3, sites);
     expect(subject.selectedSquadron).toBe(2);
     expect(subject.selectedFlight).toBe(2);
-  });
-
-  it('setting the site Id refreshes all airmen', async () => {
-    await subject.setSelectedSite(2);
-    expect(refreshAllAirmenSpy.refreshAllAirmen).toHaveBeenCalled();
   });
 
   it('returns a list of site options', () => {

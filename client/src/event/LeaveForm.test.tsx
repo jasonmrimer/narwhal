@@ -10,27 +10,29 @@ import { StyledFieldValidation } from '../widgets/FieldValidation';
 import { StyledButton } from '../widgets/Button';
 import { EventModelFactory } from './factories/EventModelFactory';
 import { StyledForm } from '../widgets/Form';
+import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
+import { TrackerStore } from '../tracker/stores/TrackerStore';
+import { DoubleRepositories } from '../utils/Repositories';
+import { EventActions } from './EventActions';
 
 /* tslint:disable:no-empty*/
 describe('LeaveForm', () => {
   let store: LeaveFormStore;
   let wrapper: ShallowWrapper;
   let subject: LeaveForm;
-  let eventActions: { addEvent: jest.Mock, removeEvent: jest.Mock };
-  let setLoading = () => {};
+  let trackerStore: TrackerStore;
 
   beforeEach(() => {
-    eventActions = {
-      addEvent: jest.fn(),
-      removeEvent: jest.fn()
-    };
-    store = new LeaveFormStore(eventActions);
+    EventActions.handleDeleteEvent = jest.fn();
+    EventActions.handleFormSubmit = jest.fn();
+    store = new LeaveFormStore(new TimeServiceStub());
 
+    trackerStore = new TrackerStore(DoubleRepositories);
     wrapper = shallow(
       <LeaveForm
         airmanId={123}
         leaveFormStore={store}
-        setLoading={setLoading}
+        trackerStore={trackerStore}
       />
     );
 
@@ -38,7 +40,7 @@ describe('LeaveForm', () => {
   });
 
   it('should render a Form', () => {
-    expect(wrapper.find(StyledForm).prop('setLoading')).toBe(setLoading);
+    expect(wrapper.find(StyledForm).prop('setLoading')).toBe(trackerStore.setLoading);
   });
 
   it('manages the state via form changes', () => {
@@ -87,13 +89,13 @@ describe('LeaveForm', () => {
 
   it('adds a Leave', () => {
     subject.handleSubmit(eventStub);
-    expect(eventActions.addEvent).toHaveBeenCalled();
+    expect(EventActions.handleFormSubmit).toHaveBeenCalled();
   });
 
   it('removes a Leave', () => {
     store.open(EventModelFactory.build());
     subject.handleDelete();
-    expect(eventActions.removeEvent).toHaveBeenCalled();
+    expect(EventActions.handleDeleteEvent).toHaveBeenCalled();
   });
 });
 

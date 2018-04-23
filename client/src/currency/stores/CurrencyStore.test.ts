@@ -1,17 +1,10 @@
 import { CurrencyChild, CurrencyStore } from './CurrencyStore';
 import * as moment from 'moment';
 import { SkillType } from '../../skills/models/SkillType';
-import { DoubleRepositories } from '../../utils/Repositories';
-import { FakeAirmanRepository } from '../../airman/repositories/doubles/FakeAirmanRepository';
-import { AirmanModel } from '../../airman/models/AirmanModel';
-import { AirmanQualificationModel } from '../../airman/models/AirmanQualificationModel';
 import { AirmanCertificationModelFactory } from '../../airman/factories/AirmanCertificationModelFactory';
+import { Repositories } from '../../utils/Repositories';
 
 describe('CurrencyStore', () => {
-  const siteId = 14;
-  const airmanRepository = (DoubleRepositories.airmanRepository as FakeAirmanRepository);
-  let allAirmen: AirmanModel[];
-
   const skill = {
     id: 1,
     airmanId: 2,
@@ -20,21 +13,26 @@ describe('CurrencyStore', () => {
     earnDate: moment(),
     expirationDate: moment()
   };
-
   let subject: CurrencyStore;
+  let repos: Partial<Repositories>;
 
-  beforeEach(async () => {
-    allAirmen = await airmanRepository.findBySiteId(siteId);
+  beforeEach(() => {
+    repos = {
+      airmanRepository: {
+        findBySiteId: jest.fn(),
+        saveSkill: jest.fn(),
+        saveAirman: jest.fn(),
+        deleteSkill: jest.fn(),
+        findOne: jest.fn(),
+      },
 
-    const refreshAirmen = {
-      refreshAirmen: jest.fn()
+      ripItemRepository: {
+        findBySelectedAirman: jest.fn(),
+        updateAirmanRipItems: jest.fn()
+      }
     };
 
-    const selectedSiteContainer = {
-      selectedSite: siteId
-    };
-
-    subject = new CurrencyStore(refreshAirmen, selectedSiteContainer, DoubleRepositories);
+    subject = new CurrencyStore(repos);
   });
 
   it('should open an skill form for create', () => {
@@ -48,13 +46,13 @@ describe('CurrencyStore', () => {
   it('should open an skill form for edit', () => {
     expect(subject.currencyChild).toBe(CurrencyChild.SkillList);
 
-    subject.openEditSkillForm(skill);
+    subject.openEditSkillForm();
 
     expect(subject.currencyChild).toBe(CurrencyChild.SkillForm);
   });
 
   it('should close the skill form', () => {
-    subject.openEditSkillForm(skill);
+    subject.openEditSkillForm();
     subject.closeSkillForm();
 
     expect(subject.currencyChild).toBe(CurrencyChild.SkillList);
@@ -64,10 +62,10 @@ describe('CurrencyStore', () => {
     const cert = AirmanCertificationModelFactory.build(1, 1);
     expect(subject.pendingDeleteSkill).toBeNull();
 
-    subject.setPendingDeleteSkill(cert);
+    subject.removeSkill(cert);
     expect(subject.pendingDeleteSkill).toBe(cert);
 
-    subject.setPendingDeleteSkill(null);
+    subject.cancelPendingDelete();
     expect(subject.pendingDeleteSkill).toBeNull();
   });
 
@@ -77,62 +75,32 @@ describe('CurrencyStore', () => {
   });
 
   describe('skill', () => {
-    it('should add a qualification to an airman', async () => {
-      const airman = allAirmen[0];
-      const qualLength = airman.qualifications.length;
-
-      await subject.addSkill({
-        id: null,
-        type: SkillType.Qualification,
-        airmanId: airman.id,
-        skillId: 100,
-        earnDate: moment(),
-        expirationDate: moment()
-      });
-
-      const updatedAirman = (await airmanRepository.findBySiteId(siteId))[0];
-      expect(updatedAirman.qualifications.length).toBeGreaterThan(qualLength);
+    it('should save a skill', async () => {
+      await subject.addSkill(skill);
+      expect(repos.airmanRepository!.saveSkill).toHaveBeenCalledWith(skill);
     });
 
-    it('should add a certification to an airman', async () => {
-      const airman = allAirmen[0];
-      const certLength = airman.certifications.length;
+    it('should delete a skill', async () => {
+      subject.removeSkill(skill);
+      await subject.executePendingDelete();
+      expect(repos.airmanRepository!.deleteSkill).toHaveBeenCalledWith(skill);
+    });
+  });
 
-      await subject.addSkill({
-        id: null,
-        type: SkillType.Certification,
-        airmanId: airman.id,
-        skillId: 100,
-        earnDate: moment(),
-        expirationDate: moment()
-      });
-
-      const updatedAirman = (await airmanRepository.findBySiteId(siteId))[0];
-      expect(updatedAirman.certifications.length).toBeGreaterThan(certLength);
+  describe('rip items', () => {
+    it('should set rip items for an airman', async () => {
+      await subject.setRipItemsForAirman(123);
+      expect(repos.ripItemRepository!.findBySelectedAirman).toHaveBeenCalledWith(123);
     });
 
-    it('should delete a qualification from the airman', async () => {
-      const airman = allAirmen[0];
-      const newSkill = {
-        id: null,
-        type: SkillType.Qualification,
-        airmanId: airman.id,
-        skillId: 100,
-        earnDate: moment(),
-        expirationDate: moment()
-      };
+    xit('should return a count of expired items', () => {
+      // FIXME
+      expect(subject.expiredItemCount).toBe(0);
+    });
 
-      await subject.addSkill(newSkill);
-
-      let updatedAirman = (await airmanRepository.findBySiteId(siteId))[0];
-      const qualLength = updatedAirman.qualifications.length;
-      const id = updatedAirman.qualifications.find((q: AirmanQualificationModel) => q.skillId === 100)!.id;
-      subject.setPendingDeleteSkill(Object.assign({}, newSkill, {id}));
-      await subject.removeSkill();
-
-      updatedAirman = (await airmanRepository.findBySiteId(siteId))[0];
-      expect(updatedAirman.qualifications.length).toBeLessThan(qualLength);
-      expect(subject.pendingDeleteSkill).toBeNull();
+    xit('should return a count of assigned items', () => {
+      // FIXME
+      expect(subject.assignedItemCount).toBe(0);
     });
   });
 });

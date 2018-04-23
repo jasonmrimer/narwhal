@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
-import { ProfileList, ProfileListStore } from './ProfileList';
+import { AdminStoreContract, ProfileList, ProfileStoreContract } from './ProfileList';
 import { ErrorResponse } from '../utils/HTTPClient';
 import { StyledDropdown } from '../widgets/Dropdown';
 
 describe('ProfileList', () => {
   let subject: ShallowWrapper;
-  let store: ProfileListStore;
+  let store: AdminStoreContract;
+  let profileStore: ProfileStoreContract;
 
   beforeEach(() => {
     store = {
-      hydrate: jest.fn(),
       profiles: [
         {id: 1, roleName: '', roleId: 1, classified: false, siteId: 1, siteName: '1', username: 'User1'},
         {id: 2, roleName: '', roleId: 1, classified: false, siteId: 1, siteName: '1', username: 'User2'}
@@ -24,12 +24,12 @@ describe('ProfileList', () => {
       ],
       setProfileRole: jest.fn(),
     };
-    subject = shallow(<ProfileList profile={store.profiles[0]} store={store}/>);
-  });
 
-  it('should hydrate the admin store on mount', async () => {
-    await (subject.instance() as ProfileList).componentDidMount();
-    expect(store.hydrate).toHaveBeenCalled();
+    profileStore = {
+      profile: store.profiles[0]
+    };
+
+    subject = shallow(<ProfileList adminStore={store} profileStore={profileStore}/>);
   });
 
   it('should display a list of users', () => {
@@ -54,7 +54,8 @@ describe('ProfileList', () => {
   it('should display an error', () => {
     store.hasError = true;
     store.error = new ErrorResponse('A Message');
-    subject = shallow(<ProfileList profile={store.profiles[0]} store={store}/>);
+    subject.instance().forceUpdate();
+    subject.update();
     expect(subject.find('.error').at(0).text()).toContain(store.error.message);
   });
 

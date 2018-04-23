@@ -1,62 +1,76 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { TrackerStore } from './stores/TrackerStore';
 import { StyledSidePanel } from './SidePanel';
 import { StyledLegend } from '../roster/Legend';
-import { UnfilteredValue } from '../widgets/models/FilterOptionModel';
 import { StyledLoadingOverlay } from '../widgets/LoadingOverlay';
 import { StyledRosterContainer } from '../roster/RosterContainer';
 import { StyledLocationFilters } from '../widgets/LocationFilters';
 import { StyledDeletePopup } from '../widgets/DeletePopup';
 import { ProfileModel } from '../profile/models/ProfileModel';
+import { AvailabilityStore } from '../availability/stores/AvailabilityStore';
+import { CurrencyStore } from '../currency/stores/CurrencyStore';
+import { LocationFilterStore } from '../widgets/stores/LocationFilterStore';
+import { SkillFormStore } from '../skills/stores/SkillFormStore';
+import { EventActions } from '../event/EventActions';
 
 interface Props {
-  trackerStore: TrackerStore;
+  trackerStore?: TrackerStore;
+  availabilityStore?: AvailabilityStore;
+  currencyStore?: CurrencyStore;
+  locationFilterStore?: LocationFilterStore;
+  skillFormStore?: SkillFormStore;
   profile: ProfileModel;
   className?: string;
 }
 
 @observer
 export class Tracker extends React.Component<Props> {
-  async componentDidMount() {
-    await this.props.trackerStore.hydrate(this.props.profile.siteId || UnfilteredValue);
-  }
-
   render() {
-    const {trackerStore, className} = this.props;
-    const {locationFilterStore, sidePanelStore} = trackerStore;
+    const {trackerStore, availabilityStore, currencyStore, locationFilterStore, skillFormStore, className} = this.props;
     return (
       <div className={className}>
-        {trackerStore.loading && <StyledLoadingOverlay/>}
+        {trackerStore!.loading && <StyledLoadingOverlay/>}
         <div className="main">
-          <StyledLocationFilters locationFilterStore={locationFilterStore}/>
+          <StyledLocationFilters
+            refreshAirmen={async () => {
+              const siteId = this.props.locationFilterStore!.selectedSite;
+              await trackerStore!.refreshAllAirmen(siteId);
+            }}
+          />
           <div>
             <StyledLegend/>
           </div>
-          <StyledRosterContainer trackerStore={trackerStore}/>
+          <StyledRosterContainer/>
         </div>
         {
-          !trackerStore.selectedAirman.isEmpty &&
-          <StyledSidePanel
-            trackerStore={trackerStore}
-            sidePanelStore={sidePanelStore}
+          !trackerStore!.selectedAirman.isEmpty &&
+          <StyledSidePanel/>
+        }
+        {
+          availabilityStore!.pendingDeleteEvent &&
+          <StyledDeletePopup
+            item={availabilityStore!.pendingDeleteEvent!}
+            onConfirm={async () => await EventActions.executePendingDeleteEvent(trackerStore!.selectedAirman.id)}
+            onCancel={availabilityStore!.cancelPendingDelete}
           />
         }
         {
-          trackerStore.availabilityStore.pendingDeleteEvent &&
+          currencyStore!.pendingDeleteSkill &&
           <StyledDeletePopup
-            item={trackerStore.availabilityStore.pendingDeleteEvent}
-            onConfirm={trackerStore.availabilityStore.executePendingDelete}
-            onCancel={trackerStore.availabilityStore.cancelPendingDelete}
-          />
-        }
-        {
-          trackerStore.currencyStore.pendingDeleteSkill &&
-          <StyledDeletePopup
-            item={trackerStore.currencyStore.pendingDeleteSkill}
-            onConfirm={trackerStore.currencyStore.removeSkill}
-            onCancel={trackerStore.currencyStore.setPendingDeleteSkill}
+            item={currencyStore!.pendingDeleteSkill!}
+            onConfirm={async () => {
+              try {
+                await currencyStore!.executePendingDelete();
+                await trackerStore!.refreshAirmen(locationFilterStore!.selectedSite, trackerStore!.selectedAirman.id);
+                skillFormStore!.close();
+                currencyStore!.closeSkillForm();
+              } catch (e) {
+                skillFormStore!.setErrors(e);
+              }
+            }}
+            onCancel={currencyStore!.cancelPendingDelete}
           />
         }
       </div>
@@ -64,21 +78,28 @@ export class Tracker extends React.Component<Props> {
   }
 }
 
-export const StyledTracker = styled(Tracker)`
-  margin-left: 3rem;
-  padding: 0.5rem;
-  display: flex;
-  
-  .main {
-    width: 1400px;
+export const StyledTracker =
+  inject(
+    'trackerStore',
+    'availabilityStore',
+    'currencyStore',
+    'locationFilterStore',
+    'skillFormStore'
+  )(styled(Tracker)`
+    margin-left: 3rem;
+    padding: 0.5rem;
     display: flex;
-    flex-direction: column;
-  }
   
-  .filters {
-    width: 50%;
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
+    .main {
+      width: 1400px;
+      display: flex;
+      flex-direction: column;
+    }
+  
+    .filters {
+      width: 50%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
   }
- `;
+ `);

@@ -1,147 +1,50 @@
-import { mount, ReactWrapper } from 'enzyme';
+import { shallow, ShallowWrapper } from 'enzyme';
 import * as React from 'react';
 
-import { App, ClassificationBanner } from './App';
-import { MemoryRouter } from 'react-router-dom';
-import { Tracker } from '../tracker/Tracker';
-import { Dashboard } from '../dashboard/Dashboard';
-import { forIt, makeFakeTrackerStore } from '../utils/testUtils';
-import { DashboardStore } from '../dashboard/stores/DashboardStore';
-import { MissionPlanner } from '../crew/MissionPlanner';
+import { App, StyledClassificationBanner, WrappedRoutes } from './App';
 import { StyledProfileSitePicker } from '../profile/ProfileSitePicker';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
-import { ThemeProvider } from 'styled-components';
 import { DoubleRepositories } from '../utils/Repositories';
-import { Theme } from '../themes/default';
-import { MissionPlannerStore } from '../crew/stores/MissionPlannerStore';
-import { ProfileModel } from '../profile/models/ProfileModel';
-import { AdminStore } from '../admin/stores/AdminStore';
-import { SiteManagerStore } from '../site-manager/stores/SiteManagerStore';
-import { AirmanProfileManagerStore } from '../site-manager/stores/AirmanProfileManagerStore';
 
 describe('App', () => {
-  let mountedSubject: ReactWrapper;
+  let subject: ShallowWrapper;
+  let profileStore: ProfileSitePickerStore;
 
   describe('ProfileSitePicker', () => {
-    let profileStore: ProfileSitePickerStore;
-
-    beforeEach(async () => {
-      const trackerStore = await makeFakeTrackerStore();
-      const dashboardStore = new DashboardStore(DoubleRepositories);
-      const missionPlannerStore = new MissionPlannerStore(DoubleRepositories, profileStore);
-      const adminStore = new AdminStore(DoubleRepositories.profileRepository);
-      const siteManagerStore = new SiteManagerStore(DoubleRepositories);
-      const airmanProfileManagerStore = new AirmanProfileManagerStore(DoubleRepositories.airmanRepository);
-
-      const profileRepo = {
-        findOne: () => {
-          return Promise.resolve({
-            id: 1,
-            username: 'FontFace',
-            siteId: null,
-            role: 'ADMIN',
-            classified: false
-          });
-        },
-        updateSite: (siteId: number) => {
-          return Promise.resolve({
-            id: 1,
-            username: 'FontFace',
-            siteId: siteId,
-            role: 'ADMIN',
-            classified: false
-          });
-        },
-
-        save: (profile: ProfileModel) => {
-          return Promise.resolve(profile);
-        }
-      };
-
-      const repositories = Object.assign({}, DoubleRepositories, {profileRepository: profileRepo});
-      profileStore = new ProfileSitePickerStore(repositories);
-      await profileStore.hydrate();
-
-      mountedSubject = mount(
-        <ThemeProvider theme={Theme}>
-          <MemoryRouter initialEntries={['/']}>
-            <App
-              trackerStore={trackerStore}
-              profileStore={profileStore}
-              dashboardStore={dashboardStore}
-              missionPlannerStore={missionPlannerStore}
-              adminStore={adminStore}
-              siteManagerStore={siteManagerStore}
-              airmanProfileManagerStore={airmanProfileManagerStore}
-            />
-          </MemoryRouter>
-        </ThemeProvider>
-      );
-      await forIt();
-      mountedSubject.update();
+    profileStore = new ProfileSitePickerStore(DoubleRepositories);
+    profileStore.hydrate([], {
+      id: 1,
+      roleId: 1,
+      username: 'user',
+      siteId: null,
+      siteName: 'DGS',
+      roleName: 'role',
+      classified: false
     });
 
+    subject = shallow(<App repositories={DoubleRepositories} profileStore={profileStore}/>);
+
     it('renders the correct classification banner', () => {
-      const classifiedBanner = 'Dynamic Classification Highest Possible Classification: TS//SI//REL TO USA, FVEY';
-      expect(mountedSubject.find(ClassificationBanner).text()).toBe('Not Actual Classification. Prototype Only');
-      profileStore.profile!.classified = true;
-      mountedSubject.update();
-      expect(mountedSubject.find(ClassificationBanner).text()).toBe(classifiedBanner);
+      expect(subject.find(StyledClassificationBanner).prop('classified')).toBeFalsy();
     });
 
     it('renders the ProfileSitePicker component when user profile has no site', () => {
-      expect(mountedSubject.find(StyledProfileSitePicker).exists()).toBeTruthy();
+      expect(subject.find(StyledProfileSitePicker).exists()).toBeTruthy();
     });
 
     it('should render the Tracker page after saving a profile', async () => {
-      profileStore.setPendingSite(profileStore.dgsCoreSites[0]);
-      await profileStore.savePendingSite();
-      mountedSubject.update();
-      expect(mountedSubject.find(Tracker).exists()).toBeTruthy();
+      profileStore.hydrate([], {
+        id: 1,
+        roleId: 1,
+        username: 'user',
+        siteId: 1,
+        siteName: 'DGS',
+        roleName: 'role',
+        classified: false
+      });
+      subject.instance().forceUpdate();
+      subject.update();
+      expect(subject.find(WrappedRoutes).exists()).toBeTruthy();
     });
   });
-
-  it('renders the Tracker component when the route is /', async () => {
-    mountedSubject = await createMountedPage('/');
-    expect(mountedSubject.find(Tracker).exists()).toBeTruthy();
-  });
-
-  it('renders the Dashboard component when the route is /dashboard', async () => {
-    mountedSubject = await createMountedPage('/dashboard');
-    expect(mountedSubject.find(Dashboard).exists()).toBeTruthy();
-  });
-
-  it('renders the MissionPlanner component when the route is /crew', async () => {
-    mountedSubject = await createMountedPage('/dashboard/crew/1');
-    expect(mountedSubject.find(MissionPlanner).exists()).toBeTruthy();
-  });
 });
-
-const createMountedPage = async (entry: string) => {
-  const trackerStore = await makeFakeTrackerStore();
-  const dashboardStore = new DashboardStore(DoubleRepositories);
-  const profileStore = new ProfileSitePickerStore(DoubleRepositories);
-  const missionPlannerStore = new MissionPlannerStore(DoubleRepositories, profileStore);
-  const adminStore = new AdminStore(DoubleRepositories.profileRepository);
-  const siteManagerStore = new SiteManagerStore(DoubleRepositories);
-  const airmanProfileManagerStore = new AirmanProfileManagerStore(DoubleRepositories.airmanRepository);
-
-  const mountedRouter = mount(
-    <ThemeProvider theme={Theme}>
-      <MemoryRouter initialEntries={[entry]}>
-        <App
-          trackerStore={trackerStore}
-          profileStore={profileStore}
-          dashboardStore={dashboardStore}
-          missionPlannerStore={missionPlannerStore}
-          adminStore={adminStore}
-          siteManagerStore={siteManagerStore}
-          airmanProfileManagerStore={airmanProfileManagerStore}
-        />
-      </MemoryRouter>
-    </ThemeProvider>
-  );
-  await forIt();
-  mountedRouter.update();
-  return mountedRouter;
-};

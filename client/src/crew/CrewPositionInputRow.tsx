@@ -3,12 +3,17 @@ import styled from 'styled-components';
 import { StyledCheckbox } from '../widgets/Checkbox';
 import { StyledTextInput } from '../widgets/TextInput';
 import { StyledSingleTypeahead } from '../widgets/SingleTypeahead';
-import { CrewStore } from './stores/CrewStore';
 import { FilterOption } from '../widgets/models/FilterOptionModel';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
+import { NewEntry } from './stores/CrewStore';
+
+export interface CrewStoreContract {
+  airmenOptions: FilterOption[];
+  newEntry: NewEntry;
+}
 
 interface Props {
-  crewStore: CrewStore;
+  crewStore?: CrewStoreContract;
   handleNewEntryCheck: (e: any) => void;
   handleNewEntryChange: (e: any) => void;
   handleTypeahead: (opt: FilterOption) => void;
@@ -16,8 +21,9 @@ interface Props {
 }
 
 export const CrewPositionInputRow = observer((props: Props) => {
-  const selectedAirmanOption = props.crewStore.airmenOptions.find(opt => {
-    return opt.label === props.crewStore.newEntry.airmanName;
+  const {airmenOptions, newEntry} = props.crewStore!;
+  const selectedAirmanOption = airmenOptions.find(opt => {
+    return opt.label === newEntry.airmanName;
   });
 
   return (
@@ -28,7 +34,7 @@ export const CrewPositionInputRow = observer((props: Props) => {
             id={`critical-new-entry`}
             name="critical"
             onChange={props.handleNewEntryCheck}
-            checked={props.crewStore.newEntry.critical}
+            checked={newEntry.critical}
           />
         </label>
       </span>
@@ -36,13 +42,13 @@ export const CrewPositionInputRow = observer((props: Props) => {
         <StyledTextInput
           name="title"
           onChange={props.handleNewEntryChange}
-          value={props.crewStore.newEntry.title}
+          value={newEntry.title}
         />
       </span>
       <span className="member">
         <StyledSingleTypeahead
           className="airmanSelect"
-          options={props.crewStore.airmenOptions}
+          options={airmenOptions}
           onChange={props.handleTypeahead}
           selected={selectedAirmanOption ? selectedAirmanOption : {value: '', label: ''}}
           clearButton={!!selectedAirmanOption}
@@ -52,7 +58,7 @@ export const CrewPositionInputRow = observer((props: Props) => {
   );
 });
 
-export const StyledCrewPositionInputRow = styled(CrewPositionInputRow)`
+export const StyledCrewPositionInputRow = inject('crewStore')(styled(CrewPositionInputRow)`
   display: flex;
   padding: 0.75rem;
   
@@ -87,4 +93,4 @@ export const StyledCrewPositionInputRow = styled(CrewPositionInputRow)`
   .position {
     width: 40%;
   }
-`;
+`);

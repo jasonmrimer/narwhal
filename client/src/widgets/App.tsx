@@ -1,55 +1,48 @@
 import * as React from 'react';
-import { TrackerStore } from '../tracker/stores/TrackerStore';
-import { DashboardStore } from '../dashboard/stores/DashboardStore';
 import styled from 'styled-components';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { StyledProfileSitePicker } from '../profile/ProfileSitePicker';
 import { Routes } from './Routes';
-import { MissionPlannerStore } from '../crew/stores/MissionPlannerStore';
-import { AdminStore } from '../admin/stores/AdminStore';
-import { SiteManagerStore } from '../site-manager/stores/SiteManagerStore';
-import { AirmanProfileManagerStore } from '../site-manager/stores/AirmanProfileManagerStore';
+import { withRouter } from 'react-router';
+import { AppActions } from './AppActions';
+import { Repositories } from '../utils/Repositories';
 
 interface Props {
-  dashboardStore: DashboardStore;
-  trackerStore: TrackerStore;
-  missionPlannerStore: MissionPlannerStore;
-  profileStore: ProfileSitePickerStore;
-  adminStore: AdminStore;
-  siteManagerStore: SiteManagerStore;
-  airmanProfileManagerStore: AirmanProfileManagerStore;
+  repositories: Repositories;
+  profileStore?: ProfileSitePickerStore;
 }
+
+export const WrappedRoutes = withRouter((Routes as any));
 
 @observer
 export class App extends React.Component<Props> {
   async componentDidMount() {
-    await this.props.profileStore.hydrate();
+    await AppActions.getSiteAndProfile(this.props.repositories);
   }
 
   render() {
-    return this.props.profileStore.profile ?
+    const {profileStore} = this.props;
+    return profileStore!.profile ?
       (
         <div>
           <div id="classification-banner" style={{marginBottom: '7rem'}}>
-            <StyledClassificationBanner classified={this.props.profileStore.profile!.classified}/>
+            <StyledClassificationBanner classified={profileStore!.profile!.classified}/>
             <StyledAuthorizationBanner/>
           </div>
           <div>
             {
-              this.profileHasSite() ?
-                <Routes {...this.props}/> :
-                <StyledProfileSitePicker profileStore={this.props.profileStore}/>
+              profileStore!.profile!.siteId != null ?
+                <WrappedRoutes/> :
+                <StyledProfileSitePicker/>
             }
           </div>
         </div>
       ) : null;
   }
-
-  private profileHasSite() {
-    return this.props.profileStore.profile!.siteId != null;
-  }
 }
+
+export const InjectedApp = inject('profileStore')(App);
 
 export const ClassificationBanner = (props: { classified: boolean, className?: string }) => {
   return (
@@ -62,7 +55,7 @@ export const ClassificationBanner = (props: { classified: boolean, className?: s
   );
 };
 
-const StyledClassificationBanner = styled(ClassificationBanner)`
+export const StyledClassificationBanner = styled(ClassificationBanner)`
   background: red;
   text-align: center;
   position: fixed;

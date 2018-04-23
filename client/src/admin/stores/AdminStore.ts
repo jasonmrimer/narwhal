@@ -1,10 +1,10 @@
 import { ProfileRepository } from '../../profile/repositories/ProfileRepository';
 import { action, computed, observable } from 'mobx';
 import { ProfileModel } from '../../profile/models/ProfileModel';
-import { ProfileListStore } from '../ProfileList';
+import { AdminStoreContract } from '../ProfileList';
 import { ErrorResponse } from '../../utils/HTTPClient';
 
-export class AdminStore implements ProfileListStore {
+export class AdminStore implements AdminStoreContract {
   @observable private _profiles: ProfileModel[] = [];
   @observable private _error: ErrorResponse | null = null;
   @observable private _roles: { id: number; name: string }[] = [];
@@ -13,12 +13,7 @@ export class AdminStore implements ProfileListStore {
   }
 
   @action.bound
-  async hydrate() {
-    const [profilesResp, rolesResp] = await Promise.all([
-      this.profileRepository.findAll(),
-      this.profileRepository.findAllRoles()
-    ]);
-
+  hydrate(profilesResp: ProfileModel[] | ErrorResponse, rolesResp: any) {
     if (profilesResp instanceof ErrorResponse) {
       this._error = profilesResp;
     } else {

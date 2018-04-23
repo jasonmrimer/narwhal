@@ -7,15 +7,6 @@ import { QualificationModel } from '../models/QualificationModel';
 import { CertificationModel } from '../models/CertificationModel';
 import { filterOptionsBy } from '../../utils/eventUtil';
 
-export interface SiteIdContainer {
-  selectedSite: number;
-}
-
-export interface SkillActions {
-  addSkill: (skill: Skill) => void;
-  setPendingDeleteSkill: (skill: Skill) => void;
-}
-
 interface State {
   skillType: string;
   skillId: string;
@@ -26,8 +17,9 @@ interface State {
 export class SkillFormStore extends FormStore<Skill, State> {
   @observable private _certifications: CertificationModel[] = [];
   @observable private _qualifications: QualificationModel[] = [];
+  private _siteId: number;
 
-  constructor(private siteIdContainer: SiteIdContainer, private skillActions: SkillActions) {
+  constructor() {
     super();
     this._state = {
       skillType: '',
@@ -38,9 +30,10 @@ export class SkillFormStore extends FormStore<Skill, State> {
   }
 
   @action.bound
-  hydrate(certifications: CertificationModel[], qualifications: QualificationModel[]) {
+  hydrate(certifications: CertificationModel[], qualifications: QualificationModel[], siteId: number) {
     this._certifications = certifications;
     this._qualifications = qualifications;
+    this._siteId = siteId;
   }
 
   @action.bound
@@ -75,8 +68,8 @@ export class SkillFormStore extends FormStore<Skill, State> {
     };
   }
 
-  async addModel(airmanId: number) {
-    const skill = {
+  addModel(airmanId: number) {
+    return {
       type: this._state.skillType as SkillType,
       airmanId: airmanId,
       skillId: Number(this._state.skillId),
@@ -84,13 +77,6 @@ export class SkillFormStore extends FormStore<Skill, State> {
       expirationDate: moment(this._state.expirationDate),
       id: this.model ? this.model.id : null,
     };
-    await this.skillActions.addSkill(skill);
-  }
-
-  removeModel(): void {
-    if (this.model != null) {
-      this.skillActions.setPendingDeleteSkill(this.model);
-    }
   }
 
   @computed
@@ -102,7 +88,7 @@ export class SkillFormStore extends FormStore<Skill, State> {
 
   @computed
   get certificationOptions() {
-    return filterOptionsBy(this._certifications, this.siteIdContainer.selectedSite);
+    return filterOptionsBy(this._certifications, this._siteId);
   }
 
   private setDefaultSkillSelection(value: string) {

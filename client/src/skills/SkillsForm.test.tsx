@@ -1,46 +1,43 @@
 import * as React from 'react';
 import { mount, ReactWrapper, shallow, ShallowWrapper } from 'enzyme';
 import { eventStub } from '../utils/testUtils';
-import { SkillsForm } from './SkillsForm';
+import { SkillsForm, StyledSkillsForm } from './SkillsForm';
 import * as moment from 'moment';
-import { DatePicker } from '../widgets/DatePicker';
 import { SkillType } from './models/SkillType';
 import { StyledForm } from '../widgets/Form';
-import { SkillActions, SkillFormStore } from './stores/SkillFormStore';
+import { SkillFormStore } from './stores/SkillFormStore';
 import { StyledButton } from '../widgets/Button';
-import Mock = jest.Mock;
+import { TrackerStore } from '../tracker/stores/TrackerStore';
+import { DoubleRepositories } from '../utils/Repositories';
+import { SkillActions } from './SkillActions';
+import { Provider } from 'mobx-react';
+import { CurrencyStore } from '../currency/stores/CurrencyStore';
+import { LocationFilterStore } from '../widgets/stores/LocationFilterStore';
+import { DatePicker } from '../widgets/DatePicker';
 
 /* tslint:disable:no-empty*/
 describe('SkillsForm', () => {
-  let skillActions: SkillActions;
   let subject: ShallowWrapper;
   let mountedSubject: ReactWrapper;
-  let setLoading = () => {};
-
+  let trackerStore: TrackerStore;
+  let currencyStore: CurrencyStore;
   const earnDate = moment('2018-02-01');
   const expirationDate = moment('2019-02-01');
 
   beforeEach(() => {
-    const selectedSiteContainer = {
-      selectedSite: 1,
-    };
-
-    skillActions = {
-      addSkill: jest.fn(),
-      setPendingDeleteSkill: jest.fn(),
-    };
-
-    const store = new SkillFormStore(selectedSiteContainer, skillActions);
+    const store = new SkillFormStore();
+    trackerStore = new TrackerStore(DoubleRepositories);
+    SkillActions.submitSkill = jest.fn();
     subject = shallow(
       <SkillsForm
         airmanId={1}
         skillFormStore={store}
-        setLoading={setLoading}
+        trackerStore={trackerStore}
       />);
   });
 
   it('should render a Form', () => {
-    expect(subject.find(StyledForm).prop('setLoading')).toBe(setLoading);
+    expect(subject.find(StyledForm).prop('setLoading')).toBe(trackerStore!.setLoading);
   });
 
   it('calls handleSubmit with a Qualification on submission', () => {
@@ -51,37 +48,11 @@ describe('SkillsForm', () => {
     skillForm.handleChange({target: {name: 'expirationDate', value: expirationDate}});
 
     subject.find(StyledForm).simulate('submit', eventStub);
-
-    expect(skillActions.addSkill).toHaveBeenCalledWith({
-      id: null,
-      type: SkillType.Qualification,
-      airmanId: 1,
-      skillId: 1,
-      earnDate: earnDate,
-      expirationDate: expirationDate
-    });
-  });
-
-  it('calls handleSubmit with a Certification on submission', () => {
-    const skillForm = (subject.instance() as SkillsForm);
-    skillForm.handleChange({target: {name: 'skillType', value: SkillType.Certification}});
-    skillForm.handleChange({target: {name: 'skillId', value: 1}});
-    skillForm.handleChange({target: {name: 'earnDate', value: earnDate}});
-    skillForm.handleChange({target: {name: 'expirationDate', value: expirationDate}});
-
-    subject.find(StyledForm).simulate('submit', eventStub);
-
-    expect(skillActions.addSkill).toHaveBeenCalledWith({
-      id: null,
-      type: SkillType.Certification,
-      airmanId: 1,
-      skillId: 1,
-      earnDate: earnDate,
-      expirationDate: expirationDate
-    });
+    expect(SkillActions.submitSkill).toHaveBeenCalled();
   });
 
   describe('rendering with an existing skill', () => {
+
     const skill = {
       id: 12345,
       type: SkillType.Certification,
@@ -92,24 +63,22 @@ describe('SkillsForm', () => {
     };
 
     beforeEach(() => {
-      const selectedSiteContatiner = {
-        selectedSite: 1,
-      };
 
-      skillActions = {
-        addSkill: jest.fn(),
-        setPendingDeleteSkill: jest.fn()
-      };
-
-      const store = new SkillFormStore(selectedSiteContatiner, skillActions);
+      const store = new SkillFormStore();
       store.open(skill);
-
+      currencyStore = new CurrencyStore(DoubleRepositories);
+      const locationFilterStore = new LocationFilterStore();
+      SkillActions.deleteSkill = jest.fn();
       mountedSubject = mount(
-        <SkillsForm
-          airmanId={1}
+        <Provider
           skillFormStore={store}
-          setLoading={setLoading}
-        />);
+          trackerStore={trackerStore}
+          currencyStore={currencyStore}
+          locationFilterStore={locationFilterStore}
+        >
+          <StyledSkillsForm airmanId={1}/>
+        </Provider>
+      );
     });
 
     it('should only allow the edit of the expiration date', () => {
@@ -121,15 +90,12 @@ describe('SkillsForm', () => {
       expect(mountedSubject.find(DatePicker).at(1).prop('disabled')).toBeFalsy();
 
       mountedSubject.find('form').simulate('submit', eventStub);
-
-      expect(skillActions.addSkill).toHaveBeenCalled();
-      expect((skillActions.addSkill as Mock).mock.calls[0][0].id).toBeDefined();
-      expect((skillActions.addSkill as Mock).mock.calls[0][0].id).toBe(skill.id);
+      expect(SkillActions.submitSkill).toHaveBeenCalled();
     });
 
     it('calls handleDelete when clicking the delete button', () => {
       mountedSubject.find(StyledButton).simulate('click');
-      expect(skillActions.setPendingDeleteSkill).toHaveBeenCalledWith(skill);
+      expect(SkillActions.deleteSkill).toHaveBeenCalled();
     });
   });
 });

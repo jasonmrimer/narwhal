@@ -1,19 +1,44 @@
 import * as React from 'react';
 import { StyledDropdown } from './Dropdown';
 import { TopLevelFilter } from './Filter';
-import { LocationFilterStore } from './stores/LocationFilterStore';
 import styled from 'styled-components';
 import { caret } from '../utils/StyleUtils';
 import * as classNames from 'classnames';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
+import { FilterOption } from './models/FilterOptionModel';
+
+export interface LocationFilterStoreContract {
+  siteOptions: FilterOption[];
+  selectedSite: number;
+  setSelectedSite: (id: number) => void;
+  selectedSquadron: number;
+  setSelectedSquadron: (id: number) => void;
+  squadronOptions: FilterOption[];
+  selectedFlight: number;
+  setSelectedFlight: (id: number) => void;
+  flightOptions: FilterOption[];
+}
 
 interface Props {
-  locationFilterStore: LocationFilterStore;
+  locationFilterStore?: LocationFilterStoreContract;
+  refreshAirmen: () => Promise<void>;
   className?: string;
 }
 
 export const LocationFilters = observer((props: Props) => {
   const {locationFilterStore} = props;
+  const {
+    siteOptions,
+    selectedSite,
+    setSelectedSite,
+    selectedSquadron,
+    setSelectedSquadron,
+    squadronOptions,
+    selectedFlight,
+    setSelectedFlight,
+    flightOptions
+  } = locationFilterStore!;
+
   return (
     <div className={classNames('filters', props.className)}>
       <div id="site-filter-container">
@@ -22,10 +47,11 @@ export const LocationFilters = observer((props: Props) => {
         <StyledDropdown
           id="site-filter"
           name="siteId"
-          options={locationFilterStore.siteOptions}
-          value={locationFilterStore.selectedSite}
-          onChange={async (e: any) => {
-            await locationFilterStore.setSelectedSite(Number(e.target.value));
+          options={siteOptions}
+          value={selectedSite}
+          onChange={(e: any) => {
+            setSelectedSite(Number(e.target.value));
+            props.refreshAirmen();
           }}
         />
       </div>
@@ -33,25 +59,25 @@ export const LocationFilters = observer((props: Props) => {
         id="squadron-filter"
         label="SQUADRON"
         unfilteredOptionLabel="All Squadrons"
-        value={locationFilterStore.selectedSquadron}
-        callback={locationFilterStore.setSelectedSquadron}
-        options={locationFilterStore.squadronOptions}
+        value={selectedSquadron}
+        callback={setSelectedSquadron}
+        options={squadronOptions}
         notification="Please select a site first."
       />
       <TopLevelFilter
         id="flight-filter"
         label="FLIGHT"
         unfilteredOptionLabel="All Flights"
-        value={locationFilterStore.selectedFlight}
-        callback={locationFilterStore.setSelectedFlight}
-        options={locationFilterStore.flightOptions}
+        value={selectedFlight}
+        callback={setSelectedFlight}
+        options={flightOptions}
         notification="Please select a squadron first."
       />
     </div>
   );
 });
 
-export const StyledLocationFilters = styled(LocationFilters)`
+export const StyledLocationFilters = inject('locationFilterStore')(styled(LocationFilters)`
   .filters {
     &:after {
       content: "."; 
@@ -98,4 +124,4 @@ export const StyledLocationFilters = styled(LocationFilters)`
     border-radius: 0;
     cursor: pointer;
   }
-`;
+`);

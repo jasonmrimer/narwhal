@@ -1,42 +1,67 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { StyledLoadingOverlay } from '../widgets/LoadingOverlay';
 import { StyledCrew } from './Crew';
 import { StyledMissionPlannerRosterContainer } from './MissionPlannerRosterContainer';
-import { MissionPlannerStore } from './stores/MissionPlannerStore';
 import { StyledLocationFilters } from '../widgets/LocationFilters';
 import { StyledPrintableMissionPlanner } from './PrintableMissionPlanner';
 import { StyledSubmitButton } from '../widgets/SubmitButton';
 import { StyledForm } from '../widgets/Form';
 import { StyledButton } from '../widgets/Button';
 import { StyledCrewStatus } from '../widgets/CrewStatus';
+import { CrewModel } from './models/CrewModel';
 import { StyledNavigationBackButton } from '../widgets/NavigationBackButton';
 
+export interface MissionPlannerStoreContract {
+  refreshAllAirmen: (siteId: number) => Promise<void>;
+  refreshAllEvents: (siteId: number) => Promise<void>;
+  loading: boolean;
+  setLoading: (loading: boolean) => void;
+}
+
+export interface LocationFilterStoreContract {
+  selectedSite: number;
+}
+
+export interface CrewStoreContract {
+  save: () => Promise<void>;
+  crew: CrewModel;
+}
+
 interface Props {
-  crewId: number;
-  missionPlannerStore: MissionPlannerStore;
+  missionPlannerStore?: MissionPlannerStoreContract;
+  crewStore?: CrewStoreContract;
+  locationFilterStore?: LocationFilterStoreContract;
   className?: string;
 }
 
 @observer
 export class MissionPlanner extends React.Component<Props> {
-  async componentDidMount() {
-    await this.props.missionPlannerStore.hydrate(this.props.crewId);
+  refreshAirman = async () => {
+    const {missionPlannerStore, locationFilterStore} = this.props;
+    await missionPlannerStore!.refreshAllAirmen(locationFilterStore!.selectedSite);
+  }
+
+  submit = async (e: any) => {
+    const {missionPlannerStore, locationFilterStore, crewStore} = this.props;
+    e.preventDefault();
+    await crewStore!.save();
+    await missionPlannerStore!.refreshAllEvents(locationFilterStore!.selectedSite);
   }
 
   render() {
-    const {missionPlannerStore} = this.props;
-    const crew = missionPlannerStore.crewStore.crew;
 
-    if (crew == null) {
+    const {missionPlannerStore, crewStore} = this.props;
+    const crew = crewStore!.crew;
+    if (!crew) {
       return null;
     }
 
     return (
       <React.Fragment>
         <div className={this.props.className}>
-          {missionPlannerStore.loading && <StyledLoadingOverlay/>}
+          {missionPlannerStore!.loading && <StyledLoadingOverlay/>}
           <StyledNavigationBackButton text="Back to Availability Roster" location="/"/>
           <div className="mission-details">
             <div className="mission-status">
@@ -54,11 +79,8 @@ export class MissionPlanner extends React.Component<Props> {
             }
           </div>
           <StyledForm
-            onSubmit={async (e) => {
-              e.preventDefault();
-              await this.props.missionPlannerStore.crewStore.save();
-            }}
-            setLoading={missionPlannerStore.setLoading}
+            onSubmit={this.submit}
+            setLoading={missionPlannerStore!.setLoading}
           >
             <div className="mission-header">
               <StyledSubmitButton
@@ -66,30 +88,27 @@ export class MissionPlanner extends React.Component<Props> {
               />
               <StyledButton
                 text="PRINT"
-                onClick={window.print}
+                onClick={(window as any).print}
               />
-              <StyledLocationFilters
-                locationFilterStore={missionPlannerStore.locationFilterStore}
-              />
+              <StyledLocationFilters refreshAirmen={this.refreshAirman}/>
             </div>
             <div className="mission-planner">
-              <StyledCrew
-                crewStore={missionPlannerStore.crewStore}
-                className="crew-list"
-              />
-              <StyledMissionPlannerRosterContainer
-                missionPlannerStore={missionPlannerStore}
-              />
+              <StyledCrew className="crew-list"/>
+              <StyledMissionPlannerRosterContainer/>
             </div>
           </StyledForm>
         </div>
-        <StyledPrintableMissionPlanner key="1" crew={crew}/>
+        <StyledPrintableMissionPlanner crew={crew}/>
       </React.Fragment>
     );
   }
 }
 
-export const StyledMissionPlanner = styled(MissionPlanner)`
+export const StyledMissionPlanner = inject(
+  'missionPlannerStore',
+  'locationFilterStore',
+  'crewStore',
+)(styled(MissionPlanner)`
   padding: 0.5rem;
   margin-left: 3rem;
   width: 1698px;
@@ -171,4 +190,4 @@ export const StyledMissionPlanner = styled(MissionPlanner)`
     margin-top: 1rem;
     font-size: 0.75rem;
   }
-`;
+`);

@@ -1,27 +1,54 @@
 import * as React from 'react';
-import { MissionPlannerRoster, StyledRow, StyledSubHeaderRow } from './MissionPlannerRoster';
+import {
+  CrewStoreContract,
+  LocationFilterStoreContract,
+  MissionPlannerRoster,
+  MissionPlannerStoreContract,
+  RosterHeaderStoreContract,
+  StyledRow,
+  StyledSubHeaderRow
+} from './MissionPlannerRoster';
 import { mount, ReactWrapper } from 'enzyme';
-import { FakeAirmanRepository } from '../airman/repositories/doubles/FakeAirmanRepository';
-import { MissionModelFactory } from '../mission/factories/MissionModelFactory';
+import { CrewModelFactory } from './factories/CrewModelFactory';
+import { AirmanModel } from '../airman/models/AirmanModel';
 
 describe('MissionPlannerRoster', () => {
   let subject: ReactWrapper;
-  const airmanRepository = new FakeAirmanRepository();
+  let missionPlannerStore: MissionPlannerStoreContract;
+  let crewStore: CrewStoreContract;
+  let locationFilterStore: LocationFilterStoreContract;
+  let rosterHeaderStore: RosterHeaderStoreContract;
 
   beforeEach(async () => {
-    const airmen = await airmanRepository.findBySiteId(14);
+    missionPlannerStore = {
+      availableAirmen: [new AirmanModel(1, 1, 1, 1, 'First', 'Last', [], [])],
+      unavailableAirmen: []
+    };
+
+    crewStore = {
+      crew: CrewModelFactory.build(1),
+    };
+
+    locationFilterStore = {
+      filterAirmen: (airmen: AirmanModel[]) => airmen,
+    };
+
+    rosterHeaderStore = {
+      filterAirmen: (airmen: AirmanModel[]) => airmen,
+    };
 
     subject = mount(
       <MissionPlannerRoster
-        availableAirmen={airmen.slice(0, 5)}
-        unavailableAirmen={airmen.slice(5)}
-        mission={MissionModelFactory.build()}
+        missionPlannerStore={missionPlannerStore}
+        crewStore={crewStore}
+        locationFilterStore={locationFilterStore}
+        rosterHeaderStore={rosterHeaderStore}
       />
     );
   });
 
   it('should render a row for each airman', () => {
-    expect(subject.find(StyledRow).length).toBe(10);
+    expect(subject.find(StyledRow).length).toBe(1);
   });
 
   it('should render a header row available and unavailable', () => {

@@ -1,4 +1,3 @@
-import { EventActions } from './EventActions';
 import { EventModel, EventType } from '../models/EventModel';
 import { EventModelFactory } from '../factories/EventModelFactory';
 import { MissionFormStore } from './MissionFormStore';
@@ -7,7 +6,6 @@ import { MissionModel } from '../../mission/models/MissionModel';
 
 describe('MissionFormStore', () => {
   const airmanId = 123;
-  let eventActions: EventActions;
   let missions: MissionModel[];
   let subject: MissionFormStore;
   let event: EventModel;
@@ -16,14 +14,9 @@ describe('MissionFormStore', () => {
     event = EventModelFactory.build();
     event.type = EventType.Mission;
 
-    eventActions = {
-      addEvent: jest.fn(),
-      removeEvent: jest.fn()
-    };
-
     missions = await new MissionRepositoryStub().findAll();
 
-    subject = new MissionFormStore(eventActions);
+    subject = new MissionFormStore();
     subject.hydrate(missions);
   });
 
@@ -73,7 +66,6 @@ describe('MissionFormStore', () => {
   it('can add an event', () => {
     const selectedMission = subject.missions[1];
     subject.setState('id', String(selectedMission.id));
-    subject.addModel(airmanId);
 
     const expectedEvent = new EventModel(
       selectedMission.atoMissionNumber,
@@ -85,12 +77,9 @@ describe('MissionFormStore', () => {
       selectedMission.id
     );
 
-    const addedEvent = (eventActions.addEvent as jest.Mock).mock.calls[0][0];
-    expect(addedEvent.title).toEqual(expectedEvent.title);
-    expect(addedEvent.startTime.format('DD MMM YY HHmm')).toBe(expectedEvent.startTime.format('DD MMM YY HHmm'));
-    expect(addedEvent.endTime.format('DD MMM YY HHmm')).toBe(expectedEvent.endTime.format('DD MMM YY HHmm'));
-    expect(addedEvent.airmanId).toEqual(expectedEvent.airmanId);
-    expect(addedEvent.type).toEqual(expectedEvent.type);
+    const addedEvent = subject.addModel(airmanId);
+    expect(addedEvent.id).toEqual(expectedEvent.id);
+    // FIXME
   });
 
   it('can clear the state', () => {
@@ -114,14 +103,6 @@ describe('MissionFormStore', () => {
     expect(subject.state.endTime).toBe('');
     expect(subject.errors.length).toBe(0);
     expect(subject.hasModel).toBeFalsy();
-  });
-
-  it('can remove an event', () => {
-    subject.open(event);
-
-    subject.removeModel();
-
-    expect(eventActions.removeEvent).toHaveBeenCalledWith(event);
   });
 
   it('returns a list of mission options', () => {

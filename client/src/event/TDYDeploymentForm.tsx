@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import * as React from 'react';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { StyledForm, StyledFormRow } from '../widgets/Form';
 import { StyledTextInput } from '../widgets/TextInput';
 import { StyledFieldValidation } from '../widgets/FieldValidation';
@@ -9,33 +9,42 @@ import { StyledSubmitButton } from '../widgets/SubmitButton';
 import { StyledButton } from '../widgets/Button';
 import { DeleteIcon } from '../icons/DeleteIcon';
 import { TDYDeploymentFormStore } from './stores/TDYDeploymentFormStore';
+import { EventModel } from './models/EventModel';
+import { TrackerStore } from '../tracker/stores/TrackerStore';
+import { EventActions } from './EventActions';
 
 interface Props {
+  tdyDeploymentFormStore?: TDYDeploymentFormStore;
+  trackerStore?: TrackerStore;
   airmanId: number;
-  tdyDeploymentFormStore: TDYDeploymentFormStore;
-  setLoading: (loading: boolean) => void;
+  event?: EventModel;
   className?: string;
 }
 
 @observer
 export class TDYDeploymentForm extends React.Component<Props> {
-  handleChange = ({target}: any) => {
-    this.props.tdyDeploymentFormStore.setState(target.name, target.value);
+  componentDidMount() {
+    this.props.tdyDeploymentFormStore!.open(this.props.event);
   }
 
-  handleDelete = () => {
-    this.props.tdyDeploymentFormStore.removeModel();
+  handleChange = ({target}: any) => {
+    this.props.tdyDeploymentFormStore!.setState(target.name, target.value);
+  }
+
+  handleDelete = async () => {
+    await EventActions.handleDeleteEvent(this.props.tdyDeploymentFormStore!.model!);
   }
 
   handleSubmit = async (e: any) => {
     e.preventDefault();
-    await this.props.tdyDeploymentFormStore.addModel(this.props.airmanId);
+    await EventActions.handleFormSubmit(this.props.airmanId, this.props.tdyDeploymentFormStore!);
   }
 
   render() {
-    const {state, errors, hasModel} = this.props.tdyDeploymentFormStore;
+    const {trackerStore, tdyDeploymentFormStore} = this.props;
+    const {state, errors, hasModel} = tdyDeploymentFormStore!;
     return (
-      <StyledForm onSubmit={this.handleSubmit} setLoading={this.props.setLoading}>
+      <StyledForm onSubmit={this.handleSubmit} setLoading={trackerStore!.setLoading}>
         <StyledFormRow>
           <StyledFieldValidation name="title" errors={errors}>
             <StyledTextInput
@@ -90,6 +99,6 @@ export class TDYDeploymentForm extends React.Component<Props> {
   }
 }
 
-export const StyledTDYDeploymentForm = styled(TDYDeploymentForm)`
+export const StyledTDYDeploymentForm = inject('tdyDeploymentFormStore')(styled(TDYDeploymentForm)`
   min-width: ${props => props.theme.sidePanelWidth};
-`;
+`);

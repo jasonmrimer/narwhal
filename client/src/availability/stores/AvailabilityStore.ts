@@ -1,57 +1,23 @@
 import { EventModel, EventType } from '../../event/models/EventModel';
 import { action, computed, observable } from 'mobx';
-import { LeaveFormStore } from '../../event/stores/LeaveFormStore';
-import { MissionFormStore } from '../../event/stores/MissionFormStore';
-import { AppointmentFormStore } from '../../event/stores/AppointmentFormStore';
 import { Moment } from 'moment';
-import { EventActions } from '../../event/stores/EventActions';
 import { Repositories } from '../../utils/Repositories';
-import { MissionModel } from '../../mission/models/MissionModel';
-import { TDYDeploymentFormStore } from '../../event/stores/TDYDeploymentFormStore';
 
-export interface RefreshAirmen {
-  refreshAirmen: (item: { airmanId: number }) => Promise<void>;
-}
+export class AvailabilityStore {
 
-export interface PlannerActions {
-  navigateToWeek: (date: Moment) => void;
-}
-
-export class AvailabilityStore implements EventActions {
-  public appointmentFormStore: AppointmentFormStore;
-  public leaveFormStore: LeaveFormStore;
-  public missionFormStore: MissionFormStore;
-  public tdyDeploymentFormStore: TDYDeploymentFormStore;
-
-  readonly formStores: {
-    [key: string]: AppointmentFormStore | MissionFormStore | LeaveFormStore | TDYDeploymentFormStore
-  };
+  readonly formStores: {};
 
   @observable private _shouldShowEventForm: boolean = false;
   @observable private _shouldShowEventTypeSelection: boolean = true;
   @observable private _eventFormType: EventType | string = '';
   @observable private _pendingDeleteEvent: EventModel | null = null;
+  @observable private _editableEvent: EventModel | null = null;
   @observable private _airmanEvents: EventModel[] = [];
+  @observable private _selectedDate: Moment | null = null;
 
   constructor(
-    private refreshAirmen: RefreshAirmen,
     private repositories: Repositories,
-    private plannerActions: PlannerActions
   ) {
-    this.appointmentFormStore = new AppointmentFormStore(this);
-    this.leaveFormStore = new LeaveFormStore(this);
-    this.missionFormStore = new MissionFormStore(this);
-    this.tdyDeploymentFormStore = new TDYDeploymentFormStore(this);
-    this.formStores = {
-      [EventType.Mission]: this.missionFormStore,
-      [EventType.Appointment]: this.appointmentFormStore,
-      [EventType.Leave]: this.leaveFormStore,
-      [EventType.TDY_DEPLOYMENT]: this.tdyDeploymentFormStore,
-    };
-  }
-
-  hydrate(missions: MissionModel[]) {
-    this.missionFormStore.hydrate(missions);
   }
 
   @computed
@@ -62,6 +28,22 @@ export class AvailabilityStore implements EventActions {
   @action.bound
   setAirmanEvents(events: EventModel[]) {
     this._airmanEvents = events;
+  }
+
+  @action.bound
+  async refreshAirmanEvents(airmanId: number, week: Moment[]) {
+    this._airmanEvents = await this.repositories.eventRepository
+      .findAllByAirmanIdAndWithinPeriod(airmanId, week[0], week[6]);
+  }
+
+  @computed
+  get selectedDate() {
+    return this._selectedDate;
+  }
+
+  @action.bound
+  setSelectedDate(date: Moment | null = null) {
+    this._selectedDate = date;
   }
 
   @computed
@@ -87,13 +69,8 @@ export class AvailabilityStore implements EventActions {
   }
 
   @action.bound
-  openCreateEventForm(eventType: EventType, airmanId: number, date: Moment | null) {
+  setEventFormType(eventType: EventType) {
     this._eventFormType = eventType;
-    if (date && eventType !== EventType.Mission) {
-      this.formStores[eventType].open(new EventModel('', '', date, date, airmanId, eventType));
-    } else {
-      this.formStores[eventType].open();
-    }
   }
 
   @action.bound
@@ -101,31 +78,25 @@ export class AvailabilityStore implements EventActions {
     this._shouldShowEventForm = true;
     this._shouldShowEventTypeSelection = false;
     this._eventFormType = event.type;
-    this.formStores[event.type].open(event);
+    this._editableEvent = event;
+  }
+
+  @computed
+  get editableEvent() {
+    return this._editableEvent;
   }
 
   @action.bound
   closeEventForm() {
-    if (this.eventFormType.length > 0) {
-      this.formStores[this.eventFormType].close();
-    }
     this._shouldShowEventForm = false;
     this._shouldShowEventTypeSelection = false;
     this._eventFormType = '';
+    this._editableEvent = null;
   }
 
   @action.bound
   async addEvent(event: EventModel) {
-    try {
-      const addedEvent = await this.repositories.eventRepository.save(event);
-      await this.plannerActions.navigateToWeek(event.startTime);
-      await this.refreshAirmen.refreshAirmen(event);
-      this.closeEventForm();
-      return addedEvent;
-    } catch (e) {
-      this.setFormErrors(e);
-      return event;
-    }
+    return await this.repositories.eventRepository.save(event);
   }
 
   @action.bound
@@ -148,17 +119,8 @@ export class AvailabilityStore implements EventActions {
     if (this._pendingDeleteEvent == null) {
       return;
     }
-    try {
-      await this.repositories.eventRepository.delete(this._pendingDeleteEvent);
-      await this.refreshAirmen.refreshAirmen(this._pendingDeleteEvent);
-      this.closeEventForm();
-    } catch (e) {
-      this.setFormErrors(e);
-    }
-    this._pendingDeleteEvent = null;
-  }
 
-  setFormErrors(errors: object[]) {
-    this.formStores[this.eventFormType].setErrors(errors);
+    await this.repositories.eventRepository.delete(this._pendingDeleteEvent);
+    this._pendingDeleteEvent = null;
   }
 }

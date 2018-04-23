@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { StyledTextInput } from '../widgets/TextInput';
 import { StyledDatePicker } from '../widgets/DatePicker';
 import { StyledTimeInput } from '../widgets/TimeInput';
@@ -10,33 +10,42 @@ import { StyledButton } from '../widgets/Button';
 import { StyledForm, StyledFormRow } from '../widgets/Form';
 import { DeleteIcon } from '../icons/DeleteIcon';
 import { AppointmentFormStore } from './stores/AppointmentFormStore';
+import { EventModel } from './models/EventModel';
+import { EventActions } from './EventActions';
+import { TrackerStore } from '../tracker/stores/TrackerStore';
 
 interface Props {
+  appointmentFormStore?: AppointmentFormStore;
+  trackerStore?: TrackerStore;
   airmanId: number;
-  appointmentFormStore: AppointmentFormStore;
-  setLoading: (loading: boolean) => void;
+  event?: EventModel;
   className?: string;
 }
 
 @observer
 export class AppointmentForm extends React.Component<Props> {
-  handleChange = ({target}: any) => {
-    this.props.appointmentFormStore.setState(target.name, target.value);
+  componentDidMount() {
+    this.props.appointmentFormStore!.open(this.props.event);
   }
 
-  handleDelete = () => {
-    this.props.appointmentFormStore.removeModel();
+  handleChange = ({target}: any) => {
+    this.props.appointmentFormStore!.setState(target.name, target.value);
+  }
+
+  handleDelete = async () => {
+    await EventActions.handleDeleteEvent(this.props.appointmentFormStore!.model!);
   }
 
   handleSubmit = async (e: any) => {
     e.preventDefault();
-    await this.props.appointmentFormStore.addModel(this.props.airmanId);
+    await EventActions.handleFormSubmit(this.props.airmanId, this.props.appointmentFormStore!);
   }
 
   render() {
-    const {state, errors, hasModel} = this.props.appointmentFormStore;
+    const {trackerStore, appointmentFormStore} = this.props;
+    const {state, errors, hasModel} = appointmentFormStore!;
     return (
-      <StyledForm onSubmit={this.handleSubmit} setLoading={this.props.setLoading}>
+      <StyledForm onSubmit={this.handleSubmit} setLoading={trackerStore!.setLoading}>
         <StyledFieldValidation name="title" errors={errors}>
           <StyledFormRow>
             <StyledTextInput
@@ -105,6 +114,6 @@ export class AppointmentForm extends React.Component<Props> {
   }
 }
 
-export const StyledAppointmentForm = styled(AppointmentForm)`
+export const StyledAppointmentForm = inject('appointmentFormStore', 'trackerStore')(styled(AppointmentForm)`
   min-width: ${props => props.theme.sidePanelWidth};
-`;
+`);

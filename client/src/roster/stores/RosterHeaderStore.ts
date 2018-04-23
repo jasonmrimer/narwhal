@@ -5,11 +5,8 @@ import { CertificationModel } from '../../skills/models/CertificationModel';
 import { AirmanModel, ShiftType } from '../../airman/models/AirmanModel';
 import * as Fuse from 'fuse.js';
 
-export interface SiteIdContainer {
-  selectedSite: number;
-}
-
 export class RosterHeaderStore {
+  private _siteId: number = UnfilteredValue;
   @observable private _selectedCertificationOptions: FilterOption[] = [];
   @observable private _selectedQualificationOptions: FilterOption[] = [];
   @observable private _selectedShift: number = UnfilteredValue;
@@ -17,11 +14,9 @@ export class RosterHeaderStore {
   @observable private _certifications: CertificationModel[] = [];
   @observable private _qualifications: QualificationModel[] = [];
 
-  constructor(private siteIdContainer: SiteIdContainer) {
-  }
-
   @action.bound
-  hydrate(certifications: CertificationModel[], qualifications: QualificationModel[]) {
+  hydrate(siteId: number, certifications: CertificationModel[], qualifications: QualificationModel[]) {
+    this._siteId = siteId;
     this._certifications = certifications;
     this._qualifications = qualifications;
   }
@@ -29,7 +24,7 @@ export class RosterHeaderStore {
   @computed
   get certificationOptions() {
     return this._certifications.filter((cert: CertificationModel) => {
-      return cert.siteId === this.siteIdContainer.selectedSite || this.siteIdContainer.selectedSite === UnfilteredValue;
+      return cert.siteId === this._siteId || this._siteId === UnfilteredValue;
     }).map(cert => {
       return {value: cert.id, label: cert.title};
     });

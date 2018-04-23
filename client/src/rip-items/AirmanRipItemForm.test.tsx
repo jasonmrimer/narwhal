@@ -11,21 +11,21 @@ import Mock = jest.Mock;
 import { AirmanRipItemModel } from '../airman/models/AirmanRipItemModel';
 import { RipItemModel } from './models/RipItemModel';
 import { StyledForm } from '../widgets/Form';
+import { CurrencyStore } from '../currency/stores/CurrencyStore';
+import { DoubleRepositories } from '../utils/Repositories';
+import { TrackerStore } from '../tracker/stores/TrackerStore';
 
-/* tslint:disable:no-empty*/
 describe('RipItems', () => {
   let store: AirmanRipItemFormStore;
+  let currencyStore: CurrencyStore;
+  let trackerStore: TrackerStore;
   let subject: ShallowWrapper;
-  let closeSpy: Mock;
-  let setLoading = () => {};
 
   beforeEach(async () => {
-    closeSpy = jest.fn();
-    const closeable = {
-      closeAirmanRipItemForm: closeSpy
-    };
 
-    store = new AirmanRipItemFormStore(closeable, new RipItemRepositoryStub());
+    store = new AirmanRipItemFormStore(new RipItemRepositoryStub());
+    trackerStore = new TrackerStore(DoubleRepositories);
+    currencyStore = new CurrencyStore(DoubleRepositories);
     const ripItem = new RipItemModel(1, 'NICKLEBACK');
     const airmanRipItem = [new AirmanRipItemModel(1, 1, ripItem, moment())];
     store.setRipItems(airmanRipItem);
@@ -35,15 +35,16 @@ describe('RipItems', () => {
 
     subject = shallow(
       <AirmanRipItems
-        store={store}
+        airmanRipItemFormStore={store}
         selectedAirmanId={1}
-        setLoading={setLoading}
+        currencyStore={currencyStore}
+        trackerStore={trackerStore}
       />
     );
   });
 
   it('should render a Form', () => {
-    expect(subject.find(StyledForm).prop('setLoading')).toBe(setLoading);
+    expect(subject.find(StyledForm).prop('setLoading')).toBe(trackerStore.setLoading);
   });
 
   it('should render the attributes of a RipItem', () => {

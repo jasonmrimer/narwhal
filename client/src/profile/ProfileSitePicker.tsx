@@ -1,24 +1,23 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { ProfileSitePickerStore } from './stores/ProfileSitePickerStore';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { SiteModel } from '../site/models/SiteModel';
 import * as classNames from 'classnames';
 import { StyledSelectProfilePopup } from './SelectProfilePopup';
 
 interface Props {
-  profileStore: ProfileSitePickerStore;
+  profileStore?: ProfileSitePickerStore;
   className?: string;
 }
 
 @observer
 export class ProfileSitePicker extends React.Component<Props> {
   handleChange = (selectedSite: SiteModel) => {
-    this.props.profileStore.setPendingSite(selectedSite);
-    // await this.props.profileStore.saveSiteId(Number(event.target.value));
+    this.props.profileStore!.setPendingSite(selectedSite);
   }
 
-  renderButtons(sites: SiteModel[]) {
+  renderButtons = (sites: SiteModel[]) => {
     return sites.map((site) => {
       return (
         <button
@@ -33,7 +32,6 @@ export class ProfileSitePicker extends React.Component<Props> {
 
   render() {
     const {profileStore, className} = this.props;
-    const {dgsCoreSites, dmsSites, guardSites} = profileStore;
     return (
       <div className={className}>
         <h2>SELECT YOUR HOME SITE</h2>
@@ -41,31 +39,24 @@ export class ProfileSitePicker extends React.Component<Props> {
         <div className="buttons">
           <div className={classNames('column', 'dgs-core-sites')}>
             <h3>DGS CORE SITES</h3>
-            {this.renderButtons(dgsCoreSites)}
+            {this.renderButtons(profileStore!.dgsCoreSites)}
           </div>
           <div className={classNames('column', 'dms-sites')}>
             <h3>DMS SITES</h3>
-            {this.renderButtons(dmsSites)}
+            {this.renderButtons(profileStore!.dmsSites)}
           </div>
           <div className={classNames('column', 'guard-sites')}>
             <h3>GUARD SITES</h3>
-            {this.renderButtons(guardSites)}
+            {this.renderButtons(profileStore!.guardSites)}
           </div>
         </div>
-        {
-          profileStore.pendingSite &&
-            <StyledSelectProfilePopup
-              selectedSite={profileStore.pendingSite}
-              backFromPendingSiteSelection={profileStore.cancelPendingSite}
-              continuePendingSiteSelection={profileStore.savePendingSite}
-            />
-        }
+        {profileStore!.pendingSite && <StyledSelectProfilePopup/>}
       </div>
     );
   }
 }
 
-export const StyledProfileSitePicker = styled(ProfileSitePicker)`
+export const StyledProfileSitePicker = inject('profileStore')(styled(ProfileSitePicker)`
   min-width: 1000px;
   margin: 0 auto;
   text-align: center;
@@ -132,4 +123,4 @@ export const StyledProfileSitePicker = styled(ProfileSitePicker)`
       }    
     }    
   }
-`;
+`);

@@ -3,48 +3,59 @@ import { AirmanRipItemModel } from '../airman/models/AirmanRipItemModel';
 import styled from 'styled-components';
 import { StyledDatePicker } from '../widgets/DatePicker';
 import * as moment from 'moment';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { StyledSubmitButton } from '../widgets/SubmitButton';
 import { StyledForm, StyledFormRow } from '../widgets/Form';
 import { AirmanRipItemFormStore } from './stores/AirmanRipItemFormStore';
 import { StyledButton } from '../widgets/Button';
 import * as classNames from 'classnames';
 import { ResetIcon } from '../icons/ResetIcon';
+import { CurrencyStore } from '../currency/stores/CurrencyStore';
+import { TrackerStore } from '../tracker/stores/TrackerStore';
 
 interface Props {
+  airmanRipItemFormStore?: AirmanRipItemFormStore;
+  trackerStore?: TrackerStore;
+  currencyStore?: CurrencyStore;
   selectedAirmanId: number;
-  store: AirmanRipItemFormStore;
-  setLoading: (loading: boolean) => void;
   className?: string;
 }
 
 @observer
 export class AirmanRipItems extends React.Component<Props> {
   onChange = (e: any, item: AirmanRipItemModel) => {
+    const {airmanRipItemFormStore} = this.props;
+    const {updateRipItem} = airmanRipItemFormStore!;
     const expirationDate = moment(e.target.value);
     item.expirationDate = expirationDate.isValid() ? expirationDate : null;
-    this.props.store.updateRipItem(item);
+    updateRipItem(item);
   }
 
   onClick = (item: AirmanRipItemModel) => {
+    const {airmanRipItemFormStore} = this.props;
+    const {updateRipItem} = airmanRipItemFormStore!;
     item.expirationDate = moment().add(90, 'days').startOf('day');
-    this.props.store.updateRipItem(item);
+    updateRipItem(item);
   }
 
   onSubmit = async (e: any) => {
+    const {airmanRipItemFormStore, currencyStore} = this.props;
     e.preventDefault();
-    await this.props.store.submitRipItems();
+    await airmanRipItemFormStore!.submitRipItems();
+    currencyStore!.closeAirmanRipItemForm();
   }
 
   render() {
+    const {airmanRipItemFormStore} = this.props;
+    const {ripItems} = airmanRipItemFormStore!;
     return (
       <StyledForm
           className={this.props.className}
           onSubmit={this.onSubmit}
-          setLoading={this.props.setLoading}
+          setLoading={this.props.trackerStore!.setLoading}
       >
         <h3>RIP TASKS</h3>
-        {this.props.store.ripItems.map((item: AirmanRipItemModel, index: number) => {
+        {ripItems.map((item: AirmanRipItemModel, index: number) => {
             return (
               <StyledFormRow key={index} direction="column">
                 <div className={classNames('item', {expired: item.isExpired})}>{item.ripItem.title}</div>
@@ -74,7 +85,7 @@ export class AirmanRipItems extends React.Component<Props> {
   }
 }
 
-export const StyledRipItems = styled(AirmanRipItems)`
+export const StyledRipItems = inject('airmanRipItemFormStore', 'currencyStore', 'trackerStore')(styled(AirmanRipItems)`
   h3 {
     font-weight: 300;
     font-size: 1rem;
@@ -114,4 +125,4 @@ export const StyledRipItems = styled(AirmanRipItems)`
     }
   }
   
-`;
+`);

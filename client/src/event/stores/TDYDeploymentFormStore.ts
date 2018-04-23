@@ -1,7 +1,7 @@
-import { action } from 'mobx';
+import { action, computed } from 'mobx';
 import { FormStore } from '../../widgets/stores/FormStore';
 import { EventModel, EventType } from '../models/EventModel';
-import { EventActions } from './EventActions';
+import { TimeService } from '../../tracker/services/TimeService';
 
 interface State {
   title: string;
@@ -11,7 +11,7 @@ interface State {
 }
 
 export class TDYDeploymentFormStore extends FormStore<EventModel, State> {
-  constructor(private eventActions: EventActions) {
+  constructor(private timeService: TimeService) {
     super();
     this._state = {
       title: '',
@@ -50,8 +50,8 @@ export class TDYDeploymentFormStore extends FormStore<EventModel, State> {
     };
   }
 
-  async addModel(airmanId: number) {
-    const event = new EventModel(
+  addModel(airmanId: number) {
+    return new EventModel(
       this._state.title,
       this._state.description,
       this.makeMoment(this._state.startTime, '0000'),
@@ -60,12 +60,14 @@ export class TDYDeploymentFormStore extends FormStore<EventModel, State> {
       EventType.TDY_DEPLOYMENT,
       this.model ? this.model.id : null
     );
-    await this.eventActions.addEvent(event);
   }
 
-  removeModel(): void {
-    if (this.model != null) {
-      this.eventActions.removeEvent(this.model);
+  @computed
+  get week() {
+    if (this.model) {
+      return this.timeService.navigateToWeek(this.model.startTime);
+    } else {
+      return this.timeService.getCurrentWeek();
     }
   }
 }

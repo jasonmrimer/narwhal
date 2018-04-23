@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { LeaveFormStore } from './stores/LeaveFormStore';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { StyledTextInput } from '../widgets/TextInput';
 import { StyledDatePicker } from '../widgets/DatePicker';
 import { StyledTimeInput } from '../widgets/TimeInput';
@@ -10,33 +10,41 @@ import { StyledFieldValidation } from '../widgets/FieldValidation';
 import { StyledButton } from '../widgets/Button';
 import { StyledForm, StyledFormRow } from '../widgets/Form';
 import { DeleteIcon } from '../icons/DeleteIcon';
+import { EventModel } from './models/EventModel';
+import { EventActions } from './EventActions';
+import { TrackerStore } from '../tracker/stores/TrackerStore';
 
 interface Props {
+  leaveFormStore?: LeaveFormStore;
+  trackerStore?: TrackerStore;
   airmanId: number;
-  leaveFormStore: LeaveFormStore;
-  setLoading: (loading: boolean) => void;
+  event?: EventModel;
   className?: string;
 }
 
 @observer
 export class LeaveForm extends React.Component<Props> {
-  handleChange = ({target}: any) => {
-    this.props.leaveFormStore.setState(target.name, target.value);
+  componentDidMount() {
+    this.props.leaveFormStore!.open(this.props.event);
   }
 
-  handleDelete = () => {
-    this.props.leaveFormStore.removeModel();
+  handleChange = ({target}: any) => {
+    this.props.leaveFormStore!.setState(target.name, target.value);
+  }
+
+  handleDelete = async () => {
+    await EventActions.handleDeleteEvent(this.props.leaveFormStore!.model!);
   }
 
   handleSubmit = async (e: any) => {
     e.preventDefault();
-    await this.props.leaveFormStore.addModel(this.props.airmanId);
+    await EventActions.handleFormSubmit(this.props.airmanId, this.props.leaveFormStore!);
   }
 
   render() {
-    const {state, errors, hasModel} = this.props.leaveFormStore;
+    const {state, errors, hasModel} = this.props.leaveFormStore!;
     return (
-      <StyledForm onSubmit={this.handleSubmit} setLoading={this.props.setLoading}>
+      <StyledForm onSubmit={this.handleSubmit} setLoading={this.props.trackerStore!.setLoading}>
         <StyledFormRow>
           <StyledTextInput
             name="description"
@@ -92,6 +100,6 @@ export class LeaveForm extends React.Component<Props> {
   }
 }
 
-export const StyledLeaveForm = styled(LeaveForm)`
+export const StyledLeaveForm = inject('leaveFormStore', 'trackerStore')(styled(LeaveForm)`
   min-width: ${props => props.theme.sidePanelWidth};
-`;
+`);

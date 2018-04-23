@@ -4,11 +4,11 @@ import { TrackerStore } from './stores/TrackerStore';
 import { StyledDropdown } from '../widgets/Dropdown';
 import styled from 'styled-components';
 import { ShiftDisplay } from '../roster/ShiftDisplay';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 
 interface Props {
+  trackerStore?: TrackerStore;
   airman: AirmanModel;
-  trackerStore: TrackerStore;
   className?: string;
 }
 
@@ -22,6 +22,7 @@ export const unsetShiftOptions = [{value: -1, label: 'None'}, ...shiftOptions];
 
 export const ShiftDropdown = observer((props: Props) => {
   const {airman, className, trackerStore} = props;
+  const {updateAirmanShift} = trackerStore!;
   return (
     <span
       onClick={(e: any) => e.stopPropagation()}
@@ -35,7 +36,7 @@ export const ShiftDropdown = observer((props: Props) => {
           onChange={async (e: any) => {
             const shiftType = e.target.value;
             if (airman.shift !== shiftType) {
-              await trackerStore.updateAirmanShift(airman, shiftType);
+              await updateAirmanShift(airman, shiftType);
             }
           }}
         />
@@ -43,7 +44,7 @@ export const ShiftDropdown = observer((props: Props) => {
   );
 });
 
-export const StyledShiftDropdown = styled(ShiftDropdown)`
+export const StyledShiftDropdown = inject('trackerStore')(styled(ShiftDropdown)`
   display: flex;
   align-items: center;
   
@@ -59,4 +60,4 @@ export const StyledShiftDropdown = styled(ShiftDropdown)`
   & > select {
     border-bottom: none;
   }
-`;
+`);

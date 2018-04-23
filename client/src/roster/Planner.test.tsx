@@ -6,19 +6,23 @@ import { AppointmentIcon } from '../icons/AppointmentIcon';
 import { LeaveIcon } from '../icons/LeaveIcon';
 import { MissionIcon } from '../icons/MissionIcon';
 import { AvailableIcon } from '../icons/AvailableIcon';
-import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
-import { eventStub, makeFakeTrackerStore } from '../utils/testUtils';
+import { eventStub } from '../utils/testUtils';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { AirmanModel } from '../airman/models/AirmanModel';
 import { EventModel, EventType } from '../event/models/EventModel';
 import { DoubleRepositories } from '../utils/Repositories';
+import { AvailabilityStore } from '../availability/stores/AvailabilityStore';
+import { PlannerStore } from './stores/PlannerStore';
+import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
+import { PlannerActions } from './PlannerActions';
 
 describe('Planner', () => {
   let subject: ShallowWrapper;
   let trackerStore: TrackerStore;
+  let plannerStore: PlannerStore;
+  let availabilityStore: AvailabilityStore;
   let airman: AirmanModel;
-  let newEventSpy = jest.fn();
 
   beforeEach(async () => {
     const appointment = new EventModel(
@@ -54,14 +58,19 @@ describe('Planner', () => {
     await DoubleRepositories.eventRepository.save(leave);
     await DoubleRepositories.eventRepository.save(mission);
 
-    trackerStore = await makeFakeTrackerStore();
-    trackerStore.newEvent = newEventSpy;
+    PlannerActions.newEvent = jest.fn();
+
+    trackerStore = new TrackerStore(DoubleRepositories);
+    trackerStore.hydrate([airman], [appointment, mission, leave], airman.siteId);
+    plannerStore = new PlannerStore(new TimeServiceStub());
+    availabilityStore = new AvailabilityStore(DoubleRepositories);
 
     subject = shallow(
       <Planner
         airman={airman}
-        week={new TimeServiceStub().getCurrentWeek()}
         trackerStore={trackerStore}
+        plannerStore={plannerStore}
+        availabilityStore={availabilityStore}
       />);
   });
 
@@ -80,11 +89,6 @@ describe('Planner', () => {
   it('calls the newEvent when clicking on an empty bubble', () => {
     const emptyBubble = subject.find(AvailableIcon).at(0);
     emptyBubble.simulate('click', eventStub);
-
-    const calledMoment = (newEventSpy.mock.calls[0][1]).startOf('day');
-    const expectedMoment = moment('2017-11-26').startOf('day');
-
-    expect(calledMoment.isSame(expectedMoment)).toBeTruthy();
-    expect(newEventSpy.mock.calls[0][0]).toEqual(airman);
+    expect(PlannerActions.newEvent).toHaveBeenCalled();
   });
 });

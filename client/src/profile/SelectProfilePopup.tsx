@@ -1,34 +1,35 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { SiteModel } from '../site/models/SiteModel';
 import { observer } from 'mobx-react/custom';
+import { ProfileSitePickerStore } from './stores/ProfileSitePickerStore';
+import { inject } from 'mobx-react';
 
 interface Props {
-  selectedSite: SiteModel;
-  backFromPendingSiteSelection: (selectedSite: null) => void;
-  continuePendingSiteSelection: () => void;
+  profileStore?: ProfileSitePickerStore;
   className?: string;
 }
 
-export const SelectProfilePopup = observer((props: Props) => {
+export const SelectProfilePopup = observer(({profileStore, className}: Props) => {
   return (
-    <div className={props.className}>
+    <div className={className}>
       <div className="site-confirmation">
         <div className="title">Site Selection</div>
         <div className="description">
-        This will set {props.selectedSite.fullName.toUpperCase()} as your home site.
+          {profileStore!.pendingSite &&
+          `This will set ${profileStore!.pendingSite!.fullName.toUpperCase()} as your home site.`
+          }
           <br/> This cannot currently be undone.
       </div>
         <div className="pop-up-buttons">
           <button
             className="back"
-            onClick={() => props.backFromPendingSiteSelection(null)}
+            onClick={profileStore!.cancelPendingSite}
           >
             BACK
           </button>
           <button
             className="continue"
-            onClick={props.continuePendingSiteSelection}
+            onClick={profileStore!.savePendingSite}
           >
             CONTINUE
           </button>
@@ -38,7 +39,7 @@ export const SelectProfilePopup = observer((props: Props) => {
   );
 });
 
-export const StyledSelectProfilePopup = styled(SelectProfilePopup)`
+export const StyledSelectProfilePopup = inject('profileStore')(styled(SelectProfilePopup)`
   position: fixed;
   background: rgba(0, 0, 0, 0.5);
   top: 0;
@@ -107,4 +108,4 @@ export const StyledSelectProfilePopup = styled(SelectProfilePopup)`
       }
     }
   }
-`;
+`);

@@ -1,13 +1,16 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { ProfileModel } from '../profile/models/ProfileModel';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { ErrorResponse } from '../utils/HTTPClient';
 import { FilterOption } from '../widgets/models/FilterOptionModel';
 import { StyledDropdown } from '../widgets/Dropdown';
 
-export interface ProfileListStore {
-  hydrate: () => Promise<void>;
+export interface ProfileStoreContract {
+  profile: ProfileModel;
+}
+
+export interface AdminStoreContract {
   profiles: ProfileModel[];
   hasError: boolean;
   error: ErrorResponse | null;
@@ -16,28 +19,26 @@ export interface ProfileListStore {
 }
 
 interface Props {
-  profile: ProfileModel;
-  store: ProfileListStore;
+  adminStore?: AdminStoreContract;
+  profileStore?: ProfileStoreContract;
   className?: string;
 }
 
 @observer
 export class ProfileList extends React.Component<Props> {
-  async componentDidMount() {
-    await this.props.store.hydrate();
-  }
-
   render() {
+    const {profileStore, adminStore} = this.props;
+    const {hasError, error, roleOptions, setProfileRole, profiles} = adminStore!;
     return (
       <div className={this.props.className}>
         {
-          this.props.store.hasError &&
+          hasError &&
           <h1 className="error">
-            {this.props.store.error!.message + ' because you are not an Admin.'}
+            {error!.message + ' because you are not an Admin.'}
           </h1>
         }
         {
-          !this.props.store.hasError &&
+          !this.props.adminStore!.hasError &&
           <div className="profile-table">
             <div
               className="profile-header"
@@ -48,7 +49,7 @@ export class ProfileList extends React.Component<Props> {
             </div>
             <div>
               {
-                this.props.store.profiles.map((profile) => {
+                profiles.map((profile) => {
                   return (
                     <div
                       className="profile-row"
@@ -57,11 +58,11 @@ export class ProfileList extends React.Component<Props> {
                       <span>{profile.username}</span>
                       <span>{profile.siteName}</span>
                       <StyledDropdown
-                        disabled={profile.id === this.props.profile.id}
+                        disabled={profile.id === profileStore!.profile!.id}
                         name="roleId"
-                        options={this.props.store.roleOptions}
+                        options={roleOptions}
                         value={profile.roleId}
-                        onChange={(evt: any) => this.props.store.setProfileRole(profile, evt.target.value)}
+                        onChange={(evt: any) => setProfileRole(profile, evt.target.value)}
                       />
                     </div>
                   );
@@ -75,7 +76,7 @@ export class ProfileList extends React.Component<Props> {
   }
 }
 
-export const StyledProfileList = styled(ProfileList)`
+export const StyledProfileList = inject('profileStore', 'adminStore')(styled(ProfileList)`
     width: 800px;
     margin-left: auto;
     margin-right: auto;
@@ -114,4 +115,4 @@ export const StyledProfileList = styled(ProfileList)`
       background-color: ${props => props.theme.lightest};
     }
     
-`;
+`);

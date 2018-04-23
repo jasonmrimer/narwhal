@@ -4,11 +4,11 @@ import { StyledExpirationSleeve } from '../widgets/ExpirationSleeve';
 import { observer } from 'mobx-react';
 
 interface Props {
-  onClick: () => void;
   title: string;
   assignedItemCount: number;
   expiredItemCount: number;
   className?: string;
+  onClick?: () => void;
 }
 
 export const RipItemsTile = observer((props: Props) => {
@@ -25,10 +25,10 @@ export const RipItemsTile = observer((props: Props) => {
         }
       </div>
       <div className="rip-item-tile-description">
-        <span>{`${props.assignedItemCount} task(s) assigned`}</span>
+        <span className="assigned-count">{`${props.assignedItemCount} task(s) assigned`}</span>
         {
           props.expiredItemCount > 0 &&
-          <span>{`${props.expiredItemCount} task(s) expired`}</span>
+          <span className="expired-count">{`${props.expiredItemCount} task(s) expired`}</span>
         }
       </div>
     </div>

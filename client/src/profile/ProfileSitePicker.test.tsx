@@ -1,23 +1,35 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { ProfileSitePicker } from './ProfileSitePicker';
-import { forIt } from '../utils/testUtils';
 import { ProfileSitePickerStore } from './stores/ProfileSitePickerStore';
 import { DoubleRepositories } from '../utils/Repositories';
-import { StyledSelectProfilePopup } from './SelectProfilePopup';
+import { SiteModel, SiteType } from '../site/models/SiteModel';
 
 describe('ProfileSitePicker', () => {
   let subject: ShallowWrapper;
+  let sites: SiteModel[];
   let profileStore = new ProfileSitePickerStore(DoubleRepositories);
+  profileStore.setPendingSite = jest.fn();
 
-  beforeEach(async () => {
-    await profileStore.hydrate();
+  beforeEach(() => {
+    sites = [new SiteModel(1, '', [], SiteType.DGSCoreSite, '')];
+    profileStore.hydrate(
+      sites,
+      {
+        id: 1,
+        username: 'user',
+        siteId: 14,
+        roleId: 1,
+        roleName: 'admin',
+        classified: true,
+        siteName: 'site'
+      }
+    );
     subject = shallow(
       <ProfileSitePicker
         profileStore={profileStore}
       />
     );
-    await forIt();
     subject.update();
   });
 
@@ -41,6 +53,6 @@ describe('ProfileSitePicker', () => {
 
   it('should render the selected profile popup after the site has been clicked', () => {
     subject.find('button').at(0).simulate('click');
-    expect(subject.find(StyledSelectProfilePopup).exists()).toBeTruthy();
+    expect(profileStore.setPendingSite).toHaveBeenCalledWith(sites[0]);
   });
 });

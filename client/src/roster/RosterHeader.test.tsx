@@ -3,27 +3,29 @@ import { StyledMultiTypeahead } from '../widgets/MultiTypeahead';
 import { findByClassName } from '../utils/testUtils';
 import { shallow, ShallowWrapper } from 'enzyme';
 import * as React from 'react';
-import { RosterHeader } from './RosterHeader';
-import { QualificationModel } from '../skills/models/QualificationModel';
-import { CertificationModel } from '../skills/models/CertificationModel';
-import { RosterHeaderStore } from './stores/RosterHeaderStore';
-import { CertificationModelFactory } from '../skills/factories/CertificationModelFactory';
-import { QualificationModelFactory } from '../skills/factories/QualificationModelFactory';
+import { RosterHeader, RosterHeaderStoreContract } from './RosterHeader';
 
 describe('RosterHeader', () => {
   describe('when the list of airmen is empty', () => {
     let subject: ShallowWrapper;
-    let qualifications: QualificationModel[];
-    let certifications: CertificationModel[];
+    let rosterHeaderStore: RosterHeaderStoreContract;
 
     beforeEach(async () => {
-      certifications = CertificationModelFactory.buildList(2, 1);
-      qualifications = QualificationModelFactory.buildList(2);
+      rosterHeaderStore = {
+        selectedShift: -1,
+        setSelectedShift: jest.fn(),
+        shiftOptions: [{label: 'days', value: 0}],
+        selectedLastName: '',
+        setSelectedLastName: jest.fn(),
+        selectedQualificationOptions: [],
+        setSelectedQualificationOptions: jest.fn(),
+        qualificationOptions: [{label: 'qual 1', value: 0}],
+        selectedCertificationOptions: [],
+        setSelectedCertificationOptions: jest.fn(),
+        certificationOptions: [{label: 'cert 1', value: 0}],
+      };
 
-      const store = new RosterHeaderStore({selectedSite: 1});
-      store.hydrate(certifications, qualifications);
-
-      subject = shallow(<RosterHeader rosterHeaderStore={store}/>);
+      subject = shallow(<RosterHeader rosterHeaderStore={rosterHeaderStore}/>);
     });
 
     it('renders SHIFT, NAME, QUALIFICATION, CERTIFICATION, and Planner table headers', () => {
@@ -46,18 +48,11 @@ describe('RosterHeader', () => {
         });
 
         it('which renders multiple qualifications', () => {
-          const qualificationOptions = qualifications.map(qualification => {
-            return {value: qualification.id, label: `${qualification.acronym}`};
-          });
-
-          expect(qualificationMultiTypeahead.prop('options')).toEqual(qualificationOptions);
+          expect(qualificationMultiTypeahead.prop('options')).toEqual([{label: 'qual 1', value: 0}]);
         });
 
         it('which renders multiple certifications', () => {
-          const certificationOptions = certifications.map(certification => {
-            return {value: certification.id, label: certification.title};
-          });
-          expect(certificationMultiTypeahead.prop('options')).toEqual(certificationOptions);
+          expect(certificationMultiTypeahead.prop('options')).toEqual([{label: 'cert 1', value: 0}]);
         });
       });
 
@@ -70,7 +65,7 @@ describe('RosterHeader', () => {
 
         it('which renders all shifts', () => {
           expect(shiftFilter.exists()).toBeTruthy();
-          expect((shiftFilter.prop('options') as Array<FilterOption>).length).toBe(3);
+          expect((shiftFilter.prop('options') as Array<FilterOption>).length).toBe(1);
         });
       });
     });

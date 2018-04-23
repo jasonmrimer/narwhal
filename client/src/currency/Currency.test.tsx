@@ -1,18 +1,20 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { Currency } from './Currency';
-import { findSelectorWithText, makeFakeTrackerStore } from '../utils/testUtils';
+import { findSelectorWithText } from '../utils/testUtils';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 import { StyledSkillsForm } from '../skills/SkillsForm';
 import { StyledSkillTile } from '../skills/SkillTile';
 import { AirmanQualificationModelFactory } from '../airman/factories/AirmanQualificationModelFactory';
 import { AirmanCertificationModelFactory } from '../airman/factories/AirmanCertificationModelFactory';
-import { TabType } from '../tracker/stores/SidePanelStore';
 import { StyledBackButton } from '../widgets/BackButton';
 import { StyledNotification } from '../widgets/Notification';
 import { StyledRipItems } from '../rip-items/AirmanRipItemForm';
-import { CurrencyChild } from './stores/CurrencyStore';
+import { CurrencyChild, CurrencyStore } from './stores/CurrencyStore';
+import { DoubleRepositories } from '../utils/Repositories';
+import { AirmanRipItemFormStore } from '../rip-items/stores/AirmanRipItemFormStore';
+import { SkillFormStore } from '../skills/stores/SkillFormStore';
 
 /* tslint:disable:no-empty*/
 describe('Currency', () => {
@@ -26,17 +28,27 @@ describe('Currency', () => {
   );
 
   let trackerStore: TrackerStore;
+  let currencyStore: CurrencyStore;
+  let airmanRipItemFormStore: AirmanRipItemFormStore;
+  let skillFormStore: SkillFormStore;
   let subject: ShallowWrapper;
-  let setLoading = () => {};
 
   beforeEach(async () => {
-    trackerStore = await makeFakeTrackerStore();
-    trackerStore.setSelectedAirman(airman, TabType.AVAILABILITY);
+    currencyStore = new CurrencyStore(DoubleRepositories);
+
+    airmanRipItemFormStore = new AirmanRipItemFormStore(DoubleRepositories.ripItemRepository);
+
+    skillFormStore = new SkillFormStore();
+
+    trackerStore = new TrackerStore(DoubleRepositories);
+    trackerStore.setSelectedAirman(airman);
+
     subject = shallow(
       <Currency
-        selectedAirman={trackerStore.selectedAirman}
-        currencyStore={trackerStore.currencyStore}
-        setLoading={setLoading}
+        trackerStore={trackerStore}
+        currencyStore={currencyStore}
+        airmanRipItemFormStore={airmanRipItemFormStore}
+        skillFormStore={skillFormStore}
       />
     );
   });
@@ -53,13 +65,16 @@ describe('Currency', () => {
 
   it('renders a skill notification if the airman has no skill', () => {
     const emptyAirman = AirmanModelFactory.build();
-    subject.setProps({selectedAirman: emptyAirman});
+    trackerStore.setSelectedAirman(emptyAirman);
+
+    subject.instance().forceUpdate();
+    subject.update();
 
     expect(subject.find(StyledNotification).exists()).toBeTruthy();
   });
 
   it('should show RIP items', () => {
-    trackerStore.currencyStore.openAirmanRipItemForm();
+    currencyStore.openAirmanRipItemForm();
     subject.update();
 
     expect(subject.find(StyledRipItems).exists()).toBeTruthy();
@@ -72,12 +87,12 @@ describe('Currency', () => {
 
   it('opens a Skill Form when clicking on an existing Skill Tile', () => {
     subject.find(StyledSkillTile).at(0).simulate('click');
+
+    subject.instance().forceUpdate();
     subject.update();
 
-    const store = trackerStore.currencyStore.skillFormStore;
-    expect(store.hasModel).toBeTruthy();
-    expect(Number(store.state.skillId)).toBe(airman.qualifications[0].skillId);
-    expect(subject.find(StyledSkillsForm).prop('setLoading')).toBe(setLoading);
+    expect(skillFormStore.hasModel).toBeTruthy();
+    expect(Number(skillFormStore.state.skillId)).toBe(airman.qualifications[0].skillId);
   });
 
   it('can exit out of a skill form', () => {
@@ -85,6 +100,6 @@ describe('Currency', () => {
     expect(subject.find(StyledSkillsForm).exists()).toBeTruthy();
 
     subject.find(StyledBackButton).simulate('click');
-    expect(trackerStore.currencyStore.currencyChild).toBe(CurrencyChild.SkillList);
+    expect(currencyStore.currencyChild).toBe(CurrencyChild.SkillList);
   });
 });

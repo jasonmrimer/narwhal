@@ -10,16 +10,17 @@ import { AirmanProfileManagerStore } from './stores/AirmanProfileManagerStore';
 import { StyledNavigationBackButton } from '../widgets/NavigationBackButton';
 import { StyledSubmitButton } from '../widgets/SubmitButton';
 import { StyledForm } from '../widgets/Form';
+import { inject } from 'mobx-react/custom';
 
 interface Props {
-  store: AirmanProfileManagerStore;
+  airmanProfileManagerStore?: AirmanProfileManagerStore;
   className?: string;
 }
 
 @observer
 export class AirmanProfileManager extends React.Component<Props> {
   render() {
-    const {airman, setState} = this.props.store;
+    const {airman, setState} = this.props.airmanProfileManagerStore!;
     return (
       <div className={this.props.className}>
         <StyledForm onSubmit={this.onSubmit}>
@@ -70,7 +71,7 @@ export class AirmanProfileManager extends React.Component<Props> {
                   onChange={(e) => setState(e.target.name, Number(e.target.value))}
                   name="siteId"
                   value={airman.siteId}
-                  options={this.props.store.siteOptions}
+                  options={this.props.airmanProfileManagerStore!.siteOptions}
                   id="airman-site"
                 />
               </span>
@@ -80,7 +81,7 @@ export class AirmanProfileManager extends React.Component<Props> {
                   onChange={(e) => setState(e.target.name, Number(e.target.value))}
                   name="squadronId"
                   value={airman.squadronId}
-                  options={this.props.store.squadronOptions}
+                  options={this.props.airmanProfileManagerStore!.squadronOptions}
                   id="airman-squadron"
                 />
               </span>
@@ -90,7 +91,7 @@ export class AirmanProfileManager extends React.Component<Props> {
                   onChange={(e) => setState(e.target.name, Number(e.target.value))}
                   name="flightId"
                   value={airman.flightId}
-                  options={this.props.store.flightOptions}
+                  options={this.props.airmanProfileManagerStore!.flightOptions}
                   id="airman-flight"
                 />
               </span>
@@ -123,29 +124,23 @@ export class AirmanProfileManager extends React.Component<Props> {
 
   private onSubmit = async (e: any) => {
     e.preventDefault();
-    this.props.store.save();
-  }
-
-  private nothing() {
-    return;
+    this.props.airmanProfileManagerStore!.save();
   }
 
   private renderQualifications = () => {
-    return this.props.store.airman.qualifications.map((qual, index) => (
+    return this.props.airmanProfileManagerStore!.airman.qualifications.map((qual, index) => (
       <StyledSkillTile
         key={index}
         skill={qual}
-        onClick={this.nothing}
       />
     ));
   }
 
   private renderCertifications = () => {
-    return this.props.store.airman.certifications.map((cert, index) => (
+    return this.props.airmanProfileManagerStore!.airman.certifications.map((cert, index) => (
       <StyledSkillTile
         key={index}
         skill={cert}
-        onClick={this.nothing}
       />
     ));
   }
@@ -154,15 +149,14 @@ export class AirmanProfileManager extends React.Component<Props> {
     return (
       <StyledRipItemsTile
         title="RIP TASKS"
-        assignedItemCount={this.props.store.assignedItemCount}
-        expiredItemCount={this.props.store.expiredItemCount}
-        onClick={this.nothing}
+        assignedItemCount={this.props.airmanProfileManagerStore!.assignedItemCount}
+        expiredItemCount={this.props.airmanProfileManagerStore!.expiredItemCount}
       />
     );
   }
 }
 
-export const StyledAirmanProfileManager = styled(AirmanProfileManager)`
+export const StyledAirmanProfileManager = inject('airmanProfileManagerStore')(styled(AirmanProfileManager)`
   .side-nav{
     position: fixed;
     left: 5rem;
@@ -213,4 +207,4 @@ export const StyledAirmanProfileManager = styled(AirmanProfileManager)`
       }
     }
   }
-`;
+`);

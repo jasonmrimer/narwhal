@@ -2,17 +2,30 @@ import * as React from 'react';
 import { StyledDropdown } from './Dropdown';
 import { TopLevelFilter } from './Filter';
 import { shallow, ShallowWrapper } from 'enzyme';
-import { LocationFilters } from './LocationFilters';
-import { makeFakeTrackerStore } from '../utils/testUtils';
-import { TrackerStore } from '../tracker/stores/TrackerStore';
+import { LocationFilters, LocationFilterStoreContract } from './LocationFilters';
 
 describe('LocationFilters', () => {
   let subject: ShallowWrapper;
-  let trackerStore: TrackerStore;
+  let locationFilterStore: LocationFilterStoreContract;
+
   beforeEach(async () => {
-    trackerStore = await makeFakeTrackerStore(false);
+    locationFilterStore = {
+      siteOptions: [{value: 1, label: 'site1'}],
+      selectedSite: -1,
+      setSelectedSite: jest.fn(),
+      selectedSquadron: -1,
+      setSelectedSquadron: jest.fn(),
+      squadronOptions: [{value: 1, label: 'squad1'}],
+      selectedFlight: -1,
+      setSelectedFlight: jest.fn(),
+      flightOptions: [{value: 1, label: 'flight1'}]
+    };
+
     subject = shallow(
-      <LocationFilters locationFilterStore={trackerStore.locationFilterStore}/>
+      <LocationFilters
+        refreshAirmen={() => Promise.resolve()}
+        locationFilterStore={locationFilterStore}
+      />
       );
   });
 
@@ -23,21 +36,21 @@ describe('LocationFilters', () => {
 
   it('should render a site filter with the correct props', () => {
     const wrapper = subject.find('#site-filter');
-    expect(wrapper.prop('value')).toEqual(trackerStore.locationFilterStore.selectedSite);
-    expect(wrapper.prop('options')).toEqual(trackerStore.locationFilterStore.siteOptions);
+    expect(wrapper.prop('value')).toEqual(locationFilterStore.selectedSite);
+    expect(wrapper.prop('options')).toEqual(locationFilterStore.siteOptions);
   });
 
   it('should render a squadron filter with the correct props', () => {
     const wrapper = subject.find('#squadron-filter');
-    expect(wrapper.prop('value')).toEqual(trackerStore.locationFilterStore.selectedSquadron);
-    expect(wrapper.prop('callback')).toEqual(trackerStore.locationFilterStore.setSelectedSquadron);
-    expect(wrapper.prop('options')).toEqual(trackerStore.locationFilterStore.squadronOptions);
+    expect(wrapper.prop('value')).toEqual(locationFilterStore.selectedSquadron);
+    expect(wrapper.prop('callback')).toEqual(locationFilterStore.setSelectedSquadron);
+    expect(wrapper.prop('options')).toEqual(locationFilterStore.squadronOptions);
   });
 
   it('should render a flight filter with the correct props', () => {
     const wrapper = subject.find('#flight-filter');
-    expect(wrapper.prop('value')).toEqual(trackerStore.locationFilterStore.selectedFlight);
-    expect(wrapper.prop('callback')).toEqual(trackerStore.locationFilterStore.setSelectedFlight);
-    expect(wrapper.prop('options')).toEqual(trackerStore.locationFilterStore.flightOptions);
+    expect(wrapper.prop('value')).toEqual(locationFilterStore.selectedFlight);
+    expect(wrapper.prop('callback')).toEqual(locationFilterStore.setSelectedFlight);
+    expect(wrapper.prop('options')).toEqual(locationFilterStore.flightOptions);
   });
 });

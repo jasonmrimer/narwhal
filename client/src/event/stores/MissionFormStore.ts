@@ -1,6 +1,5 @@
 import { EventModel, EventType } from '../models/EventModel';
 import { FormStore } from '../../widgets/stores/FormStore';
-import { EventActions } from './EventActions';
 import { action, computed, observable } from 'mobx';
 import { MissionModel } from '../../mission/models/MissionModel';
 
@@ -16,7 +15,7 @@ interface State {
 export class MissionFormStore extends FormStore<EventModel, State> {
   @observable private _missions: MissionModel[] = [];
 
-  constructor(private eventActions: EventActions) {
+  constructor() {
     super();
     this._state = {
       id: '',
@@ -84,8 +83,8 @@ export class MissionFormStore extends FormStore<EventModel, State> {
     };
   }
 
-  async addModel(airmanId: number) {
-    const event = new EventModel(
+  addModel(airmanId: number) {
+    return new EventModel(
       this._state.title,
       '',
       this.makeMoment(this._state.startDate, this._state.startTime),
@@ -94,13 +93,6 @@ export class MissionFormStore extends FormStore<EventModel, State> {
       EventType.Mission,
       this.model ? Number(this.model.id) : Number(this._state.id)
     );
-    await this.eventActions.addEvent(event);
-  }
-
-  removeModel(): void {
-    if (this.model != null) {
-      this.eventActions.removeEvent(this.model);
-    }
   }
 
   @computed

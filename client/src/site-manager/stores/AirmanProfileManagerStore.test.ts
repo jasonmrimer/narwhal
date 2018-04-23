@@ -70,10 +70,10 @@ describe('AirmanProfileManagerStore', () => {
     subject.setState('siteId', 2);
     expect(subject.airman.siteId).toBe(2);
 
-    subject.setState('squadronId', 2)
+    subject.setState('squadronId', 2);
     expect(subject.airman.squadronId).toBe(2);
 
-    subject.setState('flightId', 2)
+    subject.setState('flightId', 2);
     expect(subject.airman.flightId).toBe(2);
 
     subject.setState('shift', ShiftType.Night);

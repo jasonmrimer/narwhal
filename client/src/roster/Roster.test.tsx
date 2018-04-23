@@ -1,36 +1,78 @@
-import { makeFakeTrackerStore } from '../utils/testUtils';
 import { mount, ReactWrapper } from 'enzyme';
 import { BorderedNotification } from '../widgets/Notification';
-import { Roster, StyledRow } from './Roster';
+import { Roster, StyledRoster, StyledRow } from './Roster';
 import { AirmanDatum } from '../tracker/AirmanDatum';
-import { TabType } from '../tracker/stores/SidePanelStore';
+import { SidePanelStore, TabType } from '../tracker/stores/SidePanelStore';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import * as React from 'react';
 import { AirmanModel } from '../airman/models/AirmanModel';
 import { StyledShiftDropdown } from '../tracker/ShiftDropdown';
+import { DoubleRepositories } from '../utils/Repositories';
+import { LocationFilterStore } from '../widgets/stores/LocationFilterStore';
+import { RosterHeaderStore } from './stores/RosterHeaderStore';
+import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
+import { EventModelFactory } from '../event/factories/EventModelFactory';
+import { Provider } from 'mobx-react';
+import { AvailabilityStore } from '../availability/stores/AvailabilityStore';
+import { CurrencyStore } from '../currency/stores/CurrencyStore';
+import { PlannerStore } from './stores/PlannerStore';
+import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
 
 describe('Roster', () => {
   let trackerStore: TrackerStore;
+  let locationFilterStore: LocationFilterStore;
+  let rosterHeaderStore: RosterHeaderStore;
   let subject: ReactWrapper;
   let airmen: AirmanModel[];
 
   describe('when the list of airmen is empty', () => {
     beforeEach(async () => {
-      trackerStore = await makeFakeTrackerStore(false);
-      subject = mount(<Roster trackerStore={trackerStore}/>);
+      trackerStore = new TrackerStore(DoubleRepositories);
+      rosterHeaderStore = new RosterHeaderStore();
+      locationFilterStore = new LocationFilterStore();
+
+      subject = mount(
+        <Roster
+          trackerStore={trackerStore}
+          rosterHeaderStore={rosterHeaderStore}
+          locationFilterStore={locationFilterStore}
+        />
+      );
     });
 
     it('should return a message', () => {
       expect(trackerStore.airmen.length).toBe(0);
       expect(subject.find(BorderedNotification).exists()).toBeTruthy();
     });
-
   });
 
   describe('when this list of airmen is not empty', () => {
-    beforeEach(async () => {
-      trackerStore = await makeFakeTrackerStore();
-      subject = mount(<Roster trackerStore={trackerStore}/>);
+    beforeEach(() => {
+      trackerStore = new TrackerStore(DoubleRepositories);
+      rosterHeaderStore = new RosterHeaderStore();
+      locationFilterStore = new LocationFilterStore();
+      const availabilityStore = new AvailabilityStore(DoubleRepositories);
+      const sidePanelStore = new SidePanelStore();
+      const currencyStore = new CurrencyStore(DoubleRepositories);
+      const plannerStore = new PlannerStore(new TimeServiceStub());
+      let airman = AirmanModelFactory.build(1);
+      let event = EventModelFactory.build();
+      trackerStore.hydrate([airman], [event], airman.siteId);
+
+      subject = mount(
+        <Provider
+          trackerStore={trackerStore}
+          rosterHeaderStore={rosterHeaderStore}
+          locationFilterStore={locationFilterStore}
+          availabilityStore={availabilityStore}
+          sidePanelStore={sidePanelStore}
+          currencyStore={currencyStore}
+          plannerStore={plannerStore}
+        >
+          <StyledRoster/>
+        </Provider>
+      );
+
       airmen = trackerStore.airmen;
     });
 

@@ -1,53 +1,58 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
-import { MissionPlanner } from './MissionPlanner';
 import { CrewModelFactory } from './factories/CrewModelFactory';
-import { DoubleRepositories } from '../utils/Repositories';
 import { StyledLoadingOverlay } from '../widgets/LoadingOverlay';
-import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
+import { StyledLocationFilters } from '../widgets/LocationFilters';
 import { StyledCrew } from './Crew';
 import { StyledMissionPlannerRosterContainer } from './MissionPlannerRosterContainer';
-import { MissionPlannerStore } from './stores/MissionPlannerStore';
-import { StyledLocationFilters } from '../widgets/LocationFilters';
 import { StyledSubmitButton } from '../widgets/SubmitButton';
+import { StyledButton } from '../widgets/Button';
 import { StyledForm } from '../widgets/Form';
 import { eventStub } from '../utils/testUtils';
-import { StyledButton } from '../widgets/Button';
+import {
+  CrewStoreContract,
+  LocationFilterStoreContract,
+  MissionPlanner,
+  MissionPlannerStoreContract
+} from './MissionPlanner';
 import { StyledNavigationBackButton } from '../widgets/NavigationBackButton';
 
 describe('MissionPlanner', () => {
   let subject: ShallowWrapper;
-  let profileStore: ProfileSitePickerStore;
-  let missionPlannerStore: MissionPlannerStore;
   let windowPrintFunction: any;
-
+  let missionPlannerStore: MissionPlannerStoreContract;
+  let locationFilterStore: LocationFilterStoreContract;
+  let crewStore: CrewStoreContract;
   const crewModel = CrewModelFactory.build();
   const mission = crewModel.mission;
 
   beforeEach(async () => {
-    windowPrintFunction = window.print;
-    window.print = jest.fn();
+    windowPrintFunction = (window as any).print;
+    (window as any).print = jest.fn();
 
-    profileStore = new ProfileSitePickerStore(DoubleRepositories);
-    await profileStore.hydrate();
-
-    missionPlannerStore = new MissionPlannerStore(DoubleRepositories, profileStore);
-    await missionPlannerStore.hydrate(1);
+    missionPlannerStore = {
+      refreshAllAirmen: jest.fn(),
+      refreshAllEvents: jest.fn(),
+      loading: false,
+      setLoading: jest.fn(),
+    };
+    locationFilterStore = {selectedSite: 1};
+    crewStore = {save: jest.fn(), crew: crewModel};
 
     subject = shallow(
       <MissionPlanner
-        crewId={crewModel.id}
         missionPlannerStore={missionPlannerStore}
+        locationFilterStore={locationFilterStore}
+        crewStore={crewStore}
       />
     );
   });
 
   afterEach(() => {
-    window.print = windowPrintFunction;
+    (window as any).print = windowPrintFunction;
   });
 
   it('displays the mission details', () => {
-    subject.update();
     expect(subject.text()).toContain(mission.atoMissionNumber);
     expect(subject.text()).toContain(`MSN DATE: ${mission.displayDateZulu}`);
     expect(subject.text()).toContain(`MSN START: ${mission.displayStartTime}`);
@@ -55,12 +60,11 @@ describe('MissionPlanner', () => {
     expect(subject.text()).toContain(`Last updated ${mission.displayUpdatedAt}.`);
   });
 
-  it('should render the spinner only while loading', async () => {
-    missionPlannerStore.setLoading(false);
-    subject.update();
+  it('should render the spinner only while loading', () => {
     expect(subject.find(StyledLoadingOverlay).exists()).toBeFalsy();
 
-    missionPlannerStore.setLoading(true);
+    missionPlannerStore.loading = true;
+    subject.instance().forceUpdate();
     subject.update();
     expect(subject.find(StyledLoadingOverlay).exists()).toBeTruthy();
   });
@@ -93,14 +97,11 @@ describe('MissionPlanner', () => {
   it('should open print window when print button is clicked', () => {
     const printButton = subject.find(StyledButton).findWhere(elem => elem.prop('text') === 'PRINT');
     printButton.simulate('click');
-    expect(window.print).toHaveBeenCalled();
+    expect((window as any).print).toHaveBeenCalled();
   });
 
   it('should call crewStore save onSubmit', () => {
-    missionPlannerStore.crewStore.save = jest.fn();
-    subject.setProps({'missionPlannerStore': missionPlannerStore});
     subject.find(StyledForm).simulate('submit', eventStub);
-    expect(missionPlannerStore.crewStore.save).toHaveBeenCalled();
+    expect(crewStore.save).toHaveBeenCalled();
   });
-
 });

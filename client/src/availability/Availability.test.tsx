@@ -6,17 +6,21 @@ import { AirmanModel } from '../airman/models/AirmanModel';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 import { StyledAvailabilityTile } from './AvailabilityTile';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
-import { makeFakeTrackerStore } from '../utils/testUtils';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { StyledRadioButtons } from '../widgets/RadioButtons';
 import { StyledAppointmentForm } from '../event/AppointmentForm';
 import { StyledLeaveForm } from '../event/LeaveForm';
 import { EventModelFactory } from '../event/factories/EventModelFactory';
-import { TabType } from '../tracker/stores/SidePanelStore';
 import { StyledBackButton } from '../widgets/BackButton';
 import { StyledTDYDeploymentForm } from '../event/TDYDeploymentForm';
+import { AvailabilityStore } from './stores/AvailabilityStore';
+import { PlannerStore } from '../roster/stores/PlannerStore';
+import { DoubleRepositories } from '../utils/Repositories';
+import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
 
 let trackerStore: TrackerStore;
+let availabilityStore: AvailabilityStore;
+let plannerStore: PlannerStore;
 let airman: AirmanModel;
 let subject: ShallowWrapper;
 let eventOne: EventModel;
@@ -25,7 +29,7 @@ let eventThree: EventModel;
 let eventFour: EventModel;
 
 describe('Availability', () => {
-  beforeEach(async () => {
+  beforeEach(() => {
     airman = AirmanModelFactory.build();
     eventOne = new EventModel(
       'Event One',
@@ -62,19 +66,19 @@ describe('Availability', () => {
 
     const eventList = [eventOne, eventTwo, eventThree, eventFour];
 
-    trackerStore = await makeFakeTrackerStore();
-    await trackerStore.setSelectedAirman(airman, TabType.AVAILABILITY);
+    trackerStore = new TrackerStore(DoubleRepositories);
+    trackerStore.setSelectedAirman(airman);
 
-    trackerStore.availabilityStore.setAirmanEvents(eventList);
+    availabilityStore = new AvailabilityStore(DoubleRepositories);
+    availabilityStore.setAirmanEvents(eventList);
+
+    plannerStore = new PlannerStore(new TimeServiceStub());
 
     subject = shallow(
       <Availability
-        selectedAirman={airman}
-        selectedDate={null}
-        createEvent={trackerStore.newEvent}
-        availabilityStore={trackerStore.availabilityStore}
-        plannerStore={trackerStore.plannerStore}
-        setLoading={trackerStore.setLoading}
+        trackerStore={trackerStore}
+        availabilityStore={availabilityStore}
+        plannerStore={plannerStore}
       />
     );
   });
@@ -93,16 +97,16 @@ describe('Availability', () => {
   it('renders Add Events buttons for each date', () => {
     let index: number;
     for (index = 0; index < 7; index++) {
-        const dateWrapper = subject.find('#day-' + index);
-        expect(dateWrapper.find('.add-event-on-date').exists()).toBeTruthy();
-        expect(dateWrapper.find('.add-event-on-date').text()).toBe('+ Add Event');
+      const dateWrapper = subject.find('#day-' + index);
+      expect(dateWrapper.find('.add-event-on-date').exists()).toBeTruthy();
+      expect(dateWrapper.find('.add-event-on-date').text()).toBe('+ Add Event');
     }
   });
 
   it('calls the createEvent on date click', () => {
     subject.find('.event-date').at(0).simulate('click');
-    expect(trackerStore.availabilityStore.shouldShowEventForm).toBeTruthy();
-    expect(trackerStore.selectedDate).toEqual(moment('2017-11-26'));
+    expect(availabilityStore.shouldShowEventForm).toBeTruthy();
+    expect(availabilityStore.selectedDate).toEqual(moment('2017-11-26'));
   });
 
   it('renders a list of events', () => {
@@ -142,11 +146,11 @@ describe('Availability', () => {
 
   describe('create new event form', () => {
     beforeEach(() => {
-      trackerStore.availabilityStore.showEventForm();
+      availabilityStore.showEventForm();
     });
 
     it('shows an appointment form', () => {
-      trackerStore.availabilityStore.openCreateEventForm(EventType.Appointment, airman.id, null);
+      availabilityStore.setEventFormType(EventType.Appointment);
       subject.update();
 
       expect(subject.find(StyledRadioButtons).prop('value')).toBe(EventType.Appointment);
@@ -154,7 +158,7 @@ describe('Availability', () => {
     });
 
     it('shows a leave form', () => {
-      trackerStore.availabilityStore.openCreateEventForm(EventType.Leave, airman.id, null);
+      availabilityStore.setEventFormType(EventType.Leave);
       subject.update();
 
       expect(subject.find(StyledRadioButtons).prop('value')).toBe(EventType.Leave);
@@ -162,7 +166,7 @@ describe('Availability', () => {
     });
 
     it('shows a tdy/deployment form', () => {
-      trackerStore.availabilityStore.openCreateEventForm(EventType.TDY_DEPLOYMENT, airman.id, null);
+      availabilityStore.setEventFormType(EventType.TDY_DEPLOYMENT);
       subject.update();
 
       expect(subject.find(StyledRadioButtons).prop('value')).toBe(EventType.TDY_DEPLOYMENT);
@@ -179,7 +183,7 @@ describe('Availability', () => {
 
     it('shows an appointment form', () => {
       event.type = EventType.Appointment;
-      trackerStore.availabilityStore.openEditEventForm(event);
+      availabilityStore.openEditEventForm(event);
       subject.update();
 
       expect(subject.find(StyledRadioButtons).exists()).toBeFalsy();
@@ -188,7 +192,7 @@ describe('Availability', () => {
 
     it('shows a leave form', () => {
       event.type = EventType.Leave;
-      trackerStore.availabilityStore.openEditEventForm(event);
+      availabilityStore.openEditEventForm(event);
       subject.update();
 
       expect(subject.find(StyledRadioButtons).exists()).toBeFalsy();
@@ -197,7 +201,7 @@ describe('Availability', () => {
 
     it('shows a tdy/deployment form', () => {
       event.type = EventType.TDY_DEPLOYMENT;
-      trackerStore.availabilityStore.openEditEventForm(event);
+      availabilityStore.openEditEventForm(event);
       subject.update();
 
       expect(subject.find(StyledRadioButtons).exists()).toBeFalsy();
@@ -207,9 +211,9 @@ describe('Availability', () => {
 
   it('can exit out of an event form', () => {
     subject.find('.add-event').simulate('click');
-    expect(trackerStore.availabilityStore.shouldShowEventForm).toBeTruthy();
+    expect(availabilityStore.shouldShowEventForm).toBeTruthy();
 
     subject.find(StyledBackButton).simulate('click');
-    expect(trackerStore.availabilityStore.shouldShowEventForm).toBeFalsy();
+    expect(availabilityStore.shouldShowEventForm).toBeFalsy();
   });
 });

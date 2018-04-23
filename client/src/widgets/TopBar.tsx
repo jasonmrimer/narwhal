@@ -1,15 +1,18 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
-import { ProfileModel } from '../profile/models/ProfileModel';
+import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
+import { inject, observer } from 'mobx-react';
 
 interface Props {
-  profile: ProfileModel;
+  profileStore?: ProfileSitePickerStore;
   className?: string;
 }
 
+@observer
 export class TopBar extends React.Component<Props> {
   render() {
+    const {profileStore} = this.props;
     return (
       <React.Fragment>
         <div className={this.props.className}>
@@ -42,7 +45,7 @@ export class TopBar extends React.Component<Props> {
             </NavLink>
           </span>
           <span>
-          {`${this.props.profile.username} (${this.props.profile.roleName})`}
+          {`${profileStore!.profile!.username} (${profileStore!.profile!.roleName})`}
           </span>
         </div>
         <TopBarSpacer/>
@@ -55,7 +58,7 @@ const TopBarSpacer = styled('div')`
   margin-bottom: 9rem;
 `;
 
-export const StyledTopBar = styled(TopBar)`
+export const StyledTopBar = inject('profileStore')(styled(TopBar)`
   border-collapse: collapse;
   
   background-color: ${props => props.theme.lighter};
@@ -132,4 +135,4 @@ export const StyledTopBar = styled(TopBar)`
   @media print {
     display: none;
   }
-`;
+`);

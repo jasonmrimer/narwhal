@@ -1,22 +1,17 @@
-import { EventActions } from './EventActions';
 import { EventModel, EventType } from '../models/EventModel';
 import { EventModelFactory } from '../factories/EventModelFactory';
 import { LeaveFormStore } from './LeaveFormStore';
 import * as moment from 'moment';
+import { TimeServiceStub } from '../../tracker/services/doubles/TimeServiceStub';
 
 describe('LeaveFormStore', () => {
   const airmanId = 123;
-  let eventActions: EventActions;
   let subject: LeaveFormStore;
   let event: EventModel;
 
   beforeEach(() => {
     event = EventModelFactory.build();
-    eventActions = {
-      addEvent: jest.fn(),
-      removeEvent: jest.fn()
-    };
-    subject = new LeaveFormStore(eventActions);
+    subject = new LeaveFormStore(new TimeServiceStub());
   });
 
   describe('open', () => {
@@ -66,8 +61,6 @@ describe('LeaveFormStore', () => {
     subject.setState('endDate', '2018-02-22');
     subject.setState('endTime', '2359');
 
-    subject.addModel(airmanId);
-
     const expectedEvent = new EventModel(
       'Leave',
       'Description',
@@ -77,7 +70,7 @@ describe('LeaveFormStore', () => {
       EventType.Leave
     );
 
-    expect(eventActions.addEvent).toHaveBeenCalledWith(expectedEvent);
+    expect(subject.addModel(airmanId)).toEqual(expectedEvent);
   });
 
   it('ensures that at least dates are included in the leave submission', () => {
@@ -85,17 +78,9 @@ describe('LeaveFormStore', () => {
     subject.setState('endDate', '2018-02-22');
     subject.setState('endTime', '2359');
 
-    subject.addModel(airmanId);
+    const addedEvent = subject.addModel(airmanId);
 
-    expect((eventActions.addEvent as jest.Mock).mock.calls[0][0].startTime.isValid()).toBeFalsy();
-  });
-
-  it('can remove an event', () => {
-    subject.open(event);
-
-    subject.removeModel();
-
-    expect(eventActions.removeEvent).toHaveBeenCalledWith(event);
+    expect(addedEvent.startTime.isValid()).toBeFalsy();
   });
 
   it('should auto-populate empty end data field when setting start date', () => {

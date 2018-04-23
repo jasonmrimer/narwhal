@@ -2,21 +2,17 @@ import * as moment from 'moment';
 import { AppointmentFormStore } from './AppointmentFormStore';
 import { EventModel, EventType } from '../models/EventModel';
 import { EventModelFactory } from '../factories/EventModelFactory';
-import { EventActions } from './EventActions';
+import { TimeServiceStub } from '../../tracker/services/doubles/TimeServiceStub';
 
 describe('AppointmenFormStore', () => {
   const airmanId = 123;
-  let eventActions: EventActions;
   let subject: AppointmentFormStore;
   let event: EventModel;
 
   beforeEach(() => {
     event = EventModelFactory.build();
-    eventActions = {
-      addEvent: jest.fn(),
-      removeEvent: jest.fn()
-    };
-    subject = new AppointmentFormStore(eventActions);
+
+    subject = new AppointmentFormStore(new TimeServiceStub());
   });
 
   describe('open', () => {
@@ -70,8 +66,6 @@ describe('AppointmenFormStore', () => {
     subject.setState('endDate', '2018-02-22');
     subject.setState('endTime', '1300');
 
-    subject.addModel(airmanId);
-
     const expectedEvent = new EventModel(
       'Title',
       'Description',
@@ -81,7 +75,7 @@ describe('AppointmenFormStore', () => {
       EventType.Appointment
     );
 
-    expect(eventActions.addEvent).toHaveBeenCalledWith(expectedEvent);
+    expect(subject.addModel(airmanId)).toEqual(expectedEvent);
   });
 
   it('ensures that at least dates are included in the appointment submission', () => {
@@ -92,17 +86,9 @@ describe('AppointmenFormStore', () => {
     subject.setState('endDate', '2018-02-22');
     subject.setState('endTime', '2359');
 
-    subject.addModel(airmanId);
+    const addedEvent = subject.addModel(airmanId);
 
-    expect((eventActions.addEvent as jest.Mock).mock.calls[0][0].startTime.isValid()).toBeFalsy();
-  });
-
-  it('can remove an event', () => {
-    subject.open(event);
-
-    subject.removeModel();
-
-    expect(eventActions.removeEvent).toHaveBeenCalledWith(event);
+    expect(addedEvent.startTime.isValid()).toBeFalsy();
   });
 
   describe('auto-populating date and time fields', () => {

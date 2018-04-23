@@ -1,25 +1,16 @@
-import { AvailabilityStore, PlannerActions } from './AvailabilityStore';
+import { AvailabilityStore } from './AvailabilityStore';
 import { EventModel, EventType } from '../../event/models/EventModel';
 import { EventModelFactory } from '../../event/factories/EventModelFactory';
-import { toJS } from 'mobx';
 import * as moment from 'moment';
 import { DoubleRepositories } from '../../utils/Repositories';
 import { FakeEventRepository } from '../../event/repositories/doubles/FakeEventRepository';
 
 describe('AvailabilityStore', () => {
-  let subject: AvailabilityStore;
   let eventRepository: FakeEventRepository;
-  let plannerActions: PlannerActions;
+  let subject: AvailabilityStore;
+
   beforeEach(() => {
-    const refreshAirmen = {
-      refreshAirmen: jest.fn()
-    };
-
-    plannerActions = {
-      navigateToWeek: jest.fn()
-    };
-
-    subject = new AvailabilityStore(refreshAirmen, DoubleRepositories, plannerActions);
+    subject = new AvailabilityStore(DoubleRepositories);
     eventRepository = (DoubleRepositories.eventRepository as FakeEventRepository);
   });
 
@@ -39,41 +30,22 @@ describe('AvailabilityStore', () => {
       expect(subject.eventFormType).toBe('');
     });
 
-    it('should open an event form with a selectedDate', () => {
-      const openAppointmentSpy = jest.fn();
-      subject.appointmentFormStore.open = openAppointmentSpy;
-
-      const selectedDate = moment();
-      const event = new EventModel('', '', selectedDate, selectedDate, 1, EventType.Appointment);
-
-      subject.openCreateEventForm(EventType.Appointment, 1, selectedDate);
-      expect(openAppointmentSpy).toHaveBeenCalledWith(event);
-    });
-
-    it('should not include the selectedDate when opens a new Mission Form', () => {
-      const openMissionSpy = jest.fn();
-      subject.missionFormStore.open = openMissionSpy;
-
-      subject.openCreateEventForm(EventType.Mission, 1, moment());
-      expect(openMissionSpy).toHaveBeenCalledWith();
-    });
-
     it('opens leave', () => {
-      subject.openCreateEventForm(EventType.Leave, 1, null);
+      subject.setEventFormType(EventType.Leave);
 
       expect(subject.shouldShowEventForm).toBeFalsy();
       expect(subject.eventFormType).toBe(EventType.Leave);
     });
 
     it('opens appointment', () => {
-      subject.openCreateEventForm(EventType.Appointment, 1, null);
+      subject.setEventFormType(EventType.Appointment);
 
       expect(subject.shouldShowEventForm).toBeFalsy();
       expect(subject.eventFormType).toBe(EventType.Appointment);
     });
 
     it('opens mission', () => {
-      subject.openCreateEventForm(EventType.Mission, 1, null);
+      subject.setEventFormType(EventType.Mission);
 
       expect(subject.shouldShowEventForm).toBeFalsy();
       expect(subject.eventFormType).toBe(EventType.Mission);
@@ -138,12 +110,6 @@ describe('AvailabilityStore', () => {
     expect(subject.eventFormType).toBe('');
   });
 
-  it('should set errors on children stores when it calls setFormErrors', () => {
-    subject.openCreateEventForm(EventType.Appointment, 1, null);
-    subject.setFormErrors([{title: 'This field is required.'}]);
-    expect(toJS(subject.appointmentFormStore.errors)).toEqual([{title: 'This field is required.'}]);
-  });
-
   describe('deleting events', () => {
     let savedEvent: EventModel;
 
@@ -173,20 +139,9 @@ describe('AvailabilityStore', () => {
   describe('creating and editing events', () => {
     const event = new EventModel('Title', 'Description', moment(), moment(), 1, EventType.Mission);
 
-    describe('addEvent', () => {
-      it('should add an event to an airman', async () => {
-        const savedEvent = await subject.addEvent(event);
-        expect(eventRepository.hasItem(savedEvent)).toBeTruthy();
-        expect(plannerActions.navigateToWeek).toHaveBeenCalledWith(event.startTime);
-      });
-
-      it('should call set form errors on Availability Stores when catching errors from add event', async () => {
-        const invalidEvent = new EventModel('', 'Description', moment(), moment(), 1, EventType.Appointment);
-        const setFormErrorsSpy = jest.fn();
-        subject.setFormErrors = setFormErrorsSpy;
-        await subject.addEvent(invalidEvent);
-        expect(setFormErrorsSpy).toHaveBeenCalledWith([{title: 'This field is required.'}]);
-      });
+    it('should add an event to an airman', async () => {
+      const savedEvent = await subject.addEvent(event);
+      expect(eventRepository.hasItem(savedEvent)).toBeTruthy();
     });
 
     it('should edit an existing event on an airman', async () => {

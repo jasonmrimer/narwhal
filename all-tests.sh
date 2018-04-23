@@ -31,14 +31,6 @@ else
     ./gradlew test
 fi
 
-if [ "$NARWHAL_CI" = "true" ]
-then
-    pushd client
-    yarn build:storybook
-    popd
-fi
-
-
 ./gradlew assemble
 java -jar ./build/libs/narwhal-0.0.1-SNAPSHOT.jar --server.port=9090 &>./tmp/test.log &
 echo $! > ./tmp/narwhal.pid

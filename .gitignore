@@ -222,5 +222,3 @@ client/.idea/**/dynamic.xml
 client/.idea/**/uiDesigner.xml
 
 .idea/sonarlint/*
-
-client/storybook-static/*

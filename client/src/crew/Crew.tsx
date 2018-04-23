@@ -1,45 +1,51 @@
 import * as React from 'react';
-import { CrewStore } from './stores/CrewStore';
 import { CrewPositionModel } from './models/CrewPositionModel';
 import { FilterOption } from '../widgets/models/FilterOptionModel';
 import styled from 'styled-components';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { StyledCrewPositionRow } from './CrewPositionRow';
+import { CrewModel } from './models/CrewModel';
 import { StyledCrewPositionInputRow } from './CrewPositionInputRow';
 
+export interface CrewStoreContract {
+  setCrewEntry: (id: number, property: Partial<CrewPositionModel>) => void;
+  clearPosition: (id: number) => void;
+  setNewEntry: (property: any) => void;
+  crew: CrewModel;
+}
 interface Props {
-  crewStore: CrewStore;
+  crewStore?: CrewStoreContract;
   className?: string;
 }
 
 @observer
 export class Crew extends React.Component<Props> {
   onCheck = (e: any, id: number) => {
-    this.props.crewStore.setCrewEntry(id, {[e.target.name]: e.target.checked});
+    this.props.crewStore!.setCrewEntry(id, {[e.target.name]: e.target.checked});
   }
 
   onChange = (e: any, id: number) => {
-    this.props.crewStore.setCrewEntry(id, {[e.target.name]: e.target.value});
+    this.props.crewStore!.setCrewEntry(id, {[e.target.name]: e.target.value});
   }
 
   handleDeleteChange = (e: any, id: number) => {
     e.preventDefault();
-    this.props.crewStore.clearPosition(id);
+    this.props.crewStore!.clearPosition(id);
   }
 
   handleNewEntryCheck = (e: any) => {
-    this.props.crewStore.setNewEntry({[e.target.name]: e.target.checked});
+    this.props.crewStore!.setNewEntry({[e.target.name]: e.target.checked});
   }
 
   handleNewEntryChange = (e: any) => {
-    this.props.crewStore.setNewEntry({[e.target.name]: e.target.value});
+    this.props.crewStore!.setNewEntry({[e.target.name]: e.target.value});
   }
 
   handleTypeahead = (opt: FilterOption) => {
     if (opt) {
-      this.props.crewStore.setNewEntry({airmanName: opt.label});
+      this.props.crewStore!.setNewEntry({airmanName: opt.label});
     } else {
-      this.props.crewStore.setNewEntry({airmanName: ''});
+      this.props.crewStore!.setNewEntry({airmanName: ''});
     }
   }
 
@@ -55,7 +61,6 @@ export class Crew extends React.Component<Props> {
           </div>
           {this.renderCrew()}
           <StyledCrewPositionInputRow
-            crewStore={this.props.crewStore}
             handleNewEntryCheck={this.handleNewEntryCheck}
             handleNewEntryChange={this.handleNewEntryChange}
             handleTypeahead={this.handleTypeahead}
@@ -66,7 +71,7 @@ export class Crew extends React.Component<Props> {
   }
 
   private renderCrew = () => {
-    const {crew} = this.props.crewStore;
+    const {crew} = this.props.crewStore!;
     if (crew == null) {
       return [];
     }
@@ -87,7 +92,7 @@ export class Crew extends React.Component<Props> {
 
 }
 
-export const StyledCrew = styled(Crew)`
+export const StyledCrew = inject('crewStore')(styled(Crew)`
   .crew {
     min-width: 800px;
     width: 80%;
@@ -127,4 +132,4 @@ export const StyledCrew = styled(Crew)`
     width: 50%;
     padding: 0 1rem 0 0;
   }
-`;
+`);

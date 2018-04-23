@@ -1,26 +1,23 @@
 import { action, computed, observable } from 'mobx';
 import { ProfileModel } from '../models/ProfileModel';
 import { ProfileRepository } from '../repositories/ProfileRepository';
-import { SiteRepository } from '../../site/repositories/SiteRepository';
 import { SiteModel, SiteType } from '../../site/models/SiteModel';
 import { Repositories } from '../../utils/Repositories';
 
 export class ProfileSitePickerStore {
-  private siteRepository: SiteRepository;
   private profileRepository: ProfileRepository;
   @observable private _profile: ProfileModel | null = null;
   @observable private _sites: SiteModel[];
   @observable private _pendingSite: SiteModel | null = null;
 
   constructor(repositories: Repositories) {
-    this.siteRepository = repositories.siteRepository;
     this.profileRepository = repositories.profileRepository;
   }
 
   @action.bound
-  async hydrate() {
-    this._sites = await this.siteRepository.findAll();
-    this._profile = await this.profileRepository.findOne();
+  hydrate(sites: SiteModel[], profile: ProfileModel) {
+    this._sites = sites;
+    this._profile = profile;
   }
 
   @computed

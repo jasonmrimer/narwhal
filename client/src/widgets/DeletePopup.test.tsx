@@ -22,7 +22,7 @@ describe('DeletePopup', () => {
     );
   });
 
-  it('should call the removeSkill on delete button click', () => {
+  it('should call the executePendingDelete on delete button click', () => {
     subject.find(StyledButton).at(1).simulate('click');
     expect(onClickSpy).toHaveBeenCalled();
   });

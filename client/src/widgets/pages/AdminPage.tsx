@@ -1,25 +1,37 @@
 import * as React from 'react';
 import { StyledTopBar } from '../TopBar';
 import { observer } from 'mobx-react';
-import { ProfileSitePickerStore } from '../../profile/stores/ProfileSitePickerStore';
 import { StyledProfileList } from '../../admin/ProfileList';
+import { inject } from 'mobx-react/custom';
 import { AdminStore } from '../../admin/stores/AdminStore';
+import { ProfileSitePickerStore } from '../../profile/stores/ProfileSitePickerStore';
+import { WebRepositories } from '../../utils/Repositories';
 
 interface Props {
-  profileStore: ProfileSitePickerStore;
-  adminStore: AdminStore;
+  adminStore?: AdminStore;
+  profileStore?: ProfileSitePickerStore;
 }
 
-export const AdminPage = observer((props: Props) => {
-  return (
-    <React.Fragment>
-      <StyledTopBar
-        profile={props.profileStore.profile!}
-      />
-      <StyledProfileList
-        profile={props.profileStore.profile!}
-        store={props.adminStore}
-      />
-    </React.Fragment>
-  );
-});
+@inject('adminStore', 'profileStore')
+@observer
+export class AdminPage extends React.Component<Props> {
+  async componentDidMount() {
+    const [profilesResp, rolesResp, sites, profile] = await Promise.all([
+      WebRepositories.profileRepository.findAll(),
+      WebRepositories.profileRepository.findAllRoles(),
+      WebRepositories.siteRepository.findAll(),
+      WebRepositories.profileRepository.findOne(),
+    ]);
+    this.props.adminStore!.hydrate(profilesResp, rolesResp);
+    this.props.profileStore!.hydrate(sites, profile);
+  }
+
+  render() {
+    return (
+      <React.Fragment>
+        <StyledTopBar/>
+        <StyledProfileList/>
+      </React.Fragment>
+    );
+  }
+}

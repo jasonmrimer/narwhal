@@ -3,75 +3,83 @@ import styled from 'styled-components';
 import { CloseIcon } from '../icons/CloseIcon';
 import { StyledCurrency } from '../currency/Currency';
 import { StyledTab } from './Tab';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { TrackerStore } from './stores/TrackerStore';
 import { StyledAvailability } from '../availability/Availability';
 import { TabAlert } from '../icons/TabAlert';
 import { SidePanelStore, TabType } from './stores/SidePanelStore';
+import { AvailabilityStore } from '../availability/stores/AvailabilityStore';
+import { PlannerStore } from '../roster/stores/PlannerStore';
+import { CurrencyStore } from '../currency/stores/CurrencyStore';
 
 interface Props {
-  trackerStore: TrackerStore;
-  sidePanelStore: SidePanelStore;
+  trackerStore?: TrackerStore;
+  sidePanelStore?: SidePanelStore;
+  availabilityStore?: AvailabilityStore;
+  currencyStore?: CurrencyStore;
+  plannerStore?: PlannerStore;
   className?: string;
 }
 
 @observer
 export class SidePanel extends React.Component<Props> {
-
   renderSelectedTab = () => {
-    const {sidePanelStore, trackerStore} = this.props;
-    switch (sidePanelStore.selectedTab) {
+    const {sidePanelStore} = this.props;
+    const {selectedTab} = sidePanelStore!;
+
+    switch (selectedTab) {
       case TabType.CURRENCY:
         return (
-          <StyledCurrency
-            selectedAirman={trackerStore.selectedAirman}
-            currencyStore={trackerStore.currencyStore}
-            setLoading={trackerStore.setLoading}
-          />
+          <StyledCurrency/>
         );
       case TabType.AVAILABILITY:
       default:
         return (
-          <StyledAvailability
-            selectedAirman={trackerStore.selectedAirman}
-            selectedDate={trackerStore.selectedDate}
-            createEvent={trackerStore.newEvent}
-            availabilityStore={trackerStore.availabilityStore}
-            plannerStore={trackerStore.plannerStore}
-            setLoading={trackerStore.setLoading}
-          />
+          <StyledAvailability/>
         );
     }
   }
 
   render() {
-    const {trackerStore, className, sidePanelStore} = this.props;
-
+    const {trackerStore, className, sidePanelStore, availabilityStore, currencyStore, plannerStore} = this.props;
+    const {clearSelectedAirman, selectedAirman} = trackerStore!;
+    const {closeEventForm} = availabilityStore!;
+    const {closeSkillForm} = currencyStore!;
+    const {setSelectedTab, selectedTab} = sidePanelStore!;
     return (
       <div className={`${className} side-panel`}>
         <div className={'header'}>
-          <button className="close" onClick={trackerStore.clearSelectedAirman}>
+          <button
+            className="close"
+            onClick={() => {
+              clearSelectedAirman();
+              plannerStore!.setSidePanelWeek(plannerStore!.plannerWeek);
+            }}
+          >
             <CloseIcon/>
           </button>
           <h2>
-            {trackerStore.selectedAirman.lastName}, {trackerStore.selectedAirman.firstName}
+            {selectedAirman.lastName}, {selectedAirman.firstName}
           </h2>
         </div>
         <div className="tabs">
           <StyledTab
             onClick={() => {
-              trackerStore.availabilityStore.closeEventForm();
-              sidePanelStore.setSelectedTab(TabType.CURRENCY);
+              closeEventForm();
+              setSelectedTab(TabType.CURRENCY);
             }}
             title="CURRENCY"
-            isActive={sidePanelStore.selectedTab === TabType.CURRENCY}
+            isActive={selectedTab === TabType.CURRENCY}
           >
-            {trackerStore.selectedAirman.hasExpiredSkills && <TabAlert/>}
+            {selectedAirman.hasExpiredSkills && <TabAlert/>}
           </StyledTab>
           <StyledTab
-            onClick={() => sidePanelStore.setSelectedTab(TabType.AVAILABILITY)}
+            onClick={() => {
+              closeSkillForm();
+              setSelectedTab(TabType.AVAILABILITY);
+            }}
             title="AVAILABILITY"
-            isActive={sidePanelStore.selectedTab === TabType.AVAILABILITY}
+            isActive={selectedTab === TabType.AVAILABILITY}
           />
         </div>
         <div>
@@ -82,7 +90,13 @@ export class SidePanel extends React.Component<Props> {
   }
 }
 
-export const StyledSidePanel = styled(SidePanel)`
+export const StyledSidePanel = inject(
+  'trackerStore',
+  'sidePanelStore',
+  'availabilityStore',
+  'currencyStore',
+  'plannerStore'
+)(styled(SidePanel)`
   background-color: ${props => props.theme.lighter};
   min-width: 380px;
   max-width: 380px;
@@ -119,4 +133,4 @@ export const StyledSidePanel = styled(SidePanel)`
     display: flex;
     justify-content: center;
   }
-`;
+`);

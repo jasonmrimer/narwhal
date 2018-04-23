@@ -2,14 +2,10 @@ import { action, computed, observable } from 'mobx';
 import { AirmanRipItemModel } from '../../airman/models/AirmanRipItemModel';
 import { RipItemRepository } from '../../airman/repositories/AirmanRipItemRepository';
 
-interface Closeable {
-  closeAirmanRipItemForm(): void;
-}
-
 export class AirmanRipItemFormStore {
   @observable private _airmanRipItems: AirmanRipItemModel[] = [];
 
-  constructor(private closeable: Closeable, public ripItemRepository: RipItemRepository) {
+  constructor(private ripItemRepository: RipItemRepository) {
   }
 
   @action.bound
@@ -32,7 +28,6 @@ export class AirmanRipItemFormStore {
   @action.bound
   async submitRipItems() {
     this._airmanRipItems = await this.ripItemRepository.updateAirmanRipItems(this._airmanRipItems);
-    this.closeable.closeAirmanRipItemForm();
   }
 
   @computed

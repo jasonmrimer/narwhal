@@ -5,7 +5,7 @@ import { observable } from 'mobx';
 export class AirmanModel {
   @observable public firstName: string;
   @observable public lastName: string;
-  @observable public siteId : number;
+  @observable public siteId: number;
   @observable public squadronId: number;
   @observable public flightId: number;
   @observable public shift?: ShiftType;

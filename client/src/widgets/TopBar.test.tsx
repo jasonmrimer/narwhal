@@ -3,6 +3,8 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import { TopBar } from './TopBar';
 import { NavLink } from 'react-router-dom';
 import { ProfileModel } from '../profile/models/ProfileModel';
+import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
+import { DoubleRepositories } from '../utils/Repositories';
 
 describe('TopBar', () => {
   let subject: ShallowWrapper;
@@ -10,7 +12,9 @@ describe('TopBar', () => {
   beforeEach(() => {
 
     profile = {id: 1, username: 'Tytus', siteId: 14, siteName: '14', roleName: 'ADMIN', roleId: 1, classified: false};
-    subject = shallow(<TopBar profile={profile}/>);
+    const profileStore = new ProfileSitePickerStore(DoubleRepositories);
+    profileStore.hydrate([], profile);
+    subject = shallow(<TopBar profileStore={profileStore}/>);
   });
 
   it('renders the username with role', () => {

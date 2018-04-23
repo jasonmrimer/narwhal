@@ -1,14 +1,14 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { SiteManagerStore } from './stores/SiteManagerStore';
-import { observer } from 'mobx-react';
+import { observer, inject } from 'mobx-react';
 import { CellMeasurer, CellMeasurerCache, List, ListRowProps } from 'react-virtualized';
 import { BorderedNotification } from '../widgets/Notification';
 import { AirmanModel } from '../airman/models/AirmanModel';
 import { Link } from 'react-router-dom';
 
 interface Props {
-  siteManagerStore: SiteManagerStore;
+  siteManagerStore?: SiteManagerStore;
   className?: string;
 }
 
@@ -52,7 +52,7 @@ const Row = observer((props: RowProps) => {
 @observer
 export class SiteManager extends React.Component<Props> {
   async componentDidMount() {
-    await this.props.siteManagerStore.hydrate();
+    await this.props.siteManagerStore!.hydrate();
   }
 
   render() {
@@ -60,7 +60,7 @@ export class SiteManager extends React.Component<Props> {
     cache.clearAll();
     return (
       <div className={this.props.className}>
-        <h2>{this.props.siteManagerStore.siteName} Personnel</h2>
+        <h2>{this.props.siteManagerStore!.siteName} Personnel</h2>
         <div className="airmen-table">
           <div className="airmen-header">
             <span>NAME</span>
@@ -69,7 +69,7 @@ export class SiteManager extends React.Component<Props> {
             className={className}
             height={855}
             rowHeight={(props) => cache.rowHeight(props)! || 60}
-            rowCount={siteManagerStore.airmen.length}
+            rowCount={siteManagerStore!.airmen.length}
             width={798}
             overscanRowCount={15}
             deferredMeasurementCache={cache}
@@ -81,7 +81,7 @@ export class SiteManager extends React.Component<Props> {
               );
             }}
             rowRenderer={(props: ListRowProps) => {
-              const airman = siteManagerStore.airmen[props.index];
+              const airman = siteManagerStore!.airmen[props.index];
               return (
                 <StyledRow
                   {...props}
@@ -123,7 +123,7 @@ export const StyledRow = styled(Row)`
   }
 `;
 
-export const StyledSiteManager = styled(SiteManager)`
+export const StyledSiteManager = inject('siteManagerStore')(styled(SiteManager)`
     width: 800px;
     margin-left: auto;
     margin-right: auto;
@@ -143,4 +143,4 @@ export const StyledSiteManager = styled(SiteManager)`
       background-color: ${props => props.theme.lightest};
       padding: 1rem;
     }
-`;
+`);

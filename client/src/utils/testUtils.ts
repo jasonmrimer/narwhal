@@ -1,14 +1,13 @@
 import { Filter } from '../widgets/Filter';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
-import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
 import { ReactWrapper } from 'enzyme';
 import { DoubleRepositories } from './Repositories';
 
 export async function makeFakeTrackerStore(shouldHydrateState: boolean = true) {
-  const siteId = 14;
-  const store = new TrackerStore(DoubleRepositories, new TimeServiceStub());
+  // const siteId = 14;
+  const store = new TrackerStore(DoubleRepositories);
   if (shouldHydrateState) {
-    await store.hydrate(siteId);
+    // await store.hydrate(siteId);
   }
   return store;
 }

@@ -36,7 +36,7 @@ describe('AirmanProfileManager', () => {
     store.hydrate(airman, SiteModelFactory.buildList(3, 3), airmanRipItems);
 
     subject = shallow(
-      <AirmanProfileManager store={store}/>
+      <AirmanProfileManager airmanProfileManagerStore={store}/>
     );
   });
 
@@ -87,10 +87,10 @@ describe('AirmanProfileManager', () => {
   });
 });
 
-function changeValue(wrapper: ShallowWrapper, name: string, value: any,  event:string = 'change') {
-  wrapper.findWhere(x=> x.prop('name') === name).first().simulate(event, {target: {name, value}});
+function changeValue(wrapper: ShallowWrapper, name: string, value: any,  event: string = 'change') {
+  wrapper.findWhere(x => x.prop('name') === name).first().simulate(event, {target: {name, value}});
 }
 
-function expectPropToBe(wrapper: ShallowWrapper, name:string,  value:any, prop:string = 'value'){
-  expect(wrapper.findWhere(x=> x.prop('name') === name).prop(prop)).toBe(value);
+function expectPropToBe(wrapper: ShallowWrapper, name: string,  value: any, prop: string = 'value') {
+  expect(wrapper.findWhere(x => x.prop('name') === name).prop(prop)).toBe(value);
 }

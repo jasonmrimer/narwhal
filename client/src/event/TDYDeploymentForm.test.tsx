@@ -8,27 +8,27 @@ import { StyledTextInput } from '../widgets/TextInput';
 import { eventStub } from '../utils/testUtils';
 import { TDYDeploymentForm } from './TDYDeploymentForm';
 import { StyledForm } from '../widgets/Form';
+import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
+import { TrackerStore } from '../tracker/stores/TrackerStore';
+import { DoubleRepositories } from '../utils/Repositories';
+import { EventActions } from './EventActions';
 
-/* tslint:disable:no-empty*/
 describe('TDYDeploymentForm', () => {
   let store: TDYDeploymentFormStore;
   let wrapper: ShallowWrapper;
   let subject: TDYDeploymentForm;
-  let eventActions: { addEvent: jest.Mock, removeEvent: jest.Mock };
-  let setLoading = () => {};
+  let trackerStore: TrackerStore;
 
   beforeEach(() => {
-    eventActions = {
-      addEvent: jest.fn(),
-      removeEvent: jest.fn()
-    };
-    store = new TDYDeploymentFormStore(eventActions);
-
+    store = new TDYDeploymentFormStore(new TimeServiceStub());
+    trackerStore = new TrackerStore(DoubleRepositories);
+    EventActions.handleFormSubmit = jest.fn();
+    EventActions.handleDeleteEvent = jest.fn();
     wrapper = shallow(
       <TDYDeploymentForm
         airmanId={123}
         tdyDeploymentFormStore={store}
-        setLoading={setLoading}
+        trackerStore={trackerStore}
       />
     );
 
@@ -36,7 +36,7 @@ describe('TDYDeploymentForm', () => {
   });
 
   it('should render a Form', () => {
-    expect(wrapper.find(StyledForm).prop('setLoading')).toBe(setLoading);
+    expect(wrapper.find(StyledForm).prop('setLoading')).toBe(trackerStore.setLoading);
   });
 
   it('manages the state via form changes', () => {
@@ -75,13 +75,13 @@ describe('TDYDeploymentForm', () => {
 
   it('adds a TDY/Deployment', () => {
     subject.handleSubmit(eventStub);
-    expect(eventActions.addEvent).toHaveBeenCalled();
+    expect(EventActions.handleFormSubmit).toHaveBeenCalled();
   });
 
   it('removes a TDY/Deployment', () => {
     store.open(EventModelFactory.build());
     subject.handleDelete();
-    expect(eventActions.removeEvent).toHaveBeenCalled();
+    expect(EventActions.handleDeleteEvent).toHaveBeenCalled();
   });
 });
 

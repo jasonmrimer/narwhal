@@ -1,28 +1,35 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { SelectProfilePopup } from './SelectProfilePopup';
-import { SiteModel } from '../site/models/SiteModel';
+import { SiteModel, SiteType } from '../site/models/SiteModel';
 import { ProfileSitePickerStore } from './stores/ProfileSitePickerStore';
 import { DoubleRepositories } from '../utils/Repositories';
-import { forIt } from '../utils/testUtils';
 
 describe('SelectProfilePopup', () => {
   let subject: ShallowWrapper;
-  let site: SiteModel;
-  let profileStore: ProfileSitePickerStore;
+  let sites: SiteModel[];
+  let profileStore = new ProfileSitePickerStore(DoubleRepositories);
 
-  beforeEach(async () => {
+  beforeEach(() => {
     profileStore = new ProfileSitePickerStore(DoubleRepositories);
-    await profileStore.hydrate();
-    site = profileStore.guardSites[0];
+    sites = [new SiteModel(1, '', [], SiteType.DGSCoreSite, '')];
 
-    subject = shallow(
-      <SelectProfilePopup
-        selectedSite={site}
-        backFromPendingSiteSelection={profileStore.cancelPendingSite}
-        continuePendingSiteSelection={profileStore.savePendingSite}
-      />
+    profileStore.hydrate(
+      sites, {
+        id: 1,
+        username: 'user',
+        siteId: 14,
+        roleId: 1,
+        roleName: 'admin',
+        classified: true,
+        siteName: 'site'
+      }
     );
+
+    profileStore.setPendingSite(sites[0]);
+    profileStore.savePendingSite = jest.fn();
+
+    subject = shallow(<SelectProfilePopup profileStore={profileStore}/>);
   });
 
   it('should renders with a title', () => {
@@ -31,7 +38,7 @@ describe('SelectProfilePopup', () => {
 
   it('should render a prompt', () => {
     expect(subject.find('.description').text())
-      .toBe(`This will set ${site.fullName.toUpperCase()} as your home site. This cannot currently be undone.`);
+      .toBe(`This will set ${sites[0].fullName.toUpperCase()} as your home site. This cannot currently be undone.`);
   });
 
   it('should render two buttons with text', () => {
@@ -40,16 +47,12 @@ describe('SelectProfilePopup', () => {
   });
 
   it('should set the pending site to null on back button click', () => {
-    profileStore.setPendingSite(site);
     subject.find('button.back').simulate('click');
     expect(profileStore.pendingSite).toBeNull();
   });
 
   it('should save the profile on continue button click', async () => {
-    profileStore.setPendingSite(site);
     subject.find('button.continue').simulate('click');
-    await forIt();
-    expect(profileStore.profile!.siteId).toBe(site.id);
+    expect(profileStore.savePendingSite).toHaveBeenCalled();
   });
-
 });

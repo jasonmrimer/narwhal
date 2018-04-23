@@ -5,10 +5,15 @@ import { Moment } from 'moment';
 import styled from 'styled-components';
 import * as classNames from 'classnames';
 import { PlannerStore } from './stores/PlannerStore';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
+import { TrackerStore } from '../tracker/stores/TrackerStore';
+import { AvailabilityStore } from '../availability/stores/AvailabilityStore';
+import { PlannerActions } from './PlannerActions';
 
 interface Props {
-  plannerStore: PlannerStore;
+  plannerStore?: PlannerStore;
+  trackerStore?: TrackerStore;
+  availabilityStore?: AvailabilityStore;
   className?: string;
 }
 
@@ -28,21 +33,22 @@ const renderWeek = (plannerWeek: Moment[]) => {
 };
 
 export const PlannerHeader = observer((props: Props) => {
+  const {plannerStore} = props;
+  const {plannerWeek, decrementPlannerWeek, incrementPlannerWeek} = plannerStore!;
   return (
     <div className={classNames(props.className, 'planner-header')}>
       <div className="month-header">
-        {props.plannerStore.plannerWeek[0].format('MMMM YYYY').toUpperCase()}
+        {plannerWeek[0].format('MMMM YYYY').toUpperCase()}
       </div>
       <span className="planner-day-navigation">
-        <span className="button-header" onClick={async () => await props.plannerStore.decrementPlannerWeek()}>
-          <button className="last-week" >
+        <span className="button-header">
+          <button className="last-week" onClick={async () => await PlannerActions.weekSlider(decrementPlannerWeek)}>
             <BackIcon height={14} width={14}/>
           </button>
         </span>
-
-        {renderWeek(props.plannerStore.plannerWeek)}
-        <span className="button-header" onClick={async () => await props.plannerStore.incrementPlannerWeek()}>
-          <button className="next-week" >
+        {renderWeek(plannerWeek)}
+        <span className="button-header">
+         <button className="next-week" onClick={async () => await PlannerActions.weekSlider(incrementPlannerWeek)}>
             <NextIcon height={14} width={14}/>
           </button>
         </span>
@@ -51,7 +57,7 @@ export const PlannerHeader = observer((props: Props) => {
   );
 });
 
-export const StyledPlannerHeader = styled(PlannerHeader)`
+export const StyledPlannerHeader = inject('plannerStore', 'trackerStore')(styled(PlannerHeader)`
   background: ${props => props.theme.lightest};
   padding: 0.75rem;
   flex-grow: 2;
@@ -111,5 +117,4 @@ export const StyledPlannerHeader = styled(PlannerHeader)`
     font-size: 0.875rem;
     font-weight: 500;  
   }
-
-`;
+`);

@@ -1,22 +1,17 @@
 import * as moment from 'moment';
 import { EventModel, EventType } from '../models/EventModel';
 import { EventModelFactory } from '../factories/EventModelFactory';
-import { EventActions } from './EventActions';
 import { TDYDeploymentFormStore } from './TDYDeploymentFormStore';
+import { TimeServiceStub } from '../../tracker/services/doubles/TimeServiceStub';
 
 describe('TDYDeploymentFormStore', () => {
   const airmanId = 123;
-  let eventActions: EventActions;
   let subject: TDYDeploymentFormStore;
   let event: EventModel;
 
   beforeEach(() => {
     event = EventModelFactory.build();
-    eventActions = {
-      addEvent: jest.fn(),
-      removeEvent: jest.fn()
-    };
-    subject = new TDYDeploymentFormStore(eventActions);
+    subject = new TDYDeploymentFormStore(new TimeServiceStub());
   });
 
   describe('open', () => {
@@ -62,8 +57,6 @@ describe('TDYDeploymentFormStore', () => {
     subject.setState('startTime', '2018-02-22');
     subject.setState('endTime', '2018-02-22');
 
-    subject.addModel(airmanId);
-
     const expectedEvent = new EventModel(
       'TDYDeployment',
       'Description',
@@ -73,7 +66,8 @@ describe('TDYDeploymentFormStore', () => {
       EventType.TDY_DEPLOYMENT
     );
 
-    expect(eventActions.addEvent).toHaveBeenCalledWith(expectedEvent);
+    const addedEvent = subject.addModel(airmanId);
+    expect(addedEvent).toEqual(expectedEvent);
   });
 
   it('ensures that at least dates are included in the TDY/Deployment submission', () => {
@@ -82,17 +76,9 @@ describe('TDYDeploymentFormStore', () => {
     subject.setState('startTime', '');
     subject.setState('endTime', '2018-02-22');
 
-    subject.addModel(airmanId);
+    const addedEvent = subject.addModel(airmanId);
 
-    expect((eventActions.addEvent as jest.Mock).mock.calls[0][0].startTime.isValid()).toBeFalsy();
-  });
-
-  it('can remove an event', () => {
-    subject.open(event);
-
-    subject.removeModel();
-
-    expect(eventActions.removeEvent).toHaveBeenCalledWith(event);
+    expect(addedEvent.startTime.isValid()).toBeFalsy();
   });
 
   it('should auto-populate empty end data field when setting start date', () => {

@@ -1,14 +1,25 @@
 import { ProfileSitePickerStore } from './ProfileSitePickerStore';
-import { forIt } from '../../utils/testUtils';
 import { DoubleRepositories } from '../../utils/Repositories';
-import { SiteType } from '../../site/models/SiteModel';
+import { SiteModel, SiteType } from '../../site/models/SiteModel';
 
 describe('ProfileSitePickerStore', () => {
   let subject: ProfileSitePickerStore;
   beforeEach(async () => {
     subject = new ProfileSitePickerStore(DoubleRepositories);
-    await subject.hydrate();
-    await forIt();
+    const sites = [
+        new SiteModel(1, 'JoshPC', [], SiteType.GuardSite, ''),
+        new SiteModel(14, 'CoryPc', [], SiteType.DMSSite, ''),
+        new SiteModel(5, 'CoryPc', [], SiteType.DGSCoreSite, '')
+    ];
+    subject.hydrate(sites, {
+      id: 1,
+      username: 'FontFace',
+      siteId: 14,
+      siteName: 'SITE 14',
+      roleId: 1,
+      roleName: 'ADMIN',
+      classified: false
+    });
   });
 
   it('should return profile', async () => {
@@ -26,7 +37,7 @@ describe('ProfileSitePickerStore', () => {
   it('should save the selected site it to the profile', async () => {
     subject.setPendingSite(subject.guardSites[0]);
     await subject.savePendingSite();
-    expect(subject.profile!.siteId).toEqual(3);
+    expect(subject.profile!.siteId).toEqual(1);
   });
 
   it('should separate sites by site types', () => {

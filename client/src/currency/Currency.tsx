@@ -1,32 +1,27 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { observer } from 'mobx-react';
-import { AirmanModel } from '../airman/models/AirmanModel';
-import { StyledSkillsForm } from '../skills/SkillsForm';
-import { StyledSkillTile } from '../skills/SkillTile';
+import { inject, observer } from 'mobx-react';
 import { CurrencyChild, CurrencyStore } from './stores/CurrencyStore';
-import { StyledBackButton } from '../widgets/BackButton';
-import { StyledNotification } from '../widgets/Notification';
-import { StyledRipItems } from '../rip-items/AirmanRipItemForm';
+import { StyledSkillsForm } from '../skills/SkillsForm';
 import { StyledRipItemsTile } from '../rip-items/RipItemsTile';
+import { StyledRipItems } from '../rip-items/AirmanRipItemForm';
+import { StyledSkillTile } from '../skills/SkillTile';
+import { StyledNotification } from '../widgets/Notification';
+import { StyledBackButton } from '../widgets/BackButton';
+import { AirmanRipItemFormStore } from '../rip-items/stores/AirmanRipItemFormStore';
+import { SkillFormStore } from '../skills/stores/SkillFormStore';
+import { TrackerStore } from '../tracker/stores/TrackerStore';
 
 interface Props {
-  selectedAirman: AirmanModel;
-  currencyStore: CurrencyStore;
-  setLoading: (loading: boolean) => void;
+  currencyStore?: CurrencyStore;
+  airmanRipItemFormStore?: AirmanRipItemFormStore;
+  trackerStore?: TrackerStore;
+  skillFormStore?: SkillFormStore;
   className?: string;
 }
 
 @observer
 export class Currency extends React.Component<Props> {
-  componentDidMount() {
-    this.props.currencyStore.closeSkillForm();
-  }
-
-  componentWillReceiveProps() {
-    this.props.currencyStore.closeSkillForm();
-  }
-
   render() {
     return (
       <div className={this.props.className}>
@@ -36,7 +31,7 @@ export class Currency extends React.Component<Props> {
   }
 
   private renderCurrencyChild = () => {
-    switch (this.props.currencyStore.currencyChild) {
+    switch (this.props.currencyStore!.currencyChild) {
       case CurrencyChild.SkillForm:
         return this.renderSkillsForm();
       case CurrencyChild.RipItemForm:
@@ -52,19 +47,25 @@ export class Currency extends React.Component<Props> {
       <div>
         {this.renderBackButton()}
         <StyledSkillsForm
-          airmanId={this.props.selectedAirman.id}
-          skillFormStore={this.props.currencyStore.skillFormStore}
-          setLoading={this.props.setLoading}
+          airmanId={this.props.trackerStore!.selectedAirman.id}
         />
       </div>
     );
   }
 
   private renderSkillsList = () => {
+    const {currencyStore, skillFormStore} = this.props;
+    const {openCreateSkillForm} = currencyStore!;
     return (
       <div>
         <div className="skill-control-row">
-          <button className="add-skill" onClick={this.props.currencyStore.openCreateSkillForm}>
+          <button
+            className="add-skill"
+            onClick={() => {
+              openCreateSkillForm();
+              skillFormStore!.open();
+            }}
+          >
             + Add Skill
           </button>
         </div>
@@ -77,13 +78,16 @@ export class Currency extends React.Component<Props> {
   }
 
   private renderRipTile = () => {
-    const currencyStore = this.props.currencyStore;
+    const {currencyStore, airmanRipItemFormStore} = this.props;
     return (
       <StyledRipItemsTile
         title="RIP TASKS"
-        onClick={currencyStore.openAirmanRipItemForm}
-        assignedItemCount={currencyStore.airmanRipItemFormStore.assignedItemCount}
-        expiredItemCount={currencyStore.airmanRipItemFormStore.expiredItemCount}
+        onClick={() => {
+          airmanRipItemFormStore!.setRipItems(currencyStore!.airmanRipItems);
+          currencyStore!.openAirmanRipItemForm();
+        }}
+        expiredItemCount={currencyStore!.expiredItemCount}
+        assignedItemCount={currencyStore!.assignedItemCount}
       />
     );
   }
@@ -93,53 +97,68 @@ export class Currency extends React.Component<Props> {
       <div>
         {this.renderBackButton()}
         <StyledRipItems
-          selectedAirmanId={this.props.selectedAirman.id}
-          store={this.props.currencyStore.airmanRipItemFormStore}
-          setLoading={this.props.setLoading}
+          selectedAirmanId={this.props.trackerStore!.selectedAirman.id}
         />
       </div>
     );
   }
 
   private renderQualifications = () => {
-    return this.props.selectedAirman.qualifications.map((qual, index) => (
+    const {currencyStore, skillFormStore} = this.props;
+    const {openEditSkillForm} = currencyStore!;
+    return this.props.trackerStore!.selectedAirman.qualifications.map((qual, index) => (
       <StyledSkillTile
         key={index}
         skill={qual}
-        onClick={() => this.props.currencyStore.openEditSkillForm(qual)}
+        onClick={() => {
+          openEditSkillForm();
+          skillFormStore!.open(qual);
+        }}
       />
     ));
   }
 
   private renderCertifications = () => {
-    return this.props.selectedAirman.certifications.map((cert, index) => (
+    const {currencyStore, skillFormStore} = this.props;
+    const {openEditSkillForm} = currencyStore!;
+    return this.props.trackerStore!.selectedAirman.certifications.map((cert, index) => (
       <StyledSkillTile
         key={index}
         skill={cert}
-        onClick={() => this.props.currencyStore.openEditSkillForm(cert)}
+        onClick={() => {
+          openEditSkillForm();
+          skillFormStore!.open(cert);
+        }}
       />
     ));
   }
 
   private renderSkillNotification = () => {
-    if (this.props.selectedAirman.qualifications.length === 0 &&
-      this.props.selectedAirman.certifications.length === 0) {
+    if (this.props.trackerStore!.selectedAirman.qualifications.length === 0 &&
+      this.props.trackerStore!.selectedAirman.certifications.length === 0) {
       return <StyledNotification>This Airman has no associated skills.</StyledNotification>;
     }
     return;
   }
 
   private renderBackButton = () => {
+    const {currencyStore} = this.props;
+    const {closeSkillForm} = currencyStore!;
     return (
       <StyledBackButton
-        onClick={() => this.props.currencyStore.closeSkillForm()}
+        onClick={closeSkillForm}
         text="Back to Overview"
       />
     );
   }
 }
 
-export const StyledCurrency = styled(Currency)`
+export const StyledCurrency = inject(
+  'currencyStore',
+  'airmanRipItemFormStore',
+  'skillFormStore',
+  'trackerStore'
+)(styled(Currency)`
   width: 100%;
   
   .skill-control-row {
@@ -160,4 +179,4 @@ export const StyledCurrency = styled(Currency)`
       }
     }
   }
-`;
+`);

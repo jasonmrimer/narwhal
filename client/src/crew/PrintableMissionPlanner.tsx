@@ -35,8 +35,8 @@ export class PrintableMissionPlanner extends React.Component<Props, {}> {
       });
     }
 
-    window.onbeforeprint = beforePrint;
-    window.onafterprint = afterPrint;
+    (window as any).onbeforeprint = beforePrint;
+    (window as any).onafterprint = afterPrint;
   }
 
   renderRows = () => {

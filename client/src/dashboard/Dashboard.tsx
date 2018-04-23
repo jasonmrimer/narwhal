@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { DashboardStore } from './stores/DashboardStore';
 import { TopLevelFilter } from '../widgets/Filter';
 import { StyledMissionCardSection } from './MissionCardSection';
@@ -8,47 +8,59 @@ import { StyledLoadingOverlay } from '../widgets/LoadingOverlay';
 import { StyledMultiTypeahead } from '../widgets/MultiTypeahead';
 
 interface Props {
-  dashboardStore: DashboardStore;
+  dashboardStore?: DashboardStore;
   className?: string;
 }
 
+@inject('dashboardStore')
 @observer
 export class Dashboard extends React.Component<Props> {
   async componentDidMount() {
-    await this.props.dashboardStore.hydrate();
+    await this.props.dashboardStore!.hydrate();
   }
 
   render() {
     const {dashboardStore, className} = this.props;
+    const {
+      siteId,
+      setSiteId,
+      siteOptions,
+      platformOptions,
+      setSelectedPlatformOptions,
+      loading,
+      selectedPlatformOptions,
+      missions
+    } = dashboardStore!;
+
     return (
       <div className={className}>
-        {dashboardStore.loading && <StyledLoadingOverlay/>}
+        {loading && <StyledLoadingOverlay/>}
         <div className="filters">
           <TopLevelFilter
             id="site-filter"
             label="SITE"
             unfilteredOptionLabel="All Sites"
-            value={dashboardStore.siteId}
-            callback={dashboardStore.setSiteId}
-            options={dashboardStore.siteOptions}
+            value={siteId}
+            callback={setSiteId}
+            options={siteOptions}
           />
           <div className="platform-filter">
             <label>PLATFORM</label>
             <br/>
             <StyledMultiTypeahead
-              options={dashboardStore.platformOptions}
-              onChange={dashboardStore.setSelectedPlatformOptions}
-              selected={dashboardStore.selectedPlatformOptions}
+              options={platformOptions}
+              onChange={setSelectedPlatformOptions}
+              selected={selectedPlatformOptions}
               placeholder="Filter Platform"
               className={'platform-typeahead'}
             />
           </div>
         </div>
         <div className="missions">
-          {Object.keys(dashboardStore.missions).map((key: string, index: number) => {
+          {Object.keys(missions).map((key: string, index: number) => {
             return (
               <StyledMissionCardSection
-                missions={dashboardStore.missions[key]}
+                missions={missions[key]}
                 header={key}
                 className={key}
                 key={index}

@@ -6,7 +6,7 @@ export interface UniqueModel {
 }
 
 export abstract class FormStore<T extends UniqueModel, S> {
-  @observable protected model: T | null = null;
+  @observable protected _model: T | null = null;
   @observable protected _state: S;
   @observable protected _errors: object[] = [];
 
@@ -14,21 +14,19 @@ export abstract class FormStore<T extends UniqueModel, S> {
 
   protected abstract emptyState(): S;
 
-  public abstract addModel(airmanId: number): void;
-
-  public abstract removeModel(): void;
+  public abstract addModel(airmanId: number): T;
 
   @action
   open(model: T | null = null) {
     this._errors = [];
-    this.model = model;
+    this._model = model;
     this._state = this.modelToState(model);
   }
 
   @action
   close() {
     this._errors = [];
-    this.model = null;
+    this._model = null;
     this._state = this.emptyState();
   }
 
@@ -54,7 +52,12 @@ export abstract class FormStore<T extends UniqueModel, S> {
 
   @computed
   get hasModel() {
-    return this.model != null && this.model!.id != null;
+    return this._model != null && this._model!.id != null;
+  }
+
+  @computed
+  get model() {
+    return this._model;
   }
 
   protected makeMoment(date: string, time: string) {

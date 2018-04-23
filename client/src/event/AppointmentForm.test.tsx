@@ -9,36 +9,33 @@ import { StyledFieldValidation } from '../widgets/FieldValidation';
 import { StyledButton } from '../widgets/Button';
 import { EventModelFactory } from './factories/EventModelFactory';
 import { AppointmentFormStore } from './stores/AppointmentFormStore';
-import { StyledForm } from '../widgets/Form';
+import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
+import { TrackerStore } from '../tracker/stores/TrackerStore';
+import { DoubleRepositories } from '../utils/Repositories';
+import { EventActions } from './EventActions';
 
 /* tslint:disable:no-empty*/
 describe('AppointmentForm', () => {
-  let store: AppointmentFormStore;
+  let trackerStore: TrackerStore;
+  let appointmentFormStore: AppointmentFormStore;
   let wrapper: ShallowWrapper;
   let subject: AppointmentForm;
-  let eventActions: { addEvent: jest.Mock, removeEvent: jest.Mock };
-  let setLoading = () => {};
 
   beforeEach(() => {
-    eventActions = {
-      addEvent: jest.fn(),
-      removeEvent: jest.fn()
-    };
-    store = new AppointmentFormStore(eventActions);
+    EventActions.handleFormSubmit = jest.fn();
+    EventActions.handleDeleteEvent = jest.fn();
+    trackerStore = new TrackerStore(DoubleRepositories);
+    appointmentFormStore = new AppointmentFormStore(new TimeServiceStub());
 
     wrapper = shallow(
       <AppointmentForm
         airmanId={123}
-        appointmentFormStore={store}
-        setLoading={setLoading}
+        appointmentFormStore={appointmentFormStore}
+        trackerStore={trackerStore}
       />
     );
 
     subject = (wrapper.instance() as AppointmentForm);
-  });
-
-  it('should render a Form', () => {
-    expect(wrapper.find(StyledForm).prop('setLoading')).toBe(setLoading);
   });
 
   it('manages the state via form changes', () => {
@@ -49,7 +46,7 @@ describe('AppointmentForm', () => {
     subject.handleChange({target: {name: 'endDate', value: '2018-02-22'}});
     subject.handleChange({target: {name: 'endTime', value: '1300'}});
 
-    expect(store.state).toEqual({
+    expect(appointmentFormStore.state).toEqual({
       title: 'Title',
       description: 'Description',
       startDate: '2018-02-22',
@@ -60,7 +57,7 @@ describe('AppointmentForm', () => {
   });
 
   it('should render a delete button', () => {
-    store.open(EventModelFactory.build());
+    appointmentFormStore.open(EventModelFactory.build());
     wrapper.update();
     expect(wrapper.find(StyledButton).prop('onClick')).toEqual(subject.handleDelete);
   });
@@ -73,32 +70,34 @@ describe('AppointmentForm', () => {
   });
 
   it('populates the fields with values from AppointmentFormStore', () => {
-    store.setState('title', 'Title');
-    store.setState('description', 'Description');
-    store.setState('startDate', '2018-02-22');
-    store.setState('startTime', '1200');
-    store.setState('endDate', '2018-02-22');
-    store.setState('endTime', '1300');
+    appointmentFormStore.setState('title', 'Title');
+    appointmentFormStore.setState('description', 'Description');
+    appointmentFormStore.setState('startDate', '2018-02-22');
+    appointmentFormStore.setState('startTime', '1200');
+    appointmentFormStore.setState('endDate', '2018-02-22');
+    appointmentFormStore.setState('endTime', '1300');
 
     wrapper.update();
 
-    expect(findInputValueByName(wrapper, StyledTextInput, 'title')).toEqual(store.state.title);
-    expect(findInputValueByName(wrapper, StyledTextInput, 'description')).toEqual(store.state.description);
-    expect(findInputValueByName(wrapper, StyledDatePicker, 'startDate')).toEqual(store.state.startDate);
-    expect(findInputValueByName(wrapper, StyledTimeInput, 'startTime')).toEqual(store.state.startTime);
-    expect(findInputValueByName(wrapper, StyledDatePicker, 'endDate')).toEqual(store.state.endDate);
-    expect(findInputValueByName(wrapper, StyledTimeInput, 'endTime')).toEqual(store.state.endTime);
+    expect(findInputValueByName(wrapper, StyledTextInput, 'title')).toEqual(appointmentFormStore.state.title);
+    expect(
+      findInputValueByName(wrapper, StyledTextInput, 'description')
+    ).toEqual(appointmentFormStore.state.description);
+    expect(findInputValueByName(wrapper, StyledDatePicker, 'startDate')).toEqual(appointmentFormStore.state.startDate);
+    expect(findInputValueByName(wrapper, StyledTimeInput, 'startTime')).toEqual(appointmentFormStore.state.startTime);
+    expect(findInputValueByName(wrapper, StyledDatePicker, 'endDate')).toEqual(appointmentFormStore.state.endDate);
+    expect(findInputValueByName(wrapper, StyledTimeInput, 'endTime')).toEqual(appointmentFormStore.state.endTime);
   });
 
-  it('add an Appointment', () => {
-    subject.handleSubmit(eventStub);
-    expect(eventActions.addEvent).toHaveBeenCalled();
+  it('add an Appointment', async () => {
+    await subject.handleSubmit(eventStub);
+    expect(EventActions.handleFormSubmit).toHaveBeenCalled();
   });
 
-  it('remove an Appointment', () => {
-    store.open(EventModelFactory.build());
-    subject.handleDelete();
-    expect(eventActions.removeEvent).toHaveBeenCalled();
+  it('remove an Appointment', async () => {
+    appointmentFormStore.open(EventModelFactory.build());
+    await subject.handleDelete();
+    expect(EventActions.handleDeleteEvent).toHaveBeenCalled();
   });
 });
 

@@ -1,10 +1,9 @@
 import { action, computed, observable } from 'mobx';
-import { SkillFormStore } from '../../skills/stores/SkillFormStore';
 import { Skill } from '../../skills/models/Skill';
-import { AirmanRipItemFormStore } from '../../rip-items/stores/AirmanRipItemFormStore';
-import { CertificationModel } from '../../skills/models/CertificationModel';
-import { QualificationModel } from '../../skills/models/QualificationModel';
+import { AirmanRipItemModel } from '../../airman/models/AirmanRipItemModel';
 import { Repositories } from '../../utils/Repositories';
+import { AirmanRepository } from '../../airman/repositories/AirmanRepository';
+import { RipItemRepository } from '../../airman/repositories/AirmanRipItemRepository';
 
 export enum CurrencyChild {
   SkillList,
@@ -12,31 +11,16 @@ export enum CurrencyChild {
   RipItemForm
 }
 
-interface AirmenRefresher {
-  refreshAirmen: (item: {airmanId: number}) => Promise<void>;
-}
-
-export interface SiteIdContainer {
-  selectedSite: number;
-}
-
 export class CurrencyStore {
-  public airmanRipItemFormStore: AirmanRipItemFormStore;
-  public skillFormStore: SkillFormStore;
   @observable private _child: CurrencyChild = CurrencyChild.SkillList;
+  @observable private _airmanRipItems: AirmanRipItemModel[] = [];
   @observable private _pendingDeleteSkill: Skill | null = null;
+  private airmanRepository: AirmanRepository;
+  private ripItemRepository: RipItemRepository;
 
-  constructor(
-    private airmenRefresher: AirmenRefresher,
-    siteIdContainer: SiteIdContainer,
-    private repositories: Repositories
-  ) {
-    this.airmanRipItemFormStore = new AirmanRipItemFormStore(this, repositories.ripItemRepository);
-    this.skillFormStore = new SkillFormStore(siteIdContainer, this);
-  }
-
-  hydrate(certifications: CertificationModel[], qualifications: QualificationModel[]) {
-    this.skillFormStore.hydrate(certifications, qualifications);
+  constructor({airmanRepository, ripItemRepository}: Partial<Repositories>) {
+    this.airmanRepository = airmanRepository!;
+    this.ripItemRepository = ripItemRepository!;
   }
 
   @computed
@@ -44,22 +28,24 @@ export class CurrencyStore {
     return this._child;
   }
 
-  @action.bound
-  openCreateSkillForm() {
-    this._child = CurrencyChild.SkillForm;
-    return this.skillFormStore.open();
+  @computed
+  get airmanRipItems() {
+    return this._airmanRipItems;
   }
 
   @action.bound
-  openEditSkillForm(skill: Skill) {
+  openCreateSkillForm() {
     this._child = CurrencyChild.SkillForm;
-    return this.skillFormStore.open(skill);
+  }
+
+  @action.bound
+  openEditSkillForm() {
+    this._child = CurrencyChild.SkillForm;
   }
 
   @action.bound
   closeSkillForm() {
     this._child = CurrencyChild.SkillList;
-    this.skillFormStore.close();
   }
 
   @action.bound
@@ -74,25 +60,26 @@ export class CurrencyStore {
 
   @action.bound
   async addSkill(skill: Skill) {
-    try {
-      await this.repositories.airmanRepository.saveSkill(skill);
-      await this.airmenRefresher.refreshAirmen(skill);
-    } catch (e) {
-      this.setFormErrors(e);
-    }
+    await this.airmanRepository.saveSkill(skill);
   }
 
   @action.bound
-  async removeSkill() {
-    if (this._pendingDeleteSkill) {
-      try {
-        await this.repositories.airmanRepository.deleteSkill(this._pendingDeleteSkill);
-        await this.airmenRefresher.refreshAirmen(this._pendingDeleteSkill);
-      } catch (e) {
-        this.setFormErrors(e);
-      }
-      this.setPendingDeleteSkill(null);
+  removeSkill(skill: Skill) {
+    this._pendingDeleteSkill = skill;
+  }
+
+  @action.bound
+  cancelPendingDelete() {
+    this._pendingDeleteSkill = null;
+  }
+
+  @action.bound
+  async executePendingDelete() {
+    if (this._pendingDeleteSkill == null) {
+      return;
     }
+    await this.airmanRepository.deleteSkill(this._pendingDeleteSkill);
+    this._pendingDeleteSkill = null;
   }
 
   @computed
@@ -101,11 +88,21 @@ export class CurrencyStore {
   }
 
   @action.bound
-  setPendingDeleteSkill(skill: Skill | null) {
-    this._pendingDeleteSkill = skill;
+  async setRipItemsForAirman(airmanId: number) {
+    this._airmanRipItems = await this.ripItemRepository.findBySelectedAirman(airmanId);
   }
 
-  setFormErrors(errors: object[]) {
-    this.skillFormStore.setErrors(errors);
+  @computed
+  get expiredItemCount() {
+    return this._airmanRipItems
+      .filter(item => item.isExpired)
+      .length;
+  }
+
+  @computed
+  get assignedItemCount() {
+    return this._airmanRipItems
+      .filter(item => item.expirationDate != null && item.expirationDate.isValid())
+      .length;
   }
 }

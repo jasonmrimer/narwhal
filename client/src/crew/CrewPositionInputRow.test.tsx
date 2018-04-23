@@ -1,34 +1,27 @@
 import * as React from 'react';
 import { StyledSingleTypeahead } from '../widgets/SingleTypeahead';
 import { shallow, ShallowWrapper } from 'enzyme';
-import { CrewPositionInputRow } from './CrewPositionInputRow';
-import { CrewStore } from './stores/CrewStore';
-import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
-import { DoubleRepositories } from '../utils/Repositories';
+import { CrewPositionInputRow, CrewStoreContract } from './CrewPositionInputRow';
 import { StyledCheckbox } from '../widgets/Checkbox';
 import { StyledTextInput } from '../widgets/TextInput';
-import { AirmanModel } from '../airman/models/AirmanModel';
 import Mock = jest.Mock;
 
 describe('CrewPositionInputRow', () => {
-  let crewStore: CrewStore;
+  let crewStore: CrewStoreContract;
   let subject: ShallowWrapper;
-  let profileStore: ProfileSitePickerStore;
   let handleNewEntryChange: Mock;
   let handleNewEntryCheck: Mock;
   let handleTypeahead: Mock;
-  let airmen: AirmanModel[];
 
   beforeEach(async () => {
-    profileStore = new ProfileSitePickerStore(DoubleRepositories);
     handleNewEntryChange = jest.fn();
     handleNewEntryCheck = jest.fn();
     handleTypeahead = jest.fn();
-    airmen = await DoubleRepositories.airmanRepository.findBySiteId(14);
 
-    await profileStore.hydrate();
-    crewStore = new CrewStore(DoubleRepositories, {refreshAllEvents: jest.fn()});
-    await crewStore.hydrate(await DoubleRepositories.crewRepository.findOne(1), airmen);
+    crewStore = {
+      airmenOptions: [{label: 'airman1', value: 1}],
+      newEntry: {airmanName: '', title: '', critical: false}
+    };
 
     subject = shallow(
       <CrewPositionInputRow
@@ -40,12 +33,8 @@ describe('CrewPositionInputRow', () => {
     );
   });
 
-  it('should have only airmen options in the typeahead who are not on the mission', async () => {
-    crewStore.setNewEntry({airmanName: `${airmen[2].lastName}, ${airmen[2].firstName}`});
-    await crewStore.save();
-    subject.update();
-
-    expect(subject.find(StyledSingleTypeahead).prop('options').length).toBe(7);
+  it('should have airmen options in the typeahead', async () => {
+    expect(subject.find(StyledSingleTypeahead).prop('options').length).toBe(1);
   });
 
   it('should handle call backs for each input type', () => {

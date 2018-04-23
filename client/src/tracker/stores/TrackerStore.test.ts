@@ -1,84 +1,49 @@
 import { TrackerStore } from './TrackerStore';
 import { AirmanModel, ShiftType } from '../../airman/models/AirmanModel';
-import * as moment from 'moment';
-import { toJS } from 'mobx';
-import { TimeServiceStub } from '../services/doubles/TimeServiceStub';
 import { DoubleRepositories } from '../../utils/Repositories';
-import { FakeAirmanRepository } from '../../airman/repositories/doubles/FakeAirmanRepository';
-import { TabType } from './SidePanelStore';
 import { AirmanModelFactory } from '../../airman/factories/AirmanModelFactory';
+import { EventModelFactory } from '../../event/factories/EventModelFactory';
+import { EventModel } from '../../event/models/EventModel';
 
 describe('TrackerStore', () => {
-  const timeServiceStub = new TimeServiceStub();
-  const airmanRepository = (DoubleRepositories.airmanRepository as FakeAirmanRepository);
   const siteId = 14;
 
-  let allAirmen: AirmanModel[];
   let subject: TrackerStore;
+  let airmen: AirmanModel[];
+  let events: EventModel[];
 
-  beforeEach(async () => {
-    allAirmen = await airmanRepository.findBySiteId(siteId);
-    subject = new TrackerStore(DoubleRepositories, timeServiceStub);
-    await subject.hydrate(siteId);
+  beforeEach(() => {
+    subject = new TrackerStore(DoubleRepositories);
+
+    airmen = [
+      AirmanModelFactory.build(1),
+      AirmanModelFactory.build(2)
+    ];
+
+    events = [
+      EventModelFactory.build()
+    ];
+
+    subject.hydrate(airmen, events, siteId);
   });
 
   it('returns a list of all airmen', async () => {
-    expect(toJS(subject.airmen)).toEqual(allAirmen);
+    expect(subject.airmen.length).toBe(2);
   });
 
-  describe('clearing the selected airman', () => {
-    it('resets the side panel week', async () => {
-      expect(subject.plannerStore.sidePanelWeek[0].isSame(subject.plannerStore.plannerWeek[0])).toBeTruthy();
-      await subject.plannerStore.incrementSidePanelWeek();
-      expect(subject.plannerStore.sidePanelWeek[0].isSame(subject.plannerStore.plannerWeek[0])).toBeFalsy();
-
-      subject.clearSelectedAirman();
-      expect(subject.plannerStore.sidePanelWeek[0].isSame(subject.plannerStore.plannerWeek[0])).toBeTruthy();
-    });
+  it('should return events for a given airman id', () => {
+    expect(subject.getEventsByAirmanId(1)).toContain(events[0]);
   });
 
-  describe('setting the selectedAirman', () => {
+  it('should return events for the selected airman', () => {
+    subject.setSelectedAirman(airmen[0]);
+    expect(subject.selectedAirmanEvents).toContain(events[0]);
+  });
+
+  it('setting the selectedAirman should set the selected airman property', () => {
     const airman = AirmanModelFactory.build();
-
-    it('should set the selected airman property', async () => {
-      await subject.setSelectedAirman(airman, TabType.AVAILABILITY);
-      expect(subject.selectedAirman).toBe(airman);
-    });
-
-    it('should set the side panel tab', async () => {
-      await subject.setSelectedAirman(airman, TabType.AVAILABILITY);
-      expect(subject.sidePanelStore.selectedTab).toBe(TabType.AVAILABILITY);
-
-      await subject.setSelectedAirman(airman, TabType.CURRENCY);
-      expect(subject.sidePanelStore.selectedTab).toBe(TabType.CURRENCY);
-    });
-
-    it('should request the airman\'s rip items', async () => {
-      subject.currencyStore.airmanRipItemFormStore.setRipItems = jest.fn();
-      await subject.setSelectedAirman(airman, TabType.AVAILABILITY);
-      expect(subject.currencyStore.airmanRipItemFormStore.setRipItems).toBeCalled();
-    });
-
-    it('should close the event and skill form when selecting a new airman', async () => {
-      await subject.setSelectedAirman(airman, TabType.AVAILABILITY);
-      subject.availabilityStore.closeEventForm = jest.fn();
-      subject.currencyStore.closeSkillForm = jest.fn();
-
-      await subject.setSelectedAirman(airman, TabType.AVAILABILITY);
-      expect(subject.availabilityStore.closeEventForm).not.toHaveBeenCalled();
-      expect(subject.currencyStore.closeSkillForm).not.toHaveBeenCalled();
-
-      await subject.setSelectedAirman(AirmanModelFactory.build(2), TabType.AVAILABILITY);
-      expect(subject.availabilityStore.closeEventForm).toHaveBeenCalled();
-      expect(subject.currencyStore.closeSkillForm).toHaveBeenCalled();
-    });
-
-    it('should clear the selected date', async () => {
-      subject.newEvent(AirmanModelFactory.build(123), moment());
-
-      await subject.setSelectedAirman(AirmanModelFactory.build(456), TabType.AVAILABILITY);
-      expect(subject.selectedDate).toBeNull();
-    });
+    subject.setSelectedAirman(airman);
+    expect(subject.selectedAirman).toBe(airman);
   });
 
   it('should update airman shift', async () => {
@@ -87,26 +52,5 @@ describe('TrackerStore', () => {
 
     await subject.updateAirmanShift(airman, ShiftType.Night);
     expect(subject.airmen[0].shift).toBe(ShiftType.Night);
-  });
-
-  it('should set loading until hydrate completes', async () => {
-    subject = new TrackerStore(DoubleRepositories, timeServiceStub);
-
-    subject.setLoading(true);
-
-    await subject.hydrate(siteId);
-
-    expect(subject.loading).toBeFalsy();
-  });
-
-  it('should set selected Airman with a new event form for airman', () => {
-    const airman = allAirmen[0];
-    const date = moment.utc();
-    subject.newEvent(airman, date);
-    expect(subject.selectedAirman.id).toEqual(airman.id);
-    expect(subject.selectedDate!.isSame(date)).toBeTruthy();
-    expect(subject.availabilityStore.shouldShowEventForm).toBeTruthy();
-    expect(subject.availabilityStore.shouldShowEventTypeSelection).toBeTruthy();
-    expect(subject.sidePanelStore.selectedTab).toBe(TabType.AVAILABILITY);
   });
 });

@@ -5,20 +5,27 @@ import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 import { AirmanModel } from '../airman/models/AirmanModel';
 import { StyledCurrency } from '../currency/Currency';
 import { TrackerStore } from './stores/TrackerStore';
-import { makeFakeTrackerStore } from '../utils/testUtils';
 import { AirmanCertificationModel } from '../airman/models/AirmanCertificationModel';
 import { CertificationModelFactory } from '../skills/factories/CertificationModelFactory';
 import * as moment from 'moment';
 import { TabAlert } from '../icons/TabAlert';
 import { StyledTab } from './Tab';
 import { SidePanelStore, TabType } from './stores/SidePanelStore';
-
-let airman: AirmanModel;
-let trackerStore: TrackerStore;
-let subject: ShallowWrapper;
-let sidePanelStore: SidePanelStore;
+import { DoubleRepositories } from '../utils/Repositories';
+import { AvailabilityStore } from '../availability/stores/AvailabilityStore';
+import { CurrencyStore } from '../currency/stores/CurrencyStore';
+import { PlannerStore } from '../roster/stores/PlannerStore';
+import { TimeServiceStub } from './services/doubles/TimeServiceStub';
 
 describe('SidePanel', () => {
+  let airman: AirmanModel;
+  let trackerStore: TrackerStore;
+  let subject: ShallowWrapper;
+  let sidePanelStore: SidePanelStore;
+  let availabilityStore: AvailabilityStore;
+  let currencyStore: CurrencyStore;
+  let plannerStore: PlannerStore;
+
   beforeEach(async () => {
     airman = AirmanModelFactory.build();
     const certification = new AirmanCertificationModel(
@@ -28,15 +35,20 @@ describe('SidePanel', () => {
       moment().subtract(3, 'year')
     );
     airman.certifications.push(certification);
-
-    trackerStore = await makeFakeTrackerStore();
-    await trackerStore.setSelectedAirman(airman, TabType.AVAILABILITY);
+    availabilityStore = new AvailabilityStore(DoubleRepositories);
+    trackerStore = new TrackerStore(DoubleRepositories);
+    trackerStore.setSelectedAirman(airman);
     sidePanelStore = new SidePanelStore();
+    currencyStore = new CurrencyStore(DoubleRepositories);
+    plannerStore = new PlannerStore(new TimeServiceStub());
 
     subject = shallow(
       <SidePanel
         trackerStore={trackerStore}
         sidePanelStore={sidePanelStore}
+        availabilityStore={availabilityStore}
+        currencyStore={currencyStore}
+        plannerStore={plannerStore}
       />
     );
   });

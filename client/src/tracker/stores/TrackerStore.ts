@@ -1,63 +1,26 @@
 import { AirmanModel, ShiftType } from '../../airman/models/AirmanModel';
 import { action, computed, observable } from 'mobx';
-import { CurrencyStore } from '../../currency/stores/CurrencyStore';
-import { AvailabilityStore, RefreshAirmen } from '../../availability/stores/AvailabilityStore';
-import { PlannerStore } from '../../roster/stores/PlannerStore';
-import { TimeService } from '../services/TimeService';
-import { SidePanelStore, TabType } from './SidePanelStore';
 import { Moment } from 'moment';
-import { RosterHeaderStore } from '../../roster/stores/RosterHeaderStore';
-import { AllAirmenRefresher, LocationFilterStore } from '../../widgets/stores/LocationFilterStore';
 import { Repositories } from '../../utils/Repositories';
 import { EventModel } from '../../event/models/EventModel';
 
-export class TrackerStore implements AllAirmenRefresher, RefreshAirmen {
-  public currencyStore: CurrencyStore;
-  public availabilityStore: AvailabilityStore;
-  public plannerStore: PlannerStore;
-  public sidePanelStore: SidePanelStore;
-  public rosterHeaderStore: RosterHeaderStore;
-  public locationFilterStore: LocationFilterStore;
-
+export class TrackerStore {
   private repositories: Repositories;
 
   @observable private _loading: boolean = false;
   @observable private _airmen: AirmanModel[] = [];
   @observable private _events: EventModel[] = [];
   @observable private _selectedAirman: AirmanModel = AirmanModel.empty();
-  @observable private _selectedDate: Moment | null = null;
+  @observable private _siteId: number;
 
-  constructor(repositories: Repositories, timeService: TimeService) {
+  constructor(repositories: Repositories) {
     this.repositories = repositories;
-    this.locationFilterStore = new LocationFilterStore(this);
-    this.currencyStore = new CurrencyStore(this, this.locationFilterStore, this.repositories);
-    this.plannerStore = new PlannerStore(timeService, this);
-    this.availabilityStore = new AvailabilityStore(this, this.repositories, this.plannerStore);
-    this.sidePanelStore = new SidePanelStore();
-    this.rosterHeaderStore = new RosterHeaderStore(this.locationFilterStore);
   }
 
-  async hydrate(siteId: number) {
-    this._loading = true;
-
-    const week = this.plannerStore.plannerWeek;
-    const [airmen, events, sites, certifications, qualifications, missions] = await Promise.all([
-      this.repositories.airmanRepository.findBySiteId(siteId),
-      this.repositories.eventRepository.findAllBySiteIdAndWithinPeriod(siteId, week[0], week[6]),
-      this.repositories.siteRepository.findAll(),
-      this.repositories.skillRepository.findAllCertifications(),
-      this.repositories.skillRepository.findAllQualifications(),
-      this.repositories.missionRepository.findAll()
-    ]);
-
+  hydrate(airmen: AirmanModel[], events: EventModel[], siteId: number) {
     this._airmen = airmen;
     this._events = events;
-    this.locationFilterStore.hydrate(siteId, sites);
-    this.rosterHeaderStore.hydrate(certifications, qualifications);
-    this.currencyStore.hydrate(certifications, qualifications);
-    this.availabilityStore.hydrate(missions);
-
-    this._loading = false;
+    this._siteId = siteId;
   }
 
   @computed
@@ -72,8 +35,7 @@ export class TrackerStore implements AllAirmenRefresher, RefreshAirmen {
 
   @computed
   get airmen() {
-    const airmen = this.locationFilterStore.filterAirmen(this._airmen);
-    return this.rosterHeaderStore.filterAirmen(airmen);
+    return this._airmen;
   }
 
   @computed
@@ -82,89 +44,51 @@ export class TrackerStore implements AllAirmenRefresher, RefreshAirmen {
   }
 
   @computed
-  get selectedDate() {
-    return this._selectedDate;
-  }
-
-  @computed
   get events() {
     return this._events;
   }
 
-  getEventsByAirmanId(airmanId: number) {
-    return this.events.filter(event => event.airmanId === airmanId);
+  getEventsByAirmanId = (airmanId: number) => {
+    return this._events.filter(event => event.airmanId === airmanId);
+  }
+
+  @computed
+  get selectedAirmanEvents() {
+    return this._events.filter(event => event.airmanId === this._selectedAirman.id);
   }
 
   @action.bound
-  async setSelectedAirman(airman: AirmanModel, tab: TabType) {
-    if (this._selectedAirman.id !== airman.id) {
-      this.availabilityStore.closeEventForm();
-      this.currencyStore.closeSkillForm();
-    }
+  setSelectedAirman(airman: AirmanModel) {
     this._selectedAirman = airman;
-    this._selectedDate = null;
-    this.sidePanelStore.setSelectedTab(tab);
-    await this.refreshAirmanRipItems();
-    await this.refreshAirmanEvents();
   }
 
   @action.bound
   clearSelectedAirman() {
     this._selectedAirman = AirmanModel.empty();
-    this.plannerStore.setSidePanelWeek(this.plannerStore.plannerWeek);
-  }
-
-  @action.bound
-  async newEvent(airman: AirmanModel, date: Moment | null) {
-    this._selectedAirman = airman;
-    this.sidePanelStore.setSelectedTab(TabType.AVAILABILITY);
-    this._selectedDate = date;
-    this.availabilityStore.showEventForm();
   }
 
   @action.bound
   async updateAirmanShift(airman: AirmanModel, shiftType: ShiftType) {
-    const updatedAirman = Object.assign({}, airman, {shift: shiftType});
-    await this.repositories.airmanRepository.saveAirman(updatedAirman);
-    this._airmen = await this.repositories.airmanRepository.findBySiteId(this.locationFilterStore.selectedSite);
+    const savedAirman = await this.repositories.airmanRepository.saveAirman(
+      Object.assign({}, airman, {shift: shiftType})
+    );
+    const index = this._airmen.findIndex(a => a.id === savedAirman.id);
+    this._airmen.splice(index, 1, savedAirman);
   }
 
-  async refreshAllAirmen() {
-    this._airmen = await this.repositories.airmanRepository.findBySiteId(this.locationFilterStore.selectedSite);
-    await this.refreshEvents();
-    await this.refreshAirmanEvents();
+  @action.bound
+  async refreshAllAirmen(selectedSiteId: number) {
+    this._airmen = await this.repositories.airmanRepository.findBySiteId(selectedSiteId);
   }
 
-  async refreshAirmen(item: { airmanId: number }) {
-    this._airmen = await this.repositories.airmanRepository.findBySiteId(this.locationFilterStore.selectedSite);
-    await this.refreshEvents();
-
-    this._selectedAirman = this._airmen.find(a => a.id === item.airmanId) || AirmanModel.empty();
-    await this.refreshAirmanEvents();
+  async refreshAirmen(siteId: number, airmanId: number) {
+    this._airmen = await this.repositories.airmanRepository.findBySiteId(siteId);
+    this._selectedAirman = this._airmen.find(a => a.id === airmanId) || AirmanModel.empty();
   }
 
-  async refreshEvents() {
-    const week = this.plannerStore.plannerWeek;
+  @action.bound
+  async refreshEvents(week: Moment[]) {
     this._events = await this.repositories.eventRepository
-      .findAllBySiteIdAndWithinPeriod(this.locationFilterStore.selectedSite, week[0], week[6]);
-  }
-
-  async refreshAirmanEvents() {
-    if (this.selectedAirman.isEmpty) {
-      return;
-    }
-    const week = this.plannerStore.sidePanelWeek;
-    const airmanEvents = await this.repositories.eventRepository
-      .findAllByAirmanIdAndWithinPeriod(this.selectedAirman.id, week[0], week[6]);
-    this.availabilityStore.setAirmanEvents(airmanEvents);
-  }
-
-  async refreshAirmanRipItems() {
-    if (this.selectedAirman.isEmpty) {
-      return;
-    }
-    const ripItems = await this.repositories.ripItemRepository
-      .findBySelectedAirman(this.selectedAirman.id);
-    this.currencyStore.airmanRipItemFormStore.setRipItems(ripItems);
+      .findAllBySiteIdAndWithinPeriod(this._siteId, week[0], week[6]);
   }
 }

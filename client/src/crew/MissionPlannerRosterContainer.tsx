@@ -3,10 +3,8 @@ import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import { StyledMissionPlannerRoster } from './MissionPlannerRoster';
 import { StyledRosterHeader } from '../roster/RosterHeader';
-import { MissionPlannerStore } from './stores/MissionPlannerStore';
 
 interface Props {
-  missionPlannerStore: MissionPlannerStore;
   className?: string;
 }
 
@@ -17,13 +15,9 @@ export class MissionPlannerRosterContainer extends React.Component<Props> {
       <div className={this.props.className}>
         <div className="header-top"/>
         <div className="roster-header">
-          <StyledRosterHeader rosterHeaderStore={this.props.missionPlannerStore.rosterHeaderStore}/>
+          <StyledRosterHeader/>
         </div>
-        <StyledMissionPlannerRoster
-          availableAirmen={this.props.missionPlannerStore.availableAirmen}
-          unavailableAirmen={this.props.missionPlannerStore.unavailableAirmen}
-          mission={this.props.missionPlannerStore.crewStore.crew!.mission}
-        />
+        <StyledMissionPlannerRoster/>
       </div>
     );
   }

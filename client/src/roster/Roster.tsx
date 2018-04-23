@@ -3,132 +3,48 @@ import * as React from 'react';
 import { CellMeasurer, CellMeasurerCache, List, ListRowProps } from 'react-virtualized';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { AirmanModel } from '../airman/models/AirmanModel';
-import { TabType } from '../tracker/stores/SidePanelStore';
+import { SidePanelStore, TabType } from '../tracker/stores/SidePanelStore';
 import { StyledAirmanDatum } from '../tracker/AirmanDatum';
 import { StyledPlanner } from './Planner';
 import styled from 'styled-components';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import * as classNames from 'classnames';
 import { StyledShiftDropdown } from '../tracker/ShiftDropdown';
 import { BorderedNotification } from '../widgets/Notification';
-
-interface Props {
-  trackerStore: TrackerStore;
-  className?: string;
-}
-
-interface RowProps {
-  airman: AirmanModel;
-  trackerStore: TrackerStore;
-  style: object;
-  index: number;
-  parent: any;
-  key: any;
-  className?: string;
-}
+import { LocationFilterStore } from '../widgets/stores/LocationFilterStore';
+import { RosterHeaderStore } from './stores/RosterHeaderStore';
+import { AvailabilityStore } from '../availability/stores/AvailabilityStore';
+import { CurrencyStore } from '../currency/stores/CurrencyStore';
 
 const cache = new CellMeasurerCache({
   defaultHeight: 60,
   fixedWidth: true
 });
 
-const Row = observer((props: RowProps) => {
-  const {airman, trackerStore, className} = props;
-  return (
-    <CellMeasurer
-      cache={cache}
-      columnIndex={0}
-      rowIndex={props.index}
-      key={props.key}
-      parent={props.parent}
-    >
-      <div
-        className={classNames(className, {selected: airman.id === trackerStore.selectedAirman.id})}
-        style={Object.assign({}, props.style, {width: '1400px'})}
-      >
-        <div
-          className="left"
-          onClick={() => trackerStore.setSelectedAirman(airman, TabType.AVAILABILITY)}
-        >
-          <StyledShiftDropdown
-            airman={airman}
-            trackerStore={trackerStore}
-            className="shift"
-          />
-          <StyledAirmanDatum
-            trackerStore={trackerStore}
-            airman={airman}
-            tab={TabType.AVAILABILITY}
-            className="airman-name"
-          >
-            <span>{airman.lastName}, {airman.firstName}</span>
-          </StyledAirmanDatum>
-          <StyledAirmanDatum
-            trackerStore={trackerStore}
-            airman={airman}
-            tab={TabType.CURRENCY}
-            className="airman-qual"
-          >
-            {airman.qualifications.map(
-              (qual, index) => {
-                return (
-                  <React.Fragment key={index}>
-                    <span
-                      className={classNames({expired: qual.isExpired})}
-                    >
-                      {qual.acronym}
-                    </span>
-                    {!(index === airman.qualifications.length - 1) && <span> / </span>}
-                  </React.Fragment>
-                );
-              })}
-          </StyledAirmanDatum>
-          <StyledAirmanDatum
-            trackerStore={trackerStore}
-            airman={airman}
-            tab={TabType.CURRENCY}
-            className="airman-cert"
-          >
-            {airman.certifications.map((certification, index) => {
-              return (
-                <React.Fragment key={index}>
-                <span
-                  className={classNames({expired: certification.isExpired})}
-                >
-                  {certification.title}
-                </span>
-                  {!(index === airman.certifications.length - 1) && <span key={index}> / </span>}
-                </React.Fragment>
-              );
-            })}
-          </StyledAirmanDatum>
-        </div>
-        <div
-          className="right"
-          onClick={() => trackerStore.setSelectedAirman(airman, TabType.AVAILABILITY)}
-        >
-          <StyledPlanner
-            week={trackerStore.plannerStore.plannerWeek}
-            trackerStore={trackerStore}
-            airman={airman}
-          />
-        </div>
-      </div>
-    </CellMeasurer>
-  );
-});
+interface Props {
+  trackerStore?: TrackerStore;
+  locationFilterStore?: LocationFilterStore;
+  rosterHeaderStore?: RosterHeaderStore;
+  className?: string;
+}
 
 @observer
 export class Roster extends React.Component<Props> {
+  airmen = () => {
+    const airmen = this.props.locationFilterStore!.filterAirmen(this.props.trackerStore!.airmen);
+    return this.props.rosterHeaderStore!.filterAirmen(airmen);
+  }
+
   render() {
-    const {trackerStore, className} = this.props;
+    const {className} = this.props;
+    const airmen = this.airmen();
     cache.clearAll();
     return (
       <List
         className={className}
         height={855}
         rowHeight={(props) => cache.rowHeight(props)! || 60}
-        rowCount={trackerStore.airmen.length}
+        rowCount={airmen.length}
         width={1400}
         overscanRowCount={15}
         deferredMeasurementCache={cache}
@@ -140,14 +56,13 @@ export class Roster extends React.Component<Props> {
           );
         }}
         rowRenderer={(props: ListRowProps) => {
-          const airman = trackerStore.airmen[props.index];
+          const airman = airmen[props.index];
           return (
             <StyledRow
               {...props}
               key={airman.id}
               airman={airman}
               style={props.style}
-              trackerStore={trackerStore}
             />
           );
         }}
@@ -156,12 +71,116 @@ export class Roster extends React.Component<Props> {
   }
 }
 
-export const StyledRoster = styled(Roster)`
+export const StyledRoster = inject('trackerStore', 'locationFilterStore', 'rosterHeaderStore')(styled(Roster)`
   border-top: none;
   outline: none;
-`;
+`);
 
-export const StyledRow = styled(Row)`
+interface RowProps {
+  airman: AirmanModel;
+  trackerStore?: TrackerStore;
+  availabilityStore?: AvailabilityStore;
+  sidePanelStore?: SidePanelStore;
+  currencyStore?: CurrencyStore;
+
+  style: object;
+  index: number;
+  parent: any;
+  key: any;
+  className?: string;
+}
+
+const Row = observer(
+  (props: RowProps) => {
+    const {airman, trackerStore, availabilityStore, sidePanelStore, className, currencyStore} = props;
+    return (
+      <CellMeasurer
+        cache={cache}
+        columnIndex={0}
+        rowIndex={props.index}
+        key={props.key}
+        parent={props.parent}
+      >
+        <div
+          className={classNames(className, {selected: airman.id === trackerStore!.selectedAirman.id})}
+          style={Object.assign({}, props.style, {width: '1400px'})}
+        >
+          <div
+            className="left"
+            onClick={async () => {
+              trackerStore!.setSelectedAirman(airman);
+              await currencyStore!.setRipItemsForAirman(airman.id);
+              currencyStore!.closeSkillForm();
+              availabilityStore!.closeEventForm();
+              availabilityStore!.setAirmanEvents(trackerStore!.selectedAirmanEvents);
+              sidePanelStore!.setSelectedTab(TabType.CURRENCY);
+            }}
+          >
+            <StyledShiftDropdown
+              airman={airman}
+              className="shift"
+            />
+            <StyledAirmanDatum
+              airman={airman}
+              tab={TabType.AVAILABILITY}
+              className="airman-name"
+            >
+              <span>{airman.lastName}, {airman.firstName}</span>
+            </StyledAirmanDatum>
+            <StyledAirmanDatum
+              airman={airman}
+              tab={TabType.CURRENCY}
+              className="airman-qual"
+            >
+              {airman.qualifications.map(
+                (qual, index) => {
+                  return (
+                    <React.Fragment key={index}>
+                    <span
+                      className={classNames({expired: qual.isExpired})}
+                    >
+                      {qual.acronym}
+                    </span>
+                      {!(index === airman.qualifications.length - 1) && <span> / </span>}
+                    </React.Fragment>
+                  );
+                })}
+            </StyledAirmanDatum>
+            <StyledAirmanDatum
+              airman={airman}
+              tab={TabType.CURRENCY}
+              className="airman-cert"
+            >
+              {airman.certifications.map((certification, index) => {
+                return (
+                  <React.Fragment key={index}>
+                    <span className={classNames({expired: certification.isExpired})}>{certification.title}</span>
+                    {!(index === airman.certifications.length - 1) && <span key={index}> / </span>}
+                  </React.Fragment>
+                );
+              })}
+            </StyledAirmanDatum>
+          </div>
+          <div
+            className="right"
+            onClick={async () => {
+              trackerStore!.setSelectedAirman(airman);
+              currencyStore!.closeSkillForm();
+              availabilityStore!.closeEventForm();
+              await currencyStore!.setRipItemsForAirman(airman.id);
+              availabilityStore!.setAirmanEvents(trackerStore!.selectedAirmanEvents);
+              sidePanelStore!.setSelectedTab(TabType.AVAILABILITY);
+            }}
+          >
+            <StyledPlanner airman={airman}/>
+          </div>
+        </div>
+      </CellMeasurer>
+    );
+  }
+);
+
+export const StyledRow = inject('trackerStore', 'availabilityStore', 'sidePanelStore', 'currencyStore')(styled(Row)`
   display: flex;
   border: 1px solid ${props => props.theme.graySteel};
   border-top: none;
@@ -208,4 +227,4 @@ export const StyledRow = styled(Row)`
   &.selected {
     box-shadow: inset 0.5rem 0px 0px ${props => props.theme.yellow};
   }
-`;
+`);

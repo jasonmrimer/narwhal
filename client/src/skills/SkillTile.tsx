@@ -10,7 +10,7 @@ import { StyledExpirationSleeve } from '../widgets/ExpirationSleeve';
 
 interface Props {
   skill: AirmanQualificationModel | AirmanCertificationModel;
-  onClick: (skill: Skill) => void;
+  onClick?: (skill: Skill) => void;
   className?: string;
 }
 
@@ -47,7 +47,11 @@ export const SkillTile = (props: Props) => {
   return (
     <div
       className={props.className}
-      onClick={() => props.onClick(convertToSkill(skill))}
+      onClick={() => {
+        if (props.onClick) {
+          props.onClick(convertToSkill(skill));
+        }
+      }}
     >
       <div className="currency-title">
         <span>{skill.title}</span>

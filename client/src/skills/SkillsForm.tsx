@@ -4,43 +4,53 @@ import { StyledDatePicker } from '../widgets/DatePicker';
 import { allSkills, SkillType } from './models/SkillType';
 import { StyledButton } from '../widgets/Button';
 import { StyledFieldValidation } from '../widgets/FieldValidation';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { StyledSubmitButton } from '../widgets/SubmitButton';
 import { StyledForm, StyledFormRow } from '../widgets/Form';
 import { StyledDropdown } from '../widgets/Dropdown';
 import { DeleteIcon } from '../icons/DeleteIcon';
 import { SkillFormStore } from './stores/SkillFormStore';
+import { CurrencyStore } from '../currency/stores/CurrencyStore';
+import { TrackerStore } from '../tracker/stores/TrackerStore';
+import { LocationFilterStore } from '../widgets/stores/LocationFilterStore';
+import { SkillActions } from './SkillActions';
 
 interface Props {
+  skillFormStore?: SkillFormStore;
+  currencyStore?: CurrencyStore;
+  trackerStore?: TrackerStore;
+  locationFilterStore?: LocationFilterStore;
   airmanId: number;
-  skillFormStore: SkillFormStore;
-  setLoading: (loading: boolean) => void;
   className?: string;
 }
 
 @observer
 export class SkillsForm extends React.Component<Props> {
   handleChange = ({target}: any) => {
-    this.props.skillFormStore.setState(target.name, target.value);
+    this.props.skillFormStore!.setState(target.name, target.value);
   }
 
-  handleDelete = () => {
-    this.props.skillFormStore.removeModel();
+  handleDelete = async () => {
+    await SkillActions.deleteSkill();
   }
 
   handleSubmit = async (e: any) => {
     e.preventDefault();
-    await this.props.skillFormStore.addModel(this.props.airmanId);
+    await SkillActions.submitSkill(this.props.airmanId);
   }
 
   render() {
-    const {state, errors, hasModel} = this.props.skillFormStore;
-    const disabled = hasModel;
+    const {skillFormStore, trackerStore} = this.props;
+    const disabled = skillFormStore!.hasModel;
+
     return (
-      <StyledForm onSubmit={this.handleSubmit} setLoading={this.props.setLoading}>
+      <StyledForm
+        onSubmit={this.handleSubmit}
+        setLoading={trackerStore!.setLoading}
+      >
         <div>
           {
-            !hasModel &&
+            !skillFormStore!.hasModel &&
             <div style={{marginTop: '1rem'}}>
               Add Skill:
             </div>
@@ -53,7 +63,7 @@ export class SkillsForm extends React.Component<Props> {
             id="skill-type-select"
             name="skillType"
             options={allSkills().map(skill => ({value: skill, label: skill}))}
-            value={state.skillType}
+            value={skillFormStore!.state.skillType}
             onChange={this.handleChange}
             disabled={disabled}
           />
@@ -65,18 +75,18 @@ export class SkillsForm extends React.Component<Props> {
             id="skill-name-select"
             name="skillId"
             options={this.getSkillNameOptions()}
-            value={state.skillId}
+            value={skillFormStore!.state.skillId}
             onChange={this.handleChange}
             disabled={disabled}
           />
         </StyledFormRow>
 
-        <StyledFieldValidation name="earnDate" errors={errors}>
+        <StyledFieldValidation name="earnDate" errors={skillFormStore!.errors}>
           <StyledFormRow>
             <label htmlFor="earn-date">Earn Date:</label>
             <StyledDatePicker
               id="earn-date"
-              value={state.earnDate}
+              value={skillFormStore!.state.earnDate}
               onChange={this.handleChange}
               disabled={disabled}
               name="earnDate"
@@ -84,12 +94,12 @@ export class SkillsForm extends React.Component<Props> {
           </StyledFormRow>
         </StyledFieldValidation>
 
-        <StyledFieldValidation name="expirationDate" errors={errors}>
+        <StyledFieldValidation name="expirationDate" errors={skillFormStore!.errors}>
           <StyledFormRow>
             <label htmlFor="expiration-date">Expiration Date:</label>
             <StyledDatePicker
               id="expiration-date"
-              value={state.expirationDate}
+              value={skillFormStore!.state.expirationDate}
               onChange={this.handleChange}
               name="expirationDate"
             />
@@ -99,7 +109,7 @@ export class SkillsForm extends React.Component<Props> {
         <StyledFormRow reversed={true}>
           <StyledSubmitButton text="CONFIRM"/>
           {
-            hasModel &&
+            skillFormStore!.hasModel &&
             <StyledButton
               text="DELETE"
               onClick={this.handleDelete}
@@ -112,17 +122,24 @@ export class SkillsForm extends React.Component<Props> {
   }
 
   private getSkillNameOptions = () => {
-    switch (this.props.skillFormStore.state.skillType) {
+    const {skillFormStore} = this.props;
+    const {state, qualificationOptions} = skillFormStore!;
+    switch (state.skillType) {
       case SkillType.Certification:
-        return this.props.skillFormStore.certificationOptions;
+        return skillFormStore!.certificationOptions;
       case SkillType.Qualification:
-        return this.props.skillFormStore.qualificationOptions;
+        return qualificationOptions;
       default:
         return [];
     }
   }
 }
 
-export const StyledSkillsForm = styled(SkillsForm)`  
+export const StyledSkillsForm = inject(
+  'skillFormStore',
+  'currencyStore',
+  'trackerStore',
+  'locationFilterStore'
+)(styled(SkillsForm)`  
   min-width: ${props => props.theme.sidePanelWidth};
-`;
+`);

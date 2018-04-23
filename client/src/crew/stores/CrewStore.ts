@@ -5,14 +5,10 @@ import { AirmanModel } from '../../airman/models/AirmanModel';
 import { Repositories } from '../../utils/Repositories';
 import { CrewPositionRepository } from '../repositories/CrewPositionRepository';
 
-interface NewEntry {
+export interface NewEntry {
   airmanName: string;
   title: string;
   critical: boolean;
-}
-
-export interface AllEventsRefresher {
-  refreshAllEvents: () => Promise<void>;
 }
 
 export class CrewStore {
@@ -23,12 +19,12 @@ export class CrewStore {
   @observable private _airmen: AirmanModel[] = [];
   @observable private _newEntry: NewEntry = {airmanName: '', title: '', critical: false};
 
-  constructor(repositories: Repositories, private eventsRefresher: AllEventsRefresher) {
+  constructor(repositories: Repositories) {
     this.crewPositionRepository = repositories.crewPositionRepository;
   }
 
-  hydrate(crew: CrewModel, airmen: AirmanModel[]) {
-    this._crew = crew;
+  hydrate(c: CrewModel, airmen: AirmanModel[]) {
+    this._crew = c;
     this._airmen = airmen;
   }
 
@@ -104,8 +100,6 @@ export class CrewStore {
 
     this._crew =
       await this.crewPositionRepository.update(this._crew.crewPositions, this._crew.mission.id);
-
-    await this.eventsRefresher.refreshAllEvents();
   }
 
   @action.bound

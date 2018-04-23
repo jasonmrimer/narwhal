@@ -5,18 +5,11 @@ import { AirmanModel } from '../../airman/models/AirmanModel';
 import { SquadronModel } from '../../squadron/models/SquadronModel';
 import { FlightModel } from '../../flight/model/FlightModel';
 
-export interface AllAirmenRefresher {
-  refreshAllAirmen: () => Promise<void>;
-}
-
 export class LocationFilterStore {
   @observable private _sites: SiteModel[] = [];
-  @observable private _selectedSite: number;
+  @observable private _selectedSite: number = UnfilteredValue;
   @observable private _selectedSquadron: number = UnfilteredValue;
   @observable private _selectedFlight: number = UnfilteredValue;
-
-  constructor(private allAirmenRefresher: AllAirmenRefresher) {
-  }
 
   hydrate(siteId: number, sites: SiteModel[]) {
     this._sites = sites;
@@ -31,9 +24,8 @@ export class LocationFilterStore {
   }
 
   @action.bound
-  async setSelectedSite(id: number) {
+  setSelectedSite(id: number) {
     this.setSiteId(id);
-    await this.allAirmenRefresher.refreshAllAirmen();
   }
 
   @computed

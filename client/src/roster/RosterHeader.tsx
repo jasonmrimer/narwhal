@@ -4,11 +4,25 @@ import { StyledTextInput } from '../widgets/TextInput';
 import { StyledMultiTypeahead } from '../widgets/MultiTypeahead';
 import styled from 'styled-components';
 import * as classNames from 'classnames';
-import { observer } from 'mobx-react';
-import { RosterHeaderStore } from './stores/RosterHeaderStore';
+import { inject, observer } from 'mobx-react';
+import { FilterOption } from '../widgets/models/FilterOptionModel';
+
+export interface RosterHeaderStoreContract {
+  selectedShift: number;
+  setSelectedShift: (shift: number) => void;
+  shiftOptions: FilterOption[];
+  selectedLastName: string;
+  setSelectedLastName: (e: any) => void;
+  selectedQualificationOptions: FilterOption[];
+  setSelectedQualificationOptions: (options: FilterOption[]) => void;
+  qualificationOptions: FilterOption[];
+  selectedCertificationOptions: FilterOption[];
+  setSelectedCertificationOptions: (options: FilterOption[]) => void;
+  certificationOptions: FilterOption[];
+}
 
 interface Props {
-  rosterHeaderStore: RosterHeaderStore;
+  rosterHeaderStore?: RosterHeaderStoreContract;
   className?: string;
 }
 
@@ -16,6 +30,19 @@ interface Props {
 export class RosterHeader extends React.Component<Props> {
   render() {
     const {className, rosterHeaderStore} = this.props;
+    const {
+      selectedShift,
+      setSelectedShift,
+      shiftOptions,
+      selectedLastName,
+      setSelectedLastName,
+      selectedQualificationOptions,
+      setSelectedQualificationOptions,
+      qualificationOptions,
+      selectedCertificationOptions,
+      setSelectedCertificationOptions,
+      certificationOptions,
+    } = rosterHeaderStore!;
     return (
       <div className={classNames('thead', className)}>
         <span className="shift">
@@ -23,17 +50,17 @@ export class RosterHeader extends React.Component<Props> {
           <RosterLevelFilter
             id="shift-filter"
             unfilteredOptionLabel="All"
-            value={rosterHeaderStore.selectedShift}
-            callback={rosterHeaderStore.setSelectedShift}
-            options={rosterHeaderStore.shiftOptions}
+            value={selectedShift}
+            callback={setSelectedShift}
+            options={shiftOptions}
           />
         </span>
         <span>
           <div className="header-column-title">NAME</div>
           <StyledTextInput
-            value={rosterHeaderStore.selectedLastName}
+            value={selectedLastName}
             name="last-name"
-            onChange={rosterHeaderStore.setSelectedLastName}
+            onChange={setSelectedLastName}
             placeholder="Search by Last Name"
             className="last-name-search"
           />
@@ -41,9 +68,9 @@ export class RosterHeader extends React.Component<Props> {
         <span>
           <div className="header-column-title">QUALIFICATION</div>
           <StyledMultiTypeahead
-            selected={rosterHeaderStore.selectedQualificationOptions}
-            onChange={rosterHeaderStore.setSelectedQualificationOptions}
-            options={rosterHeaderStore.qualificationOptions}
+            selected={selectedQualificationOptions}
+            onChange={setSelectedQualificationOptions}
+            options={qualificationOptions}
             placeholder="Filter Qualifications"
             className="qualifications-multitypeahead"
           />
@@ -51,9 +78,9 @@ export class RosterHeader extends React.Component<Props> {
         <span>
           <div className="header-column-title">CERTIFICATION</div>
           <StyledMultiTypeahead
-            selected={rosterHeaderStore.selectedCertificationOptions}
-            onChange={rosterHeaderStore.setSelectedCertificationOptions}
-            options={rosterHeaderStore.certificationOptions}
+            selected={selectedCertificationOptions}
+            onChange={setSelectedCertificationOptions}
+            options={certificationOptions}
             placeholder="Filter Certifications"
             className="certifications-multitypeahead"
           />
@@ -63,7 +90,7 @@ export class RosterHeader extends React.Component<Props> {
   }
 }
 
-export const StyledRosterHeader = styled(RosterHeader)`
+export const StyledRosterHeader = inject('rosterHeaderStore')(styled(RosterHeader)`
   background-color: ${props => props.theme.lightest};
   border-left: 1px solid ${props => props.theme.graySteel};
   display: flex;
@@ -90,6 +117,4 @@ export const StyledRosterHeader = styled(RosterHeader)`
   .shift {
    width: 5rem;
   }
-  
-  
-`;
+`);
