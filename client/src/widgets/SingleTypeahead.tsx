@@ -7,14 +7,14 @@ import 'react-bootstrap-typeahead/css/Typeahead.css';
 interface  Props {
   options: FilterOption[];
   onChange: (opt: FilterOption | null) => void;
-  placeholder: string;
   clearButton: boolean;
   disabled?: boolean;
+  placeholder?: string;
   selected?: FilterOption | null;
   className?: string;
 }
 
-export const SingleTypeahead =  (props: Props) => {
+export const SingleTypeahead = (props: Props) => {
   return (
     <div className={props.className}>
       <Typeahead
