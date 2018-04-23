@@ -16,6 +16,7 @@ import { Theme } from '../themes/default';
 import { MissionPlannerStore } from '../crew/stores/MissionPlannerStore';
 import { ProfileModel } from '../profile/models/ProfileModel';
 import { AdminStore } from '../admin/stores/AdminStore';
+import { SiteManagerStore } from '../site-manager/stores/SiteManagerStore';
 
 describe('App', () => {
   let mountedSubject: ReactWrapper;
@@ -28,6 +29,7 @@ describe('App', () => {
       const dashboardStore = new DashboardStore(DoubleRepositories);
       const missionPlannerStore = new MissionPlannerStore(DoubleRepositories, profileStore);
       const adminStore = new AdminStore(DoubleRepositories.profileRepository);
+      const siteManagerStore = new SiteManagerStore(DoubleRepositories);
 
       const profileRepo = {
         findOne: () => {
@@ -67,6 +69,7 @@ describe('App', () => {
               dashboardStore={dashboardStore}
               missionPlannerStore={missionPlannerStore}
               adminStore={adminStore}
+              siteManagerStore={siteManagerStore}
             />
           </MemoryRouter>
         </ThemeProvider>
@@ -117,6 +120,7 @@ const createMountedPage = async (entry: string) => {
   const profileStore = new ProfileSitePickerStore(DoubleRepositories);
   const missionPlannerStore = new MissionPlannerStore(DoubleRepositories, profileStore);
   const adminStore = new AdminStore(DoubleRepositories.profileRepository);
+  const siteManagerStore = new SiteManagerStore(DoubleRepositories);
 
   const mountedRouter = mount(
     <ThemeProvider theme={Theme}>
@@ -127,6 +131,7 @@ const createMountedPage = async (entry: string) => {
           dashboardStore={dashboardStore}
           missionPlannerStore={missionPlannerStore}
           adminStore={adminStore}
+          siteManagerStore={siteManagerStore}
         />
       </MemoryRouter>
     </ThemeProvider>

@@ -8,6 +8,7 @@ import { StyledProfileSitePicker } from '../profile/ProfileSitePicker';
 import { Routes } from './Routes';
 import { MissionPlannerStore } from '../crew/stores/MissionPlannerStore';
 import { AdminStore } from '../admin/stores/AdminStore';
+import { SiteManagerStore } from '../site-manager/stores/SiteManagerStore';
 
 interface Props {
   dashboardStore: DashboardStore;
@@ -15,6 +16,7 @@ interface Props {
   missionPlannerStore: MissionPlannerStore;
   profileStore: ProfileSitePickerStore;
   adminStore: AdminStore;
+  siteManagerStore: SiteManagerStore;
 }
 
 @observer
@@ -34,7 +36,7 @@ export class App extends React.Component<Props> {
           <div>
             {
               this.profileHasSite() ?
-                <Routes {...this.props} /> :
+                <Routes {...this.props}/> :
                 <StyledProfileSitePicker profileStore={this.props.profileStore}/>
             }
           </div>

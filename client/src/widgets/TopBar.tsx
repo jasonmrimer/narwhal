@@ -21,7 +21,7 @@ export class TopBar extends React.Component<Props> {
             <NavLink
               to="/dashboard"
               activeClassName="selected"
-              className="dashboard-link"
+              className="tab"
             >
               MISSION
             </NavLink>
@@ -29,16 +29,24 @@ export class TopBar extends React.Component<Props> {
               to="/"
               exact={true}
               activeClassName="selected"
-              className="availability-link"
+              className="tab"
             >
               AVAILABILITY
             </NavLink>
+              <NavLink
+                to="/flights"
+                exact={true}
+                activeClassName="selected"
+                className="tab"
+              >
+            FLIGHTS
+          </NavLink>
           </span>
           <span>
           {`${this.props.profile.username} (${this.props.profile.roleName})`}
           </span>
         </div>
-        <TopBarSpacer />
+        <TopBarSpacer/>
       </React.Fragment>
     );
   }
@@ -100,7 +108,6 @@ export const StyledTopBar = styled(TopBar)`
       border-radius: 0.25rem 0.25rem 0 0;  
       color: ${props => props.theme.yellow};
     }  
-    
   }
   
   span:first-child {
@@ -113,7 +120,7 @@ export const StyledTopBar = styled(TopBar)`
     margin-right: 1.5rem;
   }
   
-  .dashboard-link, .availability-link {
+  .tab {
     display: flex;
     align-items: center;
     justify-content: center;

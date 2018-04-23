@@ -22,13 +22,18 @@ describe('TopBar', () => {
     expect(subject.text()).toContain('Narwhal');
   });
 
-  it('renders a Mission and Availability tab', () => {
-    expect(subject.find(NavLink).length).toBe(2);
+  it('renders all tabs', () => {
+    expect(subject.find(NavLink).length).toBe(3);
   });
 
   it('should render a link to the Dashboard page', () => {
     expect(subject.find(NavLink).at(0).exists()).toBeTruthy();
     expect(subject.find(NavLink).at(0).prop('to')).toBe('/dashboard');
+  });
+
+  it('should render a link to the Flights page', () => {
+    expect(subject.find(NavLink).at(2).exists()).toBeTruthy();
+    expect(subject.find(NavLink).at(2).prop('to')).toBe('/flights');
   });
 
   it('should render a link to the Availability page', () => {

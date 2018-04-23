@@ -133,7 +133,11 @@ export class Roster extends React.Component<Props> {
         overscanRowCount={15}
         deferredMeasurementCache={cache}
         noRowsRenderer={() => {
-          return <BorderedNotification>No members at this location match your search.</BorderedNotification>;
+          return (
+            <BorderedNotification>
+              No members at this location match your search.
+            </BorderedNotification>
+          );
         }}
         rowRenderer={(props: ListRowProps) => {
           const airman = trackerStore.airmen[props.index];

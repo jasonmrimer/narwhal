@@ -11,6 +11,8 @@ import { DashboardPage } from './pages/DashboardPage';
 import { MissionPlannerStore } from '../crew/stores/MissionPlannerStore';
 import { AdminPage } from './pages/AdminPage';
 import { AdminStore } from '../admin/stores/AdminStore';
+import { FlightsPage } from './pages/FlightsPage';
+import { SiteManagerStore } from '../site-manager/stores/SiteManagerStore';
 
 interface Props {
   dashboardStore: DashboardStore;
@@ -18,6 +20,7 @@ interface Props {
   missionPlannerStore: MissionPlannerStore;
   profileStore: ProfileSitePickerStore;
   adminStore: AdminStore;
+  siteManagerStore: SiteManagerStore;
 }
 
 @observer
@@ -41,6 +44,7 @@ export class Routes extends React.Component<Props> {
           }}
         />
         <Route exact={true} path="/admin" render={() => <AdminPage {...this.props}/>}/>
+        <Route exact={true} path="/flights" render={() => <FlightsPage {...this.props}/>}/>
       </Switch>
     );
   }
