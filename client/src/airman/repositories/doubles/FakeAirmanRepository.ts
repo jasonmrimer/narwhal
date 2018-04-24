@@ -29,6 +29,10 @@ const airmen = [
 ];
 
 export class FakeAirmanRepository implements AirmanRepository {
+  findOne(airmanId: number) {
+    return Promise.resolve(airmen.filter(a => a.id === airmanId)[0]);
+  }
+
   findBySiteId(siteId: number) {
     return Promise.resolve(airmen.filter(a => a.siteId === siteId));
   }

@@ -9,6 +9,7 @@ import { DoubleRepositories } from '../utils/Repositories';
 import { MissionPlannerStore } from '../crew/stores/MissionPlannerStore';
 import { AdminStore } from '../admin/stores/AdminStore';
 import { SiteManagerStore } from '../site-manager/stores/SiteManagerStore';
+import { AirmanProfileManagerStore } from '../site-manager/stores/AirmanProfileManagerStore';
 
 describe('Routes', () => {
   it('should support all the routes', async () => {
@@ -18,6 +19,7 @@ describe('Routes', () => {
     const missionPlannerStore = new MissionPlannerStore(DoubleRepositories, profileStore);
     const adminStore = new AdminStore(DoubleRepositories.profileRepository);
     const siteManagerStore = new SiteManagerStore(DoubleRepositories);
+    const airmanProfileManagerStore = new AirmanProfileManagerStore();
 
     const subject = shallow(
       <Routes
@@ -27,14 +29,16 @@ describe('Routes', () => {
         missionPlannerStore={missionPlannerStore}
         adminStore={adminStore}
         siteManagerStore={siteManagerStore}
+        airmanProfileManagerStore={airmanProfileManagerStore}
       />
     );
-    expect(subject.find(Switch).children().length).toBe(6);
+    expect(subject.find(Switch).children().length).toBe(7);
     expect(subject.find(Route).at(0).prop('path')).toBe('/');
     expect(subject.find(Route).at(1).prop('path')).toBe('/upload');
     expect(subject.find(Route).at(2).prop('path')).toBe('/dashboard');
     expect(subject.find(Route).at(3).prop('path')).toBe('/dashboard/crew/:id');
     expect(subject.find(Route).at(4).prop('path')).toBe('/admin');
     expect(subject.find(Route).at(5).prop('path')).toBe('/flights');
+    expect(subject.find(Route).at(6).prop('path')).toBe('/flights/:airmanId');
   });
 });

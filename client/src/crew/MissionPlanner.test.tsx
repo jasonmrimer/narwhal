@@ -2,7 +2,6 @@ import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { MissionPlanner } from './MissionPlanner';
 import { CrewModelFactory } from './factories/CrewModelFactory';
-import { Link } from 'react-router-dom';
 import { DoubleRepositories } from '../utils/Repositories';
 import { StyledLoadingOverlay } from '../widgets/LoadingOverlay';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
@@ -14,6 +13,7 @@ import { StyledSubmitButton } from '../widgets/SubmitButton';
 import { StyledForm } from '../widgets/Form';
 import { eventStub } from '../utils/testUtils';
 import { StyledButton } from '../widgets/Button';
+import { StyledNavigationBackButton } from '../widgets/NavigationBackButton';
 
 describe('MissionPlanner', () => {
   let subject: ShallowWrapper;
@@ -65,9 +65,9 @@ describe('MissionPlanner', () => {
     expect(subject.find(StyledLoadingOverlay).exists()).toBeTruthy();
   });
 
-  it('renders a link back to Tracker', () => {
-    expect(subject.find(Link).exists()).toBeTruthy();
-    expect(subject.find(Link).prop('to')).toBe('/');
+  it('renders a navigation back button to the Tracker', () => {
+    expect(subject.find(StyledNavigationBackButton).exists()).toBeTruthy();
+    expect(subject.find(StyledNavigationBackButton).prop('location')).toBe('/');
   });
 
   it('should render location filters', () => {

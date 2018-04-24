@@ -1,9 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
-import { Link } from 'react-router-dom';
-import { BackArrow } from '../icons/BackArrow';
-import { Theme } from '../themes/default';
 import { StyledLoadingOverlay } from '../widgets/LoadingOverlay';
 import { StyledCrew } from './Crew';
 import { StyledMissionPlannerRosterContainer } from './MissionPlannerRosterContainer';
@@ -14,6 +11,7 @@ import { StyledSubmitButton } from '../widgets/SubmitButton';
 import { StyledForm } from '../widgets/Form';
 import { StyledButton } from '../widgets/Button';
 import { StyledCrewStatus } from '../widgets/CrewStatus';
+import { StyledNavigationBackButton } from '../widgets/NavigationBackButton';
 
 interface Props {
   crewId: number;
@@ -39,10 +37,7 @@ export class MissionPlanner extends React.Component<Props> {
       <React.Fragment>
         <div className={this.props.className}>
           {missionPlannerStore.loading && <StyledLoadingOverlay/>}
-          <Link to="/">
-            <BackArrow color={Theme.graySteel}/>
-            <span>Back to Availability Roster</span>
-          </Link>
+          <StyledNavigationBackButton text="Back to Availability Roster" location="/"/>
           <div className="mission-details">
             <div className="mission-status">
               <h1>{crew.mission.atoMissionNumber}</h1>

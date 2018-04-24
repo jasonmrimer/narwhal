@@ -17,6 +17,7 @@ import { WebRepositories } from './utils/Repositories';
 import { MissionPlannerStore } from './crew/stores/MissionPlannerStore';
 import { AdminStore } from './admin/stores/AdminStore';
 import { SiteManagerStore } from './site-manager/stores/SiteManagerStore';
+import { AirmanProfileManagerStore } from './site-manager/stores/AirmanProfileManagerStore';
 
 document.body.style.fontFamily = Theme.fontFamily;
 document.body.style.fontWeight = Theme.fontWeight;
@@ -29,6 +30,7 @@ const profileStore = new ProfileSitePickerStore(WebRepositories);
 const missionPlannerStore = new MissionPlannerStore(WebRepositories, profileStore);
 const adminStore = new AdminStore(WebRepositories.profileRepository);
 const siteManagerStore = new SiteManagerStore(WebRepositories);
+const airmanProfileManagerStore = new AirmanProfileManagerStore();
 const AppWithRouter = withRouter((App as any)) as typeof App;
 
 ReactDOM.render(
@@ -41,6 +43,7 @@ ReactDOM.render(
         profileStore={profileStore}
         adminStore={adminStore}
         siteManagerStore={siteManagerStore}
+        airmanProfileManagerStore={airmanProfileManagerStore}
       />
     </BrowserRouter>
   </ThemeProvider>,

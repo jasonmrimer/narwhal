@@ -44,4 +44,9 @@ export const StyledTextInput = styled(TextInput)`
   cursor: pointer;
   outline: inherit;
   width: 100%;
+  
+  &:disabled {
+    color: ${props => props.theme.graySteel};
+    cursor: initial;
+  }
 `;

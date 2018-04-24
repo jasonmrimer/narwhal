@@ -9,6 +9,7 @@ import { Routes } from './Routes';
 import { MissionPlannerStore } from '../crew/stores/MissionPlannerStore';
 import { AdminStore } from '../admin/stores/AdminStore';
 import { SiteManagerStore } from '../site-manager/stores/SiteManagerStore';
+import { AirmanProfileManagerStore } from '../site-manager/stores/AirmanProfileManagerStore';
 
 interface Props {
   dashboardStore: DashboardStore;
@@ -17,6 +18,7 @@ interface Props {
   profileStore: ProfileSitePickerStore;
   adminStore: AdminStore;
   siteManagerStore: SiteManagerStore;
+  airmanProfileManagerStore: AirmanProfileManagerStore;
 }
 
 @observer

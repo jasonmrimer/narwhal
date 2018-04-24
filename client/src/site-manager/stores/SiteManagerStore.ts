@@ -5,7 +5,7 @@ import { Repositories } from '../../utils/Repositories';
 import { ProfileRepository } from '../../profile/repositories/ProfileRepository';
 import { ProfileModel } from '../../profile/models/ProfileModel';
 
-export class SiteManagerStore{
+export class SiteManagerStore {
   @observable private _profile: ProfileModel | null = null;
   @observable private _airmen: AirmanModel[] = [];
 

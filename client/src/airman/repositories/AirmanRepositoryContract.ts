@@ -13,6 +13,13 @@ export function airmanRepositoryContract(subject: AirmanRepository) {
     expect(airmen).toBeDefined();
   });
 
+  describe('findOne', () => {
+    it('returns an Airman', async () => {
+      const airman = await subject.findOne(airmen[0].id);
+      expect(airman).toBeDefined();
+    });
+  });
+
   describe('findBySiteId', () => {
     it('returns airmen', () => {
       expect(airmen.length).toBeGreaterThan(0);

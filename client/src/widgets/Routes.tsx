@@ -13,6 +13,8 @@ import { AdminPage } from './pages/AdminPage';
 import { AdminStore } from '../admin/stores/AdminStore';
 import { FlightsPage } from './pages/FlightsPage';
 import { SiteManagerStore } from '../site-manager/stores/SiteManagerStore';
+import { AirmanProfilePage } from './pages/AirmanProfilePage';
+import { AirmanProfileManagerStore } from '../site-manager/stores/AirmanProfileManagerStore';
 
 interface Props {
   dashboardStore: DashboardStore;
@@ -21,11 +23,13 @@ interface Props {
   profileStore: ProfileSitePickerStore;
   adminStore: AdminStore;
   siteManagerStore: SiteManagerStore;
+  airmanProfileManagerStore: AirmanProfileManagerStore;
 }
 
 @observer
 export class Routes extends React.Component<Props> {
   render() {
+    const profile = this.props.profileStore.profile!;
     return (
       <Switch>
         <Route exact={true} path="/" render={() => <TrackerPage {...this.props}/>}/>
@@ -36,7 +40,7 @@ export class Routes extends React.Component<Props> {
           render={({match}) => {
             return (
               <CrewPage
-                profile={this.props.profileStore.profile!}
+                profile={profile}
                 crewId={match.params.id}
                 missionPlannerStore={this.props.missionPlannerStore}
               />
@@ -45,6 +49,18 @@ export class Routes extends React.Component<Props> {
         />
         <Route exact={true} path="/admin" render={() => <AdminPage {...this.props}/>}/>
         <Route exact={true} path="/flights" render={() => <FlightsPage {...this.props}/>}/>
+        <Route
+          path="/flights/:airmanId"
+          render={({match}) => {
+            return (
+            <AirmanProfilePage
+              airmanProfileManagerStore={this.props.airmanProfileManagerStore}
+              airmanId={match.params.airmanId}
+              profile={profile}
+            />
+            );
+          }}
+        />
       </Switch>
     );
   }

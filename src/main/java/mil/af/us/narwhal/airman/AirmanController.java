@@ -26,6 +26,11 @@ public class AirmanController {
     this.certificationRepository = certificationRepository;
   }
 
+  @GetMapping(path = "/{airmanId}")
+  public Airman show(@PathVariable Long airmanId) {
+    return repository.findOne(airmanId);
+  }
+
   @GetMapping
   public List<Airman> index(@RequestParam Long siteId) {
     return repository.findAllBySiteIdAndByOrderByLastName(siteId);

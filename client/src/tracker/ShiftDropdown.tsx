@@ -12,13 +12,13 @@ interface Props {
   className?: string;
 }
 
-const shiftOptions = [
+export const shiftOptions = [
   {value: ShiftType.Day, label: ShiftType.Day},
   {value: ShiftType.Night, label: ShiftType.Night},
   {value: ShiftType.Swing, label: ShiftType.Swing}
 ];
 
-const unsetShiftOptions = [{value: -1, label: 'None'}, ...shiftOptions];
+export const unsetShiftOptions = [{value: -1, label: 'None'}, ...shiftOptions];
 
 export const ShiftDropdown = observer((props: Props) => {
   const {airman, className, trackerStore} = props;

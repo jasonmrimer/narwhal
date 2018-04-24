@@ -30,12 +30,13 @@ public class AirmanControllerTest extends BaseIntegrationTest {
   @Autowired private AirmanRepository airmanRepository;
   @Autowired private QualificationRepository qualificationRepository;
   @Autowired private CertificationRepository certificationRepository;
+  private Flight flight1;
 
   @Before
   public void setUp() {
     super.setUp();
 
-    final Flight flight1 = new Flight("flight1");
+    flight1 = new Flight("flight1");
     final Squadron squadron1 = new Squadron("squadron1");
     squadron1.addFlight(flight1);
 
@@ -74,6 +75,24 @@ public class AirmanControllerTest extends BaseIntegrationTest {
   @After
   public void tearDown() {
     super.tearDown();
+  }
+
+  @Test
+  public void showTest() {
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+    .when()
+      .get(AirmanController.URI + "/" + airman1.getId())
+    .then()
+      .statusCode(200)
+      .body("firstName", equalTo("first1"))
+      .body("lastName", equalTo("last1"))
+      .body("flightId", equalTo(flight1.getId().intValue()));
+    // @formatter:on
   }
 
   @Test

@@ -33,14 +33,13 @@ export class TopBar extends React.Component<Props> {
             >
               AVAILABILITY
             </NavLink>
-              <NavLink
-                to="/flights"
-                exact={true}
-                activeClassName="selected"
-                className="tab"
-              >
+            <NavLink
+              to="/flights"
+              activeClassName="selected"
+              className="tab"
+            >
             FLIGHTS
-          </NavLink>
+            </NavLink>
           </span>
           <span>
           {`${this.props.profile.username} (${this.props.profile.roleName})`}

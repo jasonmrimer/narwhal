@@ -5,6 +5,7 @@ import { observer } from 'mobx-react';
 import { CellMeasurer, CellMeasurerCache, List, ListRowProps } from 'react-virtualized';
 import { BorderedNotification } from '../widgets/Notification';
 import { AirmanModel } from '../airman/models/AirmanModel';
+import { Link } from 'react-router-dom';
 
 interface Props {
   siteManagerStore: SiteManagerStore;
@@ -36,11 +37,13 @@ const Row = observer((props: RowProps) => {
       parent={props.parent}
     >
       <div className={props.className} style={props.style}>
-        <div className="airman-row">
-        <span className="airman-name">
-          {airman.lastName}, {airman.firstName}
-        </span>
-        </div>
+        <Link to={`/flights/${airman.id}`}>
+          <div className="airman-row">
+          <span className="airman-name">
+            {airman.lastName}, {airman.firstName}
+         </span>
+          </div>
+        </Link>
       </div>
     </CellMeasurer>
   );
@@ -86,18 +89,29 @@ export class SiteManager extends React.Component<Props> {
                   key={airman.id}
                   style={props.style}
                 />
-              )
+              );
             }}
           />
         </div>
       </div>
     );
-  };
+  }
 }
 
 export const StyledRow = styled(Row)`
+  a {
+    text-decoration: none;
+    color: ${props => props.theme.fontColor};
+  }
+  
+
+  
   .airman-row {
     padding: 1rem;
+    
+    &:hover {
+      background: ${props => props.theme.darkest};
+    }
   }
   
   &:nth-child(odd) {
