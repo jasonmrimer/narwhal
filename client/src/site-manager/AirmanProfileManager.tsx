@@ -8,6 +8,8 @@ import { StyledRipItemsTile } from '../rip-items/RipItemsTile';
 import { observer } from 'mobx-react';
 import { AirmanProfileManagerStore } from './stores/AirmanProfileManagerStore';
 import { StyledNavigationBackButton } from '../widgets/NavigationBackButton';
+import { StyledSubmitButton } from '../widgets/SubmitButton';
+import { StyledForm } from '../widgets/Form';
 
 interface Props {
   store: AirmanProfileManagerStore;
@@ -16,45 +18,48 @@ interface Props {
 
 @observer
 export class AirmanProfileManager extends React.Component<Props> {
-
   render() {
-    const {airman} = this.props.store;
+    const {airman, setState} = this.props.store;
     return (
       <div className={this.props.className}>
-        <div className="side-nav">
-          <StyledNavigationBackButton location="/flights"/>
-        </div>
-        <div className="content">
-          <div className="airman-header">
-            <h1>{`${airman.lastName}, ${airman.firstName}`}</h1>
-            <br/>
+        <StyledForm onSubmit={this.onSubmit}>
+          <div className="side-nav">
+            <StyledNavigationBackButton
+              location="/flights"
+            />
+            <StyledSubmitButton
+              text="SAVE"
+            />
           </div>
-          <div>
-            <h2>Personal Information</h2>
-            <span className="airman-profile-manager-row">
+          <div className="content">
+            <div className="airman-header">
+              <h1>{`${airman.lastName}, ${airman.firstName}`}</h1>
+              <br/>
+            </div>
+            <div>
+              <h2>Personal Information</h2>
+              <span className="airman-profile-manager-row">
           <label htmlFor="airman-last-name">LAST NAME</label>
           <StyledTextInput
-            onChange={this.nothing}
+            onChange={(e) => setState(e.target.name, e.target.value)}
             value={airman.lastName}
             name="lastName"
             id="airman-last-name"
-            disabled={true}
           />
         </span>
-            <span className="airman-profile-manager-row">
+              <span className="airman-profile-manager-row">
           <label htmlFor="airman-first-name">FIRST NAME</label>
           <StyledTextInput
-            onChange={this.nothing}
+            onChange={(e) => setState(e.target.name, e.target.value)}
             value={airman.firstName}
             name="firstName"
             id="airman-first-name"
-            disabled={true}
           />
         </span>
-          </div>
-          <div>
-            <h2>Member Organization</h2>
-            <span className="airman-profile-manager-row">
+            </div>
+            <div>
+              <h2>Member Organization</h2>
+              <span className="airman-profile-manager-row">
             <label htmlFor="airman-site">SITE</label>
             <StyledDropdown
               onChange={this.nothing}
@@ -65,7 +70,7 @@ export class AirmanProfileManager extends React.Component<Props> {
               disabled={true}
             />
           </span>
-            <span className="airman-profile-manager-row">
+              <span className="airman-profile-manager-row">
             <label htmlFor="airman-squadron">SQUADRON</label>
             <StyledDropdown
               onChange={this.nothing}
@@ -76,7 +81,7 @@ export class AirmanProfileManager extends React.Component<Props> {
               disabled={true}
             />
         </span>
-            <span className="airman-profile-manager-row">
+              <span className="airman-profile-manager-row">
             <label htmlFor="airman-flight">FLIGHT</label>
             <StyledDropdown
               onChange={this.nothing}
@@ -87,7 +92,7 @@ export class AirmanProfileManager extends React.Component<Props> {
               disabled={true}
             />
         </span>
-            <span className="airman-profile-manager-row">
+              <span className="airman-profile-manager-row">
             <label htmlFor="airman-shift">SHIFT</label>
               <StyledDropdown
                 name="shift"
@@ -98,18 +103,24 @@ export class AirmanProfileManager extends React.Component<Props> {
                 disabled={true}
               />
           </span>
-          </div>
-          <div>
-            <h2>Qualifications & Certifications</h2>
-            <div className="airman-skills">
-              {this.renderQualifications()}
-              {this.renderCertifications()}
-              {this.renderRipTile()}
+            </div>
+            <div>
+              <h2>Qualifications & Certifications</h2>
+              <div className="airman-skills">
+                {this.renderQualifications()}
+                {this.renderCertifications()}
+                {this.renderRipTile()}
+              </div>
             </div>
           </div>
-        </div>
+        </StyledForm>
       </div>
     );
+  }
+
+  private onSubmit = async (e: any) => {
+    e.preventDefault();
+    this.props.store.save();
   }
 
   private nothing() {
@@ -161,6 +172,7 @@ export const StyledAirmanProfileManager = styled(AirmanProfileManager)`
   .content {
     width: 32rem;
     margin: auto;
+    color: ${props => props.theme.fontColor};
         
     h1 {
       font-weight: 300;

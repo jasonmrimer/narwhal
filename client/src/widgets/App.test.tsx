@@ -31,7 +31,7 @@ describe('App', () => {
       const missionPlannerStore = new MissionPlannerStore(DoubleRepositories, profileStore);
       const adminStore = new AdminStore(DoubleRepositories.profileRepository);
       const siteManagerStore = new SiteManagerStore(DoubleRepositories);
-      const airmanProfileManagerStore = new AirmanProfileManagerStore();
+      const airmanProfileManagerStore = new AirmanProfileManagerStore(DoubleRepositories.airmanRepository);
 
       const profileRepo = {
         findOne: () => {
@@ -124,7 +124,7 @@ const createMountedPage = async (entry: string) => {
   const missionPlannerStore = new MissionPlannerStore(DoubleRepositories, profileStore);
   const adminStore = new AdminStore(DoubleRepositories.profileRepository);
   const siteManagerStore = new SiteManagerStore(DoubleRepositories);
-  const airmanProfileManagerStore = new AirmanProfileManagerStore();
+  const airmanProfileManagerStore = new AirmanProfileManagerStore(DoubleRepositories.airmanRepository);
 
   const mountedRouter = mount(
     <ThemeProvider theme={Theme}>

@@ -1,7 +1,11 @@
 import { AirmanQualificationModel } from './AirmanQualificationModel';
 import { AirmanCertificationModel } from './AirmanCertificationModel';
+import { observable } from 'mobx';
 
 export class AirmanModel {
+  @observable public firstName: string;
+  @observable public lastName: string;
+
   static empty(): AirmanModel {
     return new AirmanModel(-1, -1, -1, -1, '', '', [], []);
   }
@@ -10,11 +14,13 @@ export class AirmanModel {
               public flightId: number,
               public squadronId: number,
               public siteId: number,
-              public firstName: string,
-              public lastName: string,
+              firstName: string,
+              lastName: string,
               public qualifications: AirmanQualificationModel[] = [],
               public certifications: AirmanCertificationModel[] = [],
               public shift?: ShiftType) {
+    this.firstName = firstName;
+    this.lastName = lastName;
   }
 
   get isEmpty() {

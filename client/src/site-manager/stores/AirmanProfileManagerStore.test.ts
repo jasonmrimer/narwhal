@@ -5,10 +5,13 @@ import { AirmanRipItemFactory } from '../../rip-items/factories/AirmanRipItemFac
 import { AirmanModel } from '../../airman/models/AirmanModel';
 import { AirmanCertificationModelFactory } from '../../airman/factories/AirmanCertificationModelFactory';
 import { AirmanQualificationModelFactory } from '../../airman/factories/AirmanQualificationModelFactory';
+import { AirmanRepository } from '../../airman/repositories/AirmanRepository';
 
 describe('AirmanProfileManagerStore', () => {
-  let subject = new AirmanProfileManagerStore();
+  let repoMock: AirmanRepository;
+  let subject: AirmanProfileManagerStore;
   let airman: AirmanModel;
+
   beforeEach(() => {
     airman = AirmanModelFactory.build(
       1,
@@ -20,7 +23,16 @@ describe('AirmanProfileManagerStore', () => {
     );
     const airmanRipItems = AirmanRipItemFactory.buildList(airman.id, 10);
 
-  subject.hydrate(airman, [SiteModelFactory.build(1, 2)], airmanRipItems);
+    repoMock = {
+      findOne: jest.fn(),
+      findBySiteId: jest.fn(),
+      saveSkill: jest.fn(),
+      saveAirman: jest.fn(),
+      deleteSkill: jest.fn(),
+    };
+
+    subject = new AirmanProfileManagerStore(repoMock);
+    subject.hydrate(airman, [SiteModelFactory.build(1, 2)], airmanRipItems);
   });
 
   it('should pass site options', () => {
@@ -41,5 +53,18 @@ describe('AirmanProfileManagerStore', () => {
 
   it('should give the assigned ripItem count', () => {
     expect(subject.assignedItemCount).toBe(10);
+  });
+
+  it('should update the airmans first or last name when set', () => {
+    subject.setState('lastName', 'Bob');
+    expect(subject.airman.lastName).toBe('Bob');
+
+    subject.setState('firstName', 'Sponge');
+    expect(subject.airman.firstName).toBe('Sponge');
+  });
+
+  it('should call the airman repository on save', async () => {
+    await subject.save();
+    expect(repoMock.saveAirman).toHaveBeenCalled();
   });
 });

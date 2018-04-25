@@ -40,6 +40,8 @@ public class AirmanController {
   public Airman update(@RequestBody AirmanJSON airmanJSON) {
     Airman airman = repository.findOne(airmanJSON.getId());
     airman.setShift(airmanJSON.getShift());
+    airman.setLastName(airmanJSON.getLastName());
+    airman.setFirstName(airmanJSON.getFirstName());
     return repository.save(airman);
   }
 

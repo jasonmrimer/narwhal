@@ -10,10 +10,14 @@ import { StyledRipItemsTile } from '../rip-items/RipItemsTile';
 import { SiteModelFactory } from '../site/factories/SiteModelFactory';
 import { AirmanRipItemFactory } from '../rip-items/factories/AirmanRipItemFactory';
 import { AirmanProfileManagerStore } from './stores/AirmanProfileManagerStore';
+import { eventStub } from '../utils/testUtils';
+import { StyledForm } from '../widgets/Form';
+import { DoubleRepositories } from '../utils/Repositories';
 
 describe('AirmanProfileManager', () => {
-  let subject: ShallowWrapper;
   let airman: AirmanModel;
+  let store: AirmanProfileManagerStore;
+  let subject: ShallowWrapper;
 
   beforeEach(() => {
     airman = AirmanModelFactory.build(
@@ -27,7 +31,8 @@ describe('AirmanProfileManager', () => {
 
     const airmanRipItems = AirmanRipItemFactory.buildList(airman.id, 10);
 
-    const store = new AirmanProfileManagerStore();
+    store = new AirmanProfileManagerStore(DoubleRepositories.airmanRepository);
+    store.save = jest.fn();
     store.hydrate(airman, [SiteModelFactory.build(1, 2)], airmanRipItems);
 
     subject = shallow(
@@ -59,5 +64,26 @@ describe('AirmanProfileManager', () => {
     const skillCount = airman.qualifications.length + airman.certifications.length;
     expect(subject.find(StyledSkillTile).length).toBe(skillCount);
     expect(subject.find(StyledRipItemsTile).exists()).toBeTruthy();
+  });
+
+  it('should allow for edit of an Airmans last and first name', () => {
+    subject.find('#airman-last-name').simulate('change',
+      {target: {name: 'lastName', value: 'Bob'}}
+    );
+    subject.find('#airman-first-name').simulate('change',
+      {target: {name: 'firstName', value: 'Sponge'}}
+    );
+
+    subject.instance().forceUpdate();
+    subject.update();
+
+    expect(subject.find('#airman-last-name').prop('value')).toBe('Bob');
+    expect(subject.find('#airman-first-name').prop('value')).toBe('Sponge');
+
+  });
+
+  it('should call store save onSubmit', () => {
+    subject.find(StyledForm).simulate('submit', eventStub);
+    expect(store.save).toHaveBeenCalled();
   });
 });

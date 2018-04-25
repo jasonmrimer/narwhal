@@ -163,6 +163,8 @@ public class AirmanControllerTest extends BaseIntegrationTest {
   @Test
   public void updateTest() throws JsonProcessingException {
     airman1.setShift(ShiftType.Night);
+    airman1.setFirstName("Foo");
+    airman1.setLastName("Bar");
     final String json = objectMapper.writeValueAsString(airman1);
 
     // @formatter:off
@@ -177,7 +179,9 @@ public class AirmanControllerTest extends BaseIntegrationTest {
       .post(AirmanController.URI)
     .then()
       .statusCode(200)
-      .body("shift", equalTo("Night"));
+      .body("shift", equalTo("Night"))
+      .body("firstName", equalTo("Foo"))
+      .body("lastName", equalTo("Bar"));
     // @formatter:on
   }
 

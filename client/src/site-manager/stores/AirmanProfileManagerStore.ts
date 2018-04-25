@@ -1,13 +1,18 @@
-import { computed, observable } from 'mobx';
+import { action, computed, observable } from 'mobx';
 import { AirmanModel } from '../../airman/models/AirmanModel';
 import { SiteModel } from '../../site/models/SiteModel';
 import { AirmanRipItemModel } from '../../airman/models/AirmanRipItemModel';
 import { FilterOption } from '../../widgets/models/FilterOptionModel';
+import { AirmanRepository } from '../../airman/repositories/AirmanRepository';
 
 export class AirmanProfileManagerStore {
   @observable _airman: AirmanModel = AirmanModel.empty();
   @observable _sites: SiteModel[] = [];
   @observable _ripItems: AirmanRipItemModel[] = [];
+  @observable _loading: boolean = false;
+
+  constructor(private airmanRepository: AirmanRepository) {
+  }
 
   hydrate(airman: AirmanModel, sites: SiteModel[], ripItems: AirmanRipItemModel[]) {
     this._airman = airman;
@@ -51,12 +56,12 @@ export class AirmanProfileManagerStore {
 
   @computed
   get flightOptions(): FilterOption[] {
-    const site = this._sites.find(site => site.id === this._airman.siteId);
+    const site = this._sites.find(s => s.id === this._airman.siteId);
     if (!site) {
       return [];
     }
 
-    const squadron = site.squadrons.find(squadron => squadron.id === this._airman.squadronId);
+    const squadron = site.squadrons.find(s => s.id === this._airman.squadronId);
     if (!squadron) {
       return [];
     }
@@ -78,5 +83,27 @@ export class AirmanProfileManagerStore {
     return this._ripItems
       .filter(item => item.expirationDate != null && item.expirationDate.isValid())
       .length;
+  }
+
+  @action.bound
+  setLoading(loading: boolean) {
+    this._loading = loading;
+  }
+
+  @computed
+  get loading() {
+    return this._loading;
+  }
+
+  @action.bound
+  setState(key: keyof AirmanModel, value: string) {
+    this._airman[(key as any)] = value;
+  }
+
+  @action.bound
+  async save() {
+    this._loading = true;
+    this._airman = await this.airmanRepository.saveAirman(this.airman);
+    this._loading = false;
   }
 }

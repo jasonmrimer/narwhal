@@ -30,7 +30,7 @@ const profileStore = new ProfileSitePickerStore(WebRepositories);
 const missionPlannerStore = new MissionPlannerStore(WebRepositories, profileStore);
 const adminStore = new AdminStore(WebRepositories.profileRepository);
 const siteManagerStore = new SiteManagerStore(WebRepositories);
-const airmanProfileManagerStore = new AirmanProfileManagerStore();
+const airmanProfileManagerStore = new AirmanProfileManagerStore(WebRepositories.airmanRepository);
 const AppWithRouter = withRouter((App as any)) as typeof App;
 
 ReactDOM.render(
