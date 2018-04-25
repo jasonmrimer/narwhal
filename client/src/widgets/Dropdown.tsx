@@ -7,7 +7,7 @@ interface Props {
   name: string;
   options: FilterOption[];
   value: any;
-  onChange: (event: object) => void;
+  onChange: (event: any) => void;
   id?: string;
   disabled?: boolean;
   className?: string;

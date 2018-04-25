@@ -5,22 +5,30 @@ import { observable } from 'mobx';
 export class AirmanModel {
   @observable public firstName: string;
   @observable public lastName: string;
+  @observable public siteId : number;
+  @observable public squadronId: number;
+  @observable public flightId: number;
+  @observable public shift?: ShiftType;
 
   static empty(): AirmanModel {
     return new AirmanModel(-1, -1, -1, -1, '', '', [], []);
   }
 
   constructor(public id: number,
-              public flightId: number,
-              public squadronId: number,
-              public siteId: number,
+              flightId: number,
+              squadronId: number,
+              siteId: number,
               firstName: string,
               lastName: string,
               public qualifications: AirmanQualificationModel[] = [],
               public certifications: AirmanCertificationModel[] = [],
-              public shift?: ShiftType) {
+              shift?: ShiftType) {
     this.firstName = firstName;
     this.lastName = lastName;
+    this.siteId = siteId;
+    this.squadronId = squadronId;
+    this.flightId = flightId;
+    this.shift = shift;
   }
 
   get isEmpty() {

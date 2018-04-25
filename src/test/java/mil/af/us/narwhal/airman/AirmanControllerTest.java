@@ -31,6 +31,7 @@ public class AirmanControllerTest extends BaseIntegrationTest {
   @Autowired private QualificationRepository qualificationRepository;
   @Autowired private CertificationRepository certificationRepository;
   private Flight flight1;
+  private Flight flight3;
 
   @Before
   public void setUp() {
@@ -48,7 +49,7 @@ public class AirmanControllerTest extends BaseIntegrationTest {
     site.addSquadron(squadron1);
     site.addSquadron(squadron2);
 
-    final Flight flight3 = new Flight("flight3");
+    flight3 = new Flight("flight3");
     final Squadron squadron3 = new Squadron("squadron3");
     squadron3.addFlight(flight3);
 
@@ -165,6 +166,7 @@ public class AirmanControllerTest extends BaseIntegrationTest {
     airman1.setShift(ShiftType.Night);
     airman1.setFirstName("Foo");
     airman1.setLastName("Bar");
+    airman1.setFlight(flight3);
     final String json = objectMapper.writeValueAsString(airman1);
 
     // @formatter:off
@@ -181,7 +183,10 @@ public class AirmanControllerTest extends BaseIntegrationTest {
       .statusCode(200)
       .body("shift", equalTo("Night"))
       .body("firstName", equalTo("Foo"))
-      .body("lastName", equalTo("Bar"));
+      .body("lastName", equalTo("Bar"))
+      .body("flightId", equalTo(flight3.getId().intValue()))
+      .body("siteId", equalTo(flight3.getSquadron().getSite().getId().intValue()))
+      .body("squadronId", equalTo(flight3.getSquadron().getId().intValue()));
     // @formatter:on
   }
 

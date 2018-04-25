@@ -15,9 +15,9 @@ export class SiteModelFactory {
     const site = new SiteModel(id, `Site ${id}`, [], SiteType.DMSSite, `Full Site Name ${id}`);
 
     for (let i = 0; i < numOfChildren; i++) {
-      const squad = new SquadronModel(i, `Squadron ${i}`, []);
+      const squad = new SquadronModel(Number(id.toString() +  i.toString()), `Squadron ${id.toString() + i.toString()}`, []);
       for (let j = 0; j < numOfChildren; j++) {
-        const flight = new FlightModel(j, `Flight ${j}`);
+        const flight = new FlightModel(Number(id.toString() + i.toString() + j.toString()), `Flight ${id.toString() + i.toString() + j.toString()}`);
         squad.flights.push(flight);
       }
       site.squadrons.push(squad);

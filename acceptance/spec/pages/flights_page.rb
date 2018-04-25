@@ -22,6 +22,10 @@ class FlightsPage
 
     fill_in 'lastName', with: 'Bob'
     fill_in 'firstName', with: 'Sponge'
+    find('#airman-site').find(:option, text: 'DGS 1').select_option
+    find('#airman-squadron').find(:option, text: '30 IS').select_option
+    find('#airman-flight').find(:option, text: 'JKB').select_option
+    find('#airman-shift').find(:option, text: 'Day').select_option
 
     find('input[type="submit"]').click
 
@@ -29,6 +33,10 @@ class FlightsPage
 
     fill_in 'lastName', with: 'Angie'
     fill_in 'firstName', with: 'Patton'
+    find('#airman-site').find(:option, text: 'DMS Maryland').select_option
+    find('#airman-squadron').find(:option, text: '94 IS').select_option
+    find('#airman-flight').find(:option, text: 'DOB').select_option
+    find('#airman-shift').find(:option, text: 'Night').select_option
 
     find('input[type="submit"]').click
 

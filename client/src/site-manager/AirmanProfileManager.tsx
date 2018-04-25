@@ -23,6 +23,7 @@ export class AirmanProfileManager extends React.Component<Props> {
     return (
       <div className={this.props.className}>
         <StyledForm onSubmit={this.onSubmit}>
+
           <div className="side-nav">
             <StyledNavigationBackButton
               location="/flights"
@@ -31,79 +32,80 @@ export class AirmanProfileManager extends React.Component<Props> {
               text="SAVE"
             />
           </div>
+
           <div className="content">
+
             <div className="airman-header">
               <h1>{`${airman.lastName}, ${airman.firstName}`}</h1>
               <br/>
             </div>
+
             <div>
               <h2>Personal Information</h2>
               <span className="airman-profile-manager-row">
-          <label htmlFor="airman-last-name">LAST NAME</label>
-          <StyledTextInput
-            onChange={(e) => setState(e.target.name, e.target.value)}
-            value={airman.lastName}
-            name="lastName"
-            id="airman-last-name"
-          />
-        </span>
+                <label htmlFor="airman-last-name">LAST NAME</label>
+                <StyledTextInput
+                  onChange={(e) => setState(e.target.name, e.target.value)}
+                  value={airman.lastName}
+                  name="lastName"
+                  id="airman-last-name"
+                />
+              </span>
               <span className="airman-profile-manager-row">
-          <label htmlFor="airman-first-name">FIRST NAME</label>
-          <StyledTextInput
-            onChange={(e) => setState(e.target.name, e.target.value)}
-            value={airman.firstName}
-            name="firstName"
-            id="airman-first-name"
-          />
-        </span>
+                <label htmlFor="airman-first-name">FIRST NAME</label>
+                <StyledTextInput
+                  onChange={(e) => setState(e.target.name, e.target.value)}
+                  value={airman.firstName}
+                  name="firstName"
+                  id="airman-first-name"
+                />
+              </span>
             </div>
+
             <div>
               <h2>Member Organization</h2>
               <span className="airman-profile-manager-row">
-            <label htmlFor="airman-site">SITE</label>
-            <StyledDropdown
-              onChange={this.nothing}
-              name="airmanSite"
-              value={airman.siteId}
-              options={this.props.store.siteOptions}
-              id="airman-site"
-              disabled={true}
-            />
-          </span>
+                <label htmlFor="airman-site">SITE</label>
+                <StyledDropdown
+                  onChange={(e) => setState(e.target.name, Number(e.target.value))}
+                  name="siteId"
+                  value={airman.siteId}
+                  options={this.props.store.siteOptions}
+                  id="airman-site"
+                />
+              </span>
               <span className="airman-profile-manager-row">
-            <label htmlFor="airman-squadron">SQUADRON</label>
-            <StyledDropdown
-              onChange={this.nothing}
-              name="airmanSquadron"
-              value={airman.squadronId}
-              options={this.props.store.squadronOptions}
-              id="airman-squadron"
-              disabled={true}
-            />
-        </span>
+                <label htmlFor="airman-squadron">SQUADRON</label>
+                <StyledDropdown
+                  onChange={(e) => setState(e.target.name, Number(e.target.value))}
+                  name="squadronId"
+                  value={airman.squadronId}
+                  options={this.props.store.squadronOptions}
+                  id="airman-squadron"
+                />
+              </span>
               <span className="airman-profile-manager-row">
-            <label htmlFor="airman-flight">FLIGHT</label>
-            <StyledDropdown
-              onChange={this.nothing}
-              name="airmanFlight"
-              value={airman.flightId}
-              options={this.props.store.flightOptions}
-              id="airman-flight"
-              disabled={true}
-            />
-        </span>
+                <label htmlFor="airman-flight">FLIGHT</label>
+                <StyledDropdown
+                  onChange={(e) => setState(e.target.name, Number(e.target.value))}
+                  name="flightId"
+                  value={airman.flightId}
+                  options={this.props.store.flightOptions}
+                  id="airman-flight"
+                />
+              </span>
               <span className="airman-profile-manager-row">
-            <label htmlFor="airman-shift">SHIFT</label>
-              <StyledDropdown
-                name="shift"
-                options={airman.shift ? shiftOptions : unsetShiftOptions}
-                value={airman.shift || -1}
-                onChange={this.nothing}
-                id="airman-shift"
-                disabled={true}
-              />
-          </span>
+                <label htmlFor="airman-shift">SHIFT</label>
+                  <StyledDropdown
+                    name="shift"
+                    options={airman.shift ? shiftOptions : unsetShiftOptions}
+                    value={airman.shift || -1}
+                    onChange={(e) => setState(e.target.name, e.target.value)}
+                    id="airman-shift"
+                  />
+              </span>
             </div>
+
             <div>
               <h2>Qualifications & Certifications</h2>
               <div className="airman-skills">
@@ -112,6 +114,7 @@ export class AirmanProfileManager extends React.Component<Props> {
                 {this.renderRipTile()}
               </div>
             </div>
+
           </div>
         </StyledForm>
       </div>

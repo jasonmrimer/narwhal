@@ -1,4 +1,4 @@
-INSERT INTO flight VALUES (1, 16, 'DOB'), (2, 16, 'DOC');
+INSERT INTO flight VALUES (1, 16, 'DOB'), (2, 16, 'DOC'), (3, 1, 'JKB'), (4, 1, 'JKA');
 
 INSERT INTO airman VALUES
   (1, 'Corey', 'Spaceman', 1, 'Day'),

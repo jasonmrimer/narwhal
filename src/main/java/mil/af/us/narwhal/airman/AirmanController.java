@@ -1,5 +1,6 @@
 package mil.af.us.narwhal.airman;
 
+import mil.af.us.narwhal.flight.FlightRepository;
 import mil.af.us.narwhal.skill.Certification;
 import mil.af.us.narwhal.skill.CertificationRepository;
 import mil.af.us.narwhal.skill.Qualification;
@@ -19,11 +20,13 @@ public class AirmanController {
   private AirmanRepository repository;
   private QualificationRepository qualificationRepository;
   private CertificationRepository certificationRepository;
+  private FlightRepository flightRepository;
 
-  public AirmanController(AirmanRepository repository, QualificationRepository qualificationRepository, CertificationRepository certificationRepository) {
+  public AirmanController(AirmanRepository repository, QualificationRepository qualificationRepository, CertificationRepository certificationRepository, FlightRepository flightRepository) {
     this.repository = repository;
     this.qualificationRepository = qualificationRepository;
     this.certificationRepository = certificationRepository;
+    this.flightRepository = flightRepository;
   }
 
   @GetMapping(path = "/{airmanId}")
@@ -42,6 +45,7 @@ public class AirmanController {
     airman.setShift(airmanJSON.getShift());
     airman.setLastName(airmanJSON.getLastName());
     airman.setFirstName(airmanJSON.getFirstName());
+    airman.setFlight(flightRepository.findOne(airmanJSON.getFlightId()));
     return repository.save(airman);
   }
 

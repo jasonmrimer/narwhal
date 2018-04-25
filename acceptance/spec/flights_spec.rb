@@ -16,7 +16,7 @@ describe 'Flights page', type: :feature do
     flights_page.assert_shows_airman_profile
   end
 
-  it 'can edit the Airman first and last name' do
+  it 'can edit an Airman profile' do
     flights_page.assert_edit_airman_profile
   end
 
