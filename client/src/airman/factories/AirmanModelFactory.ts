@@ -2,6 +2,7 @@ import { AirmanCertificationModel } from '../models/AirmanCertificationModel';
 import { AirmanQualificationModel } from '../models/AirmanQualificationModel';
 import { AirmanModel, ShiftType } from '../models/AirmanModel';
 import { randomText } from '../../utils/randomizer';
+import { AirmanScheduleModel } from '../models/AirmanScheduleModel';
 
 export class AirmanModelFactory {
   static build(id: number = 1,
@@ -9,7 +10,8 @@ export class AirmanModelFactory {
                squadronId: number = 1,
                siteId: number = 1,
                qualifications: AirmanQualificationModel[] = [],
-               certifications: AirmanCertificationModel[] = []) {
+               certifications: AirmanCertificationModel[] = [],
+               schedules: AirmanScheduleModel[] = []) {
     return new AirmanModel(
       id,
       flightId,
@@ -19,6 +21,7 @@ export class AirmanModelFactory {
       randomText(5),
       qualifications,
       certifications,
+      schedules,
       randomShiftType()
     );
   }

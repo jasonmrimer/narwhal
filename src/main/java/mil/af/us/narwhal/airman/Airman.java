@@ -58,6 +58,11 @@ public class Airman {
   @JsonIgnore
   private List<AirmanRipItem> ripItems = new ArrayList<>();
 
+  @OneToMany(mappedBy = "airmanId", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  @JsonManagedReference
+  private List<AirmanSchedule> schedules = new ArrayList<>();
+
+
   public Airman(Flight flight, String firstName, String lastName) {
     this.flight = flight;
     this.firstName = firstName;

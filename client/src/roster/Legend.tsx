@@ -5,6 +5,7 @@ import { AvailableIcon } from '../icons/AvailableIcon';
 import styled from 'styled-components';
 import { TDYDeploymentIcon } from '../icons/TDYDeploymentIcon';
 import { MissionIcon } from '../icons/MissionIcon';
+import { OffDayIcon } from '../icons/OffDayIcon';
 
 interface Props {
   className?: string;
@@ -13,6 +14,10 @@ interface Props {
 export const Legend = (props: Props) => {
   return (
     <div className={props.className}>
+      <div>
+        <MissionIcon title="XYZ" viewBox="0 0 36 25"/>
+        <span>MISSION</span>
+      </div>
       <div>
         <TDYDeploymentIcon/>
         <span>TDY/DEPLOYMENT</span>
@@ -26,12 +31,12 @@ export const Legend = (props: Props) => {
         <span>LEAVE</span>
       </div>
       <div>
-        <MissionIcon title="XYZ" viewBox="0 0 36 25"/>
-        <span>MISSION</span>
-      </div>
-      <div>
         <AvailableIcon/>
         <span>AVAILABLE</span>
+      </div>
+      <div>
+        <OffDayIcon/>
+        <span className="off-day">OFF DAY</span>
       </div>
     </div>
   );
@@ -51,7 +56,12 @@ export const StyledLegend = styled(Legend)`
     margin: 0 0.6rem;
     align-items: center;
     span {
-      margin: 0 0.75rem;
+    font-size: 0.875rem;
+      margin: 0 0 0 0.5rem;
     }
+  }
+  
+  .off-day {
+    margin: 0 0 0 0.375rem;
   }
 `;

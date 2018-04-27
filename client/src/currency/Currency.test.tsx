@@ -11,7 +11,7 @@ import { AirmanCertificationModelFactory } from '../airman/factories/AirmanCerti
 import { TabType } from '../tracker/stores/SidePanelStore';
 import { StyledBackButton } from '../widgets/BackButton';
 import { StyledNotification } from '../widgets/Notification';
-import { StyledRipItems } from '../rip-items/AirmanRipItemForm';
+import { StyledRipItems } from '../rip-item/AirmanRipItemForm';
 import { CurrencyChild } from './stores/CurrencyStore';
 
 /* tslint:disable:no-empty*/

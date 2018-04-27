@@ -1,5 +1,5 @@
 import { RipItemRepository } from '../AirmanRipItemRepository';
-import { RipItemModel } from '../../../rip-items/models/RipItemModel';
+import { RipItemModel } from '../../../rip-item/models/RipItemModel';
 import { AirmanRipItemModel } from '../../models/AirmanRipItemModel';
 import * as moment from 'moment';
 

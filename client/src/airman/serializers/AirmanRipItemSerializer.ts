@@ -1,7 +1,7 @@
 import { Serializer } from '../../utils/serializer';
 import * as moment from 'moment';
 import { AirmanRipItemModel } from '../models/AirmanRipItemModel';
-import { RipItemSerializer } from '../../rip-items/serializers/RipItemSerializer';
+import { RipItemSerializer } from '../../rip-item/serializers/RipItemSerializer';
 
 export class AirmanRipItemSerializer implements Serializer<AirmanRipItemModel> {
   private ripItemSerializer: RipItemSerializer = new RipItemSerializer();

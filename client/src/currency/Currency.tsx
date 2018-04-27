@@ -7,8 +7,8 @@ import { StyledSkillTile } from '../skills/SkillTile';
 import { CurrencyChild, CurrencyStore } from './stores/CurrencyStore';
 import { StyledBackButton } from '../widgets/BackButton';
 import { StyledNotification } from '../widgets/Notification';
-import { StyledRipItems } from '../rip-items/AirmanRipItemForm';
-import { StyledRipItemsTile } from '../rip-items/RipItemsTile';
+import { StyledRipItems } from '../rip-item/AirmanRipItemForm';
+import { StyledRipItemsTile } from '../rip-item/RipItemsTile';
 
 interface Props {
   selectedAirman: AirmanModel;

@@ -1,6 +1,6 @@
+import * as moment from 'moment';
 import { AirmanRipItemModel } from '../../airman/models/AirmanRipItemModel';
 import { RipItemModel } from '../models/RipItemModel';
-import * as moment from 'moment';
 
 export class AirmanRipItemFactory {
   static buildList(airmanId: number, numOfChildren: number) {

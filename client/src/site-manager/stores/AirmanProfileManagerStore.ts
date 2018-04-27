@@ -44,8 +44,7 @@ export class AirmanProfileManagerStore {
 
   @computed
   get squadronOptions(): FilterOption[] {
-    debugger;
-    const site = this._sites.find(site => site.id === this._airman.siteId);
+    const site = this._sites.find(s => s.id === this._airman.siteId);
     if (!site) {
       return [];
     }
@@ -57,7 +56,6 @@ export class AirmanProfileManagerStore {
 
   @computed
   get flightOptions(): FilterOption[] {
-    debugger;
     const site = this.getSite(this._airman.siteId);
     if (!site) {
       return [];
@@ -101,10 +99,12 @@ export class AirmanProfileManagerStore {
   setState(key: keyof AirmanModel, value: any) {
     switch (key) {
       case 'siteId':
-        this.setSquadronAndFlight(Number(value))
+        this.setSquadronAndFlight(Number(value));
         break;
       case 'squadronId':
         this.setFlight(Number(value));
+        break;
+      default:
         break;
     }
 
@@ -149,6 +149,6 @@ export class AirmanProfileManagerStore {
 
   private getSquadron(id: number) {
     const squadrons = this._sites.map(site => site.squadrons).reduce((acc, val) => acc.concat(val), []);
-    return squadrons.find(s => s.id === id)
+    return squadrons.find(s => s.id === id);
   }
 }

@@ -1,7 +1,7 @@
 import { AirmanProfileManagerStore } from './AirmanProfileManagerStore';
 import { AirmanModelFactory } from '../../airman/factories/AirmanModelFactory';
 import { SiteModelFactory } from '../../site/factories/SiteModelFactory';
-import { AirmanRipItemFactory } from '../../rip-items/factories/AirmanRipItemFactory';
+import { AirmanRipItemFactory } from '../../rip-item/factories/AirmanRipItemFactory';
 import { AirmanModel, ShiftType } from '../../airman/models/AirmanModel';
 import { AirmanCertificationModelFactory } from '../../airman/factories/AirmanCertificationModelFactory';
 import { AirmanQualificationModelFactory } from '../../airman/factories/AirmanQualificationModelFactory';
@@ -70,10 +70,10 @@ describe('AirmanProfileManagerStore', () => {
     subject.setState('siteId', 2);
     expect(subject.airman.siteId).toBe(2);
 
-    subject.setState('squadronId', 2)
+    subject.setState('squadronId', 2);
     expect(subject.airman.squadronId).toBe(2);
 
-    subject.setState('flightId', 2)
+    subject.setState('flightId', 2);
     expect(subject.airman.flightId).toBe(2);
 
     subject.setState('shift', ShiftType.Night);

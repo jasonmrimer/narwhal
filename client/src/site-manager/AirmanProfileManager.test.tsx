@@ -6,9 +6,9 @@ import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 import { AirmanCertificationModelFactory } from '../airman/factories/AirmanCertificationModelFactory';
 import { AirmanQualificationModelFactory } from '../airman/factories/AirmanQualificationModelFactory';
 import { StyledSkillTile } from '../skills/SkillTile';
-import { StyledRipItemsTile } from '../rip-items/RipItemsTile';
+import { StyledRipItemsTile } from '../rip-item/RipItemsTile';
 import { SiteModelFactory } from '../site/factories/SiteModelFactory';
-import { AirmanRipItemFactory } from '../rip-items/factories/AirmanRipItemFactory';
+import { AirmanRipItemFactory } from '../rip-item/factories/AirmanRipItemFactory';
 import { AirmanProfileManagerStore } from './stores/AirmanProfileManagerStore';
 import { eventStub } from '../utils/testUtils';
 import { StyledForm } from '../widgets/Form';
@@ -87,10 +87,10 @@ describe('AirmanProfileManager', () => {
   });
 });
 
-function changeValue(wrapper: ShallowWrapper, name: string, value: any,  event:string = 'change') {
-  wrapper.findWhere(x=> x.prop('name') === name).first().simulate(event, {target: {name, value}});
+function changeValue(wrapper: ShallowWrapper, name: string, value: any,  event: string = 'change') {
+  wrapper.findWhere(x => x.prop('name') === name).first().simulate(event, {target: {name, value}});
 }
 
-function expectPropToBe(wrapper: ShallowWrapper, name:string,  value:any, prop:string = 'value'){
-  expect(wrapper.findWhere(x=> x.prop('name') === name).prop(prop)).toBe(value);
+function expectPropToBe(wrapper: ShallowWrapper, name: string,  value: any, prop: string = 'value') {
+  expect(wrapper.findWhere(x => x.prop('name') === name).prop(prop)).toBe(value);
 }

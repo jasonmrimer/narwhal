@@ -1,6 +1,7 @@
 import { action, computed, observable } from 'mobx';
 import { TimeService } from '../../tracker/services/TimeService';
 import { Moment } from 'moment';
+import { AirmanModel } from '../../airman/models/AirmanModel';
 
 interface EventsRefresher {
   refreshEvents(): Promise<void>;
@@ -67,5 +68,24 @@ export class PlannerStore {
   async decrementSidePanelWeek() {
     this._sidePanelWeek = this.timeService.decrementWeek(this._sidePanelWeek);
     await this.eventsRefresher.refreshAirmanEvents();
+  }
+
+  isAvailableToWork(airman: AirmanModel, day: Moment) {
+    const schedulesBeforeDay = airman.schedules.filter(schedule => {
+      return schedule.startDate.isSameOrBefore(day, 'day');
+    });
+
+    if (schedulesBeforeDay) {
+      const currentSchedule = schedulesBeforeDay.find(schedule => schedule.endDate === null);
+      if (currentSchedule) {
+        return currentSchedule.isScheduledWorkDay(day);
+      } else {
+        const pastSchedule = schedulesBeforeDay.find(schedule => day.isBetween(schedule.startDate, schedule.endDate!));
+        if (pastSchedule) {
+          return pastSchedule.isScheduledWorkDay(day);
+        }
+      }
+    }
+    return true;
   }
 }

@@ -13,6 +13,7 @@ import { AirmanModel } from '../airman/models/AirmanModel';
 import { TabType } from '../tracker/stores/SidePanelStore';
 import { TDYDeploymentIcon } from '../icons/TDYDeploymentIcon';
 import { observer } from 'mobx-react';
+import { OffDayIcon } from '../icons/OffDayIcon';
 
 interface Props {
   week: Moment[];
@@ -24,13 +25,13 @@ interface Props {
 const renderEventType = (type: EventType, key: number, event?: EventModel) => {
   switch (type) {
     case EventType.Appointment:
-      return <AppointmentIcon key={key} />;
+      return <AppointmentIcon key={key}/>;
     case EventType.Mission:
       return event && <MissionIcon key={key} title={event.title.substring(0, 3)} viewBox="0 2 36 25"/>;
     case EventType.Leave:
-      return <LeaveIcon key={key} />;
+      return <LeaveIcon key={key}/>;
     case EventType.TDY_DEPLOYMENT:
-      return <TDYDeploymentIcon key={key} />;
+      return <TDYDeploymentIcon key={key}/>;
     default:
       return null;
   }
@@ -52,15 +53,27 @@ const renderEvents = (day: Moment,
 
     return renderEventType(matchedEvents[0].type, key);
   } else {
-    return (
-      <AvailableIcon
-        key={key}
-        onClick={(e: any) => {
-          e.stopPropagation();
-          trackerStore.newEvent(airman, day);
-        }}
-      />
-    );
+    if (trackerStore.plannerStore.isAvailableToWork(airman, day)) {
+      return (
+        <AvailableIcon
+          key={key}
+          onClick={(e: any) => {
+            e.stopPropagation();
+            trackerStore.newEvent(airman, day);
+          }}
+        />
+      );
+    } else {
+      return (
+        <OffDayIcon
+          key={key}
+          onClick={(e: any) => {
+            e.stopPropagation();
+            trackerStore.newEvent(airman, day);
+          }}
+        />
+      );
+    }
   }
 };
 
@@ -95,6 +108,7 @@ export const StyledPlanner = styled(Planner)`
   div {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     flex-grow: 2;
   }
   

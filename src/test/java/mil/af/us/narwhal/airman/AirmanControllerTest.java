@@ -3,6 +3,8 @@ package mil.af.us.narwhal.airman;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import mil.af.us.narwhal.BaseIntegrationTest;
 import mil.af.us.narwhal.flight.Flight;
+import mil.af.us.narwhal.schedule.Schedule;
+import mil.af.us.narwhal.schedule.ScheduleRepository;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
 import mil.af.us.narwhal.skill.Certification;
@@ -16,6 +18,8 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Instant;
+import java.util.Collections;
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static java.util.Arrays.asList;
@@ -30,12 +34,14 @@ public class AirmanControllerTest extends BaseIntegrationTest {
   @Autowired private AirmanRepository airmanRepository;
   @Autowired private QualificationRepository qualificationRepository;
   @Autowired private CertificationRepository certificationRepository;
+  @Autowired private ScheduleRepository scheduleRepository;
   private Flight flight1;
   private Flight flight3;
 
   @Before
   public void setUp() {
     super.setUp();
+
 
     flight1 = new Flight("flight1");
     final Squadron squadron1 = new Squadron("squadron1");
@@ -56,21 +62,31 @@ public class AirmanControllerTest extends BaseIntegrationTest {
     final Site site2 = new Site("site2");
     site2.addSquadron(squadron3);
 
+    final Schedule savedSchedule = scheduleRepository.save(new Schedule("test", true, true, true, true, true, true, true));
+
     siteRepository.save(asList(site, site2));
-
-    airman1 = new Airman(flight1, "first1", "last1");
-    airman1.setShift(ShiftType.Day);
-    final Airman airman2 = new Airman(flight2, "first2", "last2");
-    final Airman airman3 = new Airman(flight2, "first3", "last3");
-    final Airman airman4 = new Airman(flight3, "first4", "last4");
-
-    airmanRepository.save(asList(airman1, airman2, airman3, airman4));
 
     qualification1 = new Qualification("Q1", "qualification1");
     qualificationRepository.save(qualification1);
 
     certification1 = new Certification("certification1", site);
     certificationRepository.save(certification1);
+
+    airman1 = new Airman(flight1, "first1", "last1");
+    airman1.setShift(ShiftType.Day);
+
+    final Airman airman2 = new Airman(flight2, "first2", "last2");
+    final Airman airman3 = new Airman(flight2, "first3", "last3");
+    final Airman airman4 = new Airman(flight3, "first4", "last4");
+
+    final List<Airman> airmen = airmanRepository.save(asList(airman1, airman2, airman3, airman4));
+
+    airmen.get(0).setSchedules(Collections.singletonList(
+      new AirmanSchedule(airmen.get(0).getId(), savedSchedule, Instant.now())
+    ));
+
+    airmanRepository.save(airmen);
+
   }
 
   @After
@@ -111,6 +127,7 @@ public class AirmanControllerTest extends BaseIntegrationTest {
       .statusCode(200)
       .body("$.size()", equalTo(3))
       .body("[0].firstName", equalTo("first1"))
+      .body("[0].schedules.size()", equalTo(1))
       .body("[0].shift", equalTo("Day"))
       .body("[1].shift", equalTo(null));
     // @formatter:on

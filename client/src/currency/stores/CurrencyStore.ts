@@ -1,7 +1,7 @@
 import { action, computed, observable } from 'mobx';
 import { SkillFormStore } from '../../skills/stores/SkillFormStore';
 import { Skill } from '../../skills/models/Skill';
-import { AirmanRipItemFormStore } from '../../rip-items/stores/AirmanRipItemFormStore';
+import { AirmanRipItemFormStore } from '../../rip-item/stores/AirmanRipItemFormStore';
 import { CertificationModel } from '../../skills/models/CertificationModel';
 import { QualificationModel } from '../../skills/models/QualificationModel';
 import { Repositories } from '../../utils/Repositories';
