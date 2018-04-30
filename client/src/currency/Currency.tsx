@@ -3,14 +3,14 @@ import styled from 'styled-components';
 import { inject, observer } from 'mobx-react';
 import { CurrencyChild, CurrencyStore } from './stores/CurrencyStore';
 import { StyledSkillsForm } from '../skills/SkillsForm';
-import { StyledRipItemsTile } from '../rip-items/RipItemsTile';
-import { StyledRipItems } from '../rip-items/AirmanRipItemForm';
 import { StyledSkillTile } from '../skills/SkillTile';
 import { StyledNotification } from '../widgets/Notification';
 import { StyledBackButton } from '../widgets/BackButton';
-import { AirmanRipItemFormStore } from '../rip-items/stores/AirmanRipItemFormStore';
+import { AirmanRipItemFormStore } from '../rip-item/stores/AirmanRipItemFormStore';
 import { SkillFormStore } from '../skills/stores/SkillFormStore';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
+import { StyledRipItems } from '../rip-item/AirmanRipItemForm';
+import { StyledRipItemsTile } from '../rip-item/RipItemsTile';
 
 interface Props {
   currencyStore?: CurrencyStore;

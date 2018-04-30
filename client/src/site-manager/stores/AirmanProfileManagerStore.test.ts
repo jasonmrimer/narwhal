@@ -1,7 +1,7 @@
 import { AirmanProfileManagerStore } from './AirmanProfileManagerStore';
 import { AirmanModelFactory } from '../../airman/factories/AirmanModelFactory';
 import { SiteModelFactory } from '../../site/factories/SiteModelFactory';
-import { AirmanRipItemFactory } from '../../rip-items/factories/AirmanRipItemFactory';
+import { AirmanRipItemFactory } from '../../rip-item/factories/AirmanRipItemFactory';
 import { AirmanModel, ShiftType } from '../../airman/models/AirmanModel';
 import { AirmanCertificationModelFactory } from '../../airman/factories/AirmanCertificationModelFactory';
 import { AirmanQualificationModelFactory } from '../../airman/factories/AirmanQualificationModelFactory';

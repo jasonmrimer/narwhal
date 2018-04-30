@@ -4,7 +4,7 @@ import { StyledTextInput } from '../widgets/TextInput';
 import { StyledDropdown } from '../widgets/Dropdown';
 import { shiftOptions, unsetShiftOptions } from '../tracker/ShiftDropdown';
 import { StyledSkillTile } from '../skills/SkillTile';
-import { StyledRipItemsTile } from '../rip-items/RipItemsTile';
+import { StyledRipItemsTile } from '../rip-item/RipItemsTile';
 import { observer } from 'mobx-react';
 import { AirmanProfileManagerStore } from './stores/AirmanProfileManagerStore';
 import { StyledNavigationBackButton } from '../widgets/NavigationBackButton';

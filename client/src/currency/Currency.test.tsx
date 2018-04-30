@@ -10,10 +10,10 @@ import { AirmanQualificationModelFactory } from '../airman/factories/AirmanQuali
 import { AirmanCertificationModelFactory } from '../airman/factories/AirmanCertificationModelFactory';
 import { StyledBackButton } from '../widgets/BackButton';
 import { StyledNotification } from '../widgets/Notification';
-import { StyledRipItems } from '../rip-items/AirmanRipItemForm';
+import { StyledRipItems } from '../rip-item/AirmanRipItemForm';
 import { CurrencyChild, CurrencyStore } from './stores/CurrencyStore';
 import { DoubleRepositories } from '../utils/Repositories';
-import { AirmanRipItemFormStore } from '../rip-items/stores/AirmanRipItemFormStore';
+import { AirmanRipItemFormStore } from '../rip-item/stores/AirmanRipItemFormStore';
 import { SkillFormStore } from '../skills/stores/SkillFormStore';
 
 /* tslint:disable:no-empty*/

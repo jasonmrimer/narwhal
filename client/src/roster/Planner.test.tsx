@@ -16,6 +16,9 @@ import { AvailabilityStore } from '../availability/stores/AvailabilityStore';
 import { PlannerStore } from './stores/PlannerStore';
 import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
 import { PlannerActions } from './PlannerActions';
+import { ScheduleModel } from '../schedule/models/ScheduleModel';
+import { OffDayIcon } from '../icons/OffDayIcon';
+import { AirmanScheduleModel } from '../airman/models/AirmanScheduleModel';
 
 describe('Planner', () => {
   let subject: ShallowWrapper;
@@ -25,6 +28,44 @@ describe('Planner', () => {
   let airman: AirmanModel;
 
   beforeEach(async () => {
+    airman = AirmanModelFactory.build();
+    airman.schedules = [
+      new AirmanScheduleModel(
+        1,
+        airman.id,
+        new
+        ScheduleModel(
+          1,
+          'Back Half',
+          false,
+          false,
+          false,
+          true,
+          true,
+          true,
+          true),
+        moment('2017-11-26').subtract(3, 'months'),
+        moment('2017-11-26').add(1, 'day')
+      ),
+      new AirmanScheduleModel(
+        1,
+        airman.id,
+        new
+        ScheduleModel(
+          1,
+          'M-F',
+          false,
+          true,
+          true,
+          true,
+          true,
+          true,
+          false),
+        moment('2017-11-26'),
+        null
+      )
+    ];
+
     const appointment = new EventModel(
       'Appointment',
       '',
@@ -33,7 +74,6 @@ describe('Planner', () => {
       1,
       EventType.Appointment
     );
-
     const mission = new EventModel(
       'ABC',
       '',
@@ -51,8 +91,6 @@ describe('Planner', () => {
       1,
       EventType.Leave
     );
-
-    airman = AirmanModelFactory.build();
 
     await DoubleRepositories.eventRepository.save(appointment);
     await DoubleRepositories.eventRepository.save(leave);
@@ -79,7 +117,8 @@ describe('Planner', () => {
     expect(subject.find(MissionIcon).length).toBe(1);
     expect(subject.find(MissionIcon).prop('title')).toBe('ABC');
     expect(subject.find(LeaveIcon).length).toBe(2);
-    expect(subject.find(AvailableIcon).length).toBe(3);
+    expect(subject.find(AvailableIcon).length).toBe(1);
+    expect(subject.find(OffDayIcon).length).toBe(2);
   });
 
   it('give higher importance to mission Event Type than the others', () => {

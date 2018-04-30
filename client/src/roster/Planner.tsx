@@ -16,6 +16,7 @@ import { LeaveIcon } from '../icons/LeaveIcon';
 import { TDYDeploymentIcon } from '../icons/TDYDeploymentIcon';
 import { AvailabilityStore } from '../availability/stores/AvailabilityStore';
 import { PlannerActions } from './PlannerActions';
+import { OffDayIcon } from '../icons/OffDayIcon';
 
 interface Props {
   trackerStore?: TrackerStore;
@@ -42,7 +43,7 @@ export class Planner extends React.Component<Props> {
         <div>
           {
             plannerStore!.plannerWeek.map((day, index) => {
-              return renderEvents(day, airmanEvents, index, airman, this.newEvent);
+              return renderEvents(day, airmanEvents, index, airman, this.newEvent, plannerStore!);
             })
           }
         </div>
@@ -67,7 +68,8 @@ const renderEventType = (type: EventType, key: number, event?: EventModel) => {
   }
 };
 
-const renderEvents = (day: Moment, events: EventModel[], key: number, airman: AirmanModel, newEvent: any) => {
+const renderEvents = (
+  day: Moment, events: EventModel[], key: number, airman: AirmanModel, newEvent: any, plannerStore: PlannerStore) => {
   const matchedEvents = findEventsForDay(events, day);
   if (matchedEvents.length > 0) {
     const eventType = matchedEvents.map(event => event.type);
@@ -79,15 +81,27 @@ const renderEvents = (day: Moment, events: EventModel[], key: number, airman: Ai
 
     return renderEventType(matchedEvents[0].type, key);
   } else {
-    return (
-      <AvailableIcon
-        key={key}
-        onClick={(e: any) => {
-          e.stopPropagation();
-          newEvent(airman, day);
-        }}
-      />
-    );
+    if (plannerStore.isAvailableToWork(airman, day)) {
+      return (
+        <AvailableIcon
+          key={key}
+          onClick={(e: any) => {
+            e.stopPropagation();
+            newEvent(airman, day);
+          }}
+        />
+      );
+    } else {
+      return (
+        <OffDayIcon
+          key={key}
+          onClick={(e: any) => {
+            e.stopPropagation();
+            newEvent(airman, day);
+          }}
+        />
+      );
+    }
   }
 };
 
@@ -106,6 +120,7 @@ export const StyledPlanner =
     div {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       flex-grow: 2;
     }
     

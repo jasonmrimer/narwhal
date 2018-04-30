@@ -15,7 +15,7 @@ import { MissionFormStore } from './event/stores/MissionFormStore';
 import { PlannerStore } from './roster/stores/PlannerStore';
 import { DashboardStore } from './dashboard/stores/DashboardStore';
 import { RosterHeaderStore } from './roster/stores/RosterHeaderStore';
-import { AirmanRipItemFormStore } from './rip-items/stores/AirmanRipItemFormStore';
+import { AirmanRipItemFormStore } from './rip-item/stores/AirmanRipItemFormStore';
 import { TDYDeploymentFormStore } from './event/stores/TDYDeploymentFormStore';
 import { WebRepositories } from './utils/Repositories';
 import { AirmanProfileManagerStore } from './site-manager/stores/AirmanProfileManagerStore';

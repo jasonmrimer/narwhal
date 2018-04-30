@@ -1,6 +1,7 @@
 import { AirmanQualificationModel } from './AirmanQualificationModel';
 import { AirmanCertificationModel } from './AirmanCertificationModel';
 import { observable } from 'mobx';
+import { AirmanScheduleModel } from './AirmanScheduleModel';
 
 export class AirmanModel {
   @observable public firstName: string;
@@ -11,7 +12,7 @@ export class AirmanModel {
   @observable public shift?: ShiftType;
 
   static empty(): AirmanModel {
-    return new AirmanModel(-1, -1, -1, -1, '', '', [], []);
+    return new AirmanModel(-1, -1, -1, -1, '', '', [], [], []);
   }
 
   constructor(public id: number,
@@ -22,6 +23,7 @@ export class AirmanModel {
               lastName: string,
               public qualifications: AirmanQualificationModel[] = [],
               public certifications: AirmanCertificationModel[] = [],
+              public schedules: AirmanScheduleModel[] = [],
               shift?: ShiftType) {
     this.firstName = firstName;
     this.lastName = lastName;

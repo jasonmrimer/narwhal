@@ -6,6 +6,7 @@ import { AppointmentIcon } from '../icons/AppointmentIcon';
 import { MissionIcon } from '../icons/MissionIcon';
 import { LeaveIcon } from '../icons/LeaveIcon';
 import { TDYDeploymentIcon } from '../icons/TDYDeploymentIcon';
+import { OffDayIcon } from '../icons/OffDayIcon';
 
 describe('Legend', () => {
   const subject = shallow(<Legend />);
@@ -24,5 +25,8 @@ describe('Legend', () => {
 
     expect(subject.text()).toContain('TDY/DEPLOYMENT');
     expect(subject.find(TDYDeploymentIcon).exists).toBeTruthy();
+
+    expect(subject.text()).toContain('OFF DAY');
+    expect(subject.find(OffDayIcon).exists).toBeTruthy();
   });
 });
