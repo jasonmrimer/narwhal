@@ -26,12 +26,8 @@ export class AirmanProfileManager extends React.Component<Props> {
         <StyledForm onSubmit={this.onSubmit}>
 
           <div className="side-nav">
-            <StyledNavigationBackButton
-              location="/flights"
-            />
-            <StyledSubmitButton
-              text="SAVE"
-            />
+            <StyledNavigationBackButton location="/flights"/>
+            <StyledSubmitButton text="SAVE"/>
           </div>
 
           <div className="content">

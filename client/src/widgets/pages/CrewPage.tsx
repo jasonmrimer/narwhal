@@ -53,7 +53,7 @@ export class CrewPage extends React.Component<Props> {
 
     locationFilterStore!.hydrate(profileStore!.profile!.siteId!, sites);
     rosterHeaderStore!.hydrate(profileStore!.profile!.siteId!, certifications, qualifications);
-    missionPlannerStore!.hydrate(crew, airmen, events);
+    missionPlannerStore!.hydrate(crew.mission, airmen, events);
     crewStore!.hydrate(crew, airmen);
   }
 

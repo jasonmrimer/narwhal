@@ -14,13 +14,11 @@ import { StyledLocationFilters } from '../widgets/LocationFilters';
 import { StyledDeletePopup } from '../widgets/DeletePopup';
 import { DoubleRepositories } from '../utils/Repositories';
 import { AvailabilityStore } from '../availability/stores/AvailabilityStore';
-import { LocationFilterStore } from '../widgets/stores/LocationFilterStore';
 import { CurrencyStore } from '../currency/stores/CurrencyStore';
 import { EventModelFactory } from '../event/factories/EventModelFactory';
 
 let trackerStore: TrackerStore;
 let availabilityStore: AvailabilityStore;
-let locationFilterStore: LocationFilterStore;
 let currencyStore: CurrencyStore;
 let subject: ShallowWrapper;
 
@@ -28,15 +26,24 @@ describe('Tracker', () => {
   beforeEach(async () => {
     trackerStore = new TrackerStore(DoubleRepositories);
     availabilityStore = new AvailabilityStore(DoubleRepositories);
-    locationFilterStore = new LocationFilterStore();
     currencyStore = new CurrencyStore(DoubleRepositories);
+
     subject = shallow(
       <Tracker
         trackerStore={trackerStore}
         availabilityStore={availabilityStore}
-        locationFilterStore={locationFilterStore}
         currencyStore={currencyStore}
-        profile={{id: 1, username: 'Tytus', siteId: 1, siteName: '1', roleName: 'ADMIN', roleId: 1, classified: false}}
+        profile={
+          {
+            id: 1,
+            username: 'Tytus',
+            siteId: 1,
+            siteName: '1',
+            roleName: 'ADMIN',
+            roleId: 1,
+            classified: false
+          }
+        }
       />
     );
     await forIt();

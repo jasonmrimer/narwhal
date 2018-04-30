@@ -10,48 +10,23 @@ import { StyledSubmitButton } from '../widgets/SubmitButton';
 import { StyledForm } from '../widgets/Form';
 import { StyledButton } from '../widgets/Button';
 import { StyledCrewStatus } from '../widgets/CrewStatus';
-import { CrewModel } from './models/CrewModel';
 import { StyledNavigationBackButton } from '../widgets/NavigationBackButton';
-
-export interface MissionPlannerStoreContract {
-  refreshAllAirmen: (siteId: number) => Promise<void>;
-  refreshAllEvents: (siteId: number) => Promise<void>;
-  loading: boolean;
-  setLoading: (loading: boolean) => void;
-}
-
-export interface LocationFilterStoreContract {
-  selectedSite: number;
-}
-
-export interface CrewStoreContract {
-  save: () => Promise<void>;
-  crew: CrewModel;
-}
+import { MissionPlannerActions } from './MissionPlannerActions';
+import { MissionPlannerStore } from './stores/MissionPlannerStore';
+import { CrewStore } from './stores/CrewStore';
+import { LocationFilterStore } from '../widgets/stores/LocationFilterStore';
 
 interface Props {
-  missionPlannerStore?: MissionPlannerStoreContract;
-  crewStore?: CrewStoreContract;
-  locationFilterStore?: LocationFilterStoreContract;
+  missionPlannerStore?: MissionPlannerStore;
+  crewStore?: CrewStore;
+  locationFilterStore?: LocationFilterStore;
   className?: string;
 }
 
 @observer
 export class MissionPlanner extends React.Component<Props> {
-  refreshAirman = async () => {
-    const {missionPlannerStore, locationFilterStore} = this.props;
-    await missionPlannerStore!.refreshAllAirmen(locationFilterStore!.selectedSite);
-  }
-
-  submit = async (e: any) => {
-    const {missionPlannerStore, locationFilterStore, crewStore} = this.props;
-    e.preventDefault();
-    await crewStore!.save();
-    await missionPlannerStore!.refreshAllEvents(locationFilterStore!.selectedSite);
-  }
 
   render() {
-
     const {missionPlannerStore, crewStore} = this.props;
     const crew = crewStore!.crew;
     if (!crew) {
@@ -79,7 +54,10 @@ export class MissionPlanner extends React.Component<Props> {
             }
           </div>
           <StyledForm
-            onSubmit={this.submit}
+            onSubmit={(e) => {
+              e.preventDefault();
+              MissionPlannerActions.submit();
+            }}
             setLoading={missionPlannerStore!.setLoading}
           >
             <div className="mission-header">
@@ -90,7 +68,7 @@ export class MissionPlanner extends React.Component<Props> {
                 text="PRINT"
                 onClick={(window as any).print}
               />
-              <StyledLocationFilters refreshAirmen={this.refreshAirman}/>
+              <StyledLocationFilters refreshAirmen={MissionPlannerActions.refreshAirman}/>
             </div>
             <div className="mission-planner">
               <StyledCrew className="crew-list"/>

@@ -3,7 +3,7 @@ import * as React from 'react';
 import { CellMeasurer, CellMeasurerCache, List, ListRowProps } from 'react-virtualized';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { AirmanModel } from '../airman/models/AirmanModel';
-import { SidePanelStore, TabType } from '../tracker/stores/SidePanelStore';
+import { TabType } from '../tracker/stores/SidePanelStore';
 import { StyledAirmanDatum } from '../tracker/AirmanDatum';
 import { StyledPlanner } from './Planner';
 import styled from 'styled-components';
@@ -13,8 +13,7 @@ import { StyledShiftDropdown } from '../tracker/ShiftDropdown';
 import { BorderedNotification } from '../widgets/Notification';
 import { LocationFilterStore } from '../widgets/stores/LocationFilterStore';
 import { RosterHeaderStore } from './stores/RosterHeaderStore';
-import { AvailabilityStore } from '../availability/stores/AvailabilityStore';
-import { CurrencyStore } from '../currency/stores/CurrencyStore';
+import { RosterActions } from './RosterActions';
 
 const cache = new CellMeasurerCache({
   defaultHeight: 60,
@@ -79,10 +78,6 @@ export const StyledRoster = inject('trackerStore', 'locationFilterStore', 'roste
 interface RowProps {
   airman: AirmanModel;
   trackerStore?: TrackerStore;
-  availabilityStore?: AvailabilityStore;
-  sidePanelStore?: SidePanelStore;
-  currencyStore?: CurrencyStore;
-
   style: object;
   index: number;
   parent: any;
@@ -92,7 +87,7 @@ interface RowProps {
 
 const Row = observer(
   (props: RowProps) => {
-    const {airman, trackerStore, availabilityStore, sidePanelStore, className, currencyStore} = props;
+    const {airman, trackerStore, className} = props;
     return (
       <CellMeasurer
         cache={cache}
@@ -107,14 +102,7 @@ const Row = observer(
         >
           <div
             className="left"
-            onClick={async () => {
-              trackerStore!.setSelectedAirman(airman);
-              await currencyStore!.setRipItemsForAirman(airman.id);
-              currencyStore!.closeSkillForm();
-              availabilityStore!.closeEventForm();
-              availabilityStore!.setAirmanEvents(trackerStore!.selectedAirmanEvents);
-              sidePanelStore!.setSelectedTab(TabType.CURRENCY);
-            }}
+            onClick={async () => await RosterActions.openSidePanel(airman, TabType.CURRENCY)}
           >
             <StyledShiftDropdown
               airman={airman}
@@ -163,14 +151,7 @@ const Row = observer(
           </div>
           <div
             className="right"
-            onClick={async () => {
-              trackerStore!.setSelectedAirman(airman);
-              currencyStore!.closeSkillForm();
-              availabilityStore!.closeEventForm();
-              await currencyStore!.setRipItemsForAirman(airman.id);
-              availabilityStore!.setAirmanEvents(trackerStore!.selectedAirmanEvents);
-              sidePanelStore!.setSelectedTab(TabType.AVAILABILITY);
-            }}
+            onClick={async () => RosterActions.openSidePanel(airman, TabType.AVAILABILITY)}
           >
             <StyledPlanner airman={airman}/>
           </div>
@@ -180,7 +161,7 @@ const Row = observer(
   }
 );
 
-export const StyledRow = inject('trackerStore', 'availabilityStore', 'sidePanelStore', 'currencyStore')(styled(Row)`
+export const StyledRow = inject('trackerStore')(styled(Row)`
   display: flex;
   border: 1px solid ${props => props.theme.graySteel};
   border-top: none;

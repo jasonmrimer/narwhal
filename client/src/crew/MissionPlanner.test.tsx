@@ -9,35 +9,34 @@ import { StyledSubmitButton } from '../widgets/SubmitButton';
 import { StyledButton } from '../widgets/Button';
 import { StyledForm } from '../widgets/Form';
 import { eventStub } from '../utils/testUtils';
-import {
-  CrewStoreContract,
-  LocationFilterStoreContract,
-  MissionPlanner,
-  MissionPlannerStoreContract
-} from './MissionPlanner';
 import { StyledNavigationBackButton } from '../widgets/NavigationBackButton';
+import { LocationFilterStore } from '../widgets/stores/LocationFilterStore';
+import { MissionPlannerStore } from './stores/MissionPlannerStore';
+import { CrewStore } from './stores/CrewStore';
+import { MissionPlanner } from './MissionPlanner';
+import { DoubleRepositories } from '../utils/Repositories';
+import { MissionPlannerActions } from './MissionPlannerActions';
 
 describe('MissionPlanner', () => {
   let subject: ShallowWrapper;
   let windowPrintFunction: any;
-  let missionPlannerStore: MissionPlannerStoreContract;
-  let locationFilterStore: LocationFilterStoreContract;
-  let crewStore: CrewStoreContract;
+  let missionPlannerStore: MissionPlannerStore;
+  let locationFilterStore: LocationFilterStore;
+  let crewStore: CrewStore;
   const crewModel = CrewModelFactory.build();
   const mission = crewModel.mission;
 
   beforeEach(async () => {
+    MissionPlannerActions.submit = jest.fn();
     windowPrintFunction = (window as any).print;
     (window as any).print = jest.fn();
 
-    missionPlannerStore = {
-      refreshAllAirmen: jest.fn(),
-      refreshAllEvents: jest.fn(),
-      loading: false,
-      setLoading: jest.fn(),
-    };
-    locationFilterStore = {selectedSite: 1};
-    crewStore = {save: jest.fn(), crew: crewModel};
+    missionPlannerStore = new MissionPlannerStore(DoubleRepositories);
+    locationFilterStore = new LocationFilterStore();
+    crewStore = new CrewStore(DoubleRepositories);
+
+    missionPlannerStore.hydrate(crewModel.mission, [], []);
+    crewStore.hydrate(crewModel, []);
 
     subject = shallow(
       <MissionPlanner
@@ -63,7 +62,7 @@ describe('MissionPlanner', () => {
   it('should render the spinner only while loading', () => {
     expect(subject.find(StyledLoadingOverlay).exists()).toBeFalsy();
 
-    missionPlannerStore.loading = true;
+    missionPlannerStore.setLoading(true);
     subject.instance().forceUpdate();
     subject.update();
     expect(subject.find(StyledLoadingOverlay).exists()).toBeTruthy();
@@ -102,6 +101,6 @@ describe('MissionPlanner', () => {
 
   it('should call crewStore save onSubmit', () => {
     subject.find(StyledForm).simulate('submit', eventStub);
-    expect(crewStore.save).toHaveBeenCalled();
+    expect(MissionPlannerActions.submit).toHaveBeenCalled();
   });
 });

@@ -7,13 +7,13 @@ import { eventStub } from '../utils/testUtils';
 import { AirmanRipItemFormStore } from './stores/AirmanRipItemFormStore';
 import { RipItemRepositoryStub } from '../airman/repositories/doubles/AirmanRipItemRepositoryStub';
 import { StyledButton } from '../widgets/Button';
-import Mock = jest.Mock;
 import { AirmanRipItemModel } from '../airman/models/AirmanRipItemModel';
 import { RipItemModel } from './models/RipItemModel';
 import { StyledForm } from '../widgets/Form';
 import { CurrencyStore } from '../currency/stores/CurrencyStore';
 import { DoubleRepositories } from '../utils/Repositories';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
+import { RipItemsActions } from './RipItemsActions';
 
 describe('RipItems', () => {
   let store: AirmanRipItemFormStore;
@@ -32,7 +32,8 @@ describe('RipItems', () => {
 
     store.updateRipItem = jest.fn();
     store.submitRipItems = jest.fn();
-
+    RipItemsActions.handleChange = jest.fn();
+    RipItemsActions.submit = jest.fn();
     subject = shallow(
       <AirmanRipItems
         airmanRipItemFormStore={store}
@@ -59,38 +60,24 @@ describe('RipItems', () => {
     const expirationDate = moment().startOf('day');
     const modifiedExpirationDate = expirationDate.clone().add(10, 'days');
 
-    subject.find(StyledDatePicker).at(0).simulate('change',
-                                                  {
+    subject.find(StyledDatePicker).at(0).simulate(
+      'change',
+      {
         target: {value: modifiedExpirationDate.format('YYYY-MM-DD')}
       }
     );
 
-    expect(store.updateRipItem).toHaveBeenCalled();
-    const updatedDate = (store.updateRipItem as Mock).mock.calls[0][0].expirationDate;
-    expect(updatedDate.startOf('day').isSame(modifiedExpirationDate)).toBeTruthy();
+    expect(RipItemsActions.handleChange).toHaveBeenCalled();
   });
 
   it('should render a confirmation button with callback', () => {
     const instance = (subject.instance() as AirmanRipItems);
     instance.onSubmit(eventStub);
-    expect(store.submitRipItems).toHaveBeenCalled();
+    expect(RipItemsActions.submit).toHaveBeenCalled();
   });
 
   it('should update the rip items expirationDate upon clicking the 90 day button', () => {
     subject.find(StyledButton).at(0).simulate('click');
-
-    expect(store.updateRipItem).toHaveBeenCalled();
-
-    const updatedDate = (store.updateRipItem as Mock).mock.calls[0][0].expirationDate;
-    expect(updatedDate.startOf('day').isSame(moment().add(90, 'days').startOf('day'))).toBeTruthy();
-  });
-
-  it('should NOT update the rip items expirationDate beyond 90 days', () => {
-    const add90DaysButton = subject.find(StyledButton).at(0);
-    add90DaysButton.simulate('click');
-    add90DaysButton.simulate('click');
-
-    const updatedDate = (store.updateRipItem as Mock).mock.calls[1][0].expirationDate;
-    expect(updatedDate.startOf('day').isSame(moment().add(90, 'days').startOf('day'))).toBeTruthy();
+    expect(RipItemsActions.handleChange).toHaveBeenCalled();
   });
 });

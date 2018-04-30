@@ -15,6 +15,7 @@ import { StyledLeaveForm } from '../event/LeaveForm';
 import { StyledMissionForm } from '../event/MissionForm';
 import { StyledBackButton } from '../widgets/BackButton';
 import { StyledTDYDeploymentForm } from '../event/TDYDeploymentForm';
+import { AvailabilityActions } from './AvailabilityActions';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 
 interface Props {
@@ -41,16 +42,15 @@ export class Availability extends React.Component<Props> {
 
   private renderEventFormContainer = () => {
     const {availabilityStore} = this.props;
-    const {closeEventForm, shouldShowEventTypeSelection, eventFormType, setEventFormType} = availabilityStore!;
-
+    const {eventFormType, setEventFormType} = availabilityStore!;
     return (
       <div>
         <StyledBackButton
-          onClick={() => closeEventForm()}
+          onClick={availabilityStore!.closeEventForm}
           text="Back to Week View"
         />
         {
-          shouldShowEventTypeSelection &&
+          availabilityStore!.shouldShowEventTypeSelection &&
           <div className="form-wrapper">
             <div>Select Event Type:</div>
             <StyledRadioButtons
@@ -119,18 +119,14 @@ export class Availability extends React.Component<Props> {
   }
 
   private renderAvailability = () => {
-    const {availabilityStore, plannerStore, trackerStore} = this.props;
-    const {showEventForm, setSelectedDate, refreshAirmanEvents} = availabilityStore!;
-    const {sidePanelWeek, decrementSidePanelWeek, incrementSidePanelWeek} = plannerStore!;
+    const {availabilityStore, plannerStore} = this.props;
+    const {sidePanelWeek} = plannerStore!;
     return (
       <div>
         <div className="event-control-row">
           <button
             className="add-event"
-            onClick={() => {
-              setSelectedDate();
-              showEventForm();
-            }}
+            onClick={AvailabilityActions.openForm}
           >
             + Add Event
           </button>
@@ -139,10 +135,7 @@ export class Availability extends React.Component<Props> {
         <div className="nav-row">
           <button
             className="last-week"
-            onClick={async () => {
-              await decrementSidePanelWeek();
-              await refreshAirmanEvents(trackerStore!.selectedAirman.id, plannerStore!.sidePanelWeek);
-            }}
+            onClick={async () => await AvailabilityActions.decrementWeek()}
           >
             <BackIcon width={12} height={12}/>
           </button>
@@ -153,10 +146,7 @@ export class Availability extends React.Component<Props> {
 
           <button
             className="next-week"
-            onClick={async () => {
-              await incrementSidePanelWeek();
-              await refreshAirmanEvents(trackerStore!.selectedAirman.id, plannerStore!.sidePanelWeek);
-            }}
+            onClick={async () => await AvailabilityActions.incrementWeek()}
           >
             <NextIcon width={12} height={12}/>
           </button>
@@ -169,10 +159,7 @@ export class Availability extends React.Component<Props> {
                 <div id={`day-${index}`} key={index}>
                   <div
                     className="event-date"
-                    onClick={() => {
-                      availabilityStore!.setSelectedDate(day);
-                      showEventForm();
-                    }}
+                    onClick={() => AvailabilityActions.openFormForDay(day)}
                   >
                     <span>
                       {day.format('ddd, DD MMM YY').toUpperCase()}
@@ -213,7 +200,7 @@ export class Availability extends React.Component<Props> {
 export const StyledAvailability = inject(
   'availabilityStore',
   'plannerStore',
-  'trackerStore'
+  'trackerStore',
 )(styled(Availability)`
   width: 100%;
   text-align: left;

@@ -5,9 +5,9 @@ import { Moment } from 'moment';
 
 export class PlannerActions {
   static weekSlider = async (direction: any) => {
-    await direction();
+    direction();
     await stores.trackerStore.refreshEvents(stores.plannerStore.plannerWeek);
-    if (stores.trackerStore.selectedAirman) {
+    if (!stores.trackerStore.selectedAirman.isEmpty) {
       await stores.availabilityStore.refreshAirmanEvents(
         stores.trackerStore.selectedAirman.id,
         stores.plannerStore.sidePanelWeek
@@ -15,10 +15,15 @@ export class PlannerActions {
     }
   }
 
-  static newEvent = async (airman: AirmanModel, date: Moment) => {
-    await stores.trackerStore!.setSelectedAirman(airman);
+  static openSidePanel = async (airman: AirmanModel, date: Moment) => {
+    await stores.currencyStore.setRipItemsForAirman(airman.id);
+
     stores.sidePanelStore!.setSelectedTab(TabType.AVAILABILITY);
+
+    stores.trackerStore!.setSelectedAirman(airman);
+
     stores.availabilityStore!.setSelectedDate(date);
+
     stores.availabilityStore!.showEventForm();
   }
 }

@@ -46,6 +46,11 @@ export class AvailabilityStore {
     this._selectedDate = date;
   }
 
+  @action.bound
+  clearSelectedDate() {
+    this._selectedDate = null;
+  }
+
   @computed
   get eventFormType() {
     return this._eventFormType;

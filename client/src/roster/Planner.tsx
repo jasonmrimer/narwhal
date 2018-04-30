@@ -30,7 +30,7 @@ interface Props {
 @observer
 export class Planner extends React.Component<Props> {
   newEvent = async (airman: AirmanModel, date: Moment) => {
-    PlannerActions.newEvent(airman, date);
+    PlannerActions.openSidePanel(airman, date);
   }
 
   render() {

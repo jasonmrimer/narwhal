@@ -6,17 +6,14 @@ import { StyledSkillsForm } from '../skills/SkillsForm';
 import { StyledSkillTile } from '../skills/SkillTile';
 import { StyledNotification } from '../widgets/Notification';
 import { StyledBackButton } from '../widgets/BackButton';
-import { AirmanRipItemFormStore } from '../rip-item/stores/AirmanRipItemFormStore';
-import { SkillFormStore } from '../skills/stores/SkillFormStore';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { StyledRipItems } from '../rip-item/AirmanRipItemForm';
 import { StyledRipItemsTile } from '../rip-item/RipItemsTile';
+import { CurrencyActions } from './CurrencyActions';
 
 interface Props {
   currencyStore?: CurrencyStore;
-  airmanRipItemFormStore?: AirmanRipItemFormStore;
   trackerStore?: TrackerStore;
-  skillFormStore?: SkillFormStore;
   className?: string;
 }
 
@@ -54,17 +51,12 @@ export class Currency extends React.Component<Props> {
   }
 
   private renderSkillsList = () => {
-    const {currencyStore, skillFormStore} = this.props;
-    const {openCreateSkillForm} = currencyStore!;
     return (
       <div>
         <div className="skill-control-row">
           <button
             className="add-skill"
-            onClick={() => {
-              openCreateSkillForm();
-              skillFormStore!.open();
-            }}
+            onClick={CurrencyActions.addSkill}
           >
             + Add Skill
           </button>
@@ -78,14 +70,11 @@ export class Currency extends React.Component<Props> {
   }
 
   private renderRipTile = () => {
-    const {currencyStore, airmanRipItemFormStore} = this.props;
+    const {currencyStore} = this.props;
     return (
       <StyledRipItemsTile
         title="RIP TASKS"
-        onClick={() => {
-          airmanRipItemFormStore!.setRipItems(currencyStore!.airmanRipItems);
-          currencyStore!.openAirmanRipItemForm();
-        }}
+        onClick={CurrencyActions.addRipItems}
         expiredItemCount={currencyStore!.expiredItemCount}
         assignedItemCount={currencyStore!.assignedItemCount}
       />
@@ -104,31 +93,21 @@ export class Currency extends React.Component<Props> {
   }
 
   private renderQualifications = () => {
-    const {currencyStore, skillFormStore} = this.props;
-    const {openEditSkillForm} = currencyStore!;
     return this.props.trackerStore!.selectedAirman.qualifications.map((qual, index) => (
       <StyledSkillTile
         key={index}
         skill={qual}
-        onClick={() => {
-          openEditSkillForm();
-          skillFormStore!.open(qual);
-        }}
+        onClick={() => CurrencyActions.editSkill(qual)}
       />
     ));
   }
 
   private renderCertifications = () => {
-    const {currencyStore, skillFormStore} = this.props;
-    const {openEditSkillForm} = currencyStore!;
     return this.props.trackerStore!.selectedAirman.certifications.map((cert, index) => (
       <StyledSkillTile
         key={index}
         skill={cert}
-        onClick={() => {
-          openEditSkillForm();
-          skillFormStore!.open(cert);
-        }}
+        onClick={() => CurrencyActions.editSkill(cert)}
       />
     ));
   }
@@ -155,8 +134,6 @@ export class Currency extends React.Component<Props> {
 
 export const StyledCurrency = inject(
   'currencyStore',
-  'airmanRipItemFormStore',
-  'skillFormStore',
   'trackerStore'
 )(styled(Currency)`
   width: 100%;

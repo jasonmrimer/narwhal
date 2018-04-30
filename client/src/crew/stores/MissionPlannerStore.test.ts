@@ -13,7 +13,7 @@ describe('MissionPlannerStore', () => {
     const events = [EventModelFactory.build()];
 
     subject = new MissionPlannerStore(DoubleRepositories);
-    subject.hydrate(crew, airmen, events);
+    subject.hydrate(crew.mission, airmen, events);
   });
 
   it('should return available airmen', () => {

@@ -4,17 +4,14 @@ import { Currency } from './Currency';
 import { findSelectorWithText } from '../utils/testUtils';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
-import { StyledSkillsForm } from '../skills/SkillsForm';
 import { StyledSkillTile } from '../skills/SkillTile';
 import { AirmanQualificationModelFactory } from '../airman/factories/AirmanQualificationModelFactory';
 import { AirmanCertificationModelFactory } from '../airman/factories/AirmanCertificationModelFactory';
-import { StyledBackButton } from '../widgets/BackButton';
 import { StyledNotification } from '../widgets/Notification';
 import { StyledRipItems } from '../rip-item/AirmanRipItemForm';
-import { CurrencyChild, CurrencyStore } from './stores/CurrencyStore';
+import { CurrencyStore } from './stores/CurrencyStore';
 import { DoubleRepositories } from '../utils/Repositories';
-import { AirmanRipItemFormStore } from '../rip-item/stores/AirmanRipItemFormStore';
-import { SkillFormStore } from '../skills/stores/SkillFormStore';
+import { CurrencyActions } from './CurrencyActions';
 
 /* tslint:disable:no-empty*/
 describe('Currency', () => {
@@ -29,16 +26,12 @@ describe('Currency', () => {
 
   let trackerStore: TrackerStore;
   let currencyStore: CurrencyStore;
-  let airmanRipItemFormStore: AirmanRipItemFormStore;
-  let skillFormStore: SkillFormStore;
   let subject: ShallowWrapper;
 
   beforeEach(async () => {
     currencyStore = new CurrencyStore(DoubleRepositories);
-
-    airmanRipItemFormStore = new AirmanRipItemFormStore(DoubleRepositories.ripItemRepository);
-
-    skillFormStore = new SkillFormStore();
+    CurrencyActions.addSkill = jest.fn();
+    CurrencyActions.editSkill = jest.fn();
 
     trackerStore = new TrackerStore(DoubleRepositories);
     trackerStore.setSelectedAirman(airman);
@@ -47,8 +40,6 @@ describe('Currency', () => {
       <Currency
         trackerStore={trackerStore}
         currencyStore={currencyStore}
-        airmanRipItemFormStore={airmanRipItemFormStore}
-        skillFormStore={skillFormStore}
       />
     );
   });
@@ -82,24 +73,11 @@ describe('Currency', () => {
 
   it('opens skill form on + Add Skill click', () => {
     findSelectorWithText(subject, 'button', '+ Add Skill').simulate('click');
-    expect(subject.find(StyledSkillsForm).exists()).toBeTruthy();
+    expect(CurrencyActions.addSkill).toHaveBeenCalled();
   });
 
   it('opens a Skill Form when clicking on an existing Skill Tile', () => {
     subject.find(StyledSkillTile).at(0).simulate('click');
-
-    subject.instance().forceUpdate();
-    subject.update();
-
-    expect(skillFormStore.hasModel).toBeTruthy();
-    expect(Number(skillFormStore.state.skillId)).toBe(airman.qualifications[0].skillId);
-  });
-
-  it('can exit out of a skill form', () => {
-    findSelectorWithText(subject, 'button', '+ Add Skill').simulate('click');
-    expect(subject.find(StyledSkillsForm).exists()).toBeTruthy();
-
-    subject.find(StyledBackButton).simulate('click');
-    expect(currencyStore.currencyChild).toBe(CurrencyChild.SkillList);
+    expect(CurrencyActions.editSkill).toHaveBeenCalled();
   });
 });

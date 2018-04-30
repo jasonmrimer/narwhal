@@ -93,7 +93,7 @@ describe('SkillsForm', () => {
       expect(SkillActions.submitSkill).toHaveBeenCalled();
     });
 
-    it('calls handleDelete when clicking the delete button', () => {
+    it('calls executePendingDelete when clicking the delete button', () => {
       mountedSubject.find(StyledButton).simulate('click');
       expect(SkillActions.deleteSkill).toHaveBeenCalled();
     });

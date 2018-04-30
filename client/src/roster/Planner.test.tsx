@@ -96,7 +96,7 @@ describe('Planner', () => {
     await DoubleRepositories.eventRepository.save(leave);
     await DoubleRepositories.eventRepository.save(mission);
 
-    PlannerActions.newEvent = jest.fn();
+    PlannerActions.openSidePanel = jest.fn();
 
     trackerStore = new TrackerStore(DoubleRepositories);
     trackerStore.hydrate([airman], [appointment, mission, leave], airman.siteId);
@@ -125,9 +125,9 @@ describe('Planner', () => {
     expect(subject.find(MissionIcon).length).toBe(1);
   });
 
-  it('calls the newEvent when clicking on an empty bubble', () => {
+  it('calls the openSidePanel when clicking on an empty bubble', () => {
     const emptyBubble = subject.find(AvailableIcon).at(0);
     emptyBubble.simulate('click', eventStub);
-    expect(PlannerActions.newEvent).toHaveBeenCalled();
+    expect(PlannerActions.openSidePanel).toHaveBeenCalled();
   });
 });

@@ -12,6 +12,7 @@ import * as classNames from 'classnames';
 import { ResetIcon } from '../icons/ResetIcon';
 import { CurrencyStore } from '../currency/stores/CurrencyStore';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
+import { RipItemsActions } from './RipItemsActions';
 
 interface Props {
   airmanRipItemFormStore?: AirmanRipItemFormStore;
@@ -24,25 +25,17 @@ interface Props {
 @observer
 export class AirmanRipItems extends React.Component<Props> {
   onChange = (e: any, item: AirmanRipItemModel) => {
-    const {airmanRipItemFormStore} = this.props;
-    const {updateRipItem} = airmanRipItemFormStore!;
-    const expirationDate = moment(e.target.value);
-    item.expirationDate = expirationDate.isValid() ? expirationDate : null;
-    updateRipItem(item);
+    RipItemsActions.handleChange(moment(e.target.value), item);
   }
 
   onClick = (item: AirmanRipItemModel) => {
-    const {airmanRipItemFormStore} = this.props;
-    const {updateRipItem} = airmanRipItemFormStore!;
-    item.expirationDate = moment().add(90, 'days').startOf('day');
-    updateRipItem(item);
+    const expirationDate = moment().add(90, 'days').startOf('day');
+    RipItemsActions.handleChange(expirationDate, item);
   }
 
   onSubmit = async (e: any) => {
-    const {airmanRipItemFormStore, currencyStore} = this.props;
     e.preventDefault();
-    await airmanRipItemFormStore!.submitRipItems();
-    currencyStore!.closeAirmanRipItemForm();
+    await RipItemsActions.submit();
   }
 
   render() {

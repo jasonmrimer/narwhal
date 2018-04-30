@@ -8,16 +8,11 @@ import { TrackerStore } from './stores/TrackerStore';
 import { StyledAvailability } from '../availability/Availability';
 import { TabAlert } from '../icons/TabAlert';
 import { SidePanelStore, TabType } from './stores/SidePanelStore';
-import { AvailabilityStore } from '../availability/stores/AvailabilityStore';
-import { PlannerStore } from '../roster/stores/PlannerStore';
-import { CurrencyStore } from '../currency/stores/CurrencyStore';
+import { SidePanelActions } from './SidePanelActions';
 
 interface Props {
   trackerStore?: TrackerStore;
   sidePanelStore?: SidePanelStore;
-  availabilityStore?: AvailabilityStore;
-  currencyStore?: CurrencyStore;
-  plannerStore?: PlannerStore;
   className?: string;
 }
 
@@ -25,9 +20,7 @@ interface Props {
 export class SidePanel extends React.Component<Props> {
   renderSelectedTab = () => {
     const {sidePanelStore} = this.props;
-    const {selectedTab} = sidePanelStore!;
-
-    switch (selectedTab) {
+    switch (sidePanelStore!.selectedTab) {
       case TabType.CURRENCY:
         return (
           <StyledCurrency/>
@@ -41,45 +34,32 @@ export class SidePanel extends React.Component<Props> {
   }
 
   render() {
-    const {trackerStore, className, sidePanelStore, availabilityStore, currencyStore, plannerStore} = this.props;
-    const {clearSelectedAirman, selectedAirman} = trackerStore!;
-    const {closeEventForm} = availabilityStore!;
-    const {closeSkillForm} = currencyStore!;
-    const {setSelectedTab, selectedTab} = sidePanelStore!;
+    const {trackerStore, className, sidePanelStore} = this.props;
     return (
       <div className={`${className} side-panel`}>
         <div className={'header'}>
           <button
             className="close"
-            onClick={() => {
-              clearSelectedAirman();
-              plannerStore!.setSidePanelWeek(plannerStore!.plannerWeek);
-            }}
+            onClick={SidePanelActions.closeSidePanel}
           >
             <CloseIcon/>
           </button>
           <h2>
-            {selectedAirman.lastName}, {selectedAirman.firstName}
+            {trackerStore!.selectedAirman.lastName}, {trackerStore!.selectedAirman.firstName}
           </h2>
         </div>
         <div className="tabs">
           <StyledTab
-            onClick={() => {
-              closeEventForm();
-              setSelectedTab(TabType.CURRENCY);
-            }}
+            onClick={() => SidePanelActions.selectTab(TabType.CURRENCY)}
             title="CURRENCY"
-            isActive={selectedTab === TabType.CURRENCY}
+            isActive={sidePanelStore!.selectedTab === TabType.CURRENCY}
           >
-            {selectedAirman.hasExpiredSkills && <TabAlert/>}
+            {trackerStore!.selectedAirman.hasExpiredSkills && <TabAlert/>}
           </StyledTab>
           <StyledTab
-            onClick={() => {
-              closeSkillForm();
-              setSelectedTab(TabType.AVAILABILITY);
-            }}
+            onClick={() => SidePanelActions.selectTab(TabType.AVAILABILITY)}
             title="AVAILABILITY"
-            isActive={selectedTab === TabType.AVAILABILITY}
+            isActive={sidePanelStore!.selectedTab === TabType.AVAILABILITY}
           />
         </div>
         <div>
@@ -93,9 +73,6 @@ export class SidePanel extends React.Component<Props> {
 export const StyledSidePanel = inject(
   'trackerStore',
   'sidePanelStore',
-  'availabilityStore',
-  'currencyStore',
-  'plannerStore'
 )(styled(SidePanel)`
   background-color: ${props => props.theme.lighter};
   min-width: 380px;

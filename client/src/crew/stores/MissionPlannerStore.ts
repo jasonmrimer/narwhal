@@ -2,21 +2,21 @@ import { action, computed, observable } from 'mobx';
 import { AirmanModel } from '../../airman/models/AirmanModel';
 import { Repositories } from '../../utils/Repositories';
 import { EventModel } from '../../event/models/EventModel';
-import { CrewModel } from '../models/CrewModel';
+import { MissionModel } from '../../mission/models/MissionModel';
 
 export class MissionPlannerStore {
   @observable private _loading: boolean = false;
   @observable private _airmen: AirmanModel[] = [];
   @observable private _events: EventModel[] = [];
-  private _crew: CrewModel | null = null;
+  private _mission: MissionModel;
 
   constructor(private repositories: Repositories) {
   }
 
   @action.bound
-  hydrate(crew: CrewModel, airmen: AirmanModel[], events: EventModel[]) {
+  hydrate(mission: MissionModel, airmen: AirmanModel[], events: EventModel[]) {
     this._loading = true;
-    this._crew = crew;
+    this._mission = mission;
     this._airmen = airmen;
     this._events = events;
     this._loading = false;
@@ -51,8 +51,8 @@ export class MissionPlannerStore {
   async refreshAllEvents(siteId: number) {
     this._events = await this.repositories.eventRepository.findAllBySiteIdAndWithinPeriod(
       siteId,
-      this._crew!.mission.startDateTime,
-      this._crew!.mission.endDateTime || this._crew!.mission.startDateTime.clone().add(12, 'hours')
+      this._mission.startDateTime,
+      this._mission.endDateTime || this._mission.startDateTime.clone().add(12, 'hours')
     );
   }
 

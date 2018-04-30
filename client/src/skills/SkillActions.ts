@@ -13,10 +13,22 @@ export class SkillActions {
     }
   }
 
-  static deleteSkill = async () => {
+  static deleteSkill = () => {
     const model = stores.skillFormStore!.model;
     if (model) {
       stores.currencyStore!.removeSkill(model);
+    }
+  }
+
+  static executePendingDelete = async () => {
+    const {currencyStore, trackerStore, locationFilterStore, skillFormStore} = stores;
+    try {
+      await currencyStore.executePendingDelete();
+      await trackerStore.refreshAirmen(locationFilterStore.selectedSite, trackerStore.selectedAirman.id);
+      skillFormStore.close();
+      currencyStore.closeSkillForm();
+    } catch (e) {
+      skillFormStore.setErrors(e);
     }
   }
 }

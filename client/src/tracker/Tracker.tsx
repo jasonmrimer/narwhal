@@ -11,16 +11,14 @@ import { StyledDeletePopup } from '../widgets/DeletePopup';
 import { ProfileModel } from '../profile/models/ProfileModel';
 import { AvailabilityStore } from '../availability/stores/AvailabilityStore';
 import { CurrencyStore } from '../currency/stores/CurrencyStore';
-import { LocationFilterStore } from '../widgets/stores/LocationFilterStore';
-import { SkillFormStore } from '../skills/stores/SkillFormStore';
 import { EventActions } from '../event/EventActions';
+import { TrackerActions } from './TrackerActions';
+import { SkillActions } from '../skills/SkillActions';
 
 interface Props {
   trackerStore?: TrackerStore;
   availabilityStore?: AvailabilityStore;
   currencyStore?: CurrencyStore;
-  locationFilterStore?: LocationFilterStore;
-  skillFormStore?: SkillFormStore;
   profile: ProfileModel;
   className?: string;
 }
@@ -28,16 +26,13 @@ interface Props {
 @observer
 export class Tracker extends React.Component<Props> {
   render() {
-    const {trackerStore, availabilityStore, currencyStore, locationFilterStore, skillFormStore, className} = this.props;
+    const {trackerStore, availabilityStore, currencyStore, className} = this.props;
     return (
       <div className={className}>
         {trackerStore!.loading && <StyledLoadingOverlay/>}
         <div className="main">
           <StyledLocationFilters
-            refreshAirmen={async () => {
-              const siteId = this.props.locationFilterStore!.selectedSite;
-              await trackerStore!.refreshAllAirmen(siteId);
-            }}
+            refreshAirmen={TrackerActions.getAirmenBySite}
           />
           <div>
             <StyledLegend/>
@@ -52,7 +47,7 @@ export class Tracker extends React.Component<Props> {
           availabilityStore!.pendingDeleteEvent &&
           <StyledDeletePopup
             item={availabilityStore!.pendingDeleteEvent!}
-            onConfirm={async () => await EventActions.executePendingDeleteEvent(trackerStore!.selectedAirman.id)}
+            onConfirm={EventActions.executePendingDelete}
             onCancel={availabilityStore!.cancelPendingDelete}
           />
         }
@@ -60,16 +55,7 @@ export class Tracker extends React.Component<Props> {
           currencyStore!.pendingDeleteSkill &&
           <StyledDeletePopup
             item={currencyStore!.pendingDeleteSkill!}
-            onConfirm={async () => {
-              try {
-                await currencyStore!.executePendingDelete();
-                await trackerStore!.refreshAirmen(locationFilterStore!.selectedSite, trackerStore!.selectedAirman.id);
-                skillFormStore!.close();
-                currencyStore!.closeSkillForm();
-              } catch (e) {
-                skillFormStore!.setErrors(e);
-              }
-            }}
+            onConfirm={SkillActions.executePendingDelete}
             onCancel={currencyStore!.cancelPendingDelete}
           />
         }

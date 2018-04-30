@@ -8,8 +8,8 @@ import { StyledButton } from './Button';
 
 interface Props {
   item: EventModel | Skill;
-  onConfirm: () => void;
-  onCancel: (item: EventModel | Skill | null) => void;
+  onConfirm: () => Promise<void>;
+  onCancel: () => void;
   className?: string;
 }
 
@@ -48,8 +48,8 @@ export const DeletePopup = (props: Props) => {
         <div className="title">{renderTitle(props.item)}</div>
         <span>{renderItemInformation(props.item)}</span>
         <span className="actions">
-          <StyledButton className="cancel" onClick={(e) => props.onCancel(null)} text="CANCEL"/>
-          <StyledButton className="confirm" onClick={(e) => props.onConfirm()} text="REMOVE"/>
+          <StyledButton className="cancel" onClick={props.onCancel} text="CANCEL"/>
+          <StyledButton className="confirm" onClick={async () => await props.onConfirm()} text="REMOVE"/>
         </span>
       </div>
     </div>

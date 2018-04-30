@@ -18,11 +18,12 @@ export class EventActions {
     }
   }
 
-  static handleDeleteEvent = async (event: EventModel) => {
+  static handleDeleteEvent = (event: EventModel) => {
     stores.availabilityStore.removeEvent(event);
   }
 
-  static executePendingDeleteEvent = async (airmanId: number) => {
+  static executePendingDelete = async () => {
+    const airmanId = stores.trackerStore.selectedAirman.id;
     await stores.availabilityStore.executePendingDelete();
     await stores.trackerStore.refreshEvents(stores.tdyDeploymentFormStore!.week);
     await stores.plannerStore.setSidePanelWeek(stores.tdyDeploymentFormStore!.week);

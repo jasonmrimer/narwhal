@@ -11,12 +11,12 @@ import { StyledRadioButtons } from '../widgets/RadioButtons';
 import { StyledAppointmentForm } from '../event/AppointmentForm';
 import { StyledLeaveForm } from '../event/LeaveForm';
 import { EventModelFactory } from '../event/factories/EventModelFactory';
-import { StyledBackButton } from '../widgets/BackButton';
 import { StyledTDYDeploymentForm } from '../event/TDYDeploymentForm';
 import { AvailabilityStore } from './stores/AvailabilityStore';
 import { PlannerStore } from '../roster/stores/PlannerStore';
 import { DoubleRepositories } from '../utils/Repositories';
 import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
+import { AvailabilityActions } from './AvailabilityActions';
 
 let trackerStore: TrackerStore;
 let availabilityStore: AvailabilityStore;
@@ -31,6 +31,10 @@ let eventFour: EventModel;
 describe('Availability', () => {
   beforeEach(() => {
     airman = AirmanModelFactory.build();
+    AvailabilityActions.openFormForDay = jest.fn();
+    AvailabilityActions.incrementWeek = jest.fn();
+    AvailabilityActions.decrementWeek = jest.fn();
+    AvailabilityActions.openForm = jest.fn();
     eventOne = new EventModel(
       'Event One',
       '',
@@ -105,8 +109,7 @@ describe('Availability', () => {
 
   it('calls the createEvent on date click', () => {
     subject.find('.event-date').at(0).simulate('click');
-    expect(availabilityStore.shouldShowEventForm).toBeTruthy();
-    expect(availabilityStore.selectedDate).toEqual(moment('2017-11-26'));
+    expect(AvailabilityActions.openFormForDay).toHaveBeenCalledWith(moment('2017-11-26'));
   });
 
   it('renders a list of events', () => {
@@ -126,21 +129,17 @@ describe('Availability', () => {
 
   it('forwards availability to next week', () => {
     subject.find('button.next-week').simulate('click');
-    expect(subject.text()).toContain('03 DEC - 09 DEC');
-    const dateWrapper = subject.find('#day-1');
-    expect(dateWrapper.find('.event-date').text()).toContain('MON, 04 DEC 17');
+    expect(AvailabilityActions.incrementWeek).toHaveBeenCalled();
   });
 
   it('advanced to previous weeks', () => {
     subject.find('button.last-week').simulate('click');
-    expect(subject.text()).toContain('19 NOV - 25 NOV');
-    const dateWrapper = subject.find('#day-1');
-    expect(dateWrapper.find('.event-date').text()).toContain('MON, 20 NOV 17');
+    expect(AvailabilityActions.decrementWeek).toHaveBeenCalled();
   });
 
-  it('renders event type radio buttons form after clicking Add Event', () => {
-    expect(subject.find(StyledRadioButtons).exists()).toBeFalsy();
-    subject.find('button.add-event').simulate('click');
+  it('renders event type radio buttons form after calling show event form', () => {
+    availabilityStore.showEventForm();
+    subject.update();
     expect(subject.find(StyledRadioButtons).exists()).toBeTruthy();
   });
 
@@ -207,13 +206,5 @@ describe('Availability', () => {
       expect(subject.find(StyledRadioButtons).exists()).toBeFalsy();
       expect(subject.find(StyledTDYDeploymentForm).exists()).toBeTruthy();
     });
-  });
-
-  it('can exit out of an event form', () => {
-    subject.find('.add-event').simulate('click');
-    expect(availabilityStore.shouldShowEventForm).toBeTruthy();
-
-    subject.find(StyledBackButton).simulate('click');
-    expect(availabilityStore.shouldShowEventForm).toBeFalsy();
   });
 });

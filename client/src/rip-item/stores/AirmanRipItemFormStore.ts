@@ -21,8 +21,7 @@ export class AirmanRipItemFormStore {
   @action.bound
   updateRipItem(item: AirmanRipItemModel) {
     const index = this._airmanRipItems.findIndex(i => i.id === item.id)!;
-    this._airmanRipItems[index] = item;
-    this._airmanRipItems = this._airmanRipItems.slice();
+    this._airmanRipItems.splice(index, 1, item);
   }
 
   @action.bound
