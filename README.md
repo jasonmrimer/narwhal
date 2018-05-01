@@ -31,7 +31,7 @@ Source the following script to set the environment variables for local developme
 
 ## Build
 ### Client
-* Be sure dependencies are up to date with `cd client && yarn install` 
+* Be sure dependencies are up to date with `cd client && yarn install`. 
 * `cd client && yarn build`
 
 ### Backend
@@ -63,6 +63,7 @@ Source the following script to set the environment variables for local developme
 
 #### Acceptance Tests
 * Ensure that the client has been built and that the app server is running locally.
+* Be sure that all dependencies are installed with `cd acceptance && bundle install`.
 * `cd acceptance && bundle exec rspec`
 
 #### All tests
