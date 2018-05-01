@@ -62,7 +62,7 @@ Source the following script to set the environment variables for local developme
 
 #### Acceptance Tests
 * Ensure that the client has been built and that the app server is running locally.
-* `bundle exec rspec`
+* `cd acceptance && bundle exec rspec`
 
 #### All tests
 * `./all-tests.sh`
