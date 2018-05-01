@@ -31,6 +31,7 @@ Source the following script to set the environment variables for local developme
 
 ## Build
 ### Client
+* Be sure dependencies are up to date with `cd client && yarn install` 
 * `cd client && yarn build`
 
 ### Backend
