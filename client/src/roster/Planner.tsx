@@ -81,7 +81,7 @@ const renderEvents = (
 
     return renderEventType(matchedEvents[0].type, key);
   } else {
-    if (plannerStore.isAvailableToWork(airman, day)) {
+    if (airman.isAvailableForWork(day)) {
       return (
         <AvailableIcon
           key={key}

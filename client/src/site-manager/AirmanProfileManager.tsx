@@ -20,9 +20,10 @@ interface Props {
 @observer
 export class AirmanProfileManager extends React.Component<Props> {
   render() {
-    const {airman, setState} = this.props.airmanProfileManagerStore!;
+    const {className, airmanProfileManagerStore} = this.props;
+    const {airman, setState} = airmanProfileManagerStore!;
     return (
-      <div className={this.props.className}>
+      <div className={className}>
         <StyledForm onSubmit={this.onSubmit}>
 
           <div className="side-nav">
@@ -67,7 +68,7 @@ export class AirmanProfileManager extends React.Component<Props> {
                   onChange={(e) => setState(e.target.name, Number(e.target.value))}
                   name="siteId"
                   value={airman.siteId}
-                  options={this.props.airmanProfileManagerStore!.siteOptions}
+                  options={airmanProfileManagerStore!.siteOptions}
                   id="airman-site"
                 />
               </span>
@@ -77,7 +78,7 @@ export class AirmanProfileManager extends React.Component<Props> {
                   onChange={(e) => setState(e.target.name, Number(e.target.value))}
                   name="squadronId"
                   value={airman.squadronId}
-                  options={this.props.airmanProfileManagerStore!.squadronOptions}
+                  options={airmanProfileManagerStore!.squadronOptions}
                   id="airman-squadron"
                 />
               </span>
@@ -87,8 +88,18 @@ export class AirmanProfileManager extends React.Component<Props> {
                   onChange={(e) => setState(e.target.name, Number(e.target.value))}
                   name="flightId"
                   value={airman.flightId}
-                  options={this.props.airmanProfileManagerStore!.flightOptions}
+                  options={airmanProfileManagerStore!.flightOptions}
                   id="airman-flight"
+                />
+              </span>
+              <span className="airman-profile-manager-row">
+                <label htmlFor="airman-schedule">SCHEDULE</label>
+                <StyledDropdown
+                  onChange={(e) => setState(e.target.name, Number(e.target.value))}
+                  name="scheduleId"
+                  value={airmanProfileManagerStore!.scheduleId}
+                  options={airmanProfileManagerStore!.scheduleOptions}
+                  id="airman-schedule"
                 />
               </span>
               <span className="airman-profile-manager-row">

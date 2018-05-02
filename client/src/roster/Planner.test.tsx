@@ -16,7 +16,7 @@ import { AvailabilityStore } from '../availability/stores/AvailabilityStore';
 import { PlannerStore } from './stores/PlannerStore';
 import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
 import { PlannerActions } from './PlannerActions';
-import { ScheduleModel } from '../schedule/models/ScheduleModel';
+import { ScheduleModel, ScheduleType } from '../schedule/models/ScheduleModel';
 import { OffDayIcon } from '../icons/OffDayIcon';
 import { AirmanScheduleModel } from '../airman/models/AirmanScheduleModel';
 
@@ -31,12 +31,11 @@ describe('Planner', () => {
     airman = AirmanModelFactory.build();
     airman.schedules = [
       new AirmanScheduleModel(
-        1,
         airman.id,
         new
         ScheduleModel(
-          1,
-          'Back Half',
+          2,
+          ScheduleType.BackHalf,
           false,
           false,
           false,
@@ -48,12 +47,11 @@ describe('Planner', () => {
         moment('2017-11-26').add(1, 'day')
       ),
       new AirmanScheduleModel(
-        1,
         airman.id,
         new
         ScheduleModel(
           1,
-          'M-F',
+          ScheduleType.MondayToFriday,
           false,
           true,
           true,

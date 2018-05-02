@@ -1,12 +1,19 @@
+export enum ScheduleType {
+  NoSchedule = 'No Schedule',
+  FrontHalf = 'Front Half',
+  BackHalf = 'Back Half',
+  MondayToFriday = 'Monday - Friday'
+}
+
 export class ScheduleModel {
   constructor(public id: number,
-              public type: string,
-              public sunday: boolean,
-              public monday: boolean,
-              public tuesday: boolean,
-              public wednesday: boolean,
-              public thursday: boolean,
-              public friday: boolean,
-              public saturday: boolean) {
+              public type: ScheduleType,
+              public sunday: boolean = true,
+              public monday: boolean = true,
+              public tuesday: boolean = true,
+              public wednesday: boolean = true,
+              public thursday: boolean = true,
+              public friday: boolean = true,
+              public saturday: boolean = true) {
   }
 }

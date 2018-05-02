@@ -1,5 +1,7 @@
 package mil.af.us.narwhal.airman;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,8 +21,11 @@ public class AirmanSchedule {
   @GeneratedValue
   private Long id;
 
-  @Column(name = "airman_id", nullable = false)
-  private Long airmanId;
+  @NotNull
+  @ManyToOne
+  @JoinColumn(name = "airman_id", referencedColumnName = "id", nullable = false)
+  @JsonIgnore
+  private Airman airman;
 
   @ManyToOne
   @JoinColumn(name = "schedule_id", referencedColumnName = "id", nullable = false)
@@ -33,10 +38,20 @@ public class AirmanSchedule {
   @Column(name = "end_date")
   private Instant endDate;
 
-  public AirmanSchedule(Long airmanId, Schedule schedule, Instant startDate) {
-    this.airmanId = airmanId;
+  public AirmanSchedule(Airman airman, Schedule schedule, Instant startDate) {
+    this.airman = airman;
     this.schedule = schedule;
     this.startDate = startDate;
+  }
+
+  public AirmanSchedule(Schedule schedule, Instant startDate) {
+    this.schedule = schedule;
+    this.startDate = startDate;
+  }
+
+  @JsonProperty
+  public Long airmanId() {
+    return this.airman.getId();
   }
 }
 

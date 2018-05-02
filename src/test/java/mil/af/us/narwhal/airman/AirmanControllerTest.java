@@ -18,7 +18,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Instant;
-import java.util.Collections;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
@@ -37,6 +36,7 @@ public class AirmanControllerTest extends BaseIntegrationTest {
   @Autowired private ScheduleRepository scheduleRepository;
   private Flight flight1;
   private Flight flight3;
+  private Schedule schedule;
 
   @Before
   public void setUp() {
@@ -62,7 +62,7 @@ public class AirmanControllerTest extends BaseIntegrationTest {
     final Site site2 = new Site("site2");
     site2.addSquadron(squadron3);
 
-    final Schedule savedSchedule = scheduleRepository.save(new Schedule("test", true, true, true, true, true, true, true));
+    schedule = scheduleRepository.save(new Schedule("No Schedule", true, true, true, true, true, true, true));
 
     siteRepository.save(asList(site, site2));
 
@@ -79,11 +79,9 @@ public class AirmanControllerTest extends BaseIntegrationTest {
     final Airman airman3 = new Airman(flight2, "first3", "last3");
     final Airman airman4 = new Airman(flight3, "first4", "last4");
 
-    final List<Airman> airmen = airmanRepository.save(asList(airman1, airman2, airman3, airman4));
+    airman1.addSchedule(new AirmanSchedule(schedule, Instant.now()));
 
-    airmen.get(0).setSchedules(Collections.singletonList(
-      new AirmanSchedule(airmen.get(0).getId(), savedSchedule, Instant.now())
-    ));
+    final List<Airman> airmen = airmanRepository.save(asList(airman1, airman2, airman3, airman4));
 
     airmanRepository.save(airmen);
 
@@ -184,6 +182,7 @@ public class AirmanControllerTest extends BaseIntegrationTest {
     airman1.setFirstName("Foo");
     airman1.setLastName("Bar");
     airman1.setFlight(flight3);
+    airman1.addSchedule(new AirmanSchedule(schedule, Instant.now()));
     final String json = objectMapper.writeValueAsString(airman1);
 
     // @formatter:off
@@ -203,7 +202,8 @@ public class AirmanControllerTest extends BaseIntegrationTest {
       .body("lastName", equalTo("Bar"))
       .body("flightId", equalTo(flight3.getId().intValue()))
       .body("siteId", equalTo(flight3.getSquadron().getSite().getId().intValue()))
-      .body("squadronId", equalTo(flight3.getSquadron().getId().intValue()));
+      .body("squadronId", equalTo(flight3.getSquadron().getId().intValue()))
+      .body("schedules.size()", equalTo(2));
     // @formatter:on
   }
 

@@ -5,6 +5,7 @@ TRUNCATE TABLE profile;
 TRUNCATE TABLE join_airman_qualification;
 TRUNCATE TABLE join_airman_certification;
 TRUNCATE TABLE join_airman_rip_item;
+TRUNCATE TABLE join_airman_schedule;
 TRUNCATE TABLE join_mission_airman;
 TRUNCATE TABLE certification;
 TRUNCATE TABLE qualification;

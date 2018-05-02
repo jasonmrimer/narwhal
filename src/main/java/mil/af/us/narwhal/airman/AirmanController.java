@@ -20,33 +20,28 @@ public class AirmanController {
   private AirmanRepository repository;
   private QualificationRepository qualificationRepository;
   private CertificationRepository certificationRepository;
-  private FlightRepository flightRepository;
+  private AirmanService airmanService;
 
-  public AirmanController(AirmanRepository repository, QualificationRepository qualificationRepository, CertificationRepository certificationRepository, FlightRepository flightRepository) {
+  public AirmanController(AirmanRepository repository, QualificationRepository qualificationRepository, CertificationRepository certificationRepository, AirmanService airmanService) {
     this.repository = repository;
     this.qualificationRepository = qualificationRepository;
     this.certificationRepository = certificationRepository;
-    this.flightRepository = flightRepository;
+    this.airmanService = airmanService;
   }
 
   @GetMapping(path = "/{airmanId}")
   public Airman show(@PathVariable Long airmanId) {
-    return repository.findOne(airmanId);
+    return airmanService.getAirman(airmanId);
   }
 
   @GetMapping
   public List<Airman> index(@RequestParam Long siteId) {
-    return repository.findAllBySiteIdAndByOrderByLastName(siteId);
+    return airmanService.getAirmenBySite(siteId);
   }
 
   @PostMapping
   public Airman update(@RequestBody AirmanJSON airmanJSON) {
-    Airman airman = repository.findOne(airmanJSON.getId());
-    airman.setShift(airmanJSON.getShift());
-    airman.setLastName(airmanJSON.getLastName());
-    airman.setFirstName(airmanJSON.getFirstName());
-    airman.setFlight(flightRepository.findOne(airmanJSON.getFlightId()));
-    return repository.save(airman);
+    return airmanService.updateAirman(airmanJSON);
   }
 
   @PostMapping(path = "/{id}/qualifications")

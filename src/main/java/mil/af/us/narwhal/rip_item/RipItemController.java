@@ -15,7 +15,7 @@ import static java.util.stream.Collectors.toList;
 public class RipItemController {
   public static final String URI = "/api/skill/rip-items";
 
-  AirmanRepository airmanRepository;
+  private AirmanRepository airmanRepository;
 
   public RipItemController(AirmanRepository airmanRepository) {
     this.airmanRepository = airmanRepository;

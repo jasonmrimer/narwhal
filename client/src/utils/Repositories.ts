@@ -1,4 +1,5 @@
 ///<reference path="../site/repositories/web/WebSiteRepository.ts"/>
+///<reference path="../schedule/repositories/web/WebScheduleRepository.ts"/>
 import { EventRepository } from '../event/repositories/EventRepository';
 import { MissionRepository } from '../mission/repositories/MissionRepository';
 import { AirmanRepository } from '../airman/repositories/AirmanRepository';
@@ -27,6 +28,9 @@ import { ProfileRepositoryStub } from '../profile/repositories/doubles/ProfileRe
 import { CrewPositionRepository } from '../crew/repositories/CrewPositionRepository';
 import { WebCrewPositionRepository } from '../crew/repositories/web/WebCrewPositionRepository';
 import { CrewPositionRepositorySpy } from '../crew/repositories/doubles/CrewPositionRepositorySpy';
+import { ScheduleRepository } from '../schedule/repositories/ScheduleRepository';
+import { WebScheduleRepository } from '../schedule/repositories/web/WebScheduleRepository';
+import { ScheduleRepositoryStub } from '../schedule/repositories/doubles/ScheduleRepositoryStub';
 
 export interface Repositories {
   airmanRepository: AirmanRepository;
@@ -38,6 +42,7 @@ export interface Repositories {
   crewRepository: CrewRepository;
   crewPositionRepository: CrewPositionRepository;
   profileRepository: ProfileRepository;
+  scheduleRepository: ScheduleRepository;
 }
 
 const client = new HTTPClient();
@@ -52,6 +57,7 @@ export const WebRepositories: Repositories = Object.freeze({
   crewRepository: new WebCrewRepository(client),
   crewPositionRepository: new WebCrewPositionRepository(client),
   profileRepository: new WebProfileRepository(client),
+  scheduleRepository: new WebScheduleRepository(client)
 });
 
 export const DoubleRepositories: Repositories = {
@@ -63,5 +69,6 @@ export const DoubleRepositories: Repositories = {
   ripItemRepository: new RipItemRepositoryStub(),
   crewRepository: new CrewRepositorySpy(),
   crewPositionRepository: new CrewPositionRepositorySpy(),
-  profileRepository: new ProfileRepositoryStub()
+  profileRepository: new ProfileRepositoryStub(),
+  scheduleRepository: new ScheduleRepositoryStub(),
 };

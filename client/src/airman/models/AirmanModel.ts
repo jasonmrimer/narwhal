@@ -2,6 +2,7 @@ import { AirmanQualificationModel } from './AirmanQualificationModel';
 import { AirmanCertificationModel } from './AirmanCertificationModel';
 import { observable } from 'mobx';
 import { AirmanScheduleModel } from './AirmanScheduleModel';
+import { Moment } from 'moment';
 
 export class AirmanModel {
   @observable public firstName: string;
@@ -48,6 +49,38 @@ export class AirmanModel {
 
   get certificationIds() {
     return this.certifications.map(cert => cert.certification.id);
+  }
+
+  get currentAirmanSchedule() {
+    return this.schedules.find(as => as.endDate === null);
+  }
+
+  get currentScheduleId() {
+    const airmanSchedule = this.currentAirmanSchedule;
+    if (airmanSchedule) {
+      return airmanSchedule.schedule.id;
+    } else {
+      return null;
+    }
+  }
+
+  isAvailableForWork(day: Moment) {
+    const schedulesBeforeDay = this.schedules.filter(schedule => {
+      return schedule.startDate.isSameOrBefore(day);
+    });
+
+    if (schedulesBeforeDay) {
+      const currentSchedule = schedulesBeforeDay.find(schedule => schedule.endDate === null);
+      if (currentSchedule) {
+        return currentSchedule.isScheduledWorkDay(day);
+      } else {
+        const pastSchedule = schedulesBeforeDay.find(schedule => day.isBetween(schedule.startDate, schedule.endDate!));
+        if (pastSchedule) {
+          return pastSchedule.isScheduledWorkDay(day);
+        }
+      }
+    }
+    return true;
   }
 }
 

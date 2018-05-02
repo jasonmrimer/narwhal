@@ -6,8 +6,14 @@ import { AirmanModel, ShiftType } from '../../airman/models/AirmanModel';
 import { AirmanCertificationModelFactory } from '../../airman/factories/AirmanCertificationModelFactory';
 import { AirmanQualificationModelFactory } from '../../airman/factories/AirmanQualificationModelFactory';
 import { AirmanRepository } from '../../airman/repositories/AirmanRepository';
+import { ScheduleModel, ScheduleType } from '../../schedule/models/ScheduleModel';
+import Mock = jest.Mock;
+import { AirmanScheduleModel } from '../../airman/models/AirmanScheduleModel';
+import * as moment from 'moment';
 
 describe('AirmanProfileManagerStore', () => {
+  const schedule3 = new ScheduleModel(3, ScheduleType.FrontHalf);
+  const schedule1 = new ScheduleModel(1, ScheduleType.MondayToFriday);
   let repoMock: AirmanRepository;
   let subject: AirmanProfileManagerStore;
   let airman: AirmanModel;
@@ -21,7 +27,8 @@ describe('AirmanProfileManagerStore', () => {
       0,
       0,
       AirmanQualificationModelFactory.buildList(2),
-      AirmanCertificationModelFactory.buildList(3, 1)
+      AirmanCertificationModelFactory.buildList(3, 1),
+      [new AirmanScheduleModel(1, schedule1, moment(), null)]
     );
 
     const airmanRipItems = AirmanRipItemFactory.buildList(airman.id, 10);
@@ -34,8 +41,15 @@ describe('AirmanProfileManagerStore', () => {
       deleteSkill: jest.fn(),
     };
 
+    const schedules = [
+      schedule1,
+      new ScheduleModel(2, ScheduleType.BackHalf),
+      schedule3,
+      new ScheduleModel(4, ScheduleType.NoSchedule)
+    ]
+
     subject = new AirmanProfileManagerStore(repoMock);
-    subject.hydrate(airman, sites, airmanRipItems);
+    subject.hydrate(airman, sites, airmanRipItems, schedules);
   });
 
   it('should pass site options', () => {
@@ -49,6 +63,10 @@ describe('AirmanProfileManagerStore', () => {
   it('should pass flight options', () => {
     expect(subject.flightOptions.length).toBe(3);
   });
+
+  it('should return schedule options', () => {
+    expect(subject.scheduleOptions.length).toBe(4);
+  })
 
   it('should give expired ripItem count', () => {
     expect(subject.expiredItemCount).toBe(4);
@@ -96,5 +114,19 @@ describe('AirmanProfileManagerStore', () => {
   it('should call the airman repository on save', async () => {
     await subject.save();
     expect(repoMock.saveAirman).toHaveBeenCalled();
+  });
+
+  it('should set the new schedule upon selection', () => {
+    subject.setState('scheduleId', 3);
+    expect(subject.scheduleId).toBe(3);
+  });
+
+  it('should call the airman repository on save with a new schedule', async () => {
+    subject.setState('scheduleId', 3);
+    await subject.save();
+    const airman = (repoMock.saveAirman as Mock).mock.calls[0][0] as AirmanModel;
+    const newAirmanSchedule = airman.schedules.find(as => as.schedule.id === 3)!;
+    expect(newAirmanSchedule.endDate).toBeNull();
+    expect(newAirmanSchedule.id).toBeNull();
   });
 });

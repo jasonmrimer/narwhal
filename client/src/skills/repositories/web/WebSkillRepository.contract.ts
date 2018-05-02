@@ -2,7 +2,7 @@ import { SkillRepositoryContract } from '../SkillRepositoryContract';
 import { WebSkillRepository } from './WebSkillRepository';
 import { HTTPClient } from '../../../utils/HTTPClient';
 
-describe('WebSkillRepository', () => {
+describe('WebScheduleRepository', () => {
   const client = new HTTPClient(process.env.REACT_APP_HOST || 'http://localhost:8080');
   SkillRepositoryContract(new WebSkillRepository(client));
 });

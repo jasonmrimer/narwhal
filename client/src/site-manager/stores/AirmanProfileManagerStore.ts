@@ -4,20 +4,34 @@ import { SiteModel } from '../../site/models/SiteModel';
 import { AirmanRipItemModel } from '../../airman/models/AirmanRipItemModel';
 import { FilterOption } from '../../widgets/models/FilterOptionModel';
 import { AirmanRepository } from '../../airman/repositories/AirmanRepository';
+import { ScheduleModel, ScheduleType } from '../../schedule/models/ScheduleModel';
+import { AirmanScheduleModel } from '../../airman/models/AirmanScheduleModel';
+import * as moment from 'moment';
 
 export class AirmanProfileManagerStore {
   @observable _airman: AirmanModel = AirmanModel.empty();
   @observable _sites: SiteModel[] = [];
   @observable _ripItems: AirmanRipItemModel[] = [];
+  @observable _schedules: ScheduleModel[] = [];
+  @observable _scheduleId: number;
   @observable _loading: boolean = false;
 
   constructor(private airmanRepository: AirmanRepository) {
   }
 
-  hydrate(airman: AirmanModel, sites: SiteModel[], ripItems: AirmanRipItemModel[]) {
+  hydrate(
+    airman: AirmanModel,
+    sites: SiteModel[],
+    ripItems: AirmanRipItemModel[],
+    schedules: ScheduleModel[]
+  ) {
     this._airman = airman;
     this._sites = sites;
     this._ripItems = ripItems;
+    this._schedules = schedules;
+    this._scheduleId = airman.currentScheduleId ?
+      airman.currentScheduleId :
+      this._schedules.find(s => s.type === ScheduleType.NoSchedule)!.id;
   }
 
   @computed
@@ -33,6 +47,11 @@ export class AirmanProfileManagerStore {
   @computed
   get ripItems() {
     return this._ripItems;
+  }
+
+  @computed
+  get scheduleId() {
+    return this._scheduleId;
   }
 
   @computed
@@ -72,6 +91,13 @@ export class AirmanProfileManagerStore {
   }
 
   @computed
+  get scheduleOptions() {
+    return this._schedules.map(schedule => {
+      return {value: schedule.id, label: schedule.type};
+    });
+  }
+
+  @computed
   get expiredItemCount(): number {
     return this._ripItems
       .filter(item => item.isExpired)
@@ -96,13 +122,16 @@ export class AirmanProfileManagerStore {
   }
 
   @action.bound
-  setState(key: keyof AirmanModel, value: any) {
+  setState(key: keyof AirmanModel | 'scheduleId', value: any) {
     switch (key) {
       case 'siteId':
         this.setSquadronAndFlight(Number(value));
         break;
       case 'squadronId':
         this.setFlight(Number(value));
+        break;
+      case 'scheduleId':
+        this._scheduleId = Number(value);
         break;
       default:
         break;
@@ -114,8 +143,20 @@ export class AirmanProfileManagerStore {
   @action.bound
   async save() {
     this._loading = true;
-    this._airman = await this.airmanRepository.saveAirman(this.airman);
+
+    if (this._scheduleId) {
+      this.addSchedule();
+    }
+
+    this._airman = await this.airmanRepository.saveAirman(this._airman);
     this._loading = false;
+  }
+
+  private addSchedule() {
+    const schedule = this._schedules.find(s => s.id === this._scheduleId);
+    if (schedule) {
+      this._airman.schedules.push(new AirmanScheduleModel(this._airman.id, schedule, moment()));
+    }
   }
 
   private setSquadronAndFlight(siteId: number) {

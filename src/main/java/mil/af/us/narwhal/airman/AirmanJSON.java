@@ -26,5 +26,7 @@ public class AirmanJSON {
 
   private List<AirmanCertification> certifications = new ArrayList<>();
 
+  private List<AirmanSchedule> schedules = new ArrayList<>();
+
   private List<Event> events = new ArrayList<>();
 }

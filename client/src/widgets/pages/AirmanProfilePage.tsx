@@ -18,12 +18,13 @@ export class AirmanProfilePage extends React.Component<Props> {
     this.props.airmanProfileManagerStore!.setLoading(true);
 
     const {airmanId} = this.props;
-    const [airman, sites, ripItems] = await Promise.all([
+    const [airman, sites, ripItems, schedules] = await Promise.all([
       WebRepositories.airmanRepository.findOne(airmanId),
       WebRepositories.siteRepository.findAll(),
-      WebRepositories.ripItemRepository.findBySelectedAirman(airmanId)
+      WebRepositories.ripItemRepository.findBySelectedAirman(airmanId),
+      WebRepositories.scheduleRepository.findAll()
     ]);
-    this.props.airmanProfileManagerStore!.hydrate(airman, sites, ripItems);
+    this.props.airmanProfileManagerStore!.hydrate(airman, sites, ripItems, schedules);
 
     this.props.airmanProfileManagerStore!.setLoading(false);
   }

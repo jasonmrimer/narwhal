@@ -13,6 +13,7 @@ import { AirmanProfileManagerStore } from './stores/AirmanProfileManagerStore';
 import { eventStub } from '../utils/testUtils';
 import { StyledForm } from '../widgets/Form';
 import { DoubleRepositories } from '../utils/Repositories';
+import { ScheduleModel, ScheduleType } from '../schedule/models/ScheduleModel';
 
 describe('AirmanProfileManager', () => {
   let airman: AirmanModel;
@@ -31,9 +32,16 @@ describe('AirmanProfileManager', () => {
 
     const airmanRipItems = AirmanRipItemFactory.buildList(airman.id, 10);
 
+    const schedules = [
+      new ScheduleModel(1, ScheduleType.MondayToFriday),
+      new ScheduleModel(2, ScheduleType.BackHalf),
+      new ScheduleModel(3, ScheduleType.FrontHalf),
+      new ScheduleModel(4, ScheduleType.NoSchedule),
+    ]
+
     store = new AirmanProfileManagerStore(DoubleRepositories.airmanRepository);
     store.save = jest.fn();
-    store.hydrate(airman, SiteModelFactory.buildList(3, 3), airmanRipItems);
+    store.hydrate(airman, SiteModelFactory.buildList(3, 3), airmanRipItems, schedules);
 
     subject = shallow(
       <AirmanProfileManager airmanProfileManagerStore={store}/>
@@ -49,10 +57,11 @@ describe('AirmanProfileManager', () => {
     expect(subject.find('#airman-first-name').prop('value')).toBe(airman.firstName);
   });
 
-  it('should render the member orginization about an Airman', () => {
+  it('should render the member organization about an Airman', () => {
     expect(subject.find('#airman-site').props().value).toBe(airman.siteId);
     expect(subject.find('#airman-squadron').props().value).toBe(airman.squadronId);
     expect(subject.find('#airman-flight').props().value).toBe(airman.flightId);
+    expect(subject.find('#airman-schedule').props().value).toBe(4);
     expect(subject.find('#airman-shift').props().value).toBe(airman.shift);
   });
 
@@ -68,6 +77,7 @@ describe('AirmanProfileManager', () => {
     changeValue(subject, 'siteId', 2);
     changeValue(subject, 'squadronId', 2);
     changeValue(subject, 'flightId', 2);
+    changeValue(subject, 'scheduleId', 2);
     changeValue(subject, 'shift', ShiftType.Night);
 
     subject.instance().forceUpdate();
@@ -78,6 +88,7 @@ describe('AirmanProfileManager', () => {
     expectPropToBe(subject, 'siteId', 2);
     expectPropToBe(subject, 'squadronId', 2);
     expectPropToBe(subject, 'flightId', 2);
+    expectPropToBe(subject, 'scheduleId', 2);
     expectPropToBe(subject, 'shift', ShiftType.Night);
   });
 
@@ -87,10 +98,10 @@ describe('AirmanProfileManager', () => {
   });
 });
 
-function changeValue(wrapper: ShallowWrapper, name: string, value: any,  event: string = 'change') {
+function changeValue(wrapper: ShallowWrapper, name: string, value: any, event: string = 'change') {
   wrapper.findWhere(x => x.prop('name') === name).first().simulate(event, {target: {name, value}});
 }
 
-function expectPropToBe(wrapper: ShallowWrapper, name: string,  value: any, prop: string = 'value') {
+function expectPropToBe(wrapper: ShallowWrapper, name: string, value: any, prop: string = 'value') {
   expect(wrapper.findWhere(x => x.prop('name') === name).prop(prop)).toBe(value);
 }

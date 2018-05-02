@@ -1,7 +1,6 @@
 import { action, computed, observable } from 'mobx';
 import { TimeService } from '../../tracker/services/TimeService';
 import { Moment } from 'moment';
-import { AirmanModel } from '../../airman/models/AirmanModel';
 
 export class PlannerStore {
   private timeService: TimeService;
@@ -43,36 +42,17 @@ export class PlannerStore {
   }
 
   @action.bound
-  async navigateToWeek(date: Moment) {
+  navigateToWeek(date: Moment) {
     this._sidePanelWeek = this.timeService.navigateToWeek(date);
   }
 
   @action.bound
-  async incrementSidePanelWeek() {
+  incrementSidePanelWeek() {
     this._sidePanelWeek = this.timeService.incrementWeek(this._sidePanelWeek);
   }
 
   @action.bound
-  async decrementSidePanelWeek() {
+  decrementSidePanelWeek() {
     this._sidePanelWeek = this.timeService.decrementWeek(this._sidePanelWeek);
-  }
-
-  isAvailableToWork(airman: AirmanModel, day: Moment) {
-    const schedulesBeforeDay = airman.schedules.filter(schedule => {
-      return schedule.startDate.isSameOrBefore(day, 'day');
-    });
-
-    if (schedulesBeforeDay) {
-      const currentSchedule = schedulesBeforeDay.find(schedule => schedule.endDate === null);
-      if (currentSchedule) {
-        return currentSchedule.isScheduledWorkDay(day);
-      } else {
-        const pastSchedule = schedulesBeforeDay.find(schedule => day.isBetween(schedule.startDate, schedule.endDate!));
-        if (pastSchedule) {
-          return pastSchedule.isScheduledWorkDay(day);
-        }
-      }
-    }
-    return true;
   }
 }

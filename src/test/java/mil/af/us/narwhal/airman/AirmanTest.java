@@ -1,5 +1,6 @@
 package mil.af.us.narwhal.airman;
 
+import mil.af.us.narwhal.schedule.Schedule;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.skill.Certification;
 import mil.af.us.narwhal.skill.Qualification;
@@ -11,6 +12,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import java.time.Instant;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.in;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AirmanTest {
@@ -40,5 +42,23 @@ public class AirmanTest {
 
     assertThat(airman.addCertification(airmanCertification)).isFalse();
     assertThat(airman.getCertifications().size()).isEqualTo(1);
+  }
+
+  @Test
+  public void testAddSchedule() {
+    final Schedule schedule = new Schedule();
+    final Airman airman = new Airman();
+
+    airman.addSchedule(new AirmanSchedule(schedule, Instant.EPOCH));
+    assertThat(airman.getSchedules().size()).isEqualTo(1);
+
+    airman.addSchedule(new AirmanSchedule(schedule, Instant.now()));
+    assertThat(airman.getSchedules().size()).isEqualTo(2);
+
+    long count = airman.getSchedules().stream()
+      .filter(airmanSchedule -> airmanSchedule.getEndDate() == null)
+      .count();
+
+    assertThat(count).isEqualTo(1L);
   }
 }

@@ -58,7 +58,7 @@ public class Airman {
   @JsonIgnore
   private List<AirmanRipItem> ripItems = new ArrayList<>();
 
-  @OneToMany(mappedBy = "airmanId", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+  @OneToMany(mappedBy = "airman", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
   @JsonManagedReference
   private List<AirmanSchedule> schedules = new ArrayList<>();
 
@@ -146,5 +146,15 @@ public class Airman {
 
   public void deleteCertification(Long id) {
     certifications.removeIf(certification -> certification.getId().equals(id));
+  }
+
+  public void addSchedule(AirmanSchedule schedule) {
+    this.schedules.stream()
+      .filter(airmanSchedule -> airmanSchedule.getEndDate() == null)
+      .findFirst()
+      .ifPresent(oldSchedule -> oldSchedule.setEndDate(schedule.getStartDate()));
+
+    schedule.setAirman(this);
+    this.schedules.add(schedule);
   }
 }
