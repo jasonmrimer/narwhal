@@ -39,12 +39,12 @@ public class AirmanController {
     return airmanService.getAirmenBySite(siteId);
   }
 
-  @PostMapping(path = "/new")
+  @PostMapping
   public Airman create(@RequestBody AirmanJSON airmanJSON) {
     return airmanService.createAirman(airmanJSON);
   }
 
-  @PostMapping
+  @PutMapping
   public Airman update(@RequestBody AirmanJSON airmanJSON) {
     return airmanService.updateAirman(airmanJSON);
   }

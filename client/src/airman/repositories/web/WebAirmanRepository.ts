@@ -22,8 +22,9 @@ export class WebAirmanRepository implements AirmanRepository {
   }
 
   async saveAirman(airman: AirmanModel): Promise<AirmanModel> {
-    const path = airman.id > -1 ? '/api/airmen' : '/api/airmen/new';
-    const json = await this.client.postJSON(path, JSON.stringify(airman));
+    const json = airman.id > -1 ?
+      await this.client.putJSON('/api/airmen', JSON.stringify(airman)) :
+      await this.client.postJSON('/api/airmen', JSON.stringify(airman));
     return this.serializer.deserialize(json);
   }
 

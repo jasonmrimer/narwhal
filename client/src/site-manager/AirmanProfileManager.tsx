@@ -24,6 +24,7 @@ export class AirmanProfileManager extends React.Component<Props> {
   render() {
     const {className, airmanProfileManagerStore} = this.props;
     const {airman, setState} = airmanProfileManagerStore!;
+    const {firstName, lastName} = airman;
     return (
       <div className={className}>
         <StyledForm onSubmit={this.onSubmit}>
@@ -36,7 +37,9 @@ export class AirmanProfileManager extends React.Component<Props> {
           <div className="content">
 
             <div className="airman-header">
-              <h1>{`${airman.lastName}, ${airman.firstName}`}</h1>
+              <h1>
+                {`${lastName}${lastName.length > 0 && firstName.length > 0 ? ',' : ''} ${firstName}`}
+              </h1>
               <br/>
             </div>
 
@@ -46,7 +49,7 @@ export class AirmanProfileManager extends React.Component<Props> {
                 <label htmlFor="airman-last-name">LAST NAME</label>
                 <StyledTextInput
                   onChange={(e) => setState(e.target.name, e.target.value)}
-                  value={airman.lastName}
+                  value={lastName}
                   name="lastName"
                   id="airman-last-name"
                 />
@@ -55,7 +58,7 @@ export class AirmanProfileManager extends React.Component<Props> {
                 <label htmlFor="airman-first-name">FIRST NAME</label>
                 <StyledTextInput
                   onChange={(e) => setState(e.target.name, e.target.value)}
-                  value={airman.firstName}
+                  value={firstName}
                   name="firstName"
                   id="airman-first-name"
                 />
@@ -80,6 +83,7 @@ export class AirmanProfileManager extends React.Component<Props> {
                   onChange={(e) => setState(e.target.name, Number(e.target.value))}
                   name="squadronId"
                   value={airman.squadronId}
+                  disabled={airmanProfileManagerStore!.squadronOptions.length === 0}
                   options={airmanProfileManagerStore!.squadronOptions}
                   id="airman-squadron"
                 />
@@ -90,6 +94,7 @@ export class AirmanProfileManager extends React.Component<Props> {
                   onChange={(e) => setState(e.target.name, Number(e.target.value))}
                   name="flightId"
                   value={airman.flightId}
+                  disabled={airmanProfileManagerStore!.flightOptions.length === 0}
                   options={airmanProfileManagerStore!.flightOptions}
                   id="airman-flight"
                 />

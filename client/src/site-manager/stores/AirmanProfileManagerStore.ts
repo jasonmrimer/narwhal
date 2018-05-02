@@ -56,9 +56,12 @@ export class AirmanProfileManagerStore {
 
   @computed
   get siteOptions(): FilterOption[] {
-    return this._sites.map(site => {
+    const siteOptions = this._airman.siteId === -1 ?
+      [{value: -1, label: 'No Site Selected'}] :
+      [];
+    return siteOptions.concat(this._sites.map(site => {
       return {value: site.id, label: site.fullName};
-    });
+    }));
   }
 
   @computed
@@ -162,11 +165,14 @@ export class AirmanProfileManagerStore {
   private setSquadronAndFlight(siteId: number) {
     const site = this.getSite(siteId);
     if (!site || (site && site.squadrons.length < 1)) {
+      this._airman.squadronId = -1;
+      this._airman.flightId = -1;
       return;
     }
 
     const squadron = site.squadrons[0];
     if (squadron.flights.length < 1) {
+      this._airman.flightId = -1;
       return;
     }
 
@@ -177,6 +183,7 @@ export class AirmanProfileManagerStore {
   private setFlight(squadronId: number) {
     const squadron = this.getSquadron(squadronId);
     if (!squadron || (squadron && squadron.flights.length < 1)) {
+      this._airman.flightId = -1;
       return;
     }
 
