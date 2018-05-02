@@ -72,11 +72,11 @@ export class AirmanModel {
     if (schedulesBeforeDay) {
       const currentSchedule = schedulesBeforeDay.find(schedule => schedule.endDate === null);
       if (currentSchedule) {
-        return currentSchedule.isScheduledWorkDay(day);
+        return currentSchedule.schedule.isScheduledWorkDay(day);
       } else {
         const pastSchedule = schedulesBeforeDay.find(schedule => day.isBetween(schedule.startDate, schedule.endDate!));
         if (pastSchedule) {
-          return pastSchedule.isScheduledWorkDay(day);
+          return pastSchedule.schedule.isScheduledWorkDay(day);
         }
       }
     }
