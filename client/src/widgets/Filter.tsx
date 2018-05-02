@@ -79,7 +79,7 @@ export class Filter extends React.Component<Props, State> {
 }
 
 export const TopLevelFilter = styled(Filter)`
-  min-width: 20%;
+  min-width: 28%;
   display: inline-block;
   position: relative;
   z-index: 9;

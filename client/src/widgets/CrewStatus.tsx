@@ -19,7 +19,6 @@ export const CrewStatus = (props: Props) => {
 
 export const StyledCrewStatus = styled(CrewStatus)`
   font-weight: 500;
-  width: fit-content;
   align-self: center;
   padding: .3125rem;
   background: ${props => props.theme.fontColor};

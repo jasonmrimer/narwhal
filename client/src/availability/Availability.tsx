@@ -242,17 +242,6 @@ export const StyledAvailability = inject(
     height: 0.75rem;
     align-items: center;
     display: flex;
-    
-    :hover .add-event-on-date {
-      display: inline;
-      margin-left: 0.5rem;
-      margin-top: 0;
-      padding: 0;
-      font-size: inherit;
-      font-weight: inherit;
-      color: ${props => props.theme.fontColor};
-      cursor: pointer;
-    }
   }
 
   .event-name {
@@ -275,6 +264,13 @@ export const StyledAvailability = inject(
   }
   
   .add-event-on-date {
-    display: none;
+      display: inline;
+      margin-left: 0.75rem;
+      margin-top: 0;
+      padding: 0;
+      font-size: inherit;
+      font-weight: inherit;
+      color: ${props => props.theme.fontColor};
+      cursor: pointer;
   }
 `);

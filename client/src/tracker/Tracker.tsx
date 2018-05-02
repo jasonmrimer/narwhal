@@ -83,7 +83,7 @@ export const StyledTracker =
     }
   
     .filters {
-      width: 50%;
+      width: 35%;
       display: flex;
       align-items: flex-end;
       justify-content: space-between;

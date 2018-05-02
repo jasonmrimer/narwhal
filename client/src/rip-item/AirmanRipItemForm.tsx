@@ -47,7 +47,7 @@ export class AirmanRipItems extends React.Component<Props> {
           onSubmit={this.onSubmit}
           setLoading={this.props.trackerStore!.setLoading}
       >
-        <h3>RIP TASKS</h3>
+        <h3>RIP Task Expiration Dates</h3>
         {ripItems.map((item: AirmanRipItemModel, index: number) => {
             return (
               <StyledFormRow key={index} direction="column">
@@ -81,7 +81,8 @@ export class AirmanRipItems extends React.Component<Props> {
 export const StyledRipItems = inject('airmanRipItemFormStore', 'currencyStore', 'trackerStore')(styled(AirmanRipItems)`
   h3 {
     font-weight: 300;
-    font-size: 1rem;
+    font-size: 1.15rem;
+    color: ${props => props.theme.fontColor};
     margin: 0;
   }
 

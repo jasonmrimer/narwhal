@@ -83,11 +83,6 @@ export const StyledTopBar = inject('profileStore')(styled(TopBar)`
     align-items: center;
   }
   
-  img {
-    height: 3rem;
-    width: 3rem;
-  }
-  
   .navigation-tabs {
     display: flex;
     flex-direction: row;
@@ -119,7 +114,7 @@ export const StyledTopBar = inject('profileStore')(styled(TopBar)`
   
   span:last-child {
     font-size: 1rem;
-    margin-right: 1.5rem;
+    margin-left: 1rem;
   }
   
   .tab {

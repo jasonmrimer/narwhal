@@ -89,7 +89,7 @@ export const StyledLocationFilters = inject('locationFilterStore')(styled(Locati
   }
 
   #site-filter-container {
-    min-width: 20%;
+    min-width: 28%;
     display: inline-block;
     position: relative;
     z-index: 9;

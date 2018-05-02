@@ -55,12 +55,13 @@ export const StyledAvailabilityTile = styled(AvailabilityTile)`
   }
   
   .mission-list {
- 
-  text-decoration: none;
-  color: ${props => props.theme.fontColor};
-  
+    text-decoration: none;
+    color: ${props => props.theme.fontColor};
+    margin-bottom: 1px;
+    
     &:hover {
-      background: ${props => props.theme.lightest};
+      border-bottom: 1px solid white;
+      margin-bottom: 0;
     }
   }
 `;

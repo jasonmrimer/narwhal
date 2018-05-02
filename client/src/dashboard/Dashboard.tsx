@@ -82,6 +82,10 @@ export const StyledDashboard = styled(Dashboard)`
   
   .filters {
     display: flex;
+    
+    & > div {
+      min-width: 20%;
+    }
   }
   
   .platform-filter {

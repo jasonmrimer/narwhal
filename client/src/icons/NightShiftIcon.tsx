@@ -5,7 +5,7 @@ export const NightShiftIcon = () => {
     <svg
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
-      width="13"
+      width="16"
       height="16"
       viewBox="0 0 16 16"
     >
