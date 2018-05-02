@@ -4,17 +4,18 @@ import { Routes } from './Routes';
 import { shallow } from 'enzyme';
 
 describe('Routes', () => {
-  it('should support 4 routes', async () => {
+  it('should support all routes', async () => {
 
     const subject = shallow(<Routes />);
 
-    expect(subject.find(Switch).children().length).toBe(7);
+    expect(subject.find(Switch).children().length).toBe(8);
     expect(subject.find(Route).at(0).prop('path')).toBe('/');
     expect(subject.find(Route).at(1).prop('path')).toBe('/upload');
     expect(subject.find(Route).at(2).prop('path')).toBe('/dashboard');
     expect(subject.find(Route).at(3).prop('path')).toBe('/dashboard/crew/:id');
     expect(subject.find(Route).at(4).prop('path')).toBe('/flights');
-    expect(subject.find(Route).at(5).prop('path')).toBe('/flights/:airmanId');
-    expect(subject.find(Route).at(6).prop('path')).toBe('/admin');
+    expect(subject.find(Route).at(5).prop('path')).toBe('/flights/new');
+    expect(subject.find(Route).at(6).prop('path')).toBe('/flights/:airmanId');
+    expect(subject.find(Route).at(7).prop('path')).toBe('/admin');
   });
 });

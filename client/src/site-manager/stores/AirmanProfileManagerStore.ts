@@ -22,12 +22,12 @@ export class AirmanProfileManagerStore {
   hydrate(
     airman: AirmanModel,
     sites: SiteModel[],
-    ripItems: AirmanRipItemModel[],
-    schedules: ScheduleModel[]
+    schedules: ScheduleModel[],
+    ripItems?: AirmanRipItemModel[],
   ) {
     this._airman = airman;
     this._sites = sites;
-    this._ripItems = ripItems;
+    this._ripItems = ripItems ? ripItems : this._ripItems;
     this._schedules = schedules;
     this._scheduleId = airman.currentScheduleId ?
       airman.currentScheduleId :

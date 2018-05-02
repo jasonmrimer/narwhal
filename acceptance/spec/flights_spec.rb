@@ -13,11 +13,15 @@ describe 'Flights page', type: :feature do
   end
 
   it 'shows an Airman profile details' do
-    flights_page.assert_shows_airman_profile
+    flights_page.assert_shows_airman
   end
 
   it 'can edit an Airman profile' do
-    flights_page.assert_edit_airman_profile
+    flights_page.assert_edit_airman
+  end
+
+  it 'creat a new airman profile' do
+    flights_page.assert_create_airman
   end
 
 end

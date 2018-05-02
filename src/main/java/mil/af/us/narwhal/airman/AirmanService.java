@@ -42,4 +42,13 @@ public class AirmanService {
 
     return airmanRepository.save(airman);
   }
+
+  public Airman createAirman(AirmanJSON airmanJSON) {
+    Airman airman = new Airman();
+    airman.setShift(airmanJSON.getShift());
+    airman.setLastName(airmanJSON.getLastName());
+    airman.setFirstName(airmanJSON.getFirstName());
+    airman.setFlight(flightRepository.findOne(airmanJSON.getFlightId()));
+    return airmanRepository.save(airman);
+  }
 }

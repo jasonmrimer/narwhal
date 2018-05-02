@@ -5,10 +5,13 @@ import { WebRepositories } from '../../utils/Repositories';
 import { AirmanProfileManagerStore } from '../../site-manager/stores/AirmanProfileManagerStore';
 import { StyledLoadingOverlay } from '../LoadingOverlay';
 import { observer, inject } from 'mobx-react';
+import { AirmanModel } from '../../airman/models/AirmanModel';
+import { History } from 'history';
 
 interface Props {
   airmanProfileManagerStore?: AirmanProfileManagerStore;
-  airmanId: number;
+  history: History;
+  airmanId?: number;
 }
 
 @inject('airmanProfileManagerStore')
@@ -16,24 +19,31 @@ interface Props {
 export class AirmanProfilePage extends React.Component<Props> {
   async componentDidMount() {
     this.props.airmanProfileManagerStore!.setLoading(true);
-
-    const {airmanId} = this.props;
-    const [airman, sites, ripItems, schedules] = await Promise.all([
-      WebRepositories.airmanRepository.findOne(airmanId),
+    const [sites, schedules] = await Promise.all([
       WebRepositories.siteRepository.findAll(),
-      WebRepositories.ripItemRepository.findBySelectedAirman(airmanId),
       WebRepositories.scheduleRepository.findAll()
     ]);
-    this.props.airmanProfileManagerStore!.hydrate(airman, sites, ripItems, schedules);
 
-    this.props.airmanProfileManagerStore!.setLoading(false);
+    const {airmanId} = this.props;
+    if (airmanId) {
+      const [airman, ripItems] = await Promise.all([
+        WebRepositories.airmanRepository.findOne(airmanId),
+        WebRepositories.ripItemRepository.findBySelectedAirman(airmanId),
+      ]);
+      this.props.airmanProfileManagerStore!.hydrate(airman, sites, schedules, ripItems);
+
+      this.props.airmanProfileManagerStore!.setLoading(false);
+    } else {
+      this.props.airmanProfileManagerStore!.hydrate(AirmanModel.empty(), sites, schedules);
+      this.props.airmanProfileManagerStore!.setLoading(false);
+    }
   }
 
   render() {
     return (
       <React.Fragment>
         <StyledTopBar/>
-        <StyledAirmanProfileManager/>
+        <StyledAirmanProfileManager history={this.props.history}/>
         {
           this.props.airmanProfileManagerStore!.loading &&
           <StyledLoadingOverlay/>

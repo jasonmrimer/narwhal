@@ -46,10 +46,10 @@ describe('AirmanProfileManagerStore', () => {
       new ScheduleModel(2, ScheduleType.BackHalf),
       schedule3,
       new ScheduleModel(4, ScheduleType.NoSchedule)
-    ]
+    ];
 
     subject = new AirmanProfileManagerStore(repoMock);
-    subject.hydrate(airman, sites, airmanRipItems, schedules);
+    subject.hydrate(airman, sites, schedules, airmanRipItems);
   });
 
   it('should pass site options', () => {
@@ -66,7 +66,7 @@ describe('AirmanProfileManagerStore', () => {
 
   it('should return schedule options', () => {
     expect(subject.scheduleOptions.length).toBe(4);
-  })
+  });
 
   it('should give expired ripItem count', () => {
     expect(subject.expiredItemCount).toBe(4);

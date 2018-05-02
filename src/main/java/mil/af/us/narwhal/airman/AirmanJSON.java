@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import mil.af.us.narwhal.event.Event;
+import mil.af.us.narwhal.schedule.Schedule;
 
 import java.util.ArrayList;
 import java.util.List;

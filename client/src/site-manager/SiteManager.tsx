@@ -6,6 +6,7 @@ import { CellMeasurer, CellMeasurerCache, List, ListRowProps } from 'react-virtu
 import { BorderedNotification } from '../widgets/Notification';
 import { AirmanModel } from '../airman/models/AirmanModel';
 import { Link } from 'react-router-dom';
+import { OperatorIcon } from '../icons/OperatorIcon';
 
 interface Props {
   siteManagerStore?: SiteManagerStore;
@@ -60,7 +61,14 @@ export class SiteManager extends React.Component<Props> {
     cache.clearAll();
     return (
       <div className={this.props.className}>
-        <h2>{this.props.siteManagerStore!.siteName} Personnel</h2>
+        <div className="header">
+          <h2>{this.props.siteManagerStore!.siteName} Personnel</h2>
+          <Link to="/flights/new">
+            <OperatorIcon />
+            <span>New Operator</span>
+          </Link>
+        </div>
+
         <div className="airmen-table">
           <div className="airmen-header">
             <span>NAME</span>
@@ -99,12 +107,6 @@ export class SiteManager extends React.Component<Props> {
 }
 
 export const StyledRow = styled(Row)`
-  a {
-    text-decoration: none;
-    color: ${props => props.theme.fontColor};
-  }
-  
-
   
   .airman-row {
     padding: 1rem;
@@ -134,8 +136,24 @@ export const StyledSiteManager = inject('siteManagerStore')(styled(SiteManager)`
       padding-top: 0.5rem;
     }
     
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      
+      a {
+        width: 15%;
+        display: flex;
+        justify-content: space-between;
+      }
+    }
+    
+    a {
+      text-decoration: none;
+      color: ${props => props.theme.fontColor};
+    }
+    
     .airmen-table {
-      margin-top: 2rem;
       border: 1px solid ${props => props.theme.graySteel};
     }
     

@@ -22,9 +22,10 @@ export class Routes extends React.Component {
           render={({match}) => <CrewPage crewId={match.params.id}/>}
         />
         <Route exact={true} path="/flights" render={() => <FlightsPage />}/>
+        <Route path="/flights/new" render={({history}) => <AirmanProfilePage history={history}/>}/>
         <Route
           path="/flights/:airmanId"
-          render={({match}) => <AirmanProfilePage airmanId={match.params.airmanId}/>}
+          render={({match, history}) => <AirmanProfilePage airmanId={match.params.airmanId} history={history}/>}
         />
         <Route exact={true} path="/admin" render={() => <AdminPage/>}/>
       </Switch>

@@ -11,13 +11,13 @@ class FlightsPage
     expect(page).to have_css('.airman-name', minimum: 1)
   end
 
-  def assert_shows_airman_profile
+  def assert_shows_airman
     click_on_airman('Angie, Patton')
     expect(page).to have_content('94 IS')
     expect(page).to have_content('DMS Maryland')
   end
 
-  def assert_edit_airman_profile
+  def assert_edit_airman
     click_on_airman('Angie, Patton')
 
     fill_in 'lastName', with: 'Bob'
@@ -55,11 +55,22 @@ class FlightsPage
     expect(find('#airman-shift').value).to eq 'Night'
   end
 
-private
+  def assert_create_airman
+    page.find('span', text: 'New Operator').click
+    fill_in 'lastName', with: 'Plissken'
+    fill_in 'firstName', with: 'Snake'
+    find('#airman-site').find(:option, text: 'DMS Maryland').select_option
 
-def click_on_airman(name)
-  page.find('span', text: name).click
-  expect(page).to have_content('Personal Information')
-end
+    find('input[type="submit"]').click
+    visit '/flights'
+    expect(page).to have_content 'Plissken, Snake'
+  end
+
+  private
+
+  def click_on_airman(name)
+    page.find('span', text: name).click
+    expect(page).to have_content('Personal Information')
+  end
 
 end

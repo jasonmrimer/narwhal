@@ -44,8 +44,17 @@ describe('SiteManager', () => {
     expect(siteManagerStore.hydrate).toHaveBeenCalled();
   });
 
-  it('should render a link to the airmans profile', () => {
+  it('should render a link to add a new airman', () => {
     const link = subject.find(Link).at(0);
+    expect(link.prop('to')).toBe('/flights/new');
+  });
+
+  it('should render a link to the airmans profile', () => {
+    const link = subject.find(Link).at(1);
     expect(link.prop('to')).toBe(`/flights/${siteManagerStore.airmen[0].id}`);
+  });
+
+  it('should render an New Operator link', () => {
+    expect(subject.find('.header').find(Link).prop('to')).toBe('/flights/new');
   });
 });

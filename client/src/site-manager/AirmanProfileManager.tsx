@@ -11,10 +11,12 @@ import { StyledNavigationBackButton } from '../widgets/NavigationBackButton';
 import { StyledSubmitButton } from '../widgets/SubmitButton';
 import { StyledForm } from '../widgets/Form';
 import { inject } from 'mobx-react/custom';
+import { History } from 'history';
 
 interface Props {
   airmanProfileManagerStore?: AirmanProfileManagerStore;
   className?: string;
+  history: History;
 }
 
 @observer
@@ -131,7 +133,8 @@ export class AirmanProfileManager extends React.Component<Props> {
 
   private onSubmit = async (e: any) => {
     e.preventDefault();
-    this.props.airmanProfileManagerStore!.save();
+    await this.props.airmanProfileManagerStore!.save();
+    this.props.history!.push(`/flights/${this.props.airmanProfileManagerStore!.airman.id}`);
   }
 
   private renderQualifications = () => {

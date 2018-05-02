@@ -22,6 +22,7 @@ import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static java.util.Arrays.asList;
+import static java.util.Collections.emptyList;
 import static org.hamcrest.Matchers.equalTo;
 
 public class AirmanControllerTest extends BaseIntegrationTest {
@@ -204,6 +205,37 @@ public class AirmanControllerTest extends BaseIntegrationTest {
       .body("siteId", equalTo(flight3.getSquadron().getSite().getId().intValue()))
       .body("squadronId", equalTo(flight3.getSquadron().getId().intValue()))
       .body("schedules.size()", equalTo(2));
+    // @formatter:on
+  }
+
+  @Test
+  public void createTest() throws JsonProcessingException {
+    AirmanJSON airman = new AirmanJSON();
+    airman.setCertifications(emptyList());
+    airman.setFirstName("FirstFace");
+    airman.setLastName("LastFace");
+    airman.setFlightId(flight1.getId());
+    airman.setQualifications(emptyList());
+    airman.setSchedules(emptyList());
+    airman.setShift(ShiftType.Swing);
+
+    final String json = objectMapper.writeValueAsString(airman);
+
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .contentType("application/json")
+      .body(json)
+    .when()
+      .post(AirmanController.URI + "/new")
+    .then()
+      .statusCode(200)
+      .body("shift", equalTo("Swing"))
+      .body("firstName", equalTo("FirstFace"))
+      .body("lastName", equalTo("LastFace"));
     // @formatter:on
   }
 

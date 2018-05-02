@@ -10,7 +10,7 @@ import { StyledRipItemsTile } from '../rip-item/RipItemsTile';
 import { SiteModelFactory } from '../site/factories/SiteModelFactory';
 import { AirmanRipItemFactory } from '../rip-item/factories/AirmanRipItemFactory';
 import { AirmanProfileManagerStore } from './stores/AirmanProfileManagerStore';
-import { eventStub } from '../utils/testUtils';
+import { eventStub, historyMock } from '../utils/testUtils';
 import { StyledForm } from '../widgets/Form';
 import { DoubleRepositories } from '../utils/Repositories';
 import { ScheduleModel, ScheduleType } from '../schedule/models/ScheduleModel';
@@ -37,14 +37,14 @@ describe('AirmanProfileManager', () => {
       new ScheduleModel(2, ScheduleType.BackHalf),
       new ScheduleModel(3, ScheduleType.FrontHalf),
       new ScheduleModel(4, ScheduleType.NoSchedule),
-    ]
+    ];
 
     store = new AirmanProfileManagerStore(DoubleRepositories.airmanRepository);
     store.save = jest.fn();
-    store.hydrate(airman, SiteModelFactory.buildList(3, 3), airmanRipItems, schedules);
+    store.hydrate(airman, SiteModelFactory.buildList(3, 3), schedules, airmanRipItems);
 
     subject = shallow(
-      <AirmanProfileManager airmanProfileManagerStore={store}/>
+      <AirmanProfileManager airmanProfileManagerStore={store} history={historyMock}/>
     );
   });
 

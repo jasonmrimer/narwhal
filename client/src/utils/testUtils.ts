@@ -2,6 +2,7 @@ import { Filter } from '../widgets/Filter';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { ReactWrapper } from 'enzyme';
 import { DoubleRepositories } from './Repositories';
+import { Action, Location } from 'history';
 
 export async function makeFakeTrackerStore(shouldHydrateState: boolean = true) {
   // const siteId = 14;
@@ -49,3 +50,17 @@ export function clickButtonByName(wrapper: ReactWrapper, component: any, classNa
 export function findByClassName(wrapper: any, className: string) {
   return wrapper.findWhere((e: any) => e.prop('className') === className);
 }
+
+export const historyMock = {
+  length: 0,
+  action: ('PUSH' as Action),
+  location: ({state: ''} as Location),
+  push: jest.fn(),
+  replace: jest.fn(),
+  go: jest.fn(),
+  goBack: jest.fn(),
+  goForward: jest.fn(),
+  block: jest.fn(),
+  listen: jest.fn(),
+  createHref: jest.fn(),
+};

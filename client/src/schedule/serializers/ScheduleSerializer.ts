@@ -27,6 +27,6 @@ export class ScheduleSerializer implements Serializer<ScheduleModel> {
       thursday: item.thursday,
       friday: item.friday,
       saturday: item.saturday
-    }
+    };
   }
 }

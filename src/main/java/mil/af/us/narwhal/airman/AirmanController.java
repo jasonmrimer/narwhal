@@ -1,6 +1,5 @@
 package mil.af.us.narwhal.airman;
 
-import mil.af.us.narwhal.flight.FlightRepository;
 import mil.af.us.narwhal.skill.Certification;
 import mil.af.us.narwhal.skill.CertificationRepository;
 import mil.af.us.narwhal.skill.Qualification;
@@ -22,6 +21,7 @@ public class AirmanController {
   private CertificationRepository certificationRepository;
   private AirmanService airmanService;
 
+
   public AirmanController(AirmanRepository repository, QualificationRepository qualificationRepository, CertificationRepository certificationRepository, AirmanService airmanService) {
     this.repository = repository;
     this.qualificationRepository = qualificationRepository;
@@ -37,6 +37,11 @@ public class AirmanController {
   @GetMapping
   public List<Airman> index(@RequestParam Long siteId) {
     return airmanService.getAirmenBySite(siteId);
+  }
+
+  @PostMapping(path = "/new")
+  public Airman create(@RequestBody AirmanJSON airmanJSON) {
+    return airmanService.createAirman(airmanJSON);
   }
 
   @PostMapping
