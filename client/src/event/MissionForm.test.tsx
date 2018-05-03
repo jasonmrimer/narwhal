@@ -77,7 +77,7 @@ describe('MissionForm', () => {
   });
 
   it('renders with field validation', () => {
-    expect(wrapper.find(StyledFieldValidation).at(0).prop('name')).toBe('title');
+    expect(wrapper.find(StyledFieldValidation).at(0).prop('fieldName')).toBe('title');
   });
 
   it('populates the fields with values from MissionFormStore', () => {

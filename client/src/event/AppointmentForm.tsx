@@ -46,7 +46,7 @@ export class AppointmentForm extends React.Component<Props> {
     const {state, errors, hasModel} = appointmentFormStore!;
     return (
       <StyledForm onSubmit={this.handleSubmit} setLoading={trackerStore!.setLoading}>
-        <StyledFieldValidation name="title" errors={errors}>
+        <StyledFieldValidation fieldName="title" errors={errors}>
           <StyledFormRow>
             <StyledTextInput
               name="title"
@@ -66,8 +66,8 @@ export class AppointmentForm extends React.Component<Props> {
           />
         </StyledFormRow>
 
-        <StyledFieldValidation name="validDateRange" errors={errors}>
-          <StyledFieldValidation name="startTime" errors={errors}>
+        <StyledFieldValidation fieldName="validDateRange" errors={errors}>
+          <StyledFieldValidation fieldName="startTime" errors={errors}>
             <StyledFormRow>
               <StyledDatePicker
                 name="startDate"
@@ -82,7 +82,7 @@ export class AppointmentForm extends React.Component<Props> {
             </StyledFormRow>
           </StyledFieldValidation>
 
-          <StyledFieldValidation name="endTime" errors={errors}>
+          <StyledFieldValidation fieldName="endTime" errors={errors}>
             <StyledFormRow>
               <StyledDatePicker
                 name="endDate"

@@ -10,6 +10,8 @@ import { ScheduleModel, ScheduleType } from '../../schedule/models/ScheduleModel
 import Mock = jest.Mock;
 import { AirmanScheduleModel } from '../../airman/models/AirmanScheduleModel';
 import * as moment from 'moment';
+import { SiteModel, SiteType } from '../../site/models/SiteModel';
+import { SquadronModel } from '../../squadron/models/SquadronModel';
 
 describe('AirmanProfileManagerStore', () => {
   const schedule3 = new ScheduleModel(3, ScheduleType.FrontHalf);
@@ -20,6 +22,10 @@ describe('AirmanProfileManagerStore', () => {
 
   beforeEach(() => {
     const sites = SiteModelFactory.buildList(3, 3);
+    const squadron = new SquadronModel(8888, 'Squadron', []);
+
+    sites.push(new SiteModel(9998, 'NS', [], SiteType.DGSCoreSite, 'No Squad'));
+    sites.push(new SiteModel(9999, 'NF', [squadron], SiteType.DGSCoreSite, 'No Squad'));
 
     airman = AirmanModelFactory.build(
       1,
@@ -53,7 +59,7 @@ describe('AirmanProfileManagerStore', () => {
   });
 
   it('should pass site options', () => {
-    expect(subject.siteOptions.length).toBe(3);
+    expect(subject.siteOptions.length).toBe(5);
   });
 
   it('should pass squadron options', () => {
@@ -111,8 +117,21 @@ describe('AirmanProfileManagerStore', () => {
     expect(subject.airman.flightId).toBe(210);
   });
 
+  it('should assign a default squadron and flight when selecting a site', () => {
+    subject.setState('siteId', 9998);
+    expect(subject.airman.squadronId).toBe(-1);
+    expect(subject.airman.flightId).toBe(-1);
+
+  });
+
+  it('should assign a default flight when selecting a squadron', () => {
+    subject.setState('siteId', 9999);
+    subject.setState('squadronId', 8888);
+    expect(subject.airman.flightId).toBe(-1);
+  });
+
   it('should call the airman repository on save', async () => {
-    await subject.save();
+    await subject.addAirman();
     expect(repoMock.saveAirman).toHaveBeenCalled();
   });
 
@@ -123,9 +142,9 @@ describe('AirmanProfileManagerStore', () => {
 
   it('should call the airman repository on save with a new schedule', async () => {
     subject.setState('scheduleId', 3);
-    await subject.save();
-    const airman = (repoMock.saveAirman as Mock).mock.calls[0][0] as AirmanModel;
-    const newAirmanSchedule = airman.schedules.find(as => as.schedule.id === 3)!;
+    await subject.addAirman();
+    const newAirman = (repoMock.saveAirman as Mock).mock.calls[0][0] as AirmanModel;
+    const newAirmanSchedule = newAirman.schedules.find(as => as.schedule.id === 3)!;
     expect(newAirmanSchedule.endDate).toBeNull();
     expect(newAirmanSchedule.id).toBeNull();
   });

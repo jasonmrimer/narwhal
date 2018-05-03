@@ -11,13 +11,9 @@ export class WebEventRepository implements EventRepository {
   }
 
   async save(event: EventModel) {
-    try {
-      return event.id ?
-        await this.client.putJSON(`api/events/${event.id}`, this.serializer.serialize(event)) :
-        await this.client.postJSON('api/events', this.serializer.serialize(event));
-    } catch (e) {
-      throw this.handleError(e);
-    }
+    return event.id ?
+      await this.client.putJSON(`api/events/${event.id}`, this.serializer.serialize(event)) :
+      await this.client.postJSON('api/events', this.serializer.serialize(event));
   }
 
   async delete(event: EventModel): Promise<void> {
@@ -38,14 +34,5 @@ export class WebEventRepository implements EventRepository {
       `api/events?airmanId=${airmanId}&start=${start.toISOString()}&end=${end.toISOString()}`
     );
     return json.map((item: any) => this.serializer.deserialize(item));
-  }
-
-  private handleError(response: { errors: object[] }): object {
-    if (response.errors != null) {
-      return response.errors.map((error: { field: string, defaultMessage: string }) => {
-        return {[error.field]: error.defaultMessage};
-      });
-    }
-    return [];
   }
 }

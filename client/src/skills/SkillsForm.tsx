@@ -81,28 +81,30 @@ export class SkillsForm extends React.Component<Props> {
           />
         </StyledFormRow>
 
-        <StyledFieldValidation name="earnDate" errors={skillFormStore!.errors}>
-          <StyledFormRow>
-            <label htmlFor="earn-date">Earn Date:</label>
-            <StyledDatePicker
-              id="earn-date"
-              value={skillFormStore!.state.earnDate}
-              onChange={this.handleChange}
-              name="earnDate"
-            />
-          </StyledFormRow>
-        </StyledFieldValidation>
+        <StyledFieldValidation fieldName="validDateRange" errors={skillFormStore!.errors}>
+          <StyledFieldValidation fieldName="earnDate" errors={skillFormStore!.errors}>
+            <StyledFormRow>
+              <label htmlFor="earn-date">Earn Date:</label>
+              <StyledDatePicker
+                id="earn-date"
+                value={skillFormStore!.state.earnDate}
+                onChange={this.handleChange}
+                name="earnDate"
+              />
+            </StyledFormRow>
+          </StyledFieldValidation>
 
-        <StyledFieldValidation name="expirationDate" errors={skillFormStore!.errors}>
-          <StyledFormRow>
-            <label htmlFor="expiration-date">Expiration Date:</label>
-            <StyledDatePicker
-              id="expiration-date"
-              value={skillFormStore!.state.expirationDate}
-              onChange={this.handleChange}
-              name="expirationDate"
-            />
-          </StyledFormRow>
+          <StyledFieldValidation fieldName="expirationDate" errors={skillFormStore!.errors}>
+            <StyledFormRow>
+              <label htmlFor="expiration-date">Expiration Date:</label>
+              <StyledDatePicker
+                id="expiration-date"
+                value={skillFormStore!.state.expirationDate}
+                onChange={this.handleChange}
+                name="expirationDate"
+              />
+            </StyledFormRow>
+          </StyledFieldValidation>
         </StyledFieldValidation>
 
         <StyledFormRow reversed={true}>

@@ -2,6 +2,7 @@ import { EventRepository } from '../EventRepository';
 import { EventModel } from '../../models/EventModel';
 import { Moment } from 'moment';
 import { FakeAirmanRepository } from '../../../airman/repositories/doubles/FakeAirmanRepository';
+import { FormErrors } from '../../../widgets/FieldValidation';
 
 export class FakeEventRepository implements EventRepository {
   private static counter: number = 0;
@@ -59,10 +60,14 @@ export class FakeEventRepository implements EventRepository {
     return this._events.map(e => e.id).includes(event.id);
   }
 
-  handleError(response: { errors: object[] }): object[] {
-    return response.errors.map((error: { field: string }) => {
-      return {[error.field]: 'This field is required.'};
-    });
+  handleError(response: { errors: object[] }): FormErrors {
+    return response.errors.reduce(
+      (accum: any, val: any) => {
+        accum[val.field] = 'This field is required.';
+        return accum;
+      },
+      {}
+    );
   }
 
   get count() {

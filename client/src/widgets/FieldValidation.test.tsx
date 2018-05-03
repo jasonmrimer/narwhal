@@ -5,8 +5,8 @@ import { FieldValidation } from './FieldValidation';
 describe('FieldValidation', () => {
   it('should display the given error message for its child input', () => {
     const subject = shallow(
-      <FieldValidation name="fieldName" errors={[{fieldName: 'there is an error'}]}>
-        <input />
+      <FieldValidation fieldName="input" errors={{'input': 'there is an error'}}>
+        <input/>
       </FieldValidation>
     );
 

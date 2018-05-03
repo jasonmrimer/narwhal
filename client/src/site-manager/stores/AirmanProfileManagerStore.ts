@@ -7,6 +7,7 @@ import { AirmanRepository } from '../../airman/repositories/AirmanRepository';
 import { ScheduleModel, ScheduleType } from '../../schedule/models/ScheduleModel';
 import { AirmanScheduleModel } from '../../airman/models/AirmanScheduleModel';
 import * as moment from 'moment';
+import { FormErrors } from '../../widgets/FieldValidation';
 
 export class AirmanProfileManagerStore {
   @observable _airman: AirmanModel = AirmanModel.empty();
@@ -15,6 +16,7 @@ export class AirmanProfileManagerStore {
   @observable _schedules: ScheduleModel[] = [];
   @observable _scheduleId: number;
   @observable _loading: boolean = false;
+  @observable _errors: FormErrors = {};
 
   constructor(private airmanRepository: AirmanRepository) {
   }
@@ -32,6 +34,7 @@ export class AirmanProfileManagerStore {
     this._scheduleId = airman.currentScheduleId ?
       airman.currentScheduleId :
       this._schedules.find(s => s.type === ScheduleType.NoSchedule)!.id;
+    this._errors = {};
   }
 
   @computed
@@ -52,6 +55,16 @@ export class AirmanProfileManagerStore {
   @computed
   get scheduleId() {
     return this._scheduleId;
+  }
+
+  @computed
+  get errors() {
+    return this._errors;
+  }
+
+  @action.bound
+  setErrors(errors: FormErrors) {
+    this._errors = errors;
   }
 
   @computed
@@ -144,15 +157,11 @@ export class AirmanProfileManagerStore {
   }
 
   @action.bound
-  async save() {
-    this._loading = true;
-
+  async addAirman() {
     if (this._scheduleId) {
       this.addSchedule();
     }
-
     this._airman = await this.airmanRepository.saveAirman(this._airman);
-    this._loading = false;
   }
 
   private addSchedule() {
@@ -172,6 +181,7 @@ export class AirmanProfileManagerStore {
 
     const squadron = site.squadrons[0];
     if (squadron.flights.length < 1) {
+      this._airman.squadronId = squadron.id;
       this._airman.flightId = -1;
       return;
     }

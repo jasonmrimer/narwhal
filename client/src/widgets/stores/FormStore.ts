@@ -1,5 +1,6 @@
 import { action, computed, observable } from 'mobx';
 import * as moment from 'moment';
+import { FormErrors } from '../FieldValidation';
 
 export interface UniqueModel {
   id: number | null;
@@ -8,7 +9,7 @@ export interface UniqueModel {
 export abstract class FormStore<T extends UniqueModel, S> {
   @observable protected _model: T | null = null;
   @observable protected _state: S;
-  @observable protected _errors: object[] = [];
+  @observable protected _errors: FormErrors = {};
 
   protected abstract modelToState(model: T | null): S;
 
@@ -18,14 +19,14 @@ export abstract class FormStore<T extends UniqueModel, S> {
 
   @action
   open(model: T | null = null) {
-    this._errors = [];
+    this._errors = {};
     this._model = model;
     this._state = this.modelToState(model);
   }
 
   @action
   close() {
-    this._errors = [];
+    this._errors = {};
     this._model = null;
     this._state = this.emptyState();
   }
@@ -46,7 +47,7 @@ export abstract class FormStore<T extends UniqueModel, S> {
   }
 
   @action
-  setErrors(errors: object[]) {
+  setErrors(errors: FormErrors) {
     this._errors = errors;
   }
 

@@ -12,6 +12,8 @@ import { StyledSubmitButton } from '../widgets/SubmitButton';
 import { StyledForm } from '../widgets/Form';
 import { inject } from 'mobx-react/custom';
 import { History } from 'history';
+import { StyledFieldValidation } from '../widgets/FieldValidation';
+import { ProfileActions } from './ProfileActions';
 
 interface Props {
   airmanProfileManagerStore?: AirmanProfileManagerStore;
@@ -45,60 +47,96 @@ export class AirmanProfileManager extends React.Component<Props> {
 
             <div>
               <h2>Personal Information</h2>
-              <span className="airman-profile-manager-row">
-                <label htmlFor="airman-last-name">LAST NAME</label>
-                <StyledTextInput
-                  onChange={(e) => setState(e.target.name, e.target.value)}
-                  value={lastName}
-                  name="lastName"
-                  id="airman-last-name"
-                />
-              </span>
-              <span className="airman-profile-manager-row">
-                <label htmlFor="airman-first-name">FIRST NAME</label>
-                <StyledTextInput
-                  onChange={(e) => setState(e.target.name, e.target.value)}
-                  value={firstName}
-                  name="firstName"
-                  id="airman-first-name"
-                />
-              </span>
+
+              <StyledFieldValidation
+                fieldName="lastName"
+                errors={airmanProfileManagerStore!.errors}
+                rightAlign={true}
+              >
+                <span className="airman-profile-manager-row">
+                  <label htmlFor="airman-last-name">LAST NAME</label>
+                  <StyledTextInput
+                    onChange={(e) => setState(e.target.name, e.target.value)}
+                    value={lastName}
+                    name="lastName"
+                    id="airman-last-name"
+                  />
+                </span>
+              </StyledFieldValidation>
+
+              <StyledFieldValidation
+                fieldName="firstName"
+                errors={airmanProfileManagerStore!.errors}
+                rightAlign={true}
+              >
+                <span className="airman-profile-manager-row">
+                  <label htmlFor="airman-first-name">FIRST NAME</label>
+                  <StyledTextInput
+                    onChange={(e) => setState(e.target.name, e.target.value)}
+                    value={firstName}
+                    name="firstName"
+                    id="airman-first-name"
+                  />
+                </span>
+              </StyledFieldValidation>
             </div>
 
             <div>
               <h2>Member Organization</h2>
-              <span className="airman-profile-manager-row">
-                <label htmlFor="airman-site">SITE</label>
-                <StyledDropdown
-                  onChange={(e) => setState(e.target.name, Number(e.target.value))}
-                  name="siteId"
-                  value={airman.siteId}
-                  options={airmanProfileManagerStore!.siteOptions}
-                  id="airman-site"
-                />
-              </span>
-              <span className="airman-profile-manager-row">
-                <label htmlFor="airman-squadron">SQUADRON</label>
-                <StyledDropdown
-                  onChange={(e) => setState(e.target.name, Number(e.target.value))}
-                  name="squadronId"
-                  value={airman.squadronId}
-                  disabled={airmanProfileManagerStore!.squadronOptions.length === 0}
-                  options={airmanProfileManagerStore!.squadronOptions}
-                  id="airman-squadron"
-                />
-              </span>
-              <span className="airman-profile-manager-row">
-                <label htmlFor="airman-flight">FLIGHT</label>
-                <StyledDropdown
-                  onChange={(e) => setState(e.target.name, Number(e.target.value))}
-                  name="flightId"
-                  value={airman.flightId}
-                  disabled={airmanProfileManagerStore!.flightOptions.length === 0}
-                  options={airmanProfileManagerStore!.flightOptions}
-                  id="airman-flight"
-                />
-              </span>
+
+              <StyledFieldValidation
+                fieldName="siteId"
+                errors={airmanProfileManagerStore!.errors}
+                rightAlign={true}
+              >
+                <span className="airman-profile-manager-row">
+                  <label htmlFor="airman-site">SITE</label>
+                  <StyledDropdown
+                    onChange={(e) => setState(e.target.name, Number(e.target.value))}
+                    name="siteId"
+                    value={airman.siteId}
+                    options={airmanProfileManagerStore!.siteOptions}
+                    id="airman-site"
+                  />
+                </span>
+              </StyledFieldValidation>
+
+              <StyledFieldValidation
+                fieldName="squadronId"
+                errors={airmanProfileManagerStore!.errors}
+                rightAlign={true}
+              >
+                <span className="airman-profile-manager-row">
+                  <label htmlFor="airman-squadron">SQUADRON</label>
+                  <StyledDropdown
+                    onChange={(e) => setState(e.target.name, Number(e.target.value))}
+                    name="squadronId"
+                    value={airman.squadronId}
+                    disabled={airmanProfileManagerStore!.squadronOptions.length === 0}
+                    options={airmanProfileManagerStore!.squadronOptions}
+                    id="airman-squadron"
+                  />
+                </span>
+              </StyledFieldValidation>
+
+              <StyledFieldValidation
+                fieldName="flightId"
+                errors={airmanProfileManagerStore!.errors}
+                rightAlign={true}
+              >
+                <span className="airman-profile-manager-row">
+                  <label htmlFor="airman-flight">FLIGHT</label>
+                  <StyledDropdown
+                    onChange={(e) => setState(e.target.name, Number(e.target.value))}
+                    name="flightId"
+                    value={airman.flightId}
+                    disabled={airmanProfileManagerStore!.flightOptions.length === 0}
+                    options={airmanProfileManagerStore!.flightOptions}
+                    id="airman-flight"
+                  />
+                </span>
+              </StyledFieldValidation>
+
               <span className="airman-profile-manager-row">
                 <label htmlFor="airman-schedule">SCHEDULE</label>
                 <StyledDropdown
@@ -109,6 +147,7 @@ export class AirmanProfileManager extends React.Component<Props> {
                   id="airman-schedule"
                 />
               </span>
+
               <span className="airman-profile-manager-row">
                 <label htmlFor="airman-shift">SHIFT</label>
                   <StyledDropdown
@@ -123,6 +162,7 @@ export class AirmanProfileManager extends React.Component<Props> {
 
             <div>
               <h2>Qualifications & Certifications</h2>
+
               <div className="airman-skills">
                 {this.renderQualifications()}
                 {this.renderCertifications()}
@@ -138,8 +178,7 @@ export class AirmanProfileManager extends React.Component<Props> {
 
   private onSubmit = async (e: any) => {
     e.preventDefault();
-    await this.props.airmanProfileManagerStore!.save();
-    this.props.history!.push(`/flights/${this.props.airmanProfileManagerStore!.airman.id}`);
+    await ProfileActions.handleFormSubmit(this.props.history);
   }
 
   private renderQualifications = () => {

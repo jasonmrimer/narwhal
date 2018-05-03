@@ -23,7 +23,7 @@ describe('LeaveFormStore', () => {
       expect(subject.state.startTime).toBe('0000');
       expect(subject.state.endDate).toBe('');
       expect(subject.state.endTime).toBe('2359');
-      expect(subject.errors.length).toBe(0);
+      expect(subject.errors).toEqual({});
     });
 
     it('should set the state with the given event', () => {
@@ -34,7 +34,7 @@ describe('LeaveFormStore', () => {
       expect(subject.state.startTime).toBe(event.startTime.format('HHmm'));
       expect(subject.state.endDate).toBe(event.endTime.format('YYYY-MM-DD'));
       expect(subject.state.endTime).toBe(event.endTime.format('HHmm'));
-      expect(subject.errors.length).toBe(0);
+      expect(subject.errors).toEqual({});
     });
   });
 
@@ -49,7 +49,7 @@ describe('LeaveFormStore', () => {
       expect(subject.state.startTime).toBe('0000');
       expect(subject.state.endDate).toBe('');
       expect(subject.state.endTime).toBe('2359');
-      expect(subject.errors.length).toBe(0);
+      expect(subject.errors).toEqual({});
       expect(subject.hasModel).toBeFalsy();
     });
   });

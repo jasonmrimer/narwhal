@@ -10,9 +10,6 @@
       </configuration>
     </facet>
   </component>
-  <component name="ModuleRunConfigurationManager">
-    <shared />
-  </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output url="file://$MODULE_DIR$/../../out/production/classes" />
     <exclude-output />
@@ -42,8 +39,8 @@
     <orderEntry type="library" name="Gradle: org.hibernate:hibernate-java8:5.0.12.Final" level="project" />
     <orderEntry type="library" name="Gradle: com.opencsv:opencsv:4.0" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter:1.5.8.RELEASE" level="project" />
-    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-aop:1.5.8.RELEASE" level="project" />
     <orderEntry type="library" scope="RUNTIME" name="Gradle: mysql:mysql-connector-java:5.1.44" level="project" />
+    <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-aop:1.5.8.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.springframework.boot:spring-boot-starter-jdbc:1.5.8.RELEASE" level="project" />
     <orderEntry type="library" name="Gradle: org.hibernate:hibernate-core:5.0.12.Final" level="project" />
     <orderEntry type="library" name="Gradle: org.hibernate:hibernate-entitymanager:5.0.12.Final" level="project" />
@@ -108,9 +105,5 @@
     <orderEntry type="library" scope="PROVIDED" name="Gradle: org.projectlombok:lombok:1.16.18" level="project" />
     <orderEntry type="library" name="Gradle: org.apache.tomcat:tomcat-annotations-api:8.5.23" level="project" />
     <orderEntry type="library" name="Gradle: ch.qos.logback:logback-core:1.1.11" level="project" />
-  </component>
-  <component name="sonarModuleSettings">
-    <option name="localAnalysisScripName" value="&lt;PROJECT&gt;" />
-    <option name="serverName" value="&lt;PROJECT&gt;" />
   </component>
 </module>

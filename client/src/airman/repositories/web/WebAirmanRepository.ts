@@ -29,15 +29,11 @@ export class WebAirmanRepository implements AirmanRepository {
   }
 
   async saveSkill(skill: Skill): Promise<AirmanModel> {
-    try {
-      const body = JSON.stringify(skill);
-      const json = skill.id ?
-        await this.client.putJSON(`/api/airmen/${skill.airmanId}/${this.pathForSkill(skill)}`, body) :
-        await this.client.postJSON(`/api/airmen/${skill.airmanId}/${this.pathForSkill(skill)}`, body);
-      return this.serializer.deserialize(json);
-    } catch (errorJSON) {
-      throw this.handleError(errorJSON);
-    }
+    const body = JSON.stringify(skill);
+    const json = skill.id ?
+      await this.client.putJSON(`/api/airmen/${skill.airmanId}/${this.pathForSkill(skill)}`, body) :
+      await this.client.postJSON(`/api/airmen/${skill.airmanId}/${this.pathForSkill(skill)}`, body);
+    return this.serializer.deserialize(json);
   }
 
   async deleteSkill(skill: Skill): Promise<AirmanModel> {
@@ -50,11 +46,5 @@ export class WebAirmanRepository implements AirmanRepository {
       [SkillType.Qualification]: 'qualifications',
       [SkillType.Certification]: 'certifications'
     }[skill.type];
-  }
-
-  private handleError(response: { errors: object[] }): object {
-    return response.errors.map((error: { field: string }) => {
-      return {[error.field]: 'This field is required.'};
-    });
   }
 }

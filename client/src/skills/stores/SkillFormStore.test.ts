@@ -46,7 +46,7 @@ describe('SkillFormStore', () => {
       expect(subject.state.skillId).toBe('0');
       expect(subject.state.earnDate).toBe('');
       expect(subject.state.expirationDate).toBe('');
-      expect(subject.errors.length).toBe(0);
+      expect(subject.errors).toEqual({});
     });
 
     it('should set the state with the given skill', () => {
@@ -56,7 +56,7 @@ describe('SkillFormStore', () => {
       expect(subject.state.skillId).toBe(String(skill.skillId));
       expect(subject.state.earnDate).toBe(skill.earnDate.format('YYYY-MM-DD'));
       expect(subject.state.expirationDate).toBe(skill.expirationDate.format('YYYY-MM-DD'));
-      expect(subject.errors.length).toBe(0);
+      expect(subject.errors).toEqual({});
     });
   });
 
@@ -70,7 +70,7 @@ describe('SkillFormStore', () => {
       expect(subject.state.skillId).toBe('0');
       expect(subject.state.earnDate).toBe('');
       expect(subject.state.expirationDate).toBe('');
-      expect(subject.errors.length).toBe(0);
+      expect(subject.errors).toEqual({});
       expect(subject.hasModel).toBeFalsy();
     });
   });

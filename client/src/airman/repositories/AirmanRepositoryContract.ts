@@ -141,7 +141,7 @@ export function airmanRepositoryContract(subject: AirmanRepository) {
     describe('validation', () => {
       it('correctly handles validations from the server', async () => {
         const qualId = 5;
-        const errors = [{earnDate: 'This field is required.'}, {expirationDate: 'This field is required.'}];
+        const errors = {earnDate: 'This field is required.', expirationDate: 'This field is required.'};
 
         try {
           await subject.saveSkill({
@@ -153,8 +153,7 @@ export function airmanRepositoryContract(subject: AirmanRepository) {
             expirationDate: moment.invalid()
           });
         } catch (e) {
-
-          errors.forEach((item: any) => expect(e).toContainEqual(item));
+          expect(e).toEqual(errors);
           return;
         }
         assert.fail('saveSkill should have returned validation errors');

@@ -40,12 +40,12 @@ public class AirmanController {
   }
 
   @PostMapping
-  public Airman create(@RequestBody AirmanJSON airmanJSON) {
+  public Airman create(@Valid @RequestBody AirmanJSON airmanJSON) {
     return airmanService.createAirman(airmanJSON);
   }
 
   @PutMapping
-  public Airman update(@RequestBody AirmanJSON airmanJSON) {
+  public Airman update(@Valid @RequestBody AirmanJSON airmanJSON) {
     return airmanService.updateAirman(airmanJSON);
   }
 

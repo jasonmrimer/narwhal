@@ -30,7 +30,7 @@ describe('MissionFormStore', () => {
       expect(subject.state.startTime).toBe('');
       expect(subject.state.endDate).toBe('');
       expect(subject.state.endTime).toBe('');
-      expect(subject.errors.length).toBe(0);
+      expect(subject.errors).toEqual({});
     });
 
     it('should set the state with the given event', () => {
@@ -42,7 +42,7 @@ describe('MissionFormStore', () => {
       expect(subject.state.startTime).toBe(event.startTime.format('HHmm'));
       expect(subject.state.endDate).toBe(event.endTime.format('YYYY-MM-DD'));
       expect(subject.state.endTime).toBe(event.endTime.format('HHmm'));
-      expect(subject.errors.length).toBe(0);
+      expect(subject.errors).toEqual({});
     });
   });
 
@@ -58,7 +58,7 @@ describe('MissionFormStore', () => {
       expect(subject.state.startTime).toBe('');
       expect(subject.state.endDate).toBe('');
       expect(subject.state.endTime).toBe('');
-      expect(subject.errors.length).toBe(0);
+      expect(subject.errors).toEqual({});
       expect(subject.hasModel).toBeFalsy();
     });
   });
@@ -91,7 +91,7 @@ describe('MissionFormStore', () => {
     expect(subject.state.startTime).toBe(selectedMission.startDateTime.format('HHmm'));
     expect(subject.state.endDate).toBe(selectedMission.endDateTime!.format('YYYY-MM-DD'));
     expect(subject.state.endTime).toBe(selectedMission.endDateTime!.format('HHmm'));
-    expect(subject.errors.length).toBe(0);
+    expect(subject.errors).toEqual({});
 
     subject.setState('id', '');
     subject.setState('title', '');
@@ -101,7 +101,7 @@ describe('MissionFormStore', () => {
     expect(subject.state.startTime).toBe('');
     expect(subject.state.endDate).toBe('');
     expect(subject.state.endTime).toBe('');
-    expect(subject.errors.length).toBe(0);
+    expect(subject.errors).toEqual({});
     expect(subject.hasModel).toBeFalsy();
   });
 

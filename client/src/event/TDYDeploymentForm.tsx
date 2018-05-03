@@ -46,7 +46,7 @@ export class TDYDeploymentForm extends React.Component<Props> {
     return (
       <StyledForm onSubmit={this.handleSubmit} setLoading={trackerStore!.setLoading}>
         <StyledFormRow>
-          <StyledFieldValidation name="title" errors={errors}>
+          <StyledFieldValidation fieldName="title" errors={errors}>
             <StyledTextInput
               name="title"
               onChange={this.handleChange}
@@ -63,8 +63,8 @@ export class TDYDeploymentForm extends React.Component<Props> {
             value={state.description}
           />
         </StyledFormRow>
-        <StyledFieldValidation name="validDateRange" errors={errors}>
-          <StyledFieldValidation name="startTime" errors={errors}>
+        <StyledFieldValidation fieldName="validDateRange" errors={errors}>
+          <StyledFieldValidation fieldName="startTime" errors={errors}>
             <StyledFormRow>
               <StyledDatePicker
                 name="startTime"
@@ -73,7 +73,7 @@ export class TDYDeploymentForm extends React.Component<Props> {
               />
             </StyledFormRow>
           </StyledFieldValidation>
-          <StyledFieldValidation name="endTime" errors={errors}>
+          <StyledFieldValidation fieldName="endTime" errors={errors}>
             <StyledFormRow>
               <StyledDatePicker
                 name="endTime"
@@ -99,6 +99,6 @@ export class TDYDeploymentForm extends React.Component<Props> {
   }
 }
 
-export const StyledTDYDeploymentForm = inject('tdyDeploymentFormStore')(styled(TDYDeploymentForm)`
+export const StyledTDYDeploymentForm = inject('trackerStore', 'tdyDeploymentFormStore')(styled(TDYDeploymentForm)`
   min-width: ${props => props.theme.sidePanelWidth};
 `);

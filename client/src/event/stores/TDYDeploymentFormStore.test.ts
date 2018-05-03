@@ -22,7 +22,7 @@ describe('TDYDeploymentFormStore', () => {
       expect(subject.state.description).toBe('');
       expect(subject.state.startTime).toBe('');
       expect(subject.state.endTime).toBe('');
-      expect(subject.errors.length).toBe(0);
+      expect(subject.errors).toEqual({});
     });
 
     it('should set the state with the given event', () => {
@@ -32,7 +32,7 @@ describe('TDYDeploymentFormStore', () => {
       expect(subject.state.description).toBe(event.description);
       expect(subject.state.startTime).toBe(event.startTime.format('YYYY-MM-DD'));
       expect(subject.state.endTime).toBe(event.endTime.format('YYYY-MM-DD'));
-      expect(subject.errors.length).toBe(0);
+      expect(subject.errors).toEqual({});
     });
   });
 
@@ -46,7 +46,7 @@ describe('TDYDeploymentFormStore', () => {
       expect(subject.state.description).toBe('');
       expect(subject.state.startTime).toBe('');
       expect(subject.state.endTime).toBe('');
-      expect(subject.errors.length).toBe(0);
+      expect(subject.errors).toEqual({});
       expect(subject.hasModel).toBeFalsy();
     });
   });

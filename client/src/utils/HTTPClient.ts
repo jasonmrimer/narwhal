@@ -3,7 +3,6 @@ import * as urljoin from 'url-join';
 
 export class ErrorResponse {
   constructor(public message: string) {
-
   }
 }
 
@@ -36,9 +35,7 @@ export class HTTPClient {
       }
     );
     const json = await resp.json();
-    if (resp.status < 200 || resp.status >= 300) {
-      throw json;
-    }
+    this.handleErrors(resp.status, json);
     return json;
   }
 
@@ -53,9 +50,7 @@ export class HTTPClient {
       }
     );
     const json = await resp.json();
-    if (resp.status < 200 || resp.status >= 300) {
-      throw json;
-    }
+    this.handleErrors(resp.status, json);
     return json;
   }
 
@@ -69,9 +64,7 @@ export class HTTPClient {
       }
     );
     const json = await resp.json();
-    if (resp.status < 200 || resp.status >= 300) {
-      throw json;
-    }
+    this.handleErrors(resp.status, json);
     return json;
   }
 
@@ -98,8 +91,7 @@ export class HTTPClient {
       }
     );
 
-    if (resp
-      .status < 200 || resp.status >= 300) {
+    if (resp.status < 200 || resp.status >= 300) {
       throw new Error('Failed to delete item');
     }
 
@@ -118,5 +110,17 @@ export class HTTPClient {
         credentials: 'include'
       }
     );
+  }
+
+  private handleErrors(status: number, json: any) {
+    if (status < 200 || status >= 300) {
+      throw json.errors.reduce(
+        (accum: any, e: any) => {
+          accum[e.field] = e.defaultMessage || 'There was an error.';
+          return accum;
+        },
+        {}
+      );
+    }
   }
 }

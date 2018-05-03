@@ -14,6 +14,8 @@ import { eventStub, historyMock } from '../utils/testUtils';
 import { StyledForm } from '../widgets/Form';
 import { DoubleRepositories } from '../utils/Repositories';
 import { ScheduleModel, ScheduleType } from '../schedule/models/ScheduleModel';
+import { StyledFieldValidation } from '../widgets/FieldValidation';
+import { ProfileActions } from './ProfileActions';
 
 describe('AirmanProfileManager', () => {
   let airman: AirmanModel;
@@ -40,7 +42,7 @@ describe('AirmanProfileManager', () => {
     ];
 
     store = new AirmanProfileManagerStore(DoubleRepositories.airmanRepository);
-    store.save = jest.fn();
+    ProfileActions.handleFormSubmit = jest.fn();
     store.hydrate(airman, SiteModelFactory.buildList(3, 3), schedules, airmanRipItems);
 
     subject = shallow(
@@ -94,7 +96,15 @@ describe('AirmanProfileManager', () => {
 
   it('should call store save onSubmit', () => {
     subject.find(StyledForm).simulate('submit', eventStub);
-    expect(store.save).toHaveBeenCalled();
+    expect(ProfileActions.handleFormSubmit).toHaveBeenCalled();
+  });
+
+  it('should show field validation for first name and last name', () => {
+    expect(subject.find(StyledFieldValidation).at(0).prop('fieldName')).toBe('lastName');
+    expect(subject.find(StyledFieldValidation).at(1).prop('fieldName')).toBe('firstName');
+    expect(subject.find(StyledFieldValidation).at(2).prop('fieldName')).toBe('siteId');
+    expect(subject.find(StyledFieldValidation).at(3).prop('fieldName')).toBe('squadronId');
+    expect(subject.find(StyledFieldValidation).at(4).prop('fieldName')).toBe('flightId');
   });
 });
 

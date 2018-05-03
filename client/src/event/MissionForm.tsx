@@ -56,7 +56,7 @@ export class MissionForm extends React.Component<Props> {
     const selected = missionOptions.find(msn => msn.value === Number(state.id));
     return (
       <StyledForm onSubmit={this.handleSubmit} setLoading={trackerStore!.setLoading}>
-        <StyledFieldValidation name="title" errors={errors}>
+        <StyledFieldValidation fieldName="title" errors={errors}>
           <StyledFormRow>
             <StyledSingleTypeahead
               selected={selected}
@@ -69,7 +69,7 @@ export class MissionForm extends React.Component<Props> {
           </StyledFormRow>
         </StyledFieldValidation>
 
-        <StyledFieldValidation name="validDateRange" errors={errors}>
+        <StyledFieldValidation fieldName="validDateRange" errors={errors}>
           <StyledFormRow>
             <StyledDatePicker
               name="startDate"

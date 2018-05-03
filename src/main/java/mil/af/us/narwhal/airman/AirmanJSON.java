@@ -4,8 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import mil.af.us.narwhal.event.Event;
-import mil.af.us.narwhal.schedule.Schedule;
+import org.hibernate.validator.constraints.NotEmpty;
 
+import javax.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,12 +14,17 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AirmanJSON {
+  private static final String emptyFieldMessage = "This field is required.";
+
   private Long id;
 
+  @Min(value = 0L, message = emptyFieldMessage)
   private Long flightId;
 
+  @NotEmpty(message = emptyFieldMessage)
   private String firstName;
 
+  @NotEmpty(message = emptyFieldMessage)
   private String lastName;
 
   private ShiftType shift;

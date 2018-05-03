@@ -44,7 +44,7 @@ export function EventRepositoryContract(subject: EventRepository) {
         try {
           await subject.save(event);
         } catch (errors) {
-          expect(errors).toEqual([{title: 'This field is required.'}]);
+          expect(errors).toEqual({title: 'This field is required.'});
         }
       });
 
@@ -53,7 +53,7 @@ export function EventRepositoryContract(subject: EventRepository) {
         try {
           await subject.save(event);
         } catch (errors) {
-          expect(errors).toEqual([{validDateRange: 'End Date cannot be before Start Date.'}]);
+          expect(errors).toEqual({validDateRange: 'End Date cannot be before Start Date.'});
         }
       });
     });
