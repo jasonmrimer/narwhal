@@ -12,6 +12,8 @@ import { ClipLoader } from 'react-spinners';
 import { ThemeProvider } from 'styled-components';
 import { Theme } from '../themes/default';
 import { StyledMultiTypeahead } from '../widgets/MultiTypeahead';
+import { StyledTextInput } from '../widgets/TextInput';
+import { Provider } from 'mobx-react';
 
 const missionRepositoryStub = DoubleRepositories.missionRepository;
 
@@ -28,9 +30,9 @@ describe('Dashboard', () => {
     subject = mount(
       <ThemeProvider theme={Theme}>
         <MemoryRouter>
-          <Dashboard
-            dashboardStore={dashboardStore}
-          />
+          <Provider dashboardStore={dashboardStore}>
+            <Dashboard/>
+          </Provider>
         </MemoryRouter>
       </ThemeProvider>
     );
@@ -111,6 +113,20 @@ describe('Dashboard', () => {
       input.simulate('keyDown', {keyCode: 13});
 
       expect(subject.find(StyledMission).length).toBe(9);
+    });
+
+    it('should render an ato mission id search field', () => {
+      dashboardStore.handleFilterMission = jest.fn();
+      subject.setProps(dashboardStore);
+      expect(subject.find(StyledTextInput).exists()).toBeTruthy();
+      subject.find(StyledTextInput).simulate('change', {target: {value: 'mission1'}});
+      expect(dashboardStore.handleFilterMission).toHaveBeenCalledWith('mission1');
+    });
+
+    it('should set the mission filter value to dashBoard missionIdFilter', () => {
+      dashboardStore.handleFilterMission('fooface');
+      subject.update();
+      expect(subject.find(StyledTextInput).prop('value')).toBe('fooface');
     });
   });
 });

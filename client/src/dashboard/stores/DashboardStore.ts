@@ -6,6 +6,7 @@ import { SiteModel } from '../../site/models/SiteModel';
 import { FilterOption, UnfilteredValue } from '../../widgets/models/FilterOptionModel';
 import { Repositories } from '../../utils/Repositories';
 import * as moment from 'moment';
+import * as Fuse from 'fuse.js';
 
 export class DashboardStore {
   private siteRepository: SiteRepository;
@@ -16,6 +17,7 @@ export class DashboardStore {
   @observable private _loading: boolean = false;
   @observable private _platforms: string[] = [];
   @observable private _selectedPlatformOptions: FilterOption[] = [];
+  @observable private _atoMissionNumberFilter: string = '';
 
   constructor(repositories: Repositories) {
     this.siteRepository = repositories.siteRepository;
@@ -92,7 +94,7 @@ export class DashboardStore {
       {label: 'LONG RANGE', startTime: moment().add(24 * 14, 'hour'), endTime: moment().add(24 * 30, 'hour')},
     ];
 
-    const filteredMissions =
+    let filteredMissions =
       this._siteId !== UnfilteredValue ?
         this._missions
           .filter(msn => msn.site != null)
@@ -101,6 +103,7 @@ export class DashboardStore {
         this._missions
           .filter(this.byPlatforms);
 
+    filteredMissions = this.filterByAtoMissionNumber(filteredMissions);
     return filteredMissions.reduce(
       (accum, current) => {
         intervals.forEach(interval => {
@@ -114,6 +117,16 @@ export class DashboardStore {
     );
   }
 
+  @action.bound
+  handleFilterMission(value: string) {
+    this._atoMissionNumberFilter = value;
+  }
+
+  @computed
+  get atoMissionNumberFilter() {
+    return this._atoMissionNumberFilter;
+  }
+
   private byPlatforms = (mission: MissionModel) => {
     if (this._selectedPlatformOptions.length === 0) {
       return true;
@@ -122,5 +135,13 @@ export class DashboardStore {
         .map(opt => opt.label)
         .some((label: string) => mission.platform.includes(label));
     }
+  }
+
+  private filterByAtoMissionNumber(missions: MissionModel[]): any {
+    if (this._atoMissionNumberFilter === '') {
+        return missions;
+    };
+
+    return new Fuse(missions, {keys: ['atoMissionNumber'], threshold: 0.1, }).search(this._atoMissionNumberFilter);
   }
 }

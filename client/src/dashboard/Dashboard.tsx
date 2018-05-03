@@ -6,6 +6,7 @@ import { TopLevelFilter } from '../widgets/Filter';
 import { StyledMissionCardSection } from './MissionCardSection';
 import { StyledLoadingOverlay } from '../widgets/LoadingOverlay';
 import { StyledMultiTypeahead } from '../widgets/MultiTypeahead';
+import { StyledTextInput } from '../widgets/TextInput';
 
 interface Props {
   dashboardStore?: DashboardStore;
@@ -55,6 +56,17 @@ export class Dashboard extends React.Component<Props> {
               className={'platform-typeahead'}
             />
           </div>
+          <div>
+            <label>MISSION ID</label>
+            <br/>
+            <StyledTextInput
+              value={dashboardStore!.atoMissionNumberFilter}
+              name="mission-filter"
+              placeholder="All Missions"
+              onChange={(e) => dashboardStore!.handleFilterMission(e.target.value)}
+              className="mission-filter"
+            />
+          </div>
         </div>
         <div className="missions">
           {Object.keys(missions).map((key: string, index: number) => {
@@ -82,15 +94,25 @@ export const StyledDashboard = styled(Dashboard)`
   
   .filters {
     display: flex;
+    align-items: flex-end;
     
     & > div {
       min-width: 20%;
+      margin-right: 1rem;
+      & > label {
+        font-size: 0.875rem;
+        color: ${props => props.theme.purpleSteel};
+      }
+    }
+    
+    .mission-filter {
+      margin-top: 0.7rem;
+      padding: 0.5rem 0;
     }
   }
   
   .platform-filter {
     width: 20%;
-    margin-left: 1rem;
     
     label {
       font-size: 0.875rem;
@@ -108,5 +130,9 @@ export const StyledDashboard = styled(Dashboard)`
     flex-direction: column;
     justify-content: flex-start;
     flex-wrap: wrap;
+  }
+  
+  #site-filter {
+    margin: 0;
   }
 `;

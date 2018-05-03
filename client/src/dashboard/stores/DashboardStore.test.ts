@@ -68,6 +68,12 @@ describe('DashboardStore', () => {
       expect(missions.length).toBe(15);
 
     });
+
+    it('should return missions based on matching ato mission number', () => {
+      subject.handleFilterMission('ato1');
+      const missions = filteredMissions(subject.missions);
+      expect(missions.length).toBe(11);
+    });
   });
 
   it('organizes missions by time interval', () => {
