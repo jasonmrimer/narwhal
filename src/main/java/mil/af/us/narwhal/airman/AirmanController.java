@@ -92,7 +92,7 @@ public class AirmanController {
     @RequestBody AirmanSkillJSON skill
   ) {
     final Airman airman = repository.findOne(id);
-    airman.updateQualification(skill.getId(), skill.getExpirationDate());
+    airman.updateQualification(skill.getId(), skill.getEarnDate(), skill.getExpirationDate());
     return repository.save(airman);
   }
 
@@ -103,7 +103,7 @@ public class AirmanController {
     @RequestBody AirmanSkillJSON skill
   ) {
     final Airman airman = repository.findOne(id);
-    airman.updateCertification(skill.getId(), skill.getExpirationDate());
+    airman.updateCertification(skill.getId(), skill.getEarnDate(), skill.getExpirationDate());
     return repository.save(airman);
   }
 

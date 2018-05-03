@@ -88,7 +88,6 @@ export class SkillsForm extends React.Component<Props> {
               id="earn-date"
               value={skillFormStore!.state.earnDate}
               onChange={this.handleChange}
-              disabled={disabled}
               name="earnDate"
             />
           </StyledFormRow>

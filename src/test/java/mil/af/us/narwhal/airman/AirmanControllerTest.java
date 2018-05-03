@@ -254,7 +254,7 @@ public class AirmanControllerTest extends BaseIntegrationTest {
       new AirmanSkillJSON(
         updatedAirmanQualification.getId(),
         updatedAirmanQualification.getQualification().getId(),
-        updatedAirmanQualification.getEarnDate(),
+        Instant.EPOCH,
         Instant.EPOCH
       )
     );
@@ -271,6 +271,7 @@ public class AirmanControllerTest extends BaseIntegrationTest {
       .put(AirmanController.URI + "/" + airman1.getId() + "/qualifications")
     .then()
       .statusCode(200)
+      .body("qualifications[0].earnDate", equalTo("1970-01-01T00:00:00Z"))
       .body("qualifications[0].expirationDate", equalTo("1970-01-01T00:00:00Z"));
     // @formatter:on
   }
@@ -290,7 +291,7 @@ public class AirmanControllerTest extends BaseIntegrationTest {
       new AirmanSkillJSON(
         updatedAirmanCertification.getId(),
         updatedAirmanCertification.getCertification().getId(),
-        updatedAirmanCertification.getEarnDate(),
+        Instant.EPOCH,
         Instant.EPOCH
       )
     );
@@ -307,6 +308,7 @@ public class AirmanControllerTest extends BaseIntegrationTest {
       .put(AirmanController.URI + "/" + airman1.getId() + "/certifications")
     .then()
       .statusCode(200)
+      .body("certifications[0].earnDate", equalTo("1970-01-01T00:00:00Z"))
       .body("certifications[0].expirationDate", equalTo("1970-01-01T00:00:00Z"));
     // @formatter:on
   }

@@ -126,18 +126,24 @@ public class Airman {
     return true;
   }
 
-  public void updateCertification(long id, Instant expirationDate) {
+  public void updateCertification(long id, Instant earnDate, Instant expirationDate) {
     certifications.stream()
       .filter(cert -> cert.getId().equals(id))
       .findFirst()
-      .ifPresent(cert -> cert.setExpirationDate(expirationDate));
+      .ifPresent(cert -> {
+        cert.setEarnDate(earnDate);
+        cert.setExpirationDate(expirationDate);
+      });
   }
 
-  public void updateQualification(long id, Instant expirationDate) {
+  public void updateQualification(long id, Instant earnDate, Instant expirationDate) {
     qualifications.stream()
       .filter(qual -> qual.getId().equals(id))
       .findFirst()
-      .ifPresent(qual -> qual.setExpirationDate(expirationDate));
+      .ifPresent(qual -> {
+        qual.setEarnDate(earnDate);
+        qual.setExpirationDate(expirationDate);
+      });
   }
 
   public void deleteQualification(Long id) {

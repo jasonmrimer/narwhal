@@ -13,7 +13,6 @@ import { SkillActions } from './SkillActions';
 import { Provider } from 'mobx-react';
 import { CurrencyStore } from '../currency/stores/CurrencyStore';
 import { LocationFilterStore } from '../widgets/stores/LocationFilterStore';
-import { DatePicker } from '../widgets/DatePicker';
 
 /* tslint:disable:no-empty*/
 describe('SkillsForm', () => {
@@ -79,18 +78,6 @@ describe('SkillsForm', () => {
           <StyledSkillsForm airmanId={1}/>
         </Provider>
       );
-    });
-
-    it('should only allow the edit of the expiration date', () => {
-      mountedSubject.find('select').forEach((elem) => {
-        expect(elem.prop('disabled')).toBeTruthy();
-      });
-
-      expect(mountedSubject.find(DatePicker).at(0).prop('disabled')).toBeTruthy();
-      expect(mountedSubject.find(DatePicker).at(1).prop('disabled')).toBeFalsy();
-
-      mountedSubject.find('form').simulate('submit', eventStub);
-      expect(SkillActions.submitSkill).toHaveBeenCalled();
     });
 
     it('calls executePendingDelete when clicking the delete button', () => {
