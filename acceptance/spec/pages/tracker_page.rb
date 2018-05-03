@@ -62,7 +62,8 @@ class TrackerPage
     last_name.split("").each do
       page.find('input[name=last-name]').native.send_key(:backspace)
     end
-    expect(page).to have_css('.airman-name', count: @all_airmen_count)
+
+    expect(page).to have_css('.airman-name', minimum: 2)
   end
 
   def assert_filters_by_shift

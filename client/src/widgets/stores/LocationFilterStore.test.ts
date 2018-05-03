@@ -23,8 +23,8 @@ describe('LocationFilterStore', () => {
     subject.setSelectedSquadron(2);
     subject.setSelectedFlight(2);
     subject.hydrate(3, sites);
-    expect(subject.selectedSquadron).toBe(2);
-    expect(subject.selectedFlight).toBe(2);
+    expect(subject.selectedSquadronId).toBe(2);
+    expect(subject.selectedFlightId).toBe(2);
   });
 
   it('returns a list of site options', () => {
@@ -49,18 +49,18 @@ describe('LocationFilterStore', () => {
       subject.setSelectedSquadron(2);
       subject.setSelectedFlight(1);
       await subject.setSelectedSite(2);
-      expect(subject.selectedSquadron).toBe(UnfilteredValue);
-      expect(subject.selectedFlight).toBe(UnfilteredValue);
+      expect(subject.selectedSquadronId).toBe(UnfilteredValue);
+      expect(subject.selectedFlightId).toBe(UnfilteredValue);
     });
 
     describe('when a site only has one squadron', () => {
       it('sets the squadron id on selection', async () => {
         await subject.setSelectedSite(3);
-        expect(subject.selectedSquadron).toBe(5);
+        expect(subject.selectedSquadronId).toBe(5);
       });
 
       it('sets the squadron id on hydration', () => {
-        expect(subject.selectedSquadron).toBe(5);
+        expect(subject.selectedSquadronId).toBe(5);
       });
     });
   });
@@ -88,7 +88,7 @@ describe('LocationFilterStore', () => {
     it('resets the flight when a new squadron is set', () => {
       subject.setSelectedFlight(1);
       subject.setSelectedSquadron(2);
-      expect(subject.selectedFlight).toBe(UnfilteredValue);
+      expect(subject.selectedFlightId).toBe(UnfilteredValue);
     });
   });
 

@@ -5,12 +5,12 @@ import {
   MissionPlannerRoster,
   MissionPlannerStoreContract,
   RosterHeaderStoreContract,
-  StyledRow,
-  StyledSubHeaderRow
+  StyledRow
 } from './MissionPlannerRoster';
 import { mount, ReactWrapper } from 'enzyme';
 import { CrewModelFactory } from './factories/CrewModelFactory';
 import { AirmanModel } from '../airman/models/AirmanModel';
+import { StyledRosterSubHeaderRow } from '../widgets/RosterSubHeaderRow';
 
 describe('MissionPlannerRoster', () => {
   let subject: ReactWrapper;
@@ -52,11 +52,11 @@ describe('MissionPlannerRoster', () => {
   });
 
   it('should render a header row available and unavailable', () => {
-    expect(subject.find(StyledSubHeaderRow).length).toBe(2);
+    expect(subject.find(StyledRosterSubHeaderRow).length).toBe(2);
   });
 
   it('should render the available sub header before the unavailable', () => {
-    expect(subject.find(StyledSubHeaderRow).at(0).text()).toContain('PERSONNEL BELOW ARE AVAILABLE FOR MISSION ON');
-    expect(subject.find(StyledSubHeaderRow).at(1).text()).toContain('PERSONNEL BELOW ARE UNAVAILABLE FOR MISSION ON');
+    expect(subject.find(StyledRosterSubHeaderRow).at(0).text()).toContain('PERSONNEL BELOW ARE AVAILABLE FOR MISSION ON');
+    expect(subject.find(StyledRosterSubHeaderRow).at(1).text()).toContain('PERSONNEL BELOW ARE UNAVAILABLE FOR MISSION ON');
   });
 });

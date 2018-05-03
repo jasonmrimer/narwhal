@@ -10,10 +10,13 @@ import styled from 'styled-components';
 import { inject, observer } from 'mobx-react';
 import * as classNames from 'classnames';
 import { StyledShiftDropdown } from '../tracker/ShiftDropdown';
-import { BorderedNotification } from '../widgets/Notification';
+import { BorderedNotification, EmptyBorderedNotification } from '../widgets/Notification';
 import { LocationFilterStore } from '../widgets/stores/LocationFilterStore';
 import { RosterHeaderStore } from './stores/RosterHeaderStore';
 import { RosterActions } from './RosterActions';
+import { RosterList } from './RosterList';
+import { StyledRosterSubHeaderRow } from '../widgets/RosterSubHeaderRow';
+import { FlightModel } from '../flight/model/FlightModel';
 
 const cache = new CellMeasurerCache({
   defaultHeight: 60,
@@ -36,14 +39,18 @@ export class Roster extends React.Component<Props> {
 
   render() {
     const {className} = this.props;
-    const airmen = this.airmen();
+    const squadron = this.props.locationFilterStore!.selectedSquadron;
+    const selectedFlightId = this.props.locationFilterStore!.selectedFlightId;
+    const list = new RosterList(selectedFlightId, squadron, this.airmen());
+
     cache.clearAll();
+
     return (
       <List
         className={className}
         height={855}
         rowHeight={(props) => cache.rowHeight(props)! || 60}
-        rowCount={airmen.length}
+        rowCount={list.size}
         width={1400}
         overscanRowCount={15}
         deferredMeasurementCache={cache}
@@ -55,15 +62,34 @@ export class Roster extends React.Component<Props> {
           );
         }}
         rowRenderer={(props: ListRowProps) => {
-          const airman = airmen[props.index];
-          return (
-            <StyledRow
-              {...props}
-              key={airman.id}
-              airman={airman}
-              style={props.style}
-            />
-          );
+          const item = list.get(props.index);
+          if (item instanceof AirmanModel) {
+            const airman = item as AirmanModel;
+            return (
+              <StyledRow
+                {...props}
+                key={airman.id}
+                airman={airman}
+                style={props.style}
+              />
+            );
+          } else if (item instanceof FlightModel) {
+            return (
+              <CellMeasurer {...props} cache={cache} columnIndex={0}>
+                <StyledRosterSubHeaderRow {...props} text={item.name} alignment="left"/>
+              </CellMeasurer>
+            );
+          } else {
+            return (
+              <CellMeasurer {...props} cache={cache} columnIndex={0}>
+                <div style={props.style}>
+                  <EmptyBorderedNotification>
+                    {item}
+                  </EmptyBorderedNotification>
+                </div>
+              </CellMeasurer>
+            );
+          }
         }}
       />
     );

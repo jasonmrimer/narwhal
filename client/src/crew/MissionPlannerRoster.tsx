@@ -8,6 +8,7 @@ import { inject, observer } from 'mobx-react';
 import { StyledNotification } from '../widgets/Notification';
 import { ShiftDisplay } from '../roster/ShiftDisplay';
 import { CrewModel } from './models/CrewModel';
+import { StyledRosterSubHeaderRow } from '../widgets/RosterSubHeaderRow';
 
 const cache = new CellMeasurerCache({
   defaultHeight: 60,
@@ -50,19 +51,14 @@ export class MissionPlannerRoster extends React.Component<Props> {
     const {crewStore} = this.props;
     const {crew} = crewStore!;
 
-    if (props.index === 0) {
+    if (props.index === 0 || props.index === availableAirmen.length + 1) {
+      const text = props.index === 0 ?
+        `PERSONNEL BELOW ARE AVAILABLE FOR MISSION ON ${crew!.mission.displayDateZulu}` :
+        `PERSONNEL BELOW ARE UNAVAILABLE FOR MISSION ON ${crew!.mission.displayDateZulu}`;
       return (
-        <StyledSubHeaderRow
-          {...props}
-          text={`PERSONNEL BELOW ARE AVAILABLE FOR MISSION ON ${crew!.mission.displayDateZulu}`}
-        />
-      );
-    } else if (props.index === availableAirmen.length + 1) {
-      return (
-        <StyledSubHeaderRow
-          {...props}
-          text={`PERSONNEL BELOW ARE UNAVAILABLE FOR MISSION ON ${crew!.mission.displayDateZulu}`}
-        />
+        <CellMeasurer {...props} cache={cache} columnIndex={0}>
+          <StyledRosterSubHeaderRow {...props} text={text}/>
+        </CellMeasurer>
       );
     }
 
@@ -182,38 +178,4 @@ export const StyledRow = styled(Row)`
   .airman-shift {
     width: 5rem;
   }
-`;
-
-interface SubHeaderProps {
-  text: string;
-  style: object;
-  index: number;
-  parent: any;
-  key: any;
-  className?: string;
-}
-
-export const SubHeaderRow = observer((props: SubHeaderProps) => {
-  return (
-    <CellMeasurer
-      cache={cache}
-      columnIndex={0}
-      rowIndex={props.index}
-      key={props.key}
-      parent={props.parent}
-    >
-      <div className={props.className} style={props.style}>{props.text}</div>
-    </CellMeasurer>
-  );
-});
-
-export const StyledSubHeaderRow = styled(SubHeaderRow)`
-  display: flex;
-  justify-content: center;
-  background: ${props => props.theme.blueSteel};
-  border-right: 1px solid ${props => props.theme.graySteel};
-  border-left: 1px solid ${props => props.theme.graySteel};
-  padding: 0.5rem 0;
-  font-size: 0.875rem;
-  font-weight: 200;
 `;

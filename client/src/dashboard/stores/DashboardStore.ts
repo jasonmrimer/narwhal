@@ -139,9 +139,9 @@ export class DashboardStore {
 
   private filterByAtoMissionNumber(missions: MissionModel[]): any {
     if (this._atoMissionNumberFilter === '') {
-        return missions;
-    };
+      return missions;
+    }
 
-    return new Fuse(missions, {keys: ['atoMissionNumber'], threshold: 0.1, }).search(this._atoMissionNumberFilter);
+    return new Fuse(missions, {keys: ['atoMissionNumber'], threshold: 0.1,}).search(this._atoMissionNumberFilter);
   }
 }

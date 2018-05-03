@@ -5,22 +5,10 @@ import styled from 'styled-components';
 import { caret } from '../utils/StyleUtils';
 import * as classNames from 'classnames';
 import { inject, observer } from 'mobx-react';
-import { FilterOption } from './models/FilterOptionModel';
-
-export interface LocationFilterStoreContract {
-  siteOptions: FilterOption[];
-  selectedSite: number;
-  setSelectedSite: (id: number) => void;
-  selectedSquadron: number;
-  setSelectedSquadron: (id: number) => void;
-  squadronOptions: FilterOption[];
-  selectedFlight: number;
-  setSelectedFlight: (id: number) => void;
-  flightOptions: FilterOption[];
-}
+import { LocationFilterStore } from './stores/LocationFilterStore';
 
 interface Props {
-  locationFilterStore?: LocationFilterStoreContract;
+  locationFilterStore?: LocationFilterStore;
   refreshAirmen: () => Promise<void>;
   className?: string;
 }
@@ -29,12 +17,12 @@ export const LocationFilters = observer((props: Props) => {
   const {locationFilterStore} = props;
   const {
     siteOptions,
-    selectedSite,
+    selectedSiteId,
     setSelectedSite,
-    selectedSquadron,
+    selectedSquadronId,
     setSelectedSquadron,
     squadronOptions,
-    selectedFlight,
+    selectedFlightId,
     setSelectedFlight,
     flightOptions
   } = locationFilterStore!;
@@ -48,10 +36,10 @@ export const LocationFilters = observer((props: Props) => {
           id="site-filter"
           name="siteId"
           options={siteOptions}
-          value={selectedSite}
-          onChange={(e: any) => {
+          value={selectedSiteId}
+          onChange={async (e: any) => {
             setSelectedSite(Number(e.target.value));
-            props.refreshAirmen();
+            await props.refreshAirmen();
           }}
         />
       </div>
@@ -59,7 +47,7 @@ export const LocationFilters = observer((props: Props) => {
         id="squadron-filter"
         label="SQUADRON"
         unfilteredOptionLabel="All Squadrons"
-        value={selectedSquadron}
+        value={selectedSquadronId}
         callback={setSelectedSquadron}
         options={squadronOptions}
         notification="Please select a site first."
@@ -68,7 +56,7 @@ export const LocationFilters = observer((props: Props) => {
         id="flight-filter"
         label="FLIGHT"
         unfilteredOptionLabel="All Flights"
-        value={selectedFlight}
+        value={selectedFlightId}
         callback={setSelectedFlight}
         options={flightOptions}
         notification="Please select a squadron first."

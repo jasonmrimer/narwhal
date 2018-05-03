@@ -5,7 +5,7 @@ export class SkillActions {
     const skill = stores.skillFormStore!.addModel(airmanId);
     try {
       await stores.currencyStore!.addSkill(skill);
-      await stores.trackerStore!.refreshAirmen(stores.locationFilterStore!.selectedSite, airmanId);
+      await stores.trackerStore!.refreshAirmen(stores.locationFilterStore!.selectedSiteId, airmanId);
       stores.skillFormStore!.close();
       stores.currencyStore!.closeSkillForm();
     } catch (e) {
@@ -24,7 +24,7 @@ export class SkillActions {
     const {currencyStore, trackerStore, locationFilterStore, skillFormStore} = stores;
     try {
       await currencyStore.executePendingDelete();
-      await trackerStore.refreshAirmen(locationFilterStore.selectedSite, trackerStore.selectedAirman.id);
+      await trackerStore.refreshAirmen(locationFilterStore.selectedSiteId, trackerStore.selectedAirman.id);
       skillFormStore.close();
       currencyStore.closeSkillForm();
     } catch (e) {
