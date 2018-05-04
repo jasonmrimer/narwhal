@@ -1,20 +1,13 @@
 import * as React from 'react';
 import { CrewPositionModel } from './models/CrewPositionModel';
-import { FilterOption } from '../widgets/models/FilterOptionModel';
 import styled from 'styled-components';
 import { inject, observer } from 'mobx-react';
 import { StyledCrewPositionRow } from './CrewPositionRow';
-import { CrewModel } from './models/CrewModel';
-import { StyledCrewPositionInputRow } from './CrewPositionInputRow';
+import { CrewStore } from './stores/CrewStore';
+import * as classNames from 'classnames';
 
-export interface CrewStoreContract {
-  setCrewEntry: (id: number, property: Partial<CrewPositionModel>) => void;
-  clearPosition: (id: number) => void;
-  setNewEntry: (property: any) => void;
-  crew: CrewModel;
-}
 interface Props {
-  crewStore?: CrewStoreContract;
+  crewStore?: CrewStore;
   className?: string;
 }
 
@@ -33,23 +26,8 @@ export class Crew extends React.Component<Props> {
     this.props.crewStore!.clearPosition(id);
   }
 
-  handleNewEntryCheck = (e: any) => {
-    this.props.crewStore!.setNewEntry({[e.target.name]: e.target.checked});
-  }
-
-  handleNewEntryChange = (e: any) => {
-    this.props.crewStore!.setNewEntry({[e.target.name]: e.target.value});
-  }
-
-  handleTypeahead = (opt: FilterOption) => {
-    if (opt) {
-      this.props.crewStore!.setNewEntry({airmanName: opt.label});
-    } else {
-      this.props.crewStore!.setNewEntry({airmanName: ''});
-    }
-  }
-
   render() {
+    const {crewStore} = this.props;
     return (
       <div className={this.props.className}>
         <div className="crew">
@@ -59,12 +37,12 @@ export class Crew extends React.Component<Props> {
             <span className="position">POSITION</span>
             <span className="member">ASSIGNED CREW MEMBER</span>
           </div>
-          {this.renderCrew()}
-          <StyledCrewPositionInputRow
-            handleNewEntryCheck={this.handleNewEntryCheck}
-            handleNewEntryChange={this.handleNewEntryChange}
-            handleTypeahead={this.handleTypeahead}
-          />
+          <div
+            className={
+              classNames({'crew-positions': crewStore!.crew!.crewPositions.length === 0})}
+          >
+            {this.renderCrew()}
+          </div>
         </div>
       </div>
     );
@@ -131,5 +109,9 @@ export const StyledCrew = inject('crewStore')(styled(Crew)`
   .member {
     width: 50%;
     padding: 0 1rem 0 0;
+  }
+  
+  .crew-positions {
+    padding: 1rem;
   }
 `);

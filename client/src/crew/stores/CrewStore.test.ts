@@ -19,7 +19,7 @@ describe('CrewStore', () => {
     subject = new CrewStore(DoubleRepositories);
 
     airmen = await DoubleRepositories.airmanRepository.findBySiteId(14);
-    await subject.hydrate(crew, airmen);
+    subject.hydrate(crew, airmen);
 
     crew.crewPositions[0].title = 'Title1';
     crew.crewPositions[0].critical = true;
@@ -44,20 +44,6 @@ describe('CrewStore', () => {
   it('should set a new crew member', () => {
     subject.setNewEntry({airmanName: 'pizza face'});
     expect(subject.newEntry.airmanName).toBe('pizza face');
-  });
-
-  it('should save the new crew member set in newEntry', async () => {
-    const airmanDisplayName = subject.airmenOptions[1].label;
-    subject.setNewEntry({airmanName: `${airmanDisplayName}`});
-    await subject.save();
-    const [lastCrewPosition] = crewPositions.slice(-1);
-
-    expect(lastCrewPosition.airman.firstName).toBe(airmanDisplayName.split(', ', 2)[1]);
-    expect(lastCrewPosition.airman.lastName).toBe(airmanDisplayName.split(', ', 2)[0]);
-  });
-
-  it('should have a list of airmen options related to the users site who are not on the crew positions', () => {
-    expect(subject.airmenOptions.length).toEqual(8);
   });
 
   it('should clear an airman, title, and critical by id', () => {

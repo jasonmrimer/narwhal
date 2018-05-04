@@ -12,16 +12,19 @@ import { Provider } from 'mobx-react';
 import { stores } from './stores';
 import { withRouter } from 'react-router';
 import { WebRepositories } from './utils/Repositories';
+import { MissionPlannerActions } from './crew/MissionPlannerActions';
 
 document.body.style.fontFamily = Theme.fontFamily;
 document.body.style.fontWeight = Theme.fontWeight;
 document.body.style.color = Theme.fontColor;
 document.body.style.backgroundColor = Theme.dark;
 
+const missionPlannerActions = new MissionPlannerActions(stores);
+
 const AppWithRouter = withRouter((InjectedApp as any)) as typeof App;
 
 ReactDOM.render(
-  <Provider {...stores}>
+  <Provider {...stores} missionPlannerActions={missionPlannerActions}>
     <ThemeProvider theme={Theme}>
       <BrowserRouter>
         <AppWithRouter repositories={WebRepositories}/>

@@ -23,11 +23,11 @@ describe('MissionPlanner', () => {
   let missionPlannerStore: MissionPlannerStore;
   let locationFilterStore: LocationFilterStore;
   let crewStore: CrewStore;
+  let missionPlannerActions: MissionPlannerActions;
   const crewModel = CrewModelFactory.build();
   const mission = crewModel.mission;
 
   beforeEach(async () => {
-    MissionPlannerActions.submit = jest.fn();
     windowPrintFunction = (window as any).print;
     (window as any).print = jest.fn();
 
@@ -38,11 +38,17 @@ describe('MissionPlanner', () => {
     missionPlannerStore.hydrate(crewModel.mission, [], []);
     crewStore.hydrate(crewModel, []);
 
+    missionPlannerActions = new MissionPlannerActions(
+      {crewStore, locationFilterStore, missionPlannerStore}
+    );
+
+    missionPlannerActions.submit = jest.fn();
     subject = shallow(
       <MissionPlanner
         missionPlannerStore={missionPlannerStore}
         locationFilterStore={locationFilterStore}
         crewStore={crewStore}
+        missionPlannerActions={missionPlannerActions}
       />
     );
   });
@@ -101,6 +107,6 @@ describe('MissionPlanner', () => {
 
   it('should call crewStore save onSubmit', () => {
     subject.find(StyledForm).simulate('submit', eventStub);
-    expect(MissionPlannerActions.submit).toHaveBeenCalled();
+    expect(missionPlannerActions.submit).toHaveBeenCalled();
   });
 });

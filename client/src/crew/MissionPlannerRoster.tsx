@@ -2,41 +2,28 @@ import * as React from 'react';
 
 import { CellMeasurer, CellMeasurerCache, List, ListRowProps } from 'react-virtualized';
 import { AirmanModel } from '../airman/models/AirmanModel';
-import { formatAttributes } from '../utils/StyleUtils';
 import styled from 'styled-components';
 import { inject, observer } from 'mobx-react';
 import { StyledNotification } from '../widgets/Notification';
-import { ShiftDisplay } from '../roster/ShiftDisplay';
-import { CrewModel } from './models/CrewModel';
 import { StyledRosterSubHeaderRow } from '../widgets/RosterSubHeaderRow';
+import { RosterHeaderStore } from '../roster/stores/RosterHeaderStore';
+import { LocationFilterStore } from '../widgets/stores/LocationFilterStore';
+import { CrewStore } from './stores/CrewStore';
+import { MissionPlannerStore } from './stores/MissionPlannerStore';
+import { MissionPlannerActions } from './MissionPlannerActions';
+import { StyledMissionPlannerRosterRow } from './MissionPlannerRosterRow';
 
-const cache = new CellMeasurerCache({
+export const cache = new CellMeasurerCache({
   defaultHeight: 60,
   fixedWidth: true
 });
 
-export interface MissionPlannerStoreContract {
-  availableAirmen: AirmanModel[];
-  unavailableAirmen: AirmanModel[];
-}
-
-export interface CrewStoreContract {
-  crew: CrewModel;
-}
-
-export interface LocationFilterStoreContract {
-  filterAirmen: (airmen: AirmanModel[]) => AirmanModel[];
-}
-
-export interface RosterHeaderStoreContract {
-  filterAirmen: (airmen: AirmanModel[]) => AirmanModel[];
-}
-
 interface Props {
-  missionPlannerStore?: MissionPlannerStoreContract;
-  crewStore?: CrewStoreContract;
-  locationFilterStore?: LocationFilterStoreContract;
-  rosterHeaderStore?: RosterHeaderStoreContract;
+  missionPlannerStore?: MissionPlannerStore;
+  crewStore?: CrewStore;
+  locationFilterStore?: LocationFilterStore;
+  rosterHeaderStore?: RosterHeaderStore;
+  missionPlannerActions?: MissionPlannerActions;
   className?: string;
 }
 
@@ -68,12 +55,19 @@ export class MissionPlannerRoster extends React.Component<Props> {
     } else {
       airman = unavailableAirmen[props.index % (availableAirmen.length + 2)];
     }
+
+    const addAirman = async () => {
+      this.props.crewStore!.setNewEntry({airmanName: `${airman.lastName}, ${airman.firstName}`});
+      await this.props.missionPlannerActions!.submit();
+    };
+
     return (
-      <StyledRow
+      <StyledMissionPlannerRosterRow
         {...props}
         key={airman.id}
         airman={airman}
         style={props.style}
+        onClick={crewStore!.crew!.hasAirman(airman) ? undefined : addAirman}
       />
     );
   }
@@ -82,6 +76,7 @@ export class MissionPlannerRoster extends React.Component<Props> {
     const {missionPlannerStore, className} = this.props;
     const availableAirmen = this.filterAirmen(missionPlannerStore!.availableAirmen);
     const unavailableAirmen = this.filterAirmen(missionPlannerStore!.unavailableAirmen);
+
     cache.clearAll();
     return (
       <List
@@ -107,75 +102,8 @@ export const StyledMissionPlannerRoster =
     'crewStore',
     'locationFilterStore',
     'rosterHeaderStore',
+    'missionPlannerActions',
   )(styled(MissionPlannerRoster)`
     border-top: none;
     outline: none;
 `);
-
-interface RowProps {
-  airman: AirmanModel;
-  style: object;
-  index: number;
-  parent: any;
-  key: any;
-  className?: string;
-}
-
-export const Row = observer((props: RowProps) => {
-  const {airman, className} = props;
-  return (
-    <CellMeasurer
-      cache={cache}
-      columnIndex={0}
-      rowIndex={props.index}
-      key={props.key}
-      parent={props.parent}
-    >
-      <div className={className} style={props.style}>
-        <div className="airman-row">
-          <span className="airman-shift"><ShiftDisplay shift={props.airman.shift}/></span>
-          <span className="airman-name">{`${airman.lastName}, ${airman.firstName}`}</span>
-          <span className="airman-qual">{formatAttributes(airman.qualifications, 'acronym')}</span>
-          <span className="airman-cert">{formatAttributes(airman.certifications, 'title')}</span>
-        </div>
-      </div>
-    </CellMeasurer>
-  );
-});
-
-export const StyledRow = styled(Row)`
-  .airman-row {
-    width: 866px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.75rem;
-    cursor: initial;
-    border-left: 1px solid ${props => props.theme.graySteel};
-    border-right: 1px solid ${props => props.theme.graySteel};
-  }
-  
-  &:last-child {
-    border-bottom: 1px solid ${props => props.theme.graySteel};
-  }
-  
-  &:nth-child(odd) {
-    background: ${props => props.theme.dark};
-  }
-  
-  &:nth-child(even) {
-    background: ${props => props.theme.light};
-  }
-  
-  &:hover {
-    background: ${props => props.theme.darkest};
-  }
-  
-  .airman-name, .airman-qual, .airman-cert {
-    width: 23%;
-  }
-  
-  .airman-shift {
-    width: 5rem;
-  }
-`;

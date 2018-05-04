@@ -1,30 +1,29 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { CrewModelFactory } from './factories/CrewModelFactory';
-import { Crew, CrewStoreContract } from './Crew';
+import { Crew } from './Crew';
 import { StyledCrewPositionRow } from './CrewPositionRow';
-import { StyledCrewPositionInputRow } from './CrewPositionInputRow';
 import { eventStub } from '../utils/testUtils';
+import { CrewStore } from './stores/CrewStore';
+import { DoubleRepositories } from '../utils/Repositories';
+import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 
 describe('Crew', () => {
-  let crewStore: CrewStoreContract;
+  let crewStore: CrewStore;
   let subject: ShallowWrapper;
   let instance: Crew;
   const crew = CrewModelFactory.build();
   const crewPositions = crew.crewPositions;
 
   beforeEach(async () => {
-    crewStore = {
-      setCrewEntry: jest.fn(),
-      clearPosition: jest.fn(),
-      setNewEntry: jest.fn(),
-      crew: CrewModelFactory.build(1)
-    };
+    crewStore = new CrewStore(DoubleRepositories);
+
+    crewStore.hydrate(crew, [AirmanModelFactory.build()]);
+    crewStore.setCrewEntry = jest.fn();
+    crewStore.clearPosition = jest.fn();
 
     subject = shallow(
-      <Crew
-        crewStore={crewStore}
-      />
+      <Crew crewStore={crewStore}/>
     );
     instance = (subject.instance() as Crew);
   });
@@ -46,21 +45,5 @@ describe('Crew', () => {
   it('clears a crew position row', () => {
     instance.handleDeleteChange(eventStub, 1);
     expect(crewStore.clearPosition).toHaveBeenCalledWith(1);
-  });
-
-  it('should render a CrewPositionInputRow', () => {
-    expect(subject.find(StyledCrewPositionInputRow).exists()).toBeTruthy();
-    expect(subject.find(StyledCrewPositionInputRow).prop('handleNewEntryCheck')).toBe(instance.handleNewEntryCheck);
-    expect(subject.find(StyledCrewPositionInputRow).prop('handleNewEntryChange')).toBe(instance.handleNewEntryChange);
-    expect(subject.find(StyledCrewPositionInputRow).prop('handleTypeahead')).toBe(instance.handleTypeahead);
-  });
-
-  it('sets a new crew member', () => {
-    instance.handleNewEntryCheck({target: {checked: true, name: 'critical'}});
-    expect(crewStore.setNewEntry).toHaveBeenCalledWith({critical: true});
-    instance.handleNewEntryChange({target: {value: 'QB', name: 'title'}});
-    expect(crewStore.setNewEntry).toHaveBeenCalledWith({title: 'QB'});
-    instance.handleTypeahead({value: 1, label: 'Munoz, Diana'});
-    expect(crewStore.setNewEntry).toHaveBeenCalledWith({airmanName: 'Munoz, Diana'});
   });
 });

@@ -20,6 +20,7 @@ interface Props {
   missionPlannerStore?: MissionPlannerStore;
   crewStore?: CrewStore;
   locationFilterStore?: LocationFilterStore;
+  missionPlannerActions?: MissionPlannerActions;
   className?: string;
 }
 
@@ -27,7 +28,7 @@ interface Props {
 export class MissionPlanner extends React.Component<Props> {
 
   render() {
-    const {missionPlannerStore, crewStore} = this.props;
+    const {missionPlannerStore, crewStore, missionPlannerActions} = this.props;
     const crew = crewStore!.crew;
     if (!crew) {
       return null;
@@ -54,9 +55,9 @@ export class MissionPlanner extends React.Component<Props> {
             }
           </div>
           <StyledForm
-            onSubmit={(e) => {
+            onSubmit={async (e) => {
               e.preventDefault();
-              MissionPlannerActions.submit();
+              await missionPlannerActions!.submit();
             }}
             setLoading={missionPlannerStore!.setLoading}
           >
@@ -68,7 +69,7 @@ export class MissionPlanner extends React.Component<Props> {
                 text="PRINT"
                 onClick={(window as any).print}
               />
-              <StyledLocationFilters refreshAirmen={MissionPlannerActions.refreshAirman}/>
+              <StyledLocationFilters refreshAirmen={missionPlannerActions!.refreshAirman}/>
             </div>
             <div className="mission-planner">
               <StyledCrew className="crew-list"/>
@@ -86,6 +87,7 @@ export const StyledMissionPlanner = inject(
   'missionPlannerStore',
   'locationFilterStore',
   'crewStore',
+  'missionPlannerActions',
 )(styled(MissionPlanner)`
   padding: 0.5rem;
   margin-left: 3rem;
