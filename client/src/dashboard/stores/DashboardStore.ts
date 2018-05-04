@@ -142,6 +142,6 @@ export class DashboardStore {
       return missions;
     }
 
-    return new Fuse(missions, {keys: ['atoMissionNumber'], threshold: 0.1,}).search(this._atoMissionNumberFilter);
+    return new Fuse(missions, {keys: ['atoMissionNumber'], threshold: 0.1, }).search(this._atoMissionNumberFilter);
   }
 }

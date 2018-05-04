@@ -56,7 +56,7 @@ describe('MissionPlannerRoster', () => {
   });
 
   it('should render the available sub header before the unavailable', () => {
-    expect(subject.find(StyledRosterSubHeaderRow).at(0).text()).toContain('PERSONNEL BELOW ARE AVAILABLE FOR MISSION ON');
-    expect(subject.find(StyledRosterSubHeaderRow).at(1).text()).toContain('PERSONNEL BELOW ARE UNAVAILABLE FOR MISSION ON');
+    expect(subject.find(StyledRosterSubHeaderRow).at(0).text()).toContain('AVAILABLE FOR MISSION ON');
+    expect(subject.find(StyledRosterSubHeaderRow).at(1).text()).toContain('UNAVAILABLE FOR MISSION ON');
   });
 });

@@ -6,7 +6,7 @@ export class EventActions {
   static handleFormSubmit = async (airmanId: number, formStore: FormStore<EventModel, any>) => {
     try {
       const event = formStore.addModel(airmanId);
-      await stores.plannerStore.navigateToWeek(event.startTime);
+      await stores.plannerStore.navigateToSidePanelWeek(event.startTime);
       await stores.availabilityStore.addEvent(event);
       await stores.trackerStore.refreshEvents(stores.tdyDeploymentFormStore!.week);
       await stores.plannerStore.setSidePanelWeek(stores.tdyDeploymentFormStore!.week);

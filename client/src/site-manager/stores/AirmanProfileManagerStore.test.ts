@@ -7,11 +7,11 @@ import { AirmanCertificationModelFactory } from '../../airman/factories/AirmanCe
 import { AirmanQualificationModelFactory } from '../../airman/factories/AirmanQualificationModelFactory';
 import { AirmanRepository } from '../../airman/repositories/AirmanRepository';
 import { ScheduleModel, ScheduleType } from '../../schedule/models/ScheduleModel';
-import Mock = jest.Mock;
 import { AirmanScheduleModel } from '../../airman/models/AirmanScheduleModel';
 import * as moment from 'moment';
 import { SiteModel, SiteType } from '../../site/models/SiteModel';
 import { SquadronModel } from '../../squadron/models/SquadronModel';
+import Mock = jest.Mock;
 
 describe('AirmanProfileManagerStore', () => {
   const schedule3 = new ScheduleModel(3, ScheduleType.FrontHalf);

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { BackIcon } from '../icons/BackIcon';
 import { NextIcon } from '../icons/NextIcon';
 import { Moment } from 'moment';
+import * as moment from 'moment';
 import styled from 'styled-components';
 import * as classNames from 'classnames';
 import { PlannerStore } from './stores/PlannerStore';
@@ -9,6 +10,8 @@ import { inject, observer } from 'mobx-react';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { AvailabilityStore } from '../availability/stores/AvailabilityStore';
 import { PlannerActions } from './PlannerActions';
+import { StyledDatePicker } from '../widgets/DatePicker';
+import { DatePickerIcon } from './DatePickerIcon';
 
 interface Props {
   plannerStore?: PlannerStore;
@@ -32,30 +35,59 @@ const renderWeek = (plannerWeek: Moment[]) => {
   );
 };
 
-export const PlannerHeader = observer((props: Props) => {
-  const {plannerStore} = props;
-  const {plannerWeek, decrementPlannerWeek, incrementPlannerWeek} = plannerStore!;
-  return (
-    <div className={classNames(props.className, 'planner-header')}>
-      <div className="month-header">
-        {plannerWeek[0].format('MMMM YYYY').toUpperCase()}
-      </div>
-      <span className="planner-day-navigation">
+@observer
+export class PlannerHeader extends React.Component<Props> {
+  state = {calendarFocus: false};
+
+  handleFocus = ({focused}: {focused: boolean}) => {
+    this.setState({calendarFocus: focused});
+  }
+
+  handleDateChange = (event: any) => {
+    this.props.plannerStore!.navigateToPlannerWeek(moment(event.target.value));
+  }
+
+  render() {
+    const {plannerStore} = this.props;
+    const {decrementPlannerWeek, incrementPlannerWeek} = plannerStore!;
+    return (
+      <div className={classNames(this.props.className, 'planner-header')}>
+        <div
+          onClick={() => {
+            this.setState({calendarFocus: true});
+          }}
+          className="month-header"
+        >
+          <span>
+            {plannerStore!.plannerWeek[0].format('MMMM YYYY').toUpperCase()}
+          </span>
+          <DatePickerIcon fill="#fff"/>
+        </div>
+        <StyledDatePicker
+          value=""
+          onChange={this.handleDateChange}
+          id="planner-date-picker"
+          name="date-picker"
+          focused={this.state.calendarFocus}
+          handleFocusChange={this.handleFocus}
+        />
+        <span className="planner-day-navigation">
         <span className="button-header">
           <button className="last-week" onClick={async () => await PlannerActions.weekSlider(decrementPlannerWeek)}>
             <BackIcon height={14} width={14}/>
           </button>
         </span>
-        {renderWeek(plannerWeek)}
-        <span className="button-header">
+          {renderWeek(plannerStore!.plannerWeek)}
+          <span className="button-header">
          <button className="next-week" onClick={async () => await PlannerActions.weekSlider(incrementPlannerWeek)}>
             <NextIcon height={14} width={14}/>
           </button>
         </span>
       </span>
-    </div>
-  );
-});
+      </div>
+    );
+  }
+}
 
 export const StyledPlannerHeader = inject('plannerStore', 'trackerStore')(styled(PlannerHeader)`
   background: ${props => props.theme.lightest};
@@ -115,6 +147,22 @@ export const StyledPlannerHeader = inject('plannerStore', 'trackerStore')(styled
   .month-header {
     margin-bottom: 7px;
     font-size: 0.875rem;
-    font-weight: 500;  
+    font-weight: 500;
+    display: flex;
+    
+    &:hover {
+      color: ${props => props.theme.purpleSteel};
+      cursor: pointer;
+      svg {
+        fill: ${props => props.theme.purpleSteel};
+      }
+    }
+    
+    & > span {
+      margin-right: 1rem;
+    }
+  }
+  .DateInput.DateInput_1 {
+    display: none;
   }
 `);

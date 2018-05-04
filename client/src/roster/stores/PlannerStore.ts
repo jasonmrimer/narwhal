@@ -42,8 +42,13 @@ export class PlannerStore {
   }
 
   @action.bound
-  navigateToWeek(date: Moment) {
+  navigateToSidePanelWeek(date: Moment) {
     this._sidePanelWeek = this.timeService.navigateToWeek(date);
+  }
+
+  @action.bound
+  navigateToPlannerWeek(date: Moment) {
+    this._plannerWeek = this.timeService.navigateToWeek(date);
   }
 
   @action.bound

@@ -30,7 +30,7 @@ describe('PlannerStore', () => {
   });
 
   it('should navigate to the given week', () => {
-    subject.navigateToWeek(moment('2018-04-17'));
+    subject.navigateToSidePanelWeek(moment('2018-04-17'));
     expect(subject.sidePanelWeek[0].isSame(moment('2018-04-15'))).toBeTruthy();
   });
 });

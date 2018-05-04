@@ -14,6 +14,8 @@ interface Props {
   name: string;
   disabled?: boolean;
   className?: string;
+  focused?: boolean;
+  handleFocusChange?: any;
 }
 
 interface State {
@@ -38,8 +40,11 @@ export class DatePicker extends React.Component<Props, State> {
           id={this.props.id || `date-picker-${randomText(10)}`}
           date={this.props.value !== '' ? moment(this.props.value) : null}
           onDateChange={this.onChange}
-          focused={this.state.focused || false}
-          onFocusChange={({focused}) => this.setState({focused})}
+          focused={this.props.focused || this.state.focused || false}
+          onFocusChange={this.props.handleFocusChange ?
+            this.props.handleFocusChange :
+            ({focused}) => this.setState({focused})
+          }
           disabled={this.props.disabled}
           numberOfMonths={1}
           showClearDate={!this.props.disabled}
