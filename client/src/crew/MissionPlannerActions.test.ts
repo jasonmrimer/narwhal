@@ -6,11 +6,15 @@ import { CrewStore } from './stores/CrewStore';
 
 describe('MissionPlannerActions', () => {
   let subject: MissionPlannerActions;
+  let windowPrintFunction: any;
   let missionPlannerStore: MissionPlannerStore;
   let locationFilterStore: LocationFilterStore;
   let crewStore: CrewStore;
 
   beforeEach(() => {
+    windowPrintFunction = (window as any).print;
+    (window as any).print = jest.fn();
+
     missionPlannerStore = new MissionPlannerStore(DoubleRepositories);
     locationFilterStore = new LocationFilterStore();
     crewStore = new CrewStore(DoubleRepositories);
@@ -23,6 +27,10 @@ describe('MissionPlannerActions', () => {
     subject = new MissionPlannerActions({missionPlannerStore, locationFilterStore, crewStore});
   });
 
+  afterEach(() => {
+    (window as any).print = windowPrintFunction;
+  });
+
   it('should call refreshAllAirmen', async () => {
     await subject.refreshAirman();
     expect(missionPlannerStore.refreshAllAirmen).toHaveBeenCalledWith(1);
@@ -32,5 +40,12 @@ describe('MissionPlannerActions', () => {
     await subject.submit();
     expect(crewStore.save).toHaveBeenCalled();
     expect(missionPlannerStore.refreshAllEvents).toHaveBeenCalledWith(1);
+  });
+
+  it('should call submitAndPrint', async () => {
+    await subject.submitAndPrint();
+    expect(crewStore.save).toHaveBeenCalled();
+    expect(missionPlannerStore.refreshAllEvents).toHaveBeenCalledWith(1);
+    expect((window as any).print).toHaveBeenCalled();
   });
 });

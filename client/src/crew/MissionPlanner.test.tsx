@@ -19,7 +19,6 @@ import { MissionPlannerActions } from './MissionPlannerActions';
 
 describe('MissionPlanner', () => {
   let subject: ShallowWrapper;
-  let windowPrintFunction: any;
   let missionPlannerStore: MissionPlannerStore;
   let locationFilterStore: LocationFilterStore;
   let crewStore: CrewStore;
@@ -28,9 +27,6 @@ describe('MissionPlanner', () => {
   const mission = crewModel.mission;
 
   beforeEach(async () => {
-    windowPrintFunction = (window as any).print;
-    (window as any).print = jest.fn();
-
     missionPlannerStore = new MissionPlannerStore(DoubleRepositories);
     locationFilterStore = new LocationFilterStore();
     crewStore = new CrewStore(DoubleRepositories);
@@ -42,6 +38,7 @@ describe('MissionPlanner', () => {
       {crewStore, locationFilterStore, missionPlannerStore}
     );
 
+    missionPlannerActions.submitAndPrint = jest.fn();
     missionPlannerActions.submit = jest.fn();
     subject = shallow(
       <MissionPlanner
@@ -51,10 +48,6 @@ describe('MissionPlanner', () => {
         missionPlannerActions={missionPlannerActions}
       />
     );
-  });
-
-  afterEach(() => {
-    (window as any).print = windowPrintFunction;
   });
 
   it('displays the mission details', () => {
@@ -99,10 +92,10 @@ describe('MissionPlanner', () => {
     expect(subject.find(StyledButton).prop('text')).toBe('PRINT');
   });
 
-  it('should open print window when print button is clicked', () => {
+  it('should save the current crew and open print window when print button is clicked', () => {
     const printButton = subject.find(StyledButton).findWhere(elem => elem.prop('text') === 'PRINT');
     printButton.simulate('click');
-    expect((window as any).print).toHaveBeenCalled();
+    expect(missionPlannerActions.submitAndPrint).toHaveBeenCalled();
   });
 
   it('should call crewStore save onSubmit', () => {

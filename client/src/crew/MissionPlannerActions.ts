@@ -12,4 +12,9 @@ export class MissionPlannerActions {
     await crewStore!.save();
     await missionPlannerStore!.refreshAllEvents(locationFilterStore.selectedSiteId);
   }
+
+  async submitAndPrint() {
+    await this.submit();
+    (window as any).print();
+  }
 }

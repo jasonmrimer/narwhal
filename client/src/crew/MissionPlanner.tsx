@@ -67,7 +67,9 @@ export class MissionPlanner extends React.Component<Props> {
               />
               <StyledButton
                 text="PRINT"
-                onClick={(window as any).print}
+                onClick={async () => {
+                  await missionPlannerActions!.submitAndPrint();
+                }}
               />
               <StyledLocationFilters refreshAirmen={missionPlannerActions!.refreshAirman}/>
             </div>
