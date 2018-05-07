@@ -75,7 +75,7 @@ describe('AppointmenFormStore', () => {
       EventType.Appointment
     );
 
-    expect(subject.addModel(airmanId)).toEqual(expectedEvent);
+    expect(subject.stateToModel(airmanId)).toEqual(expectedEvent);
   });
 
   it('ensures that at least dates are included in the appointment submission', () => {
@@ -86,7 +86,7 @@ describe('AppointmenFormStore', () => {
     subject.setState('endDate', '2018-02-22');
     subject.setState('endTime', '2359');
 
-    const addedEvent = subject.addModel(airmanId);
+    const addedEvent = subject.stateToModel(airmanId);
 
     expect(addedEvent.startTime.isValid()).toBeFalsy();
   });

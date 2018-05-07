@@ -17,6 +17,7 @@ interface Props {
   plannerStore?: PlannerStore;
   trackerStore?: TrackerStore;
   availabilityStore?: AvailabilityStore;
+  plannerActions?: PlannerActions;
   className?: string;
 }
 
@@ -48,8 +49,7 @@ export class PlannerHeader extends React.Component<Props> {
   }
 
   render() {
-    const {plannerStore} = this.props;
-    const {decrementPlannerWeek, incrementPlannerWeek} = plannerStore!;
+    const {plannerStore, plannerActions} = this.props;
     return (
       <div className={classNames(this.props.className, 'planner-header')}>
         <div
@@ -73,13 +73,13 @@ export class PlannerHeader extends React.Component<Props> {
         />
         <span className="planner-day-navigation">
         <span className="button-header">
-          <button className="last-week" onClick={async () => await PlannerActions.weekSlider(decrementPlannerWeek)}>
+          <button className="last-week" onClick={async () => await plannerActions!.decrementDay()}>
             <BackIcon height={14} width={14}/>
           </button>
         </span>
           {renderWeek(plannerStore!.plannerWeek)}
-          <span className="button-header">
-         <button className="next-week" onClick={async () => await PlannerActions.weekSlider(incrementPlannerWeek)}>
+        <span className="button-header">
+         <button className="next-week" onClick={async () => await plannerActions!.incrementDay()}>
             <NextIcon height={14} width={14}/>
           </button>
         </span>
@@ -89,7 +89,7 @@ export class PlannerHeader extends React.Component<Props> {
   }
 }
 
-export const StyledPlannerHeader = inject('plannerStore', 'trackerStore')(styled(PlannerHeader)`
+export const StyledPlannerHeader = inject('plannerStore', 'trackerStore', 'plannerActions')(styled(PlannerHeader)`
   background: ${props => props.theme.lightest};
   padding: 0.75rem;
   flex-grow: 2;

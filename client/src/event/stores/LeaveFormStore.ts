@@ -54,7 +54,7 @@ export class LeaveFormStore extends FormStore<EventModel, State> {
     };
   }
 
-  addModel(airmanId: number) {
+  stateToModel(airmanId: number) {
     return new EventModel(
       'Leave',
       this._state.description,

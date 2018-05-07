@@ -11,14 +11,15 @@ import { StyledDeletePopup } from '../widgets/DeletePopup';
 import { ProfileModel } from '../profile/models/ProfileModel';
 import { AvailabilityStore } from '../availability/stores/AvailabilityStore';
 import { CurrencyStore } from '../currency/stores/CurrencyStore';
-import { EventActions } from '../event/EventActions';
 import { TrackerActions } from './TrackerActions';
 import { SkillActions } from '../skills/SkillActions';
+import { EventActions } from '../event/EventActions';
 
 interface Props {
   trackerStore?: TrackerStore;
   availabilityStore?: AvailabilityStore;
   currencyStore?: CurrencyStore;
+  eventActions?: EventActions;
   profile: ProfileModel;
   className?: string;
 }
@@ -26,7 +27,7 @@ interface Props {
 @observer
 export class Tracker extends React.Component<Props> {
   render() {
-    const {trackerStore, availabilityStore, currencyStore, className} = this.props;
+    const {trackerStore, availabilityStore, currencyStore, className, eventActions} = this.props;
     return (
       <div className={className}>
         {trackerStore!.loading && <StyledLoadingOverlay/>}
@@ -47,7 +48,7 @@ export class Tracker extends React.Component<Props> {
           availabilityStore!.pendingDeleteEvent &&
           <StyledDeletePopup
             item={availabilityStore!.pendingDeleteEvent!}
-            onConfirm={EventActions.executePendingDelete}
+            onConfirm={eventActions!.executePendingDelete}
             onCancel={availabilityStore!.cancelPendingDelete}
           />
         }
@@ -70,7 +71,8 @@ export const StyledTracker =
     'availabilityStore',
     'currencyStore',
     'locationFilterStore',
-    'skillFormStore'
+    'skillFormStore',
+    'eventActions'
   )(styled(Tracker)`
     margin-left: 3rem;
     padding: 0.5rem;

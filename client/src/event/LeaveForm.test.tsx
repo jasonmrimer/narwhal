@@ -13,7 +13,6 @@ import { StyledForm } from '../widgets/Form';
 import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { DoubleRepositories } from '../utils/Repositories';
-import { EventActions } from './EventActions';
 
 /* tslint:disable:no-empty*/
 describe('LeaveForm', () => {
@@ -21,10 +20,13 @@ describe('LeaveForm', () => {
   let wrapper: ShallowWrapper;
   let subject: LeaveForm;
   let trackerStore: TrackerStore;
+  let eventActions: any;
 
   beforeEach(() => {
-    EventActions.handleDeleteEvent = jest.fn();
-    EventActions.handleFormSubmit = jest.fn();
+    eventActions = {
+      handleFormSubmit: jest.fn(),
+      handleDeleteEvent: jest.fn(),
+    };
     store = new LeaveFormStore(new TimeServiceStub());
 
     trackerStore = new TrackerStore(DoubleRepositories);
@@ -33,6 +35,7 @@ describe('LeaveForm', () => {
         airmanId={123}
         leaveFormStore={store}
         trackerStore={trackerStore}
+        eventActions={eventActions}
       />
     );
 
@@ -87,15 +90,15 @@ describe('LeaveForm', () => {
     expect(findInputValueByName(wrapper, StyledTimeInput, 'endTime')).toEqual(store.state.endTime);
   });
 
-  it('adds a Leave', () => {
-    subject.handleSubmit(eventStub);
-    expect(EventActions.handleFormSubmit).toHaveBeenCalled();
+  it('adds a Leave', async () => {
+    await subject.handleSubmit(eventStub);
+    expect(eventActions.handleFormSubmit).toHaveBeenCalled();
   });
 
-  it('removes a Leave', () => {
+  it('removes a Leave', async () => {
     store.open(EventModelFactory.build());
-    subject.handleDelete();
-    expect(EventActions.handleDeleteEvent).toHaveBeenCalled();
+    await subject.handleDelete();
+    expect(eventActions.handleDeleteEvent).toHaveBeenCalled();
   });
 });
 

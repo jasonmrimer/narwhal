@@ -17,6 +17,7 @@ import { TrackerStore } from '../tracker/stores/TrackerStore';
 interface Props {
   appointmentFormStore?: AppointmentFormStore;
   trackerStore?: TrackerStore;
+  eventActions?: EventActions;
   airmanId: number;
   event?: EventModel;
   className?: string;
@@ -33,12 +34,12 @@ export class AppointmentForm extends React.Component<Props> {
   }
 
   handleDelete = async () => {
-    await EventActions.handleDeleteEvent(this.props.appointmentFormStore!.model!);
+    await this.props.eventActions!.handleDeleteEvent(this.props.appointmentFormStore!.model!);
   }
 
   handleSubmit = async (e: any) => {
     e.preventDefault();
-    await EventActions.handleFormSubmit(this.props.airmanId, this.props.appointmentFormStore!);
+    await this.props.eventActions!.handleFormSubmit(this.props.airmanId, this.props.appointmentFormStore!);
   }
 
   render() {
@@ -114,6 +115,10 @@ export class AppointmentForm extends React.Component<Props> {
   }
 }
 
-export const StyledAppointmentForm = inject('appointmentFormStore', 'trackerStore')(styled(AppointmentForm)`
+export const StyledAppointmentForm = inject(
+  'appointmentFormStore',
+  'trackerStore',
+  'eventActions'
+)(styled(AppointmentForm)`
   min-width: ${props => props.theme.sidePanelWidth};
 `);

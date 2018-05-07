@@ -15,7 +15,6 @@ import { StyledForm } from '../widgets/Form';
 import { MissionModelFactory } from '../mission/factories/MissionModelFactory';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { DoubleRepositories } from '../utils/Repositories';
-import { EventActions } from './EventActions';
 
 /* tslint:disable:no-empty*/
 describe('MissionForm', () => {
@@ -24,6 +23,7 @@ describe('MissionForm', () => {
   let wrapper: ShallowWrapper;
   let subject: MissionForm;
   let trackerStore: TrackerStore;
+  let eventActions: any;
 
   beforeEach(async () => {
     trackerStore = new TrackerStore(DoubleRepositories);
@@ -32,13 +32,16 @@ describe('MissionForm', () => {
     missionFormStore.hydrate([MissionModelFactory.build()]);
     mission = missionFormStore.missions[0];
 
-    EventActions.handleFormSubmit = jest.fn();
-    EventActions.handleDeleteEvent = jest.fn();
+    eventActions = {
+      handleFormSubmit: jest.fn(),
+      handleDeleteEvent: jest.fn(),
+    };
     wrapper = shallow(
       <MissionForm
         airmanId={123}
         missionFormStore={missionFormStore}
         trackerStore={trackerStore}
+        eventActions={eventActions}
       />
     );
 
@@ -107,15 +110,15 @@ describe('MissionForm', () => {
     expect(findInputValueByName(wrapper, StyledTimeInput, 'endTime')).toEqual('');
   });
 
-  it('add a Mission', () => {
-    subject.handleSubmit(eventStub);
-    expect(EventActions.handleFormSubmit).toHaveBeenCalled();
+  it('add a Mission', async () => {
+    await subject.handleSubmit(eventStub);
+    expect(eventActions.handleFormSubmit).toHaveBeenCalled();
   });
 
-  it('remove an Mission', () => {
+  it('remove an Mission', async () => {
     missionFormStore.open(EventModelFactory.build());
-    subject.handleDelete();
-    expect(EventActions.handleDeleteEvent).toHaveBeenCalled();
+    await subject.handleDelete();
+    expect(eventActions.handleDeleteEvent).toHaveBeenCalled();
   });
 });
 

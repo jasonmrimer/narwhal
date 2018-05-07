@@ -68,6 +68,7 @@ describe('Roster', () => {
           sidePanelStore={sidePanelStore}
           currencyStore={currencyStore}
           plannerStore={plannerStore}
+          sidePanelActions={null}
         >
           <StyledRoster/>
         </Provider>

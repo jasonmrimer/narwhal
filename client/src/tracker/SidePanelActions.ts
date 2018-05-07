@@ -1,19 +1,41 @@
-import { stores } from '../stores';
 import { TabType } from './stores/SidePanelStore';
+import { AirmanModel } from '../airman/models/AirmanModel';
+import { Moment } from 'moment';
 
 export class SidePanelActions {
-  static closeSidePanel = () => {
-    stores.trackerStore.clearSelectedAirman();
-    stores.availabilityStore.closeEventForm();
-    stores.currencyStore.closeSkillForm();
-    stores.currencyStore.closeAirmanRipItemForm();
-    stores.plannerStore.setSidePanelWeek(stores.plannerStore.plannerWeek);
+  constructor(private stores: any) {
   }
 
-  static selectTab = (tabType: TabType) => {
-    stores.availabilityStore.closeEventForm();
-    stores.currencyStore.closeSkillForm();
-    stores.currencyStore.closeAirmanRipItemForm();
-    stores.sidePanelStore.setSelectedTab(tabType);
+  selectTab = (tabType: TabType) => {
+    this.stores.availabilityStore.closeEventForm();
+    this.stores.currencyStore.closeSkillForm();
+    this.stores.currencyStore.closeAirmanRipItemForm();
+    this.stores.sidePanelStore.setSelectedTab(tabType);
+  }
+
+  openSidePanel = async (airman: AirmanModel, tabType: TabType, date?: Moment) => {
+    this.stores.trackerStore.setSelectedAirman(airman);
+    this.stores.sidePanelStore.setSelectedTab(tabType);
+    this.stores.plannerStore!.setSidePanelWeek(this.stores.plannerStore.plannerWeek);
+
+    this.stores.availabilityStore.closeEventForm();
+    this.stores.currencyStore.closeSkillForm();
+    this.stores.currencyStore.closeAirmanRipItemForm();
+
+    await this.stores.currencyStore.setRipItemsForAirman(airman.id);
+    this.stores.availabilityStore.setAirmanEvents(this.stores.trackerStore.getEventsByAirmanId(airman.id));
+
+    if (date) {
+      this.stores.availabilityStore.setSelectedDate(date);
+      this.stores.availabilityStore.showEventForm();
+    }
+  }
+
+  closeSidePanel = () => {
+    this.stores.trackerStore.clearSelectedAirman();
+    this.stores.availabilityStore.closeEventForm();
+    this.stores.currencyStore.closeSkillForm();
+    this.stores.currencyStore.closeAirmanRipItemForm();
+    this.stores.plannerStore.setSidePanelWeek(this.stores.plannerStore.plannerWeek);
   }
 }

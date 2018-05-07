@@ -15,7 +15,7 @@ export abstract class FormStore<T extends UniqueModel, S> {
 
   protected abstract emptyState(): S;
 
-  public abstract addModel(airmanId: number): T;
+  public abstract stateToModel(airmanId: number): T;
 
   @action
   open(model: T | null = null) {

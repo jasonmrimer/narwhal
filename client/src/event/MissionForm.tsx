@@ -24,6 +24,7 @@ interface Props {
   trackerStore?: TrackerStore;
   airmanId: number;
   event?: EventModel;
+  eventActions?: EventActions;
   className?: string;
 }
 
@@ -42,12 +43,12 @@ export class MissionForm extends React.Component<Props> {
   }
 
   handleDelete = async () => {
-    await EventActions.handleDeleteEvent(this.props.missionFormStore!.model!);
+    await this.props.eventActions!.handleDeleteEvent(this.props.missionFormStore!.model!);
   }
 
   handleSubmit = async (e: any) => {
     e.preventDefault();
-    await EventActions.handleFormSubmit(this.props.airmanId, this.props.missionFormStore!);
+    await this.props.eventActions!.handleFormSubmit(this.props.airmanId, this.props.missionFormStore!);
   }
 
   render() {
@@ -117,6 +118,6 @@ export class MissionForm extends React.Component<Props> {
   }
 }
 
-export const StyledMissionForm = inject('missionFormStore', 'trackerStore')(styled(MissionForm)`
+export const StyledMissionForm = inject('missionFormStore', 'trackerStore', 'eventActions')(styled(MissionForm)`
   min-width: ${props => props.theme.sidePanelWidth};
 `);

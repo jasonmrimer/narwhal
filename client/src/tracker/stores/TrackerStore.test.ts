@@ -35,11 +35,6 @@ describe('TrackerStore', () => {
     expect(subject.getEventsByAirmanId(1)).toContain(events[0]);
   });
 
-  it('should return events for the selected airman', () => {
-    subject.setSelectedAirman(airmen[0]);
-    expect(subject.selectedAirmanEvents).toContain(events[0]);
-  });
-
   it('setting the selectedAirman should set the selected airman property', () => {
     const airman = AirmanModelFactory.build();
     subject.setSelectedAirman(airman);

@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { EventModel, EventType } from '../event/models/EventModel';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { AirmanModel } from '../airman/models/AirmanModel';
-import { SidePanelStore } from '../tracker/stores/SidePanelStore';
+import { SidePanelStore, TabType } from '../tracker/stores/SidePanelStore';
 import { inject, observer } from 'mobx-react';
 import { PlannerStore } from './stores/PlannerStore';
 import { findEventsForDay } from '../utils/eventUtil';
@@ -15,14 +15,15 @@ import { MissionIcon } from '../icons/MissionIcon';
 import { LeaveIcon } from '../icons/LeaveIcon';
 import { TDYDeploymentIcon } from '../icons/TDYDeploymentIcon';
 import { AvailabilityStore } from '../availability/stores/AvailabilityStore';
-import { PlannerActions } from './PlannerActions';
 import { OffDayIcon } from '../icons/OffDayIcon';
+import { SidePanelActions } from '../tracker/SidePanelActions';
 
 interface Props {
   trackerStore?: TrackerStore;
   plannerStore?: PlannerStore;
   sidePanelStore?: SidePanelStore;
   availabilityStore?: AvailabilityStore;
+  sidePanelActions?: SidePanelActions;
   airman: AirmanModel;
   className?: string;
 }
@@ -30,7 +31,7 @@ interface Props {
 @observer
 export class Planner extends React.Component<Props> {
   newEvent = async (airman: AirmanModel, date: Moment) => {
-    PlannerActions.openSidePanel(airman, date);
+    await this.props.sidePanelActions!.openSidePanel(airman, TabType.AVAILABILITY, date);
   }
 
   render() {
@@ -43,7 +44,7 @@ export class Planner extends React.Component<Props> {
         <div>
           {
             plannerStore!.plannerWeek.map((day, index) => {
-              return renderEvents(day, airmanEvents, index, airman, this.newEvent, plannerStore!);
+              return renderEvents(day, airmanEvents, index, airman, this.newEvent);
             })
           }
         </div>
@@ -69,7 +70,7 @@ const renderEventType = (type: EventType, key: number, event?: EventModel) => {
 };
 
 const renderEvents = (
-  day: Moment, events: EventModel[], key: number, airman: AirmanModel, newEvent: any, plannerStore: PlannerStore) => {
+  day: Moment, events: EventModel[], key: number, airman: AirmanModel, newEvent: any) => {
   const matchedEvents = findEventsForDay(events, day);
   if (matchedEvents.length > 0) {
     const eventType = matchedEvents.map(event => event.type);
@@ -110,7 +111,8 @@ export const StyledPlanner =
     'trackerStore',
     'plannerStore',
     'sidePanelStore',
-    'availabilityStore'
+    'availabilityStore',
+    'sidePanelActions'
   )(styled(Planner)`
     display: flex;
     justify-content: space-between;

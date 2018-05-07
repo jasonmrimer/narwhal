@@ -1,29 +1,24 @@
-import { stores } from '../stores';
-import { TabType } from '../tracker/stores/SidePanelStore';
-import { AirmanModel } from '../airman/models/AirmanModel';
-import { Moment } from 'moment';
-
 export class PlannerActions {
-  static weekSlider = async (direction: any) => {
-    direction();
-    await stores.trackerStore.refreshEvents(stores.plannerStore.plannerWeek);
-    if (!stores.trackerStore.selectedAirman.isEmpty) {
-      await stores.availabilityStore.refreshAirmanEvents(
-        stores.trackerStore.selectedAirman.id,
-        stores.plannerStore.sidePanelWeek
-      );
-    }
+  constructor(private stores: any) {
   }
 
-  static openSidePanel = async (airman: AirmanModel, date: Moment) => {
-    await stores.currencyStore.setRipItemsForAirman(airman.id);
+  incrementDay = async () => {
+    this.stores.plannerStore.incrementPlannerWeek();
+    this.refreshEventData();
+  }
 
-    stores.sidePanelStore!.setSelectedTab(TabType.AVAILABILITY);
+  decrementDay = async () => {
+    this.stores.plannerStore.decrementPlannerWeek();
+    this.refreshEventData();
+  }
 
-    stores.trackerStore!.setSelectedAirman(airman);
-
-    stores.availabilityStore!.setSelectedDate(date);
-
-    stores.availabilityStore!.showEventForm();
+  private async refreshEventData() {
+    await this.stores.trackerStore.refreshEvents(this.stores.plannerStore.plannerWeek);
+    if (!this.stores.trackerStore.selectedAirman.isEmpty) {
+      await this.stores.availabilityStore.refreshAirmanEvents(
+        this.stores.trackerStore.selectedAirman.id,
+        this.stores.plannerStore.sidePanelWeek
+      );
+    }
   }
 }

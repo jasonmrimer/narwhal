@@ -50,7 +50,7 @@ export class TDYDeploymentFormStore extends FormStore<EventModel, State> {
     };
   }
 
-  addModel(airmanId: number) {
+  stateToModel(airmanId: number) {
     return new EventModel(
       this._state.title,
       this._state.description,

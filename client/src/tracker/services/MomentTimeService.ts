@@ -13,7 +13,15 @@ export class MomentTimeService implements TimeService {
     return this.createWeek(sunday);
   }
 
-  decrementWeek(week: moment.Moment[]): moment.Moment[] {
+  incrementWeekByDay(week: Moment[]): Moment[] {
+    return this.createWeek(week[1].startOf('day'));
+  }
+
+  decrementWeekByDay(week: Moment[]): Moment[] {
+    return this.createWeek(week[0].clone().subtract(1, 'day').startOf('day'));
+  }
+
+  decrementWeek(week: Moment[]): Moment[] {
     const sunday = week[0].clone().startOf('week').subtract(7, 'day');
     return this.createWeek(sunday);
   }
@@ -23,15 +31,15 @@ export class MomentTimeService implements TimeService {
     return this.createWeek(sunday);
   }
 
-  createWeek(sunday: Moment) {
+  createWeek(startOfWeek: Moment) {
     return [
-      sunday,
-      sunday.clone().add(1, 'day'),
-      sunday.clone().add(2, 'day'),
-      sunday.clone().add(3, 'day'),
-      sunday.clone().add(4, 'day'),
-      sunday.clone().add(5, 'day'),
-      sunday.clone().add(6, 'day').endOf('day')
+      startOfWeek,
+      startOfWeek.clone().add(1, 'day'),
+      startOfWeek.clone().add(2, 'day'),
+      startOfWeek.clone().add(3, 'day'),
+      startOfWeek.clone().add(4, 'day'),
+      startOfWeek.clone().add(5, 'day'),
+      startOfWeek.clone().add(6, 'day').endOf('day')
     ];
   }
 }

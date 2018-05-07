@@ -9,11 +9,11 @@ describe('PlannerStore', () => {
     subject = new PlannerStore(new TimeServiceStub());
   });
 
-  it('will increment the planner week and change the side panel week', () => {
+  it('will increment the planner week and should not change the side panel week', () => {
     expect(subject.plannerWeek[0].isSame(moment('2017-11-26'))).toBeTruthy();
     subject.incrementPlannerWeek();
-    expect(subject.plannerWeek[0].isSame(moment('2017-12-03'))).toBeTruthy();
-    expect(subject.sidePanelWeek[0].isSame(moment('2017-12-03'))).toBeTruthy();
+    expect(subject.plannerWeek[0].isSame(moment('2017-11-27'))).toBeTruthy();
+    expect(subject.sidePanelWeek[0].isSame(moment('2017-11-26'))).toBeTruthy();
   });
 
   it('will increment the side panel week but not change the planner week', () => {
@@ -23,14 +23,20 @@ describe('PlannerStore', () => {
     expect(subject.sidePanelWeek[0].isSame(moment('2017-12-03'))).toBeTruthy();
   });
 
-  it('will decrement the planner week', () => {
+  it('will decrement the planner by a day', () => {
     expect(subject.plannerWeek[0].isSame(moment('2017-11-26'))).toBeTruthy();
     subject.decrementPlannerWeek();
-    expect(subject.plannerWeek[0].isSame(moment('2017-11-19'))).toBeTruthy();
+    expect(subject.plannerWeek[0].isSame(moment('2017-11-25'))).toBeTruthy();
   });
 
   it('should navigate to the given week', () => {
     subject.navigateToSidePanelWeek(moment('2018-04-17'));
     expect(subject.sidePanelWeek[0].isSame(moment('2018-04-15'))).toBeTruthy();
+  });
+
+  it('should increment the planner week by one day', () => {
+    expect(subject.plannerWeek[0].isSame(moment('2017-11-26'))).toBeTruthy();
+    subject.incrementPlannerWeek();
+    expect(subject.plannerWeek[0].isSame(moment('2017-11-27'))).toBeTruthy();
   });
 });

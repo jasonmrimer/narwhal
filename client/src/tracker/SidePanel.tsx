@@ -13,6 +13,7 @@ import { SidePanelActions } from './SidePanelActions';
 interface Props {
   trackerStore?: TrackerStore;
   sidePanelStore?: SidePanelStore;
+  sidePanelActions?: SidePanelActions;
   className?: string;
 }
 
@@ -34,13 +35,13 @@ export class SidePanel extends React.Component<Props> {
   }
 
   render() {
-    const {trackerStore, className, sidePanelStore} = this.props;
+    const {trackerStore, className, sidePanelStore, sidePanelActions} = this.props;
     return (
       <div className={`${className} side-panel`}>
         <div className={'header'}>
           <button
             className="close"
-            onClick={SidePanelActions.closeSidePanel}
+            onClick={sidePanelActions!.closeSidePanel}
           >
             <CloseIcon/>
           </button>
@@ -50,14 +51,14 @@ export class SidePanel extends React.Component<Props> {
         </div>
         <div className="tabs">
           <StyledTab
-            onClick={() => SidePanelActions.selectTab(TabType.CURRENCY)}
+            onClick={() => sidePanelActions!.selectTab(TabType.CURRENCY)}
             title="CURRENCY"
             isActive={sidePanelStore!.selectedTab === TabType.CURRENCY}
           >
             {trackerStore!.selectedAirman.hasExpiredSkills && <TabAlert/>}
           </StyledTab>
           <StyledTab
-            onClick={() => SidePanelActions.selectTab(TabType.AVAILABILITY)}
+            onClick={() => sidePanelActions!.selectTab(TabType.AVAILABILITY)}
             title="AVAILABILITY"
             isActive={sidePanelStore!.selectedTab === TabType.AVAILABILITY}
           />
@@ -73,6 +74,7 @@ export class SidePanel extends React.Component<Props> {
 export const StyledSidePanel = inject(
   'trackerStore',
   'sidePanelStore',
+  'sidePanelActions'
 )(styled(SidePanel)`
   background-color: ${props => props.theme.lighter};
   min-width: 380px;

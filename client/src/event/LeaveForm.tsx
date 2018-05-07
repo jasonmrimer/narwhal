@@ -11,14 +11,15 @@ import { StyledButton } from '../widgets/Button';
 import { StyledForm, StyledFormRow } from '../widgets/Form';
 import { DeleteIcon } from '../icons/DeleteIcon';
 import { EventModel } from './models/EventModel';
-import { EventActions } from './EventActions';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
+import { EventActions } from './EventActions';
 
 interface Props {
   leaveFormStore?: LeaveFormStore;
   trackerStore?: TrackerStore;
   airmanId: number;
   event?: EventModel;
+  eventActions?: EventActions;
   className?: string;
 }
 
@@ -33,12 +34,12 @@ export class LeaveForm extends React.Component<Props> {
   }
 
   handleDelete = async () => {
-    await EventActions.handleDeleteEvent(this.props.leaveFormStore!.model!);
+    await this.props.eventActions!.handleDeleteEvent(this.props.leaveFormStore!.model!);
   }
 
   handleSubmit = async (e: any) => {
     e.preventDefault();
-    await EventActions.handleFormSubmit(this.props.airmanId, this.props.leaveFormStore!);
+    await this.props.eventActions!.handleFormSubmit(this.props.airmanId, this.props.leaveFormStore!);
   }
 
   render() {
@@ -100,6 +101,6 @@ export class LeaveForm extends React.Component<Props> {
   }
 }
 
-export const StyledLeaveForm = inject('leaveFormStore', 'trackerStore')(styled(LeaveForm)`
+export const StyledLeaveForm = inject('leaveFormStore', 'trackerStore', 'eventActions')(styled(LeaveForm)`
   min-width: ${props => props.theme.sidePanelWidth};
 `);

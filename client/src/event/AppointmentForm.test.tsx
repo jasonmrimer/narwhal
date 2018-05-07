@@ -12,7 +12,6 @@ import { AppointmentFormStore } from './stores/AppointmentFormStore';
 import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { DoubleRepositories } from '../utils/Repositories';
-import { EventActions } from './EventActions';
 
 /* tslint:disable:no-empty*/
 describe('AppointmentForm', () => {
@@ -20,10 +19,14 @@ describe('AppointmentForm', () => {
   let appointmentFormStore: AppointmentFormStore;
   let wrapper: ShallowWrapper;
   let subject: AppointmentForm;
+  let eventActions: any;
 
   beforeEach(() => {
-    EventActions.handleFormSubmit = jest.fn();
-    EventActions.handleDeleteEvent = jest.fn();
+    eventActions = {
+      handleFormSubmit: jest.fn(),
+      handleDeleteEvent: jest.fn(),
+    };
+
     trackerStore = new TrackerStore(DoubleRepositories);
     appointmentFormStore = new AppointmentFormStore(new TimeServiceStub());
 
@@ -32,6 +35,7 @@ describe('AppointmentForm', () => {
         airmanId={123}
         appointmentFormStore={appointmentFormStore}
         trackerStore={trackerStore}
+        eventActions={eventActions}
       />
     );
 
@@ -91,13 +95,13 @@ describe('AppointmentForm', () => {
 
   it('add an Appointment', async () => {
     await subject.handleSubmit(eventStub);
-    expect(EventActions.handleFormSubmit).toHaveBeenCalled();
+    expect(eventActions.handleFormSubmit).toHaveBeenCalled();
   });
 
   it('remove an Appointment', async () => {
     appointmentFormStore.open(EventModelFactory.build());
     await subject.handleDelete();
-    expect(EventActions.handleDeleteEvent).toHaveBeenCalled();
+    expect(eventActions.handleDeleteEvent).toHaveBeenCalled();
   });
 });
 

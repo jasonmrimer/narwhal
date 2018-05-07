@@ -16,6 +16,7 @@ import { EventActions } from './EventActions';
 interface Props {
   tdyDeploymentFormStore?: TDYDeploymentFormStore;
   trackerStore?: TrackerStore;
+  eventActions?: EventActions;
   airmanId: number;
   event?: EventModel;
   className?: string;
@@ -32,12 +33,12 @@ export class TDYDeploymentForm extends React.Component<Props> {
   }
 
   handleDelete = async () => {
-    await EventActions.handleDeleteEvent(this.props.tdyDeploymentFormStore!.model!);
+    await this.props.eventActions!.handleDeleteEvent(this.props.tdyDeploymentFormStore!.model!);
   }
 
   handleSubmit = async (e: any) => {
     e.preventDefault();
-    await EventActions.handleFormSubmit(this.props.airmanId, this.props.tdyDeploymentFormStore!);
+    await this.props.eventActions!.handleFormSubmit(this.props.airmanId, this.props.tdyDeploymentFormStore!);
   }
 
   render() {
@@ -99,6 +100,10 @@ export class TDYDeploymentForm extends React.Component<Props> {
   }
 }
 
-export const StyledTDYDeploymentForm = inject('trackerStore', 'tdyDeploymentFormStore')(styled(TDYDeploymentForm)`
+export const StyledTDYDeploymentForm = inject(
+  'trackerStore',
+  'tdyDeploymentFormStore',
+  'eventActions'
+)(styled(TDYDeploymentForm)`
   min-width: ${props => props.theme.sidePanelWidth};
 `);

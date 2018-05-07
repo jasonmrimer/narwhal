@@ -79,7 +79,7 @@ describe('SkillFormStore', () => {
     subject.setState('skillType', skill.type);
     subject.setState('skillId', String(skill.skillId));
 
-    const model = subject.addModel(airmanId);
+    const model = subject.stateToModel(airmanId);
     expect(model.type).toBe(skill.type);
     expect(model.skillId).toBe(skill.skillId);
   });

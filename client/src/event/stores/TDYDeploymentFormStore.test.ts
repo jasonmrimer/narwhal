@@ -66,7 +66,7 @@ describe('TDYDeploymentFormStore', () => {
       EventType.TDY_DEPLOYMENT
     );
 
-    const addedEvent = subject.addModel(airmanId);
+    const addedEvent = subject.stateToModel(airmanId);
     expect(addedEvent).toEqual(expectedEvent);
   });
 
@@ -76,7 +76,7 @@ describe('TDYDeploymentFormStore', () => {
     subject.setState('startTime', '');
     subject.setState('endTime', '2018-02-22');
 
-    const addedEvent = subject.addModel(airmanId);
+    const addedEvent = subject.stateToModel(airmanId);
 
     expect(addedEvent.startTime.isValid()).toBeFalsy();
   });

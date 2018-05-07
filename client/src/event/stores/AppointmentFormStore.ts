@@ -62,7 +62,7 @@ export class AppointmentFormStore extends FormStore<EventModel, State> {
   }
 
   @action.bound
-  addModel(airmanId: number) {
+  stateToModel(airmanId: number) {
     return new EventModel(
       this._state.title,
       this._state.description,

@@ -21,18 +21,23 @@ let trackerStore: TrackerStore;
 let availabilityStore: AvailabilityStore;
 let currencyStore: CurrencyStore;
 let subject: ShallowWrapper;
+let eventActions: any;
 
 describe('Tracker', () => {
   beforeEach(async () => {
     trackerStore = new TrackerStore(DoubleRepositories);
     availabilityStore = new AvailabilityStore(DoubleRepositories);
     currencyStore = new CurrencyStore(DoubleRepositories);
+    eventActions = {
+      executePendingDelete: jest.fn(),
+    }
 
     subject = shallow(
       <Tracker
         trackerStore={trackerStore}
         availabilityStore={availabilityStore}
         currencyStore={currencyStore}
+        eventActions={eventActions}
         profile={
           {
             id: 1,

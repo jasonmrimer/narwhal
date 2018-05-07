@@ -13,10 +13,10 @@ import { StyledShiftDropdown } from '../tracker/ShiftDropdown';
 import { BorderedNotification, EmptyBorderedNotification } from '../widgets/Notification';
 import { LocationFilterStore } from '../widgets/stores/LocationFilterStore';
 import { RosterHeaderStore } from './stores/RosterHeaderStore';
-import { RosterActions } from './RosterActions';
 import { RosterList } from './RosterList';
 import { StyledRosterSubHeaderRow } from '../widgets/RosterSubHeaderRow';
 import { FlightModel } from '../flight/model/FlightModel';
+import { SidePanelActions } from '../tracker/SidePanelActions';
 
 const cache = new CellMeasurerCache({
   defaultHeight: 60,
@@ -104,6 +104,7 @@ export const StyledRoster = inject('trackerStore', 'locationFilterStore', 'roste
 interface RowProps {
   airman: AirmanModel;
   trackerStore?: TrackerStore;
+  sidePanelActions?: SidePanelActions;
   style: object;
   index: number;
   parent: any;
@@ -128,7 +129,7 @@ const Row = observer(
         >
           <div
             className="left"
-            onClick={async () => await RosterActions.openSidePanel(airman, TabType.CURRENCY)}
+            onClick={async () => await props.sidePanelActions!.openSidePanel(airman, TabType.CURRENCY)}
           >
             <StyledShiftDropdown
               airman={airman}
@@ -177,7 +178,7 @@ const Row = observer(
           </div>
           <div
             className="right"
-            onClick={async () => RosterActions.openSidePanel(airman, TabType.AVAILABILITY)}
+            onClick={async () => await props.sidePanelActions!.openSidePanel(airman, TabType.AVAILABILITY)}
           >
             <StyledPlanner airman={airman}/>
           </div>
@@ -187,7 +188,10 @@ const Row = observer(
   }
 );
 
-export const StyledRow = inject('trackerStore')(styled(Row)`
+export const StyledRow = inject(
+  'trackerStore',
+  'sidePanelActions'
+)(styled(Row)`
   display: flex;
   border: 1px solid ${props => props.theme.graySteel};
   border-top: none;
@@ -232,6 +236,6 @@ export const StyledRow = inject('trackerStore')(styled(Row)`
   }
   
   &.selected {
-    box-shadow: inset 0.5rem 0px 0px ${props => props.theme.yellow};
+    box-shadow: inset 0.5rem 0 0 ${props => props.theme.yellow};
   }
 `);

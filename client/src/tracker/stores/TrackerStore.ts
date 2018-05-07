@@ -28,11 +28,6 @@ export class TrackerStore {
     return this._loading;
   }
 
-  @action.bound
-  setLoading(loading: boolean) {
-    this._loading = loading;
-  }
-
   @computed
   get airmen() {
     return this._airmen;
@@ -52,9 +47,9 @@ export class TrackerStore {
     return this._events.filter(event => event.airmanId === airmanId);
   }
 
-  @computed
-  get selectedAirmanEvents() {
-    return this._events.filter(event => event.airmanId === this._selectedAirman.id);
+  @action.bound
+  setLoading(loading: boolean) {
+    this._loading = loading;
   }
 
   @action.bound
@@ -81,14 +76,14 @@ export class TrackerStore {
     this._airmen = await this.repositories.airmanRepository.findBySiteId(selectedSiteId);
   }
 
-  async refreshAirmen(siteId: number, airmanId: number) {
-    this._airmen = await this.repositories.airmanRepository.findBySiteId(siteId);
-    this._selectedAirman = this._airmen.find(a => a.id === airmanId) || AirmanModel.empty();
-  }
-
   @action.bound
   async refreshEvents(week: Moment[]) {
     this._events = await this.repositories.eventRepository
       .findAllBySiteIdAndWithinPeriod(this._siteId, week[0], week[6]);
+  }
+
+  async refreshAirmen(siteId: number, airmanId: number) {
+    this._airmen = await this.repositories.airmanRepository.findBySiteId(siteId);
+    this._selectedAirman = this._airmen.find(a => a.id === airmanId) || AirmanModel.empty();
   }
 }

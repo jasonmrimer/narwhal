@@ -4,18 +4,20 @@ import { AirmanDatum } from './AirmanDatum';
 import { TabType } from './stores/SidePanelStore';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 import { eventStub } from '../utils/testUtils';
-import { RosterActions } from '../roster/RosterActions';
 
 describe('AirmanDatum', () => {
   let subject: ShallowWrapper;
+  let sidePanelActions: any;
   const airman = AirmanModelFactory.build();
 
   beforeEach(async () => {
-    RosterActions.openSidePanel = jest.fn();
+    sidePanelActions = {openSidePanel: jest.fn()};
+
     subject = shallow(
       <AirmanDatum
         airman={airman}
         tab={TabType.CURRENCY}
+        sidePanelActions={sidePanelActions}
         className="class"
       >
         <span className="expired">Lazer Vision</span>
@@ -25,7 +27,7 @@ describe('AirmanDatum', () => {
 
   it('calls the selectAirman when clicking on an airman', async () => {
     subject.simulate('click', eventStub);
-    expect(RosterActions.openSidePanel).toHaveBeenCalledWith(airman, TabType.CURRENCY);
+    expect(sidePanelActions.openSidePanel).toHaveBeenCalledWith(airman, TabType.CURRENCY);
   });
 
   it('should render its given text', () => {

@@ -68,7 +68,7 @@ export class SkillFormStore extends FormStore<Skill, State> {
     };
   }
 
-  addModel(airmanId: number) {
+  stateToModel(airmanId: number) {
     return {
       type: this._state.skillType as SkillType,
       airmanId: airmanId,

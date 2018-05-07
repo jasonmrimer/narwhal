@@ -18,6 +18,7 @@ describe('SidePanel', () => {
   let trackerStore: TrackerStore;
   let subject: ShallowWrapper;
   let sidePanelStore: SidePanelStore;
+  let sidePanelActions: any;
 
   beforeEach(async () => {
     airman = AirmanModelFactory.build();
@@ -31,11 +32,13 @@ describe('SidePanel', () => {
     trackerStore = new TrackerStore(DoubleRepositories);
     trackerStore.setSelectedAirman(airman);
     sidePanelStore = new SidePanelStore();
+    sidePanelActions = {};
 
     subject = shallow(
       <SidePanel
         trackerStore={trackerStore}
         sidePanelStore={sidePanelStore}
+        sidePanelActions={sidePanelActions}
       />
     );
   });

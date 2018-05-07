@@ -125,7 +125,9 @@ export class AvailabilityStore {
       return;
     }
 
+    const deletedEvent = this._pendingDeleteEvent;
     await this.repositories.eventRepository.delete(this._pendingDeleteEvent);
     this._pendingDeleteEvent = null;
+    return deletedEvent;
   }
 }

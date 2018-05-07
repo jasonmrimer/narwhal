@@ -11,24 +11,27 @@ import { StyledForm } from '../widgets/Form';
 import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { DoubleRepositories } from '../utils/Repositories';
-import { EventActions } from './EventActions';
 
 describe('TDYDeploymentForm', () => {
   let store: TDYDeploymentFormStore;
   let wrapper: ShallowWrapper;
   let subject: TDYDeploymentForm;
   let trackerStore: TrackerStore;
+  let eventActions: any;
 
   beforeEach(() => {
     store = new TDYDeploymentFormStore(new TimeServiceStub());
     trackerStore = new TrackerStore(DoubleRepositories);
-    EventActions.handleFormSubmit = jest.fn();
-    EventActions.handleDeleteEvent = jest.fn();
+    eventActions = {
+      handleFormSubmit: jest.fn(),
+      handleDeleteEvent: jest.fn(),
+    };
     wrapper = shallow(
       <TDYDeploymentForm
         airmanId={123}
         tdyDeploymentFormStore={store}
         trackerStore={trackerStore}
+        eventActions={eventActions}
       />
     );
 
@@ -73,15 +76,15 @@ describe('TDYDeploymentForm', () => {
     expect(findInputValueByName(wrapper, StyledDatePicker, 'endTime')).toEqual(store.state.endTime);
   });
 
-  it('adds a TDY/Deployment', () => {
-    subject.handleSubmit(eventStub);
-    expect(EventActions.handleFormSubmit).toHaveBeenCalled();
+  it('adds a TDY/Deployment', async() => {
+    await subject.handleSubmit(eventStub);
+    expect(eventActions.handleFormSubmit).toHaveBeenCalled();
   });
 
-  it('removes a TDY/Deployment', () => {
+  it('removes a TDY/Deployment', async() => {
     store.open(EventModelFactory.build());
-    subject.handleDelete();
-    expect(EventActions.handleDeleteEvent).toHaveBeenCalled();
+    await subject.handleDelete();
+    expect(eventActions.handleDeleteEvent).toHaveBeenCalled();
   });
 });
 

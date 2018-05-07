@@ -1,33 +1,49 @@
 import { FormStore } from '../widgets/stores/FormStore';
 import { EventModel } from './models/EventModel';
-import { stores } from '../stores';
+import { TimeService } from '../tracker/services/TimeService';
 
 export class EventActions {
-  static handleFormSubmit = async (airmanId: number, formStore: FormStore<EventModel, any>) => {
+  constructor(private stores: any, private timeSerivce: TimeService) {
+  }
+
+  handleFormSubmit = async (airmanId: number, formStore: FormStore<EventModel, any>) => {
     try {
-      const event = formStore.addModel(airmanId);
-      await stores.plannerStore.navigateToSidePanelWeek(event.startTime);
-      await stores.availabilityStore.addEvent(event);
-      await stores.trackerStore.refreshEvents(stores.tdyDeploymentFormStore!.week);
-      await stores.plannerStore.setSidePanelWeek(stores.tdyDeploymentFormStore!.week);
-      stores.availabilityStore.setAirmanEvents(stores.trackerStore!.getEventsByAirmanId(airmanId));
-      stores.availabilityStore.closeEventForm();
+      const event = formStore.stateToModel(airmanId);
+      await this.stores.availabilityStore.addEvent(event);
+
+      const eventWeek = this.timeSerivce.navigateToWeek(event.startTime);
+
+      this.stores.plannerStore.setSidePanelWeek(eventWeek);
+
+      await this.stores.availabilityStore.refreshAirmanEvents(airmanId, eventWeek);
+
+      await this.stores.trackerStore.refreshEvents(this.stores.plannerStore.plannerWeek);
+
+      this.stores.availabilityStore.closeEventForm();
+
       formStore.close();
     } catch (e) {
       formStore.setErrors(e);
     }
   }
 
-  static handleDeleteEvent = (event: EventModel) => {
-    stores.availabilityStore.removeEvent(event);
+  handleDeleteEvent = (event: EventModel) => {
+    this.stores.availabilityStore.removeEvent(event);
   }
 
-  static executePendingDelete = async () => {
-    const airmanId = stores.trackerStore.selectedAirman.id;
-    await stores.availabilityStore.executePendingDelete();
-    await stores.trackerStore.refreshEvents(stores.tdyDeploymentFormStore!.week);
-    await stores.plannerStore.setSidePanelWeek(stores.tdyDeploymentFormStore!.week);
-    stores.availabilityStore.setAirmanEvents(stores.trackerStore!.getEventsByAirmanId(airmanId));
-    stores.availabilityStore.closeEventForm();
+  executePendingDelete = async () => {
+    const airmanId = this.stores.trackerStore.selectedAirman.id;
+
+    const event = await this.stores.availabilityStore.executePendingDelete();
+
+    const eventWeek = this.timeSerivce.navigateToWeek(event.startTime);
+
+    this.stores.plannerStore.setSidePanelWeek(eventWeek);
+
+    await this.stores.availabilityStore.refreshAirmanEvents(airmanId, eventWeek);
+
+    await this.stores.trackerStore.refreshEvents(this.stores.plannerStore.plannerWeek);
+
+    this.stores.availabilityStore.closeEventForm();
   }
 }

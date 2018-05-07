@@ -21,14 +21,12 @@ export class PlannerStore {
 
   @action.bound
   incrementPlannerWeek() {
-    this._plannerWeek = this.timeService.incrementWeek(this.plannerWeek);
-    this._sidePanelWeek = this.timeService.incrementWeek(this.sidePanelWeek);
+    this._plannerWeek = this.timeService.incrementWeekByDay(this.plannerWeek);
   }
 
   @action.bound
   decrementPlannerWeek() {
-    this._plannerWeek = this.timeService.decrementWeek(this.plannerWeek);
-    this._sidePanelWeek = this.timeService.decrementWeek(this.sidePanelWeek);
+    this._plannerWeek = this.timeService.decrementWeekByDay(this.plannerWeek);
   }
 
   @action.bound

@@ -2,7 +2,7 @@ import { stores } from '../stores';
 
 export class SkillActions {
   static submitSkill = async (airmanId: number) => {
-    const skill = stores.skillFormStore!.addModel(airmanId);
+    const skill = stores.skillFormStore!.stateToModel(airmanId);
     try {
       await stores.currencyStore!.addSkill(skill);
       await stores.trackerStore!.refreshAirmen(stores.locationFilterStore!.selectedSiteId, airmanId);

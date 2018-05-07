@@ -15,7 +15,6 @@ import { DoubleRepositories } from '../utils/Repositories';
 import { AvailabilityStore } from '../availability/stores/AvailabilityStore';
 import { PlannerStore } from './stores/PlannerStore';
 import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
-import { PlannerActions } from './PlannerActions';
 import { ScheduleModel, ScheduleType } from '../schedule/models/ScheduleModel';
 import { OffDayIcon } from '../icons/OffDayIcon';
 import { AirmanScheduleModel } from '../airman/models/AirmanScheduleModel';
@@ -25,6 +24,7 @@ describe('Planner', () => {
   let trackerStore: TrackerStore;
   let plannerStore: PlannerStore;
   let availabilityStore: AvailabilityStore;
+  let sidePanelActions: any;
   let airman: AirmanModel;
 
   beforeEach(async () => {
@@ -94,12 +94,11 @@ describe('Planner', () => {
     await DoubleRepositories.eventRepository.save(leave);
     await DoubleRepositories.eventRepository.save(mission);
 
-    PlannerActions.openSidePanel = jest.fn();
-
     trackerStore = new TrackerStore(DoubleRepositories);
     trackerStore.hydrate([airman], [appointment, mission, leave], airman.siteId);
     plannerStore = new PlannerStore(new TimeServiceStub());
     availabilityStore = new AvailabilityStore(DoubleRepositories);
+    sidePanelActions = {openSidePanel: jest.fn()};
 
     subject = shallow(
       <Planner
@@ -107,6 +106,7 @@ describe('Planner', () => {
         trackerStore={trackerStore}
         plannerStore={plannerStore}
         availabilityStore={availabilityStore}
+        sidePanelActions={sidePanelActions}
       />);
   });
 
@@ -126,6 +126,6 @@ describe('Planner', () => {
   it('calls the openSidePanel when clicking on an empty bubble', () => {
     const emptyBubble = subject.find(AvailableIcon).at(0);
     emptyBubble.simulate('click', eventStub);
-    expect(PlannerActions.openSidePanel).toHaveBeenCalled();
+    expect(sidePanelActions.openSidePanel).toHaveBeenCalled();
   });
 });

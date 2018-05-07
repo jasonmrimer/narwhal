@@ -77,7 +77,7 @@ describe('MissionFormStore', () => {
       selectedMission.id
     );
 
-    const addedEvent = subject.addModel(airmanId);
+    const addedEvent = subject.stateToModel(airmanId);
     expect(addedEvent.id).toEqual(expectedEvent.id);
     // FIXME
   });

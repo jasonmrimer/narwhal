@@ -70,7 +70,7 @@ describe('LeaveFormStore', () => {
       EventType.Leave
     );
 
-    expect(subject.addModel(airmanId)).toEqual(expectedEvent);
+    expect(subject.stateToModel(airmanId)).toEqual(expectedEvent);
   });
 
   it('ensures that at least dates are included in the leave submission', () => {
@@ -78,7 +78,7 @@ describe('LeaveFormStore', () => {
     subject.setState('endDate', '2018-02-22');
     subject.setState('endTime', '2359');
 
-    const addedEvent = subject.addModel(airmanId);
+    const addedEvent = subject.stateToModel(airmanId);
 
     expect(addedEvent.startTime.isValid()).toBeFalsy();
   });
