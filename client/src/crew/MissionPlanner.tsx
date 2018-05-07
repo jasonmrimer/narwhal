@@ -33,6 +33,7 @@ export class MissionPlanner extends React.Component<Props> {
     if (!crew) {
       return null;
     }
+    const {mission} = crew;
 
     return (
       <React.Fragment>
@@ -41,17 +42,18 @@ export class MissionPlanner extends React.Component<Props> {
           <StyledNavigationBackButton text="Back to Availability Roster" location="/"/>
           <div className="mission-details">
             <div className="mission-status">
-              <h1>{crew.mission.atoMissionNumber}</h1>
+              <h1>{mission.atoMissionNumber}</h1>
               <StyledCrewStatus
                 hasCrew={crew.crewPositions.length > 0}
               />
             </div>
-            <span>MSN DATE: {crew.mission.displayDateZulu}</span>
-            <span>MSN START: {crew.mission.displayStartTime}</span>
-            <span>MSN END: {crew.mission.displayEndTime}</span>
+            <div className="core-site">CORE SITE: {mission.site ? mission.site.name : 'Unassigned'}</div>
+            <span>MSN DATE: {mission.displayDateZulu}</span>
+            <span>MSN START: {mission.displayStartTime}</span>
+            <span>MSN END: {mission.displayEndTime}</span>
             {
-              crew.mission.updatedAt &&
-              <div className="last-update">Last updated {crew.mission.displayUpdatedAt}.</div>
+              mission.updatedAt &&
+              <div className="last-update">Last updated {mission.displayUpdatedAt}.</div>
             }
           </div>
           <StyledForm
@@ -100,7 +102,12 @@ export const StyledMissionPlanner = inject(
   }
     
   .mission-details {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    
+    .core-site {
+     margin-bottom: 0.5rem;
+    }
     
     span {
       margin-right: 2rem;

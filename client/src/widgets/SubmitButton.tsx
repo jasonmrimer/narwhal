@@ -16,7 +16,7 @@ export const StyledSubmitButton = styled(SubmitButton)`
   width: fit-content;
   background: ${props => props.theme.yellow};
   color: ${props => props.theme.darkest};
-  border: none;
+  border: 1px solid ${props => props.theme.yellow};
   padding: 0.5rem 1rem;
   font: inherit;
   font-size: 0.75rem;

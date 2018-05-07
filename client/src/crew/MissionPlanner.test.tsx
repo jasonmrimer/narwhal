@@ -52,6 +52,7 @@ describe('MissionPlanner', () => {
 
   it('displays the mission details', () => {
     expect(subject.text()).toContain(mission.atoMissionNumber);
+    expect(subject.text()).toContain(`CORE SITE: ${mission.site!.name}`);
     expect(subject.text()).toContain(`MSN DATE: ${mission.displayDateZulu}`);
     expect(subject.text()).toContain(`MSN START: ${mission.displayStartTime}`);
     expect(subject.text()).toContain(`MSN END: ${mission.displayEndTime}`);

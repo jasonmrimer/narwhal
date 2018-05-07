@@ -13,6 +13,7 @@ export const Mission = (props: Props) => {
   const {
     id,
     atoMissionNumber,
+    site,
     displayDateZulu,
     displayStartAndEndTime,
     hasCrew,
@@ -21,25 +22,26 @@ export const Mission = (props: Props) => {
   } = props.mission;
 
   return (
-    <span className={`${props.className} mission-card`}>
-      <div className="left">
+    <Link className={`${props.className} mission-card`} to={`/dashboard/crew/${id}`}>
+      <div className="mission-header">
         <div className="ato">{atoMissionNumber}</div>
         <StyledCrewStatus
           hasCrew={hasCrew}
         />
-        <div>
-            <div>{displayDateZulu}</div>
-            <div>{displayStartAndEndTime}</div>
-          {
-            updatedAt &&
-            <div className="last-update">Last updated {displayUpdatedAt}.</div>
-          }
-        </div>
       </div>
-      <Link className="right" to={`/dashboard/crew/${id}`}>
-        VIEW
-      </Link>
-    </span>
+      <div className="mission-details">
+        <div className="core-site">CORE SITE: {site ? site.name : 'Unassigned'}</div>
+        <div className="mission-date">
+          <div>{displayDateZulu}</div>
+          <div>{displayStartAndEndTime}</div>
+        </div>
+        {
+          updatedAt ?
+            <div className="last-update">Last updated {displayUpdatedAt}.</div> :
+            <div className="no-update"/>
+        }
+      </div>
+    </Link>
   );
 };
 
@@ -49,39 +51,33 @@ export const StyledMission = styled(Mission)`
   min-height: 8rem;
   padding: 1rem 1rem 0;
   margin: 10px;
-  display: flex;
-  justify-content: space-between;
+  text-decoration: none;
+  color: ${props => props.theme.fontColor};
+  border-bottom: 0.25rem solid ${props => props.mission.hasCrew ? props.theme.copper : props.theme.fontColor};
+ 
   
-  div {
-    margin-bottom: 0.5rem;
-    &.left {
-      margin-bottom: 0;
-    }
-  }
-  
-  .right {
-    padding: 0.5rem 1rem;
-    border: 1px solid ${props => props.theme.fontColor};
-    color: ${props => props.theme.fontColor};
-    text-decoration: none;
-    text-align: center;
-    font-size: 0.825rem;
-    font-weight: 400;
-    align-self: center;
+  .mission-header {
+    display: flex;
+    justify-content: space-between;
     
-    &:hover {
-      color: ${props => props.theme.dark};
-      background: ${props => props.theme.fontColor};
-      text-decoration: underline;    
+    .ato {
+      font-size: 1.25rem;
     }
   }
   
-  .last-update {
-    font-size: 0.75rem;
-    margin: 1rem 0 0;
-  }
-   
-  .ato {
-    font-size: 20px;
+  .mission-details {
+    .core-site {
+      font-size: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    
+    .last-update {
+      font-size: 0.75rem;
+      margin: 1rem 0 0.5rem;
+    }
+    
+    .no-update {
+      margin-top: 2.375rem;
+    }
   }
 `;
