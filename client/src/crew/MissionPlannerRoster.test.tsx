@@ -18,6 +18,8 @@ import { AirmanModel } from '../airman/models/AirmanModel';
 import { MissionPlannerActions } from './MissionPlannerActions';
 import { CrewModel } from './models/CrewModel';
 import { StyledMissionPlannerRosterRow } from './MissionPlannerRosterRow';
+import { MissionModel } from '../mission/models/MissionModel';
+import { StyledNotification } from '../widgets/Notification';
 
 describe('MissionPlannerRoster', () => {
   let subject: ReactWrapper;
@@ -28,10 +30,11 @@ describe('MissionPlannerRoster', () => {
   let missionPlannerActions: MissionPlannerActions;
   let airman: AirmanModel;
   let crew: CrewModel;
+  let mission: MissionModel;
 
   beforeEach(async () => {
     const site = SiteModelFactory.build(1, 2);
-    const mission = MissionModelFactory.build();
+    mission = MissionModelFactory.build();
     crew = CrewModelFactory.build();
     airman = AirmanModelFactory.build(3);
 
@@ -78,6 +81,14 @@ describe('MissionPlannerRoster', () => {
 
   it('should render a header row available and unavailable', () => {
     expect(subject.find(StyledRosterSubHeaderRow).length).toBe(2);
+  });
+
+  it('should render a message if no there are no available airmen', () => {
+    missionPlannerStore.hydrate(mission, [], []);
+    subject.instance().forceUpdate();
+    subject.update();
+
+    expect(subject.find(StyledNotification).text()).toContain('No personnel currently available.');
   });
 
   it('should render the available sub header before the unavailable', () => {

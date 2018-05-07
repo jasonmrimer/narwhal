@@ -34,42 +34,80 @@ export class MissionPlannerRoster extends React.Component<Props> {
     return rosterHeaderStore!.filterAirmen(locationFilterStore!.filterAirmen(airmen));
   }
 
-  renderRow = (props: ListRowProps, availableAirmen: AirmanModel[], unavailableAirmen: AirmanModel[]) => {
+  renderWithAvailableAirmen(
+    listRowProps: ListRowProps,
+    availableAirmen: AirmanModel[],
+    unavailableAirmen: AirmanModel[]
+  ) {
     const {crewStore} = this.props;
-    const {crew} = crewStore!;
 
-    if (props.index === 0 || props.index === availableAirmen.length + 1) {
-      const text = props.index === 0 ?
-        `PERSONNEL BELOW ARE AVAILABLE FOR MISSION ON ${crew!.mission.displayDateZulu}` :
-        `PERSONNEL BELOW ARE UNAVAILABLE FOR MISSION ON ${crew!.mission.displayDateZulu}`;
-      return (
-        <CellMeasurer {...props} cache={cache} columnIndex={0}>
-          <StyledRosterSubHeaderRow {...props} text={text}/>
-        </CellMeasurer>
-      );
+    switch (listRowProps.index) {
+      case 0:
+        return this.subHeaderRow('AVAILABLE', listRowProps);
+      case (availableAirmen.length + 1):
+        return this.subHeaderRow('UNAVAILABLE', listRowProps);
+      default:
+        let airman: AirmanModel;
+
+        if (listRowProps.index < availableAirmen.length + 1) {
+          airman = availableAirmen[listRowProps.index - 1];
+        } else {
+          airman = unavailableAirmen[listRowProps.index - (availableAirmen.length + 2)];
+        }
+
+        const addAirman = async () => {
+          this.props.crewStore!.setNewEntry({airmanName: `${airman!.lastName}, ${airman!.firstName}`});
+          await this.props.missionPlannerActions!.submit();
+        };
+
+        return (
+          <StyledMissionPlannerRosterRow
+            {...listRowProps}
+            key={airman!.id}
+            airman={airman!}
+            style={listRowProps.style}
+            onClick={crewStore!.crew!.hasAirman(airman!) ? undefined : addAirman}
+          />
+        );
     }
+  }
 
-    let airman: AirmanModel;
-    if (props.index < availableAirmen.length + 1) {
-      airman = availableAirmen[props.index - 1];
-    } else {
-      airman = unavailableAirmen[props.index % (availableAirmen.length + 2)];
+  renderWithoutAvailableAirmen(
+    listRowProps: ListRowProps,
+    availableAirmen: AirmanModel[],
+    unavailableAirmen: AirmanModel[]
+  ) {
+    const {crewStore} = this.props;
+
+    switch (listRowProps.index) {
+      case 0:
+        return this.subHeaderRow('AVAILABLE', listRowProps);
+      case 1:
+        return (
+          <CellMeasurer {...listRowProps} cache={cache} columnIndex={0}>
+            <StyledNotification {...listRowProps}>No personnel currently available.</StyledNotification>
+          </CellMeasurer>
+        );
+      case 2:
+        return this.subHeaderRow('UNAVAILABLE', listRowProps);
+      default:
+        const airman = unavailableAirmen[listRowProps.index - 3];
+
+        const addAirman = async () => {
+          this.props.crewStore!.setNewEntry({airmanName: `${airman!.lastName}, ${airman!.firstName}`});
+          await this.props.missionPlannerActions!.submit();
+        };
+
+        return (
+          <StyledMissionPlannerRosterRow
+            {...listRowProps}
+            key={airman!.id}
+            airman={airman!}
+            style={listRowProps.style}
+            onClick={crewStore!.crew!.hasAirman(airman!) ? undefined : addAirman}
+          />
+        );
     }
-
-    const addAirman = async () => {
-      this.props.crewStore!.setNewEntry({airmanName: `${airman.lastName}, ${airman.firstName}`});
-      await this.props.missionPlannerActions!.submit();
-    };
-
-    return (
-      <StyledMissionPlannerRosterRow
-        {...props}
-        key={airman.id}
-        airman={airman}
-        style={props.style}
-        onClick={crewStore!.crew!.hasAirman(airman) ? undefined : addAirman}
-      />
-    );
   }
 
   render() {
@@ -83,15 +121,34 @@ export class MissionPlannerRoster extends React.Component<Props> {
         className={className}
         height={610}
         rowHeight={(props) => cache.rowHeight(props)! || 60}
-        rowCount={1 + availableAirmen.length + 1 + unavailableAirmen.length}
+        rowCount={
+          availableAirmen.length > 0
+            ? 1 + availableAirmen.length + 1 + unavailableAirmen.length
+            : 3 + unavailableAirmen.length
+        }
         width={866}
         overscanRowCount={15}
         deferredMeasurementCache={cache}
         noRowsRenderer={() => {
           return <StyledNotification>No members at this location match your search.</StyledNotification>;
         }}
-        rowRenderer={(props: ListRowProps) => this.renderRow(props, availableAirmen, unavailableAirmen)}
+        rowRenderer={
+          (props: ListRowProps) => availableAirmen.length > 0
+            ? this.renderWithAvailableAirmen(props, availableAirmen, unavailableAirmen)
+            : this.renderWithoutAvailableAirmen(props, availableAirmen, unavailableAirmen)
+        }
       />
+    );
+  }
+
+  private subHeaderRow(type: string, listRowProps: ListRowProps) {
+    return (
+      <CellMeasurer {...listRowProps} cache={cache} columnIndex={0}>
+        <StyledRosterSubHeaderRow
+          {...listRowProps}
+          text={`PERSONNEL BELOW ARE ${type} FOR MISSION ON ${this.props.crewStore!.crew!.mission.displayDateZulu}`}
+        />
+      </CellMeasurer>
     );
   }
 }
@@ -106,4 +163,10 @@ export const StyledMissionPlannerRoster =
   )(styled(MissionPlannerRoster)`
     border-top: none;
     outline: none;
+    
+    h3 {
+      border-left: 1px solid ${props => props.theme.graySteel};
+      padding: 3.125rem 0;
+      margin-bottom: 0;
+    }
 `);

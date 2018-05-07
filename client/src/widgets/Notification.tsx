@@ -3,11 +3,12 @@ import styled from 'styled-components';
 
 interface Props {
   className?: string;
+  style?: object;
 }
 
 export const Notification: React.SFC<Props> = (props) => {
   return (
-    <h3 className={props.className}>{props.children}</h3>
+    <h3 className={props.className} style={props.style}>{props.children}</h3>
   );
 };
 
