@@ -44,9 +44,9 @@ export class AppointmentFormStore extends FormStore<EventModel, State> {
       title: model.title,
       description: model.description,
       startDate: model.startTime.format('YYYY-MM-DD'),
-      startTime: model.startTime.format('HHmm'),
+      startTime: model.startTime.isSame(model.endTime) ? '' : model.startTime.format('HHmm'),
       endDate: model.endTime.format('YYYY-MM-DD'),
-      endTime: model.endTime.format('HHmm')
+      endTime: model.startTime.isSame(model.endTime) ? '' : model.endTime.format('HHmm'),
     };
   }
 

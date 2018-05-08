@@ -38,9 +38,9 @@ export class LeaveFormStore extends FormStore<EventModel, State> {
     return {
       description: item.description,
       startDate: item.startTime.format('YYYY-MM-DD'),
-      startTime: item.startTime.format('HHmm'),
+      startTime: item.startTime.isSame(item.endTime) ? '0000' : item.startTime.format('HHmm'),
       endDate: item.endTime.format('YYYY-MM-DD'),
-      endTime: item.endTime.format('HHmm'),
+      endTime: item.startTime.isSame(item.endTime) ? '2359' : item.endTime.format('HHmm'),
     };
   }
 

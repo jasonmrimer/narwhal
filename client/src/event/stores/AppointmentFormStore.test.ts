@@ -11,7 +11,7 @@ describe('AppointmenFormStore', () => {
 
   beforeEach(() => {
     event = EventModelFactory.build();
-
+    event.endTime = event.startTime.clone().add(1, 'hour');
     subject = new AppointmentFormStore(new TimeServiceStub());
   });
 

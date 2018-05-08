@@ -11,6 +11,7 @@ describe('LeaveFormStore', () => {
 
   beforeEach(() => {
     event = EventModelFactory.build();
+    event.endTime = event.startTime.clone().add(1, 'hour');
     subject = new LeaveFormStore(new TimeServiceStub());
   });
 
