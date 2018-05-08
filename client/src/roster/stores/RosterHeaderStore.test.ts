@@ -63,20 +63,21 @@ describe('RosterHeaderStore', () => {
 
   describe('filtering by shift', () => {
     it('should return the airmen with the selected shift', () => {
-      subject.setSelectedShift(2);
-      const shift = subject.filterAirmen(allAirmen)
-        .map(amn => amn.shift)
-        .filter((el, i, a) => i === a.indexOf(el));
-      expect(shift.length).toBe(1);
-      expect(shift[0]).toBe(ShiftType.Night);
+      subject.setSelectedShift(subject.shiftOptions[2].value);
+      const airmen = subject.filterAirmen(allAirmen);
+      expect(airmen.length).toBeGreaterThanOrEqual(1);
+
+      airmen.forEach(airman => {
+        expect(airman.shift).toBe(ShiftType.Night)
+      });
     });
-  });
 
-  it('should set the selectedLastName', () => {
-    const airman = allAirmen[0];
-    subject.setSelectedLastName({target: {value: airman.lastName}});
+    it('should set the selectedLastName', () => {
+      const airman = allAirmen[0];
+      subject.setSelectedLastName({target: {value: airman.lastName}});
 
-    expect(subject.filterAirmen(allAirmen).length).toBe(1);
-    expect(subject.filterAirmen(allAirmen)[0].firstName).toBe(airman.firstName);
+      expect(subject.filterAirmen(allAirmen).length).toBe(1);
+      expect(subject.filterAirmen(allAirmen)[0].firstName).toBe(airman.firstName);
+    });
   });
 });

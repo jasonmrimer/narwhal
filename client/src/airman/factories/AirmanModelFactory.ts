@@ -11,7 +11,8 @@ export class AirmanModelFactory {
                siteId: number = 1,
                qualifications: AirmanQualificationModel[] = [],
                certifications: AirmanCertificationModel[] = [],
-               schedules: AirmanScheduleModel[] = []) {
+               schedules: AirmanScheduleModel[] = [],
+               shift: ShiftType = randomShiftType()) {
     return new AirmanModel(
       id,
       flightId,
@@ -22,7 +23,7 @@ export class AirmanModelFactory {
       qualifications,
       certifications,
       schedules,
-      randomShiftType()
+      shift
     );
   }
 }

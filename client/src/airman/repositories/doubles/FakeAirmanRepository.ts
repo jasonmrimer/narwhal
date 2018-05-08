@@ -1,6 +1,6 @@
 import { AirmanRepository } from '../AirmanRepository';
 import { AirmanModelFactory } from '../../factories/AirmanModelFactory';
-import { AirmanModel } from '../../models/AirmanModel';
+import { AirmanModel, ShiftType } from '../../models/AirmanModel';
 import { AirmanCertificationModelFactory } from '../../factories/AirmanCertificationModelFactory';
 import { AirmanQualificationModelFactory } from '../../factories/AirmanQualificationModelFactory';
 import { Skill } from '../../../skills/models/Skill';
@@ -12,7 +12,7 @@ import { AirmanCertificationModel } from '../../models/AirmanCertificationModel'
 
 const af = AirmanModelFactory;
 const airmen = [
-  af.build(1, 1, 1, 14, [AirmanQualificationModelFactory.build(1)], [AirmanCertificationModelFactory.build(4, 1)]),
+  af.build(1, 1, 1, 14, [AirmanQualificationModelFactory.build(1)], [AirmanCertificationModelFactory.build(4, 1)], [], ShiftType.Night),
   af.build(2, 1, 1, 14, [AirmanQualificationModelFactory.build(2)], [AirmanCertificationModelFactory.build(5, 1)]),
   af.build(3, 1, 1, 14, [AirmanQualificationModelFactory.build(3)], [AirmanCertificationModelFactory.build(4, 1)]),
   af.build(4, 2, 1, 14, [AirmanQualificationModelFactory.build(1), AirmanQualificationModelFactory.build(2)],
