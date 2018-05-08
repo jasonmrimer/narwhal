@@ -1,16 +1,18 @@
+import { Stores } from '../stores';
+
 export class MissionPlannerActions {
-  constructor (private stores: any) {
+  constructor (private stores: Partial<Stores>) {
   }
 
   async refreshAirman() {
     const {missionPlannerStore, locationFilterStore} = this.stores;
-    await missionPlannerStore!.refreshAllAirmen(locationFilterStore.selectedSiteId);
+    await missionPlannerStore!.refreshAllAirmen(locationFilterStore!.selectedSiteId);
   }
 
   async submit() {
     const {missionPlannerStore, locationFilterStore, crewStore} = this.stores;
     await crewStore!.save();
-    await missionPlannerStore!.refreshAllEvents(locationFilterStore.selectedSiteId);
+    await missionPlannerStore!.refreshAllEvents(locationFilterStore!.selectedSiteId);
   }
 
   async submitAndPrint() {

@@ -1,34 +1,42 @@
-import { stores } from '../stores';
+import { Stores } from '../stores';
 
 export class SkillActions {
-  static submitSkill = async (airmanId: number) => {
-    const skill = stores.skillFormStore!.stateToModel(airmanId);
+  constructor(private stores: Partial<Stores>) {
+  }
+
+  submitSkill = async (airmanId: number) => {
+    const skill = this.stores.skillFormStore!.stateToModel(airmanId);
     try {
-      await stores.currencyStore!.addSkill(skill);
-      await stores.trackerStore!.refreshAirmen(stores.locationFilterStore!.selectedSiteId, airmanId);
-      stores.skillFormStore!.close();
-      stores.currencyStore!.closeSkillForm();
+      await this.stores.currencyStore!.addSkill(skill);
+      await this.stores.trackerStore!.refreshAirmen(
+        this.stores.locationFilterStore!.selectedSiteId,
+        airmanId
+      );
+      this.stores.skillFormStore!.close();
+      this.stores.currencyStore!.closeSkillForm();
     } catch (e) {
-      stores.skillFormStore!.setErrors(e);
+      this.stores.skillFormStore!.setErrors(e);
     }
   }
 
-  static deleteSkill = () => {
-    const model = stores.skillFormStore!.model;
+  deleteSkill = () => {
+    const model = this.stores.skillFormStore!.model;
     if (model) {
-      stores.currencyStore!.removeSkill(model);
+      this.stores.currencyStore!.removeSkill(model);
     }
   }
 
-  static executePendingDelete = async () => {
-    const {currencyStore, trackerStore, locationFilterStore, skillFormStore} = stores;
+  executePendingDelete = async () => {
     try {
-      await currencyStore.executePendingDelete();
-      await trackerStore.refreshAirmen(locationFilterStore.selectedSiteId, trackerStore.selectedAirman.id);
-      skillFormStore.close();
-      currencyStore.closeSkillForm();
+      await this.stores.currencyStore!.executePendingDelete();
+      await this.stores.trackerStore!.refreshAirmen(
+        this.stores.locationFilterStore!.selectedSiteId,
+        this.stores.trackerStore!.selectedAirman.id
+      );
+      this.stores.skillFormStore!.close();
+      this.stores.currencyStore!.closeSkillForm();
     } catch (e) {
-      skillFormStore.setErrors(e);
+      this.stores.skillFormStore!.setErrors(e);
     }
   }
 }

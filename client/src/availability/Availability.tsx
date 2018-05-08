@@ -22,6 +22,7 @@ interface Props {
   availabilityStore?: AvailabilityStore;
   trackerStore?: TrackerStore;
   plannerStore?: PlannerStore;
+  availabilityActions?: AvailabilityActions;
   className?: string;
 }
 
@@ -119,14 +120,14 @@ export class Availability extends React.Component<Props> {
   }
 
   private renderAvailability = () => {
-    const {availabilityStore, plannerStore} = this.props;
+    const {availabilityStore, plannerStore, availabilityActions} = this.props;
     const {sidePanelWeek} = plannerStore!;
     return (
       <div>
         <div className="event-control-row">
           <button
             className="add-event"
-            onClick={AvailabilityActions.openForm}
+            onClick={availabilityActions!.openEventForm}
           >
             + Add Event
           </button>
@@ -135,7 +136,7 @@ export class Availability extends React.Component<Props> {
         <div className="nav-row">
           <button
             className="last-week"
-            onClick={async () => await AvailabilityActions.decrementWeek()}
+            onClick={async () => await availabilityActions!.decrementWeek()}
           >
             <BackIcon width={12} height={12}/>
           </button>
@@ -146,7 +147,7 @@ export class Availability extends React.Component<Props> {
 
           <button
             className="next-week"
-            onClick={async () => await AvailabilityActions.incrementWeek()}
+            onClick={async () => await availabilityActions!.incrementWeek()}
           >
             <NextIcon width={12} height={12}/>
           </button>
@@ -159,7 +160,7 @@ export class Availability extends React.Component<Props> {
                 <div id={`day-${index}`} key={index}>
                   <div
                     className="event-date"
-                    onClick={() => AvailabilityActions.openFormForDay(day)}
+                    onClick={() => availabilityActions!.openEventFormForDay(day)}
                   >
                     <span>
                       {day.format('ddd, DD MMM YY').toUpperCase()}
@@ -201,6 +202,7 @@ export const StyledAvailability = inject(
   'availabilityStore',
   'plannerStore',
   'trackerStore',
+  'availabilityActions'
 )(styled(Availability)`
   width: 100%;
   text-align: left;

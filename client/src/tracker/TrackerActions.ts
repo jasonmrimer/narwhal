@@ -1,8 +1,11 @@
-import { stores } from '../stores';
+import { Stores } from '../stores';
 
 export class TrackerActions {
-  static getAirmenBySite = async () => {
-    const siteId = stores.locationFilterStore!.selectedSiteId;
-    await stores.trackerStore.refreshAllAirmen(siteId);
+  constructor(private stores: Partial<Stores>) {
+  }
+
+  getAirmenBySite = async () => {
+    const siteId = this.stores.locationFilterStore!.selectedSiteId;
+    await this.stores.trackerStore!.refreshAllAirmen(siteId);
   }
 }

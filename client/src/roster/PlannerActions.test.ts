@@ -20,7 +20,11 @@ describe('PlannerActions', () => {
       refreshEvents: refreshEventsSpy,
       selectedAirman: airman
     };
-    const availabilityStore = {refreshAirmanEvents: refreshAirmanEventsSpy};
+
+    const availabilityStore = {
+      refreshAirmanEvents: refreshAirmanEventsSpy
+    };
+
     plannerStore = {
       incrementPlannerWeek: incrementPlannerWeek,
       decrementPlannerWeek: decrementPlannerWeek,
@@ -28,7 +32,7 @@ describe('PlannerActions', () => {
       sidePanelWeek: week
     };
 
-    subject = new PlannerActions({trackerStore, availabilityStore, plannerStore});
+    subject = new PlannerActions(({trackerStore, availabilityStore, plannerStore} as any));
   });
 
   it('should increment the week by a day', async () => {

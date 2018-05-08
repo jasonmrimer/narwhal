@@ -11,7 +11,6 @@ import { StyledNotification } from '../widgets/Notification';
 import { StyledRipItems } from '../rip-item/AirmanRipItemForm';
 import { CurrencyStore } from './stores/CurrencyStore';
 import { DoubleRepositories } from '../utils/Repositories';
-import { CurrencyActions } from './CurrencyActions';
 
 /* tslint:disable:no-empty*/
 describe('Currency', () => {
@@ -26,20 +25,25 @@ describe('Currency', () => {
 
   let trackerStore: TrackerStore;
   let currencyStore: CurrencyStore;
+  let currencyActions: any;
   let subject: ShallowWrapper;
 
   beforeEach(async () => {
     currencyStore = new CurrencyStore(DoubleRepositories);
-    CurrencyActions.addSkill = jest.fn();
-    CurrencyActions.editSkill = jest.fn();
 
     trackerStore = new TrackerStore(DoubleRepositories);
     trackerStore.setSelectedAirman(airman);
+
+    currencyActions = {
+      addSkill: jest.fn(),
+      editSkill: jest.fn()
+    };
 
     subject = shallow(
       <Currency
         trackerStore={trackerStore}
         currencyStore={currencyStore}
+        currencyActions={currencyActions}
       />
     );
   });
@@ -73,11 +77,11 @@ describe('Currency', () => {
 
   it('opens skill form on + Add Skill click', () => {
     findSelectorWithText(subject, 'button', '+ Add Skill').simulate('click');
-    expect(CurrencyActions.addSkill).toHaveBeenCalled();
+    expect(currencyActions.addSkill).toHaveBeenCalled();
   });
 
   it('opens a Skill Form when clicking on an existing Skill Tile', () => {
     subject.find(StyledSkillTile).at(0).simulate('click');
-    expect(CurrencyActions.editSkill).toHaveBeenCalled();
+    expect(currencyActions.editSkill).toHaveBeenCalled();
   });
 });

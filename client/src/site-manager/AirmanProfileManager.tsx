@@ -17,6 +17,7 @@ import { ProfileActions } from './ProfileActions';
 
 interface Props {
   airmanProfileManagerStore?: AirmanProfileManagerStore;
+  profileActions?: ProfileActions;
   className?: string;
   history: History;
 }
@@ -178,7 +179,7 @@ export class AirmanProfileManager extends React.Component<Props> {
 
   private onSubmit = async (e: any) => {
     e.preventDefault();
-    await ProfileActions.handleFormSubmit(this.props.history);
+    await this.props.profileActions!.handleFormSubmit(this.props.history);
   }
 
   private renderQualifications = () => {
@@ -210,7 +211,10 @@ export class AirmanProfileManager extends React.Component<Props> {
   }
 }
 
-export const StyledAirmanProfileManager = inject('airmanProfileManagerStore')(styled(AirmanProfileManager)`
+export const StyledAirmanProfileManager = inject(
+  'airmanProfileManagerStore',
+  'profileActions'
+)(styled(AirmanProfileManager)`
   .side-nav{
     position: fixed;
     left: 5rem;

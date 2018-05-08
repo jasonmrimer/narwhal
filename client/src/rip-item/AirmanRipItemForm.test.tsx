@@ -13,12 +13,12 @@ import { StyledForm } from '../widgets/Form';
 import { CurrencyStore } from '../currency/stores/CurrencyStore';
 import { DoubleRepositories } from '../utils/Repositories';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
-import { RipItemsActions } from './RipItemsActions';
 
 describe('RipItems', () => {
   let store: AirmanRipItemFormStore;
   let currencyStore: CurrencyStore;
   let trackerStore: TrackerStore;
+  let ripItemsActions: any;
   let subject: ShallowWrapper;
 
   beforeEach(async () => {
@@ -32,14 +32,19 @@ describe('RipItems', () => {
 
     store.updateRipItem = jest.fn();
     store.submitRipItems = jest.fn();
-    RipItemsActions.handleChange = jest.fn();
-    RipItemsActions.submit = jest.fn();
+
+    ripItemsActions = {
+      handleChange: jest.fn(),
+      submit: jest.fn()
+    };
+
     subject = shallow(
       <AirmanRipItems
         airmanRipItemFormStore={store}
         selectedAirmanId={1}
         currencyStore={currencyStore}
         trackerStore={trackerStore}
+        ripItemsActions={ripItemsActions}
       />
     );
   });
@@ -67,17 +72,17 @@ describe('RipItems', () => {
       }
     );
 
-    expect(RipItemsActions.handleChange).toHaveBeenCalled();
+    expect(ripItemsActions.handleChange).toHaveBeenCalled();
   });
 
-  it('should render a confirmation button with callback', () => {
+  it('should render a confirmation button with callback', async () => {
     const instance = (subject.instance() as AirmanRipItems);
-    instance.onSubmit(eventStub);
-    expect(RipItemsActions.submit).toHaveBeenCalled();
+    await instance.onSubmit(eventStub);
+    expect(ripItemsActions.submit).toHaveBeenCalled();
   });
 
   it('should update the rip items expirationDate upon clicking the 90 day button', () => {
     subject.find(StyledButton).at(0).simulate('click');
-    expect(RipItemsActions.handleChange).toHaveBeenCalled();
+    expect(ripItemsActions.handleChange).toHaveBeenCalled();
   });
 });

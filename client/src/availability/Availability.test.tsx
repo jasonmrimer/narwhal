@@ -16,7 +16,6 @@ import { AvailabilityStore } from './stores/AvailabilityStore';
 import { PlannerStore } from '../roster/stores/PlannerStore';
 import { DoubleRepositories } from '../utils/Repositories';
 import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
-import { AvailabilityActions } from './AvailabilityActions';
 
 let trackerStore: TrackerStore;
 let availabilityStore: AvailabilityStore;
@@ -29,12 +28,18 @@ let eventThree: EventModel;
 let eventFour: EventModel;
 
 describe('Availability', () => {
+  let availabilityActions: any;
+
   beforeEach(() => {
     airman = AirmanModelFactory.build();
-    AvailabilityActions.openFormForDay = jest.fn();
-    AvailabilityActions.incrementWeek = jest.fn();
-    AvailabilityActions.decrementWeek = jest.fn();
-    AvailabilityActions.openForm = jest.fn();
+
+    availabilityActions = {
+      openEventFormForDay: jest.fn(),
+      incrementWeek: jest.fn(),
+      decrementWeek: jest.fn(),
+      openEventForm: jest.fn(),
+    };
+
     eventOne = new EventModel(
       'Event One',
       '',
@@ -83,6 +88,7 @@ describe('Availability', () => {
         trackerStore={trackerStore}
         availabilityStore={availabilityStore}
         plannerStore={plannerStore}
+        availabilityActions={availabilityActions}
       />
     );
   });
@@ -109,7 +115,7 @@ describe('Availability', () => {
 
   it('calls the createEvent on date click', () => {
     subject.find('.event-date').at(0).simulate('click');
-    expect(AvailabilityActions.openFormForDay).toHaveBeenCalledWith(moment('2017-11-26'));
+    expect(availabilityActions.openEventFormForDay).toHaveBeenCalledWith(moment('2017-11-26'));
   });
 
   it('renders a list of events', () => {
@@ -129,12 +135,12 @@ describe('Availability', () => {
 
   it('forwards availability to next week', () => {
     subject.find('button.next-week').simulate('click');
-    expect(AvailabilityActions.incrementWeek).toHaveBeenCalled();
+    expect(availabilityActions.incrementWeek).toHaveBeenCalled();
   });
 
   it('advanced to previous weeks', () => {
     subject.find('button.last-week').simulate('click');
-    expect(AvailabilityActions.decrementWeek).toHaveBeenCalled();
+    expect(availabilityActions.decrementWeek).toHaveBeenCalled();
   });
 
   it('renders event type radio buttons form after calling show event form', () => {

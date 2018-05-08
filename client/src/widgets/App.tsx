@@ -6,11 +6,10 @@ import { StyledProfileSitePicker } from '../profile/ProfileSitePicker';
 import { Routes } from './Routes';
 import { withRouter } from 'react-router';
 import { AppActions } from './AppActions';
-import { Repositories } from '../utils/Repositories';
 
 interface Props {
-  repositories: Repositories;
   profileStore?: ProfileSitePickerStore;
+  appActions?: AppActions;
 }
 
 export const WrappedRoutes = withRouter((Routes as any));
@@ -18,7 +17,7 @@ export const WrappedRoutes = withRouter((Routes as any));
 @observer
 export class App extends React.Component<Props> {
   async componentDidMount() {
-    await AppActions.getSiteAndProfile(this.props.repositories);
+    await this.props.appActions!.getSiteAndProfile();
   }
 
   render() {
@@ -42,7 +41,10 @@ export class App extends React.Component<Props> {
   }
 }
 
-export const InjectedApp = inject('profileStore')(App);
+export const InjectedApp = inject(
+    'profileStore',
+    'appActions'
+)(App);
 
 export const ClassificationBanner = (props: { classified: boolean, className?: string }) => {
   return (

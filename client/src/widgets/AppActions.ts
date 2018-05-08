@@ -1,13 +1,18 @@
 import { Repositories } from '../utils/Repositories';
-import { stores } from '../stores';
+import { Stores } from '../stores';
 
 export class AppActions {
-  static getSiteAndProfile = async (repositories: Repositories) => {
+  constructor(
+    private stores: Partial<Stores>,
+    private repositories: Partial<Repositories>) {
+  }
+
+  getSiteAndProfile = async () => {
     const [sites, profile] = await Promise.all([
-      repositories.siteRepository.findAll(),
-      repositories.profileRepository.findOne(),
+      this.repositories.siteRepository!.findAll(),
+      this.repositories.profileRepository!.findOne(),
     ]);
 
-    await stores.profileStore!.hydrate(sites, profile);
+    await this.stores.profileStore!.hydrate(sites, profile);
   }
 }

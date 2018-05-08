@@ -49,6 +49,29 @@ const adminStore = new AdminStore(WebRepositories.profileRepository);
 const airmanProfileManagerStore = new AirmanProfileManagerStore(WebRepositories.airmanRepository);
 const siteManagerStore = new SiteManagerStore(WebRepositories);
 
+export interface Stores {
+  profileStore: ProfileSitePickerStore;
+  locationFilterStore: LocationFilterStore;
+  rosterHeaderStore: RosterHeaderStore;
+  trackerStore: TrackerStore;
+  plannerStore: PlannerStore;
+  sidePanelStore: SidePanelStore;
+  currencyStore: CurrencyStore;
+  airmanRipItemFormStore: AirmanRipItemFormStore;
+  skillFormStore: SkillFormStore;
+  availabilityStore: AvailabilityStore;
+  appointmentFormStore: AppointmentFormStore;
+  leaveFormStore: LeaveFormStore;
+  missionFormStore: MissionFormStore;
+  tdyDeploymentFormStore: TDYDeploymentFormStore;
+  dashboardStore: DashboardStore;
+  crewStore: CrewStore;
+  missionPlannerStore: MissionPlannerStore;
+  adminStore: AdminStore;
+  airmanProfileManagerStore: AirmanProfileManagerStore;
+  siteManagerStore: SiteManagerStore;
+}
+
 export const stores = {
   adminStore,
   airmanRipItemFormStore,

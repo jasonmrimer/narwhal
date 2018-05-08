@@ -7,8 +7,8 @@ import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore
 import { DoubleRepositories } from '../utils/Repositories';
 
 describe('App', () => {
-  let subject: ShallowWrapper;
   let profileStore: ProfileSitePickerStore;
+  let subject: ShallowWrapper;
 
   describe('ProfileSitePicker', () => {
     profileStore = new ProfileSitePickerStore(DoubleRepositories);
@@ -22,7 +22,16 @@ describe('App', () => {
       classified: false
     });
 
-    subject = shallow(<App repositories={DoubleRepositories} profileStore={profileStore}/>);
+    const appActions: any = {
+      getSiteAndProfile: jest.fn()
+    };
+
+    subject = shallow(
+      <App
+        profileStore={profileStore}
+        appActions={appActions}
+      />
+    );
 
     it('renders the correct classification banner', () => {
       expect(subject.find(StyledClassificationBanner).prop('classified')).toBeFalsy();

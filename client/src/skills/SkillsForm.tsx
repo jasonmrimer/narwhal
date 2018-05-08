@@ -20,6 +20,7 @@ interface Props {
   currencyStore?: CurrencyStore;
   trackerStore?: TrackerStore;
   locationFilterStore?: LocationFilterStore;
+  skillActions?: SkillActions;
   airmanId: number;
   className?: string;
 }
@@ -31,12 +32,12 @@ export class SkillsForm extends React.Component<Props> {
   }
 
   handleDelete = async () => {
-    await SkillActions.deleteSkill();
+    await this.props.skillActions!.deleteSkill();
   }
 
   handleSubmit = async (e: any) => {
     e.preventDefault();
-    await SkillActions.submitSkill(this.props.airmanId);
+    await this.props.skillActions!.submitSkill(this.props.airmanId);
   }
 
   render() {
@@ -140,7 +141,8 @@ export const StyledSkillsForm = inject(
   'skillFormStore',
   'currencyStore',
   'trackerStore',
-  'locationFilterStore'
+  'locationFilterStore',
+  'skillActions'
 )(styled(SkillsForm)`  
   min-width: ${props => props.theme.sidePanelWidth};
 `);

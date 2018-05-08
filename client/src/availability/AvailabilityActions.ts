@@ -1,30 +1,33 @@
-import { stores } from '../stores';
 import { Moment } from 'moment';
+import { Stores } from '../stores';
 
 export class AvailabilityActions {
-  static decrementWeek = async () => {
-    await stores.plannerStore.decrementSidePanelWeek();
-    await stores.availabilityStore.refreshAirmanEvents(
-      stores.trackerStore.selectedAirman.id,
-      stores.plannerStore.sidePanelWeek
+  constructor(private stores: Partial<Stores>) {
+  }
+
+  incrementWeek = async () => {
+    await this.stores.plannerStore!.incrementSidePanelWeek();
+    await this.stores.availabilityStore!.refreshAirmanEvents(
+      this.stores.trackerStore!.selectedAirman.id,
+      this.stores.plannerStore!.sidePanelWeek
     );
   }
 
-  static incrementWeek = async () => {
-    await stores.plannerStore.incrementSidePanelWeek();
-    await stores.availabilityStore.refreshAirmanEvents(
-      stores.trackerStore.selectedAirman.id,
-      stores.plannerStore.sidePanelWeek
+  decrementWeek = async () => {
+    await this.stores.plannerStore!.decrementSidePanelWeek();
+    await this.stores.availabilityStore!.refreshAirmanEvents(
+      this.stores.trackerStore!.selectedAirman.id,
+      this.stores.plannerStore!.sidePanelWeek
     );
   }
 
-  static openFormForDay = (day: Moment) => {
-    stores.availabilityStore.setSelectedDate(day);
-    stores.availabilityStore.showEventForm();
+  openEventForm = () => {
+    this.stores.availabilityStore!.clearSelectedDate();
+    this.stores.availabilityStore!.showEventForm();
   }
 
-  static openForm = () => {
-    stores.availabilityStore.clearSelectedDate();
-    stores.availabilityStore.showEventForm();
+  openEventFormForDay = (day: Moment) => {
+    this.stores.availabilityStore!.setSelectedDate(day);
+    this.stores.availabilityStore!.showEventForm();
   }
 }

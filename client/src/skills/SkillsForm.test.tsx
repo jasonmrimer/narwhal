@@ -9,7 +9,6 @@ import { SkillFormStore } from './stores/SkillFormStore';
 import { StyledButton } from '../widgets/Button';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { DoubleRepositories } from '../utils/Repositories';
-import { SkillActions } from './SkillActions';
 import { Provider } from 'mobx-react';
 import { CurrencyStore } from '../currency/stores/CurrencyStore';
 import { LocationFilterStore } from '../widgets/stores/LocationFilterStore';
@@ -20,18 +19,24 @@ describe('SkillsForm', () => {
   let mountedSubject: ReactWrapper;
   let trackerStore: TrackerStore;
   let currencyStore: CurrencyStore;
+  let skillActions: any;
   const earnDate = moment('2018-02-01');
   const expirationDate = moment('2019-02-01');
 
   beforeEach(() => {
     const store = new SkillFormStore();
     trackerStore = new TrackerStore(DoubleRepositories);
-    SkillActions.submitSkill = jest.fn();
+
+    skillActions = {
+      submitSkill: jest.fn()
+    };
+
     subject = shallow(
       <SkillsForm
         airmanId={1}
         skillFormStore={store}
         trackerStore={trackerStore}
+        skillActions={skillActions}
       />);
   });
 
@@ -47,7 +52,7 @@ describe('SkillsForm', () => {
     skillForm.handleChange({target: {name: 'expirationDate', value: expirationDate}});
 
     subject.find(StyledForm).simulate('submit', eventStub);
-    expect(SkillActions.submitSkill).toHaveBeenCalled();
+    expect(skillActions.submitSkill).toHaveBeenCalled();
   });
 
   describe('rendering with an existing skill', () => {
@@ -65,15 +70,22 @@ describe('SkillsForm', () => {
 
       const store = new SkillFormStore();
       store.open(skill);
+
       currencyStore = new CurrencyStore(DoubleRepositories);
+
       const locationFilterStore = new LocationFilterStore();
-      SkillActions.deleteSkill = jest.fn();
+
+      skillActions = {
+        deleteSkill: jest.fn()
+      };
+
       mountedSubject = mount(
         <Provider
           skillFormStore={store}
           trackerStore={trackerStore}
           currencyStore={currencyStore}
           locationFilterStore={locationFilterStore}
+          skillActions={skillActions}
         >
           <StyledSkillsForm airmanId={1}/>
         </Provider>
@@ -82,7 +94,7 @@ describe('SkillsForm', () => {
 
     it('calls executePendingDelete when clicking the delete button', () => {
       mountedSubject.find(StyledButton).simulate('click');
-      expect(SkillActions.deleteSkill).toHaveBeenCalled();
+      expect(skillActions.deleteSkill).toHaveBeenCalled();
     });
   });
 });

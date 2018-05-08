@@ -18,6 +18,7 @@ interface Props {
   airmanRipItemFormStore?: AirmanRipItemFormStore;
   trackerStore?: TrackerStore;
   currencyStore?: CurrencyStore;
+  ripItemsActions?: RipItemsActions;
   selectedAirmanId: number;
   className?: string;
 }
@@ -25,17 +26,17 @@ interface Props {
 @observer
 export class AirmanRipItems extends React.Component<Props> {
   onChange = (e: any, item: AirmanRipItemModel) => {
-    RipItemsActions.handleChange(moment(e.target.value), item);
+    this.props.ripItemsActions!.handleChange(moment(e.target.value), item);
   }
 
   onClick = (item: AirmanRipItemModel) => {
     const expirationDate = moment().add(90, 'days').startOf('day');
-    RipItemsActions.handleChange(expirationDate, item);
+    this.props.ripItemsActions!.handleChange(expirationDate, item);
   }
 
   onSubmit = async (e: any) => {
     e.preventDefault();
-    await RipItemsActions.submit();
+    await this.props.ripItemsActions!.submit();
   }
 
   render() {
@@ -78,7 +79,12 @@ export class AirmanRipItems extends React.Component<Props> {
   }
 }
 
-export const StyledRipItems = inject('airmanRipItemFormStore', 'currencyStore', 'trackerStore')(styled(AirmanRipItems)`
+export const StyledRipItems = inject(
+  'airmanRipItemFormStore',
+  'currencyStore',
+  'trackerStore',
+  'ripItemsActions'
+  )(styled(AirmanRipItems)`
   h3 {
     font-weight: 300;
     font-size: 1.15rem;

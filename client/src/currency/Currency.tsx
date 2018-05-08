@@ -14,6 +14,7 @@ import { CurrencyActions } from './CurrencyActions';
 interface Props {
   currencyStore?: CurrencyStore;
   trackerStore?: TrackerStore;
+  currencyActions?: CurrencyActions;
   className?: string;
 }
 
@@ -56,7 +57,7 @@ export class Currency extends React.Component<Props> {
         <div className="skill-control-row">
           <button
             className="add-skill"
-            onClick={CurrencyActions.addSkill}
+            onClick={this.props.currencyActions!.addSkill}
           >
             + Add Skill
           </button>
@@ -74,7 +75,7 @@ export class Currency extends React.Component<Props> {
     return (
       <StyledRipItemsTile
         title="RIP TASKS"
-        onClick={CurrencyActions.addRipItems}
+        onClick={this.props.currencyActions!.addRipItems}
         expiredItemCount={currencyStore!.expiredItemCount}
         assignedItemCount={currencyStore!.assignedItemCount}
       />
@@ -97,7 +98,7 @@ export class Currency extends React.Component<Props> {
       <StyledSkillTile
         key={index}
         skill={qual}
-        onClick={() => CurrencyActions.editSkill(qual)}
+        onClick={() => this.props.currencyActions!.editSkill(qual)}
       />
     ));
   }
@@ -107,7 +108,7 @@ export class Currency extends React.Component<Props> {
       <StyledSkillTile
         key={index}
         skill={cert}
-        onClick={() => CurrencyActions.editSkill(cert)}
+        onClick={() => this.props.currencyActions!.editSkill(cert)}
       />
     ));
   }
@@ -134,7 +135,8 @@ export class Currency extends React.Component<Props> {
 
 export const StyledCurrency = inject(
   'currencyStore',
-  'trackerStore'
+  'trackerStore',
+  'currencyActions'
 )(styled(Currency)`
   width: 100%;
   

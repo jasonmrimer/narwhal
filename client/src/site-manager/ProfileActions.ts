@@ -1,11 +1,14 @@
-import { stores } from '../stores';
+import { Stores } from '../stores';
 import { History } from 'history';
 
 export class ProfileActions {
   public static fieldMessage = 'This field is required.';
 
-  static handleFormSubmit = async (history: History) => {
-    const store = stores.airmanProfileManagerStore;
+  constructor(private stores: Partial<Stores>) {
+  }
+
+  handleFormSubmit = async (history: History) => {
+    const store = this.stores.airmanProfileManagerStore!;
     const formErrors = {};
     try {
 

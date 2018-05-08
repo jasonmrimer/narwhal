@@ -68,7 +68,7 @@ describe('EventActions', () => {
     };
 
     subject = new EventActions(
-      {formStore, plannerStore, availabilityStore, trackerStore},
+      {plannerStore, availabilityStore, trackerStore} as any,
       timeService
     );
   });

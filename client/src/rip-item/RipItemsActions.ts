@@ -1,15 +1,17 @@
 import { Moment } from 'moment';
-import { stores } from '../stores';
+import { Stores } from '../stores';
 import { AirmanRipItemModel } from '../airman/models/AirmanRipItemModel';
 
 export class RipItemsActions {
-  static handleChange = (expirationDate: Moment, item: AirmanRipItemModel) => {
+  constructor(private stores: Partial<Stores>) {}
+
+  handleChange = (expirationDate: Moment, item: AirmanRipItemModel) => {
     item.expirationDate = expirationDate.isValid() ? expirationDate : null;
-    stores.airmanRipItemFormStore.updateRipItem(item);
+    this.stores.airmanRipItemFormStore!.updateRipItem(item);
   }
 
-  static submit = async () => {
-    await stores.airmanRipItemFormStore.submitRipItems();
-    stores.currencyStore.closeAirmanRipItemForm();
+  submit = async () => {
+    await this.stores.airmanRipItemFormStore!.submitRipItems();
+    this.stores.currencyStore!.closeAirmanRipItemForm();
   }
 }

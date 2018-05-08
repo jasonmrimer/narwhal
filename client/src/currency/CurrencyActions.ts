@@ -1,19 +1,22 @@
-import { stores } from '../stores';
+import { Stores } from '../stores';
 import { Skill } from '../skills/models/Skill';
 
 export class CurrencyActions {
-  static addSkill = () => {
-    stores.currencyStore.openCreateSkillForm();
-    stores.skillFormStore.open();
+  constructor(private stores: Partial<Stores>) {
   }
 
-  static addRipItems = () => {
-    stores.airmanRipItemFormStore.setRipItems(stores.currencyStore.airmanRipItems);
-    stores.currencyStore.openAirmanRipItemForm();
+  addSkill = () => {
+    this.stores.currencyStore!.openCreateSkillForm();
+    this.stores.skillFormStore!.open();
   }
 
-  static editSkill = (skill: Skill) => {
-    stores.currencyStore.openEditSkillForm();
-    stores.skillFormStore.open(skill);
+  addRipItems = () => {
+    this.stores.airmanRipItemFormStore!.setRipItems(this.stores.currencyStore!.airmanRipItems);
+    this.stores.currencyStore!.openAirmanRipItemForm();
+  }
+
+  editSkill = (skill: Skill) => {
+    this.stores.currencyStore!.openEditSkillForm();
+    this.stores.skillFormStore!.open(skill);
   }
 }

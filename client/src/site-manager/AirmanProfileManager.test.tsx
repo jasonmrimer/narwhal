@@ -15,9 +15,9 @@ import { StyledForm } from '../widgets/Form';
 import { DoubleRepositories } from '../utils/Repositories';
 import { ScheduleModel, ScheduleType } from '../schedule/models/ScheduleModel';
 import { StyledFieldValidation } from '../widgets/FieldValidation';
-import { ProfileActions } from './ProfileActions';
 
 describe('AirmanProfileManager', () => {
+  let profileActions: any;
   let airman: AirmanModel;
   let store: AirmanProfileManagerStore;
   let subject: ShallowWrapper;
@@ -42,11 +42,18 @@ describe('AirmanProfileManager', () => {
     ];
 
     store = new AirmanProfileManagerStore(DoubleRepositories.airmanRepository);
-    ProfileActions.handleFormSubmit = jest.fn();
     store.hydrate(airman, SiteModelFactory.buildList(3, 3), schedules, airmanRipItems);
 
+    profileActions = {
+      handleFormSubmit: jest.fn()
+    };
+
     subject = shallow(
-      <AirmanProfileManager airmanProfileManagerStore={store} history={historyMock}/>
+      <AirmanProfileManager
+        airmanProfileManagerStore={store}
+        history={historyMock}
+        profileActions={profileActions}
+      />
     );
   });
 
@@ -96,7 +103,7 @@ describe('AirmanProfileManager', () => {
 
   it('should call store save onSubmit', () => {
     subject.find(StyledForm).simulate('submit', eventStub);
-    expect(ProfileActions.handleFormSubmit).toHaveBeenCalled();
+    expect(profileActions.handleFormSubmit).toHaveBeenCalled();
   });
 
   it('should show field validation for first name and last name', () => {

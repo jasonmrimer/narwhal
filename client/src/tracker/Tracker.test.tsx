@@ -28,9 +28,14 @@ describe('Tracker', () => {
     trackerStore = new TrackerStore(DoubleRepositories);
     availabilityStore = new AvailabilityStore(DoubleRepositories);
     currencyStore = new CurrencyStore(DoubleRepositories);
+
     eventActions = {
       executePendingDelete: jest.fn(),
-    }
+    };
+
+    const trackerActions: any = {
+      getAirmenBySite: jest.fn()
+    };
 
     subject = shallow(
       <Tracker
@@ -38,6 +43,7 @@ describe('Tracker', () => {
         availabilityStore={availabilityStore}
         currencyStore={currencyStore}
         eventActions={eventActions}
+        trackerActions={trackerActions}
         profile={
           {
             id: 1,

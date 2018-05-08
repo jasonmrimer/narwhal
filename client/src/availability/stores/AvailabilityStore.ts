@@ -4,9 +4,6 @@ import { Moment } from 'moment';
 import { Repositories } from '../../utils/Repositories';
 
 export class AvailabilityStore {
-
-  readonly formStores: {};
-
   @observable private _shouldShowEventForm: boolean = false;
   @observable private _shouldShowEventTypeSelection: boolean = true;
   @observable private _eventFormType: EventType | string = '';

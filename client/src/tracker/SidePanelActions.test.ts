@@ -39,18 +39,22 @@ describe('SidePanelActions', () => {
       setSelectedAirman: setSelectedAirmanSpy,
       getEventsByAirmanId: () => airmanEvents,
     };
+
     const currencyStore = {
       closeSkillForm: closeSkillFormSpy,
       closeAirmanRipItemForm: closeAirmanRipItemFormSpy,
       setRipItemsForAirman: setRipItemsForAirmanSpy
     };
+
     const availabilityStore = {
       closeEventForm: closeEventFormSpy,
       setAirmanEvents: setAirmanEventsSpy,
       setSelectedDate: setSelectedDateSpy,
       showEventForm: showEventFormSpy
     };
+
     const plannerStore = {setSidePanelWeek: setSidePanelWeekSpy, plannerWeek: week};
+
     const sidePanelStore = {setSelectedTab: setSelectedTabSpy};
 
     subject = new SidePanelActions({
@@ -59,7 +63,7 @@ describe('SidePanelActions', () => {
       currencyStore,
       plannerStore,
       sidePanelStore
-    });
+    } as any);
   });
 
   it('should close the side panel', () => {
