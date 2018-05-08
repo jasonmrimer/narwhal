@@ -115,17 +115,23 @@ export class MissionPlannerRoster extends React.Component<Props> {
     const availableAirmen = this.filterAirmen(missionPlannerStore!.availableAirmen);
     const unavailableAirmen = this.filterAirmen(missionPlannerStore!.unavailableAirmen);
 
+    const rowCount  = () => {
+      if (availableAirmen.length !== 0 && unavailableAirmen.length !== 0) {
+          return availableAirmen.length > 0
+            ? 1 + availableAirmen.length + 1 + unavailableAirmen.length
+            : 3 + unavailableAirmen.length;
+        } else {
+          return 0;
+        }
+    }
+
     cache.clearAll();
     return (
       <List
         className={className}
         height={610}
         rowHeight={(props) => cache.rowHeight(props)! || 60}
-        rowCount={
-          availableAirmen.length > 0
-            ? 1 + availableAirmen.length + 1 + unavailableAirmen.length
-            : 3 + unavailableAirmen.length
-        }
+        rowCount={rowCount()}
         width={866}
         overscanRowCount={15}
         deferredMeasurementCache={cache}
