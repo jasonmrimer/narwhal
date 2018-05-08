@@ -5,7 +5,7 @@ import { AvailabilityActions } from './availability/AvailabilityActions';
 import { stores } from './stores';
 import { MissionPlannerActions } from './crew/MissionPlannerActions';
 import { SidePanelActions } from './tracker/SidePanelActions';
-import { ProfileActions } from './site-manager/ProfileActions';
+import { ProfileActions } from './site-manager/actions/ProfileActions';
 import { CurrencyActions } from './currency/CurrencyActions';
 import { RipItemsActions } from './rip-item/RipItemsActions';
 import { SkillActions } from './skills/SkillActions';

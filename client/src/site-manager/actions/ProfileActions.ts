@@ -1,4 +1,4 @@
-import { Stores } from '../stores';
+import { Stores } from '../../stores';
 import { History } from 'history';
 
 export class ProfileActions {
@@ -27,6 +27,7 @@ export class ProfileActions {
       await store.addAirman();
       store.setErrors({});
 
+      store.setDidSaveAirman(true);
       history.push(`/flights/${store.airman.id}`);
     } catch (e) {
       store.setErrors(Object.assign({}, e, formErrors));

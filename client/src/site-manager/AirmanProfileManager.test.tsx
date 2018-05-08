@@ -15,6 +15,7 @@ import { StyledForm } from '../widgets/Form';
 import { DoubleRepositories } from '../utils/Repositories';
 import { ScheduleModel, ScheduleType } from '../schedule/models/ScheduleModel';
 import { StyledFieldValidation } from '../widgets/FieldValidation';
+import { StyledAlert } from '../widgets/Alert';
 
 describe('AirmanProfileManager', () => {
   let profileActions: any;
@@ -112,6 +113,13 @@ describe('AirmanProfileManager', () => {
     expect(subject.find(StyledFieldValidation).at(2).prop('fieldName')).toBe('siteId');
     expect(subject.find(StyledFieldValidation).at(3).prop('fieldName')).toBe('squadronId');
     expect(subject.find(StyledFieldValidation).at(4).prop('fieldName')).toBe('flightId');
+  });
+
+  it('should render a banner when save is successful', function () {
+    store.setDidSaveAirman(true);
+    subject.instance().forceUpdate();
+    subject.update();
+    expect(subject.find(StyledAlert).exists()).toBeTruthy();
   });
 });
 

@@ -17,6 +17,7 @@ export class AirmanProfileManagerStore {
   @observable _scheduleId: number;
   @observable _loading: boolean = false;
   @observable _errors: FormErrors = {};
+  @observable _didSaveAirman: boolean = false;
 
   constructor(private airmanRepository: AirmanRepository) {
   }
@@ -35,6 +36,7 @@ export class AirmanProfileManagerStore {
       airman.currentScheduleId :
       this._schedules.find(s => s.type === ScheduleType.NoSchedule)!.id;
     this._errors = {};
+    this._didSaveAirman = false;
   }
 
   @computed
@@ -135,6 +137,16 @@ export class AirmanProfileManagerStore {
   @computed
   get loading() {
     return this._loading;
+  }
+
+  @action.bound
+  setDidSaveAirman(didSaveAirman: boolean) {
+    this._didSaveAirman = didSaveAirman;
+  }
+
+  @computed
+  get didSaveAirman() {
+    return this._didSaveAirman;
   }
 
   @action.bound

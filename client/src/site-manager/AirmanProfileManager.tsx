@@ -13,7 +13,8 @@ import { StyledForm } from '../widgets/Form';
 import { inject } from 'mobx-react/custom';
 import { History } from 'history';
 import { StyledFieldValidation } from '../widgets/FieldValidation';
-import { ProfileActions } from './ProfileActions';
+import { ProfileActions } from './actions/ProfileActions';
+import { StyledAlert } from '../widgets/Alert';
 
 interface Props {
   airmanProfileManagerStore?: AirmanProfileManagerStore;
@@ -26,7 +27,7 @@ interface Props {
 export class AirmanProfileManager extends React.Component<Props> {
   render() {
     const {className, airmanProfileManagerStore} = this.props;
-    const {airman, setState} = airmanProfileManagerStore!;
+    const {airman, setState, didSaveAirman} = airmanProfileManagerStore!;
     const {firstName, lastName} = airman;
     return (
       <div className={className}>
@@ -38,6 +39,10 @@ export class AirmanProfileManager extends React.Component<Props> {
           </div>
 
           <div className="content">
+            {
+              didSaveAirman &&
+              <StyledAlert>Your changes have been saved.</StyledAlert>
+            }
 
             <div className="airman-header">
               <h1>
