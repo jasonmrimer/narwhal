@@ -83,7 +83,7 @@ export class RosterHeaderStore {
     this._selectedLastName = e.target.value;
   }
 
-  filterAirmen(airmen: AirmanModel[]) {
+  filterAirmen = (airmen: AirmanModel[]) => {
     const filteredAirmen = airmen
       .filter(this.byShift)
       .filter(this.byQualifications)

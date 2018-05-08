@@ -13,7 +13,7 @@ import { StyledShiftDropdown } from '../tracker/ShiftDropdown';
 import { BorderedNotification, EmptyBorderedNotification } from '../widgets/Notification';
 import { LocationFilterStore } from '../widgets/stores/LocationFilterStore';
 import { RosterHeaderStore } from './stores/RosterHeaderStore';
-import { RosterList } from './RosterList';
+import { RosterList } from './models/RosterList';
 import { StyledRosterSubHeaderRow } from '../widgets/RosterSubHeaderRow';
 import { FlightModel } from '../flight/model/FlightModel';
 import { SidePanelActions } from '../tracker/SidePanelActions';
@@ -76,7 +76,9 @@ export class Roster extends React.Component<Props> {
           } else if (item instanceof FlightModel) {
             return (
               <CellMeasurer {...props} cache={cache} columnIndex={0}>
-                <StyledRosterSubHeaderRow {...props} text={item.name} alignment="left"/>
+                <StyledRosterSubHeaderRow {...props} alignment="left">
+                  {item.name}
+                </StyledRosterSubHeaderRow>
               </CellMeasurer>
             );
           } else {

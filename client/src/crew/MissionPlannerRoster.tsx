@@ -11,6 +11,7 @@ import { LocationFilterStore } from '../widgets/stores/LocationFilterStore';
 import { CrewStore } from './stores/CrewStore';
 import { MissionPlannerStore } from './stores/MissionPlannerStore';
 import { MissionPlannerActions } from './MissionPlannerActions';
+import { EmptyNotification, MissionPlannerRosterList, SubHeader } from './models/MissionPlannerRosterList';
 import { StyledMissionPlannerRosterRow } from './MissionPlannerRosterRow';
 
 export const cache = new CellMeasurerCache({
@@ -29,129 +30,75 @@ interface Props {
 
 @observer
 export class MissionPlannerRoster extends React.Component<Props> {
-  filterAirmen = (airmen: AirmanModel[]) => {
-    const {rosterHeaderStore, locationFilterStore} = this.props;
-    return rosterHeaderStore!.filterAirmen(locationFilterStore!.filterAirmen(airmen));
-  }
-
-  renderWithAvailableAirmen(
-    listRowProps: ListRowProps,
-    availableAirmen: AirmanModel[],
-    unavailableAirmen: AirmanModel[]
-  ) {
-    const {crewStore} = this.props;
-
-    switch (listRowProps.index) {
-      case 0:
-        return this.subHeaderRow('AVAILABLE', listRowProps);
-      case (availableAirmen.length + 1):
-        return this.subHeaderRow('UNAVAILABLE', listRowProps);
-      default:
-        let airman: AirmanModel;
-
-        if (listRowProps.index < availableAirmen.length + 1) {
-          airman = availableAirmen[listRowProps.index - 1];
-        } else {
-          airman = unavailableAirmen[listRowProps.index - (availableAirmen.length + 2)];
-        }
-
-        const addAirman = async () => {
-          this.props.crewStore!.setNewEntry({airmanName: `${airman!.lastName}, ${airman!.firstName}`});
-          await this.props.missionPlannerActions!.submit();
-        };
-
-        return (
-          <StyledMissionPlannerRosterRow
-            {...listRowProps}
-            key={airman!.id}
-            airman={airman!}
-            style={listRowProps.style}
-            onClick={crewStore!.crew!.hasAirman(airman!) ? undefined : addAirman}
-          />
-        );
-    }
-  }
-
-  renderWithoutAvailableAirmen(
-    listRowProps: ListRowProps,
-    availableAirmen: AirmanModel[],
-    unavailableAirmen: AirmanModel[]
-  ) {
-    const {crewStore} = this.props;
-
-    switch (listRowProps.index) {
-      case 0:
-        return this.subHeaderRow('AVAILABLE', listRowProps);
-      case 1:
-        return (
-          <CellMeasurer {...listRowProps} cache={cache} columnIndex={0}>
-            <StyledNotification {...listRowProps}>No personnel currently available.</StyledNotification>
-          </CellMeasurer>
-        );
-      case 2:
-        return this.subHeaderRow('UNAVAILABLE', listRowProps);
-      default:
-        const airman = unavailableAirmen[listRowProps.index - 3];
-
-        const addAirman = async () => {
-          this.props.crewStore!.setNewEntry({airmanName: `${airman!.lastName}, ${airman!.firstName}`});
-          await this.props.missionPlannerActions!.submit();
-        };
-
-        return (
-          <StyledMissionPlannerRosterRow
-            {...listRowProps}
-            key={airman!.id}
-            airman={airman!}
-            style={listRowProps.style}
-            onClick={crewStore!.crew!.hasAirman(airman!) ? undefined : addAirman}
-          />
-        );
-    }
-  }
-
   render() {
-    let rowCount = 0;
-    const {missionPlannerStore, className} = this.props;
-    const availableAirmen = this.filterAirmen(missionPlannerStore!.availableAirmen);
-    const unavailableAirmen = this.filterAirmen(missionPlannerStore!.unavailableAirmen);
-    if (availableAirmen.length !== 0 || unavailableAirmen.length !== 0) {
-      rowCount = availableAirmen.length > 0
-        ? 1 + availableAirmen.length + 1 + unavailableAirmen.length
-        : 3 + unavailableAirmen.length;
-    }
-
+    const {missionPlannerStore, rosterHeaderStore, locationFilterStore, className} = this.props;
+    const list = new MissionPlannerRosterList(
+      missionPlannerStore!.availableAirmen,
+      missionPlannerStore!.unavailableAirmen,
+      rosterHeaderStore!.filterAirmen,
+      locationFilterStore!.filterAirmen
+    );
     cache.clearAll();
     return (
       <List
         className={className}
         height={610}
         rowHeight={(props) => cache.rowHeight(props)! || 60}
-        rowCount={rowCount}
+        rowCount={list.size}
         width={866}
         overscanRowCount={15}
         deferredMeasurementCache={cache}
-        noRowsRenderer={() => {
-          return <StyledNotification className="failed-search">No members at this location match your search.</StyledNotification>;
-        }}
-        rowRenderer={
-          (props: ListRowProps) => availableAirmen.length > 0
-            ? this.renderWithAvailableAirmen(props, availableAirmen, unavailableAirmen)
-            : this.renderWithoutAvailableAirmen(props, availableAirmen, unavailableAirmen)
-        }
+        noRowsRenderer={this.renderNone}
+        rowRenderer={(props: ListRowProps) => this.renderRow(props, list)}
       />
     );
   }
 
-  private subHeaderRow(type: string, listRowProps: ListRowProps) {
+  private renderNone = () => {
     return (
-      <CellMeasurer {...listRowProps} cache={cache} columnIndex={0}>
-        <StyledRosterSubHeaderRow
-          {...listRowProps}
-          text={`PERSONNEL BELOW ARE ${type} FOR MISSION ON ${this.props.crewStore!.crew!.mission.displayDateZulu}`}
-        />
-      </CellMeasurer>
+      <StyledNotification className="failed-search">
+        No members at this location match your search.
+      </StyledNotification>
     );
+  }
+
+  private renderRow = (props: ListRowProps, list: MissionPlannerRosterList) => {
+    const item = list.get(props.index);
+    switch (item.constructor) {
+      case SubHeader:
+        const header = item as SubHeader;
+        return (
+          <CellMeasurer {...props} cache={cache} columnIndex={0}>
+            <StyledRosterSubHeaderRow style={props.style}>
+              PERSONNEL BELOW ARE
+              &nbsp;<b>{header.text()}</b>&nbsp;
+              FOR MISSION ON {this.props.crewStore!.crew!.mission.displayDateZulu}
+            </StyledRosterSubHeaderRow>
+          </CellMeasurer>
+        );
+      case AirmanModel:
+        const airman = item as AirmanModel;
+        return (
+          <StyledMissionPlannerRosterRow
+            {...props}
+            key={airman.id}
+            airman={airman}
+            onCrew={this.props.crewStore!.crew!.hasAirman(airman)}
+            onClick={async () => await this.props.missionPlannerActions!.addAirman(airman)}
+          />
+        );
+      case EmptyNotification:
+        const note = item as EmptyNotification;
+        return (
+          <CellMeasurer {...props} cache={cache} columnIndex={0}>
+            <StyledNotification className={props.index === list.size - 1 ? 'failed-search' : ''} style={props.style}>
+              {note.text}
+            </StyledNotification>
+          </CellMeasurer>
+        );
+      default:
+        return null;
+    }
   }
 }
 

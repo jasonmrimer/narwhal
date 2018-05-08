@@ -26,6 +26,12 @@ export class AirmanModelFactory {
       shift
     );
   }
+
+  static buildList(amount: number = 1, start: number = 1) {
+    return Array(amount).fill(null).map((_, i) => {
+      return this.build(start + i);
+    });
+  }
 }
 
 function randomShiftType(): ShiftType {

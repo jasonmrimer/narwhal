@@ -26,11 +26,11 @@ export class EventActions {
     } catch (e) {
       formStore!.setErrors(e);
     }
-  };
+  }
 
   handleDeleteEvent = (event: EventModel) => {
     this.stores.availabilityStore!.removeEvent(event);
-  };
+  }
 
   executePendingDelete = async () => {
     const airmanId = this.stores.trackerStore!.selectedAirman.id;
@@ -46,5 +46,5 @@ export class EventActions {
     await this.stores.trackerStore!.refreshEvents(this.stores.plannerStore!.plannerWeek);
 
     this.stores.availabilityStore!.closeEventForm();
-  };
+  }
 }

@@ -3,67 +3,49 @@ import { MissionPlannerRoster } from './MissionPlannerRoster';
 import { mount, ReactWrapper } from 'enzyme';
 import { CrewModelFactory } from './factories/CrewModelFactory';
 import { StyledRosterSubHeaderRow } from '../widgets/RosterSubHeaderRow';
-import { MissionPlannerStore } from './stores/MissionPlannerStore';
-import { CrewStore } from './stores/CrewStore';
-import { LocationFilterStore } from '../widgets/stores/LocationFilterStore';
-import { RosterHeaderStore } from '../roster/stores/RosterHeaderStore';
-import { DoubleRepositories } from '../utils/Repositories';
-import { MissionModelFactory } from '../mission/factories/MissionModelFactory';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
-import { EventModelFactory } from '../event/factories/EventModelFactory';
-import { SiteModelFactory } from '../site/factories/SiteModelFactory';
-import { CertificationModelFactory } from '../skills/factories/CertificationModelFactory';
-import { QualificationModelFactory } from '../skills/factories/QualificationModelFactory';
 import { AirmanModel } from '../airman/models/AirmanModel';
 import { MissionPlannerActions } from './MissionPlannerActions';
-import { CrewModel } from './models/CrewModel';
-import { StyledMissionPlannerRosterRow } from './MissionPlannerRosterRow';
-import { MissionModel } from '../mission/models/MissionModel';
+import { MissionPlannerRosterRow, StyledMissionPlannerRosterRow } from './MissionPlannerRosterRow';
 import { StyledNotification } from '../widgets/Notification';
-import { EventModel } from '../event/models/EventModel';
+import { EmptyNotification } from './models/MissionPlannerRosterList';
 
 describe('MissionPlannerRoster', () => {
-  let subject: ReactWrapper;
-  let missionPlannerStore: MissionPlannerStore;
-  let crewStore: CrewStore;
-  let locationFilterStore: LocationFilterStore;
-  let rosterHeaderStore: RosterHeaderStore;
-  let missionPlannerActions: MissionPlannerActions;
   let airman: AirmanModel;
-  let crew: CrewModel;
-  let mission: MissionModel;
-  let event: EventModel;
+  let missionPlannerStore: any;
+  let crewStore: any;
+  let subject: ReactWrapper;
+
   beforeEach(async () => {
-    const site = SiteModelFactory.build(1, 2);
-    mission = MissionModelFactory.build();
-    crew = CrewModelFactory.build();
-    airman = AirmanModelFactory.build(3);
+    const crew = CrewModelFactory.build();
 
-    const airmen = [crew.crewPositions[0].airman, crew.crewPositions[1].airman, airman];
+    airman = AirmanModelFactory.build(10);
 
-    missionPlannerStore = new MissionPlannerStore(DoubleRepositories);
-    crewStore = new CrewStore(DoubleRepositories);
-    locationFilterStore = new LocationFilterStore();
-    rosterHeaderStore = new RosterHeaderStore();
+    missionPlannerStore = {
+      availableAirmen: [airman],
+      unavailableAirmen: [crew.crewPositions[0].airman],
+      refreshAllEvents: jest.fn()
+    };
 
-    crewStore.setNewEntry = jest.fn();
-    crewStore.save = jest.fn();
+    crewStore = {
+      crew: crew,
+      setNewEntry: jest.fn(),
+      save: jest.fn()
+    };
 
-    event = EventModelFactory.build();
-    event.airmanId = 2;
+    const locationFilterStore: any = {
+      filterAirmen: (airmen: AirmanModel[]) => airmen
+    };
 
-    missionPlannerStore.hydrate(mission, airmen, [EventModelFactory.build(), event]);
-    crewStore.hydrate(crew, [airman]);
-    locationFilterStore.hydrate(site.id, [site]);
-    rosterHeaderStore.hydrate(
-      site.id,
-      CertificationModelFactory.buildList(3, site.id),
-      QualificationModelFactory.buildList(3)
-    );
+    const rosterHeaderStore: any = {
+      filterAirmen: (airmen: AirmanModel[]) => airmen
+    };
 
-    missionPlannerActions = new MissionPlannerActions(
-      {crewStore, locationFilterStore, missionPlannerStore}
-    );
+    const missionPlannerActions = new MissionPlannerActions({
+      missionPlannerStore,
+      crewStore,
+      locationFilterStore
+    });
 
     subject = mount(
       <MissionPlannerRoster
@@ -77,7 +59,7 @@ describe('MissionPlannerRoster', () => {
   });
 
   it('should render a row for each airman', () => {
-    expect(subject.find(StyledMissionPlannerRosterRow).length).toBe(3);
+    expect(subject.find(StyledMissionPlannerRosterRow).length).toBe(2);
   });
 
   it('should render a header row available and unavailable', () => {
@@ -85,17 +67,19 @@ describe('MissionPlannerRoster', () => {
   });
 
   it('should render a message if no there are no available airmen', () => {
-    event.airmanId = 3;
-    missionPlannerStore.hydrate(mission, [airman], [event]);
+    missionPlannerStore.availableAirmen = [];
+    missionPlannerStore.unavailableAirmen = [];
+
     subject.instance().forceUpdate();
     subject.update();
 
-    expect(subject.find(StyledNotification).text()).toContain('No personnel currently available.');
+    expect(subject.find(StyledNotification).at(0).text()).toContain(EmptyNotification.NoneAvailable().text);
+    expect(subject.find(StyledNotification).at(1).text()).toContain(EmptyNotification.NoneAssigned().text);
   });
 
   it('should render the available sub header before the unavailable', () => {
-    expect(subject.find(StyledRosterSubHeaderRow).at(0).text()).toContain('AVAILABLE FOR MISSION ON');
-    expect(subject.find(StyledRosterSubHeaderRow).at(1).text()).toContain('UNAVAILABLE FOR MISSION ON');
+    expect(subject.find(StyledRosterSubHeaderRow).at(0).text()).toContain('AVAILABLE');
+    expect(subject.find(StyledRosterSubHeaderRow).at(1).text()).toContain('UNAVAILABLE');
   });
 
   it('should call CrewStore set new entry when one clicks on an airman row', () => {
@@ -109,7 +93,7 @@ describe('MissionPlannerRoster', () => {
   });
 
   it('should not be able to click on an airman assigned to the crew', () => {
-    const assignedAirmanRow = subject.find('.airman-row').at(1);
-    expect(assignedAirmanRow.prop('onClick')).toBeUndefined();
+    const assignedAirmanRow = subject.find(MissionPlannerRosterRow).at(1);
+    expect(assignedAirmanRow.prop('onCrew')).toBeTruthy();
   });
 });

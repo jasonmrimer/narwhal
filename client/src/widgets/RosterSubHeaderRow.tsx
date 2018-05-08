@@ -1,19 +1,19 @@
-import { observer } from 'mobx-react';
 import styled from 'styled-components';
 import * as React from 'react';
 
 interface Props {
-  text: string;
   style: object;
   alignment?: string;
   className?: string;
 }
 
-export const RosterSubHeaderRow = observer((props: Props) => {
+export const RosterSubHeaderRow: React.SFC<Props> = props => {
   return (
-    <div className={props.className} style={props.style}>{props.text}</div>
+    <div className={props.className} style={props.style}>
+      {props.children}
+    </div>
   );
-});
+};
 
 export const StyledRosterSubHeaderRow = styled(RosterSubHeaderRow)`
   display: flex;

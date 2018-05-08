@@ -79,7 +79,7 @@ export class LocationFilterStore {
       });
   }
 
-  filterAirmen(airmen: AirmanModel[]) {
+  filterAirmen = (airmen: AirmanModel[]) => {
     return airmen
       .filter(this.bySquadron)
       .filter(this.byFlight);

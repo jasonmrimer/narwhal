@@ -11,6 +11,7 @@ import { PlusIcon } from '../icons/PlusIcon';
 
 interface Props {
   airman: AirmanModel;
+  onCrew: boolean;
   style: object;
   index: number;
   parent: any;
@@ -29,11 +30,11 @@ export const MissionPlannerRosterRow = observer((props: Props) => {
       key={props.key}
       parent={props.parent}
     >
-      <div className={classNames(className, {clickable: !!props.onClick})} style={props.style}>
-        <div onClick={props.onClick} className="airman-row">
+      <div className={className} style={props.style}>
+        <div onClick={props.onClick} className={classNames('airman-row', {clickable: !props.onCrew})}>
           <span className="airman-shift"><ShiftDisplay shift={props.airman.shift}/></span>
           <span className="airman-name">
-            {props.onClick && <PlusIcon/>}
+            {!props.onCrew && <PlusIcon/>}
             <span>{`${airman.lastName}, ${airman.firstName}`}</span>
           </span>
           <span className="airman-qual">{formatAttributes(airman.qualifications, 'acronym')}</span>
@@ -47,14 +48,18 @@ export const MissionPlannerRosterRow = observer((props: Props) => {
 export const StyledMissionPlannerRosterRow = styled(MissionPlannerRosterRow)`
   .clickable {
     cursor: pointer;
+    
+    &:hover {
+      background: ${props => props.theme.darkest};
+    }
   }
+  
   .airman-row {
     width: 866px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0.75rem;
-    cursor: initial;
     border-left: 1px solid ${props => props.theme.graySteel};
     border-right: 1px solid ${props => props.theme.graySteel};
   }
@@ -70,11 +75,7 @@ export const StyledMissionPlannerRosterRow = styled(MissionPlannerRosterRow)`
   &:nth-child(even) {
     background: ${props => props.theme.light};
   }
-  
-  &:hover {
-    background: ${props => props.theme.darkest};
-  }
-  
+    
   .airman-name, .airman-qual, .airman-cert {
     width: 23%;
   }
@@ -86,6 +87,7 @@ export const StyledMissionPlannerRosterRow = styled(MissionPlannerRosterRow)`
       margin-right: 0.5rem;
     }
   }
+  
   .airman-shift {
     width: 5rem;
   }
