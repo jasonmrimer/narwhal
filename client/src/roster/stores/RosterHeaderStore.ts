@@ -95,6 +95,7 @@ export class RosterHeaderStore {
     if (this._selectedShift === UnfilteredValue) {
       return true;
     }
+
     return airman.shift === Object.keys(ShiftType)[this._selectedShift];
   }
 

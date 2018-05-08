@@ -111,18 +111,14 @@ export class MissionPlannerRoster extends React.Component<Props> {
   }
 
   render() {
+    let rowCount = 0;
     const {missionPlannerStore, className} = this.props;
     const availableAirmen = this.filterAirmen(missionPlannerStore!.availableAirmen);
     const unavailableAirmen = this.filterAirmen(missionPlannerStore!.unavailableAirmen);
-
-    const rowCount  = () => {
-      if (availableAirmen.length !== 0 && unavailableAirmen.length !== 0) {
-          return availableAirmen.length > 0
-            ? 1 + availableAirmen.length + 1 + unavailableAirmen.length
-            : 3 + unavailableAirmen.length;
-        } else {
-          return 0;
-        }
+    if (availableAirmen.length !== 0 || unavailableAirmen.length !== 0) {
+      rowCount = availableAirmen.length > 0
+        ? 1 + availableAirmen.length + 1 + unavailableAirmen.length
+        : 3 + unavailableAirmen.length;
     }
 
     cache.clearAll();
@@ -131,12 +127,12 @@ export class MissionPlannerRoster extends React.Component<Props> {
         className={className}
         height={610}
         rowHeight={(props) => cache.rowHeight(props)! || 60}
-        rowCount={rowCount()}
+        rowCount={rowCount}
         width={866}
         overscanRowCount={15}
         deferredMeasurementCache={cache}
         noRowsRenderer={() => {
-          return <StyledNotification>No members at this location match your search.</StyledNotification>;
+          return <StyledNotification className="failed-search">No members at this location match your search.</StyledNotification>;
         }}
         rowRenderer={
           (props: ListRowProps) => availableAirmen.length > 0
@@ -172,7 +168,12 @@ export const StyledMissionPlannerRoster =
     
     h3 {
       border-left: 1px solid ${props => props.theme.graySteel};
+      border-right: 1px solid ${props => props.theme.graySteel};
       padding: 3.125rem 0;
       margin-bottom: 0;
+    }
+    
+    .failed-search {
+      border-bottom: 1px solid ${props => props.theme.graySteel};
     }
 `);

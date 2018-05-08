@@ -20,6 +20,7 @@ import { CrewModel } from './models/CrewModel';
 import { StyledMissionPlannerRosterRow } from './MissionPlannerRosterRow';
 import { MissionModel } from '../mission/models/MissionModel';
 import { StyledNotification } from '../widgets/Notification';
+import { EventModel } from '../event/models/EventModel';
 
 describe('MissionPlannerRoster', () => {
   let subject: ReactWrapper;
@@ -31,7 +32,7 @@ describe('MissionPlannerRoster', () => {
   let airman: AirmanModel;
   let crew: CrewModel;
   let mission: MissionModel;
-
+  let event: EventModel;
   beforeEach(async () => {
     const site = SiteModelFactory.build(1, 2);
     mission = MissionModelFactory.build();
@@ -48,7 +49,7 @@ describe('MissionPlannerRoster', () => {
     crewStore.setNewEntry = jest.fn();
     crewStore.save = jest.fn();
 
-    let event = EventModelFactory.build();
+    event = EventModelFactory.build();
     event.airmanId = 2;
 
     missionPlannerStore.hydrate(mission, airmen, [EventModelFactory.build(), event]);
@@ -84,7 +85,8 @@ describe('MissionPlannerRoster', () => {
   });
 
   it('should render a message if no there are no available airmen', () => {
-    missionPlannerStore.hydrate(mission, [], []);
+    event.airmanId = 3;
+    missionPlannerStore.hydrate(mission, [airman], [event]);
     subject.instance().forceUpdate();
     subject.update();
 
