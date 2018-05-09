@@ -15,7 +15,7 @@ import { DoubleRepositories } from '../utils/Repositories';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 
 describe('RipItems', () => {
-  let store: AirmanRipItemFormStore;
+  let airmanRipItemFormStore: AirmanRipItemFormStore;
   let currencyStore: CurrencyStore;
   let trackerStore: TrackerStore;
   let ripItemsActions: any;
@@ -23,24 +23,25 @@ describe('RipItems', () => {
 
   beforeEach(async () => {
 
-    store = new AirmanRipItemFormStore(new RipItemRepositoryStub());
+    airmanRipItemFormStore = new AirmanRipItemFormStore(new RipItemRepositoryStub());
     trackerStore = new TrackerStore(DoubleRepositories);
     currencyStore = new CurrencyStore(DoubleRepositories);
     const ripItem = new RipItemModel(1, 'NICKLEBACK');
     const airmanRipItem = [new AirmanRipItemModel(1, 1, ripItem, moment())];
-    store.setRipItems(airmanRipItem);
+    airmanRipItemFormStore.setRipItems(airmanRipItem);
 
-    store.updateRipItem = jest.fn();
-    store.submitRipItems = jest.fn();
+    airmanRipItemFormStore.updateRipItem = jest.fn();
+    airmanRipItemFormStore.submitRipItems = jest.fn();
 
     ripItemsActions = {
-      handleChange: jest.fn(),
+      updateRipItem: jest.fn(),
+      updateAllRipItems: jest.fn(),
       submit: jest.fn()
     };
 
     subject = shallow(
       <AirmanRipItems
-        airmanRipItemFormStore={store}
+        airmanRipItemFormStore={airmanRipItemFormStore}
         selectedAirmanId={1}
         currencyStore={currencyStore}
         trackerStore={trackerStore}
@@ -56,9 +57,9 @@ describe('RipItems', () => {
   it('should render the attributes of a RipItem', () => {
     const item = subject.find('.item');
     expect(item.length).toBe(1);
-    expect(item.at(0).text()).toBe(store.ripItems[0].ripItem.title);
+    expect(item.at(0).text()).toBe(airmanRipItemFormStore.ripItems[0].ripItem.title);
     expect(subject.find(StyledDatePicker).length).toBe(1);
-    expect(subject.find(StyledButton).length).toBe(1);
+    expect(subject.find(StyledButton).length).toBe(2);
   });
 
   it('should update the rip items expirationDate', () => {
@@ -72,7 +73,7 @@ describe('RipItems', () => {
       }
     );
 
-    expect(ripItemsActions.handleChange).toHaveBeenCalled();
+    expect(ripItemsActions.updateRipItem).toHaveBeenCalled();
   });
 
   it('should render a confirmation button with callback', async () => {
@@ -82,7 +83,15 @@ describe('RipItems', () => {
   });
 
   it('should update the rip items expirationDate upon clicking the 90 day button', () => {
-    subject.find(StyledButton).at(0).simulate('click');
-    expect(ripItemsActions.handleChange).toHaveBeenCalled();
+    subject.find(StyledButton).at(1).simulate('click');
+    expect(ripItemsActions.updateRipItem).toHaveBeenCalled();
+  });
+
+  it('should update all the rip items expirationDate upon clicking the update all button', () => {
+    subject
+      .find(StyledButton)
+      .findWhere(btn => btn.prop('text') === 'UPDATE ALL 90 DAYS')
+      .simulate('click');
+    expect(ripItemsActions.updateAllRipItems).toHaveBeenCalled();
   });
 });

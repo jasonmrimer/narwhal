@@ -1,6 +1,7 @@
-import { action, computed, observable } from 'mobx';
-import { AirmanRipItemModel } from '../../airman/models/AirmanRipItemModel';
-import { RipItemRepository } from '../../airman/repositories/AirmanRipItemRepository';
+import {action, computed, observable} from 'mobx';
+import {AirmanRipItemModel} from '../../airman/models/AirmanRipItemModel';
+import {RipItemRepository} from '../../airman/repositories/AirmanRipItemRepository';
+import {Moment} from "moment";
 
 export class AirmanRipItemFormStore {
   @observable private _airmanRipItems: AirmanRipItemModel[] = [];
@@ -19,10 +20,18 @@ export class AirmanRipItemFormStore {
   }
 
   @action.bound
-  updateRipItem(item: AirmanRipItemModel) {
-    const index = this._airmanRipItems.findIndex(i => i.id === item.id)!;
-    this._airmanRipItems.splice(index, 1, item);
+  updateRipItem(id: number, expirationDate: Moment | null) {
+    const item = this._airmanRipItems.find((i: AirmanRipItemModel) => i.id === id);
+    if (item) {
+      item.expirationDate = expirationDate;
+    }
   }
+
+  @action.bound
+  updateAllRipItems(expirationDate: Moment | null) {
+    this._airmanRipItems.forEach((item: AirmanRipItemModel) => item.expirationDate = expirationDate);
+  }
+
 
   @action.bound
   async submitRipItems() {

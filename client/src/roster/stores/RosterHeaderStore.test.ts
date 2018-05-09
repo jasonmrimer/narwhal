@@ -68,7 +68,7 @@ describe('RosterHeaderStore', () => {
       expect(airmen.length).toBeGreaterThanOrEqual(1);
 
       airmen.forEach(airman => {
-        expect(airman.shift).toBe(ShiftType.Night)
+        expect(airman.shift).toBe(ShiftType.Night);
       });
     });
 

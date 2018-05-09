@@ -1,18 +1,18 @@
 import * as React from 'react';
-import { AirmanRipItemModel } from '../airman/models/AirmanRipItemModel';
+import {AirmanRipItemModel} from '../airman/models/AirmanRipItemModel';
 import styled from 'styled-components';
-import { StyledDatePicker } from '../widgets/inputs/DatePicker';
+import {StyledDatePicker} from '../widgets/inputs/DatePicker';
 import * as moment from 'moment';
-import { observer, inject } from 'mobx-react';
-import { StyledSubmitButton } from '../widgets/forms/SubmitButton';
-import { StyledForm, StyledFormRow } from '../widgets/forms/Form';
-import { AirmanRipItemFormStore } from './stores/AirmanRipItemFormStore';
-import { StyledButton } from '../widgets/buttons/Button';
+import {inject, observer} from 'mobx-react';
+import {StyledSubmitButton} from '../widgets/forms/SubmitButton';
+import {StyledForm, StyledFormRow} from '../widgets/forms/Form';
+import {AirmanRipItemFormStore} from './stores/AirmanRipItemFormStore';
+import {StyledButton} from '../widgets/buttons/Button';
 import * as classNames from 'classnames';
-import { ResetIcon } from '../icons/ResetIcon';
-import { CurrencyStore } from '../currency/stores/CurrencyStore';
-import { TrackerStore } from '../tracker/stores/TrackerStore';
-import { RipItemsActions } from './RipItemsActions';
+import {ResetIcon} from '../icons/ResetIcon';
+import {CurrencyStore} from '../currency/stores/CurrencyStore';
+import {TrackerStore} from '../tracker/stores/TrackerStore';
+import {RipItemsActions} from './RipItemsActions';
 
 interface Props {
   airmanRipItemFormStore?: AirmanRipItemFormStore;
@@ -25,13 +25,18 @@ interface Props {
 
 @observer
 export class AirmanRipItems extends React.Component<Props> {
-  onChange = (e: any, item: AirmanRipItemModel) => {
-    this.props.ripItemsActions!.handleChange(moment(e.target.value), item);
+  onChange = (e: any, id: number) => {
+    this.props.ripItemsActions!.updateRipItem(id, moment(e.target.value));
   }
 
-  onClick = (item: AirmanRipItemModel) => {
-    const expirationDate = moment().add(90, 'days').startOf('day');
-    this.props.ripItemsActions!.handleChange(expirationDate, item);
+  onUpdateClicked = (id: number) => {
+    const expirationDate = this.getExpirationDate();
+    this.props.ripItemsActions!.updateRipItem(id, expirationDate);
+  }
+
+  onUpdateAllClicked = () => {
+    const expirationDate = this.getExpirationDate();
+    this.props.ripItemsActions!.updateAllRipItems(expirationDate);
   }
 
   onSubmit = async (e: any) => {
@@ -44,26 +49,36 @@ export class AirmanRipItems extends React.Component<Props> {
     const {ripItems} = airmanRipItemFormStore!;
     return (
       <StyledForm
-          className={this.props.className}
-          onSubmit={this.onSubmit}
-          setLoading={this.props.trackerStore!.setLoading}
+        className={this.props.className}
+        onSubmit={this.onSubmit}
+        setLoading={this.props.trackerStore!.setLoading}
       >
         <h3>RIP Task Expiration Dates</h3>
+        <StyledFormRow reversed={true}>
+          <StyledButton
+            className="update-all-btn"
+            text="UPDATE ALL 90 DAYS"
+            onClick={this.onUpdateAllClicked}
+            renderIcon={ResetIcon}
+          />
+        </StyledFormRow>
         {ripItems.map((item: AirmanRipItemModel, index: number) => {
             return (
               <StyledFormRow key={index} direction="column">
-                <div className={classNames('item', {expired: item.isExpired})}>{item.ripItem.title}</div>
+                <div className={classNames('item', {expired: item.isExpired})}>
+                  {item.ripItem.title}
+                </div>
                 <div className="item-date-controls">
                   <StyledDatePicker
                     className="item-date-input"
                     value={item.expirationDate ? item.expirationDate.format('YYYY-MM-DD') : ''}
-                    onChange={(e) => this.onChange(e, item)}
+                    onChange={(e) => this.onChange(e, item.id)}
                     name={item.ripItem.title}
                   />
                   <StyledButton
                     className="item-date-button"
                     text="90 DAYS"
-                    onClick={() => this.onClick(item)}
+                    onClick={() => this.onUpdateClicked(item.id)}
                     renderIcon={ResetIcon}
                   />
                 </div>
@@ -71,11 +86,15 @@ export class AirmanRipItems extends React.Component<Props> {
             );
           }
         )}
-        <StyledFormRow reversed={true}>
+        <StyledFormRow className="confirm-row" reversed={true}>
           <StyledSubmitButton text="CONFIRM"/>
         </StyledFormRow>
       </StyledForm>
     );
+  }
+
+  private getExpirationDate() {
+    return moment().add(90, 'days').startOf('day');
   }
 }
 
@@ -84,12 +103,17 @@ export const StyledRipItems = inject(
   'currencyStore',
   'trackerStore',
   'ripItemsActions'
-  )(styled(AirmanRipItems)`
+)(styled(AirmanRipItems)`
   h3 {
     font-weight: 300;
     font-size: 1.15rem;
     color: ${props => props.theme.fontColor};
     margin: 0;
+  }
+  
+  .update-all-btn {
+    width: 100%;
+    justify-content: center;
   }
 
   .item {
@@ -98,6 +122,8 @@ export const StyledRipItems = inject(
   }
   
   .item-date-controls {
+    width: 100%;
+    justify-content: space-between;
     display: flex;
     align-items: flex-end;
   }
@@ -125,4 +151,8 @@ export const StyledRipItems = inject(
     }
   }
   
+  .confirm-row {
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+  }
 `);

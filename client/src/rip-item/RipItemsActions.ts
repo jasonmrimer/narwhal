@@ -1,13 +1,21 @@
-import { Moment } from 'moment';
-import { Stores } from '../app/stores';
-import { AirmanRipItemModel } from '../airman/models/AirmanRipItemModel';
+import {Moment} from 'moment';
+import {Stores} from '../app/stores';
 
 export class RipItemsActions {
-  constructor(private stores: Partial<Stores>) {}
+  constructor(private stores: Partial<Stores>) {
+  }
 
-  handleChange = (expirationDate: Moment, item: AirmanRipItemModel) => {
-    item.expirationDate = expirationDate.isValid() ? expirationDate : null;
-    this.stores.airmanRipItemFormStore!.updateRipItem(item);
+  updateRipItem = (id: number, expirationDate: Moment) => {
+    this.stores.airmanRipItemFormStore!.updateRipItem(
+      id,
+      expirationDate.isValid() ? expirationDate : null
+    );
+  }
+
+  updateAllRipItems = (expirationDate: Moment) => {
+    this.stores.airmanRipItemFormStore!.updateAllRipItems(
+      expirationDate.isValid() ? expirationDate : null
+    );
   }
 
   submit = async () => {
