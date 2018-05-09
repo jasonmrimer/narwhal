@@ -40,13 +40,15 @@ export class TopBar extends React.Component<Props> {
             >
               AVAILABILITY
             </NavLink>
-            <NavLink
-              to="/flights"
-              activeClassName="selected"
-              className="tab"
-            >
-            FLIGHTS
-            </NavLink>
+            <Can do="read" on="flight" ability={profileStore!.profile!.ability!}>
+              <NavLink
+                to="/flights"
+                activeClassName="selected"
+                className="tab"
+              >
+              FLIGHTS
+              </NavLink>
+            </Can>
           </span>
           <span>
           {`${profileStore!.profile!.username} (${profileStore!.profile!.roleName})`}

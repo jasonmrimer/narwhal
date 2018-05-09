@@ -58,7 +58,7 @@ describe('TopBar', () => {
     expect(subject.find(NavLink).at(1).prop('to')).toBe('/');
   });
 
-  it('should not see the mission tab if a reader', () => {
+  it('should not see the mission or flight tab if a reader', () => {
     profile = {
       id: 1,
       username: 'Tytus',
@@ -76,6 +76,6 @@ describe('TopBar', () => {
         <TopBar profileStore={profileStore}/>
       </MemoryRouter>
     );
-    expect(mountedSubject.find('a').length).toBe(2);
+    expect(mountedSubject.find('a').length).toBe(1);
   });
 });
