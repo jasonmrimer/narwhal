@@ -1,5 +1,6 @@
 import { Repositories } from '../utils/Repositories';
 import { Stores } from './stores';
+import { adminAbility, readerAbility, writerAbility } from './abilities';
 
 export class AppActions {
   constructor(
@@ -12,6 +13,21 @@ export class AppActions {
       this.repositories.siteRepository!.findAll(),
       this.repositories.profileRepository!.findOne(),
     ]);
+
+    switch (profile.roleName) {
+      case 'READER':
+        profile.ability = readerAbility;
+        break;
+      case 'ADMIN':
+        profile.ability = adminAbility;
+        break;
+      case 'WRITER':
+        profile.ability = writerAbility;
+        break;
+      default:
+        profile.ability = readerAbility;
+        break;
+    }
 
     await this.stores.profileStore!.hydrate(sites, profile);
   }

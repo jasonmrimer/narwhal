@@ -1,3 +1,5 @@
+import { Ability } from '@casl/ability';
+
 export interface ProfileModel {
   id: number;
   username: string;
@@ -6,4 +8,5 @@ export interface ProfileModel {
   roleId: number;
   roleName: string;
   classified: boolean;
+  ability?: Ability;
 }

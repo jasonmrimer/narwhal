@@ -5,7 +5,6 @@ import { shallow } from 'enzyme';
 
 describe('Routes', () => {
   it('should support all routes', async () => {
-
     const subject = shallow(<Routes />);
 
     expect(subject.find(Switch).children().length).toBe(8);

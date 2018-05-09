@@ -1,18 +1,31 @@
 import * as React from 'react';
-import { shallow, ShallowWrapper } from 'enzyme';
+import { mount, shallow, ShallowWrapper } from 'enzyme';
 import { TopBar } from './TopBar';
 import { NavLink } from 'react-router-dom';
 import { ProfileModel } from '../profile/models/ProfileModel';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 import { DoubleRepositories } from '../utils/Repositories';
+import { adminAbility, readerAbility } from '../app/abilities';
+import { MemoryRouter } from 'react-router';
 
 describe('TopBar', () => {
   let subject: ShallowWrapper;
   let profile: ProfileModel;
+  let profileStore: ProfileSitePickerStore;
+
   beforeEach(() => {
 
-    profile = {id: 1, username: 'Tytus', siteId: 14, siteName: '14', roleName: 'ADMIN', roleId: 1, classified: false};
-    const profileStore = new ProfileSitePickerStore(DoubleRepositories);
+    profile = {id: 1,
+      username: 'Tytus',
+      siteId: 14,
+      siteName: '14',
+      roleName: 'ADMIN',
+      roleId: 1,
+      classified: false,
+      ability: adminAbility
+    };
+
+    profileStore = new ProfileSitePickerStore(DoubleRepositories);
     profileStore.hydrate([], profile);
     subject = shallow(<TopBar profileStore={profileStore}/>);
   });
@@ -43,5 +56,26 @@ describe('TopBar', () => {
   it('should render a link to the Availability page', () => {
     expect(subject.find(NavLink).at(1).exists()).toBeTruthy();
     expect(subject.find(NavLink).at(1).prop('to')).toBe('/');
+  });
+
+  it('should not see the mission tab if a reader', () => {
+    profile = {
+      id: 1,
+      username: 'Tytus',
+      siteId: 14,
+      siteName: '14',
+      roleName: 'READER',
+      roleId: 1,
+      classified: false,
+      ability: readerAbility
+    };
+    profileStore.hydrate([], profile);
+
+    const mountedSubject = mount(
+      <MemoryRouter>
+        <TopBar profileStore={profileStore}/>
+      </MemoryRouter>
+    );
+    expect(mountedSubject.find('a').length).toBe(2);
   });
 });

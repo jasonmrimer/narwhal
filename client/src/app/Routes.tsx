@@ -21,7 +21,7 @@ export class Routes extends React.Component {
           path="/dashboard/crew/:id"
           render={({match}) => <CrewPage crewId={match.params.id}/>}
         />
-        <Route exact={true} path="/flights" render={() => <FlightsPage />}/>
+        <Route exact={true} path="/flights" render={() => <FlightsPage/>}/>
         <Route path="/flights/new" render={({history}) => <AirmanProfilePage history={history}/>}/>
         <Route
           path="/flights/:airmanId"

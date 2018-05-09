@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 import { inject, observer } from 'mobx-react';
+import { Can } from '@casl/react';
 
 interface Props {
   profileStore?: ProfileSitePickerStore;
@@ -21,13 +22,16 @@ export class TopBar extends React.Component<Props> {
             <span>Narwhal</span>
           </span>
           <span className="navigation-tabs">
-            <NavLink
-              to="/dashboard"
-              activeClassName="selected"
-              className="tab"
-            >
-              MISSION
-            </NavLink>
+            <Can do="read" on="mission" ability={profileStore!.profile!.ability!}>
+              <NavLink
+                to="/dashboard"
+                activeClassName="selected"
+                className="tab"
+              >
+
+                MISSION
+              </NavLink>
+            </Can>
             <NavLink
               to="/"
               exact={true}
