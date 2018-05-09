@@ -19,9 +19,10 @@ interface Props {
 export class AirmanProfilePage extends React.Component<Props> {
   async componentDidMount() {
     this.props.airmanProfileManagerStore!.setLoading(true);
-    const [sites, schedules] = await Promise.all([
+    const [sites, schedules, ranks] = await Promise.all([
       WebRepositories.siteRepository.findAll(),
-      WebRepositories.scheduleRepository.findAll()
+      WebRepositories.scheduleRepository.findAll(),
+      WebRepositories.rankRepository.findAll()
     ]);
 
     const {airmanId} = this.props;
@@ -30,11 +31,11 @@ export class AirmanProfilePage extends React.Component<Props> {
         WebRepositories.airmanRepository.findOne(airmanId),
         WebRepositories.ripItemRepository.findBySelectedAirman(airmanId),
       ]);
-      this.props.airmanProfileManagerStore!.hydrate(airman, sites, schedules, ripItems);
+      this.props.airmanProfileManagerStore!.hydrate(airman, sites, schedules, ranks, ripItems);
 
       this.props.airmanProfileManagerStore!.setLoading(false);
     } else {
-      this.props.airmanProfileManagerStore!.hydrate(AirmanModel.empty(), sites, schedules);
+      this.props.airmanProfileManagerStore!.hydrate(AirmanModel.empty(), sites, schedules, ranks);
       this.props.airmanProfileManagerStore!.setLoading(false);
     }
   }

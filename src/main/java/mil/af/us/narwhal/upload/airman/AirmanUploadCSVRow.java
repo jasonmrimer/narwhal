@@ -4,6 +4,8 @@ import com.opencsv.bean.CsvBindByName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import mil.af.us.narwhal.rank.Rank;
+import mil.af.us.narwhal.rank.RankRepository;
 
 @Data
 @AllArgsConstructor

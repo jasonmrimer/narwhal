@@ -1,6 +1,6 @@
-import QualificationRepository from './SkillRepository';
+import { SkillRepository } from './SkillRepository';
 
-export function SkillRepositoryContract(subject: QualificationRepository) {
+export function SkillRepositoryContract(subject: SkillRepository) {
   describe('findAllQualifications', () => {
     it('returns a list of all qualifications', async () => {
       const qualifications = await subject.findAllQualifications();
@@ -8,7 +8,7 @@ export function SkillRepositoryContract(subject: QualificationRepository) {
     });
   });
 
-  describe('findAllCertificaions', () => {
+  describe('findAllCertifications', () => {
     it('returns a list of all certifications', async () => {
       const certifications = await subject.findAllCertifications();
       assertFindAll(certifications);

@@ -3,6 +3,7 @@ import { AirmanCertificationModel } from './AirmanCertificationModel';
 import { observable } from 'mobx';
 import { AirmanScheduleModel } from './AirmanScheduleModel';
 import { Moment } from 'moment';
+import { RankModel } from '../../rank/models/RankModel';
 
 export class AirmanModel {
   @observable public firstName: string;
@@ -10,10 +11,11 @@ export class AirmanModel {
   @observable public siteId: number;
   @observable public squadronId: number;
   @observable public flightId: number;
+  @observable public rank: RankModel;
   @observable public shift?: ShiftType;
 
   static empty(): AirmanModel {
-    return new AirmanModel(-1, -1, -1, -1, '', '', [], [], []);
+    return new AirmanModel(-1, -1, -1, -1, '', '', new RankModel(-1, ''), [], [], []);
   }
 
   constructor(public id: number,
@@ -22,6 +24,7 @@ export class AirmanModel {
               siteId: number,
               firstName: string,
               lastName: string,
+              rank: RankModel,
               public qualifications: AirmanQualificationModel[] = [],
               public certifications: AirmanCertificationModel[] = [],
               public schedules: AirmanScheduleModel[] = [],
@@ -31,7 +34,17 @@ export class AirmanModel {
     this.siteId = siteId;
     this.squadronId = squadronId;
     this.flightId = flightId;
+    this.rank = rank;
     this.shift = shift;
+  }
+
+  get fullName() {
+    if (this.lastName.length === 0 && this.firstName.length === 0) {
+      return '';
+    }
+    const fullName = this.rank.abbreviation === 'No Rank' ? '' : this.rank.abbreviation + ' ';
+    return fullName +
+      `${this.lastName}${this.lastName.length > 0 && this.firstName.length > 0 ? ',' : ''} ${this.firstName}`;
   }
 
   get isEmpty() {

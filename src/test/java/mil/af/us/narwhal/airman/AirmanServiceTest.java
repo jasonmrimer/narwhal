@@ -2,6 +2,8 @@ package mil.af.us.narwhal.airman;
 
 import mil.af.us.narwhal.flight.Flight;
 import mil.af.us.narwhal.flight.FlightRepository;
+import mil.af.us.narwhal.rank.Rank;
+import mil.af.us.narwhal.rank.RankRepository;
 import mil.af.us.narwhal.schedule.Schedule;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static java.util.Arrays.asList;
+import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
@@ -24,11 +27,12 @@ import static org.mockito.Mockito.when;
 public class AirmanServiceTest {
   @Mock private AirmanRepository airmanRepository;
   @Mock private FlightRepository flightRepository;
+  @Mock private RankRepository rankRepository;
   private AirmanService subject;
 
   @Before
   public void setUp() {
-    subject = new AirmanService(airmanRepository, flightRepository);
+    subject = new AirmanService(airmanRepository, flightRepository, rankRepository);
   }
 
   @Test
@@ -59,53 +63,15 @@ public class AirmanServiceTest {
   }
 
   @Test
-  public void testUpdateAirmanPersonalInfo() {
+  public void testUpdateAirman() {
     final Flight flight1 = new Flight();
     flight1.setId(1L);
 
     final Flight flight2 = new Flight();
     flight2.setId(2L);
 
-    final Airman airman = new Airman();
-    airman.setId(123L);
-    airman.setFirstName("A");
-    airman.setLastName("B");
-    airman.setShift(ShiftType.Night);
-    airman.setFlight(flight1);
-
-    when(airmanRepository.findOne(123L))
-      .thenReturn(airman);
-
-    when(flightRepository.findOne(2L))
-      .thenReturn(flight2);
-
-    when(airmanRepository.save(any(Airman.class)))
-      .thenAnswer((Answer<Airman>) invocation -> (Airman) invocation.getArguments()[0]);
-
-    final AirmanJSON json = new AirmanJSON(
-      123L,
-      2L,
-      "Foo",
-      "Bar",
-      ShiftType.Day,
-      new ArrayList<>(),
-      new ArrayList<>(),
-      new ArrayList<>(),
-      new ArrayList<>()
-    );
-
-    Airman savedAirman = subject.updateAirman(json);
-    assertThat(savedAirman.getId()).isEqualTo(123L);
-    assertThat(savedAirman.getFirstName()).isEqualTo("Foo");
-    assertThat(savedAirman.getLastName()).isEqualTo("Bar");
-    assertThat(savedAirman.getShift()).isEqualTo(ShiftType.Day);
-    assertThat(savedAirman.getFlight().getId()).isEqualTo(flight2.getId());
-  }
-
-  @Test
-  public void testUpdateAirmanSchedule() {
-    final Flight flight1 = new Flight();
-    flight1.setId(1L);
+    final Rank rank = new Rank();
+    rank.setId(3L);
 
     final Airman airman = new Airman();
     airman.setId(123L);
@@ -124,24 +90,86 @@ public class AirmanServiceTest {
       .thenReturn(airman);
 
     when(flightRepository.findOne(2L))
-      .thenReturn(flight1);
+      .thenReturn(flight2);
+
+    when(rankRepository.findOne(3L))
+      .thenReturn(rank);
 
     when(airmanRepository.save(any(Airman.class)))
       .thenAnswer((Answer<Airman>) invocation -> (Airman) invocation.getArguments()[0]);
 
     final AirmanJSON json = new AirmanJSON(
       123L,
-      1L,
-      "A",
-      "B",
+      2L,
+      "Foo",
+      "Bar",
+      rank,
       ShiftType.Day,
       new ArrayList<>(),
       new ArrayList<>(),
-      Collections.singletonList(airmanSchedule),
+      singletonList(airmanSchedule),
       new ArrayList<>()
     );
 
     Airman savedAirman = subject.updateAirman(json);
+
+    assertThat(savedAirman.getId()).isEqualTo(123L);
+    assertThat(savedAirman.getFirstName()).isEqualTo("Foo");
+    assertThat(savedAirman.getLastName()).isEqualTo("Bar");
+    assertThat(savedAirman.getShift()).isEqualTo(ShiftType.Day);
+    assertThat(savedAirman.getFlight().getId()).isEqualTo(flight2.getId());
+    assertThat(savedAirman.getRank().getId()).isEqualTo(rank.getId());
+    assertThat(savedAirman.getSchedules()).containsExactly(airmanSchedule);
+  }
+
+  @Test
+  public void testCreateAirman() {
+    final Flight flight = new Flight();
+    flight.setId(1L);
+
+    final Rank rank = new Rank();
+    rank.setId(1L);
+
+    final AirmanSchedule airmanSchedule = new AirmanSchedule(
+      null,
+      new Schedule("Back Half", false, false, false, false, true, true, true),
+      Instant.now()
+    );
+
+    when(flightRepository.findOne(1L))
+      .thenReturn(flight);
+
+    when(rankRepository.findOne(1L))
+      .thenReturn(rank);
+
+    when(airmanRepository.save(any(Airman.class)))
+      .thenAnswer((Answer<Airman>) invocation -> {
+        final Airman airman = (Airman) invocation.getArguments()[0];
+        airman.setId(123L);
+        return airman;
+      });
+
+    final AirmanJSON json = new AirmanJSON(
+      null,
+      1L,
+      "Foo",
+      "Bar",
+      rank,
+      ShiftType.Day,
+      new ArrayList<>(),
+      new ArrayList<>(),
+      singletonList(airmanSchedule),
+      new ArrayList<>()
+    );
+
+    Airman savedAirman = subject.createAirman(json);
+
+    assertThat(savedAirman.getId()).isNotNull();
+    assertThat(savedAirman.getFirstName()).isEqualTo("Foo");
+    assertThat(savedAirman.getLastName()).isEqualTo("Bar");
+    assertThat(savedAirman.getShift()).isEqualTo(ShiftType.Day);
+    assertThat(savedAirman.getFlight().getId()).isEqualTo(flight.getId());
+    assertThat(savedAirman.getRank().getId()).isEqualTo(rank.getId());
     assertThat(savedAirman.getSchedules()).containsExactly(airmanSchedule);
   }
 }

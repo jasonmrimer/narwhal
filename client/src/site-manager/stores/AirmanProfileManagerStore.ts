@@ -8,12 +8,15 @@ import { ScheduleModel, ScheduleType } from '../../schedule/models/ScheduleModel
 import { AirmanScheduleModel } from '../../airman/models/AirmanScheduleModel';
 import * as moment from 'moment';
 import { FormErrors } from '../../widgets/inputs/FieldValidation';
+import { RankModel } from '../../rank/models/RankModel';
 
 export class AirmanProfileManagerStore {
   @observable _airman: AirmanModel = AirmanModel.empty();
   @observable _sites: SiteModel[] = [];
-  @observable _ripItems: AirmanRipItemModel[] = [];
   @observable _schedules: ScheduleModel[] = [];
+  @observable _ranks: RankModel[] = [];
+  @observable _rankId: number;
+  @observable _ripItems: AirmanRipItemModel[] = [];
   @observable _scheduleId: number;
   @observable _loading: boolean = false;
   @observable _errors: FormErrors = {};
@@ -26,15 +29,20 @@ export class AirmanProfileManagerStore {
     airman: AirmanModel,
     sites: SiteModel[],
     schedules: ScheduleModel[],
+    ranks: RankModel[],
     ripItems?: AirmanRipItemModel[],
   ) {
     this._airman = airman;
     this._sites = sites;
-    this._ripItems = ripItems ? ripItems : this._ripItems;
     this._schedules = schedules;
+    this._ranks = ranks;
+    this._ripItems = ripItems ? ripItems : this._ripItems;
     this._scheduleId = airman.currentScheduleId ?
       airman.currentScheduleId :
       this._schedules.find(s => s.type === ScheduleType.NoSchedule)!.id;
+    this._rankId = !airman.isEmpty ?
+      airman.rank.id :
+      this._ranks.find(r => r.abbreviation === 'No Rank')!.id;
     this._errors = {};
     this._didSaveAirman = false;
   }
@@ -52,6 +60,16 @@ export class AirmanProfileManagerStore {
   @computed
   get ripItems() {
     return this._ripItems;
+  }
+
+  @computed
+  get ranks() {
+    return this._ranks;
+  }
+
+  @computed
+  get rankId() {
+    return this._rankId;
   }
 
   @computed
@@ -116,6 +134,13 @@ export class AirmanProfileManagerStore {
   }
 
   @computed
+  get rankOptions() {
+    return this._ranks.map(rank => {
+      return {value: rank.id, label: rank.abbreviation};
+    });
+  }
+
+  @computed
   get expiredItemCount(): number {
     return this._ripItems
       .filter(item => item.isExpired)
@@ -150,7 +175,7 @@ export class AirmanProfileManagerStore {
   }
 
   @action.bound
-  setState(key: keyof AirmanModel | 'scheduleId', value: any) {
+  setState(key: keyof AirmanModel | 'scheduleId' | 'rankId', value: any) {
     switch (key) {
       case 'siteId':
         this.setSquadronAndFlight(Number(value));
@@ -160,6 +185,9 @@ export class AirmanProfileManagerStore {
         break;
       case 'scheduleId':
         this._scheduleId = Number(value);
+        break;
+      case 'rankId':
+        this._rankId = Number(value);
         break;
       default:
         break;
@@ -173,6 +201,11 @@ export class AirmanProfileManagerStore {
     if (this._scheduleId) {
       this.addSchedule();
     }
+
+    if (this._rankId) {
+      this.addRank();
+    }
+
     this._airman = await this.airmanRepository.saveAirman(this._airman);
   }
 
@@ -180,6 +213,13 @@ export class AirmanProfileManagerStore {
     const schedule = this._schedules.find(s => s.id === this._scheduleId);
     if (schedule) {
       this._airman.schedules.push(new AirmanScheduleModel(this._airman.id, schedule, moment()));
+    }
+  }
+
+  private addRank() {
+    const rank = this._ranks.find(r => r.id === this._rankId);
+    if (rank) {
+      this._airman.rank = rank;
     }
   }
 

@@ -11,6 +11,7 @@ import { StyledNotification } from '../widgets/Notification';
 import { StyledRipItems } from '../rip-item/AirmanRipItemForm';
 import { CurrencyStore } from './stores/CurrencyStore';
 import { DoubleRepositories } from '../utils/Repositories';
+import { RankModel } from '../rank/models/RankModel';
 
 /* tslint:disable:no-empty*/
 describe('Currency', () => {
@@ -19,6 +20,7 @@ describe('Currency', () => {
     1,
     1,
     1,
+    new RankModel(1, 'rank1'),
     AirmanQualificationModelFactory.buildList(3),
     AirmanCertificationModelFactory.buildList(3, 1)
   );

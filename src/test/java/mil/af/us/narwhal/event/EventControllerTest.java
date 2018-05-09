@@ -7,6 +7,7 @@ import mil.af.us.narwhal.crew.CrewPosition;
 import mil.af.us.narwhal.flight.Flight;
 import mil.af.us.narwhal.mission.Mission;
 import mil.af.us.narwhal.mission.MissionRepository;
+import mil.af.us.narwhal.rank.Rank;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
 import mil.af.us.narwhal.squadron.Squadron;
@@ -55,9 +56,9 @@ public class EventControllerTest extends BaseIntegrationTest {
     site2.addSquadron(squadron2);
     siteRepository.save(site2);
 
-    airman = airmanRepository.save(new Airman(flight, "first", "last"));
-    airman2 = airmanRepository.save(new Airman(flight, "first2", "last2"));
-    airman3 = airmanRepository.save(new Airman(flight2, "first3", "last3"));
+    airman = airmanRepository.save(new Airman(flight, "first", "last", rank));
+    airman2 = airmanRepository.save(new Airman(flight, "first2", "last2", rank));
+    airman3 = airmanRepository.save(new Airman(flight2, "first3", "last3", rank));
   }
 
   @After

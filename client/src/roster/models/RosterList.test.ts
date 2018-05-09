@@ -3,6 +3,7 @@ import { FlightModel } from '../../flight/model/FlightModel';
 import { AirmanModel } from '../../airman/models/AirmanModel';
 import { RosterList } from './RosterList';
 import { UnfilteredValue } from '../../widgets/inputs/FilterOptionModel';
+import { RankModel } from '../../rank/models/RankModel';
 
 describe('RosterList', () => {
   const squadron = new SquadronModel(1, 'Squadron 1', [
@@ -12,9 +13,9 @@ describe('RosterList', () => {
     new FlightModel(4, 'Flight 4')
   ]);
   const airmen = [
-    new AirmanModel(1, 1, 1, 1, '1', '1'),
-    new AirmanModel(2, 2, 1, 1, '2', '2'),
-    new AirmanModel(3, 3, 1, 1, '3', '3')
+    new AirmanModel(1, 1, 1, 1, '1', '1', new RankModel(-1, '')),
+    new AirmanModel(2, 2, 1, 1, '2', '2', new RankModel(-1, '')),
+    new AirmanModel(3, 3, 1, 1, '3', '3', new RankModel(-1, ''))
   ];
 
   describe('with a squadron', () => {

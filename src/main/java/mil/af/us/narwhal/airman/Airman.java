@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import mil.af.us.narwhal.crew.CrewPosition;
 import mil.af.us.narwhal.event.Event;
 import mil.af.us.narwhal.flight.Flight;
+import mil.af.us.narwhal.rank.Rank;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -28,6 +29,10 @@ public class Airman {
   private String firstName;
 
   private String lastName;
+
+  @ManyToOne
+  @JoinColumn(name = "rank_id", nullable = false)
+  private Rank rank;
 
   @JsonIgnore
   @ManyToOne(optional = false)
@@ -63,10 +68,11 @@ public class Airman {
   private List<AirmanSchedule> schedules = new ArrayList<>();
 
 
-  public Airman(Flight flight, String firstName, String lastName) {
+  public Airman(Flight flight, String firstName, String lastName, Rank rank) {
     this.flight = flight;
     this.firstName = firstName;
     this.lastName = lastName;
+    this.rank = rank;
   }
 
   public Long getFlightId() {

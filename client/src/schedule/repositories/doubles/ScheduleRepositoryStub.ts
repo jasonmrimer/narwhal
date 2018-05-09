@@ -1,7 +1,7 @@
-import { ScheduleRepository as SkillRepository } from '../ScheduleRepository';
+import { ScheduleRepository } from '../ScheduleRepository';
 import { ScheduleModel, ScheduleType } from '../../models/ScheduleModel';
 
-export class ScheduleRepositoryStub implements SkillRepository {
+export class ScheduleRepositoryStub implements ScheduleRepository {
   findAll(): Promise<ScheduleModel[]> {
     return Promise.resolve(
       [

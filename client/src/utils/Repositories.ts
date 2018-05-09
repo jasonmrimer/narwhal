@@ -1,19 +1,19 @@
 ///<reference path="../site/repositories/web/WebSiteRepository.ts"/>
 ///<reference path="../schedule/repositories/web/WebScheduleRepository.ts"/>
+import { HTTPClient } from './HTTPClient';
 import { EventRepository } from '../event/repositories/EventRepository';
 import { MissionRepository } from '../mission/repositories/MissionRepository';
 import { AirmanRepository } from '../airman/repositories/AirmanRepository';
-import SkillRepository from '../skills/repositories/SkillRepository';
+import { SkillRepository } from '../skills/repositories/SkillRepository';
 import { SiteRepository } from '../site/repositories/SiteRepository';
 import { RipItemRepository } from '../airman/repositories/AirmanRipItemRepository';
 import { WebAirmanRepository } from '../airman/repositories/web/WebAirmanRepository';
-import { HTTPClient } from './HTTPClient';
 import { WebSiteRepository } from '../site/repositories/web/WebSiteRepository';
 import { WebSkillRepository } from '../skills/repositories/web/WebSkillRepository';
 import { WebEventRepository } from '../event/repositories/web/WebEventRepository';
 import { WebMissionRepository } from '../mission/repositories/web/WebMissionRepository';
 import { WebRipItemRepository } from '../airman/repositories/web/WebAirmanRipItemRepository';
-import SkillRepositoryStub from '../skills/repositories/doubles/SkillRepositoryStub';
+import { SkillRepositoryStub } from '../skills/repositories/doubles/SkillRepositoryStub';
 import { FakeAirmanRepository } from '../airman/repositories/doubles/FakeAirmanRepository';
 import { FakeEventRepository } from '../event/repositories/doubles/FakeEventRepository';
 import { MissionRepositoryStub } from '../mission/repositories/doubles/MissionRepositoryStub';
@@ -31,6 +31,9 @@ import { CrewPositionRepositorySpy } from '../crew/repositories/doubles/CrewPosi
 import { ScheduleRepository } from '../schedule/repositories/ScheduleRepository';
 import { WebScheduleRepository } from '../schedule/repositories/web/WebScheduleRepository';
 import { ScheduleRepositoryStub } from '../schedule/repositories/doubles/ScheduleRepositoryStub';
+import { RankRepository } from '../rank/repositories/RankRepository';
+import { WebRankRepository } from '../rank/repositories/web/WebRankRepository';
+import { RankRepositoryStub } from '../rank/repositories/doubles/RankRepositoryStub';
 
 export interface Repositories {
   airmanRepository: AirmanRepository;
@@ -43,6 +46,7 @@ export interface Repositories {
   crewPositionRepository: CrewPositionRepository;
   profileRepository: ProfileRepository;
   scheduleRepository: ScheduleRepository;
+  rankRepository: RankRepository;
 }
 
 const client = new HTTPClient();
@@ -57,7 +61,8 @@ export const WebRepositories: Repositories = Object.freeze({
   crewRepository: new WebCrewRepository(client),
   crewPositionRepository: new WebCrewPositionRepository(client),
   profileRepository: new WebProfileRepository(client),
-  scheduleRepository: new WebScheduleRepository(client)
+  scheduleRepository: new WebScheduleRepository(client),
+  rankRepository: new WebRankRepository(client)
 });
 
 export const DoubleRepositories: Repositories = {
@@ -71,4 +76,5 @@ export const DoubleRepositories: Repositories = {
   crewPositionRepository: new CrewPositionRepositorySpy(),
   profileRepository: new ProfileRepositoryStub(),
   scheduleRepository: new ScheduleRepositoryStub(),
+  rankRepository: new RankRepositoryStub()
 };

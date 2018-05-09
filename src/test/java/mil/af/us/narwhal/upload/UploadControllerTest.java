@@ -4,6 +4,8 @@ import mil.af.us.narwhal.BaseIntegrationTest;
 import mil.af.us.narwhal.airman.Airman;
 import mil.af.us.narwhal.airman.AirmanRepository;
 import mil.af.us.narwhal.flight.Flight;
+import mil.af.us.narwhal.rank.Rank;
+import mil.af.us.narwhal.rank.RankRepository;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
 import mil.af.us.narwhal.skill.Certification;
@@ -29,6 +31,7 @@ public class UploadControllerTest extends BaseIntegrationTest {
   @Autowired private AirmanRepository airmanRepository;
   @Autowired private CertificationRepository certificationRepository;
   @Autowired private QualificationRepository qualificationRepository;
+  @Autowired private RankRepository rankRepository;
   public Airman airman;
 
   @Before
@@ -48,7 +51,8 @@ public class UploadControllerTest extends BaseIntegrationTest {
     certificationRepository.save(new Certification("TITLE", site));
     qualificationRepository.save(new Qualification("ACR", "TITLE"));
 
-    airman = airmanRepository.save(new Airman(flight, "FIRST", "LAST"));
+
+    airman = airmanRepository.save(new Airman(flight, "FIRST", "LAST", rank));
   }
 
   @After

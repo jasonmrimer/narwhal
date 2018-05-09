@@ -16,6 +16,7 @@ import { DoubleRepositories } from '../utils/Repositories';
 import { ScheduleModel, ScheduleType } from '../schedule/models/ScheduleModel';
 import { StyledFieldValidation } from '../widgets/inputs/FieldValidation';
 import { StyledAlert } from '../widgets/Alert';
+import { RankModel } from '../rank/models/RankModel';
 
 describe('AirmanProfileManager', () => {
   let profileActions: any;
@@ -29,6 +30,7 @@ describe('AirmanProfileManager', () => {
       1,
       1,
       1,
+      new RankModel(1, 'rank1'),
       AirmanQualificationModelFactory.buildList(2),
       AirmanCertificationModelFactory.buildList(3, 1)
     );
@@ -42,8 +44,15 @@ describe('AirmanProfileManager', () => {
       new ScheduleModel(4, ScheduleType.NoSchedule),
     ];
 
+    const ranks = [
+      new RankModel(1, 'rank1'),
+      new RankModel(2, 'rank2'),
+      new RankModel(3, 'rank3'),
+      new RankModel(4, 'rank4')
+    ];
+
     store = new AirmanProfileManagerStore(DoubleRepositories.airmanRepository);
-    store.hydrate(airman, SiteModelFactory.buildList(3, 3), schedules, airmanRipItems);
+    store.hydrate(airman, SiteModelFactory.buildList(3, 3), schedules, ranks, airmanRipItems);
 
     profileActions = {
       handleFormSubmit: jest.fn()
@@ -59,10 +68,11 @@ describe('AirmanProfileManager', () => {
   });
 
   it('should render the header', () => {
-    expect(subject.find('.airman-header').text()).toBe(`${airman.lastName}, ${airman.firstName}`);
+    expect(subject.find('.airman-header').text()).toBe(airman.fullName);
   });
 
   it('should render the personal information about an Airman', () => {
+    expect(subject.find('#airman-rank').prop('value')).toBe(airman.rank.id);
     expect(subject.find('#airman-last-name').prop('value')).toBe(airman.lastName);
     expect(subject.find('#airman-first-name').prop('value')).toBe(airman.firstName);
   });
@@ -82,6 +92,7 @@ describe('AirmanProfileManager', () => {
   });
 
   it('should allow for the editing of an Airman profile', () => {
+    changeValue(subject, 'rankId', 4);
     changeValue(subject, 'lastName', 'Bob');
     changeValue(subject, 'firstName', 'Sponge');
     changeValue(subject, 'siteId', 2);
@@ -93,6 +104,7 @@ describe('AirmanProfileManager', () => {
     subject.instance().forceUpdate();
     subject.update();
 
+    expectPropToBe(subject, 'rankId', 4);
     expectPropToBe(subject, 'lastName', 'Bob');
     expectPropToBe(subject, 'firstName', 'Sponge');
     expectPropToBe(subject, 'siteId', 2);
@@ -107,7 +119,7 @@ describe('AirmanProfileManager', () => {
     expect(profileActions.handleFormSubmit).toHaveBeenCalled();
   });
 
-  it('should show field validation for first name and last name', () => {
+  it('should show field validation for airman details', () => {
     expect(subject.find(StyledFieldValidation).at(0).prop('fieldName')).toBe('lastName');
     expect(subject.find(StyledFieldValidation).at(1).prop('fieldName')).toBe('firstName');
     expect(subject.find(StyledFieldValidation).at(2).prop('fieldName')).toBe('siteId');

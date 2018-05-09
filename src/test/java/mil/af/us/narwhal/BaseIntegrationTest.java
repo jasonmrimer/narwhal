@@ -13,6 +13,8 @@ import mil.af.us.narwhal.mission.MissionRepository;
 import mil.af.us.narwhal.profile.Role;
 import mil.af.us.narwhal.profile.RoleName;
 import mil.af.us.narwhal.profile.RoleRepository;
+import mil.af.us.narwhal.rank.Rank;
+import mil.af.us.narwhal.rank.RankRepository;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
 import mil.af.us.narwhal.squadron.Squadron;
@@ -40,12 +42,14 @@ public abstract class BaseIntegrationTest {
   @Autowired protected FlightRepository flightRepository;
   @Autowired protected RoleRepository roleRepository;
   @Autowired protected CrewPositionRepository crewPositionRepository;
+  @Autowired protected RankRepository rankRepository;
   protected Mission mission;
   protected Flight flight;
   protected Site site;
   protected Role adminRole;
   protected Role readerRole;
   protected Role writerRole;
+  protected Rank rank;
 
   static {
     objectMapper.registerModule(module);
@@ -58,6 +62,7 @@ public abstract class BaseIntegrationTest {
     readerRole = roleRepository.save(new Role(RoleName.READER));
     writerRole = roleRepository.save(new Role(RoleName.WRITER));
     adminRole = roleRepository.save(new Role(RoleName.ADMIN));
+    rank = rankRepository.save(new Rank("No Rank"));
   }
 
   public void tearDown() {
@@ -79,7 +84,9 @@ public abstract class BaseIntegrationTest {
 
     siteRepository.save(site);
 
-    Airman airman = new Airman(flight, "FIRST", "LAST");
+
+
+    Airman airman = new Airman(flight, "FIRST", "LAST", rank);
     airmanRepository.save(airman);
 
     mission = new Mission("MISSION_ID", "MISSION_NUMBER", Instant.now(), Instant.now(), "U-2", site, Instant.now());

@@ -5,6 +5,7 @@ import mil.af.us.narwhal.airman.Airman;
 import mil.af.us.narwhal.airman.AirmanRepository;
 import mil.af.us.narwhal.crew.CrewPosition;
 import mil.af.us.narwhal.flight.Flight;
+import mil.af.us.narwhal.rank.Rank;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
 import mil.af.us.narwhal.squadron.Squadron;
@@ -48,7 +49,7 @@ public class MissionControllerTest extends BaseIntegrationTest {
 
     siteRepository.save(asList(site1, site2));
 
-    Airman airman = new Airman(flight, "FIRST", "LAST");
+    Airman airman = new Airman(flight, "FIRST", "LAST", rank);
     airmanRepository.save(airman);
 
     CrewPosition crewPosition = new CrewPosition(airman);

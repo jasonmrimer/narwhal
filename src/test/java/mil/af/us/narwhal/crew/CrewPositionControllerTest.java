@@ -5,6 +5,7 @@ import mil.af.us.narwhal.BaseIntegrationTest;
 import mil.af.us.narwhal.airman.Airman;
 import mil.af.us.narwhal.airman.AirmanRepository;
 import mil.af.us.narwhal.flight.Flight;
+import mil.af.us.narwhal.rank.Rank;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
 import mil.af.us.narwhal.squadron.Squadron;
@@ -40,7 +41,7 @@ public class CrewPositionControllerTest extends BaseIntegrationTest {
 
   @Test
   public void createTest() throws JsonProcessingException {
-    Airman airman = new Airman(flight, "FirstTwo", "LastTwo");
+    Airman airman = new Airman(flight, "FirstTwo", "LastTwo", rank);
     airmanRepository.save(airman);
 
     CrewPosition crewPosition = new CrewPosition(airman);

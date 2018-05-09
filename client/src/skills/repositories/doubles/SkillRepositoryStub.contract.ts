@@ -1,5 +1,5 @@
-import { default as SkillRepositoryStub } from './SkillRepositoryStub';
 import { SkillRepositoryContract } from '../SkillRepositoryContract';
+import { SkillRepositoryStub } from './SkillRepositoryStub';
 
 describe('SkillRepositoryStub', () => {
   SkillRepositoryContract(new SkillRepositoryStub());

@@ -46,13 +46,24 @@ export class AirmanProfileManager extends React.Component<Props> {
 
             <div className="airman-header">
               <h1>
-                {`${lastName}${lastName.length > 0 && firstName.length > 0 ? ',' : ''} ${firstName}`}
+                {airman.fullName}
               </h1>
               <br/>
             </div>
 
             <div>
               <h2>Personal Information</h2>
+
+              <span className="airman-profile-manager-row">
+                  <label htmlFor="airman-rank">RANK</label>
+                  <StyledDropdown
+                    onChange={(e) => setState(e.target.name, Number(e.target.value))}
+                    name="rankId"
+                    value={airmanProfileManagerStore!.rankId}
+                    options={airmanProfileManagerStore!.rankOptions}
+                    id="airman-rank"
+                  />
+                </span>
 
               <StyledFieldValidation
                 fieldName="lastName"

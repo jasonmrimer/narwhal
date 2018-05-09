@@ -7,6 +7,8 @@ import mil.af.us.narwhal.airman.AirmanQualification;
 import mil.af.us.narwhal.airman.AirmanRepository;
 import mil.af.us.narwhal.flight.Flight;
 import mil.af.us.narwhal.flight.FlightRepository;
+import mil.af.us.narwhal.rank.Rank;
+import mil.af.us.narwhal.rank.RankRepository;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
 import mil.af.us.narwhal.skill.Certification;
@@ -45,6 +47,7 @@ public class AirmanUploadServiceTest extends BaseIntegrationTest {
   @Autowired private FlightRepository flightRepository;
   @Autowired private CertificationRepository certificationRepository;
   @Autowired private QualificationRepository qualificationRepository;
+  @Autowired private RankRepository rankRepository;
   private AirmanUploadService subject;
 
   @Before
@@ -60,7 +63,8 @@ public class AirmanUploadServiceTest extends BaseIntegrationTest {
       siteRepository,
       flightRepository,
       certificationRepository,
-      qualificationRepository
+      qualificationRepository,
+      rankRepository
     );
   }
 
@@ -86,6 +90,9 @@ public class AirmanUploadServiceTest extends BaseIntegrationTest {
 
     assertThat(airmen.stream().map(Airman::getLastName).collect(toList()))
       .containsExactlyInAnyOrder("last1", "last2", "last3");
+
+    assertThat(airmen.stream().map(Airman::getRank).map(Rank::getAbbreviation).collect(toList()))
+      .containsExactlyInAnyOrder("No Rank", "No Rank", "No Rank");
 
     assertThat(airmen.stream().map(Airman::getFlightId).distinct().findFirst().orElseThrow(Exception::new))
       .isEqualTo(flight.getId());
@@ -116,7 +123,7 @@ public class AirmanUploadServiceTest extends BaseIntegrationTest {
 
   @Test
   public void testAttachAListOfCertifications() throws ImportException {
-    final Airman airman = new Airman(flight, "first1", "last1");
+    final Airman airman = new Airman(flight, "first1", "last1", rank);
     airmanRepository.save(airman);
 
     final Certification certification1 = new Certification("Certification1", site);
@@ -154,7 +161,7 @@ public class AirmanUploadServiceTest extends BaseIntegrationTest {
 
   @Test
   public void testAttachAListOfQualifications() {
-    final Airman airman = new Airman(flight, "first1", "last1");
+    final Airman airman = new Airman(flight, "first1", "last1", rank);
     airmanRepository.save(airman);
 
     Qualification qualification1 = new Qualification("TEST", "test qualificaiton");

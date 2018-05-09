@@ -1,4 +1,4 @@
 export interface Serializer<T> {
-  serialize(item: T): {};
-  deserialize(item: {}): T;
+  serialize(item: T): any;
+  deserialize(item: any): T;
 }

@@ -27,6 +27,7 @@ class FlightsPage
     find('#airman-flight').find(:option, text: 'JKB').select_option
     find('#airman-schedule').find(:option, text: 'Back Half').select_option
     find('#airman-shift').find(:option, text: 'Day').select_option
+    find('#airman-rank').find(:option, text: 'SSgt').select_option
 
     find('input[type="submit"]').click
 
@@ -36,6 +37,7 @@ class FlightsPage
     expect(find('#airman-flight').value).to eq '3'
     expect(find('#airman-schedule').value).to eq '3'
     expect(find('#airman-shift').value).to eq 'Day'
+    expect(find('#airman-rank').value).to eq '6'
 
     fill_in 'lastName', with: 'Angie'
     fill_in 'firstName', with: 'Patton'
@@ -44,6 +46,7 @@ class FlightsPage
     find('#airman-flight').find(:option, text: 'DOB').select_option
     find('#airman-schedule').find(:option, text: 'No Schedule').select_option
     find('#airman-shift').find(:option, text: 'Night').select_option
+    find('#airman-rank').find(:option, text: 'No Rank').select_option
 
     find('input[type="submit"]').click
 
@@ -53,17 +56,19 @@ class FlightsPage
     expect(find('#airman-flight').value).to eq '1'
     expect(find('#airman-schedule').value).to eq '1'
     expect(find('#airman-shift').value).to eq 'Night'
+    expect(find('#airman-rank').value).to eq '1'
   end
 
   def assert_create_airman
     page.find('span', text: 'New Operator').click
-    fill_in 'lastName', with: 'Plissken'
-    fill_in 'firstName', with: 'Snake'
+    fill_in 'lastName', with: 'Aaron'
+    fill_in 'firstName', with: 'Aadam'
     find('#airman-site').find(:option, text: 'DMS Maryland').select_option
 
     find('input[type="submit"]').click
+
     visit '/flights'
-    expect(page).to have_content 'Plissken, Snake'
+    expect(page).to have_content 'Aaron, Aadam'
   end
 
   private

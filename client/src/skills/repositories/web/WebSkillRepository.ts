@@ -1,7 +1,7 @@
 import { QualificationModel } from '../../models/QualificationModel';
-import SkillRepository from '../SkillRepository';
 import { CertificationModel } from '../../models/CertificationModel';
 import { HTTPClient } from '../../../utils/HTTPClient';
+import { SkillRepository } from '../SkillRepository';
 
 export class WebSkillRepository implements SkillRepository {
 

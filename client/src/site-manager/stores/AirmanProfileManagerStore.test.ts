@@ -12,6 +12,7 @@ import * as moment from 'moment';
 import { SiteModel, SiteType } from '../../site/models/SiteModel';
 import { SquadronModel } from '../../squadron/models/SquadronModel';
 import Mock = jest.Mock;
+import { RankModel } from '../../rank/models/RankModel';
 
 describe('AirmanProfileManagerStore', () => {
   const schedule3 = new ScheduleModel(3, ScheduleType.FrontHalf);
@@ -32,6 +33,7 @@ describe('AirmanProfileManagerStore', () => {
       0,
       0,
       0,
+      new RankModel(1, 'rank1'),
       AirmanQualificationModelFactory.buildList(2),
       AirmanCertificationModelFactory.buildList(3, 1),
       [new AirmanScheduleModel(1, schedule1, moment(), null)]
@@ -54,8 +56,15 @@ describe('AirmanProfileManagerStore', () => {
       new ScheduleModel(4, ScheduleType.NoSchedule)
     ];
 
+    const ranks = [
+      new RankModel(1, 'rank1'),
+      new RankModel(2, 'rank2'),
+      new RankModel(3, 'rank3'),
+      new RankModel(4, 'rank4')
+    ];
+
     subject = new AirmanProfileManagerStore(repoMock);
-    subject.hydrate(airman, sites, schedules, airmanRipItems);
+    subject.hydrate(airman, sites, schedules, ranks, airmanRipItems);
   });
 
   it('should pass site options', () => {
@@ -70,8 +79,12 @@ describe('AirmanProfileManagerStore', () => {
     expect(subject.flightOptions.length).toBe(3);
   });
 
-  it('should return schedule options', () => {
+  it('should pass schedule options', () => {
     expect(subject.scheduleOptions.length).toBe(4);
+  });
+
+  it('should pass rank options', () => {
+    expect(subject.rankOptions.length).toBe(4);
   });
 
   it('should give expired ripItem count', () => {
@@ -90,7 +103,7 @@ describe('AirmanProfileManagerStore', () => {
     expect(subject.airman.firstName).toBe('Sponge');
   });
 
-  it('should update the airmans site, squadron, flight, and shift', () => {
+  it('should update the airmans site, squadron, flight, rank, and shift', () => {
     subject.setState('siteId', 2);
     expect(subject.airman.siteId).toBe(2);
 
@@ -99,6 +112,9 @@ describe('AirmanProfileManagerStore', () => {
 
     subject.setState('flightId', 2);
     expect(subject.airman.flightId).toBe(2);
+
+    subject.setState('rankId', 2);
+    expect(subject.rankId).toBe(2);
 
     subject.setState('shift', ShiftType.Night);
     expect(subject.airman.shift).toBe(ShiftType.Night);

@@ -6,6 +6,7 @@ import mil.af.us.narwhal.airman.AirmanRepository;
 import mil.af.us.narwhal.flight.Flight;
 import mil.af.us.narwhal.mission.Mission;
 import mil.af.us.narwhal.mission.MissionRepository;
+import mil.af.us.narwhal.rank.Rank;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
 import mil.af.us.narwhal.squadron.Squadron;
@@ -45,7 +46,7 @@ public class CrewControllerTest extends BaseIntegrationTest {
     site.addSquadron(squadron);
     siteRepository.save(site);
 
-    airman = new Airman(flight, "A", "B");
+    airman = new Airman(flight, "A", "B", rank);
     airmanRepository.save(airman);
 
     mission = new Mission("A", "B", Instant.now(), Instant.now(), "U-2", site, Instant.now());

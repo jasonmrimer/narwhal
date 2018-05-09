@@ -2,6 +2,8 @@ package mil.af.us.narwhal.airman;
 
 import mil.af.us.narwhal.flight.Flight;
 import mil.af.us.narwhal.flight.FlightRepository;
+import mil.af.us.narwhal.rank.Rank;
+import mil.af.us.narwhal.rank.RankRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,10 +12,16 @@ import java.util.List;
 public class AirmanService {
   private AirmanRepository airmanRepository;
   private FlightRepository flightRepository;
+  private RankRepository rankRepository;
 
-  public AirmanService(AirmanRepository airmanRepository, FlightRepository flightRepository) {
+  public AirmanService(
+    AirmanRepository airmanRepository,
+    FlightRepository flightRepository,
+    RankRepository rankRepository
+  ) {
     this.airmanRepository = airmanRepository;
     this.flightRepository = flightRepository;
+    this.rankRepository = rankRepository;
   }
 
   public Airman getAirman(Long airmanId) {
@@ -26,29 +34,27 @@ public class AirmanService {
 
   public Airman updateAirman(AirmanJSON json) {
     final Airman airman = airmanRepository.findOne(json.getId());
+    final Rank rank = rankRepository.findOne(json.getRank().getId());
     final Flight flight = flightRepository.findOne(json.getFlightId());
+    return setAirmanAttributes(json, airman, rank, flight);
+  }
 
-    airman.setFirstName(json.getFirstName());
+  public Airman createAirman(AirmanJSON json) {
+    final Rank rank = rankRepository.findOne(json.getRank().getId());
+    final Flight flight = flightRepository.findOne(json.getFlightId());
+    return setAirmanAttributes(json, new Airman(), rank, flight);
+  }
+
+  private Airman setAirmanAttributes(AirmanJSON json, Airman airman, Rank rank, Flight flight) {
+    airman.setRank(rank);
     airman.setLastName(json.getLastName());
-
+    airman.setFirstName(json.getFirstName());
     airman.setFlight(flight);
-
     airman.setShift(json.getShift());
-
     json.getSchedules().stream()
       .filter(airmanSchedule -> airmanSchedule.getId() == null)
       .findFirst()
       .ifPresent(airman::addSchedule);
-
-    return airmanRepository.save(airman);
-  }
-
-  public Airman createAirman(AirmanJSON airmanJSON) {
-    Airman airman = new Airman();
-    airman.setShift(airmanJSON.getShift());
-    airman.setLastName(airmanJSON.getLastName());
-    airman.setFirstName(airmanJSON.getFirstName());
-    airman.setFlight(flightRepository.findOne(airmanJSON.getFlightId()));
     return airmanRepository.save(airman);
   }
 }

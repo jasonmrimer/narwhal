@@ -6,6 +6,7 @@ import mil.af.us.narwhal.airman.AirmanRepository;
 import mil.af.us.narwhal.airman.AirmanRipItemJSON;
 import mil.af.us.narwhal.airman.AirmanRipItemRepository;
 import mil.af.us.narwhal.flight.Flight;
+import mil.af.us.narwhal.rank.Rank;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
 import mil.af.us.narwhal.squadron.Squadron;
@@ -46,7 +47,7 @@ public class RipItemControllerTest extends BaseIntegrationTest {
 
     ripItem = ripItemRepository.save(new RipItem("Distress Signal"));
 
-    airman = new Airman(flight, "A", "B");
+    airman = new Airman(flight, "A", "B", rank);
     airmanRepository.save(airman);
   }
 

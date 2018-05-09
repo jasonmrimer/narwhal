@@ -46,7 +46,7 @@ export class SidePanel extends React.Component<Props> {
             <CloseIcon/>
           </button>
           <h2>
-            {trackerStore!.selectedAirman.lastName}, {trackerStore!.selectedAirman.firstName}
+            {trackerStore!.selectedAirman.fullName}
           </h2>
         </div>
         <div className="tabs">

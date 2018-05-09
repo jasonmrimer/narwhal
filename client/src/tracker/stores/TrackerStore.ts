@@ -21,6 +21,9 @@ export class TrackerStore {
     this._airmen = airmen;
     this._events = events;
     this._siteId = siteId;
+    if (!this._selectedAirman.isEmpty) {
+      this._selectedAirman = this._airmen.find(a => a.id === this._selectedAirman.id) || AirmanModel.empty();
+    }
   }
 
   @computed

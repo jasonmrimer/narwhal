@@ -3,6 +3,8 @@ package mil.af.us.narwhal.airman;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import mil.af.us.narwhal.BaseIntegrationTest;
 import mil.af.us.narwhal.flight.Flight;
+import mil.af.us.narwhal.rank.Rank;
+import mil.af.us.narwhal.rank.RankRepository;
 import mil.af.us.narwhal.schedule.Schedule;
 import mil.af.us.narwhal.schedule.ScheduleRepository;
 import mil.af.us.narwhal.site.Site;
@@ -18,7 +20,6 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
@@ -27,23 +28,24 @@ import static java.util.Collections.emptyList;
 import static org.hamcrest.Matchers.equalTo;
 
 public class AirmanControllerTest extends BaseIntegrationTest {
-  private Airman airman1;
-  private Site site;
-  private Qualification qualification1;
-  private Certification certification1;
   @Autowired private SiteRepository siteRepository;
   @Autowired private AirmanRepository airmanRepository;
   @Autowired private QualificationRepository qualificationRepository;
   @Autowired private CertificationRepository certificationRepository;
   @Autowired private ScheduleRepository scheduleRepository;
+  @Autowired private RankRepository rankRepository;
+  private Airman airman1;
+  private Rank newRank;
   private Flight flight1;
   private Flight flight3;
+  private Site site;
+  private Qualification qualification1;
+  private Certification certification1;
   private Schedule schedule;
 
   @Before
   public void setUp() {
     super.setUp();
-
 
     flight1 = new Flight("flight1");
     final Squadron squadron1 = new Squadron("squadron1");
@@ -64,6 +66,8 @@ public class AirmanControllerTest extends BaseIntegrationTest {
     final Site site2 = new Site("site2");
     site2.addSquadron(squadron3);
 
+    newRank = rankRepository.save(new Rank("AB"));
+
     schedule = scheduleRepository.save(new Schedule("No Schedule", true, true, true, true, true, true, true));
 
     siteRepository.save(asList(site, site2));
@@ -74,19 +78,18 @@ public class AirmanControllerTest extends BaseIntegrationTest {
     certification1 = new Certification("certification1", site);
     certificationRepository.save(certification1);
 
-    airman1 = new Airman(flight1, "first1", "last1");
+    airman1 = new Airman(flight1, "first1", "last1", rank);
     airman1.setShift(ShiftType.Day);
 
-    final Airman airman2 = new Airman(flight2, "first2", "last2");
-    final Airman airman3 = new Airman(flight2, "first3", "last3");
-    final Airman airman4 = new Airman(flight3, "first4", "last4");
+    final Airman airman2 = new Airman(flight2, "first2", "last2", rank);
+    final Airman airman3 = new Airman(flight2, "first3", "last3", rank);
+    final Airman airman4 = new Airman(flight3, "first4", "last4", rank);
 
     airman1.addSchedule(new AirmanSchedule(schedule, Instant.now()));
 
     final List<Airman> airmen = airmanRepository.save(asList(airman1, airman2, airman3, airman4));
 
     airmanRepository.save(airmen);
-
   }
 
   @After
@@ -185,6 +188,7 @@ public class AirmanControllerTest extends BaseIntegrationTest {
     airman1.setLastName("Bar");
     airman1.setFlight(flight3);
     airman1.addSchedule(new AirmanSchedule(schedule, Instant.now()));
+    airman1.setRank(newRank);
     final String json = objectMapper.writeValueAsString(airman1);
 
     // @formatter:off
@@ -205,7 +209,8 @@ public class AirmanControllerTest extends BaseIntegrationTest {
       .body("flightId", equalTo(flight3.getId().intValue()))
       .body("siteId", equalTo(flight3.getSquadron().getSite().getId().intValue()))
       .body("squadronId", equalTo(flight3.getSquadron().getId().intValue()))
-      .body("schedules.size()", equalTo(2));
+      .body("schedules.size()", equalTo(2))
+      .body("rank.id", equalTo(newRank.getId().intValue()));
     // @formatter:on
   }
 
@@ -219,6 +224,7 @@ public class AirmanControllerTest extends BaseIntegrationTest {
     airman.setQualifications(emptyList());
     airman.setSchedules(emptyList());
     airman.setShift(ShiftType.Swing);
+    airman.setRank(rank);
 
     final String json = objectMapper.writeValueAsString(airman);
 
@@ -234,9 +240,14 @@ public class AirmanControllerTest extends BaseIntegrationTest {
       .post(AirmanController.URI)
     .then()
       .statusCode(200)
-      .body("shift", equalTo("Swing"))
+     .body("shift", equalTo("Swing"))
       .body("firstName", equalTo("FirstFace"))
-      .body("lastName", equalTo("LastFace"));
+      .body("lastName", equalTo("LastFace"))
+      .body("flightId", equalTo(flight1.getId().intValue()))
+      .body("siteId", equalTo(flight1.getSquadron().getSite().getId().intValue()))
+      .body("squadronId", equalTo(flight1.getSquadron().getId().intValue()))
+      .body("schedules.size()", equalTo(0))
+      .body("rank.id", equalTo(rank.getId().intValue()));
     // @formatter:on
   }
 

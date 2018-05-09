@@ -1,10 +1,10 @@
-import { default as SkillRepository } from '../SkillRepository';
 import { QualificationModel } from '../../models/QualificationModel';
 import { CertificationModel } from '../../models/CertificationModel';
 import { CertificationModelFactory } from '../../factories/CertificationModelFactory';
 import { QualificationModelFactory } from '../../factories/QualificationModelFactory';
+import { SkillRepository } from '../SkillRepository';
 
-export default class SkillRepositoryStub implements SkillRepository {
+export class SkillRepositoryStub implements SkillRepository {
   findAllQualifications(): Promise<QualificationModel[]> {
     return Promise.resolve(QualificationModelFactory.buildList(10));
   }

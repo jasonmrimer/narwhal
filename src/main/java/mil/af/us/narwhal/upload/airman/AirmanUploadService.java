@@ -6,6 +6,8 @@ import mil.af.us.narwhal.airman.AirmanQualification;
 import mil.af.us.narwhal.airman.AirmanRepository;
 import mil.af.us.narwhal.flight.Flight;
 import mil.af.us.narwhal.flight.FlightRepository;
+import mil.af.us.narwhal.rank.Rank;
+import mil.af.us.narwhal.rank.RankRepository;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
 import mil.af.us.narwhal.skill.Certification;
@@ -32,18 +34,22 @@ public class AirmanUploadService {
   private FlightRepository flightRepository;
   private CertificationRepository certificationRepository;
   private QualificationRepository qualificationRepository;
+  private RankRepository rankRepository;
 
-  public AirmanUploadService(AirmanRepository airmanRepository, SiteRepository siteRepository, FlightRepository flightRepository, CertificationRepository certificationRepository, QualificationRepository qualificationRepository) {
+
+  public AirmanUploadService(AirmanRepository airmanRepository, SiteRepository siteRepository, FlightRepository flightRepository, CertificationRepository certificationRepository, QualificationRepository qualificationRepository, RankRepository rankRepository) {
     this.airmanRepository = airmanRepository;
     this.siteRepository = siteRepository;
     this.flightRepository = flightRepository;
     this.certificationRepository = certificationRepository;
     this.qualificationRepository = qualificationRepository;
+    this.rankRepository = rankRepository;
   }
 
   @Transactional
   public void importToDatabase(List<AirmanUploadCSVRow> rows) throws ImportException {
     List<Integer> failedRows = new ArrayList<>();
+    final Rank rank = rankRepository.findRankByAbbreviation("No Rank");
 
     for (int i = 0; i < rows.size(); i++) {
       final AirmanUploadCSVRow row = rows.get(i);
@@ -62,7 +68,7 @@ public class AirmanUploadService {
 
       Flight flight = getFlight(row, squadron);
 
-      final Airman airman = new Airman(flight, row.getFirstName(), row.getLastName());
+      final Airman airman = new Airman(flight, row.getFirstName(), row.getLastName(), rank);
       airmanRepository.save(airman);
     }
 

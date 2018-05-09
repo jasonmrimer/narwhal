@@ -20,7 +20,7 @@ describe 'Flights page', type: :feature do
     flights_page.assert_edit_airman
   end
 
-  it 'creat a new airman profile' do
+  it 'create a new airman profile' do
     flights_page.assert_create_airman
   end
 
