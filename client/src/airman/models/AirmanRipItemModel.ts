@@ -1,7 +1,7 @@
 import * as moment from 'moment';
-import {Moment} from 'moment';
-import {RipItemModel} from '../../rip-item/models/RipItemModel';
-import {observable} from "mobx";
+import { Moment } from 'moment';
+import { RipItemModel } from '../../rip-item/models/RipItemModel';
+import { observable } from 'mobx';
 
 export class AirmanRipItemModel {
   @observable public expirationDate: Moment | null = null;

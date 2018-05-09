@@ -1,18 +1,18 @@
 import * as React from 'react';
-import {AirmanRipItemModel} from '../airman/models/AirmanRipItemModel';
+import { AirmanRipItemModel } from '../airman/models/AirmanRipItemModel';
 import styled from 'styled-components';
-import {StyledDatePicker} from '../widgets/inputs/DatePicker';
+import { StyledDatePicker } from '../widgets/inputs/DatePicker';
 import * as moment from 'moment';
-import {inject, observer} from 'mobx-react';
-import {StyledSubmitButton} from '../widgets/forms/SubmitButton';
-import {StyledForm, StyledFormRow} from '../widgets/forms/Form';
-import {AirmanRipItemFormStore} from './stores/AirmanRipItemFormStore';
-import {StyledButton} from '../widgets/buttons/Button';
+import { inject, observer } from 'mobx-react';
+import { StyledSubmitButton } from '../widgets/forms/SubmitButton';
+import { StyledForm, StyledFormRow } from '../widgets/forms/Form';
+import { AirmanRipItemFormStore } from './stores/AirmanRipItemFormStore';
+import { StyledButton } from '../widgets/buttons/Button';
 import * as classNames from 'classnames';
-import {ResetIcon} from '../icons/ResetIcon';
-import {CurrencyStore} from '../currency/stores/CurrencyStore';
-import {TrackerStore} from '../tracker/stores/TrackerStore';
-import {RipItemsActions} from './RipItemsActions';
+import { ResetIcon } from '../icons/ResetIcon';
+import { CurrencyStore } from '../currency/stores/CurrencyStore';
+import { TrackerStore } from '../tracker/stores/TrackerStore';
+import { RipItemsActions } from './RipItemsActions';
 
 interface Props {
   airmanRipItemFormStore?: AirmanRipItemFormStore;

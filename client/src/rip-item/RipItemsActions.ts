@@ -1,5 +1,5 @@
-import {Moment} from 'moment';
-import {Stores} from '../app/stores';
+import { Moment } from 'moment';
+import { Stores } from '../app/stores';
 
 export class RipItemsActions {
   constructor(private stores: Partial<Stores>) {
