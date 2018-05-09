@@ -1,6 +1,6 @@
 import { action, computed, observable } from 'mobx';
 import * as moment from 'moment';
-import { FormErrors } from '../FieldValidation';
+import { FormErrors } from '../inputs/FieldValidation';
 
 export interface UniqueModel {
   id: number | null;

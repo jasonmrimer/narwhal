@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { AirmanRipItemModel } from '../airman/models/AirmanRipItemModel';
 import styled from 'styled-components';
-import { StyledDatePicker } from '../widgets/DatePicker';
+import { StyledDatePicker } from '../widgets/inputs/DatePicker';
 import * as moment from 'moment';
 import { observer, inject } from 'mobx-react';
-import { StyledSubmitButton } from '../widgets/SubmitButton';
-import { StyledForm, StyledFormRow } from '../widgets/Form';
+import { StyledSubmitButton } from '../widgets/forms/SubmitButton';
+import { StyledForm, StyledFormRow } from '../widgets/forms/Form';
 import { AirmanRipItemFormStore } from './stores/AirmanRipItemFormStore';
-import { StyledButton } from '../widgets/Button';
+import { StyledButton } from '../widgets/buttons/Button';
 import * as classNames from 'classnames';
 import { ResetIcon } from '../icons/ResetIcon';
 import { CurrencyStore } from '../currency/stores/CurrencyStore';

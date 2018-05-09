@@ -7,7 +7,7 @@ import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 import { StyledAvailabilityTile } from './AvailabilityTile';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { shallow, ShallowWrapper } from 'enzyme';
-import { StyledRadioButtons } from '../widgets/RadioButtons';
+import { StyledRadioButtons } from '../widgets/inputs/RadioButtons';
 import { StyledAppointmentForm } from '../event/AppointmentForm';
 import { StyledLeaveForm } from '../event/LeaveForm';
 import { EventModelFactory } from '../event/factories/EventModelFactory';

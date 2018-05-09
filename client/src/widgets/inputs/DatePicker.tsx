@@ -5,7 +5,7 @@ import { SingleDatePicker } from 'react-dates';
 import styled from 'styled-components';
 import * as moment from 'moment';
 import { Moment } from 'moment';
-import { randomText } from '../utils/randomizer';
+import { randomText } from '../../utils/randomizer';
 
 interface Props {
   id?: string;

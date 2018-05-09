@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { AirmanModel, ShiftType } from '../airman/models/AirmanModel';
 import { TrackerStore } from './stores/TrackerStore';
-import { StyledDropdown } from '../widgets/Dropdown';
+import { StyledDropdown } from '../widgets/inputs/Dropdown';
 import styled from 'styled-components';
 import { ShiftDisplay } from '../roster/ShiftDisplay';
 import { inject, observer } from 'mobx-react';

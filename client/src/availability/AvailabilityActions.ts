@@ -1,5 +1,5 @@
 import { Moment } from 'moment';
-import { Stores } from '../stores';
+import { Stores } from '../app/stores';
 
 export class AvailabilityActions {
   constructor(private stores: Partial<Stores>) {

@@ -2,7 +2,7 @@ import { EventRepository } from '../EventRepository';
 import { EventModel } from '../../models/EventModel';
 import { Moment } from 'moment';
 import { FakeAirmanRepository } from '../../../airman/repositories/doubles/FakeAirmanRepository';
-import { FormErrors } from '../../../widgets/FieldValidation';
+import { FormErrors } from '../../../widgets/inputs/FieldValidation';
 
 export class FakeEventRepository implements EventRepository {
   private static counter: number = 0;

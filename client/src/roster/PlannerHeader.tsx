@@ -10,7 +10,7 @@ import { inject, observer } from 'mobx-react';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { AvailabilityStore } from '../availability/stores/AvailabilityStore';
 import { PlannerActions } from './PlannerActions';
-import { StyledDatePicker } from '../widgets/DatePicker';
+import { StyledDatePicker } from '../widgets/inputs/DatePicker';
 import { DatePickerIcon } from './DatePickerIcon';
 
 interface Props {

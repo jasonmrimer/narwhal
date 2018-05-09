@@ -3,7 +3,7 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import { ShiftDropdown } from './ShiftDropdown';
 import { AirmanModel, ShiftType } from '../airman/models/AirmanModel';
 import { TrackerStore } from './stores/TrackerStore';
-import { StyledDropdown } from '../widgets/Dropdown';
+import { StyledDropdown } from '../widgets/inputs/Dropdown';
 import { DoubleRepositories } from '../utils/Repositories';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 import Mock = jest.Mock;

@@ -1,4 +1,4 @@
-import { FilterOption, UnfilteredValue } from '../../widgets/models/FilterOptionModel';
+import { FilterOption, UnfilteredValue } from '../../widgets/inputs/FilterOptionModel';
 import { action, computed, observable, toJS } from 'mobx';
 import { QualificationModel } from '../../skills/models/QualificationModel';
 import { CertificationModel } from '../../skills/models/CertificationModel';

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { AdminStoreContract, ProfileList, ProfileStoreContract } from './ProfileList';
 import { ErrorResponse } from '../utils/HTTPClient';
-import { StyledDropdown } from '../widgets/Dropdown';
+import { StyledDropdown } from '../widgets/inputs/Dropdown';
 
 describe('ProfileList', () => {
   let subject: ShallowWrapper;

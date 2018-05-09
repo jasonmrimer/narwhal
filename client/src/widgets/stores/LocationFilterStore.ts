@@ -1,6 +1,6 @@
 import { action, computed, observable } from 'mobx';
 import { SiteModel } from '../../site/models/SiteModel';
-import { UnfilteredValue } from '../models/FilterOptionModel';
+import { UnfilteredValue } from '../inputs/FilterOptionModel';
 import { AirmanModel } from '../../airman/models/AirmanModel';
 import { SquadronModel } from '../../squadron/models/SquadronModel';
 import { FlightModel } from '../../flight/model/FlightModel';

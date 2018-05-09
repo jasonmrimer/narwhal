@@ -4,14 +4,14 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
 import './polyfills';
-import { App, InjectedApp } from './widgets/App';
+import { App, InjectedApp } from './app/App';
 import { BrowserRouter } from 'react-router-dom';
 import { Theme } from './themes/default';
 import { ThemeProvider } from 'styled-components';
 import { Provider } from 'mobx-react';
-import { stores } from './stores';
+import { stores } from './app/stores';
 import { withRouter } from 'react-router';
-import { actions } from './actions';
+import { actions } from './app/actions';
 
 document.body.style.fontFamily = Theme.fontFamily;
 document.body.style.fontWeight = Theme.fontWeight;

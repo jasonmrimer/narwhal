@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyledTopBar } from '../TopBar';
+import { StyledTopBar } from '../../widgets/TopBar';
 import { observer } from 'mobx-react';
 import { StyledProfileList } from '../../admin/ProfileList';
 import { inject } from 'mobx-react/custom';

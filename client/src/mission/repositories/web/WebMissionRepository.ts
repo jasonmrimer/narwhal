@@ -3,7 +3,7 @@ import { MissionModel } from '../../models/MissionModel';
 import { MissionSerializer } from '../../serializers/MissionSerializer';
 import { HTTPClient } from '../../../utils/HTTPClient';
 import * as moment from 'moment';
-import { UnfilteredValue } from '../../../widgets/models/FilterOptionModel';
+import { UnfilteredValue } from '../../../widgets/inputs/FilterOptionModel';
 
 export class WebMissionRepository implements MissionRepository {
   private serializer: MissionSerializer = new MissionSerializer();

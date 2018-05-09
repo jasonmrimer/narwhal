@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { ChangeEvent } from 'react';
 import styled from 'styled-components';
-import { caret } from '../utils/StyleUtils';
-import { FilterOption, UnfilteredValue } from './models/FilterOptionModel';
-import { StyledFilterNotification } from './FilterNotification';
+import { caret } from '../../utils/StyleUtils';
+import { FilterOption, UnfilteredValue } from './FilterOptionModel';
+import { StyledFilterNotification } from '../FilterNotification';
 
 interface Props {
   id: string;

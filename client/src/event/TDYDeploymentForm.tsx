@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 import * as React from 'react';
 import { inject, observer } from 'mobx-react';
-import { StyledForm, StyledFormRow } from '../widgets/Form';
-import { StyledTextInput } from '../widgets/TextInput';
-import { StyledFieldValidation } from '../widgets/FieldValidation';
-import { StyledDatePicker } from '../widgets/DatePicker';
-import { StyledSubmitButton } from '../widgets/SubmitButton';
-import { StyledButton } from '../widgets/Button';
+import { StyledForm, StyledFormRow } from '../widgets/forms/Form';
+import { StyledTextInput } from '../widgets/inputs/TextInput';
+import { StyledFieldValidation } from '../widgets/inputs/FieldValidation';
+import { StyledDatePicker } from '../widgets/inputs/DatePicker';
+import { StyledSubmitButton } from '../widgets/forms/SubmitButton';
+import { StyledButton } from '../widgets/buttons/Button';
 import { DeleteIcon } from '../icons/DeleteIcon';
 import { TDYDeploymentFormStore } from './stores/TDYDeploymentFormStore';
 import { EventModel } from './models/EventModel';

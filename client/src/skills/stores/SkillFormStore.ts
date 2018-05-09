@@ -1,4 +1,4 @@
-import { FormStore } from '../../widgets/stores/FormStore';
+import { FormStore } from '../../widgets/forms/FormStore';
 import { Skill } from '../models/Skill';
 import * as moment from 'moment';
 import { SkillType } from '../models/SkillType';

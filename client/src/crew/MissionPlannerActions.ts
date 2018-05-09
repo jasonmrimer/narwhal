@@ -1,4 +1,4 @@
-import { Stores } from '../stores';
+import { Stores } from '../app/stores';
 import { AirmanModel } from '../airman/models/AirmanModel';
 
 export class MissionPlannerActions {

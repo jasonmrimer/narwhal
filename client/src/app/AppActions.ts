@@ -1,5 +1,5 @@
 import { Repositories } from '../utils/Repositories';
-import { Stores } from '../stores';
+import { Stores } from './stores';
 
 export class AppActions {
   constructor(

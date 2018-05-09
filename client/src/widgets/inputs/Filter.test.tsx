@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { Filter } from './Filter';
-import { UnfilteredValue } from './models/FilterOptionModel';
-import { StyledFilterNotification } from './FilterNotification';
+import { UnfilteredValue } from './FilterOptionModel';
+import { StyledFilterNotification } from '../FilterNotification';
 import Mock = jest.Mock;
 
 const expectedOptions = [

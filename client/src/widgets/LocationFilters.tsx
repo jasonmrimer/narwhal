@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { StyledDropdown } from './Dropdown';
-import { TopLevelFilter } from './Filter';
+import { StyledDropdown } from './inputs/Dropdown';
+import { TopLevelFilter } from './inputs/Filter';
 import styled from 'styled-components';
 import { caret } from '../utils/StyleUtils';
 import * as classNames from 'classnames';

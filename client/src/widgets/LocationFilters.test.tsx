@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { StyledDropdown } from './Dropdown';
-import { TopLevelFilter } from './Filter';
+import { StyledDropdown } from './inputs/Dropdown';
+import { TopLevelFilter } from './inputs/Filter';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { LocationFilters } from './LocationFilters';
 import { LocationFilterStore } from './stores/LocationFilterStore';

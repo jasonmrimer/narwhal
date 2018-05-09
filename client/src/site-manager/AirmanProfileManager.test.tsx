@@ -11,10 +11,10 @@ import { SiteModelFactory } from '../site/factories/SiteModelFactory';
 import { AirmanRipItemFactory } from '../rip-item/factories/AirmanRipItemFactory';
 import { AirmanProfileManagerStore } from './stores/AirmanProfileManagerStore';
 import { eventStub, historyMock } from '../utils/testUtils';
-import { StyledForm } from '../widgets/Form';
+import { StyledForm } from '../widgets/forms/Form';
 import { DoubleRepositories } from '../utils/Repositories';
 import { ScheduleModel, ScheduleType } from '../schedule/models/ScheduleModel';
-import { StyledFieldValidation } from '../widgets/FieldValidation';
+import { StyledFieldValidation } from '../widgets/inputs/FieldValidation';
 import { StyledAlert } from '../widgets/Alert';
 
 describe('AirmanProfileManager', () => {

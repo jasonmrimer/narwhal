@@ -1,7 +1,7 @@
 import { TabType } from './stores/SidePanelStore';
 import { AirmanModel } from '../airman/models/AirmanModel';
 import { Moment } from 'moment';
-import { Stores } from '../stores';
+import { Stores } from '../app/stores';
 
 export class SidePanelActions {
   constructor(private stores: Partial<Stores>) {

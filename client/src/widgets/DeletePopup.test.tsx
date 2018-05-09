@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyledButton } from './Button';
+import { StyledButton } from './buttons/Button';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { DeletePopup, renderItemInformation } from './DeletePopup';
 import { AirmanCertificationModelFactory } from '../airman/factories/AirmanCertificationModelFactory';

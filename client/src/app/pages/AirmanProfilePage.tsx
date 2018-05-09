@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { StyledTopBar } from '../TopBar';
+import { StyledTopBar } from '../../widgets/TopBar';
 import { StyledAirmanProfileManager } from '../../site-manager/AirmanProfileManager';
 import { WebRepositories } from '../../utils/Repositories';
 import { AirmanProfileManagerStore } from '../../site-manager/stores/AirmanProfileManagerStore';
-import { StyledLoadingOverlay } from '../LoadingOverlay';
+import { StyledLoadingOverlay } from '../../widgets/LoadingOverlay';
 import { observer, inject } from 'mobx-react';
 import { AirmanModel } from '../../airman/models/AirmanModel';
 import { History } from 'history';

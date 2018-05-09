@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import * as moment from 'moment';
-import { StyledDatePicker } from '../widgets/DatePicker';
+import { StyledDatePicker } from '../widgets/inputs/DatePicker';
 import { AirmanRipItems } from './AirmanRipItemForm';
 import { eventStub } from '../utils/testUtils';
 import { AirmanRipItemFormStore } from './stores/AirmanRipItemFormStore';
 import { RipItemRepositoryStub } from '../airman/repositories/doubles/AirmanRipItemRepositoryStub';
-import { StyledButton } from '../widgets/Button';
+import { StyledButton } from '../widgets/buttons/Button';
 import { AirmanRipItemModel } from '../airman/models/AirmanRipItemModel';
 import { RipItemModel } from './models/RipItemModel';
-import { StyledForm } from '../widgets/Form';
+import { StyledForm } from '../widgets/forms/Form';
 import { CurrencyStore } from '../currency/stores/CurrencyStore';
 import { DoubleRepositories } from '../utils/Repositories';
 import { TrackerStore } from '../tracker/stores/TrackerStore';

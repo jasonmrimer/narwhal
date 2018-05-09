@@ -11,8 +11,8 @@ import { StyledMissionCardSection } from './MissionCardSection';
 import { ClipLoader } from 'react-spinners';
 import { ThemeProvider } from 'styled-components';
 import { Theme } from '../themes/default';
-import { StyledMultiTypeahead } from '../widgets/MultiTypeahead';
-import { StyledTextInput } from '../widgets/TextInput';
+import { StyledMultiTypeahead } from '../widgets/inputs/MultiTypeahead';
+import { StyledTextInput } from '../widgets/inputs/TextInput';
 import { Provider } from 'mobx-react';
 
 const missionRepositoryStub = DoubleRepositories.missionRepository;

@@ -2,12 +2,12 @@ import { action, computed, observable } from 'mobx';
 import { AirmanModel } from '../../airman/models/AirmanModel';
 import { SiteModel } from '../../site/models/SiteModel';
 import { AirmanRipItemModel } from '../../airman/models/AirmanRipItemModel';
-import { FilterOption } from '../../widgets/models/FilterOptionModel';
+import { FilterOption } from '../../widgets/inputs/FilterOptionModel';
 import { AirmanRepository } from '../../airman/repositories/AirmanRepository';
 import { ScheduleModel, ScheduleType } from '../../schedule/models/ScheduleModel';
 import { AirmanScheduleModel } from '../../airman/models/AirmanScheduleModel';
 import * as moment from 'moment';
-import { FormErrors } from '../../widgets/FieldValidation';
+import { FormErrors } from '../../widgets/inputs/FieldValidation';
 
 export class AirmanProfileManagerStore {
   @observable _airman: AirmanModel = AirmanModel.empty();

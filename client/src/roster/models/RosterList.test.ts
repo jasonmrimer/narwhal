@@ -2,7 +2,7 @@ import { SquadronModel } from '../../squadron/models/SquadronModel';
 import { FlightModel } from '../../flight/model/FlightModel';
 import { AirmanModel } from '../../airman/models/AirmanModel';
 import { RosterList } from './RosterList';
-import { UnfilteredValue } from '../../widgets/models/FilterOptionModel';
+import { UnfilteredValue } from '../../widgets/inputs/FilterOptionModel';
 
 describe('RosterList', () => {
   const squadron = new SquadronModel(1, 'Squadron 1', [

@@ -1,5 +1,5 @@
-import { FilterOption } from '../widgets/models/FilterOptionModel';
-import { StyledMultiTypeahead } from '../widgets/MultiTypeahead';
+import { FilterOption } from '../widgets/inputs/FilterOptionModel';
+import { StyledMultiTypeahead } from '../widgets/inputs/MultiTypeahead';
 import { findByClassName } from '../utils/testUtils';
 import { shallow, ShallowWrapper } from 'enzyme';
 import * as React from 'react';

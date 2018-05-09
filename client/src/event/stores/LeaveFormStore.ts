@@ -1,5 +1,5 @@
 import { EventModel, EventType } from '../models/EventModel';
-import { FormStore } from '../../widgets/stores/FormStore';
+import { FormStore } from '../../widgets/forms/FormStore';
 import { action, computed } from 'mobx';
 import { TimeService } from '../../tracker/services/TimeService';
 

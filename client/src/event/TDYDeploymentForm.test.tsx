@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { TDYDeploymentFormStore } from './stores/TDYDeploymentFormStore';
-import { StyledButton } from '../widgets/Button';
-import { StyledDatePicker } from '../widgets/DatePicker';
+import { StyledButton } from '../widgets/buttons/Button';
+import { StyledDatePicker } from '../widgets/inputs/DatePicker';
 import { EventModelFactory } from './factories/EventModelFactory';
 import { shallow, ShallowWrapper } from 'enzyme';
-import { StyledTextInput } from '../widgets/TextInput';
+import { StyledTextInput } from '../widgets/inputs/TextInput';
 import { eventStub } from '../utils/testUtils';
 import { TDYDeploymentForm } from './TDYDeploymentForm';
-import { StyledForm } from '../widgets/Form';
+import { StyledForm } from '../widgets/forms/Form';
 import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { DoubleRepositories } from '../utils/Repositories';

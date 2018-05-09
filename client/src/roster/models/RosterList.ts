@@ -1,6 +1,6 @@
 import { SquadronModel } from '../../squadron/models/SquadronModel';
 import { AirmanModel } from '../../airman/models/AirmanModel';
-import { UnfilteredValue } from '../../widgets/models/FilterOptionModel';
+import { UnfilteredValue } from '../../widgets/inputs/FilterOptionModel';
 import { FlightModel } from '../../flight/model/FlightModel';
 
 export type RosterListItem = AirmanModel | FlightModel | string;

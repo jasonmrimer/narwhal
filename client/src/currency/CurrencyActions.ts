@@ -1,4 +1,4 @@
-import { Stores } from '../stores';
+import { Stores } from '../app/stores';
 import { Skill } from '../skills/models/Skill';
 
 export class CurrencyActions {

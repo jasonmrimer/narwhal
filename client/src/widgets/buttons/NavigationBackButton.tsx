@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Theme } from '../themes/default';
-import { BackArrow } from '../icons/BackArrow';
+import { Theme } from '../../themes/default';
+import { BackArrow } from '../../icons/BackArrow';
 import { Link } from 'react-router-dom';
 
 interface Props {

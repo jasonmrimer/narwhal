@@ -1,4 +1,4 @@
-import { UnfilteredValue } from '../models/FilterOptionModel';
+import { UnfilteredValue } from '../inputs/FilterOptionModel';
 import { LocationFilterStore } from './LocationFilterStore';
 import { FakeAirmanRepository } from '../../airman/repositories/doubles/FakeAirmanRepository';
 import { AirmanModel } from '../../airman/models/AirmanModel';

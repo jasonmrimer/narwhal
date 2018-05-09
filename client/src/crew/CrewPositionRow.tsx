@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { StyledCheckbox } from '../widgets/Checkbox';
-import { StyledTextInput } from '../widgets/TextInput';
+import { StyledCheckbox } from '../widgets/inputs/Checkbox';
+import { StyledTextInput } from '../widgets/inputs/TextInput';
 import styled from 'styled-components';
 import { CrewPositionModel } from './models/CrewPositionModel';
 import { observer } from 'mobx-react';

@@ -1,4 +1,4 @@
-import { Stores } from '../stores';
+import { Stores } from '../app/stores';
 
 export class SkillActions {
   constructor(private stores: Partial<Stores>) {

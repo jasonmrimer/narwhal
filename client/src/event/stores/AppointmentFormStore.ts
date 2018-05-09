@@ -1,4 +1,4 @@
-import { FormStore } from '../../widgets/stores/FormStore';
+import { FormStore } from '../../widgets/forms/FormStore';
 import { EventModel, EventType } from '../models/EventModel';
 import { action, computed } from 'mobx';
 import * as moment from 'moment';

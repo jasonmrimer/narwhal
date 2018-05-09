@@ -1,4 +1,4 @@
-import { Stores } from '../../stores';
+import { Stores } from '../../app/stores';
 import { History } from 'history';
 
 export class ProfileActions {

@@ -1,5 +1,5 @@
 import { Moment } from 'moment';
-import { Stores } from '../stores';
+import { Stores } from '../app/stores';
 import { AirmanRipItemModel } from '../airman/models/AirmanRipItemModel';
 
 export class RipItemsActions {

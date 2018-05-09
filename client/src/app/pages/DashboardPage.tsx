@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyledTopBar } from '../TopBar';
+import { StyledTopBar } from '../../widgets/TopBar';
 import { StyledDashboard } from '../../dashboard/Dashboard';
 import { observer } from 'mobx-react';
 

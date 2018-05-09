@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { StyledTopBar } from '../TopBar';
+import { StyledTopBar } from '../../widgets/TopBar';
 import { ProfileSitePickerStore } from '../../profile/stores/ProfileSitePickerStore';
 import { inject, observer } from 'mobx-react';
 import { StyledTracker } from '../../tracker/Tracker';
 import { TrackerStore } from '../../tracker/stores/TrackerStore';
 import { WebRepositories } from '../../utils/Repositories';
 import { PlannerStore } from '../../roster/stores/PlannerStore';
-import { LocationFilterStore } from '../stores/LocationFilterStore';
+import { LocationFilterStore } from '../../widgets/stores/LocationFilterStore';
 import { RosterHeaderStore } from '../../roster/stores/RosterHeaderStore';
 import { MissionFormStore } from '../../event/stores/MissionFormStore';
 import { SkillFormStore } from '../../skills/stores/SkillFormStore';

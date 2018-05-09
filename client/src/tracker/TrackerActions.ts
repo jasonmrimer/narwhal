@@ -1,4 +1,4 @@
-import { Stores } from '../stores';
+import { Stores } from '../app/stores';
 
 export class TrackerActions {
   constructor(private stores: Partial<Stores>) {

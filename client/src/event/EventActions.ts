@@ -1,7 +1,7 @@
-import { FormStore } from '../widgets/stores/FormStore';
+import { FormStore } from '../widgets/forms/FormStore';
 import { EventModel } from './models/EventModel';
 import { TimeService } from '../tracker/services/TimeService';
-import { Stores } from '../stores';
+import { Stores } from '../app/stores';
 
 export class EventActions {
   constructor(private stores: Partial<Stores>, private timeSerivce: TimeService) {

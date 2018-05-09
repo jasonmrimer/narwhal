@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyledTopBar } from '../TopBar';
+import { StyledTopBar } from '../../widgets/TopBar';
 import { StyledSiteManager } from '../../site-manager/SiteManager';
 
 export const FlightsPage = () => {

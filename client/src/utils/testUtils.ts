@@ -1,4 +1,4 @@
-import { Filter } from '../widgets/Filter';
+import { Filter } from '../widgets/inputs/Filter';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { ReactWrapper } from 'enzyme';
 import { DoubleRepositories } from './Repositories';

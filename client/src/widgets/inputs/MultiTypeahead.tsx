@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { Typeahead } from 'react-bootstrap-typeahead';
-import { FilterOption } from './models/FilterOptionModel';
+import { FilterOption } from './FilterOptionModel';
 import styled from 'styled-components';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
-import { caret } from '../utils/StyleUtils';
+import { caret } from '../../utils/StyleUtils';
 
 interface  Props {
   options: FilterOption[];

@@ -4,7 +4,7 @@ import { EventModel } from '../event/models/EventModel';
 import { Skill } from '../skills/models/Skill';
 import { AirmanCertificationModel } from '../airman/models/AirmanCertificationModel';
 import { AirmanQualificationModel } from '../airman/models/AirmanQualificationModel';
-import { StyledButton } from './Button';
+import { StyledButton } from './buttons/Button';
 
 interface Props {
   item: EventModel | Skill;

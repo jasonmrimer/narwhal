@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { StyledMissionPlanner } from '../../crew/MissionPlanner';
 import { inject, observer } from 'mobx-react';
-import { StyledTopBar } from '../TopBar';
+import { StyledTopBar } from '../../widgets/TopBar';
 import { WebRepositories } from '../../utils/Repositories';
 import { MissionPlannerStore } from '../../crew/stores/MissionPlannerStore';
 import { RosterHeaderStore } from '../../roster/stores/RosterHeaderStore';
-import { LocationFilterStore } from '../stores/LocationFilterStore';
+import { LocationFilterStore } from '../../widgets/stores/LocationFilterStore';
 import { CrewStore } from '../../crew/stores/CrewStore';
 import { ProfileSitePickerStore } from '../../profile/stores/ProfileSitePickerStore';
 

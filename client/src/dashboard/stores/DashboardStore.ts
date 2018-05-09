@@ -3,7 +3,7 @@ import { SiteRepository } from '../../site/repositories/SiteRepository';
 import { MissionModel } from '../../mission/models/MissionModel';
 import { action, computed, observable, toJS } from 'mobx';
 import { SiteModel } from '../../site/models/SiteModel';
-import { FilterOption, UnfilteredValue } from '../../widgets/models/FilterOptionModel';
+import { FilterOption, UnfilteredValue } from '../../widgets/inputs/FilterOptionModel';
 import { Repositories } from '../../utils/Repositories';
 import * as moment from 'moment';
 import * as Fuse from 'fuse.js';

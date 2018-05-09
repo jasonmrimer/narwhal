@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { FilterOption } from './models/FilterOptionModel';
-import { caret } from '../utils/StyleUtils';
+import { FilterOption } from './FilterOptionModel';
+import { caret } from '../../utils/StyleUtils';
 
 interface Props {
   name: string;

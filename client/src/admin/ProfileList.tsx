@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { ProfileModel } from '../profile/models/ProfileModel';
 import { inject, observer } from 'mobx-react';
 import { ErrorResponse } from '../utils/HTTPClient';
-import { FilterOption } from '../widgets/models/FilterOptionModel';
-import { StyledDropdown } from '../widgets/Dropdown';
+import { FilterOption } from '../widgets/inputs/FilterOptionModel';
+import { StyledDropdown } from '../widgets/inputs/Dropdown';
 
 export interface ProfileStoreContract {
   profile: ProfileModel;

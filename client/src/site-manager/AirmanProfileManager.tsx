@@ -1,18 +1,18 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { StyledTextInput } from '../widgets/TextInput';
-import { StyledDropdown } from '../widgets/Dropdown';
+import { StyledTextInput } from '../widgets/inputs/TextInput';
+import { StyledDropdown } from '../widgets/inputs/Dropdown';
 import { shiftOptions, unsetShiftOptions } from '../tracker/ShiftDropdown';
 import { StyledSkillTile } from '../skills/SkillTile';
 import { StyledRipItemsTile } from '../rip-item/RipItemsTile';
 import { observer } from 'mobx-react';
 import { AirmanProfileManagerStore } from './stores/AirmanProfileManagerStore';
-import { StyledNavigationBackButton } from '../widgets/NavigationBackButton';
-import { StyledSubmitButton } from '../widgets/SubmitButton';
-import { StyledForm } from '../widgets/Form';
+import { StyledNavigationBackButton } from '../widgets/buttons/NavigationBackButton';
+import { StyledSubmitButton } from '../widgets/forms/SubmitButton';
+import { StyledForm } from '../widgets/forms/Form';
 import { inject } from 'mobx-react/custom';
 import { History } from 'history';
-import { StyledFieldValidation } from '../widgets/FieldValidation';
+import { StyledFieldValidation } from '../widgets/inputs/FieldValidation';
 import { ProfileActions } from './actions/ProfileActions';
 import { StyledAlert } from '../widgets/Alert';
 

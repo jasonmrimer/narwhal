@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { StyledTextInput } from '../widgets/TextInput';
+import { StyledTextInput } from '../widgets/inputs/TextInput';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { CrewPositionRow } from './CrewPositionRow';
 import { CrewModelFactory } from './factories/CrewModelFactory';
 import { CrewPositionModel } from './models/CrewPositionModel';
 import Mock = jest.Mock;
-import { StyledCheckbox } from '../widgets/Checkbox';
+import { StyledCheckbox } from '../widgets/inputs/Checkbox';
 
 describe('CrewPostionRow', () => {
   let subject: ShallowWrapper;

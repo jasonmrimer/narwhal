@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { RosterLevelFilter } from '../widgets/Filter';
-import { StyledTextInput } from '../widgets/TextInput';
-import { StyledMultiTypeahead } from '../widgets/MultiTypeahead';
+import { RosterLevelFilter } from '../widgets/inputs/Filter';
+import { StyledTextInput } from '../widgets/inputs/TextInput';
+import { StyledMultiTypeahead } from '../widgets/inputs/MultiTypeahead';
 import styled from 'styled-components';
 import * as classNames from 'classnames';
 import { inject, observer } from 'mobx-react';
-import { FilterOption } from '../widgets/models/FilterOptionModel';
+import { FilterOption } from '../widgets/inputs/FilterOptionModel';
 
 export interface RosterHeaderStoreContract {
   selectedShift: number;

@@ -3,7 +3,7 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import { PlannerHeader } from './PlannerHeader';
 import { PlannerStore } from './stores/PlannerStore';
 import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
-import { StyledDatePicker } from '../widgets/DatePicker';
+import { StyledDatePicker } from '../widgets/inputs/DatePicker';
 import { DatePickerIcon } from './DatePickerIcon';
 import * as moment from 'moment';
 
