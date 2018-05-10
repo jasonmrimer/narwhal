@@ -10,11 +10,14 @@ import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { StyledRipItems } from '../rip-item/AirmanRipItemForm';
 import { StyledRipItemsTile } from '../rip-item/RipItemsTile';
 import { CurrencyActions } from './CurrencyActions';
+import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
+import { Can } from '@casl/react';
 
 interface Props {
   currencyStore?: CurrencyStore;
   trackerStore?: TrackerStore;
   currencyActions?: CurrencyActions;
+  profileStore?: ProfileSitePickerStore;
   className?: string;
 }
 
@@ -55,12 +58,14 @@ export class Currency extends React.Component<Props> {
     return (
       <div>
         <div className="skill-control-row">
-          <button
-            className="add-skill"
-            onClick={this.props.currencyActions!.addSkill}
-          >
-            + Add Skill
-          </button>
+          <Can do="write" on="skill" ability={this.props.profileStore!.profile!.ability!}>
+            <button
+              className="add-skill"
+              onClick={this.props.currencyActions!.addSkill}
+            >
+              + Add Skill
+            </button>
+          </Can>
         </div>
         {this.renderRipTile()}
         {this.renderQualifications()}
@@ -136,11 +141,13 @@ export class Currency extends React.Component<Props> {
 export const StyledCurrency = inject(
   'currencyStore',
   'trackerStore',
-  'currencyActions'
+  'currencyActions',
+  'profileStore'
 )(styled(Currency)`
   width: 100%;
   
   .skill-control-row {
+    height: 2.3125rem;
     display: flex;
     justify-content: flex-end;
 

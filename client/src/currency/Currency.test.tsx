@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { shallow, ShallowWrapper } from 'enzyme';
+import { mount, shallow, ShallowWrapper } from 'enzyme';
 import { Currency } from './Currency';
-import { findSelectorWithText } from '../utils/testUtils';
+import { findSelectorWithText, makeFakeProfile } from '../utils/testUtils';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 import { StyledSkillTile } from '../skills/SkillTile';
@@ -12,6 +12,9 @@ import { StyledRipItems } from '../rip-item/AirmanRipItemForm';
 import { CurrencyStore } from './stores/CurrencyStore';
 import { DoubleRepositories } from '../utils/Repositories';
 import { RankModel } from '../rank/models/RankModel';
+import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
+import { adminAbility, readerAbility } from '../app/abilities';
+import { ThemeProvider } from 'styled-components';
 
 /* tslint:disable:no-empty*/
 describe('Currency', () => {
@@ -27,14 +30,16 @@ describe('Currency', () => {
 
   let trackerStore: TrackerStore;
   let currencyStore: CurrencyStore;
+  let profileStore: ProfileSitePickerStore;
   let currencyActions: any;
   let subject: ShallowWrapper;
 
   beforeEach(async () => {
     currencyStore = new CurrencyStore(DoubleRepositories);
-
+    profileStore = new ProfileSitePickerStore(DoubleRepositories);
     trackerStore = new TrackerStore(DoubleRepositories);
     trackerStore.setSelectedAirman(airman);
+    profileStore.hydrate([], makeFakeProfile('ADMIN', adminAbility));
 
     currencyActions = {
       addSkill: jest.fn(),
@@ -46,6 +51,7 @@ describe('Currency', () => {
         trackerStore={trackerStore}
         currencyStore={currencyStore}
         currencyActions={currencyActions}
+        profileStore={profileStore}
       />
     );
   });
@@ -85,5 +91,22 @@ describe('Currency', () => {
   it('opens a Skill Form when clicking on an existing Skill Tile', () => {
     subject.find(StyledSkillTile).at(0).simulate('click');
     expect(currencyActions.editSkill).toHaveBeenCalled();
+  });
+
+  it('should not render the add skill button if profile is reader', () => {
+    profileStore.hydrate([], makeFakeProfile('READER', readerAbility));
+
+    const mountedSubject = mount(
+      <ThemeProvider theme={{}}>
+        <Currency
+          trackerStore={trackerStore}
+          currencyStore={currencyStore}
+          currencyActions={currencyActions}
+          profileStore={profileStore}
+        />
+      </ThemeProvider>
+    );
+
+    expect(mountedSubject.find('.add-skill').exists()).toBeFalsy();
   });
 });
