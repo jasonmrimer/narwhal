@@ -1,5 +1,6 @@
 import { Filter } from '../widgets/inputs/Filter';
 import { Action, Location } from 'history';
+import { Ability } from '@casl/ability';
 
 export function forIt(wait: number = 0): Promise<{}> {
   return new Promise((resolve) => {
@@ -46,3 +47,16 @@ export const historyMock = {
   listen: jest.fn(),
   createHref: jest.fn(),
 };
+
+export function makeFakeProfile(roleName: string, ability: Ability) {
+  return {
+    id: 1,
+    username: 'Tytus',
+    siteId: 14,
+    siteName: '14',
+    roleName: roleName,
+    roleId: 1,
+    classified: false,
+    ability: ability
+  };
+}

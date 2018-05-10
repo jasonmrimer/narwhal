@@ -15,15 +15,13 @@ export class AppActions {
     ]);
 
     switch (profile.roleName) {
-      case 'READER':
-        profile.ability = readerAbility;
-        break;
       case 'ADMIN':
         profile.ability = adminAbility;
         break;
       case 'WRITER':
         profile.ability = writerAbility;
         break;
+      case 'READER':
       default:
         profile.ability = readerAbility;
         break;

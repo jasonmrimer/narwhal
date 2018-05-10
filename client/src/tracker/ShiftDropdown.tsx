@@ -5,10 +5,13 @@ import { StyledDropdown } from '../widgets/inputs/Dropdown';
 import styled from 'styled-components';
 import { ShiftDisplay } from '../roster/ShiftDisplay';
 import { inject, observer } from 'mobx-react';
+import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
+import { Can } from '@casl/react';
 
 interface Props {
-  trackerStore?: TrackerStore;
   airman: AirmanModel;
+  trackerStore?: TrackerStore;
+  profileStore?: ProfileSitePickerStore;
   className?: string;
 }
 
@@ -21,30 +24,33 @@ export const shiftOptions = [
 export const unsetShiftOptions = [{value: -1, label: 'None'}, ...shiftOptions];
 
 export const ShiftDropdown = observer((props: Props) => {
-  const {airman, className, trackerStore} = props;
+  const {airman, className, trackerStore, profileStore} = props;
   const {updateAirmanShift} = trackerStore!;
+
   return (
     <span
       onClick={(e: any) => e.stopPropagation()}
       className={className}
     >
         <ShiftDisplay shift={airman.shift}/>
-        <StyledDropdown
-          name="shift"
-          options={airman.shift ? shiftOptions : unsetShiftOptions}
-          value={airman.shift || -1}
-          onChange={async (e: any) => {
-            const shiftType = e.target.value;
-            if (airman.shift !== shiftType) {
-              await updateAirmanShift(airman, shiftType);
-            }
-          }}
-        />
+        <Can do="manage" on="all" ability={profileStore!.profile!.ability!}>
+          <StyledDropdown
+            name="shift"
+            options={airman.shift ? shiftOptions : unsetShiftOptions}
+            value={airman.shift || -1}
+            onChange={async (e: any) => {
+              const shiftType = e.target.value;
+              if (airman.shift !== shiftType) {
+                await updateAirmanShift(airman, shiftType);
+              }
+            }}
+          />
+        </Can>
     </span>
   );
 });
 
-export const StyledShiftDropdown = inject('trackerStore')(styled(ShiftDropdown)`
+export const StyledShiftDropdown = inject('trackerStore', 'profileStore')(styled(ShiftDropdown)`
   display: flex;
   align-items: center;
   

@@ -54,51 +54,68 @@ export class Roster extends React.Component<Props> {
         width={1400}
         overscanRowCount={15}
         deferredMeasurementCache={cache}
-        noRowsRenderer={() => {
-          return (
-            <BorderedNotification>
-              No members at this location match your search.
-            </BorderedNotification>
-          );
-        }}
+        noRowsRenderer={this.renderNone}
         rowRenderer={(props: ListRowProps) => {
           const item = list.get(props.index);
           if (item instanceof AirmanModel) {
-            const airman = item as AirmanModel;
-            return (
-              <StyledRow
-                {...props}
-                key={airman.id}
-                airman={airman}
-                style={props.style}
-              />
-            );
+            return this.renderAirmanRow(props, item as AirmanModel);
           } else if (item instanceof FlightModel) {
-            return (
-              <CellMeasurer {...props} cache={cache} columnIndex={0}>
-                <StyledRosterSubHeaderRow {...props} alignment="left">
-                  {item.name}
-                </StyledRosterSubHeaderRow>
-              </CellMeasurer>
-            );
+            return this.renderFlightRow(props, item as FlightModel);
           } else {
-            return (
-              <CellMeasurer {...props} cache={cache} columnIndex={0}>
-                <div style={props.style}>
-                  <EmptyBorderedNotification>
-                    {item}
-                  </EmptyBorderedNotification>
-                </div>
-              </CellMeasurer>
-            );
+            return this.renderEmptyRow(props, item as string);
           }
         }}
       />
     );
   }
+
+  private renderNone = () => {
+    return (
+      <BorderedNotification>
+        No members at this location match your search.
+      </BorderedNotification>
+    );
+  }
+
+  private renderAirmanRow = (props: ListRowProps, airman: AirmanModel) => {
+    return (
+      <StyledRow
+        {...props}
+        key={airman.id}
+        airman={airman}
+        style={props.style}
+      />
+    );
+  }
+
+  private renderFlightRow = (props: ListRowProps, flight: FlightModel) => {
+    return (
+      <CellMeasurer {...props} cache={cache} columnIndex={0}>
+        <StyledRosterSubHeaderRow {...props} alignment="left">
+          {flight.name}
+        </StyledRosterSubHeaderRow>
+      </CellMeasurer>
+    );
+  }
+
+  private renderEmptyRow = (props: ListRowProps, message: string) => {
+    return (
+      <CellMeasurer {...props} cache={cache} columnIndex={0}>
+        <div style={props.style}>
+          <EmptyBorderedNotification>
+            {message}
+          </EmptyBorderedNotification>
+        </div>
+      </CellMeasurer>
+    );
+  }
 }
 
-export const StyledRoster = inject('trackerStore', 'locationFilterStore', 'rosterHeaderStore')(styled(Roster)`
+export const StyledRoster = inject(
+  'trackerStore',
+  'locationFilterStore',
+  'rosterHeaderStore'
+)(styled(Roster)`
   border-top: none;
   outline: none;
 `);

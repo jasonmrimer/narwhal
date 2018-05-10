@@ -17,6 +17,9 @@ import { AvailabilityStore } from '../availability/stores/AvailabilityStore';
 import { CurrencyStore } from '../currency/stores/CurrencyStore';
 import { PlannerStore } from './stores/PlannerStore';
 import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
+import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
+import { makeFakeProfile } from '../utils/testUtils';
+import { adminAbility } from '../app/abilities';
 
 describe('Roster', () => {
   let trackerStore: TrackerStore;
@@ -55,8 +58,11 @@ describe('Roster', () => {
       const sidePanelStore = new SidePanelStore();
       const currencyStore = new CurrencyStore(DoubleRepositories);
       const plannerStore = new PlannerStore(new TimeServiceStub());
+      const profileStore = new ProfileSitePickerStore(DoubleRepositories);
       let airman = AirmanModelFactory.build(1);
       let event = EventModelFactory.build();
+
+      profileStore.hydrate([], makeFakeProfile('ADMIN', adminAbility));
       trackerStore.hydrate([airman], [event], airman.siteId);
 
       subject = mount(
@@ -68,6 +74,7 @@ describe('Roster', () => {
           sidePanelStore={sidePanelStore}
           currencyStore={currencyStore}
           plannerStore={plannerStore}
+          profileStore={profileStore}
           sidePanelActions={null}
         >
           <StyledRoster/>

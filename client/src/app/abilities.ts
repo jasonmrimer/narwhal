@@ -5,10 +5,10 @@ export const readerAbility = AbilityBuilder.define((can: any, cannot: any) => {
   cannot('read', ['mission', 'flight']);
 });
 
-export const adminAbility = AbilityBuilder.define((can: any, cannot: any) => {
+export const writerAbility = AbilityBuilder.define((can: any, cannot: any) => {
   can('manage', 'all');
 });
 
-export const writerAbility = AbilityBuilder.define((can: any, cannot: any) => {
+export const adminAbility = AbilityBuilder.define((can: any, cannot: any) => {
   can('manage', 'all');
 });
