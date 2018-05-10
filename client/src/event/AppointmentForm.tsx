@@ -19,7 +19,7 @@ interface Props {
   trackerStore?: TrackerStore;
   eventActions?: EventActions;
   airmanId: number;
-  event?: EventModel;
+  event: EventModel | null;
   className?: string;
 }
 

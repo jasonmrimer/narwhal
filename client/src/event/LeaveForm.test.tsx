@@ -36,6 +36,7 @@ describe('LeaveForm', () => {
         leaveFormStore={store}
         trackerStore={trackerStore}
         eventActions={eventActions}
+        event={null}
       />
     );
 

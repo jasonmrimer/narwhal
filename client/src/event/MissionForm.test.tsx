@@ -42,6 +42,7 @@ describe('MissionForm', () => {
         missionFormStore={missionFormStore}
         trackerStore={trackerStore}
         eventActions={eventActions}
+        event={null}
       />
     );
 

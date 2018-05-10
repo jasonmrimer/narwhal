@@ -8,7 +8,7 @@ export class AvailabilityStore {
   @observable private _shouldShowEventTypeSelection: boolean = true;
   @observable private _eventFormType: EventType | string = '';
   @observable private _pendingDeleteEvent: EventModel | null = null;
-  @observable private _editableEvent: EventModel | null = null;
+  @observable private _event: EventModel | null = null;
   @observable private _airmanEvents: EventModel[] = [];
   @observable private _selectedDate: Moment | null = null;
 
@@ -64,10 +64,20 @@ export class AvailabilityStore {
   }
 
   @action.bound
-  showEventForm() {
+  showEventForm(airmanId: number) {
     this.closeEventForm();
     this._shouldShowEventForm = true;
     this._shouldShowEventTypeSelection = true;
+    if (this._selectedDate && this._eventFormType !== EventType.Mission) {
+      this._event = new EventModel(
+        '',
+        '',
+        this._selectedDate,
+        this._selectedDate,
+        airmanId,
+        EventType[this._eventFormType]
+      );
+    }
   }
 
   @action.bound
@@ -80,12 +90,12 @@ export class AvailabilityStore {
     this._shouldShowEventForm = true;
     this._shouldShowEventTypeSelection = false;
     this._eventFormType = event.type;
-    this._editableEvent = event;
+    this._event = event;
   }
 
   @computed
-  get editableEvent() {
-    return this._editableEvent;
+  get event() {
+    return this._event;
   }
 
   @action.bound
@@ -93,7 +103,7 @@ export class AvailabilityStore {
     this._shouldShowEventForm = false;
     this._shouldShowEventTypeSelection = false;
     this._eventFormType = '';
-    this._editableEvent = null;
+    this._event = null;
   }
 
   @action.bound

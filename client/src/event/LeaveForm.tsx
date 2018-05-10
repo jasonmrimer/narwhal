@@ -18,7 +18,7 @@ interface Props {
   leaveFormStore?: LeaveFormStore;
   trackerStore?: TrackerStore;
   airmanId: number;
-  event?: EventModel;
+  event: EventModel | null;
   eventActions?: EventActions;
   className?: string;
 }

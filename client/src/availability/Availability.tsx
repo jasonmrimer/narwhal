@@ -1,28 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Moment } from 'moment';
-import { EventModel, EventType } from '../event/models/EventModel';
-import { StyledAvailabilityTile } from './AvailabilityTile';
 import { inject, observer } from 'mobx-react';
-import { NextIcon } from '../icons/NextIcon';
-import { findEventsForDay } from '../utils/eventUtil';
-import { BackIcon } from '../icons/BackIcon';
 import { AvailabilityStore } from './stores/AvailabilityStore';
-import { PlannerStore } from '../roster/stores/PlannerStore';
-import { StyledRadioButtons } from '../widgets/inputs/RadioButtons';
-import { StyledAppointmentForm } from '../event/AppointmentForm';
-import { StyledLeaveForm } from '../event/LeaveForm';
-import { StyledMissionForm } from '../event/MissionForm';
-import { StyledBackButton } from '../widgets/buttons/BackButton';
-import { StyledTDYDeploymentForm } from '../event/TDYDeploymentForm';
-import { AvailabilityActions } from './AvailabilityActions';
-import { TrackerStore } from '../tracker/stores/TrackerStore';
+import { StyledEventFormContainer } from './EventFormContainer';
+import { StyledEventsList } from './EventsList';
 
 interface Props {
   availabilityStore?: AvailabilityStore;
-  trackerStore?: TrackerStore;
-  plannerStore?: PlannerStore;
-  availabilityActions?: AvailabilityActions;
   className?: string;
 }
 
@@ -32,178 +16,13 @@ export class Availability extends React.Component<Props> {
     const {availabilityStore} = this.props;
     return (
       <div className={this.props.className}>
-        {
-          availabilityStore!.shouldShowEventForm ?
-            this.renderEventFormContainer() :
-            this.renderAvailability()
-        }
+        {availabilityStore!.shouldShowEventForm ? <StyledEventFormContainer /> : <StyledEventsList/>}
       </div>
     );
-  }
-
-  private renderEventFormContainer = () => {
-    const {availabilityStore} = this.props;
-    const {eventFormType, setEventFormType} = availabilityStore!;
-    return (
-      <div>
-        <StyledBackButton
-          onClick={availabilityStore!.closeEventForm}
-          text="Back to Week View"
-        />
-        {
-          availabilityStore!.shouldShowEventTypeSelection &&
-          <div className="form-wrapper">
-            <div>Select Event Type:</div>
-            <StyledRadioButtons
-              name="eventType"
-              options={Object.keys(EventType).map(key => EventType[key])}
-              value={eventFormType}
-              onChange={e => setEventFormType(e.target.value)}
-            />
-          </div>
-        }
-        {this.renderEventForm()}
-      </div>
-    );
-  }
-
-  private renderEventForm() {
-    const {availabilityStore, trackerStore} = this.props;
-    const {eventFormType, editableEvent, selectedDate} = availabilityStore!;
-
-    let event;
-    if (editableEvent) {
-      event = editableEvent;
-    } else if (selectedDate && eventFormType !== EventType.Mission) {
-      event = new EventModel(
-        '',
-        '',
-        selectedDate,
-        selectedDate,
-        trackerStore!.selectedAirman.id,
-        EventType[eventFormType]
-      );
-    }
-
-    switch (eventFormType) {
-      case EventType.Appointment:
-        return (
-          <StyledAppointmentForm
-            airmanId={trackerStore!.selectedAirman.id}
-            event={event}
-          />
-        );
-      case EventType.Leave:
-        return (
-          <StyledLeaveForm
-            airmanId={trackerStore!.selectedAirman.id}
-            event={event}
-          />
-        );
-      case EventType.Mission:
-        return (
-          <StyledMissionForm
-            airmanId={trackerStore!.selectedAirman.id}
-            event={event}
-          />
-        );
-      case EventType.TDY_DEPLOYMENT:
-        return (
-          <StyledTDYDeploymentForm
-            airmanId={trackerStore!.selectedAirman.id}
-            event={event}
-          />
-        );
-      default:
-        return null;
-    }
-  }
-
-  private renderAvailability = () => {
-    const {availabilityStore, plannerStore, availabilityActions} = this.props;
-    const {sidePanelWeek} = plannerStore!;
-    return (
-      <div>
-        <div className="event-control-row">
-          <button
-            className="add-event"
-            onClick={availabilityActions!.openEventForm}
-          >
-            + Add Event
-          </button>
-        </div>
-
-        <div className="nav-row">
-          <button
-            className="last-week"
-            onClick={async () => await availabilityActions!.decrementWeek()}
-          >
-            <BackIcon width={12} height={12}/>
-          </button>
-
-          <h3>
-            {sidePanelWeek[0].format('DD MMM').toUpperCase()} - {sidePanelWeek[6].format('DD MMM').toUpperCase()}
-          </h3>
-
-          <button
-            className="next-week"
-            onClick={async () => await availabilityActions!.incrementWeek()}
-          >
-            <NextIcon width={12} height={12}/>
-          </button>
-        </div>
-
-        <div className="availability">
-          {
-            sidePanelWeek.map((day, index) => {
-              return (
-                <div id={`day-${index}`} key={index}>
-                  <div
-                    className="event-date"
-                    onClick={() => availabilityActions!.openEventFormForDay(day)}
-                  >
-                    <span>
-                      {day.format('ddd, DD MMM YY').toUpperCase()}
-                    </span>
-                    <span className="add-event-on-date">
-                      + Add Event
-                    </span>
-                  </div>
-                  {this.scheduledEventsForDate(day, availabilityStore!.airmanEvents)}
-                </div>
-              );
-            })
-          }
-        </div>
-      </div>
-    )
-      ;
-  }
-
-  private scheduledEventsForDate = (day: Moment, events: EventModel[]) => {
-    const eventsForDay = findEventsForDay(events, day);
-    return eventsForDay.length === 0
-      ? <div className="event-name">No Events Scheduled</div>
-      : eventsForDay.map((event, index) => {
-        return (
-          <StyledAvailabilityTile
-            key={index}
-            event={event}
-            editEvent={() => {
-              this.props.availabilityStore!.openEditEventForm(event);
-            }}
-          />
-        );
-      });
   }
 }
 
-export const StyledAvailability = inject(
-  'availabilityStore',
-  'plannerStore',
-  'trackerStore',
-  'availabilityActions'
-)(styled(Availability)`
+export const StyledAvailability = inject('availabilityStore')(styled(Availability)`
   width: 100%;
   text-align: left;
 

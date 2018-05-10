@@ -32,6 +32,7 @@ describe('TDYDeploymentForm', () => {
         tdyDeploymentFormStore={store}
         trackerStore={trackerStore}
         eventActions={eventActions}
+        event={null}
       />
     );
 

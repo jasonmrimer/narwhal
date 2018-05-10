@@ -18,7 +18,7 @@ describe('AvailabilityStore', () => {
     expect(subject.shouldShowEventForm).toBeFalsy();
     expect(subject.eventFormType).toBe('');
 
-    subject.showEventForm();
+    subject.showEventForm(1);
 
     expect(subject.shouldShowEventForm).toBeTruthy();
     expect(subject.eventFormType).toBe('');

@@ -36,6 +36,7 @@ describe('AppointmentForm', () => {
         appointmentFormStore={appointmentFormStore}
         trackerStore={trackerStore}
         eventActions={eventActions}
+        event={null}
       />
     );
 

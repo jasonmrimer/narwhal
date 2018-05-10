@@ -28,7 +28,7 @@ export class SidePanelActions {
 
     if (date) {
       this.stores.availabilityStore!.setSelectedDate(date);
-      this.stores.availabilityStore!.showEventForm();
+      this.stores.availabilityStore!.showEventForm(airman.id);
     }
   }
 

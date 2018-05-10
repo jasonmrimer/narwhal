@@ -23,11 +23,11 @@ export class AvailabilityActions {
 
   openEventForm = () => {
     this.stores.availabilityStore!.clearSelectedDate();
-    this.stores.availabilityStore!.showEventForm();
+    this.stores.availabilityStore!.showEventForm(this.stores.trackerStore!.selectedAirman.id);
   }
 
   openEventFormForDay = (day: Moment) => {
     this.stores.availabilityStore!.setSelectedDate(day);
-    this.stores.availabilityStore!.showEventForm();
+    this.stores.availabilityStore!.showEventForm(this.stores.trackerStore!.selectedAirman.id);
   }
 }
