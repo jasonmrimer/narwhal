@@ -16,4 +16,10 @@ export class EventModel {
               public type: EventType = EventType.Mission,
               public id: number | null = null) {
   }
+
+  isOnDay(day: Moment) {
+    return this.type === EventType.Mission
+      ? day.clone().startOf('day').isSame(this.startTime.clone().startOf('day'))
+      : day.isBetween(this.startTime, this.endTime, 'day', '[]');
+  }
 }

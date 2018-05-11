@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { Event } from './Event';
-import * as moment from 'moment'
+import * as moment from 'moment';
 import { AvailabilityStore } from './stores/AvailabilityStore';
 import { AvailabilityActions } from './AvailabilityActions';
 import { DoubleRepositories } from '../utils/Repositories';
@@ -17,8 +17,8 @@ describe('Event', () => {
     availabilityActions = new AvailabilityActions({});
     availabilityActions.openEventFormForDay = jest.fn();
     availabilityStore = new AvailabilityStore(DoubleRepositories);
-    const event = EventModelFactory.build('', '', moment('2017-11-26'), moment('2017-11-26'))
-    availabilityStore.setAirmanEvents([event])
+    const event = EventModelFactory.build('', '', moment('2017-11-26'), moment('2017-11-26'));
+    availabilityStore.setAirmanEvents([event]);
     subject = shallow(
       <Event
         day={moment('2017-11-26')}
@@ -45,6 +45,6 @@ describe('Event', () => {
   it('renders no events scheduled tile', () => {
     availabilityStore.setAirmanEvents([]);
     subject.update();
-    expect(subject.text()).toContain("No Events Scheduled");
+    expect(subject.text()).toContain('No Events Scheduled');
   });
 });

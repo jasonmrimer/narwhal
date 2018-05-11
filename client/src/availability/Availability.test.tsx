@@ -29,7 +29,7 @@ describe('Availability', () => {
 
   it('should render the event form container', () => {
     availabilityStore.showEventForm(1);
-    subject.update()
+    subject.update();
     expect(subject.find(StyledEventsList).exists()).toBeFalsy();
     expect(subject.find(StyledEventFormContainer).exists()).toBeTruthy();
   });

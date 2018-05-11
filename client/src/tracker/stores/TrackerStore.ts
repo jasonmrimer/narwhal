@@ -50,6 +50,10 @@ export class TrackerStore {
     return this._events.filter(event => event.airmanId === airmanId);
   }
 
+  getDailyEventsByAirmanId = (airmanId: number, day: Moment) => {
+    return this.getEventsByAirmanId(airmanId).filter(event => event.isOnDay(day));
+  }
+
   @action.bound
   setLoading(loading: boolean) {
     this._loading = loading;

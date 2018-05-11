@@ -29,7 +29,7 @@ describe('ShiftDropdown', () => {
     trackerStore = new TrackerStore(DoubleRepositories);
     profileStore = new ProfileSitePickerStore(DoubleRepositories);
 
-    profileStore.hydrate([], profile)
+    profileStore.hydrate([], profile);
     trackerStore.updateAirmanShift = updateAirmanShiftSpy;
 
     subject = shallow(
@@ -53,7 +53,7 @@ describe('ShiftDropdown', () => {
 
   it('should not render dropdown when viewing page as a reader', () => {
     profile = makeFakeProfile('READER', readerAbility);
-    profileStore.hydrate([], profile)
+    profileStore.hydrate([], profile);
 
     const mountedSubject = mount(
       <ShiftDropdown
