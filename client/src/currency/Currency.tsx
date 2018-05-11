@@ -12,6 +12,8 @@ import { StyledRipItemsTile } from '../rip-item/RipItemsTile';
 import { CurrencyActions } from './CurrencyActions';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 import { Can } from '@casl/react';
+import { AirmanCertificationModel } from '../airman/models/AirmanCertificationModel';
+import { AirmanQualificationModel } from '../airman/models/AirmanQualificationModel';
 
 interface Props {
   currencyStore?: CurrencyStore;
@@ -103,19 +105,30 @@ export class Currency extends React.Component<Props> {
       <StyledSkillTile
         key={index}
         skill={qual}
-        onClick={() => this.props.currencyActions!.editSkill(qual)}
+        onClick={this.checkForAbility(qual)}
+        editor={this.props.profileStore!.profile!.ability!.can('write', 'editSkill')}
       />
     ));
   }
 
   private renderCertifications = () => {
+
     return this.props.trackerStore!.selectedAirman.certifications.map((cert, index) => (
       <StyledSkillTile
         key={index}
         skill={cert}
-        onClick={() => this.props.currencyActions!.editSkill(cert)}
+        onClick={this.checkForAbility(cert)}
+        editor={this.props.profileStore!.profile!.ability!.can('write', 'editSkill')}
       />
     ));
+  }
+
+  /* tslint:disable:no-empty*/
+  private checkForAbility = (item: AirmanQualificationModel | AirmanCertificationModel) => {
+    const {profileStore} = this.props;
+    return profileStore!.profile!.ability!.can('write', 'editSkill') ?
+      () => this.props.currencyActions!.editSkill(item) :
+      () => {};
   }
 
   private renderSkillNotification = () => {

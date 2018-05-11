@@ -11,6 +11,7 @@ import { StyledExpirationSleeve } from '../widgets/ExpirationSleeve';
 interface Props {
   skill: AirmanQualificationModel | AirmanCertificationModel;
   onClick?: (skill: Skill) => void;
+  editor?: boolean;
   className?: string;
 }
 
@@ -85,7 +86,7 @@ export const StyledSkillTile = styled(SkillTile)`
     &:hover {
       background-color: ${props => props.theme.hoverBlueSteel};
       border-radius: 0.25rem 0.25rem 0 0;
-      cursor: pointer;
+      cursor: ${props => props.editor ? 'pointer' : 'default'};
     }
   }
 

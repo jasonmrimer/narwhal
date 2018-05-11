@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { mount, shallow, ShallowWrapper } from 'enzyme';
+import { mount, ReactWrapper, shallow, ShallowWrapper } from 'enzyme';
 import { Currency } from './Currency';
 import { findSelectorWithText, makeFakeProfile } from '../utils/testUtils';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
@@ -93,20 +93,36 @@ describe('Currency', () => {
     expect(currencyActions.editSkill).toHaveBeenCalled();
   });
 
-  it('should not render the add skill button if profile is reader', () => {
-    profileStore.hydrate([], makeFakeProfile('READER', readerAbility));
+  describe('Currency as a reader', () => {
+    let mountedSubject: ReactWrapper;
+    beforeEach(() => {
+      profileStore.hydrate([], makeFakeProfile('READER', readerAbility));
 
-    const mountedSubject = mount(
-      <ThemeProvider theme={{}}>
-        <Currency
-          trackerStore={trackerStore}
-          currencyStore={currencyStore}
-          currencyActions={currencyActions}
-          profileStore={profileStore}
-        />
-      </ThemeProvider>
-    );
+      mountedSubject = mount(
+        <ThemeProvider theme={{}}>
+          <Currency
+            trackerStore={trackerStore}
+            currencyStore={currencyStore}
+            currencyActions={currencyActions}
+            profileStore={profileStore}
+          />
+        </ThemeProvider>
+      );
 
-    expect(mountedSubject.find('.add-skill').exists()).toBeFalsy();
+    });
+    it('should not render the add skill button if profile is reader', () => {
+      expect(mountedSubject.find('.add-skill').exists()).toBeFalsy();
+    });
+
+    it('should not a Skill Form when clicking on an existing Qualification Tile', () => {
+      mountedSubject.find(StyledSkillTile).at(0).simulate('click');
+      expect(currencyActions.editSkill).toHaveBeenCalledTimes(0);
+    });
+
+    it('should not a Skill Form when clicking on an existing Certification Tile', () => {
+      mountedSubject.find(StyledSkillTile).at(3).simulate('click');
+      expect(currencyActions.editSkill).toHaveBeenCalledTimes(0);
+    });
   });
+
 });

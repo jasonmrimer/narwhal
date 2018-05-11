@@ -3,7 +3,7 @@ import { AbilityBuilder } from '@casl/ability';
 export const readerAbility = AbilityBuilder.define((can: any, cannot: any) => {
   can('error', 'all');
   cannot('read', ['mission', 'flight']);
-  cannot('write', 'skill');
+  cannot('write', ['skill', 'editSkill']);
 });
 
 export const writerAbility = AbilityBuilder.define((can: any, cannot: any) => {
