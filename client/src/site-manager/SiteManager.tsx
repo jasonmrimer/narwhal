@@ -1,129 +1,62 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { SiteManagerStore } from './stores/SiteManagerStore';
-import { observer, inject } from 'mobx-react';
-import { CellMeasurer, CellMeasurerCache, List, ListRowProps } from 'react-virtualized';
-import { BorderedNotification } from '../widgets/Notification';
-import { AirmanModel } from '../airman/models/AirmanModel';
-import { Link } from 'react-router-dom';
-import { OperatorIcon } from '../icons/OperatorIcon';
+import {SiteManagerStore} from './stores/SiteManagerStore';
+import {inject, observer} from 'mobx-react';
+import {CellMeasurerCache} from 'react-virtualized';
+import {Link} from 'react-router-dom';
+import {OperatorIcon} from '../icons/OperatorIcon';
 
 interface Props {
-  siteManagerStore?: SiteManagerStore;
-  className?: string;
+	siteManagerStore?: SiteManagerStore;
+	className?: string;
 }
 
 const cache = new CellMeasurerCache({
-  defaultHeight: 60,
-  fixedWidth: true
-});
-
-interface RowProps {
-  airman: AirmanModel;
-  style: object;
-  index: number;
-  parent: any;
-  key: any;
-  className?: string;
-}
-
-const Row = observer((props: RowProps) => {
-  const {airman} = props;
-  return (
-    <CellMeasurer
-      cache={cache}
-      columnIndex={0}
-      rowIndex={props.index}
-      key={props.key}
-      parent={props.parent}
-    >
-      <div className={props.className} style={props.style}>
-        <Link to={`/flights/${airman.id}`}>
-          <div className="airman-row">
-          <span className="airman-name">
-            {airman.lastName}, {airman.firstName}
-         </span>
-          </div>
-        </Link>
-      </div>
-    </CellMeasurer>
-  );
+	defaultHeight: 60,
+	fixedWidth: true
 });
 
 @observer
 export class SiteManager extends React.Component<Props> {
-  async componentDidMount() {
-    await this.props.siteManagerStore!.hydrate();
-  }
-
-  render() {
-    const {siteManagerStore, className} = this.props;
-    cache.clearAll();
-    return (
-      <div className={this.props.className}>
-        <div className="header">
-          <h2>{this.props.siteManagerStore!.siteName} Personnel</h2>
-          <Link to="/flights/new">
-            <OperatorIcon />
-            <span>New Operator</span>
-          </Link>
-        </div>
-
-        <div className="airmen-table">
-          <div className="airmen-header">
-            <span>NAME</span>
-          </div>
-          <List
-            className={className}
-            height={855}
-            rowHeight={(props) => cache.rowHeight(props)! || 60}
-            rowCount={siteManagerStore!.airmen.length}
-            width={798}
-            overscanRowCount={15}
-            deferredMeasurementCache={cache}
-            noRowsRenderer={() => {
-              return (
-                <BorderedNotification>
-                  No members at this site.
-                </BorderedNotification>
-              );
-            }}
-            rowRenderer={(props: ListRowProps) => {
-              const airman = siteManagerStore!.airmen[props.index];
-              return (
-                <StyledRow
-                  {...props}
-                  airman={airman}
-                  key={airman.id}
-                  style={props.style}
-                />
-              );
-            }}
-          />
-        </div>
-      </div>
-    );
-  }
+	render() {
+		const {siteManagerStore} = this.props;
+		const squadron = this.props.siteManagerStore!.squadron;
+		cache.clearAll();
+		return (
+			<div className={this.props.className}>
+				<div className="header">
+					<h2>{siteManagerStore!.siteName} Personnel</h2>
+					<Link to="/flights/new">
+						<OperatorIcon/>
+						<span>New Operator</span>
+					</Link>
+				</div>
+				{squadron &&
+				squadron.flights.map(flight => {
+					return (
+						<div className="airmen-table" key={flight.id}>
+							<h3>{flight.name}</h3>
+							<div className="airmen-header">
+								<span>NAME</span>
+							</div>
+							{flight.airmen.map((airman) => {
+								return (
+									<div className="airman-row" key={airman.id}>
+										<span className="airman-name">
+											<Link to={`/flights/${airman.id}`}>
+												{airman.lastName}, {airman.firstName}
+											</Link>
+										</span>
+									</div>
+								);
+							})}
+						</div>
+					);
+				})}
+			</div>
+		);
+	}
 }
-
-export const StyledRow = styled(Row)`
-  
-  .airman-row {
-    padding: 1rem;
-    
-    &:hover {
-      background: ${props => props.theme.darkest};
-    }
-  }
-  
-  &:nth-child(odd) {
-    background: ${props => props.theme.dark};
-  }
-  
-  &:nth-child(even) {
-    background: ${props => props.theme.light};
-  }
-`;
 
 export const StyledSiteManager = inject('siteManagerStore')(styled(SiteManager)`
     width: 800px;
@@ -134,6 +67,14 @@ export const StyledSiteManager = inject('siteManagerStore')(styled(SiteManager)`
       font-size: 1.5rem;
       font-weight: 300;
       padding-top: 0.5rem;
+    }
+    
+    h3 {
+      padding: 1rem;
+      font-size: 1.25rem;
+      font-weight: 500;
+      margin: 0;
+      background: ${props => props.theme.blueSteel};
     }
     
     .header {
@@ -155,6 +96,24 @@ export const StyledSiteManager = inject('siteManagerStore')(styled(SiteManager)`
     
     .airmen-table {
       border: 1px solid ${props => props.theme.graySteel};
+      margin-bottom: 2rem;
+      
+       .airman-row {
+          padding: 1rem;
+          cursor: pointer;
+      
+          &:hover {
+            background: ${props => props.theme.darkest};
+          }
+          
+          &:nth-child(odd) {
+            background: ${props => props.theme.dark};
+          }
+    
+          &:nth-child(even) {
+            background: ${props => props.theme.light};
+          }
+       }
     }
     
     .airmen-header {

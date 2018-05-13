@@ -53,4 +53,8 @@ export class SiteRepositoryStub implements SiteRepository {
   findAll(): Promise<SiteModel[]> {
     return Promise.resolve(sites);
   }
+
+	findOne(siteId: number): Promise<SiteModel> {
+		return Promise.resolve(sites.find(s => s.id === siteId)!);
+	}
 }

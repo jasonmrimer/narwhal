@@ -1,15 +1,15 @@
 import * as React from 'react';
-import {PlannerEvent} from './PlannerEvent';
+import { PlannerEvent } from './PlannerEvent';
 import * as moment from 'moment';
-import {shallow, ShallowWrapper} from 'enzyme';
-import {AvailableIcon} from '../icons/AvailableIcon';
-import {OffDayIcon} from '../icons/OffDayIcon';
-import {LeaveIcon} from '../icons/LeaveIcon';
-import {EventType} from '../event/models/EventModel';
-import {EventModelFactory} from '../event/factories/EventModelFactory';
-import {AppointmentIcon} from '../icons/AppointmentIcon';
-import {TDYDeploymentIcon} from '../icons/TDYDeploymentIcon';
-import {MissionIcon} from '../icons/MissionIcon';
+import { shallow, ShallowWrapper } from 'enzyme';
+import { AvailableIcon } from '../icons/AvailableIcon';
+import { OffDayIcon } from '../icons/OffDayIcon';
+import { LeaveIcon } from '../icons/LeaveIcon';
+import { EventType } from '../event/models/EventModel';
+import { EventModelFactory } from '../event/factories/EventModelFactory';
+import { AppointmentIcon } from '../icons/AppointmentIcon';
+import { TDYDeploymentIcon } from '../icons/TDYDeploymentIcon';
+import { MissionIcon } from '../icons/MissionIcon';
 
 describe('PlannerEvent', () => {
   const event = EventModelFactory.build();

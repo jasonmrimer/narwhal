@@ -1,6 +1,7 @@
 package mil.af.us.narwhal.site;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,5 +21,10 @@ public class SiteController {
   @GetMapping
   public List<Site> index() {
     return siteRepository.findAll();
+  }
+
+  @GetMapping(path = "/{siteId}")
+  public Site show(@PathVariable Long siteId) {
+    return siteRepository.findOne(siteId);
   }
 }

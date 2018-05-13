@@ -14,6 +14,7 @@ import static org.hamcrest.Matchers.equalTo;
 
 public class SiteControllerTest extends BaseIntegrationTest {
   @Autowired private SiteRepository siteRepository;
+  Site site1;
 
   @Before
   public void setUp() {
@@ -24,7 +25,7 @@ public class SiteControllerTest extends BaseIntegrationTest {
     final Squadron squad1 = new Squadron("squad1");
     squad1.addFlight(flight1);
 
-    final Site site1 = new Site("site1");
+		site1 = new Site("site1");
     site1.setFullName("siteOne");
     site1.addSquadron(squad1);
     site1.setSiteType(SiteType.DGSCoreSite);
@@ -79,4 +80,21 @@ public class SiteControllerTest extends BaseIntegrationTest {
       .body("[1].fullName", equalTo("siteTwo"));
     // @formatter:on
   }
+
+	@Test
+	public void showTest() {
+		// @formatter:off
+		given()
+			.port(port)
+			.auth()
+			.preemptive()
+			.basic("tytus", "password")
+			.when()
+			.get(SiteController.URI + "/" + site1.getId())
+			.then()
+			.statusCode(200)
+			.body("squadrons.size()", equalTo(1))
+			.body("squadrons[0].flights[0].airmen.size()", equalTo(0));
+		// @formatter:on
+	}
 }

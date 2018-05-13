@@ -1,38 +1,27 @@
 import { action, computed, observable } from 'mobx';
-import { AirmanModel } from '../../airman/models/AirmanModel';
-import { AirmanRepository } from '../../airman/repositories/AirmanRepository';
-import { Repositories } from '../../utils/Repositories';
-import { ProfileRepository } from '../../profile/repositories/ProfileRepository';
 import { ProfileModel } from '../../profile/models/ProfileModel';
+import { SquadronModel } from '../../squadron/models/SquadronModel';
 
 export class SiteManagerStore {
-  @observable private _profile: ProfileModel | null = null;
-  @observable private _airmen: AirmanModel[] = [];
+	@observable private _profile: ProfileModel | null = null;
+	@observable private _squadron: SquadronModel;
 
-  private airmenRepository: AirmanRepository;
-  private profileRepository: ProfileRepository;
+	@action.bound
+	hydrate(profile: ProfileModel, squadron: SquadronModel) {
+		this._profile = profile;
+		this._squadron = squadron;
+	}
 
-  constructor(repositories: Repositories) {
-    this.profileRepository = repositories.profileRepository;
-    this.airmenRepository = repositories.airmanRepository;
-  }
+	@computed
+	get siteName() {
+		if (this._profile) {
+			return this._profile!.siteName;
+		}
+		return '';
+	}
 
-  @action.bound
-  async hydrate() {
-   this._profile = await this.profileRepository.findOne();
-   this._airmen = await this.airmenRepository.findBySiteId(this._profile.siteId!);
-  }
-
-  @computed
-  get airmen() {
-    return this._airmen;
-  }
-
-  @computed
-  get siteName() {
-    if (this._profile) {
-      return this._profile!.siteName;
-    }
-    return '';
-  }
+	@computed
+	get squadron() {
+		return this._squadron;
+	}
 }

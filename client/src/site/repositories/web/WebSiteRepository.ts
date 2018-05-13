@@ -13,4 +13,9 @@ export class WebSiteRepository implements SiteRepository {
     const json = await this.client.getJSON('api/sites');
     return json.map((item: {}) => this.siteSerializer.deserialize(item));
   }
+
+	async findOne(siteId: number): Promise<SiteModel> {
+		const json = await this.client.getJSON(`api/sites/${siteId}`);
+		return this.siteSerializer.deserialize(json);
+	}
 }
