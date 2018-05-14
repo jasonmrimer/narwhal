@@ -21,6 +21,7 @@ export class App extends React.Component<Props> {
     await this.props.profileStore!.performLoading(async () => {
       await this.props.appActions!.getSiteAndProfile();
     });
+    this.props.profileStore!.setLoading(true);
   }
 
   render() {
