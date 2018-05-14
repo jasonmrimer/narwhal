@@ -32,16 +32,16 @@ export class LeaveForm extends React.Component<Props> {
 
   handleChange = ({target}: any) => {
     this.props.leaveFormStore!.setState(target.name, target.value);
-  };
+  }
 
   handleDelete = async () => {
     await this.props.eventActions!.handleDeleteEvent(this.props.leaveFormStore!.model!);
-  };
+  }
 
   handleSubmit = async (e: any) => {
     e.preventDefault();
     await this.props.eventActions!.handleFormSubmit(this.props.airmanId, this.props.leaveFormStore!);
-  };
+  }
 
   render() {
     const {state, errors, hasModel} = this.props.leaveFormStore!;

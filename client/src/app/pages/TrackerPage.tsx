@@ -37,10 +37,9 @@ export class TrackerPage extends React.Component<Props> {
       const week = this.props.plannerStore!.plannerWeek;
       const siteId = this.props.profileStore!.profile!.siteId!;
 
-      const [airmen, events, , certifications, qualifications, missions, sites] = await Promise.all([
+      const [airmen, events, certifications, qualifications, missions, sites] = await Promise.all([
         WebRepositories.airmanRepository.findBySiteId(siteId),
         WebRepositories.eventRepository.findAllBySiteIdAndWithinPeriod(siteId, week[0], week[6]),
-        WebRepositories.siteRepository.findAll(),
         WebRepositories.skillRepository.findAllCertifications(),
         WebRepositories.skillRepository.findAllQualifications(),
         WebRepositories.missionRepository.findAll(),
