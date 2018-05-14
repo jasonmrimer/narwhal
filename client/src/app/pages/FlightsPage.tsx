@@ -8,31 +8,31 @@ import { WebRepositories } from '../../utils/Repositories';
 import { SiteManagerStore } from '../../site-manager/stores/SiteManagerStore';
 
 interface Props {
-	profileStore?: ProfileSitePickerStore;
-	siteManagerStore?: SiteManagerStore;
+  profileStore?: ProfileSitePickerStore;
+  siteManagerStore?: SiteManagerStore;
 }
 
 @inject('profileStore', 'siteManagerStore')
 @observer
 export class FlightsPage extends React.Component<Props> {
-	async componentDidMount() {
-		const profile = await WebRepositories.profileRepository.findOne();
-		const site = await WebRepositories.siteRepository.findOne(profile!.siteId!);
-		this.props.siteManagerStore!.hydrate(profile, site.squadrons[0]);
-	}
+  async componentDidMount() {
+    const profile = await WebRepositories.profileRepository.findOne();
+    const site = await WebRepositories.siteRepository.findOne(profile!.siteId!);
+    this.props.siteManagerStore!.hydrate(profile, site.squadrons[0]);
+  }
 
-	render() {
-		const {profileStore} = this.props;
-		return (
-			<React.Fragment>
-				<StyledTopBar/>
-				<Can do="read" on="mission" ability={profileStore!.profile!.ability!}>
-					<StyledSiteManager/>
-				</Can>
-				<Can do="error" on="all" ability={profileStore!.profile!.ability!}>
-					<h1 style={{textAlign: 'center'}}>You do not have access to this page.</h1>
-				</Can>
-			</React.Fragment>
-		);
-	}
+  render() {
+    const {profileStore} = this.props;
+    return (
+      <React.Fragment>
+        <StyledTopBar/>
+        <Can do="read" on="mission" ability={profileStore!.profile!.ability!}>
+          <StyledSiteManager/>
+        </Can>
+        <Can do="error" on="all" ability={profileStore!.profile!.ability!}>
+          <h1 style={{textAlign: 'center'}}>You do not have access to this page.</h1>
+        </Can>
+      </React.Fragment>
+    );
+  }
 }

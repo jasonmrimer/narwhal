@@ -13,7 +13,7 @@ import { RankModel } from '../../../rank/models/RankModel';
 
 const af = AirmanModelFactory;
 const airmen = [
-  af.build(1, 1, 1, 14, new RankModel(1, 'r1'), [AQMF.build(1)], [ACMF.build(4, 1)], [], ShiftType.Night),
+  af.build(1, 1, 1, 14, new RankModel(1, 'r1'), [AQMF.build(1)], [ACMF.build(4, 1)], [], ShiftType.Night, ),
   af.build(2, 1, 1, 14, new RankModel(1, 'r1'), [AQMF.build(2)], [ACMF.build(5, 1)]),
   af.build(3, 1, 1, 14, new RankModel(1, 'r1'), [AQMF.build(3)], [ACMF.build(4, 1)]),
   af.build(4, 2, 1, 14, new RankModel(1, 'r1'), [AQMF.build(1), AQMF.build(2)], [ACMF.build(4, 1), ACMF.build(5, 1)]),

@@ -3,9 +3,9 @@ import { FlightModel } from '../model/FlightModel';
 import { AirmanSerializer } from '../../airman/serializers/AirmanSerializer';
 
 export class FlightSerializer implements Serializer<FlightModel> {
-	private airmanSerializer: AirmanSerializer = new AirmanSerializer();
+  private airmanSerializer: AirmanSerializer = new AirmanSerializer();
 
-	serialize(item: FlightModel): {} {
+  serialize(item: FlightModel): {} {
     throw new Error('Not Implemented');
   }
 
@@ -13,7 +13,7 @@ export class FlightSerializer implements Serializer<FlightModel> {
     return new FlightModel(
       item.id,
       item.name,
-			   item.airmen.map((airman: any) => this.airmanSerializer.deserialize(airman))
-		);
+      item.airmen.map((airman: any) => this.airmanSerializer.deserialize(airman))
+    );
   }
 }
