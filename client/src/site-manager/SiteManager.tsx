@@ -4,9 +4,9 @@ import { inject, observer } from 'mobx-react';
 import { CellMeasurerCache } from 'react-virtualized';
 import { Link } from 'react-router-dom';
 import { OperatorIcon } from '../icons/OperatorIcon';
-import { ShiftDisplay } from '../roster/ShiftDisplay';
-import { AirmanModel } from '../airman/models/AirmanModel';
 import styled from 'styled-components';
+import { AirmanModel } from '../airman/models/AirmanModel';
+import { ShiftDisplay } from '../roster/ShiftDisplay';
 
 interface Props {
   siteManagerStore?: SiteManagerStore;
@@ -60,22 +60,25 @@ export class SiteManager extends React.Component<Props> {
             <span>New Operator</span>
           </Link>
         </div>
-        {squadron &&
-        squadron.flights.map(flight => {
-          return (
-            <div className="airmen-table" key={flight.id}>
-              <h3>{flight.name}</h3>
-              <div className="airmen-header">
-                <span>NAME</span>
-                <span>SHIFT</span>
-                <span>SCHEDULE</span>
+        {
+          squadron &&
+          squadron.flights.map(flight => {
+            return (
+              <div className="airmen-table" key={flight.id}>
+                <h3>{flight.name}</h3>
+                <div className="airmen-header">
+                  <span>NAME</span>
+                  <span>SHIFT</span>
+                  <span>SCHEDULE</span>
+                </div>
+                {
+                  siteManagerStore!.getAirmenByFlightId(flight.id).map((airman) => {
+                    return <FlightTable key={airman.id} airman={airman}/>;
+                  })
+                }
               </div>
-              {flight.airmen.map((airman) => {
-                return <FlightTable key={airman.id} airman={airman}/>;
-              })}
-            </div>
-          );
-        })}
+            );
+          })}
       </div>
     );
   }

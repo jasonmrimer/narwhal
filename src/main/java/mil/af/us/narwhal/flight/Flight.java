@@ -24,10 +24,6 @@ public class Flight {
   @JsonBackReference
   private Squadron squadron;
 
-	@OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JsonManagedReference
-	private List<Airman> airmen;
-
 	private String name;
 
   public Flight(String name) {

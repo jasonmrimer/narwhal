@@ -26,12 +26,12 @@ describe('SiteManager', () => {
     const airmanSchedule = new AirmanScheduleModel(airman.id, schedule, moment().add(-1));
     airman.schedules = [airmanSchedule];
 
-    const flight1 = new FlightModel(1, 'Flight 1', [airman]);
-    const flight2 = new FlightModel(2, 'Flight 2', []);
+    const flight1 = new FlightModel(1, 'Flight 1');
+    const flight2 = new FlightModel(2, 'Flight 2');
 
     const squadron = new SquadronModel(1, 'squad1', [flight1, flight2]);
 
-    siteManagerStore.hydrate(({siteName: 'SITE 14'} as ProfileModel), squadron);
+    siteManagerStore.hydrate(({siteName: 'SITE 14'} as ProfileModel), squadron, [airman]);
 
     subject = mount(
       <MemoryRouter>

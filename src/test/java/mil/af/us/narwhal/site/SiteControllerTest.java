@@ -93,8 +93,7 @@ public class SiteControllerTest extends BaseIntegrationTest {
 			.get(SiteController.URI + "/" + site1.getId())
 			.then()
 			.statusCode(200)
-			.body("squadrons.size()", equalTo(1))
-			.body("squadrons[0].flights[0].airmen.size()", equalTo(0));
+			.body("squadrons.size()", equalTo(1));
 		// @formatter:on
 	}
 }

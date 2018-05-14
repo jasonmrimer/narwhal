@@ -18,8 +18,11 @@ export class FlightsPage extends React.Component<Props> {
   async componentDidMount() {
     await this.props.siteManagerStore!.performLoading(async () => {
       const profile = await WebRepositories.profileRepository.findOne();
-      const site = await WebRepositories.siteRepository.findOne(profile!.siteId!);
-      this.props.siteManagerStore!.hydrate(profile, site.squadrons[0]);
+      const [site, airmen] = await Promise.all([
+        WebRepositories.siteRepository.findOne(profile!.siteId!),
+        WebRepositories.airmanRepository.findBySiteId(profile!.siteId!)
+      ]);
+      this.props.siteManagerStore!.hydrate(profile, site.squadrons[0], airmen);
     });
   }
 
