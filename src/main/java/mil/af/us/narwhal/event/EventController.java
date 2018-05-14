@@ -2,9 +2,13 @@ package mil.af.us.narwhal.event;
 
 import mil.af.us.narwhal.airman.Airman;
 import mil.af.us.narwhal.airman.AirmanRepository;
+import mil.af.us.narwhal.profile.Profile;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.nio.file.attribute.UserPrincipal;
 import java.time.Instant;
 import java.util.List;
 
@@ -24,9 +28,14 @@ public class EventController {
   }
 
   @PostMapping
-  public Event create(@Valid @RequestBody EventJSON json) {
+  public Event create(@Valid @RequestBody EventJSON json, @AuthenticationPrincipal Profile profile) {
     final Airman airman = airmanRepository.findOne(json.getAirmanId());
-    return eventRepository.save(Event.fromJSON(json, airman));
+    final Event event = Event.fromJSON(json, airman);
+
+    event.setCreatedBy(profile.getUsername());
+    event.setCreatedOn(Instant.now());
+
+    return eventRepository.save(event);
   }
 
   @PutMapping(value = "{id}")

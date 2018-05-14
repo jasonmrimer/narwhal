@@ -119,7 +119,9 @@ public class Mission {
       this.getStartDateTime(),
       this.getEndDateTime(),
       EventType.MISSION,
-      airman
+      airman,
+      null,
+      null
     )).orElse(null);
   }
 

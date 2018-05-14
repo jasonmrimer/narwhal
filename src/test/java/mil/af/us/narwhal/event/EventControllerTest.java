@@ -76,6 +76,7 @@ public class EventControllerTest extends BaseIntegrationTest {
       EventType.APPOINTMENT,
       airman
     );
+
     final String json = objectMapper.writeValueAsString(event);
 
     // @formatter:off
@@ -90,7 +91,9 @@ public class EventControllerTest extends BaseIntegrationTest {
       .post(EventController.URI)
     .then()
       .statusCode(200)
-      .body("id", notNullValue());
+      .body("id", notNullValue())
+      .body("createdBy", notNullValue())
+      .body("createdOn", notNullValue());
     // @formatter:on
   }
 

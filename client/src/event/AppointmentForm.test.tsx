@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { shallow, ShallowWrapper } from 'enzyme';
+import { mount, shallow, ShallowWrapper } from 'enzyme';
 import { AppointmentForm } from './AppointmentForm';
 import { eventStub } from '../utils/testUtils';
 import { StyledTextInput } from '../widgets/inputs/TextInput';
@@ -12,6 +12,8 @@ import { AppointmentFormStore } from './stores/AppointmentFormStore';
 import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { DoubleRepositories } from '../utils/Repositories';
+import { StyledEventCreationInfo } from '../widgets/EventCreationInfo';
+import * as moment from 'moment';
 
 /* tslint:disable:no-empty*/
 describe('AppointmentForm', () => {
@@ -103,6 +105,24 @@ describe('AppointmentForm', () => {
     appointmentFormStore.open(EventModelFactory.build());
     await subject.handleDelete();
     expect(eventActions.handleDeleteEvent).toHaveBeenCalled();
+  });
+
+  it('should render the creation data for an existing event', () => {
+    const event = EventModelFactory.build();
+    event.createdOn = moment();
+    event.createdBy = 'user';
+
+    const mountedWrapper = mount(
+      <AppointmentForm
+        airmanId={123}
+        appointmentFormStore={appointmentFormStore}
+        trackerStore={trackerStore}
+        eventActions={eventActions}
+        event={event}
+      />
+    );
+
+    expect(mountedWrapper.find(StyledEventCreationInfo).exists()).toBeTruthy();
   });
 });
 

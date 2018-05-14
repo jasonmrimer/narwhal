@@ -45,6 +45,10 @@ public class Event {
   @JsonIgnore
   private Airman airman;
 
+  private String createdBy;
+
+  private Instant createdOn;
+
   public static Event fromJSON(EventJSON json, Airman airman) {
     return new Event(
       json.getId(),
@@ -53,7 +57,9 @@ public class Event {
       json.getStartTime(),
       json.getEndTime(),
       json.getType(),
-      airman
+      airman,
+      null,
+      null
     );
   }
 
@@ -73,7 +79,7 @@ public class Event {
     EventType eventType,
     Airman airman
   ) {
-    this(null, title, description, startTime, endTime, eventType, airman);
+    this(null, title, description, startTime, endTime, eventType, airman, null, null);
   }
 
   @JsonProperty

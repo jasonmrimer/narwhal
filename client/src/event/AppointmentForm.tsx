@@ -13,6 +13,7 @@ import { AppointmentFormStore } from './stores/AppointmentFormStore';
 import { EventModel } from './models/EventModel';
 import { EventActions } from './EventActions';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
+import { StyledEventCreationInfo } from '../widgets/EventCreationInfo';
 
 interface Props {
   appointmentFormStore?: AppointmentFormStore;
@@ -98,6 +99,13 @@ export class AppointmentForm extends React.Component<Props> {
             </StyledFormRow>
           </StyledFieldValidation>
         </StyledFieldValidation>
+
+        {
+          this.props.event ?
+            this.props.event!.createdBy &&
+              <StyledEventCreationInfo event={this.props.event!}/> :
+            null
+        }
 
         <StyledFormRow reversed={true}>
           <StyledSubmitButton text="CONFIRM"/>

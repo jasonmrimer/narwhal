@@ -13,6 +13,7 @@ import { DeleteIcon } from '../icons/DeleteIcon';
 import { EventModel } from './models/EventModel';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { EventActions } from './EventActions';
+import { StyledEventCreationInfo } from '../widgets/EventCreationInfo';
 
 interface Props {
   leaveFormStore?: LeaveFormStore;
@@ -31,16 +32,16 @@ export class LeaveForm extends React.Component<Props> {
 
   handleChange = ({target}: any) => {
     this.props.leaveFormStore!.setState(target.name, target.value);
-  }
+  };
 
   handleDelete = async () => {
     await this.props.eventActions!.handleDeleteEvent(this.props.leaveFormStore!.model!);
-  }
+  };
 
   handleSubmit = async (e: any) => {
     e.preventDefault();
     await this.props.eventActions!.handleFormSubmit(this.props.airmanId, this.props.leaveFormStore!);
-  }
+  };
 
   render() {
     const {state, errors, hasModel} = this.props.leaveFormStore!;
@@ -85,6 +86,12 @@ export class LeaveForm extends React.Component<Props> {
             </StyledFormRow>
           </StyledFieldValidation>
         </StyledFieldValidation>
+        {
+          this.props.event ?
+            this.props.event!.createdBy &&
+              <StyledEventCreationInfo event={this.props.event!}/> :
+            null
+        }
         <StyledFormRow reversed={true}>
           <StyledSubmitButton text="CONFIRM"/>
           {

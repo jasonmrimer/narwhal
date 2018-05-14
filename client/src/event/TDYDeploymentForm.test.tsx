@@ -3,13 +3,15 @@ import { TDYDeploymentFormStore } from './stores/TDYDeploymentFormStore';
 import { StyledButton } from '../widgets/buttons/Button';
 import { StyledDatePicker } from '../widgets/inputs/DatePicker';
 import { EventModelFactory } from './factories/EventModelFactory';
-import { shallow, ShallowWrapper } from 'enzyme';
+import { mount, shallow, ShallowWrapper } from 'enzyme';
 import { StyledTextInput } from '../widgets/inputs/TextInput';
 import { eventStub } from '../utils/testUtils';
 import { TDYDeploymentForm } from './TDYDeploymentForm';
 import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { DoubleRepositories } from '../utils/Repositories';
+import { StyledEventCreationInfo } from '../widgets/EventCreationInfo';
+import * as moment from 'moment';
 
 describe('TDYDeploymentForm', () => {
   let store: TDYDeploymentFormStore;
@@ -81,6 +83,24 @@ describe('TDYDeploymentForm', () => {
     store.open(EventModelFactory.build());
     await subject.handleDelete();
     expect(eventActions.handleDeleteEvent).toHaveBeenCalled();
+  });
+
+  it('should render the creation data for an existing event', () => {
+    const event = EventModelFactory.build();
+    event.createdOn = moment();
+    event.createdBy = 'user';
+
+    const mountedWrapper = mount(
+      <TDYDeploymentForm
+        airmanId={123}
+        tdyDeploymentFormStore={store}
+        trackerStore={trackerStore}
+        eventActions={eventActions}
+        event={event}
+      />
+    );
+
+    expect(mountedWrapper.find(StyledEventCreationInfo).exists()).toBeTruthy();
   });
 });
 

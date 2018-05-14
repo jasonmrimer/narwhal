@@ -12,6 +12,7 @@ import { TDYDeploymentFormStore } from './stores/TDYDeploymentFormStore';
 import { EventModel } from './models/EventModel';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { EventActions } from './EventActions';
+import { StyledEventCreationInfo } from '../widgets/EventCreationInfo';
 
 interface Props {
   tdyDeploymentFormStore?: TDYDeploymentFormStore;
@@ -56,6 +57,7 @@ export class TDYDeploymentForm extends React.Component<Props> {
             />
           </StyledFieldValidation>
         </StyledFormRow>
+
         <StyledFormRow>
           <StyledTextInput
             name="description"
@@ -64,6 +66,7 @@ export class TDYDeploymentForm extends React.Component<Props> {
             value={state.description}
           />
         </StyledFormRow>
+
         <StyledFieldValidation fieldName="validDateRange" errors={errors}>
           <StyledFieldValidation fieldName="startTime" errors={errors}>
             <StyledFormRow>
@@ -74,6 +77,7 @@ export class TDYDeploymentForm extends React.Component<Props> {
               />
             </StyledFormRow>
           </StyledFieldValidation>
+
           <StyledFieldValidation fieldName="endTime" errors={errors}>
             <StyledFormRow>
               <StyledDatePicker
@@ -84,6 +88,14 @@ export class TDYDeploymentForm extends React.Component<Props> {
             </StyledFormRow>
           </StyledFieldValidation>
         </StyledFieldValidation>
+
+        {
+          this.props.event ?
+            this.props.event!.createdBy &&
+              <StyledEventCreationInfo event={this.props.event!}/> :
+            null
+        }
+
         <StyledFormRow reversed={true}>
           <StyledSubmitButton text="CONFIRM"/>
           {

@@ -14,7 +14,9 @@ export class EventModel {
               public endTime: Moment,
               public airmanId: number,
               public type: EventType = EventType.Mission,
-              public id: number | null = null) {
+              public id: number | null = null,
+              public createdBy: string | null = null,
+              public createdOn: Moment | null = null) {
   }
 
   isOnDay(day: Moment) {

@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { shallow, ShallowWrapper } from 'enzyme';
+import * as moment from 'moment';
+import { mount, shallow, ShallowWrapper } from 'enzyme';
 import { LeaveForm } from './LeaveForm';
 import { LeaveFormStore } from './stores/LeaveFormStore';
 import { eventStub } from '../utils/testUtils';
@@ -12,6 +13,7 @@ import { EventModelFactory } from './factories/EventModelFactory';
 import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { DoubleRepositories } from '../utils/Repositories';
+import { StyledEventCreationInfo } from '../widgets/EventCreationInfo';
 
 /* tslint:disable:no-empty*/
 describe('LeaveForm', () => {
@@ -95,6 +97,24 @@ describe('LeaveForm', () => {
     store.open(EventModelFactory.build());
     await subject.handleDelete();
     expect(eventActions.handleDeleteEvent).toHaveBeenCalled();
+  });
+
+  it('should render the creation data for an existing event', () => {
+    const event = EventModelFactory.build();
+    event.createdOn = moment();
+    event.createdBy = 'user';
+
+    const mountedWrapper = mount(
+      <LeaveForm
+        airmanId={123}
+        leaveFormStore={store}
+        trackerStore={trackerStore}
+        eventActions={eventActions}
+        event={event}
+      />
+    );
+
+    expect(mountedWrapper.find(StyledEventCreationInfo).exists()).toBeTruthy();
   });
 });
 
