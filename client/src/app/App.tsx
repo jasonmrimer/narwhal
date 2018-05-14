@@ -6,6 +6,7 @@ import { StyledProfileSitePicker } from '../profile/ProfileSitePicker';
 import { Routes } from './Routes';
 import { withRouter } from 'react-router';
 import { AppActions } from './AppActions';
+import { StyledLoadingOverlay } from '../widgets/LoadingOverlay';
 
 interface Props {
   profileStore?: ProfileSitePickerStore;
@@ -17,7 +18,9 @@ export const WrappedRoutes = withRouter((Routes as any));
 @observer
 export class App extends React.Component<Props> {
   async componentDidMount() {
-    await this.props.appActions!.getSiteAndProfile();
+    await this.props.profileStore!.performLoading(async () => {
+      await this.props.appActions!.getSiteAndProfile();
+    });
   }
 
   render() {
@@ -30,11 +33,8 @@ export class App extends React.Component<Props> {
             <StyledAuthorizationBanner/>
           </div>
           <div>
-            {
-              profileStore!.profile!.siteId != null ?
-                <WrappedRoutes/> :
-                <StyledProfileSitePicker/>
-            }
+            {this.props.profileStore!.loading ? <StyledLoadingOverlay/> : null}
+            {profileStore!.profile!.siteId != null ? <WrappedRoutes/> : <StyledProfileSitePicker/>}
           </div>
         </div>
       ) : null;
@@ -42,8 +42,8 @@ export class App extends React.Component<Props> {
 }
 
 export const InjectedApp = inject(
-    'profileStore',
-    'appActions'
+  'profileStore',
+  'appActions'
 )(App);
 
 export const ClassificationBanner = (props: { classified: boolean, className?: string }) => {

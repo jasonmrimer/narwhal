@@ -37,31 +37,33 @@ export class CrewPage extends React.Component<Props> {
       crewStore
     } = this.props;
 
-    const [crew, airmen, certifications, qualifications, sites] = await Promise.all([
-      WebRepositories.crewRepository.findOne(crewId),
-      WebRepositories.airmanRepository.findBySiteId(profileStore!.profile!.siteId!),
-      WebRepositories.skillRepository.findAllCertifications(),
-      WebRepositories.skillRepository.findAllQualifications(),
-      WebRepositories.siteRepository.findAll()
-    ]);
+    await missionPlannerStore!.performLoading(async () => {
+      const [crew, airmen, certifications, qualifications, sites] = await Promise.all([
+        WebRepositories.crewRepository.findOne(crewId),
+        WebRepositories.airmanRepository.findBySiteId(profileStore!.profile!.siteId!),
+        WebRepositories.skillRepository.findAllCertifications(),
+        WebRepositories.skillRepository.findAllQualifications(),
+        WebRepositories.siteRepository.findAll()
+      ]);
 
-    const events = await WebRepositories.eventRepository.findAllBySiteIdAndWithinPeriod(
-      profileStore!.profile!.siteId!,
-      crew.mission.startDateTime,
-      crew.mission.endDateTime || crew.mission.startDateTime.clone().add(12, 'hours')
-    );
+      const events = await WebRepositories.eventRepository.findAllBySiteIdAndWithinPeriod(
+        profileStore!.profile!.siteId!,
+        crew.mission.startDateTime,
+        crew.mission.endDateTime || crew.mission.startDateTime.clone().add(12, 'hours')
+      );
 
-    locationFilterStore!.hydrate(profileStore!.profile!.siteId!, sites);
-    rosterHeaderStore!.hydrate(profileStore!.profile!.siteId!, certifications, qualifications);
-    missionPlannerStore!.hydrate(crew.mission, airmen, events);
-    crewStore!.hydrate(crew, airmen);
+      locationFilterStore!.hydrate(profileStore!.profile!.siteId!, sites);
+      rosterHeaderStore!.hydrate(profileStore!.profile!.siteId!, certifications, qualifications);
+      missionPlannerStore!.hydrate(crew.mission, airmen, events);
+      crewStore!.hydrate(crew, airmen);
+    });
   }
 
   render() {
     return (
       <React.Fragment>
         <StyledTopBar/>
-        <StyledMissionPlanner />
+        <StyledMissionPlanner/>
       </React.Fragment>
     );
   }

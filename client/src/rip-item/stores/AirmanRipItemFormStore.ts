@@ -2,11 +2,13 @@ import { action, computed, observable } from 'mobx';
 import { AirmanRipItemModel } from '../../airman/models/AirmanRipItemModel';
 import { RipItemRepository } from '../../airman/repositories/AirmanRipItemRepository';
 import { Moment } from 'moment';
+import { NotificationStore } from '../../widgets/stores/NotificationStore';
 
-export class AirmanRipItemFormStore {
+export class AirmanRipItemFormStore extends NotificationStore {
   @observable private _airmanRipItems: AirmanRipItemModel[] = [];
 
   constructor(private ripItemRepository: RipItemRepository) {
+    super();
   }
 
   @action.bound

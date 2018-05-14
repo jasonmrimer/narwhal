@@ -51,7 +51,7 @@ export class AirmanRipItems extends React.Component<Props> {
       <StyledForm
         className={this.props.className}
         onSubmit={this.onSubmit}
-        setLoading={this.props.trackerStore!.setLoading}
+        performLoading={this.props.trackerStore!.performLoading}
       >
         <h3>RIP Task Expiration Dates</h3>
         <StyledFormRow reversed={true}>

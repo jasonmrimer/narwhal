@@ -11,7 +11,6 @@ import { EventModelFactory } from './factories/EventModelFactory';
 import { MissionModel } from '../mission/models/MissionModel';
 import { StyledSubmitButton } from '../widgets/forms/SubmitButton';
 import { StyledSingleTypeahead } from '../widgets/inputs/SingleTypeahead';
-import { StyledForm } from '../widgets/forms/Form';
 import { MissionModelFactory } from '../mission/factories/MissionModelFactory';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { DoubleRepositories } from '../utils/Repositories';
@@ -60,10 +59,6 @@ describe('MissionForm', () => {
       endDate: mission.endDateTime!.format('YYYY-MM-DD'),
       endTime: mission.endDateTime!.format('HHmm')
     });
-  });
-
-  it('should render a Form', () => {
-    expect(wrapper.find(StyledForm).prop('setLoading')).toBe(trackerStore.setLoading);
   });
 
   it('should render a delete button when there is an event', () => {

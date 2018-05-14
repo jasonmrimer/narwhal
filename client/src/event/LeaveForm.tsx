@@ -45,7 +45,7 @@ export class LeaveForm extends React.Component<Props> {
   render() {
     const {state, errors, hasModel} = this.props.leaveFormStore!;
     return (
-      <StyledForm onSubmit={this.handleSubmit} setLoading={this.props.trackerStore!.setLoading}>
+      <StyledForm onSubmit={this.handleSubmit} performLoading={this.props.trackerStore!.performLoading}>
         <StyledFormRow>
           <StyledTextInput
             name="description"

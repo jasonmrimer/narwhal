@@ -9,7 +9,6 @@ import { StyledTimeInput } from '../widgets/inputs/TimeInput';
 import { StyledFieldValidation } from '../widgets/inputs/FieldValidation';
 import { StyledButton } from '../widgets/buttons/Button';
 import { EventModelFactory } from './factories/EventModelFactory';
-import { StyledForm } from '../widgets/forms/Form';
 import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { DoubleRepositories } from '../utils/Repositories';
@@ -41,10 +40,6 @@ describe('LeaveForm', () => {
     );
 
     subject = (wrapper.instance() as LeaveForm);
-  });
-
-  it('should render a Form', () => {
-    expect(wrapper.find(StyledForm).prop('setLoading')).toBe(trackerStore.setLoading);
   });
 
   it('manages the state via form changes', () => {

@@ -1,6 +1,6 @@
 import { AdminStore } from './AdminStore';
 import { UnauthorizedErrorResponse } from '../../utils/HTTPClient';
-import { ProfileRepositoryStub } from '../../profile/repositories/doubles/ProfileRepositoryStub';
+import { DoubleRepositories } from '../../utils/Repositories';
 
 describe('AdminStore', () => {
   const profiles = [{
@@ -18,7 +18,7 @@ describe('AdminStore', () => {
   let subject: AdminStore;
 
   it('should fetch profiles and roles on hydrate', () => {
-    subject = new AdminStore(new ProfileRepositoryStub());
+    subject = new AdminStore(DoubleRepositories);
 
     expect(subject.profiles.length).toBe(0);
     expect(subject.roleOptions.length).toBe(0);
@@ -31,15 +31,7 @@ describe('AdminStore', () => {
   });
 
   it('should show a message when the user is unauthorized', () => {
-    const mockRepo = {
-      findAll: jest.fn(),
-      findAllRoles: jest.fn(),
-      findOne: jest.fn(),
-      save: jest.fn(),
-      updateSite: jest.fn()
-    };
-
-    subject = new AdminStore(mockRepo);
+    subject = new AdminStore(DoubleRepositories);
 
     subject.hydrate(new UnauthorizedErrorResponse('Some clever response'), roles);
 
@@ -49,7 +41,7 @@ describe('AdminStore', () => {
   });
 
   it('should update the profiles with the provided role Id', async () => {
-    subject = new AdminStore(new ProfileRepositoryStub());
+    subject = new AdminStore(DoubleRepositories);
     subject.hydrate(profiles, roles);
 
     const profile = subject.profiles[0];

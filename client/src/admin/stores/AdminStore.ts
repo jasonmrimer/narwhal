@@ -1,25 +1,32 @@
 import { ProfileRepository } from '../../profile/repositories/ProfileRepository';
 import { action, computed, observable } from 'mobx';
 import { ProfileModel } from '../../profile/models/ProfileModel';
-import { AdminStoreContract } from '../ProfileList';
 import { ErrorResponse } from '../../utils/HTTPClient';
+import { NotificationStore } from '../../widgets/stores/NotificationStore';
+import { Repositories } from '../../utils/Repositories';
 
-export class AdminStore implements AdminStoreContract {
+export class AdminStore extends NotificationStore {
   @observable private _profiles: ProfileModel[] = [];
   @observable private _error: ErrorResponse | null = null;
   @observable private _roles: { id: number; name: string }[] = [];
+  private profileRepository: ProfileRepository;
 
-  constructor(private profileRepository: ProfileRepository) {
+  constructor(repositories: Repositories) {
+    super();
+    this.profileRepository = repositories.profileRepository;
   }
 
   @action.bound
   hydrate(profilesResp: ProfileModel[] | ErrorResponse, rolesResp: any) {
+    this.setLoading(true);
+
     if (profilesResp instanceof ErrorResponse) {
       this._error = profilesResp;
     } else {
       this._profiles = profilesResp;
       this._roles = rolesResp;
     }
+    this.setLoading(false);
   }
 
   @computed

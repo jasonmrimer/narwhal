@@ -45,10 +45,7 @@ export class SkillsForm extends React.Component<Props> {
     const disabled = skillFormStore!.hasModel;
 
     return (
-      <StyledForm
-        onSubmit={this.handleSubmit}
-        setLoading={trackerStore!.setLoading}
-      >
+      <StyledForm onSubmit={this.handleSubmit} performLoading={trackerStore!.performLoading}>
         <div>
           {
             !skillFormStore!.hasModel &&

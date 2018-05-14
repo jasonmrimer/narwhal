@@ -45,7 +45,7 @@ export class TDYDeploymentForm extends React.Component<Props> {
     const {trackerStore, tdyDeploymentFormStore} = this.props;
     const {state, errors, hasModel} = tdyDeploymentFormStore!;
     return (
-      <StyledForm onSubmit={this.handleSubmit} setLoading={trackerStore!.setLoading}>
+      <StyledForm onSubmit={this.handleSubmit} performLoading={trackerStore!.performLoading}>
         <StyledFormRow>
           <StyledFieldValidation fieldName="title" errors={errors}>
             <StyledTextInput

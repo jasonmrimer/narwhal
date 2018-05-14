@@ -3,14 +3,16 @@ import { ProfileModel } from '../models/ProfileModel';
 import { ProfileRepository } from '../repositories/ProfileRepository';
 import { SiteModel, SiteType } from '../../site/models/SiteModel';
 import { Repositories } from '../../utils/Repositories';
+import { NotificationStore } from '../../widgets/stores/NotificationStore';
 
-export class ProfileSitePickerStore {
+export class ProfileSitePickerStore extends NotificationStore {
   private profileRepository: ProfileRepository;
   @observable private _profile: ProfileModel | null = null;
   @observable private _sites: SiteModel[];
   @observable private _pendingSite: SiteModel | null = null;
 
   constructor(repositories: Repositories) {
+    super();
     this.profileRepository = repositories.profileRepository;
   }
 

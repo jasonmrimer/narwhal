@@ -22,17 +22,14 @@ export class ProfileActions {
         formErrors[key] = ProfileActions.fieldMessage;
       }
 
-      store.setLoading(true);
-
       await store.addAirman();
+
       store.setErrors({});
 
       store.setDidSaveAirman(true);
       history.push(`/flights/${store.airman.id}`);
     } catch (e) {
       store.setErrors(Object.assign({}, e, formErrors));
-    } finally {
-      store.setLoading(false);
     }
   }
 }

@@ -1,26 +1,13 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { ProfileModel } from '../profile/models/ProfileModel';
 import { inject, observer } from 'mobx-react';
-import { ErrorResponse } from '../utils/HTTPClient';
-import { FilterOption } from '../widgets/inputs/FilterOptionModel';
 import { StyledDropdown } from '../widgets/inputs/Dropdown';
-
-export interface ProfileStoreContract {
-  profile: ProfileModel;
-}
-
-export interface AdminStoreContract {
-  profiles: ProfileModel[];
-  hasError: boolean;
-  error: ErrorResponse | null;
-  roleOptions: FilterOption[];
-  setProfileRole: (profile: ProfileModel, roleId: number) => void;
-}
+import { AdminStore } from './stores/AdminStore';
+import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 
 interface Props {
-  adminStore?: AdminStoreContract;
-  profileStore?: ProfileStoreContract;
+  adminStore?: AdminStore;
+  profileStore?: ProfileSitePickerStore;
   className?: string;
 }
 
@@ -62,7 +49,10 @@ export class ProfileList extends React.Component<Props> {
                         name="roleId"
                         options={roleOptions}
                         value={profile.roleId}
-                        onChange={(evt: any) => setProfileRole(profile, evt.target.value)}
+                        onChange={async (evt: any) =>
+                          await this.props.adminStore!.performLoading(async () => {
+                          await setProfileRole(profile, evt.target.value);
+                        })}
                       />
                     </div>
                   );

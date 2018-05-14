@@ -56,7 +56,7 @@ export class MissionForm extends React.Component<Props> {
     const {missionOptions, state, hasModel, errors} = missionFormStore!;
     const selected = missionOptions.find(msn => msn.value === Number(state.id));
     return (
-      <StyledForm onSubmit={this.handleSubmit} setLoading={trackerStore!.setLoading}>
+      <StyledForm onSubmit={this.handleSubmit} performLoading={trackerStore!.performLoading}>
         <StyledFieldValidation fieldName="title" errors={errors}>
           <StyledFormRow>
             <StyledSingleTypeahead

@@ -16,14 +16,17 @@ interface Props {
 @observer
 export class AdminPage extends React.Component<Props> {
   async componentDidMount() {
-    const [profilesResp, rolesResp, sites, profile] = await Promise.all([
-      WebRepositories.profileRepository.findAll(),
-      WebRepositories.profileRepository.findAllRoles(),
-      WebRepositories.siteRepository.findAll(),
-      WebRepositories.profileRepository.findOne(),
-    ]);
-    this.props.adminStore!.hydrate(profilesResp, rolesResp);
-    this.props.profileStore!.hydrate(sites, profile);
+    await this.props.adminStore!.performLoading(async () => {
+        const [profilesResp, rolesResp, sites, profile] = await Promise.all([
+          WebRepositories.profileRepository.findAll(),
+          WebRepositories.profileRepository.findAllRoles(),
+          WebRepositories.siteRepository.findAll(),
+          WebRepositories.profileRepository.findOne(),
+        ]);
+        this.props.adminStore!.hydrate(profilesResp, rolesResp);
+        this.props.profileStore!.hydrate(sites, profile);
+      }
+    );
   }
 
   render() {

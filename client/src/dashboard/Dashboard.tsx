@@ -4,7 +4,6 @@ import { inject, observer } from 'mobx-react';
 import { DashboardStore } from './stores/DashboardStore';
 import { TopLevelFilter } from '../widgets/inputs/Filter';
 import { StyledMissionCardSection } from './MissionCardSection';
-import { StyledLoadingOverlay } from '../widgets/LoadingOverlay';
 import { StyledMultiTypeahead } from '../widgets/inputs/MultiTypeahead';
 import { StyledTextInput } from '../widgets/inputs/TextInput';
 
@@ -17,7 +16,7 @@ interface Props {
 @observer
 export class Dashboard extends React.Component<Props> {
   async componentDidMount() {
-    await this.props.dashboardStore!.hydrate();
+    await this.props.dashboardStore!.performLoading(async () => await this.props.dashboardStore!.hydrate());
   }
 
   render() {
@@ -28,14 +27,12 @@ export class Dashboard extends React.Component<Props> {
       siteOptions,
       platformOptions,
       setSelectedPlatformOptions,
-      loading,
       selectedPlatformOptions,
       missions
     } = dashboardStore!;
 
     return (
       <div className={className}>
-        {loading && <StyledLoadingOverlay/>}
         <div className="filters">
           <TopLevelFilter
             id="site-filter"

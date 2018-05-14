@@ -4,7 +4,6 @@ import { inject, observer } from 'mobx-react';
 import { TrackerStore } from './stores/TrackerStore';
 import { StyledSidePanel } from './SidePanel';
 import { StyledLegend } from '../roster/Legend';
-import { StyledLoadingOverlay } from '../widgets/LoadingOverlay';
 import { StyledRosterContainer } from '../roster/RosterContainer';
 import { StyledLocationFilters } from '../widgets/LocationFilters';
 import { StyledDeletePopup } from '../widgets/DeletePopup';
@@ -40,7 +39,6 @@ export class Tracker extends React.Component<Props> {
     } = this.props;
     return (
       <div className={className}>
-        {trackerStore!.loading && <StyledLoadingOverlay/>}
         <div className="main">
           <StyledLocationFilters
             refreshAirmen={trackerActions!.getAirmenBySite}

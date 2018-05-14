@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { inject, observer } from 'mobx-react';
-import { StyledLoadingOverlay } from '../widgets/LoadingOverlay';
 import { StyledCrew } from './Crew';
 import { StyledMissionPlannerRosterContainer } from './MissionPlannerRosterContainer';
 import { StyledLocationFilters } from '../widgets/LocationFilters';
@@ -38,7 +37,6 @@ export class MissionPlanner extends React.Component<Props> {
     return (
       <React.Fragment>
         <div className={this.props.className}>
-          {missionPlannerStore!.loading && <StyledLoadingOverlay/>}
           <StyledNavigationBackButton text="Back to Availability Roster" location="/"/>
           <div className="mission-details">
             <div className="mission-status">
@@ -61,7 +59,7 @@ export class MissionPlanner extends React.Component<Props> {
               e.preventDefault();
               await missionPlannerActions!.submit();
             }}
-            setLoading={missionPlannerStore!.setLoading}
+            performLoading={missionPlannerStore!.performLoading}
           >
             <div className="mission-header">
               <StyledSubmitButton

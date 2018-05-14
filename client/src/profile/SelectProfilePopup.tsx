@@ -29,7 +29,7 @@ export const SelectProfilePopup = observer(({profileStore, className}: Props) =>
           </button>
           <button
             className="continue"
-            onClick={profileStore!.savePendingSite}
+            onClick={async () => await profileStore!.performLoading(async () => profileStore!.savePendingSite())}
           >
             CONTINUE
           </button>

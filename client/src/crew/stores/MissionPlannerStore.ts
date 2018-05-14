@@ -3,33 +3,22 @@ import { AirmanModel } from '../../airman/models/AirmanModel';
 import { Repositories } from '../../utils/Repositories';
 import { EventModel } from '../../event/models/EventModel';
 import { MissionModel } from '../../mission/models/MissionModel';
+import { NotificationStore } from '../../widgets/stores/NotificationStore';
 
-export class MissionPlannerStore {
-  @observable private _loading: boolean = false;
+export class MissionPlannerStore extends NotificationStore {
   @observable private _airmen: AirmanModel[] = [];
   @observable private _events: EventModel[] = [];
   private _mission: MissionModel;
 
   constructor(private repositories: Repositories) {
+    super();
   }
 
   @action.bound
   hydrate(mission: MissionModel, airmen: AirmanModel[], events: EventModel[]) {
-    this._loading = true;
     this._mission = mission;
     this._airmen = airmen;
     this._events = events;
-    this._loading = false;
-  }
-
-  @computed
-  get loading() {
-    return this._loading;
-  }
-
-  @action.bound
-  setLoading(loading: boolean) {
-    this._loading = loading;
   }
 
   @computed

@@ -3,17 +3,18 @@ import { action, computed, observable } from 'mobx';
 import { Moment } from 'moment';
 import { Repositories } from '../../utils/Repositories';
 import { EventModel } from '../../event/models/EventModel';
+import { NotificationStore } from '../../widgets/stores/NotificationStore';
 
-export class TrackerStore {
+export class TrackerStore extends NotificationStore {
   private repositories: Repositories;
 
-  @observable private _loading: boolean = false;
   @observable private _airmen: AirmanModel[] = [];
   @observable private _events: EventModel[] = [];
   @observable private _selectedAirman: AirmanModel = AirmanModel.empty();
   @observable private _siteId: number;
 
   constructor(repositories: Repositories) {
+    super();
     this.repositories = repositories;
   }
 
@@ -24,11 +25,6 @@ export class TrackerStore {
     if (!this._selectedAirman.isEmpty) {
       this._selectedAirman = this._airmen.find(a => a.id === this._selectedAirman.id) || AirmanModel.empty();
     }
-  }
-
-  @computed
-  get loading() {
-    return this._loading;
   }
 
   @computed
@@ -52,11 +48,6 @@ export class TrackerStore {
 
   getDailyEventsByAirmanId = (airmanId: number, day: Moment) => {
     return this.getEventsByAirmanId(airmanId).filter(event => event.isOnDay(day));
-  }
-
-  @action.bound
-  setLoading(loading: boolean) {
-    this._loading = loading;
   }
 
   @action.bound

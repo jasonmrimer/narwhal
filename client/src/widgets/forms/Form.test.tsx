@@ -5,16 +5,16 @@ import { Form } from './Form';
 describe('Form', () => {
   let subject: ShallowWrapper;
   let onSubmit: jest.Mock;
-  let setLoading: jest.Mock;
+  let performLoading: jest.Mock;
 
   beforeEach(() => {
     onSubmit = jest.fn();
-    setLoading = jest.fn();
+    performLoading = jest.fn();
 
     subject = shallow(
       <Form
         onSubmit={onSubmit}
-        setLoading={setLoading}
+        performLoading={performLoading}
       >
         Hello World
       </Form>
@@ -23,6 +23,6 @@ describe('Form', () => {
 
   it('should call the setLoading function on submit', async () => {
     await subject.simulate('submit');
-    expect(setLoading).toHaveBeenCalledTimes(2);
+    expect(performLoading).toHaveBeenCalledTimes(1);
   });
 });

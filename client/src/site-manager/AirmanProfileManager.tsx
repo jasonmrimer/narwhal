@@ -31,7 +31,7 @@ export class AirmanProfileManager extends React.Component<Props> {
     const {firstName, lastName} = airman;
     return (
       <div className={className}>
-        <StyledForm onSubmit={this.onSubmit}>
+        <StyledForm onSubmit={this.onSubmit} performLoading={airmanProfileManagerStore!.performLoading}>
 
           <div className="side-nav">
             <StyledNavigationBackButton location="/flights"/>

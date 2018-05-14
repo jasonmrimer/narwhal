@@ -46,7 +46,7 @@ export class AppointmentForm extends React.Component<Props> {
     const {trackerStore, appointmentFormStore} = this.props;
     const {state, errors, hasModel} = appointmentFormStore!;
     return (
-      <StyledForm onSubmit={this.handleSubmit} setLoading={trackerStore!.setLoading}>
+      <StyledForm onSubmit={this.handleSubmit} performLoading={trackerStore!.performLoading}>
         <StyledFieldValidation fieldName="title" errors={errors}>
           <StyledFormRow>
             <StyledTextInput

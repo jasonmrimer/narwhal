@@ -1,8 +1,9 @@
 import { action, computed, observable } from 'mobx';
 import { ProfileModel } from '../../profile/models/ProfileModel';
 import { SquadronModel } from '../../squadron/models/SquadronModel';
+import { NotificationStore } from '../../widgets/stores/NotificationStore';
 
-export class SiteManagerStore {
+export class SiteManagerStore extends NotificationStore {
   @observable private _profile: ProfileModel | null = null;
   @observable private _squadron: SquadronModel;
 

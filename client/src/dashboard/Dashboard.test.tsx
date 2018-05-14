@@ -8,7 +8,6 @@ import { StyledMission } from '../mission/Mission';
 import { MemoryRouter } from 'react-router';
 import { DoubleRepositories } from '../utils/Repositories';
 import { StyledMissionCardSection } from './MissionCardSection';
-import { ClipLoader } from 'react-spinners';
 import { ThemeProvider } from 'styled-components';
 import { Theme } from '../themes/default';
 import { StyledMultiTypeahead } from '../widgets/inputs/MultiTypeahead';
@@ -38,14 +37,6 @@ describe('Dashboard', () => {
     );
     await forIt();
     subject.update();
-  });
-
-  it('should render the spinner only while loading', async () => {
-    expect(subject.find(ClipLoader).exists()).toBeFalsy();
-
-    dashboardStore.setLoading(true);
-    subject.update();
-    expect(subject.find(ClipLoader).exists()).toBeTruthy();
   });
 
   it('renders a Dashboard with all missions', () => {

@@ -7,7 +7,6 @@ import { StyledLegend } from '../roster/Legend';
 import { StyledSidePanel } from './SidePanel';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 import { StyledRosterContainer } from '../roster/RosterContainer';
-import { StyledLoadingOverlay } from '../widgets/LoadingOverlay';
 import { EventModel, EventType } from '../event/models/EventModel';
 import * as moment from 'moment';
 import { StyledLocationFilters } from '../widgets/LocationFilters';
@@ -59,13 +58,6 @@ describe('Tracker', () => {
     );
     await forIt();
     subject.update();
-  });
-
-  it('should render the spinner only while loading', async () => {
-    expect(subject.find(StyledLoadingOverlay).exists()).toBeFalsy();
-    trackerStore.setLoading(true);
-    subject.update();
-    expect(subject.find(StyledLoadingOverlay).exists()).toBeTruthy();
   });
 
   it('should render location filters', () => {

@@ -7,26 +7,25 @@ import { FilterOption, UnfilteredValue } from '../../widgets/inputs/FilterOption
 import { Repositories } from '../../utils/Repositories';
 import * as moment from 'moment';
 import * as Fuse from 'fuse.js';
+import { NotificationStore } from '../../widgets/stores/NotificationStore';
 
-export class DashboardStore {
+export class DashboardStore extends NotificationStore {
   private siteRepository: SiteRepository;
   private missionRepository: MissionRepository;
   @observable private _sites: SiteModel[] = [];
   @observable private _missions: MissionModel[] = [];
   @observable private _siteId: number = UnfilteredValue;
-  @observable private _loading: boolean = false;
   @observable private _platforms: string[] = [];
   @observable private _selectedPlatformOptions: FilterOption[] = [];
   @observable private _atoMissionNumberFilter: string = '';
 
   constructor(repositories: Repositories) {
+    super();
     this.siteRepository = repositories.siteRepository;
     this.missionRepository = repositories.missionRepository;
   }
 
   async hydrate() {
-    this._loading = true;
-
     const [sites, missions, platforms] = await Promise.all([
       this.siteRepository.findAll(),
       this.missionRepository.findAll(),
@@ -35,18 +34,6 @@ export class DashboardStore {
     this._sites = sites;
     this._missions = missions;
     this._platforms = platforms;
-
-    this._loading = false;
-  }
-
-  @computed
-  get loading() {
-    return this._loading;
-  }
-
-  @action.bound
-  setLoading(loading: boolean) {
-    this._loading = loading;
   }
 
   @computed

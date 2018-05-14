@@ -40,10 +40,6 @@ describe('SkillsForm', () => {
       />);
   });
 
-  it('should render a Form', () => {
-    expect(subject.find(StyledForm).prop('setLoading')).toBe(trackerStore!.setLoading);
-  });
-
   it('calls handleSubmit with a Qualification on submission', () => {
     const skillForm = (subject.instance() as SkillsForm);
     skillForm.handleChange({target: {name: 'skillType', value: SkillType.Qualification}});

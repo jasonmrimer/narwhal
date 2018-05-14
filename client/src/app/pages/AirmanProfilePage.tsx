@@ -18,26 +18,25 @@ interface Props {
 @observer
 export class AirmanProfilePage extends React.Component<Props> {
   async componentDidMount() {
-    this.props.airmanProfileManagerStore!.setLoading(true);
-    const [sites, schedules, ranks] = await Promise.all([
-      WebRepositories.siteRepository.findAll(),
-      WebRepositories.scheduleRepository.findAll(),
-      WebRepositories.rankRepository.findAll()
-    ]);
-
-    const {airmanId} = this.props;
-    if (airmanId) {
-      const [airman, ripItems] = await Promise.all([
-        WebRepositories.airmanRepository.findOne(airmanId),
-        WebRepositories.ripItemRepository.findBySelectedAirman(airmanId),
+    await this.props.airmanProfileManagerStore!.performLoading(async () => {
+      const [sites, schedules, ranks] = await Promise.all([
+        WebRepositories.siteRepository.findAll(),
+        WebRepositories.scheduleRepository.findAll(),
+        WebRepositories.rankRepository.findAll()
       ]);
-      this.props.airmanProfileManagerStore!.hydrate(airman, sites, schedules, ranks, ripItems);
 
-      this.props.airmanProfileManagerStore!.setLoading(false);
-    } else {
-      this.props.airmanProfileManagerStore!.hydrate(AirmanModel.empty(), sites, schedules, ranks);
-      this.props.airmanProfileManagerStore!.setLoading(false);
-    }
+      const {airmanId} = this.props;
+      if (airmanId) {
+        const [airman, ripItems] = await Promise.all([
+          WebRepositories.airmanRepository.findOne(airmanId),
+          WebRepositories.ripItemRepository.findBySelectedAirman(airmanId),
+        ]);
+        this.props.airmanProfileManagerStore!.hydrate(airman, sites, schedules, ranks, ripItems);
+
+      } else {
+        this.props.airmanProfileManagerStore!.hydrate(AirmanModel.empty(), sites, schedules, ranks);
+      }
+    });
   }
 
   render() {

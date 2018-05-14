@@ -9,8 +9,9 @@ import { AirmanScheduleModel } from '../../airman/models/AirmanScheduleModel';
 import * as moment from 'moment';
 import { FormErrors } from '../../widgets/inputs/FieldValidation';
 import { RankModel } from '../../rank/models/RankModel';
+import { NotificationStore } from '../../widgets/stores/NotificationStore';
 
-export class AirmanProfileManagerStore {
+export class AirmanProfileManagerStore extends NotificationStore {
   @observable _airman: AirmanModel = AirmanModel.empty();
   @observable _sites: SiteModel[] = [];
   @observable _schedules: ScheduleModel[] = [];
@@ -18,11 +19,11 @@ export class AirmanProfileManagerStore {
   @observable _rankId: number;
   @observable _ripItems: AirmanRipItemModel[] = [];
   @observable _scheduleId: number;
-  @observable _loading: boolean = false;
   @observable _errors: FormErrors = {};
   @observable _didSaveAirman: boolean = false;
 
   constructor(private airmanRepository: AirmanRepository) {
+    super();
   }
 
   hydrate(
@@ -152,16 +153,6 @@ export class AirmanProfileManagerStore {
     return this._ripItems
       .filter(item => item.expirationDate != null && item.expirationDate.isValid())
       .length;
-  }
-
-  @action.bound
-  setLoading(loading: boolean) {
-    this._loading = loading;
-  }
-
-  @computed
-  get loading() {
-    return this._loading;
   }
 
   @action.bound

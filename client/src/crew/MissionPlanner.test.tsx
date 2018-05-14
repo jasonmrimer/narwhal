@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { CrewModelFactory } from './factories/CrewModelFactory';
-import { StyledLoadingOverlay } from '../widgets/LoadingOverlay';
 import { StyledLocationFilters } from '../widgets/LocationFilters';
 import { StyledCrew } from './Crew';
 import { StyledMissionPlannerRosterContainer } from './MissionPlannerRosterContainer';
@@ -57,15 +56,6 @@ describe('MissionPlanner', () => {
     expect(subject.text()).toContain(`MSN START: ${mission.displayStartTime}`);
     expect(subject.text()).toContain(`MSN END: ${mission.displayEndTime}`);
     expect(subject.text()).toContain(`Last updated ${mission.displayUpdatedAt}.`);
-  });
-
-  it('should render the spinner only while loading', () => {
-    expect(subject.find(StyledLoadingOverlay).exists()).toBeFalsy();
-
-    missionPlannerStore.setLoading(true);
-    subject.instance().forceUpdate();
-    subject.update();
-    expect(subject.find(StyledLoadingOverlay).exists()).toBeTruthy();
   });
 
   it('renders a navigation back button to the Tracker', () => {

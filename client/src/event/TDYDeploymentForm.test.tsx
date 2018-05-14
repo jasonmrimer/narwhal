@@ -7,7 +7,6 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import { StyledTextInput } from '../widgets/inputs/TextInput';
 import { eventStub } from '../utils/testUtils';
 import { TDYDeploymentForm } from './TDYDeploymentForm';
-import { StyledForm } from '../widgets/forms/Form';
 import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { DoubleRepositories } from '../utils/Repositories';
@@ -37,10 +36,6 @@ describe('TDYDeploymentForm', () => {
     );
 
     subject = (wrapper.instance() as TDYDeploymentForm);
-  });
-
-  it('should render a Form', () => {
-    expect(wrapper.find(StyledForm).prop('setLoading')).toBe(trackerStore.setLoading);
   });
 
   it('manages the state via form changes', () => {

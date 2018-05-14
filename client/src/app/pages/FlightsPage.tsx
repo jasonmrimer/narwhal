@@ -16,9 +16,11 @@ interface Props {
 @observer
 export class FlightsPage extends React.Component<Props> {
   async componentDidMount() {
-    const profile = await WebRepositories.profileRepository.findOne();
-    const site = await WebRepositories.siteRepository.findOne(profile!.siteId!);
-    this.props.siteManagerStore!.hydrate(profile, site.squadrons[0]);
+    await this.props.siteManagerStore!.performLoading(async () => {
+      const profile = await WebRepositories.profileRepository.findOne();
+      const site = await WebRepositories.siteRepository.findOne(profile!.siteId!);
+      this.props.siteManagerStore!.hydrate(profile, site.squadrons[0]);
+    });
   }
 
   render() {

@@ -1,33 +1,28 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
-import { AdminStoreContract, ProfileList, ProfileStoreContract } from './ProfileList';
 import { ErrorResponse } from '../utils/HTTPClient';
 import { StyledDropdown } from '../widgets/inputs/Dropdown';
+import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
+import { AdminStore } from './stores/AdminStore';
+import { ProfileList } from './ProfileList';
+import { DoubleRepositories } from '../utils/Repositories';
 
 describe('ProfileList', () => {
   let subject: ShallowWrapper;
-  let store: AdminStoreContract;
-  let profileStore: ProfileStoreContract;
+  let store: AdminStore;
+  let profileStore: ProfileSitePickerStore;
 
   beforeEach(() => {
-    store = {
-      profiles: [
-        {id: 1, roleName: '', roleId: 1, classified: false, siteId: 1, siteName: '1', username: 'User1'},
-        {id: 2, roleName: '', roleId: 1, classified: false, siteId: 1, siteName: '1', username: 'User2'}
-      ],
-      hasError: false,
-      error: null,
-      roleOptions: [
-        {value: 1, label: 'ADMIN'},
-        {value: 2, label: 'READER'},
-        {value: 3, label: 'WRITER'}
-      ],
-      setProfileRole: jest.fn(),
-    };
+    store = new AdminStore(DoubleRepositories);
+    profileStore = new ProfileSitePickerStore(DoubleRepositories);
 
-    profileStore = {
-      profile: store.profiles[0]
-    };
+    const profiles = [
+      {id: 1, roleName: '', roleId: 1, classified: false, siteId: 1, siteName: '1', username: 'User1'},
+      {id: 2, roleName: '', roleId: 1, classified: false, siteId: 1, siteName: '1', username: 'User2'}
+    ];
+    store.hydrate(profiles, [{value: 1, name: 'role1'}, {value: 1, name: 'role1'}]);
+    profileStore.hydrate([], profiles[0]);
+    store.setProfileRole = jest.fn();
 
     subject = shallow(<ProfileList adminStore={store} profileStore={profileStore}/>);
   });
@@ -51,16 +46,19 @@ describe('ProfileList', () => {
     expect(store.setProfileRole).toHaveBeenCalledWith(store.profiles[0], store.roleOptions[1].value);
   });
 
-  it('should display an error', () => {
-    store.hasError = true;
-    store.error = new ErrorResponse('A Message');
-    subject.instance().forceUpdate();
-    subject.update();
-    expect(subject.find('.error').at(0).text()).toContain(store.error.message);
-  });
-
   it('should disable the role drop down for the current user', () => {
     expect(subject.find(StyledDropdown).at(0).prop('disabled')).toBeTruthy();
     expect(subject.find(StyledDropdown).at(1).prop('disabled')).toBeFalsy();
+  });
+
+  it('should display an error', () => {
+    const errorResponse = new ErrorResponse('A Message');
+    store.hydrate(errorResponse, [{value: 1, name: 'role1'}, {value: 1, name: 'role1'}]);
+
+    subject = shallow(<ProfileList adminStore={store} profileStore={profileStore}/>);
+
+    subject.update();
+
+    expect(subject.find('.error').at(0).text()).toContain(errorResponse.message);
   });
 });

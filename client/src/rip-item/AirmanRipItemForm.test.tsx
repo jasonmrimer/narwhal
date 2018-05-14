@@ -9,7 +9,6 @@ import { RipItemRepositoryStub } from '../airman/repositories/doubles/AirmanRipI
 import { StyledButton } from '../widgets/buttons/Button';
 import { AirmanRipItemModel } from '../airman/models/AirmanRipItemModel';
 import { RipItemModel } from './models/RipItemModel';
-import { StyledForm } from '../widgets/forms/Form';
 import { CurrencyStore } from '../currency/stores/CurrencyStore';
 import { DoubleRepositories } from '../utils/Repositories';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
@@ -48,10 +47,6 @@ describe('RipItems', () => {
         ripItemsActions={ripItemsActions}
       />
     );
-  });
-
-  it('should render a Form', () => {
-    expect(subject.find(StyledForm).prop('setLoading')).toBe(trackerStore.setLoading);
   });
 
   it('should render the attributes of a RipItem', () => {
