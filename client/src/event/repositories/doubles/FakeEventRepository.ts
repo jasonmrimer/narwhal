@@ -30,7 +30,6 @@ export class FakeEventRepository implements EventRepository {
       };
       throw this.handleError(resp);
     }
-
     return Promise.resolve(copy);
   }
 

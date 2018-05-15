@@ -1,9 +1,10 @@
-import { TrackerStore } from './TrackerStore';
-import { AirmanModel, ShiftType } from '../../airman/models/AirmanModel';
-import { DoubleRepositories } from '../../utils/Repositories';
-import { AirmanModelFactory } from '../../airman/factories/AirmanModelFactory';
-import { EventModelFactory } from '../../event/factories/EventModelFactory';
-import { EventModel } from '../../event/models/EventModel';
+import {TrackerStore} from './TrackerStore';
+import {AirmanModel, ShiftType} from '../../airman/models/AirmanModel';
+import {DoubleRepositories} from '../../utils/Repositories';
+import {AirmanModelFactory} from '../../airman/factories/AirmanModelFactory';
+import {EventModelFactory} from '../../event/factories/EventModelFactory';
+import {EventModel, EventType} from '../../event/models/EventModel';
+import {TimeServiceStub} from "../services/doubles/TimeServiceStub";
 
 describe('TrackerStore', () => {
   const siteId = 14;
@@ -12,9 +13,8 @@ describe('TrackerStore', () => {
   let airmen: AirmanModel[];
   let events: EventModel[];
 
-  beforeEach(() => {
+  beforeEach(async () => {
     subject = new TrackerStore(DoubleRepositories);
-
     airmen = [
       AirmanModelFactory.build(1),
       AirmanModelFactory.build(2)
@@ -47,5 +47,24 @@ describe('TrackerStore', () => {
 
     await subject.updateAirmanShift(airman, ShiftType.Night);
     expect(subject.airmen[0].shift).toBe(ShiftType.Night);
+  });
+
+  it('should update events, siteId, and airmen on refresh', async () => {
+    const timeServiceStub = new TimeServiceStub();
+
+    let newEvent = EventModelFactory.build('Fake Event',
+      '',
+      timeServiceStub.getCurrentWeek()[1],
+      timeServiceStub.getCurrentWeek()[2],
+      11,
+      EventType.Appointment,
+      null
+    );
+
+    newEvent = await DoubleRepositories.eventRepository.save(newEvent);
+    await subject.refreshAllAirmen(1, timeServiceStub.getCurrentWeek());
+
+    expect(subject.airmen.length).toBe(2);
+    expect(subject.events[0]).toEqual(newEvent);
   });
 });

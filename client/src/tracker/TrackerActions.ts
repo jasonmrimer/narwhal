@@ -6,6 +6,6 @@ export class TrackerActions {
 
   getAirmenBySite = async () => {
     const siteId = this.stores.locationFilterStore!.selectedSiteId;
-    await this.stores.trackerStore!.refreshAllAirmen(siteId);
+    await this.stores.trackerStore!.refreshAllAirmen(siteId, this.stores.plannerStore!.plannerWeek);
   }
 }

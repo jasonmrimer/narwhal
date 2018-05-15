@@ -1,9 +1,9 @@
-import { AirmanModel, ShiftType } from '../../airman/models/AirmanModel';
-import { action, computed, observable } from 'mobx';
-import { Moment } from 'moment';
-import { Repositories } from '../../utils/Repositories';
-import { EventModel } from '../../event/models/EventModel';
-import { NotificationStore } from '../../widgets/stores/NotificationStore';
+import {AirmanModel, ShiftType} from '../../airman/models/AirmanModel';
+import {action, computed, observable} from 'mobx';
+import {Moment} from 'moment';
+import {Repositories} from '../../utils/Repositories';
+import {EventModel} from '../../event/models/EventModel';
+import {NotificationStore} from '../../widgets/stores/NotificationStore';
 
 export class TrackerStore extends NotificationStore {
   private repositories: Repositories;
@@ -70,8 +70,10 @@ export class TrackerStore extends NotificationStore {
   }
 
   @action.bound
-  async refreshAllAirmen(selectedSiteId: number) {
-    this._airmen = await this.repositories.airmanRepository.findBySiteId(selectedSiteId);
+  async refreshAllAirmen(selectedSiteId: number, week: Moment[]) {
+    this._siteId = selectedSiteId;
+    this._airmen = await  this.repositories.airmanRepository.findBySiteId(this._siteId);
+    await this.refreshEvents(week);
   }
 
   @action.bound
