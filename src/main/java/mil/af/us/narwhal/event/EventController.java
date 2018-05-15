@@ -1,14 +1,10 @@
 package mil.af.us.narwhal.event;
 
-import mil.af.us.narwhal.airman.Airman;
-import mil.af.us.narwhal.airman.AirmanRepository;
 import mil.af.us.narwhal.profile.Profile;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.nio.file.attribute.UserPrincipal;
 import java.time.Instant;
 import java.util.List;
 
@@ -18,24 +14,22 @@ public class EventController {
   public static final String URI = "/api/events";
 
   private EventRepository eventRepository;
-  private AirmanRepository airmanRepository;
   private EventService service;
 
-  public EventController(EventRepository eventRepository, AirmanRepository airmanRepository, EventService service) {
+  public EventController(EventRepository eventRepository, EventService service) {
     this.eventRepository = eventRepository;
-    this.airmanRepository = airmanRepository;
     this.service = service;
   }
 
   @PostMapping
   public Event create(@Valid @RequestBody EventJSON json, @AuthenticationPrincipal Profile profile) {
-    final Airman airman = airmanRepository.findOne(json.getAirmanId());
-    final Event event = Event.fromJSON(json, airman);
-
-    event.setCreatedBy(profile.getUsername());
-    event.setCreatedOn(Instant.now());
-
-    return eventRepository.save(event);
+    if (json.getType().equals(EventType.APPOINTMENT)) {
+      return service.createAppointment(json, profile);
+    } else if (json.getType().equals(EventType.LEAVE)) {
+      return service.createLeave(json, profile);
+    } else {
+      return service.createTDYDeployment(json, profile);
+    }
   }
 
   @PutMapping(value = "{id}")

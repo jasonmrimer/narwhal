@@ -1,5 +1,5 @@
 import { FormStore } from '../widgets/forms/FormStore';
-import { EventModel } from './models/EventModel';
+import { EventModel, EventType } from './models/EventModel';
 import { TimeService } from '../tracker/services/TimeService';
 import { Stores } from '../app/stores';
 
@@ -10,7 +10,12 @@ export class EventActions {
   handleFormSubmit = async (airmanId: number, formStore: FormStore<EventModel, any>) => {
     try {
       const event = formStore.stateToModel(airmanId);
-      await this.stores.availabilityStore!.addEvent(event);
+
+      if (event.type === EventType.Mission) {
+        await this.stores.availabilityStore!.addMissionEvent(event);
+      } else {
+        await this.stores.availabilityStore!.addEvent(event);
+      }
 
       const eventWeek = this.timeSerivce.navigateToWeek(event.startTime);
 

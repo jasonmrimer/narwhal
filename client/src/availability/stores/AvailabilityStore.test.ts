@@ -10,8 +10,8 @@ describe('AvailabilityStore', () => {
   let subject: AvailabilityStore;
 
   beforeEach(() => {
-    subject = new AvailabilityStore(DoubleRepositories);
     eventRepository = (DoubleRepositories.eventRepository as FakeEventRepository);
+    subject = new AvailabilityStore(DoubleRepositories);
   });
 
   it('should show the event form without an event', () => {
@@ -137,11 +137,20 @@ describe('AvailabilityStore', () => {
   });
 
   describe('creating and editing events', () => {
-    const event = new EventModel('Title', 'Description', moment(), moment(), 1, EventType.Mission);
+    const event = new EventModel('Title', 'Description', moment(), moment(), 1, EventType.Leave);
+    const missionEvent = new EventModel('Title', 'Description', moment(), moment(), 1, EventType.Mission);
 
     it('should add an event to an airman', async () => {
       const savedEvent = await subject.addEvent(event);
       expect(eventRepository.hasItem(savedEvent)).toBeTruthy();
+    });
+
+    it('should add a mission event to an airman', async () => {
+      DoubleRepositories.crewRepository.save = jest.fn();
+
+      await subject.addMissionEvent(missionEvent);
+
+      expect(DoubleRepositories.crewRepository.save).toHaveBeenCalledWith(missionEvent);
     });
 
     it('should edit an existing event on an airman', async () => {

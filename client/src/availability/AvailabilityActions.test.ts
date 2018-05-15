@@ -3,13 +3,19 @@ import { PlannerStore } from '../roster/stores/PlannerStore';
 import { AvailabilityStore } from './stores/AvailabilityStore';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
+import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
+import { makeFakeProfile } from '../utils/testUtils';
+import { adminAbility, readerAbility } from '../app/abilities';
+import { Stores } from '../app/stores';
 
 describe('AvailabilityActions', () => {
   const airman = AirmanModelFactory.build();
   const sidePanelWeek = Symbol('sidePanelWeek');
+  let profileStore: Partial<ProfileSitePickerStore>;
   let plannerStore: Partial<PlannerStore>;
   let availabilityStore: Partial<AvailabilityStore>;
   let trackerStore: Partial<TrackerStore>;
+  let stores: Partial<Stores>;
   let subject: AvailabilityActions;
 
   beforeEach(() => {
@@ -30,11 +36,16 @@ describe('AvailabilityActions', () => {
       selectedAirman: airman
     };
 
-    const stores = {
+    profileStore = {
+      profile: makeFakeProfile('ADMIN', adminAbility)
+    };
+
+    stores = {
       plannerStore,
       availabilityStore,
-      trackerStore
-    } as any;
+      trackerStore,
+      profileStore
+    } as Stores;
     subject = new AvailabilityActions(stores);
   });
 
@@ -61,5 +72,26 @@ describe('AvailabilityActions', () => {
     subject.openEventFormForDay((day as any));
     expect(availabilityStore.setSelectedDate).toHaveBeenCalledWith(day);
     expect(availabilityStore.showEventForm).toHaveBeenCalled();
+  });
+
+  it('should return radio buttons for all event types if profile role is admin or writer', () => {
+    expect(subject.radioOptions().length).toBe(4);
+  });
+
+  it('should return radio buttons for leave and appointment if profile role is reader', () => {
+    profileStore = {
+      profile: makeFakeProfile('READER', readerAbility)
+    };
+
+    stores = {
+      plannerStore,
+      availabilityStore,
+      trackerStore,
+      profileStore
+    } as Stores;
+
+    subject = new AvailabilityActions(stores);
+
+    expect(subject.radioOptions().length).toBe(2);
   });
 });

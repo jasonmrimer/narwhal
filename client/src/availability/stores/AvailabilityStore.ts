@@ -112,6 +112,11 @@ export class AvailabilityStore {
   }
 
   @action.bound
+  async addMissionEvent(event: EventModel) {
+    return await this.repositories.crewRepository.save(event);
+  }
+
+  @action.bound
   removeEvent(event: EventModel) {
     this._pendingDeleteEvent = event;
   }

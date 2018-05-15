@@ -11,6 +11,7 @@ public class SharedWebSecurityConfig extends WebSecurityConfigurerAdapter {
       .authorizeRequests()
       .antMatchers(HttpMethod.GET, "/api/profiles").hasRole("ADMIN")
       .antMatchers(HttpMethod.PUT, "/api/profiles").hasRole("ADMIN")
+      .antMatchers(HttpMethod.PUT, "/api/crews").hasAnyRole("ADMIN", "WRITER")
       .anyRequest()
       .authenticated()
       .and()
