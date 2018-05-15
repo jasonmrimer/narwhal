@@ -7,6 +7,9 @@ describe('SiteManagerActions', () => {
       updateShiftByFlightId: jest.fn()
     };
     const siteManagerStore: any = {
+      performLoading: (fn: any) => {
+        fn();
+      },
       setAirmenShiftByFlightId: jest.fn()
     };
     const subject = new SiteManagerActions(

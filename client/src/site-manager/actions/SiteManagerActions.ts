@@ -14,7 +14,9 @@ export class SiteManagerActions {
   }
 
   async setFlightShift(flightId: number, shift: ShiftType) {
-    await this.airmanRepository.updateShiftByFlightId(flightId, shift);
-    this.siteManagerStore.setAirmenShiftByFlightId(flightId, shift);
+    await this.siteManagerStore.performLoading(async () => {
+      await this.airmanRepository.updateShiftByFlightId(flightId, shift);
+      this.siteManagerStore.setAirmenShiftByFlightId(flightId, shift);
+    });
   }
 }

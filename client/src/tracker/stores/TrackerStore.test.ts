@@ -1,10 +1,10 @@
-import {TrackerStore} from './TrackerStore';
-import {AirmanModel, ShiftType} from '../../airman/models/AirmanModel';
-import {DoubleRepositories} from '../../utils/Repositories';
-import {AirmanModelFactory} from '../../airman/factories/AirmanModelFactory';
-import {EventModelFactory} from '../../event/factories/EventModelFactory';
-import {EventModel, EventType} from '../../event/models/EventModel';
-import {TimeServiceStub} from "../services/doubles/TimeServiceStub";
+import { TrackerStore } from './TrackerStore';
+import { AirmanModel, ShiftType } from '../../airman/models/AirmanModel';
+import { DoubleRepositories } from '../../utils/Repositories';
+import { AirmanModelFactory } from '../../airman/factories/AirmanModelFactory';
+import { EventModelFactory } from '../../event/factories/EventModelFactory';
+import { EventModel, EventType } from '../../event/models/EventModel';
+import { TimeServiceStub } from '../services/doubles/TimeServiceStub';
 
 describe('TrackerStore', () => {
   const siteId = 14;
@@ -53,12 +53,12 @@ describe('TrackerStore', () => {
     const timeServiceStub = new TimeServiceStub();
 
     let newEvent = EventModelFactory.build('Fake Event',
-      '',
-      timeServiceStub.getCurrentWeek()[1],
-      timeServiceStub.getCurrentWeek()[2],
-      11,
-      EventType.Appointment,
-      null
+                                           '',
+                                           timeServiceStub.getCurrentWeek()[1],
+                                           timeServiceStub.getCurrentWeek()[2],
+                                           11,
+                                           EventType.Appointment,
+                                           null
     );
 
     newEvent = await DoubleRepositories.eventRepository.save(newEvent);

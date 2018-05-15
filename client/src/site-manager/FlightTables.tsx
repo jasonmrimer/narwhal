@@ -114,6 +114,7 @@ export const StyledFlightTables = inject(
       
       .shift {
         width: 5rem;
+        border-bottom: 1px solid ${props => props.theme.purpleSteel};
       }
     }
         

@@ -8,5 +8,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ShiftTypeJson {
-  public ShiftType shiftType;
+  private ShiftType shiftType;
 }
