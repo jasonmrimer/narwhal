@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { CellMeasurer, CellMeasurerCache, List, ListRowProps } from 'react-virtualized';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
-import { AirmanModel } from '../airman/models/AirmanModel';
+import { AirmanModel, ShiftType } from '../airman/models/AirmanModel';
 import { TabType } from '../tracker/stores/SidePanelStore';
 import { StyledAirmanDatum } from '../tracker/AirmanDatum';
 import { StyledPlanner } from './Planner';
@@ -151,8 +151,11 @@ const Row = observer(
             onClick={async () => await props.sidePanelActions!.openSidePanel(airman, TabType.CURRENCY)}
           >
             <StyledShiftDropdown
-              airman={airman}
               className="shift"
+              selectedShift={airman.shift}
+              setShift={(shift: ShiftType) => {
+                return trackerStore!.updateAirmanShift(airman, shift);
+              }}
             />
             <StyledAirmanDatum
               airman={airman}

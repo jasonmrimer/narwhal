@@ -24,6 +24,7 @@ describe('CurrencyStore', () => {
         saveAirman: jest.fn(),
         deleteSkill: jest.fn(),
         findOne: jest.fn(),
+        updateShiftByFlightId: jest.fn()
       },
 
       ripItemRepository: {
@@ -91,16 +92,6 @@ describe('CurrencyStore', () => {
     it('should set rip items for an airman', async () => {
       await subject.setRipItemsForAirman(123);
       expect(repos.ripItemRepository!.findBySelectedAirman).toHaveBeenCalledWith(123);
-    });
-
-    xit('should return a count of expired items', () => {
-      // FIXME
-      expect(subject.expiredItemCount).toBe(0);
-    });
-
-    xit('should return a count of assigned items', () => {
-      // FIXME
-      expect(subject.assignedItemCount).toBe(0);
     });
   });
 });

@@ -11,8 +11,8 @@ import { AirmanScheduleModel } from '../../airman/models/AirmanScheduleModel';
 import * as moment from 'moment';
 import { SiteModel, SiteType } from '../../site/models/SiteModel';
 import { SquadronModel } from '../../squadron/models/SquadronModel';
-import Mock = jest.Mock;
 import { RankModel } from '../../rank/models/RankModel';
+import Mock = jest.Mock;
 
 describe('AirmanProfileManagerStore', () => {
   const schedule3 = new ScheduleModel(3, ScheduleType.FrontHalf);
@@ -47,6 +47,7 @@ describe('AirmanProfileManagerStore', () => {
       saveSkill: jest.fn(),
       saveAirman: jest.fn(),
       deleteSkill: jest.fn(),
+      updateShiftByFlightId: jest.fn()
     };
 
     const schedules = [

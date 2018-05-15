@@ -1,6 +1,6 @@
 import { AirmanRepository } from '../AirmanRepository';
 import { AirmanSerializer } from '../../serializers/AirmanSerializer';
-import { AirmanModel } from '../../models/AirmanModel';
+import { AirmanModel, ShiftType } from '../../models/AirmanModel';
 import { SkillType } from '../../../skills/models/SkillType';
 import { Skill } from '../../../skills/models/Skill';
 import { HTTPClient } from '../../../utils/HTTPClient';
@@ -39,6 +39,12 @@ export class WebAirmanRepository implements AirmanRepository {
   async deleteSkill(skill: Skill): Promise<AirmanModel> {
     const json = await this.client.deleteJSON(`/api/airmen/${skill.airmanId}/${this.pathForSkill(skill)}/${skill.id}`);
     return this.serializer.deserialize(json);
+  }
+
+  async updateShiftByFlightId(flightId: number, shift: ShiftType): Promise<AirmanModel[]> {
+    const body = JSON.stringify({shiftType: shift});
+    const json = await this.client.putJSON(`/api/airmen/shift?flightId=${flightId}`, body);
+    return json.map((item: any) => this.serializer.deserialize(item));
   }
 
   private pathForSkill(skill: Skill): string {

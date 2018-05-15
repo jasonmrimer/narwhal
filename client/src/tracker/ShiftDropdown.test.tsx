@@ -1,54 +1,46 @@
 import * as React from 'react';
 import { mount, shallow, ShallowWrapper } from 'enzyme';
 import { ShiftDropdown } from './ShiftDropdown';
-import { AirmanModel, ShiftType } from '../airman/models/AirmanModel';
-import { TrackerStore } from './stores/TrackerStore';
+import { ShiftType } from '../airman/models/AirmanModel';
 import { StyledDropdown } from '../widgets/inputs/Dropdown';
 import { DoubleRepositories } from '../utils/Repositories';
-import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 import { adminAbility, readerAbility } from '../app/abilities';
-import Mock = jest.Mock;
 import { makeFakeProfile } from '../utils/testUtils';
 import { ProfileModel } from '../profile/models/ProfileModel';
+import Mock = jest.Mock;
 
 describe('ShiftDropdown', () => {
-  let subject: ShallowWrapper;
-  let trackerStore: TrackerStore;
   let profileStore: ProfileSitePickerStore;
-  let airman: AirmanModel;
-  let updateAirmanShiftSpy: Mock;
+  let setShift: Mock;
   let profile: ProfileModel;
+  let subject: ShallowWrapper;
 
   beforeEach(async () => {
     profile = makeFakeProfile('ADMIN', adminAbility);
-    airman = AirmanModelFactory.build();
-    airman.shift = ShiftType.Day;
-    updateAirmanShiftSpy = jest.fn();
 
-    trackerStore = new TrackerStore(DoubleRepositories);
+    setShift = jest.fn();
+
     profileStore = new ProfileSitePickerStore(DoubleRepositories);
 
     profileStore.hydrate([], profile);
-    trackerStore.updateAirmanShift = updateAirmanShiftSpy;
 
     subject = shallow(
       <ShiftDropdown
-        airman={airman}
-        trackerStore={trackerStore}
+        selectedShift={ShiftType.Day}
+        setShift={setShift}
         profileStore={profileStore}
       />
     );
   });
 
-  it('should save an airman with a new shift', () => {
-    subject.find(StyledDropdown).simulate('change', {target: {value: ShiftType.Swing}});
-    expect(updateAirmanShiftSpy).toHaveBeenCalledWith(airman, ShiftType.Swing);
+  it('should render the selected shift', () => {
+    expect(subject.find(StyledDropdown).prop('value')).toEqual(ShiftType.Day);
   });
 
-  it('should not call the save function if the same shift is selected', () => {
-    subject.find(StyledDropdown).simulate('change', {target: {value: ShiftType.Day}});
-    expect(updateAirmanShiftSpy).not.toHaveBeenCalled();
+  it('should call setShift with a new shift', () => {
+    subject.find(StyledDropdown).simulate('change', {target: {value: ShiftType.Swing}});
+    expect(setShift).toHaveBeenCalledWith(ShiftType.Swing);
   });
 
   it('should not render dropdown when viewing page as a reader', () => {
@@ -57,8 +49,8 @@ describe('ShiftDropdown', () => {
 
     const mountedSubject = mount(
       <ShiftDropdown
-        airman={airman}
-        trackerStore={trackerStore}
+        selectedShift={ShiftType.Day}
+        setShift={setShift}
         profileStore={profileStore}
       />
     );

@@ -2,7 +2,7 @@ import { action, computed, observable } from 'mobx';
 import { ProfileModel } from '../../profile/models/ProfileModel';
 import { SquadronModel } from '../../squadron/models/SquadronModel';
 import { NotificationStore } from '../../widgets/stores/NotificationStore';
-import { AirmanModel } from '../../airman/models/AirmanModel';
+import { AirmanModel, ShiftType } from '../../airman/models/AirmanModel';
 
 export class SiteManagerStore extends NotificationStore {
   @observable private _profile: ProfileModel | null = null;
@@ -29,7 +29,41 @@ export class SiteManagerStore extends NotificationStore {
     return this._squadron;
   }
 
+  @computed
+  get airmen() {
+    return this._airmen;
+  }
+
+  @action.bound
+  setAirmenShiftByFlightId(flightId: number, shift: ShiftType) {
+    this._airmen
+      .filter(airman => airman.flightId === flightId)
+      .forEach(airman => airman.shift = shift);
+  }
+
   getAirmenByFlightId = (flightId: number) => {
-    return this._airmen.filter(a => a.flightId === flightId);
+    return this.airmen.filter(a => a.flightId === flightId);
+  }
+
+  getShiftByFlightId = (flightId: number) => {
+    const shiftCount = {
+      [ShiftType.Day]: 0,
+      [ShiftType.Night]: 0,
+      [ShiftType.Swing]: 0
+    };
+    let max = 0;
+    let flightShift = null;
+
+    this.getAirmenByFlightId(flightId).forEach(airman => {
+      if (airman.shift == null) { return; }
+
+      shiftCount[airman.shift] += 1;
+      if (shiftCount[airman.shift] <= max) { return; }
+
+      max = shiftCount[airman.shift];
+      flightShift = airman.shift;
+    });
+
+    return flightShift;
   }
 }

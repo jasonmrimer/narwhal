@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { AirmanModel, ShiftType } from '../airman/models/AirmanModel';
-import { TrackerStore } from './stores/TrackerStore';
+import { ShiftType } from '../airman/models/AirmanModel';
 import { StyledDropdown } from '../widgets/inputs/Dropdown';
 import styled from 'styled-components';
 import { ShiftDisplay } from '../roster/ShiftDisplay';
@@ -9,8 +8,8 @@ import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore
 import { Can } from '@casl/react';
 
 interface Props {
-  airman: AirmanModel;
-  trackerStore?: TrackerStore;
+  setShift: (shift: ShiftType) => Promise<void>;
+  selectedShift?: ShiftType | null;
   profileStore?: ProfileSitePickerStore;
   className?: string;
 }
@@ -21,36 +20,31 @@ export const shiftOptions = [
   {value: ShiftType.Swing, label: ShiftType.Swing}
 ];
 
-export const unsetShiftOptions = [{value: -1, label: 'None'}, ...shiftOptions];
+export const unsetShiftOptions = [ {value: -1, label: 'None'}, ...shiftOptions ];
 
 export const ShiftDropdown = observer((props: Props) => {
-  const {airman, className, trackerStore, profileStore} = props;
-  const {updateAirmanShift} = trackerStore!;
-
+  const {selectedShift, className, profileStore, setShift} = props;
   return (
     <span
       onClick={(e: any) => e.stopPropagation()}
       className={className}
     >
-        <ShiftDisplay shift={airman.shift}/>
+        <ShiftDisplay shift={selectedShift || undefined}/>
         <Can do="manage" on="all" ability={profileStore!.profile!.ability!}>
           <StyledDropdown
             name="shift"
-            options={airman.shift ? shiftOptions : unsetShiftOptions}
-            value={airman.shift || -1}
-            onChange={async (e: any) => {
-              const shiftType = e.target.value;
-              if (airman.shift !== shiftType) {
-                await updateAirmanShift(airman, shiftType);
-              }
-            }}
+            options={selectedShift ? shiftOptions : unsetShiftOptions}
+            value={selectedShift || -1}
+            onChange={async e => await setShift(e.target.value as ShiftType)}
           />
         </Can>
     </span>
   );
 });
 
-export const StyledShiftDropdown = inject('trackerStore', 'profileStore')(styled(ShiftDropdown)`
+export const StyledShiftDropdown = inject(
+  'profileStore'
+)(styled(ShiftDropdown)`
   display: flex;
   align-items: center;
   

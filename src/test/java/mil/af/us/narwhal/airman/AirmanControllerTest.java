@@ -372,4 +372,25 @@ public class AirmanControllerTest extends BaseIntegrationTest {
       .body("certifications.size()", equalTo(0));
     // @formatter:on
   }
+
+  @Test
+  public void updateShiftsTest() throws JsonProcessingException {
+    ShiftTypeJson shiftTypeJson = new ShiftTypeJson(ShiftType.Day);
+    final String json = objectMapper.writeValueAsString(shiftTypeJson);
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .body(json)
+      .contentType("application/json")
+      .param("flightId", flight1.getId())
+    .when()
+      .put(AirmanController.URI + "/shift")
+    .then()
+      .statusCode(200)
+      .body("[0].shift", equalTo("Day"));
+    // @formatter:on
+  }
 }

@@ -1,7 +1,7 @@
 package mil.af.us.narwhal.flight;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,7 +24,11 @@ public class Flight {
   @JsonBackReference
   private Squadron squadron;
 
-	private String name;
+  @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JsonIgnore
+  private List<Airman> airmen;
+
+  private String name;
 
   public Flight(String name) {
     this.name = name;

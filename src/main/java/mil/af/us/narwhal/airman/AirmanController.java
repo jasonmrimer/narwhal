@@ -1,5 +1,7 @@
 package mil.af.us.narwhal.airman;
 
+import mil.af.us.narwhal.flight.Flight;
+import mil.af.us.narwhal.flight.FlightRepository;
 import mil.af.us.narwhal.skill.Certification;
 import mil.af.us.narwhal.skill.CertificationRepository;
 import mil.af.us.narwhal.skill.Qualification;
@@ -16,16 +18,24 @@ import java.util.List;
 public class AirmanController {
   public static final String URI = "/api/airmen";
 
-  private AirmanRepository repository;
+  private AirmanRepository airmanRepository;
   private QualificationRepository qualificationRepository;
   private CertificationRepository certificationRepository;
+  private FlightRepository flightRepository;
   private AirmanService airmanService;
 
 
-  public AirmanController(AirmanRepository repository, QualificationRepository qualificationRepository, CertificationRepository certificationRepository, AirmanService airmanService) {
-    this.repository = repository;
+  public AirmanController(
+    AirmanRepository airmanRepository,
+    QualificationRepository qualificationRepository,
+    CertificationRepository certificationRepository,
+    FlightRepository flightRepository,
+    AirmanService airmanService
+  ) {
+    this.airmanRepository = airmanRepository;
     this.qualificationRepository = qualificationRepository;
     this.certificationRepository = certificationRepository;
+    this.flightRepository = flightRepository;
     this.airmanService = airmanService;
   }
 
@@ -55,7 +65,7 @@ public class AirmanController {
     @Valid
     @RequestBody AirmanSkillJSON skill
   ) {
-    final Airman airman = repository.findOne(id);
+    final Airman airman = airmanRepository.findOne(id);
     final Qualification qualification = qualificationRepository.findOne(skill.getSkillId());
     final AirmanQualification airmanQualification = new AirmanQualification(
       qualification,
@@ -63,7 +73,7 @@ public class AirmanController {
       skill.getExpirationDate()
     );
     return airman.addQualification(airmanQualification) ?
-      new ResponseEntity<>(repository.save(airman), HttpStatus.CREATED) :
+      new ResponseEntity<>(airmanRepository.save(airman), HttpStatus.CREATED) :
       new ResponseEntity<>(airman, HttpStatus.OK);
   }
 
@@ -73,7 +83,7 @@ public class AirmanController {
     @Valid
     @RequestBody AirmanSkillJSON skill
   ) {
-    final Airman airman = repository.findOne(id);
+    final Airman airman = airmanRepository.findOne(id);
     final Certification certification = certificationRepository.findOne(skill.getSkillId());
     final AirmanCertification airmanCertification = new AirmanCertification(
       certification,
@@ -81,7 +91,7 @@ public class AirmanController {
       skill.getExpirationDate()
     );
     return airman.addCertification(airmanCertification) ?
-      new ResponseEntity<>(repository.save(airman), HttpStatus.CREATED) :
+      new ResponseEntity<>(airmanRepository.save(airman), HttpStatus.CREATED) :
       new ResponseEntity<>(airman, HttpStatus.OK);
   }
 
@@ -91,9 +101,9 @@ public class AirmanController {
     @Valid
     @RequestBody AirmanSkillJSON skill
   ) {
-    final Airman airman = repository.findOne(id);
+    final Airman airman = airmanRepository.findOne(id);
     airman.updateQualification(skill.getId(), skill.getEarnDate(), skill.getExpirationDate());
-    return repository.save(airman);
+    return airmanRepository.save(airman);
   }
 
   @PutMapping(path = "/{id}/certifications")
@@ -102,9 +112,9 @@ public class AirmanController {
     @Valid
     @RequestBody AirmanSkillJSON skill
   ) {
-    final Airman airman = repository.findOne(id);
+    final Airman airman = airmanRepository.findOne(id);
     airman.updateCertification(skill.getId(), skill.getEarnDate(), skill.getExpirationDate());
-    return repository.save(airman);
+    return airmanRepository.save(airman);
   }
 
   @DeleteMapping(value = "/{airmanId}/qualifications/{id}")
@@ -112,9 +122,9 @@ public class AirmanController {
     @PathVariable("airmanId") Long airmanId,
     @PathVariable("id") Long id
   ) {
-    final Airman airman = repository.findOne(airmanId);
+    final Airman airman = airmanRepository.findOne(airmanId);
     airman.deleteQualification(id);
-    return repository.save(airman);
+    return airmanRepository.save(airman);
   }
 
   @DeleteMapping(value = "/{airmanId}/certifications/{id}")
@@ -122,8 +132,18 @@ public class AirmanController {
     @PathVariable("airmanId") Long airmanId,
     @PathVariable("id") Long id
   ) {
-    final Airman airman = repository.findOne(airmanId);
+    final Airman airman = airmanRepository.findOne(airmanId);
     airman.deleteCertification(id);
-    return repository.save(airman);
+    return airmanRepository.save(airman);
+  }
+
+  @PutMapping(path = "/shift")
+  public List<Airman> update(
+    @RequestParam Long flightId,
+    @RequestBody ShiftTypeJson json
+  ) {
+    final Flight flight = flightRepository.findOne(flightId);
+    flight.getAirmen().forEach(airman -> airman.setShift(json.getShiftType()));
+    return flightRepository.save(flight).getAirmen();
   }
 }

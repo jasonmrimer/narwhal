@@ -62,6 +62,10 @@ export class TrackerStore extends NotificationStore {
 
   @action.bound
   async updateAirmanShift(airman: AirmanModel, shiftType: ShiftType) {
+    if (airman.shift === shiftType) {
+      return;
+    }
+
     const savedAirman = await this.repositories.airmanRepository.saveAirman(
       Object.assign({}, airman, {shift: shiftType})
     );
@@ -79,7 +83,7 @@ export class TrackerStore extends NotificationStore {
   @action.bound
   async refreshEvents(week: Moment[]) {
     this._events = await this.repositories.eventRepository
-      .findAllBySiteIdAndWithinPeriod(this._siteId, week[0], week[6]);
+      .findAllBySiteIdAndWithinPeriod(this._siteId, week[ 0 ], week[ 6 ]);
   }
 
   async refreshAirmen(siteId: number, airmanId: number) {

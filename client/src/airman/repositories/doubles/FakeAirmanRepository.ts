@@ -95,6 +95,12 @@ export class FakeAirmanRepository implements AirmanRepository {
     return Promise.resolve(airman);
   }
 
+  updateShiftByFlightId(flightId: number, shift: ShiftType): Promise<AirmanModel[]> {
+    const filteredAirmen = airmen.filter(airman => airman.flightId === flightId);
+    filteredAirmen.forEach(airman => airman.shift = shift);
+    return Promise.resolve(filteredAirmen);
+  }
+
   private save(skills: any[], skillToSave: any) {
     const existingSkill = skills.find((s: any) => s.id === skillToSave.skillId);
     if (!existingSkill) {
