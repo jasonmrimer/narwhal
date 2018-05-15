@@ -41,6 +41,12 @@ public class Profile implements UserDetails {
     this.role = role;
   }
 
+  public Profile(String username, String password, Role role) {
+    this.password = password;
+    this.role = role;
+    this.username = username;
+  }
+
   public Profile(String username, Site site) {
     this.username = username;
     this.site = site;

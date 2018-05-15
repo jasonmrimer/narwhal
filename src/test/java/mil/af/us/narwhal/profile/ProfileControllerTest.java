@@ -25,10 +25,10 @@ public class ProfileControllerTest extends BaseIntegrationTest {
 
     site = siteRepository.save(new Site("Test Site"));
     updatedSite = siteRepository.save(new Site("Upated Site"));
-
+    tytus.setSite(site);
     profiles = profileRepository.save(asList(
-      new Profile("tytus", site, adminRole, "password"),
-      new Profile("other_user", site, adminRole)
+      new Profile("other_user", site, adminRole),
+      tytus
     ));
   }
 

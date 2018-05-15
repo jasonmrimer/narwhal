@@ -10,9 +10,7 @@ import mil.af.us.narwhal.flight.Flight;
 import mil.af.us.narwhal.flight.FlightRepository;
 import mil.af.us.narwhal.mission.Mission;
 import mil.af.us.narwhal.mission.MissionRepository;
-import mil.af.us.narwhal.profile.Role;
-import mil.af.us.narwhal.profile.RoleName;
-import mil.af.us.narwhal.profile.RoleRepository;
+import mil.af.us.narwhal.profile.*;
 import mil.af.us.narwhal.rank.Rank;
 import mil.af.us.narwhal.rank.RankRepository;
 import mil.af.us.narwhal.site.Site;
@@ -43,6 +41,8 @@ public abstract class BaseIntegrationTest {
   @Autowired protected RoleRepository roleRepository;
   @Autowired protected CrewPositionRepository crewPositionRepository;
   @Autowired protected RankRepository rankRepository;
+  @Autowired protected ProfileRepository profileRepository;
+  public Profile tytus;
   protected Mission mission;
   protected Flight flight;
   protected Site site;
@@ -63,6 +63,7 @@ public abstract class BaseIntegrationTest {
     writerRole = roleRepository.save(new Role(RoleName.WRITER));
     adminRole = roleRepository.save(new Role(RoleName.ADMIN));
     rank = rankRepository.save(new Rank("No Rank"));
+    tytus = profileRepository.save(new Profile("tytus",  "password", adminRole));
   }
 
   public void tearDown() {

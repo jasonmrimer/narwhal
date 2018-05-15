@@ -55,8 +55,6 @@ public class CrewControllerTest extends BaseIntegrationTest {
     mission.addCrewPosition(new CrewPosition(airman));
 
     mission = missionRepository.save(mission);
-
-    profileRepository.save(singletonList(new Profile("tytus", site, adminRole, "password")));
   }
 
   @After

@@ -1,6 +1,8 @@
 package mil.af.us.narwhal;
 
+import mil.af.us.narwhal.config.EndpointAuthorizationExpectations;
 import mil.af.us.narwhal.profile.RoleName;
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,10 +23,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import javax.servlet.Filter;
 import java.io.Serializable;
 import java.util.*;
 
-import static java.util.Arrays.asList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
@@ -36,50 +38,177 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class AuthorizedRequestsTest {
-  @Autowired private WebApplicationContext webAppContext;
+  public static final List<RoleName> NoneAdmins = Arrays.asList(RoleName.READER, RoleName.WRITER);
+  public static final List<RoleName> NoneViewers = Arrays.asList(RoleName.ADMIN, RoleName.WRITER);
+  public static final List<RoleName> Everyone = Arrays.asList(RoleName.READER, RoleName.WRITER, RoleName.ADMIN);
+  public static final List<RoleName> Admins = Arrays.asList(RoleName.ADMIN);
+  public static final List<RoleName> Viewers = Arrays.asList(RoleName.READER);
+  private static final Boolean Authorized = true;
+  private  static final Boolean Unauthorized = false;
+  @Autowired
+  private WebApplicationContext webAppContext;
+  @Autowired
+  private Filter springSecurityFilterChain;
   private MockMvc mockMvc;
-
+  private List<EndpointAuthorizationExpectations> expectations;
+  private HashMap<Boolean, List<RoleName>> adminOnly;
+  private HashMap<Boolean, List<RoleName>> modifiersOnly;
+  private HashMap<Boolean, List<RoleName>> everyone;
   @Before
   public void setUp() {
     mockMvc = MockMvcBuilders
       .webAppContextSetup(webAppContext)
       .apply(springSecurity())
+      .addFilters(springSecurityFilterChain, new ShortCircuitFilter())
       .build();
+
+
+    adminOnly = new HashMap<Boolean, List<RoleName>>() {{
+      put(Authorized, Admins);
+      put(Unauthorized, NoneAdmins);
+    }};
+
+    modifiersOnly = new HashMap<Boolean, List<RoleName>>() {{
+      put(Authorized, NoneViewers);
+      put(Unauthorized, Viewers);
+    }};
+
+    everyone = new HashMap<Boolean, List<RoleName>>() {{
+      put(Authorized, Everyone);
+    }};
+
+    //{[/api/events],methods=[POST]}
+    //{[/api/upload/airmen],methods=[POST]}
+    //{[/api/events/{id}],methods=[PUT]}
+    ///api/skill/rip-items
+    expectations =
+      Arrays.asList(
+        new EndpointAuthorizationExpectations("/api/airmen/1/certifications/1")
+          .setStatusCodeDictionaryDELETE(modifiersOnly)
+        ,new EndpointAuthorizationExpectations("/api/airmen/1/certifications")
+          .setStatusCodeDictionaryPOST(modifiersOnly)
+          .setStatusCodeDictionaryPUT(modifiersOnly)
+        ,new EndpointAuthorizationExpectations("/api/events")
+          .setStatusCodeDictionaryPOST(everyone)
+        ,new EndpointAuthorizationExpectations("/api/airmen/1/qualifications")
+          .setStatusCodeDictionaryPOST(modifiersOnly)
+          .setStatusCodeDictionaryPUT(modifiersOnly)
+        ,new EndpointAuthorizationExpectations("/api/airmen/1/qualifications/1")
+          .setStatusCodeDictionaryDELETE(modifiersOnly)
+        ,new EndpointAuthorizationExpectations("/api/crew_positions")
+          .setStatusCodeDictionaryDELETE(modifiersOnly)
+        ,new EndpointAuthorizationExpectations("/api/crew_positions/1")
+          .setStatusCodeDictionaryPUT(modifiersOnly)
+        ,new EndpointAuthorizationExpectations("/api/crews/1/airmen/1")
+          .setStatusCodeDictionaryDELETE(modifiersOnly)
+        ,new EndpointAuthorizationExpectations("/api/events/1")
+          .setStatusCodeDictionaryDELETE(everyone)
+          .setStatusCodeDictionaryPUT(everyone)
+        ,new EndpointAuthorizationExpectations("/api/profiles")
+          .setStatusCodeDictionaryGET(adminOnly)
+          .setStatusCodeDictionaryPUT(adminOnly)
+        ,new EndpointAuthorizationExpectations("/api/profiles/me")
+          .setStatusCodeDictionaryPUT(everyone)
+        ,new EndpointAuthorizationExpectations("/api/skill/rip-items")
+          .setStatusCodeDictionaryPUT(modifiersOnly)
+        ,new EndpointAuthorizationExpectations("/api/upload/airmen")
+          .setStatusCodeDictionaryPOST(modifiersOnly)
+        ,new EndpointAuthorizationExpectations("/api/upload/airmen/certifications")
+          .setStatusCodeDictionaryPOST(modifiersOnly)
+        ,new EndpointAuthorizationExpectations("/api/upload/airmen/qualifications")
+          .setStatusCodeDictionaryPOST(modifiersOnly)
+        ,new EndpointAuthorizationExpectations("/api/upload/certifications")
+          .setStatusCodeDictionaryPOST(modifiersOnly)
+        ,new EndpointAuthorizationExpectations("/api/upload/qualifications")
+          .setStatusCodeDictionaryPOST(modifiersOnly)
+    );
   }
 
   @Test
   public void testAdminProtectedRoutes() throws Exception {
-    Object[][] getRequests = new Object[][]{
-      {"/api/profiles", RoleName.ADMIN, 200},
-      {"/api/profiles", RoleName.READER, 403},
-      {"/api/profiles", RoleName.WRITER, 403},
-    };
-
-    for (Object[] req : getRequests) {
-      mockMvc.perform(MockMvcRequestBuilders.get((String) req[0])
-        .with(authentication(getOauthGoodTestAuthentication((RoleName) req[1])))
-        .sessionAttr("scopedTarget.oauth2ClientContext", getOauth2ClientContext()))
-        .andExpect(status().is((int) req[2]));
-    }
-
-    Object[][] putRequests = new Object[][]{
-      {"/api/profiles", RoleName.ADMIN, 400},
-      {"/api/profiles", RoleName.READER, 403},
-      {"/api/profiles", RoleName.WRITER, 403},
-    };
-
-    for (Object[] req : putRequests) {
-      mockMvc.perform(
-        MockMvcRequestBuilders
-          .put((String) req[0])
-          .with(csrf())
-          .with(authentication(getOauthGoodTestAuthentication((RoleName) req[1])))
-          .sessionAttr("scopedTarget.oauth2ClientContext", getOauth2ClientContext())
-      ).andExpect(
-        status().is((int) req[2])
-      );
+    for (EndpointAuthorizationExpectations expectation : expectations) {
+      testGET(expectation);
+      testPUT(expectation);
+      testPOST(expectation);
+      testDELETE(expectation);
     }
   }
+
+  private void testDELETE(EndpointAuthorizationExpectations expectation) throws Exception {
+    for (Map.Entry<Boolean, List<RoleName>> entry : expectation.getStatusCodeDictionaryDELETE().entrySet()) {
+      for (RoleName roleName : entry.getValue()) {
+        testExpectationDELETE(expectation, entry, roleName);
+      }
+    }
+  }
+
+  private void testGET(EndpointAuthorizationExpectations expectation) throws Exception {
+    for (Map.Entry<Boolean, List<RoleName>> entry : expectation.getStatusCodeDictionaryGET().entrySet()) {
+      for (RoleName roleName : entry.getValue()) {
+        testExpectationGET(expectation, entry, roleName);
+      }
+    }
+  }
+
+  private void testPOST(EndpointAuthorizationExpectations expectation) throws Exception {
+    for (Map.Entry<Boolean, List<RoleName>> entry : expectation.getStatusCodeDictionaryPOST().entrySet()) {
+      for (RoleName roleName : entry.getValue()) {
+        testExpectationPOST(expectation, entry, roleName);
+      }
+    }
+  }
+
+  private void testPUT(EndpointAuthorizationExpectations expectation) throws Exception {
+    for (Map.Entry<Boolean, List<RoleName>> entry : expectation.getStatusCodeDictionaryPUT().entrySet()) {
+      for (RoleName roleName : entry.getValue()) {
+        testExpectationPUT(expectation, entry, roleName);
+      }
+    }
+  }
+
+  private void testExpectationDELETE(EndpointAuthorizationExpectations expectation, Map.Entry<Boolean, List<RoleName>> entry, RoleName roleName) throws Exception {
+    Boolean isSuccess = entry.getKey();
+
+    mockMvc.perform(MockMvcRequestBuilders.delete(expectation.getUrl())
+      .with(authentication(getOauthGoodTestAuthentication(roleName)))
+      .with(csrf())
+      .sessionAttr("scopedTarget.oauth2ClientContext", getOauth2ClientContext()))
+      .andExpect(isSuccess ? status().is(Matchers.not(403)) : status().is(403));
+  }
+
+  private void testExpectationGET(EndpointAuthorizationExpectations expectation, Map.Entry<Boolean, List<RoleName>> entry, RoleName roleName) throws Exception {
+    Boolean isSuccess = entry.getKey();
+
+    mockMvc.perform(MockMvcRequestBuilders.get(expectation.getUrl())
+      .with(authentication(getOauthGoodTestAuthentication(roleName)))
+      .sessionAttr("scopedTarget.oauth2ClientContext", getOauth2ClientContext()))
+      .andExpect(isSuccess ? status().is(Matchers.not(403)) : status().is(403));
+  }
+
+  private void testExpectationPOST(EndpointAuthorizationExpectations expectation, Map.Entry<Boolean, List<RoleName>> entry, RoleName roleName) throws Exception {
+    Boolean isSuccess = entry.getKey();
+
+    mockMvc.perform(
+      MockMvcRequestBuilders
+        .post(expectation.getUrl())
+        .with(csrf())
+        .with(authentication(getOauthGoodTestAuthentication(roleName)))
+        .sessionAttr("scopedTarget.oauth2ClientContext", getOauth2ClientContext()))
+      .andExpect(isSuccess ? status().is(Matchers.not(403)) : status().is(403));
+  }
+
+  private void testExpectationPUT(EndpointAuthorizationExpectations expectation, Map.Entry<Boolean, List<RoleName>> entry, RoleName roleName) throws Exception {
+    Boolean isSuccess = entry.getKey();
+
+    mockMvc.perform(
+      MockMvcRequestBuilders
+        .put(expectation.getUrl())
+        .with(csrf())
+        .with(authentication(getOauthGoodTestAuthentication(roleName)))
+        .sessionAttr("scopedTarget.oauth2ClientContext", getOauth2ClientContext()))
+      .andExpect(isSuccess ? status().is(Matchers.not(403)) : status().is(403));
+  }
+
 
   private Authentication getOauthGoodTestAuthentication(RoleName roleName) {
     return new OAuth2Authentication(getOauth2Request(roleName), getGoodAuthentication(roleName));
