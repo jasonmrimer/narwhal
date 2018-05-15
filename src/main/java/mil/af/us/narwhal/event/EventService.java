@@ -2,7 +2,6 @@ package mil.af.us.narwhal.event;
 
 import mil.af.us.narwhal.airman.Airman;
 import mil.af.us.narwhal.airman.AirmanRepository;
-import mil.af.us.narwhal.crew.CrewService;
 import mil.af.us.narwhal.mission.Mission;
 import mil.af.us.narwhal.mission.MissionRepository;
 import mil.af.us.narwhal.profile.Profile;

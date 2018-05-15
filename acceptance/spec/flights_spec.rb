@@ -24,4 +24,7 @@ describe 'Flights page', type: :feature do
     flights_page.assert_create_airman
   end
 
+  it 'shows certifications for that site' do
+    flights_page.assert_shows_certifications
+  end
 end

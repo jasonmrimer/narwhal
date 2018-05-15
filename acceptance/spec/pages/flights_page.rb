@@ -11,6 +11,10 @@ class FlightsPage
     expect(page).to have_css('.airman-name', minimum: 1)
   end
 
+  def assert_shows_certifications
+    expect(page).to have_css('.certification-row', minimum: 1)
+  end
+
   def assert_shows_airman
     click_on_airman('Angie, Patton')
     expect(page).to have_content('94 IS')
@@ -70,6 +74,8 @@ class FlightsPage
     visit '/flights'
     expect(page).to have_content 'Aaron, Aadam'
   end
+
+
 
   private
 

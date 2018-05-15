@@ -3,6 +3,8 @@ import { SquadronModel } from '../../squadron/models/SquadronModel';
 import { ProfileModel } from '../../profile/models/ProfileModel';
 import { FlightModel } from '../../flight/model/FlightModel';
 import { AirmanModelFactory } from '../../airman/factories/AirmanModelFactory';
+import { CertificationModel } from '../../skills/models/CertificationModel';
+import { CertificationModelFactory } from '../../skills/factories/CertificationModelFactory';
 import { AirmanModel, ShiftType } from '../../airman/models/AirmanModel';
 
 describe('SiteManagerStore', () => {
@@ -10,6 +12,7 @@ describe('SiteManagerStore', () => {
   let flight1: FlightModel;
   let flight2: FlightModel;
   let squadron: SquadronModel;
+  let certifications: CertificationModel[];
   let subject: SiteManagerStore;
 
   beforeEach(async () => {
@@ -24,10 +27,12 @@ describe('SiteManagerStore', () => {
     flight1 = new FlightModel(1, 'Flight 1');
     flight2 = new FlightModel(2, 'Flight 2');
 
-    squadron = new SquadronModel(1, 'squad1', [ flight1, flight2 ]);
+    squadron = new SquadronModel(1, 'squad1', [flight1, flight2]);
+
+    certifications = CertificationModelFactory.buildList(3, 1);
 
     subject = new SiteManagerStore();
-    await subject.hydrate(({siteName: 'SITE 14'} as ProfileModel), squadron, airmen);
+    await subject.hydrate(({siteName: 'SITE 14'} as ProfileModel), squadron, airmen, certifications);
   });
 
   it('should provide the current site', () => {
@@ -53,5 +58,10 @@ describe('SiteManagerStore', () => {
       .toBe(ShiftType.Swing);
     expect(subject.getAirmenByFlightId(1).map(a => a.shift))
       .toEqual([ShiftType.Swing, ShiftType.Swing, ShiftType.Swing]);
+  });
+
+  it('should provide a list of certifications belonging to the current site', () => {
+    expect(subject.certifications.length).toBe(3);
+    expect(subject.certifications[0].siteId).toBe(1);
   });
 });

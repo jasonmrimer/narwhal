@@ -5,6 +5,7 @@ import { CellMeasurerCache } from 'react-virtualized';
 import { Link } from 'react-router-dom';
 import { OperatorIcon } from '../icons/OperatorIcon';
 import styled from 'styled-components';
+import { StyledCertificationList } from './CertificationList';
 import { StyledFlightTables } from './FlightTables';
 
 interface Props {
@@ -36,6 +37,12 @@ export class SiteManager extends React.Component<Props> {
           squadron &&
           <StyledFlightTables flights={squadron.flights}/>
         }
+
+        <h2 className="certification-section-header">
+          {siteManagerStore!.siteName} has {siteManagerStore!.certifications.length} certifications.
+        </h2>
+
+        <StyledCertificationList certifications={siteManagerStore!.certifications}/>
       </div>
     );
   }

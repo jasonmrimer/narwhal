@@ -21,4 +21,11 @@ export class WebSkillRepository implements SkillRepository {
       return new CertificationModel(obj.id, obj.title, obj.siteId);
     });
   }
+
+  async findAllCertificationsBySiteId(siteId: number): Promise<CertificationModel[]> {
+    const json = await this.client.getJSON(`/api/skill/certifications/${siteId}`);
+    return json.map((obj: any) => {
+      return new CertificationModel(obj.id, obj.title, obj.siteId);
+    });
+  }
 }

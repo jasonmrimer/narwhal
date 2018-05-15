@@ -14,4 +14,8 @@ export class SkillRepositoryStub implements SkillRepository {
       CertificationModelFactory.buildList(5, 1).concat(CertificationModelFactory.buildList(10, 2).splice(5, 5))
     );
   }
+
+  findAllCertificationsBySiteId(siteId: number): Promise<CertificationModel[]> {
+    return Promise.resolve(CertificationModelFactory.buildList(10, siteId));
+  }
 }
