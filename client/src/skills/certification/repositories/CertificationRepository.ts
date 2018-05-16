@@ -1,9 +1,11 @@
-import { QualificationModel } from '../models/QualificationModel';
 import { CertificationModel } from '../models/CertificationModel';
 
-export interface SkillRepository {
+export interface CertificationRepository {
   findAllCertifications(): Promise<CertificationModel[]>;
+
   findAllCertificationsBySiteId(siteId: number): Promise<CertificationModel[]>;
 
-  findAllQualifications(): Promise<QualificationModel[]>;
+  findOneCertification(certificationId: number): Promise<CertificationModel>;
+
+  update(certification: CertificationModel): Promise<CertificationModel>;
 }

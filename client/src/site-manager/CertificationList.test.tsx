@@ -1,13 +1,16 @@
 import { shallow, ShallowWrapper } from 'enzyme';
 import { CertificationList } from './CertificationList';
 import * as React from 'react';
-import { CertificationModelFactory } from '../skills/factories/CertificationModelFactory';
+import { CertificationModelFactory } from '../skills/certification/factories/CertificationModelFactory';
+import { Link } from 'react-router-dom';
+import { CertificationModel } from '../skills/certification/models/CertificationModel';
 
 describe('CertificationList', () => {
   let subject: ShallowWrapper;
+  let certifications: CertificationModel[];
 
   beforeEach(() => {
-    const certifications = CertificationModelFactory.buildList(3, 1);
+    certifications = CertificationModelFactory.buildList(3, 1);
     subject = shallow(<CertificationList certifications={certifications}/>);
   });
 
@@ -17,5 +20,11 @@ describe('CertificationList', () => {
 
   it('should render a row for every certification', () => {
     expect(subject.find('.certification-row').length).toBe(3);
+  });
+
+  it('should render a link to the airmans profile', () => {
+    const link = subject.find(Link).at(0);
+    expect(link.prop('to')).toBe(`/certifications/${certifications[0].id}`);
+    expect(link.children().at(0).text()).toContain(certifications[0].title);
   });
 });

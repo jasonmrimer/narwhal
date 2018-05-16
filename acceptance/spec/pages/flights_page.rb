@@ -63,6 +63,24 @@ class FlightsPage
     expect(find('#airman-rank').value).to eq '1'
   end
 
+  def assert_edit_certification
+    click_on_certification('Laser Vision')
+
+    expect(page).to have_content 'Laser Vision'
+
+    fill_in 'acronym', with: 'Frost Breath'
+
+    find('input[type="submit"]').click
+
+    expect(page).to have_content 'Frost Breath'
+
+    fill_in 'acronym', with: 'Laser Vision'
+
+    find('input[type="submit"]').click
+
+    expect(page).to have_content 'Laser Vision'
+  end
+
   def assert_create_airman
     page.find('span', text: 'New Operator').click
     fill_in 'lastName', with: 'Aaron'
@@ -76,7 +94,6 @@ class FlightsPage
   end
 
 
-
   private
 
   def click_on_airman(name)
@@ -84,4 +101,8 @@ class FlightsPage
     expect(page).to have_content('Personal Information')
   end
 
+  def click_on_certification(name)
+    page.find('a', text: name).click
+    expect(page).to have_content('Certification')
+  end
 end

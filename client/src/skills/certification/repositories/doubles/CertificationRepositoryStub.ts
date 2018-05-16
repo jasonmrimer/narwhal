@@ -1,14 +1,8 @@
-import { QualificationModel } from '../../models/QualificationModel';
+import { CertificationRepository } from '../CertificationRepository';
 import { CertificationModel } from '../../models/CertificationModel';
 import { CertificationModelFactory } from '../../factories/CertificationModelFactory';
-import { QualificationModelFactory } from '../../factories/QualificationModelFactory';
-import { SkillRepository } from '../SkillRepository';
 
-export class SkillRepositoryStub implements SkillRepository {
-  findAllQualifications(): Promise<QualificationModel[]> {
-    return Promise.resolve(QualificationModelFactory.buildList(10));
-  }
-
+export class CertificationRepositoryStub implements CertificationRepository {
   findAllCertifications(): Promise<CertificationModel[]> {
     return Promise.resolve(
       CertificationModelFactory.buildList(5, 1).concat(CertificationModelFactory.buildList(10, 2).splice(5, 5))
@@ -17,5 +11,13 @@ export class SkillRepositoryStub implements SkillRepository {
 
   findAllCertificationsBySiteId(siteId: number): Promise<CertificationModel[]> {
     return Promise.resolve(CertificationModelFactory.buildList(10, siteId));
+  }
+
+  findOneCertification(certificationId: number): Promise<CertificationModel> {
+    return Promise.resolve(CertificationModelFactory.build(certificationId, 1));
+  }
+
+  update(certification: CertificationModel): Promise<CertificationModel> {
+    return Promise.resolve(certification);
   }
 }

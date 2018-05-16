@@ -8,6 +8,7 @@ import { DashboardPage } from './pages/DashboardPage';
 import { AdminPage } from './pages/AdminPage';
 import { FlightsPage } from './pages/FlightsPage';
 import { AirmanProfilePage } from './pages/AirmanProfilePage';
+import { CertificationManagerPage } from './pages/CertificationManagerPage';
 
 @observer
 export class Routes extends React.Component {
@@ -26,6 +27,14 @@ export class Routes extends React.Component {
         <Route
           path="/flights/:airmanId"
           render={({match, history}) => <AirmanProfilePage airmanId={match.params.airmanId} history={history}/>}
+        />
+        <Route
+          path="/certifications/:certificationId"
+          render={({match}) => {
+            return (
+              <CertificationManagerPage certificationId={match.params.certificationId}/>
+            );
+          }}
         />
         <Route exact={true} path="/admin" render={() => <AdminPage/>}/>
       </Switch>

@@ -1,6 +1,6 @@
 import * as moment from 'moment';
 import { Moment } from 'moment';
-import { QualificationModel } from '../../skills/models/QualificationModel';
+import { QualificationModel } from '../../skills/qualifications/models/QualificationModel';
 import { SkillType } from '../../skills/models/SkillType';
 
 export class AirmanQualificationModel {

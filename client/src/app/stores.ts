@@ -20,6 +20,7 @@ import { TDYDeploymentFormStore } from '../event/stores/TDYDeploymentFormStore';
 import { WebRepositories } from '../utils/Repositories';
 import { AirmanProfileManagerStore } from '../site-manager/stores/AirmanProfileManagerStore';
 import { SiteManagerStore } from '../site-manager/stores/SiteManagerStore';
+import { CertificationFormStore } from '../skills/certification/stores/CertificationFormStore';
 
 const timeService = new MomentTimeService();
 const profileStore = new ProfileSitePickerStore(WebRepositories);
@@ -48,6 +49,7 @@ const missionPlannerStore = new MissionPlannerStore(WebRepositories);
 const adminStore = new AdminStore(WebRepositories);
 const airmanProfileManagerStore = new AirmanProfileManagerStore(WebRepositories.airmanRepository);
 const siteManagerStore = new SiteManagerStore();
+const certificationFormStore = new CertificationFormStore(WebRepositories);
 
 export interface Stores {
   profileStore: ProfileSitePickerStore;
@@ -70,6 +72,7 @@ export interface Stores {
   adminStore: AdminStore;
   airmanProfileManagerStore: AirmanProfileManagerStore;
   siteManagerStore: SiteManagerStore;
+  certificationFormStore: CertificationFormStore;
 }
 
 export const stores = {
@@ -92,5 +95,6 @@ export const stores = {
   tdyDeploymentFormStore,
   trackerStore,
   airmanProfileManagerStore,
-  siteManagerStore
+  siteManagerStore,
+  certificationFormStore
 };

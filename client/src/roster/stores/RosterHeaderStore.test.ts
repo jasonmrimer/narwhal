@@ -1,6 +1,6 @@
 import { RosterHeaderStore } from './RosterHeaderStore';
-import { CertificationModelFactory } from '../../skills/factories/CertificationModelFactory';
-import { QualificationModelFactory } from '../../skills/factories/QualificationModelFactory';
+import { CertificationModelFactory } from '../../skills/certification/factories/CertificationModelFactory';
+import { QualificationModelFactory } from '../../skills/qualifications/factories/QualificationModelFactory';
 import { AirmanModel, ShiftType } from '../../airman/models/AirmanModel';
 import { FakeAirmanRepository } from '../../airman/repositories/doubles/FakeAirmanRepository';
 

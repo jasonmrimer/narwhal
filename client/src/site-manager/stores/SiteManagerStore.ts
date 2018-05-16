@@ -3,7 +3,7 @@ import { ProfileModel } from '../../profile/models/ProfileModel';
 import { SquadronModel } from '../../squadron/models/SquadronModel';
 import { NotificationStore } from '../../widgets/stores/NotificationStore';
 import { AirmanModel, ShiftType } from '../../airman/models/AirmanModel';
-import { CertificationModel } from '../../skills/models/CertificationModel';
+import { CertificationModel } from '../../skills/certification/models/CertificationModel';
 import { ScheduleModel } from '../../schedule/models/ScheduleModel';
 
 export class SiteManagerStore extends NotificationStore {

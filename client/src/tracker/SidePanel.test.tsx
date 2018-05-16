@@ -6,7 +6,7 @@ import { AirmanModel } from '../airman/models/AirmanModel';
 import { StyledCurrency } from '../currency/Currency';
 import { TrackerStore } from './stores/TrackerStore';
 import { AirmanCertificationModel } from '../airman/models/AirmanCertificationModel';
-import { CertificationModelFactory } from '../skills/factories/CertificationModelFactory';
+import { CertificationModelFactory } from '../skills/certification/factories/CertificationModelFactory';
 import * as moment from 'moment';
 import { TabAlert } from '../icons/TabAlert';
 import { StyledTab } from './Tab';

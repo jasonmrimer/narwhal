@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { CertificationModel } from '../skills/models/CertificationModel';
+import { CertificationModel } from '../skills/certification/models/CertificationModel';
+import { Link } from 'react-router-dom';
 
 interface Props {
   certifications: CertificationModel[];
@@ -15,7 +16,9 @@ export const CertificationList = (props: Props) => {
       {
         props.certifications.map((certification: CertificationModel, index: number) => {
           return (
-            <div className="certification-row" key={index}>{certification.title}</div>
+            <Link to={`/certifications/${certification.id}`} key={index}>
+              <div className="certification-row">{certification.title}</div>
+            </Link>
           );
         })
       }

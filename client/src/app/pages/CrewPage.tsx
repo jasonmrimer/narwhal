@@ -41,8 +41,8 @@ export class CrewPage extends React.Component<Props> {
       const [crew, airmen, certifications, qualifications, sites] = await Promise.all([
         WebRepositories.crewRepository.findOne(crewId),
         WebRepositories.airmanRepository.findBySiteId(profileStore!.profile!.siteId!),
-        WebRepositories.skillRepository.findAllCertifications(),
-        WebRepositories.skillRepository.findAllQualifications(),
+        WebRepositories.certificationRepository.findAllCertifications(),
+        WebRepositories.qualificationRepository.findAllQualifications(),
         WebRepositories.siteRepository.findAll()
       ]);
 

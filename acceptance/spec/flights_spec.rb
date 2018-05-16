@@ -27,4 +27,8 @@ describe 'Flights page', type: :feature do
   it 'shows certifications for that site' do
     flights_page.assert_shows_certifications
   end
+
+  it 'can edit the acronym of a certification' do
+    flights_page.assert_edit_certification
+  end
 end

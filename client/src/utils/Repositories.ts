@@ -4,16 +4,16 @@ import { HTTPClient } from './HTTPClient';
 import { EventRepository } from '../event/repositories/EventRepository';
 import { MissionRepository } from '../mission/repositories/MissionRepository';
 import { AirmanRepository } from '../airman/repositories/AirmanRepository';
-import { SkillRepository } from '../skills/repositories/SkillRepository';
+import { QualificationRepository } from '../skills/qualifications/repositories/QualificationRepository';
 import { SiteRepository } from '../site/repositories/SiteRepository';
 import { RipItemRepository } from '../airman/repositories/AirmanRipItemRepository';
 import { WebAirmanRepository } from '../airman/repositories/web/WebAirmanRepository';
 import { WebSiteRepository } from '../site/repositories/web/WebSiteRepository';
-import { WebSkillRepository } from '../skills/repositories/web/WebSkillRepository';
+import { WebQualificationRepository } from '../skills/qualifications/repositories/web/WebQualificationRepository';
 import { WebEventRepository } from '../event/repositories/web/WebEventRepository';
 import { WebMissionRepository } from '../mission/repositories/web/WebMissionRepository';
 import { WebRipItemRepository } from '../airman/repositories/web/WebAirmanRipItemRepository';
-import { SkillRepositoryStub } from '../skills/repositories/doubles/SkillRepositoryStub';
+import { QualificationRepositoryStub } from '../skills/qualifications/repositories/doubles/QualificationRepositoryStub';
 import { FakeAirmanRepository } from '../airman/repositories/doubles/FakeAirmanRepository';
 import { FakeEventRepository } from '../event/repositories/doubles/FakeEventRepository';
 import { MissionRepositoryStub } from '../mission/repositories/doubles/MissionRepositoryStub';
@@ -34,11 +34,15 @@ import { ScheduleRepositoryStub } from '../schedule/repositories/doubles/Schedul
 import { RankRepository } from '../rank/repositories/RankRepository';
 import { WebRankRepository } from '../rank/repositories/web/WebRankRepository';
 import { RankRepositoryStub } from '../rank/repositories/doubles/RankRepositoryStub';
+import { CertificationRepository } from '../skills/certification/repositories/CertificationRepository';
+import { WebCertificationRepository } from '../skills/certification/repositories/web/WebCertificationRepository';
+import { CertificationRepositoryStub } from '../skills/certification/repositories/doubles/CertificationRepositoryStub';
 
 export interface Repositories {
   airmanRepository: AirmanRepository;
   siteRepository: SiteRepository;
-  skillRepository: SkillRepository;
+  qualificationRepository: QualificationRepository;
+  certificationRepository: CertificationRepository;
   eventRepository: EventRepository;
   missionRepository: MissionRepository;
   ripItemRepository: RipItemRepository;
@@ -54,7 +58,8 @@ const client = new HTTPClient();
 export const WebRepositories: Repositories = Object.freeze({
   airmanRepository: new WebAirmanRepository(client),
   siteRepository: new WebSiteRepository(client),
-  skillRepository: new WebSkillRepository(client),
+  qualificationRepository: new WebQualificationRepository(client),
+  certificationRepository: new WebCertificationRepository(client),
   eventRepository: new WebEventRepository(client),
   missionRepository: new WebMissionRepository(client),
   ripItemRepository: new WebRipItemRepository(client),
@@ -68,7 +73,8 @@ export const WebRepositories: Repositories = Object.freeze({
 export const DoubleRepositories: Repositories = {
   airmanRepository: new FakeAirmanRepository(),
   siteRepository: new SiteRepositoryStub(),
-  skillRepository: new SkillRepositoryStub(),
+  qualificationRepository: new QualificationRepositoryStub(),
+  certificationRepository: new CertificationRepositoryStub(),
   eventRepository: new FakeEventRepository(),
   missionRepository: new MissionRepositoryStub(),
   ripItemRepository: new RipItemRepositoryStub(),

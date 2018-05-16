@@ -1,7 +1,7 @@
 import { FilterOption, UnfilteredValue } from '../../widgets/inputs/FilterOptionModel';
 import { action, computed, observable, toJS } from 'mobx';
-import { QualificationModel } from '../../skills/models/QualificationModel';
-import { CertificationModel } from '../../skills/models/CertificationModel';
+import { QualificationModel } from '../../skills/qualifications/models/QualificationModel';
+import { CertificationModel } from '../../skills/certification/models/CertificationModel';
 import { AirmanModel, ShiftType } from '../../airman/models/AirmanModel';
 import * as Fuse from 'fuse.js';
 

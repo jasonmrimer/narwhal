@@ -21,7 +21,7 @@ export class FlightsPage extends React.Component<Props> {
       const [site, airmen, certifications, schedules] = await Promise.all([
         WebRepositories.siteRepository.findOne(profile!.siteId!),
         WebRepositories.airmanRepository.findBySiteId(profile!.siteId!),
-        WebRepositories.skillRepository.findAllCertificationsBySiteId(profile!.siteId!),
+        WebRepositories.certificationRepository.findAllCertificationsBySiteId(profile!.siteId!),
         WebRepositories.scheduleRepository.findAll(),
       ]);
       this.props.siteManagerStore!.hydrate(profile, site.squadrons[0], airmen, certifications, schedules);

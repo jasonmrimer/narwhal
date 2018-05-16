@@ -7,7 +7,7 @@ import { FlightModel } from '../flight/model/FlightModel';
 import { SquadronModel } from '../squadron/models/SquadronModel';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 import { ProfileModel } from '../profile/models/ProfileModel';
-import { CertificationModelFactory } from '../skills/factories/CertificationModelFactory';
+import { CertificationModelFactory } from '../skills/certification/factories/CertificationModelFactory';
 import { StyledCertificationList } from './CertificationList';
 import { StyledFlightTables } from './FlightTables';
 

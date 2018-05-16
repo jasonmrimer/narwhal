@@ -1,6 +1,6 @@
 import { EventModel, EventType } from '../event/models/EventModel';
 import { Moment } from 'moment';
-import { CertificationModel } from '../skills/models/CertificationModel';
+import { CertificationModel } from '../skills/certification/models/CertificationModel';
 
 export const doesDayHaveEvent = (day: Moment, event: EventModel) => {
   return day.isBetween(event.startTime, event.endTime, 'day', '[]');

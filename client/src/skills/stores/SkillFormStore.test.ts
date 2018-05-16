@@ -2,8 +2,8 @@ import { SkillFormStore } from './SkillFormStore';
 import { Skill } from '../models/Skill';
 import { SkillType } from '../models/SkillType';
 import * as moment from 'moment';
-import { CertificationModelFactory } from '../factories/CertificationModelFactory';
-import { QualificationModelFactory } from '../factories/QualificationModelFactory';
+import { CertificationModelFactory } from '../certification/factories/CertificationModelFactory';
+import { QualificationModelFactory } from '../qualifications/factories/QualificationModelFactory';
 
 describe('SkillFormStore', () => {
   const airmanId = 123;

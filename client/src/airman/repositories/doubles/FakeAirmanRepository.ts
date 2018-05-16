@@ -6,8 +6,8 @@ import { AirmanQualificationModelFactory as AQMF } from '../../factories/AirmanQ
 import { Skill } from '../../../skills/models/Skill';
 import { AirmanQualificationModel } from '../../models/AirmanQualificationModel';
 import { SkillType } from '../../../skills/models/SkillType';
-import { QualificationModel } from '../../../skills/models/QualificationModel';
-import { CertificationModel } from '../../../skills/models/CertificationModel';
+import { QualificationModel } from '../../../skills/qualifications/models/QualificationModel';
+import { CertificationModel } from '../../../skills/certification/models/CertificationModel';
 import { AirmanCertificationModel } from '../../models/AirmanCertificationModel';
 import { RankModel } from '../../../rank/models/RankModel';
 import { ScheduleModel } from '../../../schedule/models/ScheduleModel';

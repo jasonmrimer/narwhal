@@ -3,8 +3,8 @@ import { Skill } from '../models/Skill';
 import * as moment from 'moment';
 import { SkillType } from '../models/SkillType';
 import { action, computed, observable } from 'mobx';
-import { QualificationModel } from '../models/QualificationModel';
-import { CertificationModel } from '../models/CertificationModel';
+import { QualificationModel } from '../qualifications/models/QualificationModel';
+import { CertificationModel } from '../certification/models/CertificationModel';
 import { filterOptionsBy } from '../../utils/eventUtil';
 
 interface State {

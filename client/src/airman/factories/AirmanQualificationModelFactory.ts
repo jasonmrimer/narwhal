@@ -1,6 +1,6 @@
 import { AirmanQualificationModel } from '../models/AirmanQualificationModel';
 import * as moment from 'moment';
-import { QualificationModel } from '../../skills/models/QualificationModel';
+import { QualificationModel } from '../../skills/qualifications/models/QualificationModel';
 
 export class AirmanQualificationModelFactory {
   static build(id: number) {

@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import { CertificationModel } from '../../skills/models/CertificationModel';
+import { CertificationModel } from '../../skills/certification/models/CertificationModel';
 import { AirmanCertificationModel } from '../models/AirmanCertificationModel';
 
 export class AirmanCertificationModelFactory {
