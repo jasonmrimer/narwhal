@@ -19,4 +19,16 @@ export class SiteManagerActions {
       this.siteManagerStore.setAirmenShiftByFlightId(flightId, shift);
     });
   }
+
+  async setFlightSchedule(flightId: number, scheduleId: number) {
+    const schedule = this.siteManagerStore.getScheduleByScheduleId(scheduleId);
+    if (!schedule) {
+      return;
+    }
+
+    await this.siteManagerStore.performLoading(async () => {
+      const updatedAirmen = await this.airmanRepository.updateScheduleByFlightId(flightId, schedule);
+      this.siteManagerStore.setAirmenScheduleByFlightId(flightId, updatedAirmen);
+    });
+  }
 }

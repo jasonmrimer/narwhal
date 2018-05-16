@@ -1,5 +1,6 @@
 import { AirmanModel, ShiftType } from '../models/AirmanModel';
 import { Skill } from '../../skills/models/Skill';
+import { ScheduleModel } from '../../schedule/models/ScheduleModel';
 
 export interface AirmanRepository {
   findOne(airmanId: number): Promise<AirmanModel>;
@@ -13,4 +14,6 @@ export interface AirmanRepository {
   deleteSkill(skill: Skill): Promise<AirmanModel>;
 
   updateShiftByFlightId(flightId: number, shift: ShiftType): Promise<AirmanModel[]>;
+
+  updateScheduleByFlightId(flightId: number, schedule: ScheduleModel): Promise<AirmanModel[]>;
 }

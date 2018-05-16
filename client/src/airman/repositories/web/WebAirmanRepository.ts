@@ -4,6 +4,7 @@ import { AirmanModel, ShiftType } from '../../models/AirmanModel';
 import { SkillType } from '../../../skills/models/SkillType';
 import { Skill } from '../../../skills/models/Skill';
 import { HTTPClient } from '../../../utils/HTTPClient';
+import { ScheduleModel } from '../../../schedule/models/ScheduleModel';
 
 export class WebAirmanRepository implements AirmanRepository {
   private serializer = new AirmanSerializer();
@@ -44,6 +45,12 @@ export class WebAirmanRepository implements AirmanRepository {
   async updateShiftByFlightId(flightId: number, shift: ShiftType): Promise<AirmanModel[]> {
     const body = JSON.stringify({shiftType: shift});
     const json = await this.client.putJSON(`/api/airmen/shift?flightId=${flightId}`, body);
+    return json.map((item: any) => this.serializer.deserialize(item));
+  }
+
+  async updateScheduleByFlightId(flightId: number, schedule: ScheduleModel): Promise<AirmanModel[]> {
+    const body = JSON.stringify(schedule);
+    const json = await this.client.putJSON(`/api/airmen/schedules?flightId=${flightId}`, body);
     return json.map((item: any) => this.serializer.deserialize(item));
   }
 

@@ -47,7 +47,8 @@ describe('AirmanProfileManagerStore', () => {
       saveSkill: jest.fn(),
       saveAirman: jest.fn(),
       deleteSkill: jest.fn(),
-      updateShiftByFlightId: jest.fn()
+      updateShiftByFlightId: jest.fn(),
+      updateScheduleByFlightId: jest.fn()
     };
 
     const schedules = [

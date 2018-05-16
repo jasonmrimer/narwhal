@@ -25,7 +25,8 @@ describe('SiteManager', () => {
       ({siteName: 'SITE 14'} as ProfileModel),
       squadron,
       [airman],
-      CertificationModelFactory.buildList(3, 1)
+      CertificationModelFactory.buildList(3, 1),
+      []
     );
     subject = shallow(<SiteManager siteManagerStore={siteManagerStore}/>);
   });

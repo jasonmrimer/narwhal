@@ -8,6 +8,7 @@ import { inject, observer } from 'mobx-react';
 import styled from 'styled-components';
 import { StyledShiftDropdown } from '../tracker/ShiftDropdown';
 import { SiteManagerActions } from './actions/SiteManagerActions';
+import { StyledDropdown } from '../widgets/inputs/Dropdown';
 
 interface FlightTableRowProps {
   airman: AirmanModel;
@@ -17,7 +18,6 @@ export const FlightTableRow = observer((props: FlightTableRowProps) => {
   const {airman} = props;
   return (
     <Link to={`/flights/${airman.id}`}>
-      {/*<div className="flight-row">*/}
       <span className="airman-name airman-attribute">
             {`${airman.lastName}, ${airman.firstName}`}
         </span>
@@ -31,7 +31,6 @@ export const FlightTableRow = observer((props: FlightTableRowProps) => {
           airman.currentAirmanSchedule.schedule.type
         }
       </span>
-      {/*</div>*/}
     </Link>
   );
 });
@@ -66,14 +65,28 @@ export class FlightTables extends React.Component<FlightTablesProps> {
     return (
       <React.Fragment>
         <div className="flight-header">
-          <h3>{flight.name}</h3>
-          <StyledShiftDropdown
-            selectedShift={this.props.siteManagerStore!.getShiftByFlightId(flight.id)}
-            setShift={(shift: ShiftType) => {
-              return this.props.siteManagerActions!.setFlightShift(flight.id, shift);
-            }}
-            className="shift"
-          />
+          <div className="header-section">
+            <h3>{flight.name}</h3>
+          </div>
+          <div className="header-section">
+            <StyledShiftDropdown
+              selectedShift={this.props.siteManagerStore!.getShiftByFlightId(flight.id)}
+              setShift={(shift: ShiftType) => {
+                return this.props.siteManagerActions!.setFlightShift(flight.id, shift);
+              }}
+              className="shift"
+            />
+          </div>
+          <div className="header-section">
+            <StyledDropdown
+              onChange={(e) => {
+                return this.props.siteManagerActions!.setFlightSchedule(flight.id, Number(e.target.value));
+              }}
+              name="schedule-select"
+              options={this.props.siteManagerStore!.scheduleOptions}
+              value={this.props.siteManagerStore!.getScheduleIdByFlightId(flight.id)}
+            />
+          </div>
         </div>
         <div className="flight-sub-header">
           <span>NAME</span>
@@ -103,6 +116,8 @@ export const StyledFlightTables = inject(
     .flight-header {
       display: flex;
       align-items: center;
+      display: flex;
+      justify-content: space-around;
       padding: 1rem;
       background: ${props => props.theme.blueSteel};
       
@@ -115,6 +130,10 @@ export const StyledFlightTables = inject(
       .shift {
         width: 5rem;
         border-bottom: 1px solid ${props => props.theme.purpleSteel};
+      }
+      
+      .header-section {
+        width: 33%;
       }
     }
         

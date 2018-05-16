@@ -10,6 +10,7 @@ import { QualificationModel } from '../../../skills/models/QualificationModel';
 import { CertificationModel } from '../../../skills/models/CertificationModel';
 import { AirmanCertificationModel } from '../../models/AirmanCertificationModel';
 import { RankModel } from '../../../rank/models/RankModel';
+import { ScheduleModel } from '../../../schedule/models/ScheduleModel';
 
 const af = AirmanModelFactory;
 const airmen = [
@@ -99,6 +100,10 @@ export class FakeAirmanRepository implements AirmanRepository {
     const filteredAirmen = airmen.filter(airman => airman.flightId === flightId);
     filteredAirmen.forEach(airman => airman.shift = shift);
     return Promise.resolve(filteredAirmen);
+  }
+
+  updateScheduleByFlightId(flightId: number, schedule: ScheduleModel): Promise<AirmanModel[]> {
+    return Promise.resolve(airmen.filter(a => a.flightId === flightId));
   }
 
   private save(skills: any[], skillToSave: any) {

@@ -24,7 +24,8 @@ describe('CurrencyStore', () => {
         saveAirman: jest.fn(),
         deleteSkill: jest.fn(),
         findOne: jest.fn(),
-        updateShiftByFlightId: jest.fn()
+        updateShiftByFlightId: jest.fn(),
+        updateScheduleByFlightId: jest.fn(),
       },
 
       ripItemRepository: {

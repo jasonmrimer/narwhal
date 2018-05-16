@@ -6,6 +6,7 @@ import { FlightModel } from '../flight/model/FlightModel';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 import { StyledShiftDropdown } from '../tracker/ShiftDropdown';
 import { ShiftType } from '../airman/models/AirmanModel';
+import { StyledDropdown } from '../widgets/inputs/Dropdown';
 
 describe('FlightTables', () => {
   const flights = [
@@ -20,14 +21,19 @@ describe('FlightTables', () => {
     },
     getShiftByFlightId: () => {
       return ShiftType.Day;
-    }
+    },
+    getScheduleIdByFlightId: () => {
+      return '1';
+    },
+    scheduleOptions: [{label: 'Front Half', value: 1}, {label: 'Back Half', value: 2}]
   };
   let siteManagerActions: any;
   let subject: ShallowWrapper;
 
   beforeEach(() => {
     siteManagerActions = {
-      setFlightShift: jest.fn()
+      setFlightShift: jest.fn(),
+      setFlightSchedule: jest.fn(),
     };
 
     subject = shallow(
@@ -39,8 +45,13 @@ describe('FlightTables', () => {
     );
   });
 
-  it('should render a shift dropdown for each flight', () => {
-    expect(subject.find(StyledShiftDropdown).length).toBe(flights.length);
+  it('should render StyledDropdown for schedules', () => {
+    const scheduleDropdowns = subject.find(StyledDropdown);
+    expect(scheduleDropdowns.length).toBe(flights.length);
+    expect(scheduleDropdowns.at(0).prop('options')).toBe(siteManagerStore.scheduleOptions);
+    expect(scheduleDropdowns.at(0).prop('value')).toBe(siteManagerStore.getScheduleIdByFlightId());
+    scheduleDropdowns.at(0).simulate('change', {target: {value: 2}});
+    expect(siteManagerActions.setFlightSchedule).toHaveBeenCalledWith(flights[0].id, 2);
   });
 
   it('should call setFlightShift when selecting a shift', () => {

@@ -2,6 +2,7 @@ package mil.af.us.narwhal.airman;
 
 import mil.af.us.narwhal.flight.Flight;
 import mil.af.us.narwhal.flight.FlightRepository;
+import mil.af.us.narwhal.schedule.Schedule;
 import mil.af.us.narwhal.skill.Certification;
 import mil.af.us.narwhal.skill.CertificationRepository;
 import mil.af.us.narwhal.skill.Qualification;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.time.Instant;
 import java.util.List;
 
 @RestController
@@ -138,12 +140,25 @@ public class AirmanController {
   }
 
   @PutMapping(path = "/shift")
-  public List<Airman> update(
+  public List<Airman> updateShift(
     @RequestParam Long flightId,
     @RequestBody ShiftTypeJson json
   ) {
     final Flight flight = flightRepository.findOne(flightId);
     flight.getAirmen().forEach(airman -> airman.setShift(json.getShiftType()));
+    return flightRepository.save(flight).getAirmen();
+  }
+
+  @PutMapping(path = "/schedules")
+  public List<Airman> updateSchedules(
+    @RequestParam Long flightId,
+    @RequestBody Schedule schedule
+  ) {
+    final Flight flight = flightRepository.findOne(flightId);
+    flight.getAirmen().forEach(airman -> {
+      AirmanSchedule as = new AirmanSchedule(schedule, Instant.now());
+      airman.addSchedule(as);
+    });
     return flightRepository.save(flight).getAirmen();
   }
 }

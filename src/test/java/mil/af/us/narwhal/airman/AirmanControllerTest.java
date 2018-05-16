@@ -25,7 +25,7 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
-import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.*;
 
 public class AirmanControllerTest extends BaseIntegrationTest {
   @Autowired private SiteRepository siteRepository;
@@ -68,7 +68,7 @@ public class AirmanControllerTest extends BaseIntegrationTest {
 
     newRank = rankRepository.save(new Rank("AB"));
 
-    schedule = scheduleRepository.save(new Schedule("No Schedule", true, true, true, true, true, true, true));
+    schedule = scheduleRepository.save(new Schedule("Front Half", true, true, true, true, true, true, true));
 
     siteRepository.save(asList(site, site2));
 
@@ -391,6 +391,29 @@ public class AirmanControllerTest extends BaseIntegrationTest {
     .then()
       .statusCode(200)
       .body("[0].shift", equalTo("Day"));
+    // @formatter:on
+  }
+
+  @Test
+  public void updateScheduleTest() throws JsonProcessingException {
+    final String json = objectMapper.writeValueAsString(schedule);
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .body(json)
+      .contentType("application/json")
+      .param("flightId", flight1.getId())
+    .when()
+      .put(AirmanController.URI + "/schedules")
+    .then()
+      .statusCode(200)
+      .body("[0].schedules.size()", equalTo(2))
+      .body("[0].schedules[1].schedule.type", equalTo("Front Half"))
+      .body("[0].schedules[0].endDate", notNullValue())
+      .body("[0].schedules[1].endDate", nullValue());
     // @formatter:on
   }
 }
