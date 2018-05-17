@@ -7,10 +7,13 @@ import { readerAbility } from '../../abilities';
 import { MemoryRouter } from 'react-router';
 import { StyledDashboard } from '../../../dashboard/Dashboard';
 import { FlightsPage } from '../FlightsPage';
+import { SiteManagerStore } from '../../../site-manager/stores/SiteManagerStore';
+import { PopupModal } from '../../../widgets/PopupModal';
 
 describe('FlightsPage', () => {
+  const siteManagerStore = new SiteManagerStore();
+  const profileStore = new ProfileSitePickerStore(DoubleRepositories);
   it('should not render if profile is a reader', () => {
-    const profileStore = new ProfileSitePickerStore(DoubleRepositories);
     const profile = {
       id: 1,
       username: 'Tytus',
@@ -25,13 +28,25 @@ describe('FlightsPage', () => {
 
     const subject = mount(
       <MemoryRouter>
-        <Provider profileStore={profileStore}>
-          <FlightsPage/>
+        <Provider profileStore={profileStore} siteManagerStore={siteManagerStore}>
+          <FlightsPage repositories={DoubleRepositories}  />
         </Provider>
       </MemoryRouter>
     );
 
     expect(subject.find('h1').text()).toContain('You do not have access to this page.');
     expect(subject.find(StyledDashboard).exists()).toBeFalsy();
+  });
+
+  it('should render a ScheduleModal when schedule drop down on flight changes', function () {
+    siteManagerStore.setSchedulePrompt(1, 1);
+    const subject = mount(
+      <MemoryRouter>
+        <Provider profileStore={profileStore} siteManagerStore={siteManagerStore} >
+          <FlightsPage repositories={DoubleRepositories} />
+        </Provider>
+      </MemoryRouter>
+    );
+    expect(subject.find(PopupModal).exists()).toBeTruthy();
   });
 });

@@ -21,6 +21,7 @@ describe('SiteManagerActions', () => {
       },
       setAirmenShiftByFlightId: jest.fn(),
       setAirmenScheduleByFlightId: jest.fn(),
+      setSchedulePrompt: jest.fn(),
       getScheduleByScheduleId: (id: number) => schedule,
     };
 
@@ -48,11 +49,13 @@ describe('SiteManagerActions', () => {
   });
 
   it('should set the schedule for a flight', async () => {
-    await subject.setFlightSchedule(1, 1);
-    const foundSchedule = siteManagerStore.getScheduleByScheduleId(1);
-    const airmen = airmanRepository.updateScheduleByFlightId(1, foundSchedule);
-
-    expect(siteManagerStore.setAirmenScheduleByFlightId)
-      .toHaveBeenCalledWith(1, airmen);
+    subject.setFlightSchedule(1, 1);
+    expect(siteManagerStore.setSchedulePrompt).toBeCalledWith(1, 1);
+    // await subject.setFlightSchedule(1, 1);
+    // const foundSchedule = siteManagerStore.getScheduleByScheduleId(1);
+    // const airmen = airmanRepository.updateScheduleByFlightId(1, foundSchedule);
+    //
+    // expect(siteManagerStore.setAirmenScheduleByFlightId)
+    //   .toHaveBeenCalledWith(1, airmen);
   });
 });

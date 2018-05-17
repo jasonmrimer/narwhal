@@ -12,6 +12,7 @@ export class SiteManagerStore extends NotificationStore {
   @observable private _airmen: AirmanModel[] = [];
   @observable private _certifications: CertificationModel[] = [];
   @observable private _schedules: ScheduleModel[] = [];
+  @observable private  _shouldShowSchedulePrompt: boolean = false;
 
   @action.bound
   hydrate(profile: ProfileModel,
@@ -25,6 +26,11 @@ export class SiteManagerStore extends NotificationStore {
     this._airmen = airmen.filter(a => a.squadronId === squadron.id);
     this._certifications = certifications;
     this._schedules = schedules;
+  }
+
+  @computed
+  get shouldShowSchedulePrompt() {
+    return this._shouldShowSchedulePrompt;
   }
 
   @computed
@@ -55,6 +61,12 @@ export class SiteManagerStore extends NotificationStore {
     this._airmen
       .filter(airman => airman.flightId === flightId)
       .forEach(airman => airman.shift = shift);
+  }
+
+  @action.bound
+  setSchedulePrompt(flightId: number, scheduleId: number){
+    this._shouldShowSchedulePrompt = true;
+
   }
 
   @computed

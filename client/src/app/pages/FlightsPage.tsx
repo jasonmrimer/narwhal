@@ -4,12 +4,13 @@ import { StyledSiteManager } from '../../site-manager/SiteManager';
 import { ProfileSitePickerStore } from '../../profile/stores/ProfileSitePickerStore';
 import { inject, observer } from 'mobx-react';
 import { Can } from '@casl/react';
-import { WebRepositories } from '../../utils/Repositories';
+import { Repositories } from '../../utils/Repositories';
 import { SiteManagerStore } from '../../site-manager/stores/SiteManagerStore';
 
 interface Props {
   profileStore?: ProfileSitePickerStore;
   siteManagerStore?: SiteManagerStore;
+  repositories: Repositories;
 }
 
 @inject('profileStore', 'siteManagerStore')
@@ -17,12 +18,12 @@ interface Props {
 export class FlightsPage extends React.Component<Props> {
   async componentDidMount() {
     await this.props.siteManagerStore!.performLoading(async () => {
-      const profile = await WebRepositories.profileRepository.findOne();
+      const profile = await this.props.repositories.profileRepository.findOne();
       const [site, airmen, certifications, schedules] = await Promise.all([
-        WebRepositories.siteRepository.findOne(profile!.siteId!),
-        WebRepositories.airmanRepository.findBySiteId(profile!.siteId!),
-        WebRepositories.certificationRepository.findAllCertificationsBySiteId(profile!.siteId!),
-        WebRepositories.scheduleRepository.findAll(),
+        this.props.repositories.siteRepository.findOne(profile!.siteId!),
+        this.props.repositories.airmanRepository.findBySiteId(profile!.siteId!),
+        this.props.repositories.certificationRepository.findAllCertificationsBySiteId(profile!.siteId!),
+        this.props.repositories.scheduleRepository.findAll(),
       ]);
       this.props.siteManagerStore!.hydrate(profile, site.squadrons[0], airmen, certifications, schedules);
     });
