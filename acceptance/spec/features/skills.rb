@@ -60,7 +60,7 @@ class Skill
       find('a', text: 'CURRENCY').click
       click_link_or_button '+ Add Skill'
       select 'Certification', from: 'Type:'
-      select 'X-Ray Vision', from: 'Name:'
+      select 'X-RAY VISION', from: 'Name:'
       continue_submission
     end
   end
@@ -100,7 +100,7 @@ class Skill
     @earn = DateTime.now
     @expiration = @earn + 90
     @qual_title = 'HT - Instructor'
-    @cert_title = 'X-Ray Vision'
+    @cert_title = 'X-RAY VISION'
   end
 
   def continue_submission

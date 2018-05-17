@@ -59,8 +59,8 @@ INSERT INTO qualification VALUES
   (14, 'XW', 'Evaluator');
 
 INSERT INTO certification VALUES
-  (1, 'Laser Vision', 1),
-  (2, 'X-Ray Vision', 1),
+  (1, 'LASER VISION', 1),
+  (2, 'X-RAY VISION', 1),
   (3, 'Super Speed', 1),
   (4, 'Invisibility', 1);
 

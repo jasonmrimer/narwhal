@@ -64,21 +64,21 @@ class FlightsPage
   end
 
   def assert_edit_certification
-    click_on_certification('Laser Vision')
+    click_on_certification('LASER VISION')
 
-    expect(page).to have_content 'Laser Vision'
+    expect(page).to have_content 'LASER VISION'
 
-    fill_in 'acronym', with: 'Frost Breath'
-
-    find('input[type="submit"]').click
-
-    expect(page).to have_content 'Frost Breath'
-
-    fill_in 'acronym', with: 'Laser Vision'
+    fill_in 'Acronym', with: 'Frost Breath'
 
     find('input[type="submit"]').click
 
-    expect(page).to have_content 'Laser Vision'
+    expect(page).to have_content 'FROST BREATH'
+
+    fill_in 'Acronym', with: 'LASER VISION'
+
+    find('input[type="submit"]').click
+
+    expect(page).to have_content 'LASER VISION'
   end
 
   def assert_create_airman

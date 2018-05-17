@@ -13,6 +13,7 @@ import { TrackerActions } from '../tracker/TrackerActions';
 import { AppActions } from './AppActions';
 import { WebRepositories } from '../utils/Repositories';
 import { SiteManagerActions } from '../site-manager/actions/SiteManagerActions';
+import { CertificationActions } from '../skills/certification/CertificationActions';
 
 const availabilityActions = new AvailabilityActions(stores);
 const missionPlannerActions = new MissionPlannerActions(stores);
@@ -26,6 +27,7 @@ const sidePanelActions = new SidePanelActions(stores);
 const trackerActions = new TrackerActions(stores);
 const appActions = new AppActions(stores, WebRepositories);
 const siteManagerActions = new SiteManagerActions(stores, WebRepositories);
+const certificationActions = new CertificationActions(stores);
 
 export const actions = {
   availabilityActions,
@@ -39,5 +41,6 @@ export const actions = {
   sidePanelActions,
   trackerActions,
   appActions,
-  siteManagerActions
+  siteManagerActions,
+  certificationActions,
 };

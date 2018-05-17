@@ -1,0 +1,1 @@
+ALTER TABLE certification ADD CONSTRAINT UC_Certification UNIQUE (title, site_id);

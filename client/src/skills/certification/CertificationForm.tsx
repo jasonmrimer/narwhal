@@ -6,16 +6,19 @@ import { StyledTextInput } from '../../widgets/inputs/TextInput';
 import { StyledSubmitButton } from '../../widgets/forms/SubmitButton';
 import { StyledForm } from '../../widgets/forms/Form';
 import { StyledNavigationBackButton } from '../../widgets/buttons/NavigationBackButton';
+import { StyledFieldValidation } from '../../widgets/inputs/FieldValidation';
+import { CertificationActions } from './CertificationActions';
 
 interface Props {
   certificationFormStore?: CertificationFormStore;
+  certificationActions?: CertificationActions;
   className?: string;
 }
 
 @observer
 export class CertificationForm extends React.Component <Props> {
   render() {
-    const {certificationFormStore, className} = this.props;
+    const {certificationFormStore, certificationActions, className} = this.props;
     if (!certificationFormStore!.certification) {
       return null;
     }
@@ -23,10 +26,7 @@ export class CertificationForm extends React.Component <Props> {
     return (
       <div className={className}>
         <StyledForm
-          onSubmit={async (e) => {
-            e.preventDefault();
-            await certificationFormStore!.update();
-          }}
+          onSubmit={certificationActions!.submit}
           performLoading={certificationFormStore!.performLoading}
         >
           <div className="navigation-section">
@@ -39,28 +39,40 @@ export class CertificationForm extends React.Component <Props> {
             />
           </div>
           <div className="form-fields">
+
             <h2>{certificationFormStore!.certification.title}</h2>
             <h3>Certification</h3>
+
             <div className="input-row">
-              <label htmlFor="acronym">Acronym</label>
-              <StyledTextInput
-                value={certificationFormStore!.certification.title}
-                onChange={(e) => {
-                  certificationFormStore!.setCertificationTitle(e.target.value);
-                }}
-                name="acronym"
-                id="acronym"
-              />
+
+              <label htmlFor="title">Acronym</label>
+
+              <StyledFieldValidation
+                fieldName="title"
+                errors={certificationFormStore!.errors}
+              >
+                <StyledTextInput
+                  value={certificationFormStore!.certification.title}
+                  onChange={(e) => {
+                    certificationFormStore!.setCertificationTitle(e.target.value);
+                  }}
+                  name="title"
+                  id="title"
+                />
+              </StyledFieldValidation>
+
             </div>
           </div>
         </StyledForm>
+
       </div>
     );
   }
 }
 
 export const StyledCertificationForm = inject(
-  'certificationFormStore'
+  'certificationFormStore',
+  'certificationActions'
 )(styled(CertificationForm)`
   margin: auto 0;
   
@@ -91,8 +103,13 @@ export const StyledCertificationForm = inject(
       display: flex;
       justify-content: space-between;
       
+      #title {
+        width: 13.125rem;
+      }
+      
       input {
-        width: 40%;
+        width: 100%;
+        margin-bottom: 0.5rem;
       }
     }
   }

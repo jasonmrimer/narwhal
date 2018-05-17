@@ -10,11 +10,16 @@ import { StyledSubmitButton } from '../../widgets/forms/SubmitButton';
 import { StyledForm } from '../../widgets/forms/Form';
 import { eventStub } from '../../utils/testUtils';
 import { StyledNavigationBackButton } from '../../widgets/buttons/NavigationBackButton';
+import { StyledFieldValidation } from '../../widgets/inputs/FieldValidation';
 
 describe('CertificationForm', () => {
   let subject: ShallowWrapper;
   let certification: CertificationModel;
   let store: CertificationFormStore;
+  const certificationActions: any = {
+    submit: jest.fn(),
+  };
+
   beforeEach(() => {
     certification = CertificationModelFactory.build(1, 1);
     DoubleRepositories.certificationRepository.update = jest.fn();
@@ -24,7 +29,7 @@ describe('CertificationForm', () => {
     store.hydrate(certification);
 
     subject = shallow(
-      <CertificationForm certificationFormStore={store}/>
+      <CertificationForm certificationFormStore={store} certificationActions={certificationActions}/>
     );
   });
 
@@ -38,19 +43,23 @@ describe('CertificationForm', () => {
 
   it('should call the certificationFormStore set acronym method', () => {
     subject.find(StyledTextInput).simulate('change', {target: {value: 'new title'}});
-    expect(store.certification.title).toBe('new title');
+    expect(store.certification.title).toBe('NEW TITLE');
   });
 
   it('should render a save button', () => {
     expect(subject.find(StyledSubmitButton).exists()).toBeTruthy();
   });
 
-  it('should call the certificationFormStore update methon on submit', async () => {
+  it('should call the certificationFormStore update method on submit', async () => {
     subject.find(StyledForm).simulate('submit', eventStub);
-    expect(DoubleRepositories.certificationRepository.update).toBeCalled();
+    expect(certificationActions.submit).toHaveBeenCalled();
   });
 
   it('should render a button to go back', () => {
     expect(subject.find(StyledNavigationBackButton).exists()).toBeTruthy();
+  });
+
+  it('should render with field validation', () => {
+    expect(subject.find(StyledFieldValidation).prop('fieldName')).toBe('title');
   });
 });

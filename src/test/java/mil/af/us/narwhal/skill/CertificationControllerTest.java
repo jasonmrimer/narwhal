@@ -15,6 +15,8 @@ import static org.hamcrest.Matchers.equalTo;
 
 public class CertificationControllerTest extends BaseIntegrationTest {
   private Certification certification;
+  private Certification certification2;
+  private Certification certification3;
   @Autowired CertificationRepository certificationRepository;
 
   @Before
@@ -39,10 +41,12 @@ public class CertificationControllerTest extends BaseIntegrationTest {
     siteRepository.save(site2);
 
     certification = new Certification("Cert", site);
-    final Certification cert2 = new Certification("Cert", site2);
+    certification2 = new Certification("Cert", site2);
+    certification3 = new Certification("Cert2", site);
 
     certificationRepository.save(certification);
-    certificationRepository.save(cert2);
+    certificationRepository.save(certification2);
+    certificationRepository.save(certification3);
   }
 
   @After
@@ -62,7 +66,7 @@ public class CertificationControllerTest extends BaseIntegrationTest {
       .get(CertificationController.URI)
     .then()
       .statusCode(200)
-      .body("$.size()", equalTo(2));
+      .body("$.size()", equalTo(3));
     // @formatter:on
   }
 
@@ -78,7 +82,7 @@ public class CertificationControllerTest extends BaseIntegrationTest {
       .get(CertificationController.URI + "?siteId=" + site.getId())
     .then()
       .statusCode(200)
-      .body("$.size()", equalTo(1));
+      .body("$.size()", equalTo(2));
     // @formatter:on
   }
 
@@ -116,6 +120,27 @@ public class CertificationControllerTest extends BaseIntegrationTest {
     .then()
       .statusCode(200)
       .body("title", equalTo("COREY'S CERT"));
+    // @formatter:on
+  }
+
+  @Test
+  public void testUpdate_BlankTitle() throws JsonProcessingException {
+    certification.setTitle("");
+    final String json = objectMapper.writeValueAsString(certification);
+
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .contentType("application/json")
+      .body(json)
+    .when()
+      .put(CertificationController.URI + "/" + certification.getId())
+    .then()
+      .statusCode(400)
+      .body("error", equalTo("Bad Request"));
     // @formatter:on
   }
 }

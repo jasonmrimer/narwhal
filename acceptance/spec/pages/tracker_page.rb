@@ -75,7 +75,7 @@ class TrackerPage
   end
 
   def assert_filters_by_certification
-    typeahead('Filter Certifications', 'Super Speed')
+    typeahead('Filter Certifications', 'SUPER SPEED')
     expect(page).to have_css('.airman-name', maximum: @all_airmen_count - 1)
   end
 
@@ -103,7 +103,7 @@ class TrackerPage
       expect(page).to have_content('Spaceman, Corey')
       expect(page).to have_content('QB')
       expect(page).to have_content('25 Jan 19')
-      expect(page).to have_content('Laser Vision')
+      expect(page).to have_content('LASER VISION')
       expect(page).to have_content('25 Jan 19')
     end
   end
@@ -213,7 +213,7 @@ class TrackerPage
 
     filter('flight', 'DOB')
     typeahead('Filter Qualifications', 'QB')
-    typeahead('Filter Certifications', 'Super Speed')
+    typeahead('Filter Certifications', 'SUPER SPEED')
 
     click(find('a', text: 'MISSION'))
 
@@ -230,7 +230,7 @@ class TrackerPage
       expect(page.find('.rbt-token').text).to eq 'QB ×'
     end
     page.within('.certifications-multitypeahead') do
-      expect(page.find('.rbt-token').text).to eq 'Super Speed ×'
+      expect(page.find('.rbt-token').text).to eq 'SUPER SPEED ×'
     end
   end
 
@@ -245,7 +245,7 @@ class TrackerPage
   end
 
   def open_rip_page
-    click(page.first(".airman-cert", text: "Laser Vision"))
+    click(page.first(".airman-cert", text: "LASER VISION"))
     expect(page).to have_content('RIP TASKS')
     click(page.find("div.rip-item-tile-title", text: "RIP TASKS"))
     expect(page).to have_content('DCGS Mission')
