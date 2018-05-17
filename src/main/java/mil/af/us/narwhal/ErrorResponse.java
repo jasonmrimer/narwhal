@@ -12,10 +12,11 @@ public class ErrorResponse {
   private List<Map<String, String>> errors = new ArrayList<>();
 
   public ErrorResponse addError(String field, String message) {
-    HashMap error = new HashMap<String, String>() {{
-      put("field", field);
-      put("defaultMessage", message);
-    }};
+    HashMap<String, String> error = new HashMap<>();
+
+    error.put("field", field);
+    error.put("defaultMessage", message);
+
     this.errors.add(error);
     return this;
   }
