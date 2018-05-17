@@ -57,10 +57,8 @@ public class CertificationController {
       );
     } catch (Exception e) {
       if (!(e.getCause() instanceof ConstraintViolationException)) throw e;
-
-      final ConstraintViolationException cause = (ConstraintViolationException) e.getCause();
       return new ResponseEntity<>(
-        new ErrorResponse().addError(cause.getConstraintName(), "Certification must be unique."),
+        new ErrorResponse().addError("title", "Certification must be unique."),
         HttpStatus.BAD_REQUEST
       );
     }
