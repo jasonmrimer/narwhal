@@ -32,7 +32,6 @@ export class AirmanProfilePage extends React.Component<Props> {
           WebRepositories.ripItemRepository.findBySelectedAirman(airmanId),
         ]);
         this.props.airmanProfileManagerStore!.hydrate(airman, sites, schedules, ranks, ripItems);
-
       } else {
         this.props.airmanProfileManagerStore!.hydrate(AirmanModel.empty(), sites, schedules, ranks);
       }

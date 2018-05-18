@@ -21,6 +21,7 @@ export class AirmanProfileManagerStore extends NotificationStore {
   @observable _scheduleId: number;
   @observable _errors: FormErrors = {};
   @observable _didSaveAirman: boolean = false;
+  @observable _pendingDeleteAirman: boolean = false;
 
   constructor(private airmanRepository: AirmanRepository) {
     super();
@@ -46,6 +47,7 @@ export class AirmanProfileManagerStore extends NotificationStore {
       this._ranks.find(r => r.abbreviation === 'No Rank')!.id;
     this._errors = {};
     this._didSaveAirman = false;
+    this._pendingDeleteAirman = false;
   }
 
   @computed
@@ -86,6 +88,16 @@ export class AirmanProfileManagerStore extends NotificationStore {
   @action.bound
   setErrors(errors: FormErrors) {
     this._errors = errors;
+  }
+
+  @computed
+  get pendingDeleteAirman() {
+    return this._pendingDeleteAirman;
+  }
+
+  @action.bound
+  setPendingDeleteAirman(pending: boolean) {
+    this._pendingDeleteAirman = pending;
   }
 
   @computed

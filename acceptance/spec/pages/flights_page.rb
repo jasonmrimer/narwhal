@@ -81,8 +81,9 @@ class FlightsPage
     expect(page).to have_content 'LASER VISION'
   end
 
-  def assert_create_airman
+  def assert_create_and_delete_airman
     page.find('span', text: 'New Operator').click
+
     fill_in 'lastName', with: 'Aaron'
     fill_in 'firstName', with: 'Aadam'
     find('#airman-site').find(:option, text: 'DMS Maryland').select_option
@@ -90,7 +91,15 @@ class FlightsPage
     find('input[type="submit"]').click
 
     visit '/flights'
+
     expect(page).to have_content 'Aaron, Aadam'
+
+    click_on_airman 'Aaron, Aadam'
+
+    click_button 'DELETE MEMBER'
+
+    expect(page).to have_content 'This action cannot be undone.'
+    page.find('button.confirm', text: 'DELETE').click
   end
 
   def assert_create_certification

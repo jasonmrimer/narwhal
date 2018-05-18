@@ -89,9 +89,9 @@ export class FakeAirmanRepository implements AirmanRepository {
   deleteSkill(skill: Skill): Promise<AirmanModel> {
     const airman = airmen.find(a => a.id === skill.airmanId)!;
     if (skill.type === SkillType.Qualification) {
-      this.delete(airman.qualifications, skill.id!);
+      this._deleteSkill(airman.qualifications, skill.id!);
     } else {
-      this.delete(airman.certifications, skill.id!);
+      this._deleteSkill(airman.certifications, skill.id!);
     }
     return Promise.resolve(airman);
   }
@@ -114,10 +114,18 @@ export class FakeAirmanRepository implements AirmanRepository {
     }
   }
 
-  private delete(skills: any[], skillToDeleteId: number) {
+  private _deleteSkill(skills: any[], skillToDeleteId: number) {
     const index = skills.map(s => s.id).indexOf(skillToDeleteId, 0);
     if (index > -1) {
       skills.splice(index, 1);
     }
+  }
+
+  async delete(airman: AirmanModel): Promise<void> {
+    const i = airmen.findIndex(a => a.id === airman.id);
+    if (i !== -1) {
+      airmen.splice(i, 1);
+    }
+    return Promise.resolve();
   }
 }

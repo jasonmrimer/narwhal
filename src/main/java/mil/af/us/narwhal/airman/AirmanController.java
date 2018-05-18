@@ -61,6 +61,11 @@ public class AirmanController {
     return airmanService.updateAirman(airmanJSON);
   }
 
+  @DeleteMapping(path = "/{id}")
+  public void delete(@PathVariable("id") Long id) {
+    airmanService.deleteAirman(id);
+  }
+
   @PostMapping(path = "/{id}/qualifications")
   public ResponseEntity<Airman> createAirmanQualification(
     @PathVariable("id") Long id,

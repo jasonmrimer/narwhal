@@ -22,6 +22,7 @@ describe('CurrencyStore', () => {
         findBySiteId: jest.fn(),
         saveSkill: jest.fn(),
         saveAirman: jest.fn(),
+        delete: jest.fn(),
         deleteSkill: jest.fn(),
         findOne: jest.fn(),
         updateShiftByFlightId: jest.fn(),

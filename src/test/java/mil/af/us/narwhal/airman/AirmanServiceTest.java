@@ -21,6 +21,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -171,5 +172,11 @@ public class AirmanServiceTest {
     assertThat(savedAirman.getFlight().getId()).isEqualTo(flight.getId());
     assertThat(savedAirman.getRank().getId()).isEqualTo(rank.getId());
     assertThat(savedAirman.getSchedules()).containsExactly(airmanSchedule);
+  }
+
+  @Test
+  public void testDeleteAirman() {
+    subject.deleteAirman(123L);
+    verify(airmanRepository).delete(123L);
   }
 }

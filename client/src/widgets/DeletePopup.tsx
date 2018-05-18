@@ -5,15 +5,18 @@ import { Skill } from '../skills/models/Skill';
 import { AirmanCertificationModel } from '../airman/models/AirmanCertificationModel';
 import { AirmanQualificationModel } from '../airman/models/AirmanQualificationModel';
 import { StyledButton } from './buttons/Button';
+import { AirmanModel } from '../airman/models/AirmanModel';
+
+type Deletable = AirmanModel | EventModel | Skill;
 
 interface Props {
-  item: EventModel | Skill;
+  item: Deletable;
   onConfirm: () => Promise<void>;
   onCancel: () => void;
   className?: string;
 }
 
-export const renderItemInformation = (item: EventModel | Skill) => {
+export const renderItemInformation = (item: Deletable) => {
   const format = 'DD MMM YY HH:mm';
   switch (item.constructor) {
     case EventModel:
@@ -23,12 +26,14 @@ export const renderItemInformation = (item: EventModel | Skill) => {
       return `Remove ${(item as AirmanCertificationModel).title}?`;
     case AirmanQualificationModel:
       return `Remove ${(item as AirmanQualificationModel).acronym}?`;
+    case AirmanModel:
+      return `Delete ${(item as AirmanModel).fullName}? This action cannot be undone.`;
     default:
       return 'REMOVE ITEM';
   }
 };
 
-export const renderTitle = (item: EventModel | Skill) => {
+export const renderTitle = (item: Deletable) => {
   switch (item.constructor) {
     case EventModel:
       return 'REMOVE EVENT';
@@ -36,6 +41,8 @@ export const renderTitle = (item: EventModel | Skill) => {
       return 'REMOVE CERTIFICATION';
     case AirmanQualificationModel:
       return 'REMOVE QUALIFICATION';
+    case AirmanModel:
+      return 'DELETE MEMBER';
     default:
       return 'REMOVE ITEM';
   }
@@ -48,8 +55,16 @@ export const DeletePopup = (props: Props) => {
         <div className="title">{renderTitle(props.item)}</div>
         <span>{renderItemInformation(props.item)}</span>
         <span className="actions">
-          <StyledButton className="cancel" onClick={props.onCancel} text="CANCEL"/>
-          <StyledButton className="confirm" onClick={async () => await props.onConfirm()} text="REMOVE"/>
+          <StyledButton
+            className="cancel"
+            onClick={props.onCancel}
+            text="CANCEL"
+          />
+          <StyledButton
+            className="confirm"
+            onClick={async () => await props.onConfirm()}
+            text={props.item instanceof AirmanModel ? 'DELETE' : 'REMOVE'}
+          />
         </span>
       </div>
     </div>

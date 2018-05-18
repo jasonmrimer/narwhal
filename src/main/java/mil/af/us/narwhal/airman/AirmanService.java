@@ -57,4 +57,8 @@ public class AirmanService {
       .ifPresent(airman::addSchedule);
     return airmanRepository.save(airman);
   }
+
+  public void deleteAirman(Long id) {
+    airmanRepository.delete(id);
+  }
 }

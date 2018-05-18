@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { CertificationModel } from '../skills/certification/models/CertificationModel';
 import { Link } from 'react-router-dom';
-import { PlusIcon } from "../icons/PlusIcon";
+import { PlusIcon } from '../icons/PlusIcon';
 
 interface Props {
   certifications: CertificationModel[];

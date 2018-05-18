@@ -29,6 +29,10 @@ export class WebAirmanRepository implements AirmanRepository {
     return this.serializer.deserialize(json);
   }
 
+  async delete(airman: AirmanModel): Promise<void> {
+    await this.client.delete(`/api/airmen/${airman.id}`);
+  }
+
   async saveSkill(skill: Skill): Promise<AirmanModel> {
     const body = JSON.stringify(skill);
     const json = skill.id ?

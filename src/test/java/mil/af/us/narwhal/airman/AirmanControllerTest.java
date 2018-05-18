@@ -252,6 +252,21 @@ public class AirmanControllerTest extends BaseIntegrationTest {
   }
 
   @Test
+  public void deleteTest() {
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+    .when()
+      .delete(AirmanController.URI + "/" + airman1.getId())
+    .then()
+      .statusCode(200);
+    // @formatter:on
+  }
+
+  @Test
   public void updateAirmanQualification() throws JsonProcessingException {
     final AirmanQualification airmanQualification = new AirmanQualification(
       qualification1,

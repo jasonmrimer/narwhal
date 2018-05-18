@@ -17,6 +17,7 @@ import { ScheduleModel, ScheduleType } from '../schedule/models/ScheduleModel';
 import { StyledFieldValidation } from '../widgets/inputs/FieldValidation';
 import { StyledAlert } from '../widgets/Alert';
 import { RankModel } from '../rank/models/RankModel';
+import { StyledButton } from '../widgets/buttons/Button';
 
 describe('AirmanProfileManager', () => {
   let profileActions: any;
@@ -55,7 +56,8 @@ describe('AirmanProfileManager', () => {
     store.hydrate(airman, SiteModelFactory.buildList(3, 3), schedules, ranks, airmanRipItems);
 
     profileActions = {
-      handleFormSubmit: jest.fn()
+      handleFormSubmit: jest.fn(),
+      deleteAirman: jest.fn()
     };
 
     subject = shallow(
@@ -68,7 +70,17 @@ describe('AirmanProfileManager', () => {
   });
 
   it('should render the header', () => {
-    expect(subject.find('.airman-header').text()).toBe(airman.fullName);
+    expect(subject.find('.airman-header').text()).toContain(airman.fullName);
+  });
+
+  it('should render a delete button when the airman is not empty', () => {
+    const deleteButton = subject
+      .find(StyledButton)
+      .findWhere(btn => btn.prop('text') === 'DELETE MEMBER');
+    expect(deleteButton.exists()).toBeTruthy();
+
+    deleteButton.simulate('click', eventStub);
+    expect(store.pendingDeleteAirman).toBeTruthy();
   });
 
   it('should render the personal information about an Airman', () => {

@@ -44,7 +44,7 @@ public class AuthorizedRequestsTest {
   public static final List<RoleName> Admins = Arrays.asList(RoleName.ADMIN);
   public static final List<RoleName> Viewers = Arrays.asList(RoleName.READER);
   private static final Boolean Authorized = true;
-  private  static final Boolean Unauthorized = false;
+  private static final Boolean Unauthorized = false;
   @Autowired
   private WebApplicationContext webAppContext;
   @Autowired
@@ -54,6 +54,7 @@ public class AuthorizedRequestsTest {
   private HashMap<Boolean, List<RoleName>> adminOnly;
   private HashMap<Boolean, List<RoleName>> modifiersOnly;
   private HashMap<Boolean, List<RoleName>> everyone;
+
   @Before
   public void setUp() {
     mockMvc = MockMvcBuilders
@@ -77,51 +78,52 @@ public class AuthorizedRequestsTest {
       put(Authorized, Everyone);
     }};
 
-    //{[/api/events],methods=[POST]}
-    //{[/api/upload/airmen],methods=[POST]}
-    //{[/api/events/{id}],methods=[PUT]}
-    ///api/skill/rip-items
     expectations =
       Arrays.asList(
-        new EndpointAuthorizationExpectations("/api/airmen/1/certifications/1")
-          .setStatusCodeDictionaryDELETE(modifiersOnly)
-        ,new EndpointAuthorizationExpectations("/api/airmen/1/certifications")
+        new EndpointAuthorizationExpectations("/api/airmen")
           .setStatusCodeDictionaryPOST(modifiersOnly)
           .setStatusCodeDictionaryPUT(modifiersOnly)
-        ,new EndpointAuthorizationExpectations("/api/events")
+        , new EndpointAuthorizationExpectations("/api/airmen/1")
+          .setStatusCodeDictionaryDELETE(modifiersOnly)
+        , new EndpointAuthorizationExpectations("/api/airmen/1/certifications/1")
+          .setStatusCodeDictionaryDELETE(modifiersOnly)
+        , new EndpointAuthorizationExpectations("/api/airmen/1/certifications")
+          .setStatusCodeDictionaryPOST(modifiersOnly)
+          .setStatusCodeDictionaryPUT(modifiersOnly)
+        , new EndpointAuthorizationExpectations("/api/events")
           .setStatusCodeDictionaryPOST(everyone)
-        ,new EndpointAuthorizationExpectations("/api/airmen/1/qualifications")
+        , new EndpointAuthorizationExpectations("/api/airmen/1/qualifications")
           .setStatusCodeDictionaryPOST(modifiersOnly)
           .setStatusCodeDictionaryPUT(modifiersOnly)
-        ,new EndpointAuthorizationExpectations("/api/airmen/1/qualifications/1")
+        , new EndpointAuthorizationExpectations("/api/airmen/1/qualifications/1")
           .setStatusCodeDictionaryDELETE(modifiersOnly)
-        ,new EndpointAuthorizationExpectations("/api/crew_positions")
+        , new EndpointAuthorizationExpectations("/api/crew_positions")
           .setStatusCodeDictionaryDELETE(modifiersOnly)
-        ,new EndpointAuthorizationExpectations("/api/crew_positions/1")
+        , new EndpointAuthorizationExpectations("/api/crew_positions/1")
           .setStatusCodeDictionaryPUT(modifiersOnly)
-        ,new EndpointAuthorizationExpectations("/api/crews/1/airmen/1")
+        , new EndpointAuthorizationExpectations("/api/crews/1/airmen/1")
           .setStatusCodeDictionaryDELETE(modifiersOnly)
-        ,new EndpointAuthorizationExpectations("/api/events/1")
+        , new EndpointAuthorizationExpectations("/api/events/1")
           .setStatusCodeDictionaryDELETE(everyone)
           .setStatusCodeDictionaryPUT(everyone)
-        ,new EndpointAuthorizationExpectations("/api/profiles")
+        , new EndpointAuthorizationExpectations("/api/profiles")
           .setStatusCodeDictionaryGET(adminOnly)
           .setStatusCodeDictionaryPUT(adminOnly)
-        ,new EndpointAuthorizationExpectations("/api/profiles/me")
+        , new EndpointAuthorizationExpectations("/api/profiles/me")
           .setStatusCodeDictionaryPUT(everyone)
-        ,new EndpointAuthorizationExpectations("/api/skill/rip-items")
+        , new EndpointAuthorizationExpectations("/api/skill/rip-items")
           .setStatusCodeDictionaryPUT(modifiersOnly)
-        ,new EndpointAuthorizationExpectations("/api/upload/airmen")
+        , new EndpointAuthorizationExpectations("/api/upload/airmen")
           .setStatusCodeDictionaryPOST(modifiersOnly)
-        ,new EndpointAuthorizationExpectations("/api/upload/airmen/certifications")
+        , new EndpointAuthorizationExpectations("/api/upload/airmen/certifications")
           .setStatusCodeDictionaryPOST(modifiersOnly)
-        ,new EndpointAuthorizationExpectations("/api/upload/airmen/qualifications")
+        , new EndpointAuthorizationExpectations("/api/upload/airmen/qualifications")
           .setStatusCodeDictionaryPOST(modifiersOnly)
-        ,new EndpointAuthorizationExpectations("/api/upload/certifications")
+        , new EndpointAuthorizationExpectations("/api/upload/certifications")
           .setStatusCodeDictionaryPOST(modifiersOnly)
-        ,new EndpointAuthorizationExpectations("/api/upload/qualifications")
+        , new EndpointAuthorizationExpectations("/api/upload/qualifications")
           .setStatusCodeDictionaryPOST(modifiersOnly)
-    );
+      );
   }
 
   @Test

@@ -15,6 +15,9 @@ import { History } from 'history';
 import { StyledFieldValidation } from '../widgets/inputs/FieldValidation';
 import { ProfileActions } from './actions/ProfileActions';
 import { StyledAlert } from '../widgets/Alert';
+import { StyledButton } from '../widgets/buttons/Button';
+import { DeleteIcon } from '../icons/DeleteIcon';
+import { StyledDeletePopup } from '../widgets/DeletePopup';
 
 interface Props {
   airmanProfileManagerStore?: AirmanProfileManagerStore;
@@ -26,13 +29,25 @@ interface Props {
 @observer
 export class AirmanProfileManager extends React.Component<Props> {
   render() {
-    const {className, airmanProfileManagerStore} = this.props;
+    const {history, className, airmanProfileManagerStore} = this.props;
     const {airman, setState, didSaveAirman} = airmanProfileManagerStore!;
     const {firstName, lastName} = airman;
     return (
       <div className={className}>
-        <StyledForm onSubmit={this.onSubmit} performLoading={airmanProfileManagerStore!.performLoading}>
 
+        {
+          airmanProfileManagerStore!.pendingDeleteAirman &&
+          <StyledDeletePopup
+            item={airman}
+            onConfirm={async () => await this.props.profileActions!.deleteAirman(history)}
+            onCancel={() => airmanProfileManagerStore!.setPendingDeleteAirman(false)}
+          />
+        }
+
+        <StyledForm
+          onSubmit={this.onSubmit}
+          performLoading={airmanProfileManagerStore!.performLoading}
+        >
           <div className="side-nav">
             <StyledNavigationBackButton location="/flights"/>
             <StyledSubmitButton text="SAVE"/>
@@ -48,7 +63,19 @@ export class AirmanProfileManager extends React.Component<Props> {
               <h1>
                 {airman.fullName}
               </h1>
-              <br/>
+              {
+                airman.isEmpty ?
+                  <br/> :
+                  <StyledButton
+                    className="delete-member-btn"
+                    text="DELETE MEMBER"
+                    renderIcon={DeleteIcon}
+                    onClick={async (e: any) => {
+                      e.preventDefault();
+                      airmanProfileManagerStore!.setPendingDeleteAirman(true);
+                    }}
+                  />
+              }
             </div>
 
             <div>
@@ -238,6 +265,10 @@ export const StyledAirmanProfileManager = inject(
     & > a {
       margin-top: 0;
     }
+  }
+  
+  .delete-member-btn {
+    margin: 0 0 0 auto;
   }
 
   .content {

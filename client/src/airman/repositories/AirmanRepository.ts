@@ -11,6 +11,8 @@ export interface AirmanRepository {
 
   saveAirman(airman: AirmanModel): Promise<AirmanModel>;
 
+  delete(airman: AirmanModel): Promise<void>;
+
   deleteSkill(skill: Skill): Promise<AirmanModel>;
 
   updateShiftByFlightId(flightId: number, shift: ShiftType): Promise<AirmanModel[]>;
