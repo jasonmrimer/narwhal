@@ -1,22 +1,16 @@
 import { CertificationFormStore } from './CertificationFormStore';
-import { DoubleRepositories } from '../../../utils/Repositories';
 import { CertificationModelFactory } from '../factories/CertificationModelFactory';
 
 describe('CertificationFormStore', () => {
   let subject: CertificationFormStore;
 
   beforeEach(() => {
-    DoubleRepositories.certificationRepository.update = jest.fn();
-    subject = new CertificationFormStore(DoubleRepositories);
+    subject = new CertificationFormStore();
     subject.hydrate(CertificationModelFactory.build(1, 1));
   });
 
-  it('should save the certification when save is called', async () => {
-    subject.setCertificationTitle('New Title');
-
-    const newCertification = subject.certification;
-    await subject.update();
-
-    expect(DoubleRepositories.certificationRepository.update).toHaveBeenCalledWith(newCertification);
+  it('should set text that was input to certification title to uppercase', () => {
+    subject.setCertificationTitle('chicken');
+    expect(subject.certification.title).toBe('CHICKEN');
   });
 });

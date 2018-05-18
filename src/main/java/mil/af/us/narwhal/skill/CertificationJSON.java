@@ -9,10 +9,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class CertificationJSON {
   private static final String emptyFieldMessage = "This field is required.";
 
-  private Long id;
-
   @NotEmpty(message = emptyFieldMessage)
   private String title;
-
-  private Long siteId;
 }

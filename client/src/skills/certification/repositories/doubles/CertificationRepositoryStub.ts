@@ -20,4 +20,8 @@ export class CertificationRepositoryStub implements CertificationRepository {
   update(certification: CertificationModel): Promise<CertificationModel> {
     return Promise.resolve(certification);
   }
+
+  save(certification: { title: string }): Promise<CertificationModel> {
+    return Promise.resolve(new CertificationModel(1, certification.title, 14));
+  }
 }

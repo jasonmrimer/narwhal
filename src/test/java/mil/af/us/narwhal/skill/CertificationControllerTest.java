@@ -103,6 +103,27 @@ public class CertificationControllerTest extends BaseIntegrationTest {
   }
 
   @Test
+  public void testCreate() throws JsonProcessingException {
+    final Certification certification = new Certification("DANNY'S CERT");
+    final String json = objectMapper.writeValueAsString(certification);
+
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .contentType("application/json")
+      .body(json)
+    .when()
+      .post(CertificationController.URI)
+    .then()
+      .statusCode(201)
+      .body("title", equalTo("DANNY'S CERT"));
+    // @formatter:on
+  }
+
+  @Test
   public void testUpdate() throws JsonProcessingException {
     certification.setTitle("COREY'S CERT");
     final String json = objectMapper.writeValueAsString(certification);

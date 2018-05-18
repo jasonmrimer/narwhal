@@ -8,7 +8,10 @@ import lombok.NoArgsConstructor;
 import mil.af.us.narwhal.site.Site;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -33,8 +36,14 @@ public class Certification {
     this.site = site;
   }
 
+  public Certification(String title) {
+    this.title = title;
+  }
+
   @JsonProperty
   public Long siteId() {
-    return this.site.getId();
+    return this.site != null
+      ? this.site.getId()
+      : null;
   }
 }

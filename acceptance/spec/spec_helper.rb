@@ -16,7 +16,7 @@ end
 
 Capybara.configure do |config|
   config.run_server = false
-  config.default_driver = :headless_chrome
+  config.default_driver = :chrome
   config.app_host = ENV['REACT_APP_HOST'] || 'http://localhost:8080'
 end
 

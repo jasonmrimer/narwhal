@@ -8,6 +8,7 @@ import { StyledCertificationForm } from '../../skills/certification/Certificatio
 interface Props {
   certificationFormStore?: CertificationFormStore;
   certificationId?: number;
+  history?: any;
 }
 
 @inject('certificationFormStore')
@@ -15,8 +16,10 @@ interface Props {
 export class CertificationManagerPage extends React.Component<Props> {
   async componentDidMount() {
     await this.props.certificationFormStore!.performLoading(async () => {
-      const certification =
-        await WebRepositories.certificationRepository.findOneCertification(this.props.certificationId!);
+      const {certificationId} = this.props;
+      const certification = certificationId
+        ? await WebRepositories.certificationRepository.findOneCertification(certificationId!)
+        : {title: ''};
       this.props.certificationFormStore!.hydrate(certification);
     });
   }
@@ -25,7 +28,7 @@ export class CertificationManagerPage extends React.Component<Props> {
     return (
       <React.Fragment>
         <StyledTopBar/>
-        <StyledCertificationForm/>
+        <StyledCertificationForm history={this.props.history}/>
       </React.Fragment>
     );
   }

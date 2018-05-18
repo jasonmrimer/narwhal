@@ -1,24 +1,22 @@
 import { action, computed, observable } from 'mobx';
-import { CertificationModel } from '../models/CertificationModel';
-import { Repositories } from '../../../utils/Repositories';
 import { NotificationStore } from '../../../widgets/stores/NotificationStore';
-import { CertificationRepository } from '../repositories/CertificationRepository';
 import { FormErrors } from '../../../widgets/inputs/FieldValidation';
 
+interface Certification {
+  title: string;
+  siteId?: number;
+  id?: number;
+}
+
 export class CertificationFormStore extends NotificationStore {
-  private certificationRepository: CertificationRepository;
-
-  @observable private _certification: CertificationModel;
+  @observable private _certification: Certification;
   @observable private _errors: FormErrors = {};
+  @observable private _didSave: boolean = false;
 
-  constructor(repositories: Repositories) {
-    super();
-    this.certificationRepository = repositories.certificationRepository;
-  }
-
-  hydrate(certification: CertificationModel) {
+  hydrate(certification: Certification) {
     this._certification = certification;
     this._errors = {};
+    this._didSave = false;
   }
 
   @computed
@@ -31,18 +29,23 @@ export class CertificationFormStore extends NotificationStore {
     return this._errors;
   }
 
+  @computed
+  get didSave() {
+    return this._didSave;
+  }
+
   @action.bound
   setErrors(errors: FormErrors) {
     this._errors = errors;
   }
 
   @action.bound
-  setCertificationTitle(title: string) {
-    this._certification = Object.assign({}, this._certification, {title: title.toUpperCase()});
+  setDidSave(didSave: boolean) {
+    this._didSave = didSave;
   }
 
   @action.bound
-  async update() {
-    this._certification = await this.certificationRepository.update(this._certification);
+  setCertificationTitle(title: string) {
+    this._certification = Object.assign({}, this._certification, {title: title.toUpperCase()});
   }
 }

@@ -1,11 +1,13 @@
 package mil.af.us.narwhal.skill;
 
 import mil.af.us.narwhal.ErrorResponse;
+import mil.af.us.narwhal.profile.Profile;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -45,15 +47,36 @@ public class CertificationController {
     @RequestBody CertificationJSON certificationJSON
   ) {
     try {
-      final Site site = siteRepository.findOne(certificationJSON.getSiteId());
+      final Certification certification = this.certificationRepository.findOne(id);
+      certification.setTitle(certificationJSON.getTitle());
+      return new ResponseEntity<>(
+        this.certificationRepository.save(certification),
+        HttpStatus.OK
+      );
+    } catch (Exception e) {
+      if (!(e.getCause() instanceof ConstraintViolationException)) throw e;
+      return new ResponseEntity<>(
+        new ErrorResponse().addError("title", "Certification must be unique."),
+        HttpStatus.BAD_REQUEST
+      );
+    }
+  }
+
+  @PostMapping
+  public ResponseEntity<Object> create(
+    @AuthenticationPrincipal Profile profile,
+    @Valid
+    @RequestBody CertificationJSON certificationJSON
+  ) {
+    try {
+      final Site site = siteRepository.findOne(profile.getSite().getId());
       final Certification certification = new Certification(
-        certificationJSON.getId(),
         certificationJSON.getTitle(),
         site
       );
       return new ResponseEntity<>(
         this.certificationRepository.save(certification),
-        HttpStatus.OK
+        HttpStatus.CREATED
       );
     } catch (Exception e) {
       if (!(e.getCause() instanceof ConstraintViolationException)) throw e;

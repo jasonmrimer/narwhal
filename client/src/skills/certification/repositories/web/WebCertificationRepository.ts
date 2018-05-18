@@ -31,4 +31,9 @@ export class WebCertificationRepository implements CertificationRepository {
     const body = JSON.stringify(certification);
     return await this.client.putJSON(`/api/certifications/${certification.id}`, body);
   }
+
+  async save(certification: { title: string }): Promise<CertificationModel> {
+    const body = JSON.stringify(certification);
+    return await this.client.postJSON('/api/certifications', body);
+  }
 }

@@ -29,6 +29,13 @@ export class Routes extends React.Component {
           render={({match, history}) => <AirmanProfilePage airmanId={match.params.airmanId} history={history}/>}
         />
         <Route
+          exact={true}
+          path="/certifications/new"
+          render={({history}) => {
+            return (<CertificationManagerPage history={history}/>);
+          }}
+        />
+        <Route
           path="/certifications/:certificationId"
           render={({match}) => {
             return (

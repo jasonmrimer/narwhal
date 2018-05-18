@@ -93,6 +93,18 @@ class FlightsPage
     expect(page).to have_content 'Aaron, Aadam'
   end
 
+  def assert_create_certification
+    page.find('a', text: 'ADD CERTIFICATION').click
+
+    fill_in 'Acronym', with: 'MAGNETIC MANIPULATION'
+
+    find('input[type="submit"]').click
+
+    click_link 'Back'
+
+    expect(page).to have_content 'MAGNETIC MANIPULATION'
+  end
+
 
   private
 

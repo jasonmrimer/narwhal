@@ -49,7 +49,7 @@ const missionPlannerStore = new MissionPlannerStore(WebRepositories);
 const adminStore = new AdminStore(WebRepositories);
 const airmanProfileManagerStore = new AirmanProfileManagerStore(WebRepositories.airmanRepository);
 const siteManagerStore = new SiteManagerStore();
-const certificationFormStore = new CertificationFormStore(WebRepositories);
+const certificationFormStore = new CertificationFormStore();
 
 export interface Stores {
   profileStore: ProfileSitePickerStore;

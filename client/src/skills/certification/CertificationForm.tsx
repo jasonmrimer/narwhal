@@ -8,10 +8,12 @@ import { StyledForm } from '../../widgets/forms/Form';
 import { StyledNavigationBackButton } from '../../widgets/buttons/NavigationBackButton';
 import { StyledFieldValidation } from '../../widgets/inputs/FieldValidation';
 import { CertificationActions } from './CertificationActions';
+import { StyledAlert } from '../../widgets/Alert';
 
 interface Props {
   certificationFormStore?: CertificationFormStore;
   certificationActions?: CertificationActions;
+  history?: History;
   className?: string;
 }
 
@@ -26,27 +28,31 @@ export class CertificationForm extends React.Component <Props> {
     return (
       <div className={className}>
         <StyledForm
-          onSubmit={certificationActions!.submit}
+          className="certification-form"
+          onSubmit={async (e: any) => {
+            e.preventDefault();
+            await certificationActions!.submit(this.props.history);
+          }}
           performLoading={certificationFormStore!.performLoading}
         >
           <div className="navigation-section">
             <StyledNavigationBackButton
               location="/flights"
             />
-
             <StyledSubmitButton
-              text="save"
+              text="SAVE"
             />
           </div>
           <div className="form-fields">
-
+            {
+              certificationFormStore!.didSave &&
+              <StyledAlert>Your changes have been saved.</StyledAlert>
+            }
             <h2>{certificationFormStore!.certification.title}</h2>
             <h3>Certification</h3>
 
             <div className="input-row">
-
               <label htmlFor="title">Acronym</label>
-
               <StyledFieldValidation
                 fieldName="title"
                 errors={certificationFormStore!.errors}
@@ -60,11 +66,10 @@ export class CertificationForm extends React.Component <Props> {
                   id="title"
                 />
               </StyledFieldValidation>
-
             </div>
+
           </div>
         </StyledForm>
-
       </div>
     );
   }
@@ -75,6 +80,10 @@ export const StyledCertificationForm = inject(
   'certificationActions'
 )(styled(CertificationForm)`
   margin: auto 0;
+  
+  .certification-form {
+    color: ${props => props.theme.fontColor};
+  }
   
   .navigation-section {
     position: fixed;

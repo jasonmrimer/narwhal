@@ -27,7 +27,7 @@ export class ProfileActions {
       store.setErrors({});
 
       store.setDidSaveAirman(true);
-      history.push(`/flights/${store.airman.id}`);
+      history.replace(`/flights/${store.airman.id}`);
     } catch (e) {
       store.setErrors(Object.assign({}, e, formErrors));
     }

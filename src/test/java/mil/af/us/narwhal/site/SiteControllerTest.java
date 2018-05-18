@@ -68,16 +68,16 @@ public class SiteControllerTest extends BaseIntegrationTest {
       .get(SiteController.URI)
     .then()
       .statusCode(200)
-      .body("$.size()", equalTo(2))
-      .body("[0].squadrons.size()", equalTo(1))
-      .body("[0].squadrons[0].flights.size()", equalTo(1))
-      .body("[0].siteType", equalTo("DGSCoreSite"))
-      .body("[0].fullName", equalTo("siteOne"))
-      .body("[1].squadrons.size()", equalTo(2))
+      .body("$.size()", equalTo(3))
+      .body("[1].squadrons.size()", equalTo(1))
       .body("[1].squadrons[0].flights.size()", equalTo(1))
-      .body("[1].squadrons[1].flights.size()", equalTo(2))
-      .body("[1].siteType", equalTo("DMSSite"))
-      .body("[1].fullName", equalTo("siteTwo"));
+      .body("[1].siteType", equalTo("DGSCoreSite"))
+      .body("[1].fullName", equalTo("siteOne"))
+      .body("[2].squadrons.size()", equalTo(2))
+      .body("[2].squadrons[0].flights.size()", equalTo(1))
+      .body("[2].squadrons[1].flights.size()", equalTo(2))
+      .body("[2].siteType", equalTo("DMSSite"))
+      .body("[2].fullName", equalTo("siteTwo"));
     // @formatter:on
   }
 

@@ -27,7 +27,7 @@ const sidePanelActions = new SidePanelActions(stores);
 const trackerActions = new TrackerActions(stores);
 const appActions = new AppActions(stores, WebRepositories);
 const siteManagerActions = new SiteManagerActions(stores, WebRepositories);
-const certificationActions = new CertificationActions(stores);
+const certificationActions = new CertificationActions(stores, WebRepositories);
 
 export const actions = {
   availabilityActions,

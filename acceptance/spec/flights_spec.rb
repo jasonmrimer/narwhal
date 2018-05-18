@@ -28,6 +28,10 @@ describe 'Flights page', type: :feature do
     flights_page.assert_shows_certifications
   end
 
+  it 'create a new certification' do
+    flights_page.assert_create_certification
+  end
+
   it 'can edit the acronym of a certification' do
     flights_page.assert_edit_certification
   end

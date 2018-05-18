@@ -59,11 +59,23 @@ public abstract class BaseIntegrationTest {
   @LocalServerPort protected int port;
 
   public void setUp() {
+    flight = new Flight("flight");
+
+    final Squadron squadron = new Squadron("squadron");
+    squadron.addFlight(flight);
+
+    site = new Site("site");
+    site.addSquadron(squadron);
+
+    siteRepository.save(site);
+
+    rank = rankRepository.save(new Rank("No Rank"));
+
     readerRole = roleRepository.save(new Role(RoleName.READER));
     writerRole = roleRepository.save(new Role(RoleName.WRITER));
     adminRole = roleRepository.save(new Role(RoleName.ADMIN));
-    rank = rankRepository.save(new Rank("No Rank"));
-    tytus = profileRepository.save(new Profile("tytus",  "password", adminRole));
+
+    tytus = profileRepository.save(new Profile("tytus",  site, adminRole, "password"));
   }
 
   public void tearDown() {
@@ -75,18 +87,6 @@ public abstract class BaseIntegrationTest {
   }
 
   public void buildAirman() {
-    flight = new Flight("flight");
-
-    final Squadron squadron = new Squadron("squadron");
-    squadron.addFlight(flight);
-
-    site = new Site("site");
-    site.addSquadron(squadron);
-
-    siteRepository.save(site);
-
-
-
     Airman airman = new Airman(flight, "FIRST", "LAST", rank);
     airmanRepository.save(airman);
 

@@ -8,4 +8,6 @@ export interface CertificationRepository {
   findOneCertification(certificationId: number): Promise<CertificationModel>;
 
   update(certification: CertificationModel): Promise<CertificationModel>;
+
+  save(certification: {title: string}): Promise<CertificationModel>;
 }

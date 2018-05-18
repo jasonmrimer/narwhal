@@ -24,7 +24,7 @@ describe('CertificationForm', () => {
     certification = CertificationModelFactory.build(1, 1);
     DoubleRepositories.certificationRepository.update = jest.fn();
 
-    store = new CertificationFormStore(DoubleRepositories);
+    store = new CertificationFormStore();
 
     store.hydrate(certification);
 
