@@ -28,8 +28,7 @@ describe 'Flights page', type: :feature do
     flights_page.assert_shows_certifications
   end
 
-  # FIXME : this refuses to work in chrome headless
-  xit 'create a new certification' do
+  it 'create a new certification' do
     flights_page.assert_create_certification
   end
 

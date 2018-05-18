@@ -103,9 +103,9 @@ class FlightsPage
   end
 
   def assert_create_certification
-    page.find('a', text: 'ADD CERTIFICATION').click
+    visit '/certifications/new'
 
-    fill_in 'Acronym', with: 'MAGNETIC MANIPULATION'
+    fill_in 'title', with: 'MAGNETIC MANIPULATION'
 
     find('input[type="submit"]').click
 
