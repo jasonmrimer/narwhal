@@ -5,14 +5,23 @@ import { ProfileSitePickerStore } from './stores/ProfileSitePickerStore';
 import { DoubleRepositories } from '../utils/Repositories';
 import { SiteModel, SiteType } from '../site/models/SiteModel';
 
+import { SquadronModel } from '../squadron/models/SquadronModel';
+import { StyledSelectProfilePopup } from './SelectProfilePopup';
+import { StyledSquadronButton } from './SquadronButton';
+
 describe('ProfileSitePicker', () => {
   let subject: ShallowWrapper;
   let sites: SiteModel[];
-  let profileStore = new ProfileSitePickerStore(DoubleRepositories);
-  profileStore.setPendingSite = jest.fn();
+  const dgsFullName = 'DGS CORE SITE';
+  const dmsFullName = 'DMS CORE SITE';
 
+  let profileStore = new ProfileSitePickerStore(DoubleRepositories);
   beforeEach(() => {
-    sites = [new SiteModel(1, '', [], SiteType.DGSCoreSite, '')];
+    const squadron = new SquadronModel(1, 'Squad 1', []);
+    sites = [
+      new SiteModel(1, 'DGS', [squadron], SiteType.DGSCoreSite, dgsFullName),
+      new SiteModel(2, 'DMS', [], SiteType.DMSSite, dmsFullName),
+    ];
     profileStore.hydrate(
       sites,
       {
@@ -30,7 +39,6 @@ describe('ProfileSitePicker', () => {
         profileStore={profileStore}
       />
     );
-    subject.update();
   });
 
   it('renders a welcome message', () => {
@@ -38,21 +46,24 @@ describe('ProfileSitePicker', () => {
   });
 
   it('renders the Sites full name on the button', () => {
-    profileStore.dgsCoreSites.forEach((site, index) => {
-      expect(subject.find('button').at(index).text()).toBe(site.fullName);
-    });
-
-    profileStore.dmsSites.forEach((site, index) => {
-      expect(subject.find('button').at(index + 1).text()).toBe(site.fullName);
-    });
-
-    profileStore.guardSites.forEach((site, index) => {
-      expect(subject.find('button').at(index + 2).text()).toBe(site.fullName);
-    });
+    expect(subject.find('button').at(0).text()).toBe(dgsFullName);
+    expect(subject.find('button').at(1).text()).toBe(dmsFullName);
   });
 
-  it('should render the selected profile popup after the site has been clicked', () => {
-    subject.find('button').at(0).simulate('click');
-    expect(profileStore.setPendingSite).toHaveBeenCalledWith(sites[0]);
+  describe('selecting a site', () => {
+    it('should show a list of squadrons when selecting a site with squadrons', () => {
+      expect(subject.find(StyledSquadronButton).exists()).toBeFalsy();
+      subject.find('button').at(0).simulate('click');
+      expect(subject.find(StyledSquadronButton).exists()).toBeTruthy();
+      expect(subject.find(StyledSquadronButton).length).toBe(1);
+    });
+
+    it('should show the pop after selecting a site with no squadrons', () => {
+      subject.find('button').at(0).simulate('click');
+      expect(subject.find(StyledSelectProfilePopup).exists()).toBeFalsy();
+
+      subject.find('button').at(1).simulate('click');
+      expect(subject.find(StyledSelectProfilePopup).exists()).toBeTruthy();
+    });
   });
 });

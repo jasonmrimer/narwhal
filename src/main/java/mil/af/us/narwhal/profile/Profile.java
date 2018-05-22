@@ -29,6 +29,8 @@ public class Profile implements UserDetails {
   @JoinColumn(name = "site_id")
   private Site site;
 
+  private Long squadronId;
+
   @ManyToOne
   @JoinColumn(name = "role_id", nullable = false)
   private Role role;

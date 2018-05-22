@@ -19,4 +19,8 @@ export class SiteModel {
       .map(squadron => squadron.getAllFlightIds())
       .reduce((x, y) => x.concat(y), []);
   }
+
+  get hasSquadrons() {
+    return this.squadrons.length > 0;
+  }
 }

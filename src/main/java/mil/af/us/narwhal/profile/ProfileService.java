@@ -2,6 +2,7 @@ package mil.af.us.narwhal.profile;
 
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
+import mil.af.us.narwhal.squadron.Squadron;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,6 +53,21 @@ public class ProfileService {
     final Role role = roleRepository.findOne(json.getRoleId());
     if (role != null) {
       profile.setRole(role);
+    }
+
+    return profileRepository.save(profile);
+  }
+
+  public Profile setSiteAndSquadron(Profile profile, Long siteId, Long squadronId) {
+    final Site site = siteRepository.findOne(siteId);
+
+    if (site != null) {
+      profile.setSite(site);
+      for (Squadron squadron : site.getSquadrons()) {
+        if (squadron.getId().equals(squadronId)) {
+          profile.setSquadronId(squadron.getId());
+        }
+      }
     }
 
     return profileRepository.save(profile);

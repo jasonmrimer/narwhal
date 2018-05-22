@@ -3,10 +3,23 @@ import styled from 'styled-components';
 import { observer } from 'mobx-react/custom';
 import { ProfileSitePickerStore } from './stores/ProfileSitePickerStore';
 import { inject } from 'mobx-react';
+import { SiteModel } from '../site/models/SiteModel';
+import { SquadronModel } from '../squadron/models/SquadronModel';
 
 interface Props {
   profileStore?: ProfileSitePickerStore;
   className?: string;
+}
+
+function getConfirmationMessage(pendingSite: SiteModel, pendingSquadron: SquadronModel | null) {
+  if (pendingSquadron) {
+    return `This will set ${pendingSite.fullName.toUpperCase()} ` +
+    `and ${pendingSquadron.name.toUpperCase()} as your home site and squadron.`;
+  }
+  if (pendingSite) {
+    return `This will set ${pendingSite.fullName.toUpperCase()} as your home site.`;
+  }
+  return null;
 }
 
 export const SelectProfilePopup = observer(({profileStore, className}: Props) => {
@@ -15,9 +28,7 @@ export const SelectProfilePopup = observer(({profileStore, className}: Props) =>
       <div className="site-confirmation">
         <div className="title">Site Selection</div>
         <div className="description">
-          {profileStore!.pendingSite &&
-          `This will set ${profileStore!.pendingSite!.fullName.toUpperCase()} as your home site.`
-          }
+          {getConfirmationMessage(profileStore!.pendingSite!, profileStore!.pendingSquadron)}
           <br/> This cannot currently be undone.
       </div>
         <div className="pop-up-buttons">

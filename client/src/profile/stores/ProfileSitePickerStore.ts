@@ -4,12 +4,15 @@ import { ProfileRepository } from '../repositories/ProfileRepository';
 import { SiteModel, SiteType } from '../../site/models/SiteModel';
 import { Repositories } from '../../utils/Repositories';
 import { NotificationStore } from '../../widgets/stores/NotificationStore';
+import { SquadronModel } from '../../squadron/models/SquadronModel';
+import { AppActions } from '../../app/AppActions';
 
 export class ProfileSitePickerStore extends NotificationStore {
   private profileRepository: ProfileRepository;
   @observable private _profile: ProfileModel | null = null;
   @observable private _sites: SiteModel[];
   @observable private _pendingSite: SiteModel | null = null;
+  @observable private _pendingSquadron: SquadronModel | null = null;
 
   constructor(repositories: Repositories) {
     super();
@@ -29,8 +32,19 @@ export class ProfileSitePickerStore extends NotificationStore {
 
   @action.bound
   async savePendingSite() {
-    if (this._profile && this._pendingSite) {
-      this._profile = await this.profileRepository.updateSite(this._pendingSite.id);
+    if (this._profile === null) {
+      return;
+    }
+
+    if (this._pendingSite && this._pendingSquadron == null) {
+      let profile = await this.profileRepository.updateSite(this._pendingSite.id);
+      this._profile = AppActions.getProfileAbilities(profile);
+    }
+
+    if (this._pendingSite && this._pendingSquadron) {
+      let profile =
+        await this.profileRepository.updateSiteAndSquadron(this._pendingSite.id, this._pendingSquadron.id);
+      this._profile = AppActions.getProfileAbilities(profile);
     }
   }
 
@@ -39,9 +53,19 @@ export class ProfileSitePickerStore extends NotificationStore {
     return this._pendingSite;
   }
 
+  @computed
+  get pendingSquadron() {
+    return this._pendingSquadron;
+  }
+
   @action.bound
   setPendingSite(site: SiteModel) {
     this._pendingSite = site;
+  }
+
+  @action.bound
+  setPendingSquadron(squadron: SquadronModel | null) {
+    this._pendingSquadron = squadron;
   }
 
   @action.bound

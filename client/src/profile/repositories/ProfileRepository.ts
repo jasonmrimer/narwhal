@@ -8,6 +8,8 @@ export interface ProfileRepository {
 
   updateSite(siteId: number): Promise<ProfileModel>;
 
+  updateSiteAndSquadron(siteId: number, squadronId: number): Promise<ProfileModel>;
+
   save(profile: ProfileModel): Promise<ProfileModel>;
 
   findAllRoles(): Promise<{ id: number, name: string }[]>;

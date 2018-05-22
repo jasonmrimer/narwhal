@@ -58,6 +58,19 @@ export class ProfileRepositoryStub implements ProfileRepository {
     });
   }
 
+  updateSiteAndSquadron(siteId: number, squadronId: number): Promise<ProfileModel> {
+    return Promise.resolve({
+      id: 1,
+      username: 'FontFace',
+      siteId: siteId,
+      siteName: 'SITE 14',
+      roleId: 1,
+      roleName: 'ADMIN',
+      classified: false,
+      squadronId: squadronId,
+    });
+  }
+
   save(profile: ProfileModel): Promise<ProfileModel> {
     return Promise.resolve(profile);
   }
@@ -69,5 +82,4 @@ export class ProfileRepositoryStub implements ProfileRepository {
       {id: 3, name: 'READER'}
     ]);
   }
-
 }

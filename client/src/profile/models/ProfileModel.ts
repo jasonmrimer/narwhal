@@ -8,5 +8,6 @@ export interface ProfileModel {
   roleId: number;
   roleName: string;
   classified: boolean;
+  squadronId?: number;
   ability?: Ability;
 }

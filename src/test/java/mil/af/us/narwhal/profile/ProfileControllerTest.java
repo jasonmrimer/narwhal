@@ -23,7 +23,6 @@ public class ProfileControllerTest extends BaseIntegrationTest {
   public void setUp() {
     super.setUp();
 
-    site = siteRepository.save(new Site("Test Site"));
     updatedSite = siteRepository.save(new Site("Upated Site"));
     tytus.setSite(site);
     profiles = profileRepository.save(asList(
@@ -128,6 +127,28 @@ public class ProfileControllerTest extends BaseIntegrationTest {
       .body("username", equalTo("tytus"))
       .body("siteId", equalTo(updatedSite.getId().intValue()))
       .body("siteName", equalTo(updatedSite.getFullName()));
+    // @formatter:on
+  }
+
+  @Test
+  public void updateSiteAndSquadronTest() {
+    // @formatter:off
+
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .param("siteId", site.getId())
+      .param("squadronId", site.getSquadrons().get(0).getId())
+    .when()
+      .put(ProfileController.URI + "/me")
+    .then()
+      .statusCode(200)
+      .body("username", equalTo("tytus"))
+      .body("siteId", equalTo(site.getId().intValue()))
+      .body("squadronId", equalTo(site.getSquadrons().get(0).getId().intValue()))
+      .body("siteName", equalTo(site.getFullName()));
     // @formatter:on
   }
 

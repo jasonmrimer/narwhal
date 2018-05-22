@@ -5,6 +5,7 @@ import { inject, observer } from 'mobx-react';
 import { SiteModel } from '../site/models/SiteModel';
 import * as classNames from 'classnames';
 import { StyledSelectProfilePopup } from './SelectProfilePopup';
+import { StyledSquadronButton } from './SquadronButton';
 
 interface Props {
   profileStore?: ProfileSitePickerStore;
@@ -13,22 +14,57 @@ interface Props {
 
 @observer
 export class ProfileSitePicker extends React.Component<Props> {
-  handleChange = (selectedSite: SiteModel) => {
+  handleSelect = (selectedSite: SiteModel) => {
+    this.props.profileStore!.setPendingSquadron(null);
     this.props.profileStore!.setPendingSite(selectedSite);
-  }
+  };
+
+  renderSquadrons = (site: SiteModel) => {
+    const {pendingSite} = this.props.profileStore!;
+
+    if (!pendingSite) {
+      return null;
+    }
+
+    return site.id === pendingSite.id ?
+      site.squadrons.map(squadron => {
+        return <StyledSquadronButton key={squadron.id} squadron={squadron}/>;
+      }) : null;
+  };
 
   renderButtons = (sites: SiteModel[]) => {
+    const {pendingSite} = this.props.profileStore!;
     return sites.map((site) => {
       return (
-        <button
-          onClick={() => this.handleChange(site)}
-          key={site.id}
-        >
-          {site.fullName}
-        </button>
+        <div key={site.id}>
+          <button
+            onClick={() => this.handleSelect(site)}
+            className={classNames({
+              'is-selected': pendingSite && site.id === pendingSite.id,
+              'is-grayed': pendingSite && site.id !== pendingSite.id
+            })}
+          >
+            {site.fullName}
+          </button>
+          {this.renderSquadrons(site)}
+        </div>
       );
     });
-  }
+  };
+
+  renderConfirmationPopup = () => {
+    const {pendingSquadron, pendingSite} = this.props.profileStore!;
+
+    if (!pendingSite) {
+      return null;
+    }
+
+    if (pendingSquadron || !pendingSite.hasSquadrons) {
+      return <StyledSelectProfilePopup/>;
+    }
+
+    return null;
+  };
 
   render() {
     const {profileStore, className} = this.props;
@@ -50,7 +86,7 @@ export class ProfileSitePicker extends React.Component<Props> {
             {this.renderButtons(profileStore!.guardSites)}
           </div>
         </div>
-        {profileStore!.pendingSite && <StyledSelectProfilePopup/>}
+        {this.renderConfirmationPopup()}
       </div>
     );
   }
@@ -83,8 +119,9 @@ export const StyledProfileSitePicker = inject('profileStore')(styled(ProfileSite
     margin: 0 2rem;
     width: 15rem;
   }
-  
+   
   button {
+    width: 100%;
     padding: 1rem 0.5rem;
     margin-bottom: 1rem;
     text-align: left;
@@ -111,9 +148,9 @@ export const StyledProfileSitePicker = inject('profileStore')(styled(ProfileSite
       &:hover {
         background: ${props => props.theme.graySteel};
       }    
-    }    
+    }
   }
-
+  
   .guard-sites {
     button {
       background: ${props => props.theme.tealSteel};
@@ -122,5 +159,14 @@ export const StyledProfileSitePicker = inject('profileStore')(styled(ProfileSite
         background: ${props => props.theme.graySteel};
       }    
     }    
+  }
+  
+  .dgs-core-sites, .dms-sites, .guard-sites {
+    button.is-selected {
+      background: ${props => props.theme.yellow};
+    }
+    button.is-grayed {
+      opacity: 0.5;
+    }
   }
 `);

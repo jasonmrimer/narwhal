@@ -43,9 +43,17 @@ public class ProfileController {
   @PutMapping(path = "/me")
   public ProfileJSON setSite(
     @AuthenticationPrincipal Profile profile,
-    @RequestParam Long siteId
+    @RequestParam Long siteId,
+    @RequestParam(value = "squadronId", required = false) Long squadronId
   ) {
-    return this.profileService.setSite(profile, siteId).toProfileJSON(classified);
+    if (squadronId != null) {
+      profile = this.profileService.setSiteAndSquadron(profile, siteId, squadronId);
+      ProfileJSON profileJSON = profile.toProfileJSON(classified);
+      profileJSON.setSquadronId(profile.getSquadronId());
+      return profileJSON;
+    } else {
+      return this.profileService.setSite(profile, siteId).toProfileJSON(classified);
+    }
   }
 
   @PutMapping

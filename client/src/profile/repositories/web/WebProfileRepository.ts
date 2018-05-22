@@ -19,6 +19,10 @@ export class WebProfileRepository implements ProfileRepository {
     return (await this.client.put(`api/profiles/me?siteId=${siteId}`));
   }
 
+  async updateSiteAndSquadron(siteId: number, squadronId: number): Promise<ProfileModel> {
+    return (await this.client.put(`api/profiles/me?siteId=${siteId}&squadronId=${squadronId}`));
+  }
+
   async save(profile: ProfileModel): Promise<ProfileModel> {
     return (await this.client.putJSON(`api/profiles`, JSON.stringify(profile)));
   }
@@ -26,5 +30,4 @@ export class WebProfileRepository implements ProfileRepository {
   async findAllRoles(): Promise<{ id: number; name: string }[]> {
     return (await this.client.getJSON('api/profiles/roles'));
   }
-
 }
