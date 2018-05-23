@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.Instant;
 import java.util.List;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping(AirmanController.URI)
@@ -156,14 +157,25 @@ public class AirmanController {
 
   @PutMapping(path = "/schedules")
   public List<Airman> updateSchedules(
+    @RequestParam(value = "startDate", required = false) String startDate,
     @RequestParam Long flightId,
     @RequestBody Schedule schedule
   ) {
     final Flight flight = flightRepository.findOne(flightId);
-    flight.getAirmen().forEach(airman -> {
-      AirmanSchedule as = new AirmanSchedule(schedule, Instant.now());
-      airman.addSchedule(as);
-    });
+      flight.getAirmen().forEach(airman -> {
+        if(startDate == null) {
+          AirmanSchedule as = new AirmanSchedule(schedule, Instant.now());
+          airman.addSchedule(as);
+        } else {
+          Stream<AirmanSchedule> currentSchedules =
+            airman.getSchedules()
+              .stream()
+              .filter(sched -> sched.getEndDate() == null);
+          currentSchedules.forEach(sched -> sched.setEndDate(Instant.now()));
+          AirmanSchedule as = new AirmanSchedule(schedule, Instant.parse(startDate));
+          airman.addSchedule(as);
+        }
+      });
     return flightRepository.save(flight).getAirmen();
   }
 }

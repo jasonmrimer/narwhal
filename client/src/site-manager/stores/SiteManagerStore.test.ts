@@ -105,4 +105,31 @@ describe('SiteManagerStore', () => {
     expect(subject.getAirmenByFlightId(1).map(a => a.currentAirmanSchedule!.schedule))
       .toEqual([schedule2, schedule2, schedule2]);
   });
+
+  it('should set pending variables when calling schedulePrompt', () => {
+    expect(subject.shouldShowSchedulePrompt).toBeFalsy();
+    subject.setSchedulePrompt(1, 2);
+    expect(subject.shouldShowSchedulePrompt).toBeTruthy();
+    expect(subject.pendingFlightId).toBe(1);
+    expect(subject.pendingScheduleId).toBe(2);
+  });
+
+  it('should set pending start date when setPendingScheduleStartDate is called', () => {
+    const currentMomentString = '2018-05-21T13:53:09-04:00';
+    const currentMoment = moment(currentMomentString);
+    subject.setPendingScheduleStartDate(currentMoment);
+    expect(subject.pendingScheduleStartDate).toEqual(currentMoment);
+  });
+
+  it('should hide and reset defaults when hideSchedulePrompt is called', () => {
+    const currentDate = moment('2015-08-22');
+    subject.setSchedulePrompt(1,1);
+    subject.setPendingScheduleStartDate(currentDate);
+    subject.hideSchedulePrompt();
+    expect(subject.shouldShowSchedulePrompt).toBeFalsy();
+    expect(subject.pendingFlightId).toBeNull();
+    const isAfter = currentDate.isBefore(subject.pendingScheduleStartDate);
+    expect(isAfter).toBeTruthy();
+    expect(subject.pendingScheduleId).toBeNull();
+  });
 });

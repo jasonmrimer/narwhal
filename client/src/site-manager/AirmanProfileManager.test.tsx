@@ -139,7 +139,7 @@ describe('AirmanProfileManager', () => {
     expect(subject.find(StyledFieldValidation).at(4).prop('fieldName')).toBe('flightId');
   });
 
-  it('should render a banner when save is successful', function () {
+  it('should render a banner when save is successful', () => {
     store.setDidSaveAirman(true);
     subject.instance().forceUpdate();
     subject.update();

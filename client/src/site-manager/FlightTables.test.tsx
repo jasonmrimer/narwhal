@@ -7,6 +7,7 @@ import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 import { StyledShiftDropdown } from '../tracker/ShiftDropdown';
 import { ShiftType } from '../airman/models/AirmanModel';
 import { StyledDropdown } from '../widgets/inputs/Dropdown';
+import { StyledFlightSchedulePopup } from '../widgets/FlightSchedulePopup';
 
 describe('FlightTables', () => {
   const flights = [
@@ -25,8 +26,12 @@ describe('FlightTables', () => {
     getScheduleIdByFlightId: () => {
       return '1';
     },
+    shouldShowSchedulePrompt: () => {
+      return true;
+    },
     scheduleOptions: [{label: 'Front Half', value: 1}, {label: 'Back Half', value: 2}]
   };
+
   let siteManagerActions: any;
   let subject: ShallowWrapper;
 
@@ -77,5 +82,12 @@ describe('FlightTables', () => {
     const link = subject.find(Link).at(0);
     expect(link.prop('to')).toBe(`/flights/${airman.id}`);
     expect(link.children().at(0).text()).toContain(`${airman.lastName}, ${airman.firstName}`);
+  });
+
+  it('should setup bindings Flight Schedule Popup', () => {
+    expect(subject.find(StyledFlightSchedulePopup).prop('onCancel'))
+      .toBe(siteManagerStore.hideSchedulePrompt);
+    expect(subject.find(StyledFlightSchedulePopup).prop('onConfirm'))
+      .toBe(siteManagerStore.saveSchedule);
   });
 });

@@ -5,6 +5,8 @@ import { NotificationStore } from '../../widgets/stores/NotificationStore';
 import { AirmanModel, ShiftType } from '../../airman/models/AirmanModel';
 import { CertificationModel } from '../../skills/certification/models/CertificationModel';
 import { ScheduleModel } from '../../schedule/models/ScheduleModel';
+import * as moment from 'moment';
+import { Moment } from 'moment';
 
 export class SiteManagerStore extends NotificationStore {
   @observable private _profile: ProfileModel | null = null;
@@ -12,7 +14,10 @@ export class SiteManagerStore extends NotificationStore {
   @observable private _airmen: AirmanModel[] = [];
   @observable private _certifications: CertificationModel[] = [];
   @observable private _schedules: ScheduleModel[] = [];
-  @observable private  _shouldShowSchedulePrompt: boolean = false;
+  @observable private _shouldShowSchedulePrompt: boolean = false;
+  @observable private _pendingFlightId: number | null = null;
+  @observable private _pendingScheduleId: number | null = null;
+  @observable private _pendingScheduleStartDate: any = moment(moment.now());
 
   @action.bound
   hydrate(profile: ProfileModel,
@@ -56,6 +61,29 @@ export class SiteManagerStore extends NotificationStore {
     return this._airmen;
   }
 
+  @computed
+  get pendingFlightId() {
+    return this._pendingFlightId;
+  }
+
+  @computed
+  get pendingScheduleId() {
+    return this._pendingScheduleId;
+  }
+
+  @computed
+  get pendingScheduleStartDate() {
+    return this._pendingScheduleStartDate;
+  }
+
+  @action.bound
+  hideSchedulePrompt() {
+    this._shouldShowSchedulePrompt = false;
+    this._pendingFlightId = null;
+    this._pendingScheduleId = null;
+    this._pendingScheduleStartDate = moment(moment.now());
+  }
+
   @action.bound
   setAirmenShiftByFlightId(flightId: number, shift: ShiftType) {
     this._airmen
@@ -64,9 +92,10 @@ export class SiteManagerStore extends NotificationStore {
   }
 
   @action.bound
-  setSchedulePrompt(flightId: number, scheduleId: number){
+  setSchedulePrompt(flightId: number, scheduleId: number) {
     this._shouldShowSchedulePrompt = true;
-
+    this._pendingFlightId = flightId;
+    this._pendingScheduleId = scheduleId;
   }
 
   @computed
@@ -136,5 +165,10 @@ export class SiteManagerStore extends NotificationStore {
         }
       });
     });
+  }
+
+  @action.bound
+  setPendingScheduleStartDate(input: Moment) {
+    this._pendingScheduleStartDate = moment(input);
   }
 }

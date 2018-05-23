@@ -9,6 +9,7 @@ import { AdminPage } from './pages/AdminPage';
 import { FlightsPage } from './pages/FlightsPage';
 import { AirmanProfilePage } from './pages/AirmanProfilePage';
 import { CertificationManagerPage } from './pages/CertificationManagerPage';
+import { WebRepositories } from '../utils/Repositories';
 
 @observer
 export class Routes extends React.Component {
@@ -22,7 +23,7 @@ export class Routes extends React.Component {
           path="/dashboard/crew/:id"
           render={({match}) => <CrewPage crewId={match.params.id}/>}
         />
-        <Route exact={true} path="/flights" render={() => <FlightsPage/>}/>
+        <Route exact={true} path="/flights" render={() => <FlightsPage repositories={WebRepositories}/>}/>
         <Route path="/flights/new" render={({history}) => <AirmanProfilePage history={history}/>}/>
         <Route
           path="/flights/:airmanId"

@@ -9,6 +9,8 @@ import styled from 'styled-components';
 import { StyledShiftDropdown } from '../tracker/ShiftDropdown';
 import { SiteManagerActions } from './actions/SiteManagerActions';
 import { StyledDropdown } from '../widgets/inputs/Dropdown';
+import { StyledFlightSchedulePopup } from '../widgets/FlightSchedulePopup';
+import * as classNames from 'classnames';
 
 interface FlightTableRowProps {
   airman: AirmanModel;
@@ -25,7 +27,7 @@ export const FlightTableRow = observer((props: FlightTableRowProps) => {
         <ShiftDisplay shift={airman.shift}/>
         <span>{airman.shift}</span>
       </span>
-      <span className="airman-attribute">
+      <span className="airman-attribute airman-schedule">
         {
           airman.currentAirmanSchedule &&
           airman.currentAirmanSchedule.schedule.type
@@ -48,9 +50,19 @@ export class FlightTables extends React.Component<FlightTablesProps> {
     return (
       <React.Fragment>
         {
+          this.props.siteManagerStore!.shouldShowSchedulePrompt &&
+          <StyledFlightSchedulePopup
+            onCancel={this.props.siteManagerStore!.hideSchedulePrompt}
+          />
+        }
+        {
           this.props.flights.map(flight => {
             return (
-              <div className={this.props.className} key={flight.id}>
+              <div
+                id={flight.name}
+                className={classNames('flight-table', flight.name, this.props.className)}
+                key={flight.id}
+              >
                 {this.renderHeader(flight)}
                 {this.renderRows(flight.id)}
               </div>
@@ -83,6 +95,7 @@ export class FlightTables extends React.Component<FlightTablesProps> {
                 return this.props.siteManagerActions!.setFlightSchedule(flight.id, Number(e.target.value));
               }}
               name="schedule-select"
+              id="schedule-select"
               options={this.props.siteManagerStore!.scheduleOptions}
               value={this.props.siteManagerStore!.getScheduleIdByFlightId(flight.id)}
             />

@@ -11,6 +11,7 @@ import { CertificationModel } from '../../../skills/certification/models/Certifi
 import { AirmanCertificationModel } from '../../models/AirmanCertificationModel';
 import { RankModel } from '../../../rank/models/RankModel';
 import { ScheduleModel } from '../../../schedule/models/ScheduleModel';
+import { Moment } from 'moment';
 
 const af = AirmanModelFactory;
 const airmen = [
@@ -102,7 +103,8 @@ export class FakeAirmanRepository implements AirmanRepository {
     return Promise.resolve(filteredAirmen);
   }
 
-  updateScheduleByFlightId(flightId: number, schedule: ScheduleModel): Promise<AirmanModel[]> {
+  updateScheduleByFlightId(flightId: number, schedule: ScheduleModel, startDate: Moment | null)
+    : Promise<AirmanModel[]> {
     return Promise.resolve(airmen.filter(a => a.flightId === flightId));
   }
 

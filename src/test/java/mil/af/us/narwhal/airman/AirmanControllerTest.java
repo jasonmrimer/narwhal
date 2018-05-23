@@ -42,6 +42,7 @@ public class AirmanControllerTest extends BaseIntegrationTest {
   private Qualification qualification1;
   private Certification certification1;
   private Schedule schedule;
+  private Instant controlDate;
 
   @Before
   public void setUp() {
@@ -67,7 +68,7 @@ public class AirmanControllerTest extends BaseIntegrationTest {
     site2.addSquadron(squadron3);
 
     newRank = rankRepository.save(new Rank("AB"));
-
+    controlDate = Instant.parse("1995-10-23T10:12:35Z");
     schedule = scheduleRepository.save(new Schedule("Front Half", true, true, true, true, true, true, true));
 
     siteRepository.save(asList(site, site2));
@@ -85,7 +86,7 @@ public class AirmanControllerTest extends BaseIntegrationTest {
     final Airman airman3 = new Airman(flight2, "first3", "last3", rank);
     final Airman airman4 = new Airman(flight3, "first4", "last4", rank);
 
-    airman1.addSchedule(new AirmanSchedule(schedule, Instant.now()));
+    airman1.addSchedule(new AirmanSchedule(schedule,  controlDate));
 
     final List<Airman> airmen = airmanRepository.save(asList(airman1, airman2, airman3, airman4));
 
@@ -421,13 +422,42 @@ public class AirmanControllerTest extends BaseIntegrationTest {
       .body(json)
       .contentType("application/json")
       .param("flightId", flight1.getId())
-    .when()
+      .when()
       .put(AirmanController.URI + "/schedules")
-    .then()
+      .then()
       .statusCode(200)
       .body("[0].schedules.size()", equalTo(2))
       .body("[0].schedules[1].schedule.type", equalTo("Front Half"))
       .body("[0].schedules[0].endDate", notNullValue())
+      .body("[0].schedules[1].endDate", nullValue());
+    // @formatter:on
+  }
+
+  @Test
+  public void updateScheduleTestWithStartDate() throws JsonProcessingException {
+    final String json = objectMapper.writeValueAsString(schedule);
+    final String startDate = Instant.now().toString();
+
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .body(json)
+      .contentType("application/json")
+      .param("flightId", flight1.getId())
+      .param("startDate", startDate)
+      .when()
+      .put(AirmanController.URI + "/schedules")
+      .then()
+      .statusCode(200)
+      .body("[0].schedules.size()", equalTo(2))
+      .body("[0].schedules[0].schedule.type", equalTo("Front Half"))
+      .body("[0].schedules[0].startDate", equalTo(controlDate.toString()))
+      .body("[0].schedules[0].endDate", notNullValue())
+      .body("[0].schedules[1].schedule.type", equalTo("Front Half"))
+      .body("[0].schedules[1].startDate", equalTo(startDate))
       .body("[0].schedules[1].endDate", nullValue());
     // @formatter:on
   }

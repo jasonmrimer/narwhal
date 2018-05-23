@@ -5,6 +5,7 @@ import { SkillType } from '../../../skills/models/SkillType';
 import { Skill } from '../../../skills/models/Skill';
 import { HTTPClient } from '../../../utils/HTTPClient';
 import { ScheduleModel } from '../../../schedule/models/ScheduleModel';
+import { Moment } from 'moment';
 
 export class WebAirmanRepository implements AirmanRepository {
   private serializer = new AirmanSerializer();
@@ -52,9 +53,14 @@ export class WebAirmanRepository implements AirmanRepository {
     return json.map((item: any) => this.serializer.deserialize(item));
   }
 
-  async updateScheduleByFlightId(flightId: number, schedule: ScheduleModel): Promise<AirmanModel[]> {
+  async updateScheduleByFlightId(flightId: number, schedule: ScheduleModel, startDate: Moment | null)
+    : Promise<AirmanModel[]> {
     const body = JSON.stringify(schedule);
-    const json = await this.client.putJSON(`/api/airmen/schedules?flightId=${flightId}`, body);
+    let url = `/api/airmen/schedules?flightId=${flightId}`;
+    if (startDate) {
+      url = url + `&startDate=${startDate.utc().format()}`;
+    }
+    const json = await this.client.putJSON(url , body);
     return json.map((item: any) => this.serializer.deserialize(item));
   }
 

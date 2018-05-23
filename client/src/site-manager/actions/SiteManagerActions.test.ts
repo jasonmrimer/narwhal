@@ -1,9 +1,7 @@
 import { SiteManagerActions } from './SiteManagerActions';
-import { ShiftType } from '../../airman/models/AirmanModel';
+import { AirmanModel, ShiftType } from '../../airman/models/AirmanModel';
 import { ScheduleModel, ScheduleType } from '../../schedule/models/ScheduleModel';
 import { AirmanModelFactory } from '../../airman/factories/AirmanModelFactory';
-import { AirmanScheduleModel } from '../../airman/models/AirmanScheduleModel';
-import * as moment from 'moment';
 
 describe('SiteManagerActions', () => {
   let siteManagerStore: any;
@@ -11,6 +9,7 @@ describe('SiteManagerActions', () => {
   let subject: SiteManagerActions;
   let schedule: ScheduleModel;
   const airman = AirmanModelFactory.build();
+  let airmen: AirmanModel[] = [airman];
 
   beforeEach(() => {
     schedule = new ScheduleModel(1, ScheduleType.NoSchedule);
@@ -19,18 +18,19 @@ describe('SiteManagerActions', () => {
       performLoading: (fn: any) => {
         fn();
       },
+      pendingScheduleId: 1,
+      pendingFlightId: 1,
       setAirmenShiftByFlightId: jest.fn(),
       setAirmenScheduleByFlightId: jest.fn(),
       setSchedulePrompt: jest.fn(),
+      updateScheduleByFlightId: jest.fn(),
       getScheduleByScheduleId: (id: number) => schedule,
+      setPendingScheduleStartDate: jest.fn()
     };
 
     airmanRepository = {
       updateShiftByFlightId: jest.fn(),
-      updateScheduleByFlightId: (flightId: number, s: ScheduleModel) => {
-        airman.schedules.push(new AirmanScheduleModel(airman.id, s, moment()));
-        return [airman];
-      },
+      updateScheduleByFlightId: () => airmen,
     };
 
     subject = new SiteManagerActions(
@@ -48,14 +48,13 @@ describe('SiteManagerActions', () => {
       .toHaveBeenCalledWith(1, ShiftType.Day);
   });
 
-  it('should set the schedule for a flight', async () => {
+  it('should set the schedule for a flight',  () => {
     subject.setFlightSchedule(1, 1);
     expect(siteManagerStore.setSchedulePrompt).toBeCalledWith(1, 1);
-    // await subject.setFlightSchedule(1, 1);
-    // const foundSchedule = siteManagerStore.getScheduleByScheduleId(1);
-    // const airmen = airmanRepository.updateScheduleByFlightId(1, foundSchedule);
-    //
-    // expect(siteManagerStore.setAirmenScheduleByFlightId)
-    //   .toHaveBeenCalledWith(1, airmen);
+  });
+
+  it('should save a flight schedule', async () => {
+    await subject.saveFlightSchedule();
+    expect(siteManagerStore.setAirmenScheduleByFlightId).toHaveBeenCalledWith(1, airmen);
   });
 });

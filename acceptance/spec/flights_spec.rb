@@ -5,7 +5,7 @@ describe 'Flights page', type: :feature do
   let(:flights_page) {
     login_page = LoginPage.new
     login_page.login
-    FlightsPage.new
+    flights_page = FlightsPage.new
   }
 
   it 'shows the Flights page' do
@@ -34,5 +34,9 @@ describe 'Flights page', type: :feature do
 
   it 'can edit the acronym of a certification' do
     flights_page.assert_edit_certification
+  end
+
+  it 'can change the schedule for an entire flight' do
+    flights_page.assert_edit_flight_schedule
   end
 end
