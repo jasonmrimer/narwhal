@@ -61,7 +61,7 @@ describe('MissionForm', () => {
     });
   });
 
-  it('should render a delete button when there is an event', () => {
+  it('should render a setPendingDelete button when there is an event', () => {
     missionFormStore.open(EventModelFactory.build());
 
     wrapper.update();
@@ -70,7 +70,7 @@ describe('MissionForm', () => {
     expect(wrapper.find(StyledSubmitButton).exists()).toBeFalsy();
   });
 
-  it('should NOT render a delete button when there is NOT an event', () => {
+  it('should NOT render a setPendingDelete button when there is NOT an event', () => {
     expect(wrapper.find(StyledButton).exists()).toBeFalsy();
     expect(wrapper.find(StyledSubmitButton).exists()).toBeTruthy();
   });
@@ -111,7 +111,7 @@ describe('MissionForm', () => {
     expect(eventActions.handleFormSubmit).toHaveBeenCalled();
   });
 
-  it('remove an Mission', async () => {
+  it('delete an Mission', async () => {
     missionFormStore.open(EventModelFactory.build());
     await subject.handleDelete();
     expect(eventActions.handleDeleteEvent).toHaveBeenCalled();

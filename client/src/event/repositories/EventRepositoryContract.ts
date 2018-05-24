@@ -66,7 +66,7 @@ export function EventRepositoryContract(subject: EventRepository) {
       await subject.delete(savedEvent);
     });
 
-    it('does not delete event with an exception', async () => {
+    it('does not setPendingDelete event with an exception', async () => {
       try {
         const event = new EventModel(
           'title1',
@@ -82,7 +82,7 @@ export function EventRepositoryContract(subject: EventRepository) {
         expect(e).toBeDefined();
         return;
       }
-      throw new Error('Should have failed to delete the event');
+      throw new Error('Should have failed to setPendingDelete the event');
     });
   });
 

@@ -9,10 +9,14 @@ import { StyledNavigationBackButton } from '../../widgets/buttons/NavigationBack
 import { StyledFieldValidation } from '../../widgets/inputs/FieldValidation';
 import { CertificationActions } from './CertificationActions';
 import { StyledAlert } from '../../widgets/Alert';
+import { StyledConfirmationPopup } from '../../widgets/ConfirmationPopup';
+import { ProfileSitePickerStore } from '../../profile/stores/ProfileSitePickerStore';
+import { DeleteIcon } from '../../icons/DeleteIcon';
 
 interface Props {
   certificationFormStore?: CertificationFormStore;
   certificationActions?: CertificationActions;
+  profileStore?: ProfileSitePickerStore;
   history?: History;
   className?: string;
 }
@@ -21,7 +25,9 @@ interface Props {
 export class CertificationForm extends React.Component <Props> {
   render() {
     const {certificationFormStore, certificationActions, className} = this.props;
-    if (!certificationFormStore!.certification) {
+    const {certification} = certificationFormStore!;
+
+    if (!certification) {
       return null;
     }
 
@@ -67,9 +73,24 @@ export class CertificationForm extends React.Component <Props> {
                 />
               </StyledFieldValidation>
             </div>
-
+            <span
+              className="delete"
+              onClick={this.props.certificationActions!.setPendingDelete}
+            >
+              <DeleteIcon />
+              DELETE
+            </span>
           </div>
         </StyledForm>
+        {
+          certificationFormStore!.pendingDelete &&
+          <StyledConfirmationPopup
+            title={certification.title}
+            siteName={this.props.profileStore!.profile!.siteName}
+            onCancel={this.props.certificationActions!.dismissPendingDelete}
+            onConfirm={() => this.props.certificationActions!.deleteCertification(this.props.history)}
+          />
+        }
       </div>
     );
   }
@@ -77,7 +98,8 @@ export class CertificationForm extends React.Component <Props> {
 
 export const StyledCertificationForm = inject(
   'certificationFormStore',
-  'certificationActions'
+  'certificationActions',
+  'profileStore'
 )(styled(CertificationForm)`
   margin: auto 0;
   
@@ -121,5 +143,17 @@ export const StyledCertificationForm = inject(
         margin-bottom: 0.5rem;
       }
     }
+  }
+  
+  .delete {
+    color: ${props => props.theme.fontColor};
+    border: none;
+    padding: 0.5rem;
+    padding-left: 0;
+    cursor: pointer;
+    width: 17%;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
   }
 `);

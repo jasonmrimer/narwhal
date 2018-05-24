@@ -47,7 +47,7 @@ describe('CrewPostionRow', () => {
     expect(onCheck).toBeCalledWith(event);
   });
 
-  it('should call the executePendingDelete callback when clicking the delete button', () => {
+  it('should call the executePendingDelete callback when clicking the setPendingDelete button', () => {
     const event = {target: {value: 'hello', name: 'foo'}};
     subject.find('button').simulate('click', event);
     expect(handleDelete).toBeCalledWith(event);

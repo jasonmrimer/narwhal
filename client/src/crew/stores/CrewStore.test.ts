@@ -52,7 +52,7 @@ describe('CrewStore', () => {
     expect(crewPositions.length).toBe(1);
   });
 
-  it('should delete positions and save new positions when updating', async () => {
+  it('should setPendingDelete positions and save new positions when updating', async () => {
     DoubleRepositories.crewPositionRepository.delete = jest.fn();
     const deletePositions = [crewPositions[0], crewPositions[1]];
     subject.clearPosition(1);

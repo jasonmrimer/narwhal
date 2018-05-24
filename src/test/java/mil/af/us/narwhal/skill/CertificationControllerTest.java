@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 public class CertificationControllerTest extends BaseIntegrationTest {
@@ -163,5 +164,24 @@ public class CertificationControllerTest extends BaseIntegrationTest {
       .statusCode(400)
       .body("error", equalTo("Bad Request"));
     // @formatter:on
+  }
+
+  @Test
+  public void testDelete() {
+
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .contentType("application/json")
+    .when()
+      .delete(CertificationController.URI + "/" + certification.getId())
+    .then()
+      .statusCode(200);
+    // @formatter:on
+
+    assertThat(certificationRepository.findOne(certification.getId())).isNull();
   }
 }

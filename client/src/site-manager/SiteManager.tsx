@@ -49,30 +49,30 @@ export class SiteManager extends React.Component<Props> {
 }
 
 export const StyledSiteManager = inject('siteManagerStore')(styled(SiteManager)`
-    width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    
-    h2 {
-      font-size: 1.5rem;
-      font-weight: 300;
-      padding-top: 0.5rem;
-    }
-    
-    .header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      
-      a {
-        width: 15%;
-        display: flex;
-        justify-content: space-between;
-      }
-    }
+  width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 300;
+    padding-top: 0.5rem;
+  }
+  
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     
     a {
-      text-decoration: none;
-      color: ${props => props.theme.fontColor};
+      width: 15%;
+      display: flex;
+      justify-content: space-between;
     }
+  }
+  
+  a {
+    text-decoration: none;
+    color: ${props => props.theme.fontColor};
+  }
 `);

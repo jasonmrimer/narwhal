@@ -63,7 +63,7 @@ describe('AppointmentForm', () => {
     });
   });
 
-  it('should render a delete button', () => {
+  it('should render a setPendingDelete button', () => {
     appointmentFormStore.open(EventModelFactory.build());
     wrapper.update();
     expect(wrapper.find(StyledButton).prop('onClick')).toEqual(subject.handleDelete);
@@ -101,7 +101,7 @@ describe('AppointmentForm', () => {
     expect(eventActions.handleFormSubmit).toHaveBeenCalled();
   });
 
-  it('remove an Appointment', async () => {
+  it('delete an Appointment', async () => {
     appointmentFormStore.open(EventModelFactory.build());
     await subject.handleDelete();
     expect(eventActions.handleDeleteEvent).toHaveBeenCalled();

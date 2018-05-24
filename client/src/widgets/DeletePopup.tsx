@@ -4,8 +4,8 @@ import { EventModel } from '../event/models/EventModel';
 import { Skill } from '../skills/models/Skill';
 import { AirmanCertificationModel } from '../airman/models/AirmanCertificationModel';
 import { AirmanQualificationModel } from '../airman/models/AirmanQualificationModel';
-import { StyledButton } from './buttons/Button';
 import { AirmanModel } from '../airman/models/AirmanModel';
+import { StyledPopupModal } from './PopupModal';
 
 type Deletable = AirmanModel | EventModel | Skill;
 
@@ -48,97 +48,22 @@ export const renderTitle = (item: Deletable) => {
   }
 };
 
-export const DeletePopup = (props: Props) => {
-  return (
-    <div className={props.className}>
-      <div className="delete-confirmation">
-        <div className="title">{renderTitle(props.item)}</div>
-        <span>{renderItemInformation(props.item)}</span>
-        <span className="actions">
-          <StyledButton
-            className="cancel"
-            onClick={props.onCancel}
-            text="CANCEL"
-          />
-          <StyledButton
-            className="confirm"
-            onClick={async () => await props.onConfirm()}
-            text={props.item instanceof AirmanModel ? 'DELETE' : 'REMOVE'}
-          />
-        </span>
-      </div>
-    </div>
-  );
-};
+export class DeletePopup extends React.Component<Props> {
+  render() {
+    return (
+      <StyledPopupModal
+        title={renderTitle(this.props.item)}
+        className={this.props.className}
+        onCancel={this.props.onCancel}
+        onConfirm={this.props.onConfirm}
+      >
+        <div className="content">
+          <span>{renderItemInformation(this.props.item)}</span>
+        </div>
+      </StyledPopupModal>
+    );
+  }
+}
 
 export const StyledDeletePopup = styled(DeletePopup)`
-  position: fixed;
-  background: rgba(0, 0, 0, 0.5);
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  font-size: 1rem;
-  z-index: 1001;
-  text-align: left;
-  
-  .delete-confirmation {
-    background: ${props => props.theme.blueSteel};
-    width: 500px;
-    display: flex;
-    flex-direction: column;
-    position: relative; 
-    top: 50%; 
-    left: 50%; 
-    transform: translate(-50%, -50%);
-    padding: 2px;
-    
-    & > div {
-      background: ${props => props.theme.dark};
-      padding: 0.45rem;
-      font-size: 1rem;
-      border-top-left-radius: 2%;      
-      border-top-right-radius: 2%;      
-    }
-    
-    & > span {
-      padding: 1rem;
-    }
-    
-    .actions {
-      padding: 1rem;
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-end;
-    } 
-    
-    button {
-      font-size: 0.75rem;
-      padding: 0.5rem 1.5rem;
-      margin-left: 0.5rem;
-      font-weight: 500;
-      background: none;
-      color: ${props => props.theme.fontColor};
-      border: 1px solid ${props => props.theme.fontColor}; 
-      border-radius: 5%;
-      cursor: pointer;
-      
-      &.cancel {
-        background: ${props => props.theme.yellow};
-        color: ${props => props.theme.darkest};
-        border: none;
-      }
-      
-      &:hover {
-        background: ${props => props.theme.fontColor};
-        color: ${props => props.theme.darkest};
-        text-decoration: underline;
-        
-        &.cancel{
-          background: ${props => props.theme.yellowHover};
-          color: ${props => props.theme.darkest};
-        }
-      }
-    }
-  }
 `;

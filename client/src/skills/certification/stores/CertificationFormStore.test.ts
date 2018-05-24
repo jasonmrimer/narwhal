@@ -13,4 +13,11 @@ describe('CertificationFormStore', () => {
     subject.setCertificationTitle('chicken');
     expect(subject.certification.title).toBe('CHICKEN');
   });
+
+  it('should set pending delete', () => {
+    expect(subject.pendingDelete).toBeFalsy();
+    subject.setPendingDelete(true);
+    expect(subject.pendingDelete).toBeTruthy();
+  });
+
 });

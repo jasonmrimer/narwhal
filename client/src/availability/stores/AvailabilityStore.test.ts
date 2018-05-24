@@ -119,16 +119,16 @@ describe('AvailabilityStore', () => {
       subject.removeEvent(savedEvent);
     });
 
-    it('should set pending delete event', () => {
+    it('should set pending setPendingDelete event', () => {
       expect(subject.pendingDeleteEvent).toEqual(savedEvent);
     });
 
-    it('should cancel pending delete event', () => {
+    it('should cancel pending setPendingDelete event', () => {
       subject.cancelPendingDelete();
       expect(subject.pendingDeleteEvent).toBeNull();
     });
 
-    it('should delete an airman\'s event', async () => {
+    it('should setPendingDelete an airman\'s event', async () => {
       await subject.executePendingDelete();
       expect(subject.pendingDeleteEvent).toBeNull();
       expect(eventRepository.hasItem(savedEvent)).toBeFalsy();

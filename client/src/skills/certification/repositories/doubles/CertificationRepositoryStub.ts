@@ -24,4 +24,8 @@ export class CertificationRepositoryStub implements CertificationRepository {
   save(certification: { title: string }): Promise<CertificationModel> {
     return Promise.resolve(new CertificationModel(1, certification.title, 14));
   }
+
+  delete(id: number): Promise<void> {
+    return Promise.resolve();
+  }
 }

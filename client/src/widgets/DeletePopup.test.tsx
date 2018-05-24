@@ -1,19 +1,18 @@
 import * as React from 'react';
-import { StyledButton } from './buttons/Button';
-import { shallow, ShallowWrapper } from 'enzyme';
+import { mount, ReactWrapper } from 'enzyme';
 import { DeletePopup, renderItemInformation } from './DeletePopup';
 import { AirmanCertificationModelFactory } from '../airman/factories/AirmanCertificationModelFactory';
 import Mock = jest.Mock;
 import { AirmanQualificationModelFactory } from '../airman/factories/AirmanQualificationModelFactory';
 
 describe('DeletePopup', () => {
-  let subject: ShallowWrapper;
+  let subject: ReactWrapper;
   let onClickSpy: Mock;
   let onCancelSpy: Mock;
   beforeEach(() => {
     onClickSpy = jest.fn();
     onCancelSpy = jest.fn();
-    subject = shallow(
+    subject = mount(
       <DeletePopup
         item={AirmanCertificationModelFactory.build(1, 1)}
         onConfirm={onClickSpy}
@@ -22,18 +21,8 @@ describe('DeletePopup', () => {
     );
   });
 
-  it('should call the executePendingDelete on delete button click', () => {
-    subject.find(StyledButton).at(1).simulate('click');
-    expect(onClickSpy).toHaveBeenCalled();
-  });
-
-  it('should call the remove pendingDeleteSkill on cancel click', () => {
-    subject.find(StyledButton).at(0).simulate('click');
-    expect(onCancelSpy).toHaveBeenCalled();
-  });
-
   it('should render the title text', () => {
-    expect(subject.find('.title').text()).toBe('REMOVE CERTIFICATION');
+    expect(subject.find('.title').text()).toContain('REMOVE CERTIFICATION');
   });
 
   describe('renderItemInformation', () => {

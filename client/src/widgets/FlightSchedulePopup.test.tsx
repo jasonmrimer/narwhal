@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { FlightSchedulePopup } from './FlightSchedulePopup';
-import { StyledButton } from './buttons/Button';
 import Mock = jest.Mock;
 import { StyledDatePicker } from './inputs/DatePicker';
 import * as moment from 'moment';
@@ -26,16 +25,6 @@ describe('FlightSchedulePopup', () => {
         siteManagerActions={siteManagerActions}
       />
     );
-  });
-
-  it('should have a functioning Back button', () => {
-    subject.find(StyledButton).at(0).simulate('click');
-    expect(onCancelSpy).toHaveBeenCalled();
-  });
-
-  it('should have a functioning Confirm button', () => {
-    subject.find(StyledButton).at(1).simulate('click');
-    expect(siteManagerActions.saveFlightSchedule).toHaveBeenCalled();
   });
 
   it('should render a date pick', () => {

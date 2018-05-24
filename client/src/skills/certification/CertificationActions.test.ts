@@ -1,4 +1,5 @@
 import { CertificationActions } from './CertificationActions';
+import { CertificationModel } from './models/CertificationModel';
 
 describe('CertificationActions', () => {
   let certificationFormStore: any;
@@ -9,14 +10,17 @@ describe('CertificationActions', () => {
   beforeEach(() => {
     certificationFormStore = {
       setErrors: jest.fn(),
-      setDidSave: jest.fn()
+      setDidSave: jest.fn(),
+      setPendingDelete: jest.fn(),
+      certification: new CertificationModel(1, 'fake cert', 2),
     };
 
     certificationRepository = {
       save: () => {
         return {id: 123};
       },
-      update: jest.fn()
+      update: jest.fn(),
+      delete: jest.fn(),
     };
 
     history = {
@@ -44,5 +48,22 @@ describe('CertificationActions', () => {
       .toHaveBeenCalledWith(certificationFormStore.certification);
     expect(certificationFormStore.setDidSave).toHaveBeenCalledWith(true);
     expect(certificationFormStore.setErrors).toHaveBeenCalledWith({});
+  });
+
+  it('should set a pending delete on the store', () => {
+    subject.setPendingDelete();
+    expect(certificationFormStore.setPendingDelete).toHaveBeenCalledWith(true);
+  });
+
+  it('should should dismiss the pending delete', () => {
+    subject.dismissPendingDelete();
+    expect(certificationFormStore.setPendingDelete).toHaveBeenCalledWith(false);
+  });
+
+  it('should call delete on the repository with the correct id', () => {
+    const certification = certificationFormStore.certification;
+
+    subject.deleteCertification(history);
+    expect(certificationRepository.delete).toHaveBeenCalledWith(certification.id);
   });
 });

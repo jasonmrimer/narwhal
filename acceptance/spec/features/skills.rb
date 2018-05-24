@@ -45,7 +45,9 @@ class Skill
       page.find('.currency-title', text: @qual_title).click
       click_link_or_button 'DELETE'
     end
-    click_link_or_button 'REMOVE'
+    page.within('.actions') do
+      click_link_or_button 'CONFIRM'
+    end
     expect(page.has_content? '+ Add Skill').to be true
   end
 
@@ -84,7 +86,9 @@ class Skill
       page.find('.currency-title', text: @cert_title).click
       click_link_or_button 'DELETE'
     end
-    click_link_or_button 'REMOVE'
+    page.within('.actions') do
+      click_link_or_button 'CONFIRM'
+    end
     expect(page.has_content? '+ Add Skill').to be true
   end
 

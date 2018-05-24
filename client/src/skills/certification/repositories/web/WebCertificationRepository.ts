@@ -36,4 +36,8 @@ export class WebCertificationRepository implements CertificationRepository {
     const body = JSON.stringify(certification);
     return await this.client.postJSON('/api/certifications', body);
   }
+
+  async delete(id: number): Promise<void> {
+    return await this.client.deleteJSON(`/api/certifications/${id}`);
+  }
 }

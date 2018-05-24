@@ -61,13 +61,21 @@ class Event
     end
 
     expect(page.has_content?('REMOVE EVENT')).to be true
-    page.find('button.cancel', text: 'CANCEL').click
+
+    page.within('.actions') do
+      click_link_or_button 'BACK'
+    end
+
     expect(page.has_content?('REMOVE EVENT')).to be false
 
     click(page.find('button[type="button"]', text: 'DELETE'))
 
     expect(page.has_content?('REMOVE EVENT')).to be true
-    page.find('button.confirm', text: 'REMOVE').click
+
+    page.within('.actions') do
+      click_link_or_button 'CONFIRM'
+    end
+
   end
 
   def exists?

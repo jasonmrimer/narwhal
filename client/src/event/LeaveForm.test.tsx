@@ -60,7 +60,7 @@ describe('LeaveForm', () => {
     });
   });
 
-  it('should render a delete button', () => {
+  it('should render a setPendingDelete button', () => {
     store.open(EventModelFactory.build());
     wrapper.update();
     expect(wrapper.find(StyledButton).prop('onClick')).toEqual(subject.handleDelete);

@@ -92,7 +92,7 @@ export class HTTPClient {
     );
 
     if (resp.status < 200 || resp.status >= 300) {
-      throw new Error('Failed to delete item');
+      throw new Error('Failed to setPendingDelete item');
     }
 
   }

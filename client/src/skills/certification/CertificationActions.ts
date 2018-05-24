@@ -23,5 +23,21 @@ export class CertificationActions {
     } catch (e) {
       this.stores.certificationFormStore!.setErrors(e);
     }
-  }
+  };
+
+  setPendingDelete = (): void => {
+    this.stores.certificationFormStore!.setPendingDelete(true);
+  };
+
+  dismissPendingDelete = (): void => {
+    this.stores.certificationFormStore!.setPendingDelete(false);
+  };
+
+  deleteCertification = async (history: any) => {
+    const certification = this.stores.certificationFormStore!.certification;
+    if (certification && certification.id) {
+      await this.repositories.certificationRepository!.delete(certification.id);
+      history.replace(`/flights/`);
+    }
+  };
 }

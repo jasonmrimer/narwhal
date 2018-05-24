@@ -38,9 +38,9 @@ export class Routes extends React.Component {
         />
         <Route
           path="/certifications/:certificationId"
-          render={({match}) => {
+          render={({match, history}) => {
             return (
-              <CertificationManagerPage certificationId={match.params.certificationId}/>
+              <CertificationManagerPage certificationId={match.params.certificationId} history={history}/>
             );
           }}
         />

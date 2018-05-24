@@ -81,6 +81,20 @@ class FlightsPage
     expect(page).to have_content 'LASER VISION'
   end
 
+  def assert_delete_certification
+    click_on_certification('INVISIBILITY')
+
+    expect(page).to have_content('INVISIBILITY')
+
+    page.find('.delete').click
+
+    expect(page).to have_content 'Delete INVISIBILITY?'
+
+    click_button 'CONFIRM'
+
+    expect(page).to have_content 'certifications'
+  end
+
   def assert_create_and_delete_airman
     page.find('span', text: 'New Operator').click
 
@@ -99,7 +113,10 @@ class FlightsPage
     click_button 'DELETE MEMBER'
 
     expect(page).to have_content 'This action cannot be undone.'
-    page.find('button.confirm', text: 'DELETE').click
+
+    page.within('.actions') do
+      click_link_or_button 'CONFIRM'
+    end
   end
 
   def assert_create_certification
@@ -120,7 +137,11 @@ class FlightsPage
       find('#schedule-select').find(:option, text: schedule_to_test).select_option
     end
     expect(page.has_content?('Schedule Settings')).to be true
-    find('.confirm').click
+
+    page.within('.actions') do
+      click_link_or_button 'CONFIRM'
+    end
+
     expect(page).to have_selector('#DOC .airman-schedule', count: 20, text: schedule_to_test)
   end
 

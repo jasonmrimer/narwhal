@@ -35,7 +35,7 @@ describe('ProfileActions', () => {
     expect(airmanProfileManagerStore.setDidSaveAirman).toHaveBeenCalledWith(true);
   });
 
-  it('should delete an airman', async () => {
+  it('should setPendingDelete an airman', async () => {
     await subject.deleteAirman(history);
     expect(airmanRepository.delete).toHaveBeenCalledWith(airmanProfileManagerStore.airman);
     expect(airmanProfileManagerStore.setPendingDeleteAirman).toHaveBeenCalledWith(false);

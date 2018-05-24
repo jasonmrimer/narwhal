@@ -12,6 +12,7 @@ export class CertificationFormStore extends NotificationStore {
   @observable private _certification: Certification;
   @observable private _errors: FormErrors = {};
   @observable private _didSave: boolean = false;
+  @observable private _pendingDelete: boolean = false;
 
   hydrate(certification: Certification) {
     this._certification = certification;
@@ -34,6 +35,11 @@ export class CertificationFormStore extends NotificationStore {
     return this._didSave;
   }
 
+  @computed
+  get pendingDelete() {
+    return this._pendingDelete;
+  }
+
   @action.bound
   setErrors(errors: FormErrors) {
     this._errors = errors;
@@ -47,5 +53,10 @@ export class CertificationFormStore extends NotificationStore {
   @action.bound
   setCertificationTitle(title: string) {
     this._certification = Object.assign({}, this._certification, {title: title.toUpperCase()});
+  }
+
+  @action.bound
+  setPendingDelete(pendingDelete: boolean): void {
+    this._pendingDelete = pendingDelete;
   }
 }

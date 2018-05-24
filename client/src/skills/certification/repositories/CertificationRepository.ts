@@ -9,5 +9,8 @@ export interface CertificationRepository {
 
   update(certification: CertificationModel): Promise<CertificationModel>;
 
-  save(certification: {title: string}): Promise<CertificationModel>;
+  save(certification: { title: string }): Promise<CertificationModel>;
+
+  delete(id: number): Promise<void>;
+
 }

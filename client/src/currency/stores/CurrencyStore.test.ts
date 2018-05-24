@@ -61,7 +61,7 @@ describe('CurrencyStore', () => {
     expect(subject.currencyChild).toBe(CurrencyChild.SkillList);
   });
 
-  it('should toggle pending delete', () => {
+  it('should toggle pending setPendingDelete', () => {
     const cert = AirmanCertificationModelFactory.build(1, 1);
     expect(subject.pendingDeleteSkill).toBeNull();
 
@@ -83,7 +83,7 @@ describe('CurrencyStore', () => {
       expect(repos.airmanRepository!.saveSkill).toHaveBeenCalledWith(skill);
     });
 
-    it('should delete a skill', async () => {
+    it('should setPendingDelete a skill', async () => {
       subject.removeSkill(skill);
       await subject.executePendingDelete();
       expect(repos.airmanRepository!.deleteSkill).toHaveBeenCalledWith(skill);

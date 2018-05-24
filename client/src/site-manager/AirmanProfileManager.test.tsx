@@ -73,7 +73,7 @@ describe('AirmanProfileManager', () => {
     expect(subject.find('.airman-header').text()).toContain(airman.fullName);
   });
 
-  it('should render a delete button when the airman is not empty', () => {
+  it('should render a setPendingDelete button when the airman is not empty', () => {
     const deleteButton = subject
       .find(StyledButton)
       .findWhere(btn => btn.prop('text') === 'DELETE MEMBER');

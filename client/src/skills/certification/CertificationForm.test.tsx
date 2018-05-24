@@ -11,6 +11,7 @@ import { StyledForm } from '../../widgets/forms/Form';
 import { eventStub } from '../../utils/testUtils';
 import { StyledNavigationBackButton } from '../../widgets/buttons/NavigationBackButton';
 import { StyledFieldValidation } from '../../widgets/inputs/FieldValidation';
+import { ConfirmationPopup, StyledConfirmationPopup } from '../../widgets/ConfirmationPopup';
 
 describe('CertificationForm', () => {
   let subject: ShallowWrapper;
@@ -18,6 +19,15 @@ describe('CertificationForm', () => {
   let store: CertificationFormStore;
   const certificationActions: any = {
     submit: jest.fn(),
+    setPendingDelete: jest.fn(),
+    dismissPendingDelete: jest.fn(),
+    deleteCertification: jest.fn(),
+  };
+
+  const profileStore: any = {
+    profile: {
+      siteName: 'Hiya!'
+    }
   };
 
   beforeEach(() => {
@@ -29,7 +39,11 @@ describe('CertificationForm', () => {
     store.hydrate(certification);
 
     subject = shallow(
-      <CertificationForm certificationFormStore={store} certificationActions={certificationActions}/>
+      <CertificationForm
+        certificationFormStore={store}
+        certificationActions={certificationActions}
+        profileStore={profileStore}
+      />
     );
   });
 
@@ -51,7 +65,7 @@ describe('CertificationForm', () => {
   });
 
   it('should call the certificationFormStore update method on submit', async () => {
-    subject.find(StyledForm).simulate('submit', eventStub);
+    await subject.find(StyledForm).simulate('submit', eventStub);
     expect(certificationActions.submit).toHaveBeenCalled();
   });
 
@@ -62,4 +76,32 @@ describe('CertificationForm', () => {
   it('should render with field validation', () => {
     expect(subject.find(StyledFieldValidation).prop('fieldName')).toBe('title');
   });
+
+  it('should render a setPendingDelete button', () => {
+    expect(subject.find('.delete').text()).toContain('DELETE');
+  });
+
+  it('should call the setPendingDelete action with the certification id', () => {
+    subject.find('.delete').simulate('click');
+    expect(certificationActions.setPendingDelete).toHaveBeenCalled();
+  });
+
+  it('should render a popup if there is a pending delete', () => {
+    expect(subject.find(ConfirmationPopup).exists()).toBeFalsy();
+    store.setPendingDelete(true);
+    subject.update();
+    expect(subject.find(StyledConfirmationPopup).exists()).toBeTruthy();
+  });
+
+  it('should pass the correct props to ConfirmationPopup', () => {
+    store.setPendingDelete(true);
+    subject.update();
+    const confirmationPopup = subject.find(StyledConfirmationPopup);
+
+    expect(confirmationPopup.prop('title')).toBe(certification.title);
+    expect(confirmationPopup.prop('siteName')).toBe('Hiya!');
+    expect(confirmationPopup.prop('onCancel')).toBe(certificationActions.dismissPendingDelete);
+    expect(confirmationPopup.prop('onConfirm')).toBeDefined();
+  });
+
 });

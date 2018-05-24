@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import static java.util.Collections.emptyList;
+
 @RestController
 @RequestMapping(CertificationController.URI)
 public class CertificationController {
@@ -85,5 +87,14 @@ public class CertificationController {
         HttpStatus.BAD_REQUEST
       );
     }
+  }
+
+  @DeleteMapping(value = "/{id}")
+  public ResponseEntity<Object> delete(@PathVariable Long id) {
+    this.certificationRepository.delete(id);
+    return new ResponseEntity<>(
+      emptyList(),
+      HttpStatus.OK
+    );
   }
 }
