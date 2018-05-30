@@ -73,12 +73,24 @@ export class FlightTables extends React.Component<FlightTablesProps> {
     );
   }
 
+  private printNumberOfOperators(flight: FlightModel ) {
+    const length = this.props.siteManagerStore!
+      .getAirmenByFlightId(flight.id)
+      .length;
+    const numOfOps = length < 10 ?  `0${length}` : length.toString();
+    return `${numOfOps} Operators`;
+  }
+
   private renderHeader = (flight: FlightModel) => {
     return (
       <React.Fragment>
         <div className="flight-header">
           <div className="header-section">
-            <h3>{flight.name}</h3>
+            <h3>{flight.name}
+            <span>
+              {this.printNumberOfOperators(flight)}
+            </span>
+            </h3>
           </div>
           <div className="header-section">
             <StyledShiftDropdown
@@ -138,7 +150,14 @@ export const StyledFlightTables = inject(
         font-size: 1.25rem;
         font-weight: 500;
         margin: 0 5rem 0 0;
+        
+        span{
+          font-weight: 300;
+          padding-left: 0.75rem;
+          margin: 0 5rem 0 0;
+        }
       }
+      
       
       .shift {
         width: 5rem;
