@@ -19,5 +19,4 @@ describe('CertificationFormStore', () => {
     subject.setPendingDelete(true);
     expect(subject.pendingDelete).toBeTruthy();
   });
-
 });

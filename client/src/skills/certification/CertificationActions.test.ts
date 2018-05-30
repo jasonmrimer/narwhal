@@ -66,4 +66,9 @@ describe('CertificationActions', () => {
     subject.deleteCertification(history);
     expect(certificationRepository.delete).toHaveBeenCalledWith(certification.id);
   });
+
+  it('should call dismissPendingDelete when the delete is confirmed', async () => {
+    await subject.deleteCertification(history);
+    expect(certificationFormStore.setPendingDelete).toHaveBeenCalledWith(false);
+  });
 });

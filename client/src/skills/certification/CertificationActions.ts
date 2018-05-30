@@ -38,6 +38,7 @@ export class CertificationActions {
     if (certification && certification.id) {
       await this.repositories.certificationRepository!.delete(certification.id);
       history.replace(`/flights/`);
+      this.dismissPendingDelete();
     }
   };
 }
