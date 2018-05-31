@@ -19,7 +19,7 @@ export class TopBar extends React.Component<Props> {
         <div className={this.props.className}>
           <span className="logo">
             <img src="/sally.png"/>
-            <span>Narwhal</span>
+            <span id="site-Title">Narwhal</span>
           </span>
           <span className="navigation-tabs">
             <Can do="read" on="mission" ability={profileStore!.profile!.ability!}>
@@ -83,6 +83,12 @@ export const StyledTopBar = inject('profileStore')(styled(TopBar)`
   height: 4rem;
   
   z-index: 1000;
+  
+  #site-Title {
+    font-size: 1.75rem;
+    font-weight: 400;
+    color: ${props => props.theme.purpleSteel};
+  }
    
   .logo {
     display: flex;

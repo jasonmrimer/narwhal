@@ -20,8 +20,8 @@ export const StyledRosterSubHeaderRow = styled(RosterSubHeaderRow)`
   background: ${props => props.theme.blueSteel};
   border-right: 1px solid ${props => props.theme.graySteel};
   border-left: 1px solid ${props => props.theme.graySteel};
-  font-size: 0.875rem;
-  font-weight: 200;
+  font-size: 1rem;
+  font-weight: 500;
   padding: 0.5rem 0 0.5rem ${props => props.alignment === 'left' ? '0.5rem' : '0'};
   justify-content: ${props => props.alignment === 'left' ? 'start' : 'center'};
 `;

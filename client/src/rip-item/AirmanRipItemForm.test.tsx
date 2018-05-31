@@ -85,7 +85,7 @@ describe('RipItems', () => {
   it('should update all the rip items expirationDate upon clicking the update all button', () => {
     subject
       .find(StyledButton)
-      .findWhere(btn => btn.prop('text') === 'UPDATE ALL 90 DAYS')
+      .findWhere(btn => btn.prop('text') === 'ALL 90 DAYS')
       .simulate('click');
     expect(ripItemsActions.updateAllRipItems).toHaveBeenCalled();
   });

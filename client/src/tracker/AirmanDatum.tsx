@@ -31,7 +31,8 @@ export const AirmanDatum =
 
 export const StyledAirmanDatum = inject('sidePanelActions')(styled(AirmanDatum)`
   .expired {
-    border: 1px solid ${props => props.theme.yellow};
+    border-bottom: 2px solid ${props => props.theme.yellow};
+    text-decoration: line-through ${props => props.theme.red};
     padding: 0.125rem;
     border-radius: 2px;
   }

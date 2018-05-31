@@ -93,22 +93,6 @@ export class AirmanProfileManager extends React.Component<Props> {
                 </span>
 
               <StyledFieldValidation
-                fieldName="lastName"
-                errors={airmanProfileManagerStore!.errors}
-                rightAlign={true}
-              >
-                <span className="airman-profile-manager-row">
-                  <label htmlFor="airman-last-name">LAST NAME</label>
-                  <StyledTextInput
-                    onChange={(e) => setState(e.target.name, e.target.value)}
-                    value={lastName}
-                    name="lastName"
-                    id="airman-last-name"
-                  />
-                </span>
-              </StyledFieldValidation>
-
-              <StyledFieldValidation
                 fieldName="firstName"
                 errors={airmanProfileManagerStore!.errors}
                 rightAlign={true}
@@ -120,6 +104,22 @@ export class AirmanProfileManager extends React.Component<Props> {
                     value={firstName}
                     name="firstName"
                     id="airman-first-name"
+                  />
+                </span>
+              </StyledFieldValidation>
+
+              <StyledFieldValidation
+                fieldName="lastName"
+                errors={airmanProfileManagerStore!.errors}
+                rightAlign={true}
+              >
+                <span className="airman-profile-manager-row">
+                  <label htmlFor="airman-last-name">LAST NAME</label>
+                  <StyledTextInput
+                    onChange={(e) => setState(e.target.name, e.target.value)}
+                    value={lastName}
+                    name="lastName"
+                    id="airman-last-name"
                   />
                 </span>
               </StyledFieldValidation>

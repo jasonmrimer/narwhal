@@ -132,8 +132,8 @@ describe('AirmanProfileManager', () => {
   });
 
   it('should show field validation for airman details', () => {
-    expect(subject.find(StyledFieldValidation).at(0).prop('fieldName')).toBe('lastName');
-    expect(subject.find(StyledFieldValidation).at(1).prop('fieldName')).toBe('firstName');
+    expect(subject.find(StyledFieldValidation).at(0).prop('fieldName')).toBe('firstName');
+    expect(subject.find(StyledFieldValidation).at(1).prop('fieldName')).toBe('lastName');
     expect(subject.find(StyledFieldValidation).at(2).prop('fieldName')).toBe('siteId');
     expect(subject.find(StyledFieldValidation).at(3).prop('fieldName')).toBe('squadronId');
     expect(subject.find(StyledFieldValidation).at(4).prop('fieldName')).toBe('flightId');

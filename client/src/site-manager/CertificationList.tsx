@@ -44,7 +44,7 @@ export const StyledCertificationList = styled(CertificationList)`
     font-size: 1.25rem;
     font-weight: 500;
     margin: 0;
-    background: ${props => props.theme.blueSteel};
+    background: ${props => props.theme.skySteel};
     
     a {
       & > svg {

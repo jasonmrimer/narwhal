@@ -99,11 +99,12 @@ export const StyledCrew = inject('crewStore')(styled(Crew)`
   .critical {
     width: 10%;
     padding: 0 1rem 0 0;
+    margin-right: 2rem;
   }
   
   .position {
     width: 20%;
-    padding: 0 1rem 0 0;
+    padding: 0 2rem 0 0;
   }
   
   .member {

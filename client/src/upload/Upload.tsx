@@ -70,6 +70,12 @@ export class Upload extends React.Component<{}, State> {
     return (
       <div>
         {this.renderMessage()}
+        <h4
+          style={{color: Theme.yellow, padding: '1rem'}}
+          key="0"
+        >
+          Check Narwhal for the data you are uploading before using this page to avoid duplication.
+        </h4>
         {
           Object.keys(this.formMap).map((name: string, index: number) => {
             return (

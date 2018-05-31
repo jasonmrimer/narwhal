@@ -57,7 +57,7 @@ export class AirmanRipItems extends React.Component<Props> {
         <StyledFormRow reversed={true}>
           <StyledButton
             className="update-all-btn"
-            text="UPDATE ALL 90 DAYS"
+            text="ALL 90 DAYS"
             onClick={this.onUpdateAllClicked}
             renderIcon={ResetIcon}
           />
