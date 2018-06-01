@@ -7,13 +7,13 @@ import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 import { StyledShiftDropdown } from '../tracker/ShiftDropdown';
 import { ShiftType } from '../airman/models/AirmanModel';
 import { StyledDropdown } from '../widgets/inputs/Dropdown';
-import { StyledFlightSchedulePopup } from '../widgets/FlightSchedulePopup';
+import { StyledFlightSchedulePopup } from '../widgets/popups/FlightSchedulePopup';
 
 describe('FlightTables', () => {
   const flights = [
-    new FlightModel(1, 'A'),
-    new FlightModel(2, 'B'),
-    new FlightModel(3, 'C')
+    new FlightModel(1, 'A', 1),
+    new FlightModel(2, 'B', 1),
+    new FlightModel(3, 'C', 1)
   ];
   const airman = AirmanModelFactory.build();
   const siteManagerStore: any = {

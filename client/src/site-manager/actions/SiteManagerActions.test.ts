@@ -25,7 +25,11 @@ describe('SiteManagerActions', () => {
       setSchedulePrompt: jest.fn(),
       updateScheduleByFlightId: jest.fn(),
       getScheduleByScheduleId: (id: number) => schedule,
-      setPendingScheduleStartDate: jest.fn()
+      setPendingScheduleStartDate: jest.fn(),
+      addPendingNewFlight: jest.fn(),
+      savePendingNewFlight: jest.fn(),
+      refreshFlights: jest.fn(),
+      cancelPendingNewFlight: jest.fn()
     };
 
     airmanRepository = {
@@ -56,5 +60,21 @@ describe('SiteManagerActions', () => {
   it('should save a flight schedule', async () => {
     await subject.saveFlightSchedule();
     expect(siteManagerStore.setAirmenScheduleByFlightId).toHaveBeenCalledWith(1, airmen);
+  });
+
+  it('should add a new pending flight for creation', () => {
+    subject.addNewFlight();
+    expect(siteManagerStore.addPendingNewFlight).toHaveBeenCalled();
+  });
+
+  it('should save a new flight and refresh the flights', async () => {
+    await subject.saveNewFlight();
+    expect(siteManagerStore.savePendingNewFlight).toHaveBeenCalled();
+    expect(siteManagerStore.refreshFlights).toHaveBeenCalled();
+  });
+
+  it('should cancel the addition of a new flight', () => {
+    subject.cancelNewFlight();
+    expect(siteManagerStore.cancelPendingNewFlight).toHaveBeenCalled();
   });
 });

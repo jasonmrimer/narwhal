@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { StyledDatePicker } from './inputs/DatePicker';
-import { SiteManagerActions } from '../site-manager/actions/SiteManagerActions';
+import { StyledDatePicker } from '../inputs/DatePicker';
+import { SiteManagerActions } from '../../site-manager/actions/SiteManagerActions';
 import styled from 'styled-components';
 import { inject, observer } from 'mobx-react';
-import { SiteManagerStore } from '../site-manager/stores/SiteManagerStore';
+import { SiteManagerStore } from '../../site-manager/stores/SiteManagerStore';
 import { StyledPopupModal } from './PopupModal';
 
 interface Props {

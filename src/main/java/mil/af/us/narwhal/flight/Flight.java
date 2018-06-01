@@ -1,7 +1,7 @@
 package mil.af.us.narwhal.flight;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,6 +9,7 @@ import mil.af.us.narwhal.airman.Airman;
 import mil.af.us.narwhal.squadron.Squadron;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -20,8 +21,9 @@ public class Flight {
   @GeneratedValue
   private Long id;
 
+  @NotNull
   @ManyToOne
-  @JsonBackReference
+  @JsonIgnore
   private Squadron squadron;
 
   @OneToMany(mappedBy = "flight", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -32,6 +34,18 @@ public class Flight {
 
   public Flight(String name) {
     this.name = name;
+  }
+
+  public Flight(Squadron squadron, String name) {
+    this.squadron = squadron;
+    this.name = name;
+  }
+
+  @JsonProperty
+  public Long squadronId(){
+    return this.squadron != null
+      ? this.squadron.getId()
+      : null;
   }
 
   @Override

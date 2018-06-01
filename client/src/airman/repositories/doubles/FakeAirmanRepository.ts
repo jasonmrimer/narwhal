@@ -97,6 +97,14 @@ export class FakeAirmanRepository implements AirmanRepository {
     return Promise.resolve(airman);
   }
 
+  async delete(airman: AirmanModel): Promise<void> {
+    const i = airmen.findIndex(a => a.id === airman.id);
+    if (i !== -1) {
+      airmen.splice(i, 1);
+    }
+    return Promise.resolve();
+  }
+
   updateShiftByFlightId(flightId: number, shift: ShiftType): Promise<AirmanModel[]> {
     const filteredAirmen = airmen.filter(airman => airman.flightId === flightId);
     filteredAirmen.forEach(airman => airman.shift = shift);
@@ -121,13 +129,5 @@ export class FakeAirmanRepository implements AirmanRepository {
     if (index > -1) {
       skills.splice(index, 1);
     }
-  }
-
-  async delete(airman: AirmanModel): Promise<void> {
-    const i = airmen.findIndex(a => a.id === airman.id);
-    if (i !== -1) {
-      airmen.splice(i, 1);
-    }
-    return Promise.resolve();
   }
 }

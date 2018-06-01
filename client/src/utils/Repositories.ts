@@ -37,6 +37,9 @@ import { RankRepositoryStub } from '../rank/repositories/doubles/RankRepositoryS
 import { CertificationRepository } from '../skills/certification/repositories/CertificationRepository';
 import { WebCertificationRepository } from '../skills/certification/repositories/web/WebCertificationRepository';
 import { CertificationRepositoryStub } from '../skills/certification/repositories/doubles/CertificationRepositoryStub';
+import { WebFlightRepository } from '../flight/repositories/WebFlightRepository';
+import { FlightRepositoryStub } from '../flight/repositories/FlightRepositoryStub';
+import { FlightRepository } from '../flight/repositories/FlightRepository';
 
 export interface Repositories {
   airmanRepository: AirmanRepository;
@@ -51,6 +54,7 @@ export interface Repositories {
   profileRepository: ProfileRepository;
   scheduleRepository: ScheduleRepository;
   rankRepository: RankRepository;
+  flightRepository: FlightRepository;
 }
 
 const client = new HTTPClient();
@@ -67,7 +71,8 @@ export const WebRepositories: Repositories = Object.freeze({
   crewPositionRepository: new WebCrewPositionRepository(client),
   profileRepository: new WebProfileRepository(client),
   scheduleRepository: new WebScheduleRepository(client),
-  rankRepository: new WebRankRepository(client)
+  rankRepository: new WebRankRepository(client),
+  flightRepository: new WebFlightRepository(client)
 });
 
 export const DoubleRepositories: Repositories = {
@@ -82,5 +87,6 @@ export const DoubleRepositories: Repositories = {
   crewPositionRepository: new CrewPositionRepositorySpy(),
   profileRepository: new ProfileRepositoryStub(),
   scheduleRepository: new ScheduleRepositoryStub(),
-  rankRepository: new RankRepositoryStub()
+  rankRepository: new RankRepositoryStub(),
+  flightRepository: new FlightRepositoryStub()
 };

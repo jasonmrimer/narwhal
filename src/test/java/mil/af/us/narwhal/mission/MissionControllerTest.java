@@ -5,7 +5,6 @@ import mil.af.us.narwhal.airman.Airman;
 import mil.af.us.narwhal.airman.AirmanRepository;
 import mil.af.us.narwhal.crew.CrewPosition;
 import mil.af.us.narwhal.flight.Flight;
-import mil.af.us.narwhal.rank.Rank;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
 import mil.af.us.narwhal.squadron.Squadron;
@@ -20,9 +19,7 @@ import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static java.util.Arrays.asList;
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.notNullValue;
-import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.Matchers.*;
 
 public class MissionControllerTest extends BaseIntegrationTest {
   private Site site1;

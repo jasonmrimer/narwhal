@@ -10,7 +10,7 @@ interface Props {
   className?: string;
 }
 
-export class ConfirmationPopup extends React.Component<Props> {
+export class DeleteCertificationPopup extends React.Component<Props> {
   render() {
     return (
       <StyledPopupModal
@@ -29,4 +29,4 @@ export class ConfirmationPopup extends React.Component<Props> {
   }
 }
 
-export const StyledConfirmationPopup = styled(ConfirmationPopup)``;
+export const StyledDeleteCertificationPopup = styled(DeleteCertificationPopup)``;

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import Mock = jest.Mock;
 import { StyledPopupModal } from './PopupModal';
-import { Button } from './buttons/Button';
+import { Button } from '../buttons/Button';
 
 describe('PopupModal', () => {
   let subject: ReactWrapper;

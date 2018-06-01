@@ -9,7 +9,7 @@ import styled from 'styled-components';
 import { StyledShiftDropdown } from '../tracker/ShiftDropdown';
 import { SiteManagerActions } from './actions/SiteManagerActions';
 import { StyledDropdown } from '../widgets/inputs/Dropdown';
-import { StyledFlightSchedulePopup } from '../widgets/FlightSchedulePopup';
+import { StyledFlightSchedulePopup } from '../widgets/popups/FlightSchedulePopup';
 import * as classNames from 'classnames';
 
 interface FlightTableRowProps {
@@ -141,7 +141,6 @@ export const StyledFlightTables = inject(
     .flight-header {
       display: flex;
       align-items: center;
-      display: flex;
       justify-content: space-around;
       padding: 1rem;
       background: ${props => props.theme.blueSteel};

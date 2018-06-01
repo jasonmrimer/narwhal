@@ -17,7 +17,7 @@ import { ProfileActions } from './actions/ProfileActions';
 import { StyledAlert } from '../widgets/Alert';
 import { StyledButton } from '../widgets/buttons/Button';
 import { DeleteIcon } from '../icons/DeleteIcon';
-import { StyledDeletePopup } from '../widgets/DeletePopup';
+import { StyledDeletePopup } from '../widgets/popups/DeletePopup';
 
 interface Props {
   airmanProfileManagerStore?: AirmanProfileManagerStore;

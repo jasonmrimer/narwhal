@@ -9,7 +9,7 @@ import { StyledNavigationBackButton } from '../../widgets/buttons/NavigationBack
 import { StyledFieldValidation } from '../../widgets/inputs/FieldValidation';
 import { CertificationActions } from './CertificationActions';
 import { StyledAlert } from '../../widgets/Alert';
-import { StyledConfirmationPopup } from '../../widgets/ConfirmationPopup';
+import { StyledDeleteCertificationPopup } from '../../widgets/popups/DeleteCertificationPopup';
 import { ProfileSitePickerStore } from '../../profile/stores/ProfileSitePickerStore';
 import { DeleteIcon } from '../../icons/DeleteIcon';
 
@@ -84,7 +84,7 @@ export class CertificationForm extends React.Component <Props> {
         </StyledForm>
         {
           certificationFormStore!.pendingDelete &&
-          <StyledConfirmationPopup
+          <StyledDeleteCertificationPopup
             title={certification.title}
             siteName={this.props.profileStore!.profile!.siteName}
             onCancel={this.props.certificationActions!.dismissPendingDelete}

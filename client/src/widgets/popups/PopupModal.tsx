@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Button } from './buttons/Button';
+import { Button } from '../buttons/Button';
+import { observer } from 'mobx-react';
 
 interface Props {
   title: string;
@@ -10,6 +11,7 @@ interface Props {
   className?: string;
 }
 
+@observer
 export class PopupModal extends React.Component<Props> {
   render() {
     return (
@@ -17,7 +19,7 @@ export class PopupModal extends React.Component<Props> {
         <div className="confirmation">
           <div className="title">
             <div>{this.props.title}</div>
-            <span onClick={this.props.onCancel}>&times;</span>
+            <span onClick={this.props.onCancel}>&#10006;</span>
           </div>
           {this.props.children}
           <div className="actions">
@@ -42,21 +44,18 @@ export const StyledPopupModal = styled(PopupModal)`
   text-align: left;
   
   .title {
-    padding: 0.25rem;
+    padding: 0.5rem;
     background: ${props => props.theme.dark};
     margin-bottom: 0.5rem;
     display: flex;
     justify-content: space-between;
+    font-size: 0.75rem;
     
     span {
       cursor: pointer;
     }
   }
-  
-  .content {
-    padding: 0.5rem;
-  }
-  
+
   .confirmation {
     background: ${props => props.theme.blueSteel};
     width: 500px;
@@ -74,7 +73,7 @@ export const StyledPopupModal = styled(PopupModal)`
   }
     
   .actions {
-      padding: 1rem;
+      padding: 0.5rem;
       display: flex;    
       justify-content: flex-end;
       
