@@ -7,6 +7,7 @@ import { OperatorIcon } from '../icons/OperatorIcon';
 import styled from 'styled-components';
 import { StyledCertificationList } from './CertificationList';
 import { StyledFlightTables } from './FlightTables';
+import { StyledButton } from '../widgets/buttons/Button';
 
 interface Props {
   siteManagerStore?: SiteManagerStore;
@@ -20,6 +21,8 @@ const cache = new CellMeasurerCache({
 
 @observer
 export class SiteManager extends React.Component<Props> {
+
+  handleAdd = () => {};
   render() {
     const {siteManagerStore} = this.props;
     const squadron = this.props.siteManagerStore!.squadron;
@@ -41,7 +44,12 @@ export class SiteManager extends React.Component<Props> {
         <h2 className="certification-section-header">
           {siteManagerStore!.siteName} has {siteManagerStore!.certifications.length} certifications.
         </h2>
-
+        <div>
+          <StyledButton
+            text="Add Flight"
+            onClick={this.handleAdd}
+          />
+        </div>
         <StyledCertificationList certifications={siteManagerStore!.certifications}/>
       </div>
     );

@@ -114,6 +114,12 @@ describe('SiteManagerStore', () => {
     expect(subject.pendingScheduleId).toBe(2);
   });
 
+  it('should set pending variables when calling addNewFlights', ()=> {
+    expect(subject.shouldShowAddFlightPrompt).toBeFalsy();
+    subject.setAddNewFlightPrompt();
+    expect(subject.shouldShowAddFlightPrompt).toBeTruthy();
+  });
+
   it('should set pending start date when setPendingScheduleStartDate is called', () => {
     const currentMomentString = '2018-05-21T13:53:09-04:00';
     const currentMoment = moment(currentMomentString);

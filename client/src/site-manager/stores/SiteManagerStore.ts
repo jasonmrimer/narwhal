@@ -15,6 +15,7 @@ export class SiteManagerStore extends NotificationStore {
   @observable private _certifications: CertificationModel[] = [];
   @observable private _schedules: ScheduleModel[] = [];
   @observable private _shouldShowSchedulePrompt: boolean = false;
+  @observable private _shouldShowAddFlightPrompt: boolean = false;
   @observable private _pendingFlightId: number | null = null;
   @observable private _pendingScheduleId: number | null = null;
   @observable private _pendingScheduleStartDate: any = moment(moment.now());
@@ -36,6 +37,11 @@ export class SiteManagerStore extends NotificationStore {
   @computed
   get shouldShowSchedulePrompt() {
     return this._shouldShowSchedulePrompt;
+  }
+
+  @computed
+  get shouldShowAddFlightPrompt() {
+    return this._shouldShowAddFlightPrompt;
   }
 
   @computed
@@ -82,6 +88,11 @@ export class SiteManagerStore extends NotificationStore {
     this._pendingFlightId = null;
     this._pendingScheduleId = null;
     this._pendingScheduleStartDate = moment(moment.now());
+  }
+
+  @action.bound
+  hideAddFlightPrompt() {
+    this._shouldShowAddFlightPrompt = false;
   }
 
   @action.bound
@@ -170,5 +181,10 @@ export class SiteManagerStore extends NotificationStore {
   @action.bound
   setPendingScheduleStartDate(input: Moment) {
     this._pendingScheduleStartDate = moment(input);
+  }
+
+  @action.bound
+  setAddNewFlightPrompt() {
+    this._shouldShowAddFlightPrompt = true;
   }
 }

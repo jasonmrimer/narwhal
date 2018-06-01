@@ -24,6 +24,10 @@ export class SiteManagerActions {
     this.siteManagerStore!.setSchedulePrompt(flightId, scheduleId);
   }
 
+  addNewFlight() {
+    this.siteManagerStore!.setAddNewFlightPrompt();
+  }
+
   async saveFlightSchedule() {
     const flightId = this.siteManagerStore!.pendingFlightId!;
     const scheduleId = this.siteManagerStore!.pendingScheduleId;

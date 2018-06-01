@@ -24,6 +24,7 @@ describe('SiteManagerActions', () => {
       setAirmenScheduleByFlightId: jest.fn(),
       setSchedulePrompt: jest.fn(),
       updateScheduleByFlightId: jest.fn(),
+      setAddNewFlightPrompt: jest.fn(),
       getScheduleByScheduleId: (id: number) => schedule,
       setPendingScheduleStartDate: jest.fn()
     };
@@ -51,6 +52,11 @@ describe('SiteManagerActions', () => {
   it('should set the schedule for a flight',  () => {
     subject.setFlightSchedule(1, 1);
     expect(siteManagerStore.setSchedulePrompt).toBeCalledWith(1, 1);
+  });
+
+  it('should call siteManagerStore setAddNewFlightPrompt',  () => {
+    subject.addNewFlight();
+    expect(siteManagerStore.setAddNewFlightPrompt).toBeCalled();
   });
 
   it('should save a flight schedule', async () => {
