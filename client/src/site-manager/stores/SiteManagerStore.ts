@@ -19,6 +19,7 @@ export class SiteManagerStore extends NotificationStore {
   @observable private _pendingFlightId: number | null = null;
   @observable private _pendingScheduleId: number | null = null;
   @observable private _pendingScheduleStartDate: any = moment(moment.now());
+  @observable private _pendingNewFlight: boolean = false;
 
   @action.bound
   hydrate(profile: ProfileModel,
@@ -80,6 +81,11 @@ export class SiteManagerStore extends NotificationStore {
   @computed
   get pendingScheduleStartDate() {
     return this._pendingScheduleStartDate;
+  }
+
+  @computed
+  get pendingNewFlight() {
+    return this._pendingNewFlight;
   }
 
   @action.bound
@@ -187,4 +193,17 @@ export class SiteManagerStore extends NotificationStore {
   setAddNewFlightPrompt() {
     this._shouldShowAddFlightPrompt = true;
   }
+
+  @action.bound
+  addFlight() {
+    this._pendingNewFlight = true;
+  }
+
+  @action.bound
+  cancelAddFlight() {
+    this._pendingNewFlight = false;
+  }
+
+  @action.bound
+
 }

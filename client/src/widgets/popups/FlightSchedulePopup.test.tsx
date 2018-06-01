@@ -2,7 +2,7 @@ import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { FlightSchedulePopup } from './FlightSchedulePopup';
 import Mock = jest.Mock;
-import { StyledDatePicker } from './inputs/DatePicker';
+import { StyledDatePicker } from '../inputs/DatePicker';
 import * as moment from 'moment';
 
 describe('FlightSchedulePopup', () => {

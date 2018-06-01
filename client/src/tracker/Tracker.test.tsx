@@ -10,7 +10,7 @@ import { StyledRosterContainer } from '../roster/RosterContainer';
 import { EventModel, EventType } from '../event/models/EventModel';
 import * as moment from 'moment';
 import { StyledLocationFilters } from '../widgets/LocationFilters';
-import { StyledDeletePopup } from '../widgets/DeletePopup';
+import { StyledDeletePopup } from '../widgets/popups/DeletePopup';
 import { DoubleRepositories } from '../utils/Repositories';
 import { AvailabilityStore } from '../availability/stores/AvailabilityStore';
 import { CurrencyStore } from '../currency/stores/CurrencyStore';

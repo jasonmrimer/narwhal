@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { Button } from './buttons/Button';
+import { Button } from '../buttons/Button';
 
 interface Props {
   title: string;

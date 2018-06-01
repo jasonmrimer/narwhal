@@ -7,7 +7,7 @@ import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 import { StyledShiftDropdown } from '../tracker/ShiftDropdown';
 import { ShiftType } from '../airman/models/AirmanModel';
 import { StyledDropdown } from '../widgets/inputs/Dropdown';
-import { StyledFlightSchedulePopup } from '../widgets/FlightSchedulePopup';
+import { StyledFlightSchedulePopup } from '../widgets/popups/FlightSchedulePopup';
 
 describe('FlightTables', () => {
   const flights = [

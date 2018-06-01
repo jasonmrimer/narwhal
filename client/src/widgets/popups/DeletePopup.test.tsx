@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
 import { DeletePopup, renderItemInformation } from './DeletePopup';
-import { AirmanCertificationModelFactory } from '../airman/factories/AirmanCertificationModelFactory';
+import { AirmanCertificationModelFactory } from '../../airman/factories/AirmanCertificationModelFactory';
 import Mock = jest.Mock;
-import { AirmanQualificationModelFactory } from '../airman/factories/AirmanQualificationModelFactory';
+import { AirmanQualificationModelFactory } from '../../airman/factories/AirmanQualificationModelFactory';
 
 describe('DeletePopup', () => {
   let subject: ReactWrapper;

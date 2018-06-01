@@ -1,10 +1,10 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { EventModel } from '../event/models/EventModel';
-import { Skill } from '../skills/models/Skill';
-import { AirmanCertificationModel } from '../airman/models/AirmanCertificationModel';
-import { AirmanQualificationModel } from '../airman/models/AirmanQualificationModel';
-import { AirmanModel } from '../airman/models/AirmanModel';
+import { EventModel } from '../../event/models/EventModel';
+import { Skill } from '../../skills/models/Skill';
+import { AirmanCertificationModel } from '../../airman/models/AirmanCertificationModel';
+import { AirmanQualificationModel } from '../../airman/models/AirmanQualificationModel';
+import { AirmanModel } from '../../airman/models/AirmanModel';
 import { StyledPopupModal } from './PopupModal';
 
 type Deletable = AirmanModel | EventModel | Skill;

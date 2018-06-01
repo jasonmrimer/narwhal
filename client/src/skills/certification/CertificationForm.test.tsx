@@ -11,7 +11,7 @@ import { StyledForm } from '../../widgets/forms/Form';
 import { eventStub } from '../../utils/testUtils';
 import { StyledNavigationBackButton } from '../../widgets/buttons/NavigationBackButton';
 import { StyledFieldValidation } from '../../widgets/inputs/FieldValidation';
-import { ConfirmationPopup, StyledConfirmationPopup } from '../../widgets/ConfirmationPopup';
+import { DeleteCertificationPopup, StyledDeleteCertificationPopup } from '../../widgets/popups/DeleteCertificationPopup';
 
 describe('CertificationForm', () => {
   let subject: ShallowWrapper;
@@ -87,16 +87,16 @@ describe('CertificationForm', () => {
   });
 
   it('should render a popup if there is a pending delete', () => {
-    expect(subject.find(ConfirmationPopup).exists()).toBeFalsy();
+    expect(subject.find(DeleteCertificationPopup).exists()).toBeFalsy();
     store.setPendingDelete(true);
     subject.update();
-    expect(subject.find(StyledConfirmationPopup).exists()).toBeTruthy();
+    expect(subject.find(StyledDeleteCertificationPopup).exists()).toBeTruthy();
   });
 
-  it('should pass the correct props to ConfirmationPopup', () => {
+  it('should pass the correct props to DeleteCertificationPopup', () => {
     store.setPendingDelete(true);
     subject.update();
-    const confirmationPopup = subject.find(StyledConfirmationPopup);
+    const confirmationPopup = subject.find(StyledDeleteCertificationPopup);
 
     expect(confirmationPopup.prop('title')).toBe(certification.title);
     expect(confirmationPopup.prop('siteName')).toBe('Hiya!');

@@ -10,6 +10,8 @@ import { ProfileModel } from '../profile/models/ProfileModel';
 import { CertificationModelFactory } from '../skills/certification/factories/CertificationModelFactory';
 import { StyledCertificationList } from './CertificationList';
 import { StyledFlightTables } from './FlightTables';
+import { StyledButton } from '../widgets/buttons/Button';
+import { StyledAddFlightPopup } from '../widgets/popups/AddFlightPopup';
 
 describe('SiteManager', () => {
   const airman = AirmanModelFactory.build(1, 1);
@@ -47,7 +49,33 @@ describe('SiteManager', () => {
     expect(subject.find('.certification-section-header').text()).toContain('SITE 14 has 3 certifications.');
   });
 
-  it('should render certificationList', () => {
+  it('should render a Add Flight button', () => {
+    expect(subject.find(StyledButton).prop('text')).toBe('Add Flight');
+  });
+
+  // TODO make a click function
+  it('should pass the add flight methods to the add flight button', () => {
+    expect(subject.find(StyledButton).prop('onClick')).toBe(siteManagerStore.addFlight);
+  });
+
+  it('should render a popup when there is a pending new flight', () => {
+    expect(subject.find(StyledAddFlightPopup).exists()).toBeFalsy();
+    siteManagerStore.addFlight();
+    subject.update();
+    expect(subject.find(StyledAddFlightPopup).exists()).toBeTruthy();
+  });
+
+  it('should remove the popup when there is no pending new flight', () => {
+    siteManagerStore.addFlight();
+    subject.update();
+    expect(subject.find(StyledAddFlightPopup).exists()).toBeTruthy();
+
+    siteManagerStore.cancelAddFlight();
+    subject.update();
+    expect(subject.find(StyledAddFlightPopup).exists()).toBeFalsy();
+  });
+
+  it('should render certification table', () => {
     expect(subject.find(StyledCertificationList).exists()).toBeTruthy();
   });
 });

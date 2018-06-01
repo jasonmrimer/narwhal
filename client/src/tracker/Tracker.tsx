@@ -6,7 +6,7 @@ import { StyledSidePanel } from './SidePanel';
 import { StyledLegend } from '../roster/Legend';
 import { StyledRosterContainer } from '../roster/RosterContainer';
 import { StyledLocationFilters } from '../widgets/LocationFilters';
-import { StyledDeletePopup } from '../widgets/DeletePopup';
+import { StyledDeletePopup } from '../widgets/popups/DeletePopup';
 import { ProfileModel } from '../profile/models/ProfileModel';
 import { AvailabilityStore } from '../availability/stores/AvailabilityStore';
 import { CurrencyStore } from '../currency/stores/CurrencyStore';

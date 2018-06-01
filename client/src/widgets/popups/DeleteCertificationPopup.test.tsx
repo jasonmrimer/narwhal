@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { mount, ReactWrapper } from 'enzyme';
-import { ConfirmationPopup } from './ConfirmationPopup';
+import { DeleteCertificationPopup } from './DeleteCertificationPopup';
 
-describe('ConfirmationPopup', () => {
+describe('DeleteCertificationPopup', () => {
   let subject: ReactWrapper;
   let onBack: jest.Mock<any>;
   let onConfirm: jest.Mock<any>;
@@ -12,7 +12,7 @@ describe('ConfirmationPopup', () => {
     onConfirm = jest.fn();
 
     subject = mount(
-      <ConfirmationPopup
+      <DeleteCertificationPopup
         title={'LAZER VISION'}
         siteName={'Test Site'}
         onCancel={onBack}

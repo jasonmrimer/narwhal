@@ -38,6 +38,7 @@ describe('SiteManagerStore', () => {
 
     certifications = CertificationModelFactory.buildList(3, 1);
 
+    // TODO left off about to inject repositories
     subject = new SiteManagerStore();
     await subject.hydrate(
       ({siteName: 'SITE 14'} as ProfileModel),
@@ -133,9 +134,29 @@ describe('SiteManagerStore', () => {
     subject.setPendingScheduleStartDate(currentDate);
     subject.hideSchedulePrompt();
     expect(subject.shouldShowSchedulePrompt).toBeFalsy();
-    expect(subject.pendingFlightId).toBeNull();
+    expect(subject.pendingFlightId).toBeFalsy();
     const isAfter = currentDate.isBefore(subject.pendingScheduleStartDate);
     expect(isAfter).toBeTruthy();
-    expect(subject.pendingScheduleId).toBeNull();
+    expect(subject.pendingScheduleId).toBeFalsy();
+  });
+
+  it('should trigger a pending flight to add when adding flight', () => {
+    subject.addFlight();
+    expect(subject.pendingNewFlight).toBeDefined();
+  });
+
+  it('should cancel the pending new flight', () => {
+    subject.addFlight();
+    subject.cancelAddFlight();
+    expect(subject.pendingNewFlight).toBeFalsy();
+  });
+
+  it('should save a new flight', () => {
+    subject.saveNewFlight();
+    expect()
+    // saved it to the backend
+    // repoSpy - did you call me with this new flight?
+    // set the pendingNewflight to false
+    expect(subject.pendingNewFlight).toBeFalsy();
   });
 });

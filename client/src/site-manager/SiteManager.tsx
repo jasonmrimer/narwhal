@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import { StyledCertificationList } from './CertificationList';
 import { StyledFlightTables } from './FlightTables';
 import { StyledButton } from '../widgets/buttons/Button';
+import { StyledAddFlightPopup } from '../widgets/popups/AddFlightPopup';
 
 interface Props {
   siteManagerStore?: SiteManagerStore;
@@ -22,13 +23,16 @@ const cache = new CellMeasurerCache({
 @observer
 export class SiteManager extends React.Component<Props> {
 
-  handleAdd = () => {};
   render() {
     const {siteManagerStore} = this.props;
     const squadron = this.props.siteManagerStore!.squadron;
     cache.clearAll();
     return (
       <div className={this.props.className}>
+        {
+          siteManagerStore!.pendingNewFlight &&
+          <StyledAddFlightPopup/>
+        }
         <div className="header">
           <h2>{siteManagerStore!.siteName} Personnel</h2>
           <Link to="/flights/new">
@@ -40,16 +44,15 @@ export class SiteManager extends React.Component<Props> {
           squadron &&
           <StyledFlightTables flights={squadron.flights}/>
         }
-
-        <h2 className="certification-section-header">
-          {siteManagerStore!.siteName} has {siteManagerStore!.certifications.length} certifications.
-        </h2>
         <div>
           <StyledButton
             text="Add Flight"
-            onClick={this.handleAdd}
+            onClick={siteManagerStore!.addFlight}
           />
         </div>
+        <h2 className="certification-section-header">
+          {siteManagerStore!.siteName} has {siteManagerStore!.certifications.length} certifications.
+        </h2>
         <StyledCertificationList certifications={siteManagerStore!.certifications}/>
       </div>
     );
