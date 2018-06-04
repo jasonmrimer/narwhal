@@ -20,7 +20,7 @@ describe('ProfileActions', () => {
       setErrors: jest.fn(),
       setDidSaveAirman: jest.fn(),
       setPendingDeleteAirman: jest.fn(),
-      performLoading: async (fun: any) => {await fun()}
+      performLoading: async (fun: any) => { await fun(); }
     };
 
     history = {

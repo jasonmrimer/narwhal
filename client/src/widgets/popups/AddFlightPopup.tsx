@@ -10,20 +10,35 @@ interface Props {
   className?: string;
 }
 
-export const AddFlightPopup = (props: Props) => {
-  return (
-    <StyledPopupModal
-      title="Add Flight"
-      onConfirm={props.siteManagerStore!.saveNewFlight}
-      onCancel={props.siteManagerStore!.cancelAddFlight}
-    >
-      <StyledTextInput
-        value=""
-        name="Name"
-        onChange={() => {}}
-      />
-    </StyledPopupModal>
-  );
+interface State {
+  flightName: string;
+}
+
+export class AddFlightPopup extends React.Component<Props, State> {
+  state = {flightName: ''};
+
+  onChange = (e: any) => {
+    this.setState({flightName: e.target.value});
+    this.props.siteManagerStore!.setPendingFlightName(e.target.value);
+  }
+
+  render() {
+    return (
+      <div className={this.props.className}>
+        <StyledPopupModal
+          title="Add Flight"
+          onConfirm={this.props.siteManagerStore!.savePendingNewFlight}
+          onCancel={this.props.siteManagerStore!.cancelPendingNewFlight}
+        >
+          <StyledTextInput
+            value={this.state.flightName}
+            name="Name"
+            onChange={this.onChange}
+          />
+        </StyledPopupModal>
+      </div>
+    );
+  }
 }
 
 export const StyledAddFlightPopup = inject('siteManagerStore')(styled(AddFlightPopup)`

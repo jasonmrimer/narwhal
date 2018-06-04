@@ -48,7 +48,7 @@ const crewStore = new CrewStore(WebRepositories);
 const missionPlannerStore = new MissionPlannerStore(WebRepositories);
 const adminStore = new AdminStore(WebRepositories);
 const airmanProfileManagerStore = new AirmanProfileManagerStore(WebRepositories.airmanRepository);
-const siteManagerStore = new SiteManagerStore();
+const siteManagerStore = new SiteManagerStore(WebRepositories.flightRepository);
 const certificationFormStore = new CertificationFormStore();
 
 export interface Stores {

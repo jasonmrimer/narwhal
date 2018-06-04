@@ -9,12 +9,12 @@ const sites = [
     'DMS-GA',
     [
       new SquadronModel(1, 'Squad 1', [
-        new FlightModel(1, 'Flight 1'),
-        new FlightModel(2, 'Flight 2')
+        new FlightModel(1, 'Flight 1', 1),
+        new FlightModel(2, 'Flight 2', 1)
       ]),
       new SquadronModel(2, 'Squad 2', [
-        new FlightModel(3, 'Flight 3'),
-        new FlightModel(4, 'Flight 4')
+        new FlightModel(3, 'Flight 3', 2),
+        new FlightModel(4, 'Flight 4', 2)
       ])
     ],
     SiteType.DGSCoreSite,
@@ -25,12 +25,12 @@ const sites = [
     'DMS-MD',
     [
       new SquadronModel(3, 'Squad 3', [
-        new FlightModel(5, 'Flight 5'),
-        new FlightModel(6, 'Flight 6')
+        new FlightModel(5, 'Flight 5', 3),
+        new FlightModel(6, 'Flight 6', 3)
       ]),
       new SquadronModel(4, 'Squad 4', [
-        new FlightModel(7, 'Flight 7'),
-        new FlightModel(8, 'Flight 8')
+        new FlightModel(7, 'Flight 7', 4),
+        new FlightModel(8, 'Flight 8', 4)
       ])
     ],
     SiteType.DMSSite,
@@ -41,7 +41,7 @@ const sites = [
     'DMS-HI',
     [
       new SquadronModel(5, 'Squad 5', [
-        new FlightModel(9, 'Flight 9')
+        new FlightModel(9, 'Flight 9', 5)
       ])
     ],
     SiteType.GuardSite,

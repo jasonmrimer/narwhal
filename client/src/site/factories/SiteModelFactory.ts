@@ -18,7 +18,7 @@ export class SiteModelFactory {
       const squad = new SquadronModel(Number(`${id}${i}`), `Squadron ${id}${i}`, []);
 
       for (let j = 0; j < numOfChildren; j++) {
-        const flight = new FlightModel(Number(`${id}${i}${j}`), `Flight ${id}${i}${j}`);
+        const flight = new FlightModel(Number(`${id}${i}${j}`), `Flight ${id}${i}${j}`, Number(`${id}${i}`));
         squad.flights.push(flight);
       }
       site.squadrons.push(squad);

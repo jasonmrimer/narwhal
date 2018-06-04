@@ -7,10 +7,10 @@ import { RankModel } from '../../rank/models/RankModel';
 
 describe('RosterList', () => {
   const squadron = new SquadronModel(1, 'Squadron 1', [
-    new FlightModel(1, 'Flight 1'),
-    new FlightModel(2, 'Flight 2'),
-    new FlightModel(3, 'Flight 3'),
-    new FlightModel(4, 'Flight 4')
+    new FlightModel(1, 'Flight 1', 1),
+    new FlightModel(2, 'Flight 2', 1),
+    new FlightModel(3, 'Flight 3', 1),
+    new FlightModel(4, 'Flight 4', 1)
   ]);
   const airmen = [
     new AirmanModel(1, 1, 1, 1, '1', '1', new RankModel(-1, '')),

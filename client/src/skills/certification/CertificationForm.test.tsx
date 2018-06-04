@@ -11,7 +11,8 @@ import { StyledForm } from '../../widgets/forms/Form';
 import { eventStub } from '../../utils/testUtils';
 import { StyledNavigationBackButton } from '../../widgets/buttons/NavigationBackButton';
 import { StyledFieldValidation } from '../../widgets/inputs/FieldValidation';
-import { DeleteCertificationPopup, StyledDeleteCertificationPopup } from '../../widgets/popups/DeleteCertificationPopup';
+import { DeleteCertificationPopup } from '../../widgets/popups/DeleteCertificationPopup';
+import { StyledDeleteCertificationPopup } from '../../widgets/popups/DeleteCertificationPopup';
 
 describe('CertificationForm', () => {
   let subject: ShallowWrapper;

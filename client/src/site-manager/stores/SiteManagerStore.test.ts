@@ -9,6 +9,7 @@ import { AirmanModel, ShiftType } from '../../airman/models/AirmanModel';
 import { ScheduleModel, ScheduleType } from '../../schedule/models/ScheduleModel';
 import { AirmanScheduleModel } from '../../airman/models/AirmanScheduleModel';
 import * as moment from 'moment';
+import { DoubleRepositories } from '../../utils/Repositories';
 
 describe('SiteManagerStore', () => {
   let airmen: AirmanModel[];
@@ -18,6 +19,7 @@ describe('SiteManagerStore', () => {
   let certifications: CertificationModel[];
   let subject: SiteManagerStore;
   let schedules: ScheduleModel[];
+  let flightRepoSaveSpy: jest.Mock;
   const schedule = new ScheduleModel(1, ScheduleType.FrontHalf);
   const schedule2 = new ScheduleModel(2, ScheduleType.BackHalf);
 
@@ -31,15 +33,17 @@ describe('SiteManagerStore', () => {
     });
 
     schedules = [schedule, schedule2];
-    flight1 = new FlightModel(1, 'Flight 1');
-    flight2 = new FlightModel(2, 'Flight 2');
+    flight1 = new FlightModel(1, 'Flight 1', 1);
+    flight2 = new FlightModel(2, 'Flight 2', 1);
 
     squadron = new SquadronModel(1, 'squad1', [flight1, flight2]);
 
     certifications = CertificationModelFactory.buildList(3, 1);
 
-    // TODO left off about to inject repositories
-    subject = new SiteManagerStore();
+    flightRepoSaveSpy = jest.fn();
+    DoubleRepositories.flightRepository.save = flightRepoSaveSpy;
+
+    subject = new SiteManagerStore(DoubleRepositories.flightRepository);
     await subject.hydrate(
       ({siteName: 'SITE 14'} as ProfileModel),
       squadron,
@@ -115,7 +119,7 @@ describe('SiteManagerStore', () => {
     expect(subject.pendingScheduleId).toBe(2);
   });
 
-  it('should set pending variables when calling addNewFlights', ()=> {
+  it('should set pending variables when calling addNewFlights', () => {
     expect(subject.shouldShowAddFlightPrompt).toBeFalsy();
     subject.setAddNewFlightPrompt();
     expect(subject.shouldShowAddFlightPrompt).toBeTruthy();
@@ -130,7 +134,7 @@ describe('SiteManagerStore', () => {
 
   it('should hide and reset defaults when hideSchedulePrompt is called', () => {
     const currentDate = moment('2015-08-22');
-    subject.setSchedulePrompt(1,1);
+    subject.setSchedulePrompt(1, 1);
     subject.setPendingScheduleStartDate(currentDate);
     subject.hideSchedulePrompt();
     expect(subject.shouldShowSchedulePrompt).toBeFalsy();
@@ -141,22 +145,23 @@ describe('SiteManagerStore', () => {
   });
 
   it('should trigger a pending flight to add when adding flight', () => {
-    subject.addFlight();
+    subject.addPendingNewFlight();
     expect(subject.pendingNewFlight).toBeDefined();
   });
 
   it('should cancel the pending new flight', () => {
-    subject.addFlight();
-    subject.cancelAddFlight();
+    subject.addPendingNewFlight();
+    subject.cancelPendingNewFlight();
     expect(subject.pendingNewFlight).toBeFalsy();
   });
 
-  it('should save a new flight', () => {
-    subject.saveNewFlight();
-    expect()
-    // saved it to the backend
-    // repoSpy - did you call me with this new flight?
-    // set the pendingNewflight to false
+  it('should save a new flight', async () => {
+    const flight = new FlightModel(-1, 'foo', 1);
+
+    subject.addPendingNewFlight();
+    subject.setPendingFlightName('foo');
+    await subject.savePendingNewFlight();
     expect(subject.pendingNewFlight).toBeFalsy();
+    expect(flightRepoSaveSpy).toHaveBeenCalledWith(flight);
   });
 });

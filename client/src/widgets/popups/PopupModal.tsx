@@ -1,6 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { Button } from '../buttons/Button';
+import { observer } from 'mobx-react';
 
 interface Props {
   title: string;
@@ -10,6 +11,7 @@ interface Props {
   className?: string;
 }
 
+@observer
 export class PopupModal extends React.Component<Props> {
   render() {
     return (

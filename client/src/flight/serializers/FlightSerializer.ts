@@ -10,7 +10,8 @@ export class FlightSerializer implements Serializer<FlightModel> {
   deserialize(item: any): FlightModel {
     return new FlightModel(
       item.id,
-      item.name
+      item.name,
+      item.squadronId
     );
   }
 }

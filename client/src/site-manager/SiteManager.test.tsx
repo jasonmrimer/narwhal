@@ -12,17 +12,18 @@ import { StyledCertificationList } from './CertificationList';
 import { StyledFlightTables } from './FlightTables';
 import { StyledButton } from '../widgets/buttons/Button';
 import { StyledAddFlightPopup } from '../widgets/popups/AddFlightPopup';
+import { DoubleRepositories } from '../utils/Repositories';
 
 describe('SiteManager', () => {
   const airman = AirmanModelFactory.build(1, 1);
-  const flight1 = new FlightModel(1, 'Flight 1');
-  const flight2 = new FlightModel(2, 'Flight 2');
+  const flight1 = new FlightModel(1, 'Flight 1', 1);
+  const flight2 = new FlightModel(2, 'Flight 2', 1);
   const squadron = new SquadronModel(1, 'squad1', [flight1, flight2]);
   let siteManagerStore: SiteManagerStore;
   let subject: ShallowWrapper;
 
   beforeEach(() => {
-    siteManagerStore = new SiteManagerStore();
+    siteManagerStore = new SiteManagerStore(DoubleRepositories.flightRepository);
     siteManagerStore.hydrate(
       ({siteName: 'SITE 14'} as ProfileModel),
       squadron,
@@ -53,24 +54,24 @@ describe('SiteManager', () => {
     expect(subject.find(StyledButton).prop('text')).toBe('Add Flight');
   });
 
-  // TODO make a click function
-  it('should pass the add flight methods to the add flight button', () => {
-    expect(subject.find(StyledButton).prop('onClick')).toBe(siteManagerStore.addFlight);
+  it('should call add flight on button click', () => {
+    subject.find(StyledButton).simulate('click');
+    expect(siteManagerStore.pendingNewFlight).toBeTruthy();
   });
 
   it('should render a popup when there is a pending new flight', () => {
     expect(subject.find(StyledAddFlightPopup).exists()).toBeFalsy();
-    siteManagerStore.addFlight();
+    siteManagerStore.addPendingNewFlight();
     subject.update();
     expect(subject.find(StyledAddFlightPopup).exists()).toBeTruthy();
   });
 
   it('should remove the popup when there is no pending new flight', () => {
-    siteManagerStore.addFlight();
+    siteManagerStore.addPendingNewFlight();
     subject.update();
     expect(subject.find(StyledAddFlightPopup).exists()).toBeTruthy();
 
-    siteManagerStore.cancelAddFlight();
+    siteManagerStore.cancelPendingNewFlight();
     subject.update();
     expect(subject.find(StyledAddFlightPopup).exists()).toBeFalsy();
   });

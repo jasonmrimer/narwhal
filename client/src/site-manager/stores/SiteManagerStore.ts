@@ -7,6 +7,8 @@ import { CertificationModel } from '../../skills/certification/models/Certificat
 import { ScheduleModel } from '../../schedule/models/ScheduleModel';
 import * as moment from 'moment';
 import { Moment } from 'moment';
+import { FlightRepository } from '../../flight/repositories/FlightRepository';
+import { FlightModel } from '../../flight/model/FlightModel';
 
 export class SiteManagerStore extends NotificationStore {
   @observable private _profile: ProfileModel | null = null;
@@ -19,7 +21,11 @@ export class SiteManagerStore extends NotificationStore {
   @observable private _pendingFlightId: number | null = null;
   @observable private _pendingScheduleId: number | null = null;
   @observable private _pendingScheduleStartDate: any = moment(moment.now());
-  @observable private _pendingNewFlight: boolean = false;
+  @observable private _pendingNewFlight: FlightModel | null = null;
+
+  constructor(private flightRepository: FlightRepository) {
+    super();
+  }
 
   @action.bound
   hydrate(profile: ProfileModel,
@@ -88,33 +94,6 @@ export class SiteManagerStore extends NotificationStore {
     return this._pendingNewFlight;
   }
 
-  @action.bound
-  hideSchedulePrompt() {
-    this._shouldShowSchedulePrompt = false;
-    this._pendingFlightId = null;
-    this._pendingScheduleId = null;
-    this._pendingScheduleStartDate = moment(moment.now());
-  }
-
-  @action.bound
-  hideAddFlightPrompt() {
-    this._shouldShowAddFlightPrompt = false;
-  }
-
-  @action.bound
-  setAirmenShiftByFlightId(flightId: number, shift: ShiftType) {
-    this._airmen
-      .filter(airman => airman.flightId === flightId)
-      .forEach(airman => airman.shift = shift);
-  }
-
-  @action.bound
-  setSchedulePrompt(flightId: number, scheduleId: number) {
-    this._shouldShowSchedulePrompt = true;
-    this._pendingFlightId = flightId;
-    this._pendingScheduleId = scheduleId;
-  }
-
   @computed
   get scheduleOptions() {
     return this._schedules.map(schedule => {
@@ -168,7 +147,34 @@ export class SiteManagerStore extends NotificationStore {
   }
 
   getScheduleByScheduleId = (scheduleId: number) => {
-   return this._schedules.find(schedule => schedule.id === scheduleId);
+    return this._schedules.find(schedule => schedule.id === scheduleId);
+  }
+
+  @action.bound
+  hideSchedulePrompt() {
+    this._shouldShowSchedulePrompt = false;
+    this._pendingFlightId = null;
+    this._pendingScheduleId = null;
+    this._pendingScheduleStartDate = moment(moment.now());
+  }
+
+  @action.bound
+  hideAddFlightPrompt() {
+    this._shouldShowAddFlightPrompt = false;
+  }
+
+  @action.bound
+  setAirmenShiftByFlightId(flightId: number, shift: ShiftType) {
+    this._airmen
+      .filter(airman => airman.flightId === flightId)
+      .forEach(airman => airman.shift = shift);
+  }
+
+  @action.bound
+  setSchedulePrompt(flightId: number, scheduleId: number) {
+    this._shouldShowSchedulePrompt = true;
+    this._pendingFlightId = flightId;
+    this._pendingScheduleId = scheduleId;
   }
 
   @action.bound
@@ -195,15 +201,29 @@ export class SiteManagerStore extends NotificationStore {
   }
 
   @action.bound
-  addFlight() {
-    this._pendingNewFlight = true;
+  setPendingFlightName(name: string) {
+    if (this._pendingNewFlight) {
+      this._pendingNewFlight.name = name;
+    }
   }
 
   @action.bound
-  cancelAddFlight() {
-    this._pendingNewFlight = false;
+  addPendingNewFlight() {
+    this._pendingNewFlight = FlightModel.empty();
+    this._pendingNewFlight.name = 'platyfpus';
+    this._pendingNewFlight.squadronId = this._squadron.id;
   }
 
   @action.bound
+  cancelPendingNewFlight() {
+    this._pendingNewFlight = null;
+  }
 
+  @action.bound
+  async savePendingNewFlight() {
+    if (this._pendingNewFlight) {
+      await this.flightRepository.save(this._pendingNewFlight);
+      this._pendingNewFlight = null;
+    }
+  }
 }

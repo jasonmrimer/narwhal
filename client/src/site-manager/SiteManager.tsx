@@ -47,7 +47,7 @@ export class SiteManager extends React.Component<Props> {
         <div>
           <StyledButton
             text="Add Flight"
-            onClick={siteManagerStore!.addFlight}
+            onClick={siteManagerStore!.addPendingNewFlight}
           />
         </div>
         <h2 className="certification-section-header">
