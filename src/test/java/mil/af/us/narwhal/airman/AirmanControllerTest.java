@@ -183,26 +183,6 @@ public class AirmanControllerTest extends BaseIntegrationTest {
   }
 
   @Test
-  public void createFlightTest() throws JsonProcessingException {
-    Flight newFlight = new Flight("NewFlight");
-    final String json = objectMapper.writeValueAsString(newFlight);
-    // @formatter:off
-    given()
-      .port(port)
-      .auth()
-      .preemptive()
-      .basic("tytus", "password")
-      .contentType("application/json")
-      .body(json)
-      .when()
-      .post(AirmanController.URI + "/flights")
-      .then()
-      .statusCode(201)
-      .body("name", equalTo("NewFlight"));
-    // @formatter:on
-  }
-
-  @Test
   public void updateTest() throws JsonProcessingException {
     airman1.setShift(ShiftType.Night);
     airman1.setFirstName("Foo");

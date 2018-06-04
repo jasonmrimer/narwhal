@@ -1,7 +1,6 @@
 package mil.af.us.narwhal.airman;
 
 import mil.af.us.narwhal.flight.Flight;
-import mil.af.us.narwhal.flight.FlightJSON;
 import mil.af.us.narwhal.flight.FlightRepository;
 import mil.af.us.narwhal.schedule.Schedule;
 import mil.af.us.narwhal.skill.Certification;
@@ -104,14 +103,6 @@ public class AirmanController {
       new ResponseEntity<>(airman, HttpStatus.OK);
   }
 
-  @PostMapping(path = "/flights")
-  public ResponseEntity<Flight> createFlight(
-    @Valid
-    @RequestBody FlightJSON flight) {
-    Flight newFlight = new Flight(flight.getName());
-    flightRepository.save(newFlight);
-    return new ResponseEntity<>(newFlight, HttpStatus.CREATED);
-  }
 
   @PutMapping(path = "/{id}/qualifications")
   public Airman updateAirmanQualification(

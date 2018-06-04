@@ -25,19 +25,19 @@ public class FlightControllerTest extends BaseIntegrationTest {
   @Before
   public void setUp() {
     super.setUp();
-//    flight = new Flight("flight");
     squadron = new Squadron("squadron");
-//    squadron.addFlight(flight);
     site = new Site("site");
     site.addSquadron(squadron);
     siteRepository.save(asList(site));
-//    System.out.println(flight.getId());
   }
 
   @Test
   public void createTest() throws JsonProcessingException {
-    Flight flight = new Flight(squadron, "flightName");
-    final String json = objectMapper.writeValueAsString(flight);
+    FlightJSON flightJSON = new FlightJSON();
+    flightJSON.setName("flightName");
+    flightJSON.setSquadronId(squadron.getId());
+    final String json = objectMapper.writeValueAsString(flightJSON);
+
     // @formatter:off
     given()
       .port(port)
@@ -50,9 +50,9 @@ public class FlightControllerTest extends BaseIntegrationTest {
       .post(FlightController.URI)
     .then()
       .statusCode(201)
+      .body("id", equalTo(2))
       .body("name", equalTo("flightName"))
-
-      .body("squadron", equalTo(squadron.getId()));
+      .body("squadronId", equalTo(squadron.getId().intValue()));
     // @formatter:on
   }
 }
