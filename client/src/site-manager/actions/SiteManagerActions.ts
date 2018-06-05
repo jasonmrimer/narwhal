@@ -2,52 +2,62 @@ import { ShiftType } from '../../airman/models/AirmanModel';
 import { Repositories } from '../../utils/Repositories';
 import { AirmanRepository } from '../../airman/repositories/AirmanRepository';
 import { Stores } from '../../app/stores';
-import { SiteManagerStore } from '../stores/SiteManagerStore';
 
 export class SiteManagerActions {
-  private siteManagerStore: SiteManagerStore;
   private airmanRepository: AirmanRepository;
 
-  constructor(stores: Partial<Stores>, repositories: Partial<Repositories>) {
-    this.siteManagerStore = stores.siteManagerStore!;
+  constructor(private stores: Partial<Stores>, repositories: Partial<Repositories>) {
     this.airmanRepository = repositories.airmanRepository!;
   }
 
   async setFlightShift(flightId: number, shift: ShiftType) {
-    await this.siteManagerStore.performLoading(async () => {
+    const {siteManagerStore} = this.stores;
+
+    await siteManagerStore!.performLoading(async () => {
       await this.airmanRepository.updateShiftByFlightId(flightId, shift);
-      this.siteManagerStore.setAirmenShiftByFlightId(flightId, shift);
+      siteManagerStore!.setAirmenShiftByFlightId(flightId, shift);
     });
   }
 
   async setFlightSchedule(flightId: number, scheduleId: number) {
-    this.siteManagerStore!.setSchedulePrompt(flightId, scheduleId);
-  }
-
-  addNewFlight() {
-    this.siteManagerStore!.setAddNewFlightPrompt();
+    this.stores.siteManagerStore!.setSchedulePrompt(flightId, scheduleId);
   }
 
   async saveFlightSchedule() {
-    const flightId = this.siteManagerStore!.pendingFlightId!;
-    const scheduleId = this.siteManagerStore!.pendingScheduleId;
-    const schedule = this.siteManagerStore.getScheduleByScheduleId(scheduleId!);
+    const {siteManagerStore} = this.stores;
+    const flightId = siteManagerStore!.pendingFlightId!;
+    const scheduleId = siteManagerStore!.pendingScheduleId;
+    const schedule = siteManagerStore!.getScheduleByScheduleId(scheduleId!);
 
     if (!schedule) {
       return;
     }
 
-    await this.siteManagerStore.performLoading(async () => {
-     const updatedAirmen = await this.airmanRepository.updateScheduleByFlightId(
-       flightId,
-       schedule,
-       this.siteManagerStore.pendingScheduleStartDate);
-     this.siteManagerStore.setAirmenScheduleByFlightId(flightId, updatedAirmen);
-     this.siteManagerStore.hideSchedulePrompt();
+    await siteManagerStore!.performLoading(async () => {
+      const updatedAirmen = await this.airmanRepository.updateScheduleByFlightId(
+        flightId,
+        schedule,
+        siteManagerStore!.pendingScheduleStartDate);
+      siteManagerStore!.setAirmenScheduleByFlightId(flightId, updatedAirmen);
+      siteManagerStore!.hideSchedulePrompt();
     });
   }
 
   setPendingScheduleStartDate(input: any) {
-    this.siteManagerStore.setPendingScheduleStartDate(input);
+    this.stores.siteManagerStore!.setPendingScheduleStartDate(input);
+  }
+
+  addNewFlight() {
+    this.stores.siteManagerStore!.addPendingNewFlight();
+  }
+
+  cancelNewFlight() {
+    this.stores.siteManagerStore!.cancelPendingNewFlight();
+  }
+
+  // todo only refresh if flight saved
+  async saveNewFlight() {
+    await this.stores.siteManagerStore!.savePendingNewFlight();
+    await this.stores.siteManagerStore!.refreshFlights();
   }
 }

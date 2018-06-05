@@ -10,7 +10,7 @@ import { FlightsPage } from '../FlightsPage';
 import { SiteManagerStore } from '../../../site-manager/stores/SiteManagerStore';
 
 describe('FlightsPage', () => {
-  const siteManagerStore = new SiteManagerStore(DoubleRepositories.flightRepository);
+  const siteManagerStore = new SiteManagerStore(DoubleRepositories);
   const profileStore = new ProfileSitePickerStore(DoubleRepositories);
   let subject: ReactWrapper;
   beforeEach(() => {

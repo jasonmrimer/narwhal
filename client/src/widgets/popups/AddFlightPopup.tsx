@@ -4,8 +4,10 @@ import { SiteManagerStore } from '../../site-manager/stores/SiteManagerStore';
 import { StyledPopupModal } from './PopupModal';
 import { inject } from 'mobx-react';
 import { StyledTextInput } from '../inputs/TextInput';
+import { SiteManagerActions } from '../../site-manager/actions/SiteManagerActions';
 
 interface Props {
+  siteManagerActions?: SiteManagerActions;
   siteManagerStore?: SiteManagerStore;
   className?: string;
 }
@@ -23,12 +25,13 @@ export class AddFlightPopup extends React.Component<Props, State> {
   }
 
   render() {
+    const {siteManagerActions} = this.props;
     return (
       <div className={this.props.className}>
         <StyledPopupModal
           title="ADD FLIGHT"
-          onConfirm={this.props.siteManagerStore!.savePendingNewFlight}
-          onCancel={this.props.siteManagerStore!.cancelPendingNewFlight}
+          onConfirm={() => siteManagerActions!.saveNewFlight()}
+          onCancel={() => siteManagerActions!.cancelNewFlight()}
         >
           <div className="flight-name-input">
             <span>FLIGHT NAME</span>
@@ -45,7 +48,10 @@ export class AddFlightPopup extends React.Component<Props, State> {
   }
 }
 
-export const StyledAddFlightPopup = inject('siteManagerStore')(styled(AddFlightPopup)`
+export const StyledAddFlightPopup = inject(
+  'siteManagerStore',
+  'siteManagerActions'
+)(styled(AddFlightPopup)`
   .flight-name-input {
     padding: 1.5rem;
     display: flex;

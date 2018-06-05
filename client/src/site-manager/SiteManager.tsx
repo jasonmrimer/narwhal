@@ -9,8 +9,10 @@ import { StyledCertificationList } from './CertificationList';
 import { StyledFlightTables } from './FlightTables';
 import { StyledButton } from '../widgets/buttons/Button';
 import { StyledAddFlightPopup } from '../widgets/popups/AddFlightPopup';
+import { SiteManagerActions } from './actions/SiteManagerActions';
 
 interface Props {
+  siteManagerActions?: SiteManagerActions;
   siteManagerStore?: SiteManagerStore;
   className?: string;
 }
@@ -24,7 +26,7 @@ const cache = new CellMeasurerCache({
 export class SiteManager extends React.Component<Props> {
 
   render() {
-    const {siteManagerStore} = this.props;
+    const {siteManagerStore, siteManagerActions} = this.props;
     const squadron = this.props.siteManagerStore!.squadron;
     cache.clearAll();
     return (
@@ -44,11 +46,11 @@ export class SiteManager extends React.Component<Props> {
           squadron &&
           <StyledFlightTables flights={squadron.flights}/>
         }
-        <div>
+        <div className="add-flight-button">
           <StyledButton
             text="Add Flight"
             className="add-flight"
-            onClick={siteManagerStore!.addPendingNewFlight}
+            onClick={() => siteManagerActions!.addNewFlight()}
           />
         </div>
         <h2 className="certification-section-header">
@@ -60,7 +62,10 @@ export class SiteManager extends React.Component<Props> {
   }
 }
 
-export const StyledSiteManager = inject('siteManagerStore')(styled(SiteManager)`
+export const StyledSiteManager = inject(
+  'siteManagerStore',
+  'siteManagerActions'
+)(styled(SiteManager)`
   width: 800px;
   margin-left: auto;
   margin-right: auto;

@@ -8,25 +8,29 @@ import { Button } from '../buttons/Button';
 
 describe('AddFlightPopup', () => {
   let subject: ReactWrapper;
+  let siteManagerActions: any;
   let siteManagerStore: any;
 
   beforeEach(() => {
+    siteManagerActions = {
+      saveNewFlight: jest.fn(),
+      cancelNewFlight: jest.fn()
+    };
     siteManagerStore = {
-      cancelPendingNewFlight: jest.fn(),
-      savePendingNewFlight: jest.fn(),
       setPendingFlightName: jest.fn(),
       pendingNewFlight: new FlightModel(1, '', 1)
     };
 
     subject = mount(
       <AddFlightPopup
+        siteManagerActions={siteManagerActions}
         siteManagerStore={siteManagerStore}
       />
     );
   });
 
   it('should be titled Add Flight', () => {
-    expect(subject.find(StyledPopupModal).prop('title')).toBe('Add Flight');
+    expect(subject.find(StyledPopupModal).prop('title')).toBe('ADD FLIGHT');
   });
 
   it('should render an input for the flight name', () => {
@@ -35,12 +39,12 @@ describe('AddFlightPopup', () => {
 
   it('should save a new flight when confirm is clicked', () => {
     subject.find(StyledPopupModal).find(Button).at(1).simulate('click');
-    expect(siteManagerStore.savePendingNewFlight).toHaveBeenCalled();
+    expect(siteManagerActions.saveNewFlight).toHaveBeenCalled();
   });
 
   it('should cancel adding a flight when the cancel button is clicked', () => {
     subject.find(StyledPopupModal).find(Button).at(0).simulate('click');
-    expect(siteManagerStore.cancelPendingNewFlight).toHaveBeenCalled();
+    expect(siteManagerActions.cancelNewFlight).toHaveBeenCalled();
   });
 
   it('should set the name of the flight on changing the name input', () => {

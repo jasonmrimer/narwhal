@@ -9,8 +9,12 @@ import * as moment from 'moment';
 import { Moment } from 'moment';
 import { FlightRepository } from '../../flight/repositories/FlightRepository';
 import { FlightModel } from '../../flight/model/FlightModel';
+import { SiteRepository } from '../../site/repositories/SiteRepository';
+import { Repositories } from '../../utils/Repositories';
 
 export class SiteManagerStore extends NotificationStore {
+  private flightRepository: FlightRepository;
+  private siteRepository: SiteRepository;
   @observable private _profile: ProfileModel | null = null;
   @observable private _squadron: SquadronModel;
   @observable private _airmen: AirmanModel[] = [];
@@ -23,8 +27,10 @@ export class SiteManagerStore extends NotificationStore {
   @observable private _pendingScheduleStartDate: any = moment(moment.now());
   @observable private _pendingNewFlight: FlightModel | null = null;
 
-  constructor(private flightRepository: FlightRepository) {
+  constructor(repositories: Repositories) {
     super();
+    this.flightRepository = repositories.flightRepository;
+    this.siteRepository = repositories.siteRepository;
   }
 
   @action.bound
@@ -210,7 +216,6 @@ export class SiteManagerStore extends NotificationStore {
   @action.bound
   addPendingNewFlight() {
     this._pendingNewFlight = FlightModel.empty();
-    this._pendingNewFlight.name = 'platyfpus';
     this._pendingNewFlight.squadronId = this._squadron.id;
   }
 
@@ -224,6 +229,15 @@ export class SiteManagerStore extends NotificationStore {
     if (this._pendingNewFlight) {
       await this.flightRepository.save(this._pendingNewFlight);
       this._pendingNewFlight = null;
+    }
+  }
+
+  @action.bound
+  async refreshFlights() {
+    const site = await this.siteRepository.findOne(this._profile!.siteId!);
+    if (site) {
+      const squadron = site.squadrons.find((squadron: SquadronModel) => squadron.id === this._squadron.id);
+      this._squadron = squadron ? squadron : this._squadron;
     }
   }
 }

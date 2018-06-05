@@ -13,6 +13,7 @@ import { StyledFlightTables } from './FlightTables';
 import { StyledButton } from '../widgets/buttons/Button';
 import { StyledAddFlightPopup } from '../widgets/popups/AddFlightPopup';
 import { DoubleRepositories } from '../utils/Repositories';
+import { SiteManagerActions } from './actions/SiteManagerActions';
 
 describe('SiteManager', () => {
   const airman = AirmanModelFactory.build(1, 1);
@@ -20,10 +21,11 @@ describe('SiteManager', () => {
   const flight2 = new FlightModel(2, 'Flight 2', 1);
   const squadron = new SquadronModel(1, 'squad1', [flight1, flight2]);
   let siteManagerStore: SiteManagerStore;
+  let siteManagerActions: SiteManagerActions;
   let subject: ShallowWrapper;
 
   beforeEach(() => {
-    siteManagerStore = new SiteManagerStore(DoubleRepositories.flightRepository);
+    siteManagerStore = new SiteManagerStore(DoubleRepositories);
     siteManagerStore.hydrate(
       ({siteName: 'SITE 14'} as ProfileModel),
       squadron,
@@ -31,7 +33,15 @@ describe('SiteManager', () => {
       CertificationModelFactory.buildList(3, 1),
       []
     );
-    subject = shallow(<SiteManager siteManagerStore={siteManagerStore}/>);
+
+    siteManagerActions = new SiteManagerActions({siteManagerStore}, DoubleRepositories);
+
+    subject = shallow(
+      <SiteManager
+        siteManagerActions={siteManagerActions}
+        siteManagerStore={siteManagerStore}
+      />
+    );
   });
 
   it('should render user\'s site name in the header', () => {
@@ -52,11 +62,7 @@ describe('SiteManager', () => {
 
   it('should render a Add Flight button', () => {
     expect(subject.find(StyledButton).prop('text')).toBe('Add Flight');
-  });
-
-  it('should call add flight on button click', () => {
-    subject.find(StyledButton).simulate('click');
-    expect(siteManagerStore.pendingNewFlight).toBeTruthy();
+    expect(subject.find(StyledButton).prop('onClick')).toBe(siteManagerActions.addNewFlight);
   });
 
   it('should render a popup when there is a pending new flight', () => {

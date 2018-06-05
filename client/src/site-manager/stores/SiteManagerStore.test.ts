@@ -43,9 +43,10 @@ describe('SiteManagerStore', () => {
     flightRepoSaveSpy = jest.fn();
     DoubleRepositories.flightRepository.save = flightRepoSaveSpy;
 
-    subject = new SiteManagerStore(DoubleRepositories.flightRepository);
+    subject = new SiteManagerStore(DoubleRepositories);
+
     await subject.hydrate(
-      ({siteName: 'SITE 14'} as ProfileModel),
+      ({siteName: 'SITE 14', siteId: 14} as ProfileModel),
       squadron,
       airmen,
       certifications,
@@ -152,7 +153,7 @@ describe('SiteManagerStore', () => {
   it('should cancel the pending new flight', () => {
     subject.addPendingNewFlight();
     subject.cancelPendingNewFlight();
-    expect(subject.pendingNewFlight).toBeFalsy();
+    expect(subject.pendingNewFlight).toBeNull();
   });
 
   it('should save a new flight', async () => {
@@ -163,5 +164,12 @@ describe('SiteManagerStore', () => {
     await subject.savePendingNewFlight();
     expect(subject.pendingNewFlight).toBeFalsy();
     expect(flightRepoSaveSpy).toHaveBeenCalledWith(flight);
+  });
+
+  it('should refresh the flights', async () => {
+    const squad = Object.assign({}, subject.squadron);
+    await subject.refreshFlights();
+    expect(subject.squadron).toEqual(squad);
+    expect(subject.squadron).not.toBe(squad);
   });
 });
