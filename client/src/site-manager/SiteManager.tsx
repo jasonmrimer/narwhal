@@ -47,6 +47,7 @@ export class SiteManager extends React.Component<Props> {
         <div>
           <StyledButton
             text="Add Flight"
+            className="add-flight"
             onClick={siteManagerStore!.addPendingNewFlight}
           />
         </div>
@@ -68,6 +69,14 @@ export const StyledSiteManager = inject('siteManagerStore')(styled(SiteManager)`
     font-size: 1.5rem;
     font-weight: 300;
     padding-top: 0.5rem;
+  }
+  
+  .add-flight {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+    padding: 1.53125rem;
   }
   
   .header {

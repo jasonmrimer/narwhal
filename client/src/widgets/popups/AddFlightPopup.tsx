@@ -26,15 +26,19 @@ export class AddFlightPopup extends React.Component<Props, State> {
     return (
       <div className={this.props.className}>
         <StyledPopupModal
-          title="Add Flight"
+          title="ADD FLIGHT"
           onConfirm={this.props.siteManagerStore!.savePendingNewFlight}
           onCancel={this.props.siteManagerStore!.cancelPendingNewFlight}
         >
-          <StyledTextInput
-            value={this.state.flightName}
-            name="Name"
-            onChange={this.onChange}
-          />
+          <div className="flight-name-input">
+            <span>FLIGHT NAME</span>
+            <StyledTextInput
+              value={this.state.flightName}
+              name="name-input"
+              className="flight-popup"
+              onChange={this.onChange}
+            />
+          </div>
         </StyledPopupModal>
       </div>
     );
@@ -42,5 +46,17 @@ export class AddFlightPopup extends React.Component<Props, State> {
 }
 
 export const StyledAddFlightPopup = inject('siteManagerStore')(styled(AddFlightPopup)`
-
+  .flight-name-input {
+    padding: 1.5rem;
+    display: flex;
+    
+    span {
+      font-size: 0.875rem;
+      margin-right: 1rem;
+    }
+    
+    input {
+      width: 76%;
+    }
+  }
 `);

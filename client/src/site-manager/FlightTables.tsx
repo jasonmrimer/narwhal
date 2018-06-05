@@ -141,7 +141,6 @@ export const StyledFlightTables = inject(
     .flight-header {
       display: flex;
       align-items: center;
-      display: flex;
       justify-content: space-around;
       padding: 1rem;
       background: ${props => props.theme.blueSteel};
