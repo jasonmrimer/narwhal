@@ -82,6 +82,12 @@ export const StyledSiteManager = inject(
     margin-right: auto;
     justify-content: center;
     padding: 1.53125rem;
+    
+    :hover {
+      background: ${props => props.theme.light};
+      font-weight: 500;
+      color: ${props => props.theme.fontColor}
+    }
   }
   
   .header {

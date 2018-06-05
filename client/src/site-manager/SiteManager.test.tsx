@@ -62,7 +62,11 @@ describe('SiteManager', () => {
 
   it('should render a Add Flight button', () => {
     expect(subject.find(StyledButton).prop('text')).toBe('Add Flight');
-    expect(subject.find(StyledButton).prop('onClick')).toBe(siteManagerActions.addNewFlight);
+  });
+
+  it('should set a pending new flight on Add Flight click', () => {
+    subject.find(StyledButton).simulate('click');
+    expect(siteManagerStore.pendingNewFlight).toBeDefined();
   });
 
   it('should render a popup when there is a pending new flight', () => {

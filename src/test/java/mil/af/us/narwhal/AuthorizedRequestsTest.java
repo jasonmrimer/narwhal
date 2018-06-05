@@ -97,7 +97,7 @@ public class AuthorizedRequestsTest {
           .setStatusCodeDictionaryPUT(modifiersOnly)
         , new EndpointAuthorizationExpectations("/api/airmen/1/qualifications/1")
           .setStatusCodeDictionaryDELETE(modifiersOnly)
-        , new EndpointAuthorizationExpectations("/api/airmen/flights")
+        , new EndpointAuthorizationExpectations("/api/flights")
           .setStatusCodeDictionaryPOST(modifiersOnly)
         , new EndpointAuthorizationExpectations("/api/crew_positions")
           .setStatusCodeDictionaryDELETE(modifiersOnly)

@@ -36,7 +36,7 @@ describe('SiteManagerStore', () => {
     flight1 = new FlightModel(1, 'Flight 1', 1);
     flight2 = new FlightModel(2, 'Flight 2', 1);
 
-    squadron = new SquadronModel(1, 'squad1', [flight1, flight2]);
+    squadron = new SquadronModel(1, 'Squad 1', [flight1, flight2]);
 
     certifications = CertificationModelFactory.buildList(3, 1);
 

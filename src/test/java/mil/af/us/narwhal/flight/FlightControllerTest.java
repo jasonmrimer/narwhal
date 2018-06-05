@@ -13,12 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static io.restassured.RestAssured.given;
 import static java.util.Arrays.asList;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.notNullValue;
 
 public class FlightControllerTest extends BaseIntegrationTest {
   @Autowired private SiteRepository siteRepository;
   @Autowired private FlightRepository flightRepository;
 
-//  private Flight flight;
   private Squadron squadron;
   private Site site;
 
@@ -50,7 +50,7 @@ public class FlightControllerTest extends BaseIntegrationTest {
       .post(FlightController.URI)
     .then()
       .statusCode(201)
-      .body("id", equalTo(2))
+      .body("id", notNullValue())
       .body("name", equalTo("flightName"))
       .body("squadronId", equalTo(squadron.getId().intValue()));
     // @formatter:on

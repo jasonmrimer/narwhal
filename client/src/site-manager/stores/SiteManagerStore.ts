@@ -235,8 +235,10 @@ export class SiteManagerStore extends NotificationStore {
   @action.bound
   async refreshFlights() {
     const site = await this.siteRepository.findOne(this._profile!.siteId!);
+
     if (site) {
-      const squadron = site.squadrons.find((squadron: SquadronModel) => squadron.id === this._squadron.id);
+      const squadronId = this._profile!.squadronId ? this._profile!.squadronId : this._squadron.id;
+      const squadron = site.squadrons.find((squadron: SquadronModel) => squadron.id === squadronId);
       this._squadron = squadron ? squadron : this._squadron;
     }
   }
