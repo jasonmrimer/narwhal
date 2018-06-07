@@ -26,6 +26,7 @@ export class SiteManagerStore extends NotificationStore {
   @observable private _pendingScheduleId: number | null = null;
   @observable private _pendingScheduleStartDate: any = moment(moment.now());
   @observable private _pendingNewFlight: FlightModel | null = null;
+  @observable private _flightsExpanded: number[] = [];
 
   constructor(repositories: Repositories) {
     super();
@@ -45,6 +46,28 @@ export class SiteManagerStore extends NotificationStore {
     this._airmen = airmen.filter(a => a.squadronId === squadron.id);
     this._certifications = certifications;
     this._schedules = schedules;
+  }
+
+  @computed
+  get expandedFlights () {
+    return this._flightsExpanded;
+  }
+
+  @action.bound
+  shouldExpandFlight(flightId: number) {
+    return this._flightsExpanded.find(x => x === flightId) !== undefined;
+  }
+
+  @action.bound
+  addFlightToExpandedFlights(flightId: number) {
+    if (!this.shouldExpandFlight(flightId)) {
+      this._flightsExpanded.push(flightId);
+    }
+  }
+
+  @action.bound
+  removeFlightFromExpandedFlights(flightId: number) {
+      this._flightsExpanded = this._flightsExpanded.filter(x => x !== flightId);
   }
 
   @computed

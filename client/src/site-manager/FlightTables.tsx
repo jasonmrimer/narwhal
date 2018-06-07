@@ -11,6 +11,7 @@ import { SiteManagerActions } from './actions/SiteManagerActions';
 import { StyledDropdown } from '../widgets/inputs/Dropdown';
 import { StyledFlightSchedulePopup } from '../widgets/popups/FlightSchedulePopup';
 import * as classNames from 'classnames';
+import { ExpandIcon } from '../icons/ExpandIcon';
 
 interface FlightTableRowProps {
   airman: AirmanModel;
@@ -64,7 +65,8 @@ export class FlightTables extends React.Component<FlightTablesProps> {
                 key={flight.id}
               >
                 {this.renderHeader(flight)}
-                {this.renderRows(flight.id)}
+                {this.props.siteManagerStore!.shouldExpandFlight(flight.id)
+                  && this.renderRows(flight.id)}
               </div>
             );
           })
@@ -112,12 +114,14 @@ export class FlightTables extends React.Component<FlightTablesProps> {
               value={this.props.siteManagerStore!.getScheduleIdByFlightId(flight.id)}
             />
           </div>
+          <ExpandIcon />
         </div>
+        {this.props.siteManagerStore!.shouldExpandFlight(flight.id) &&
         <div className="flight-sub-header">
           <span>NAME</span>
           <span>SHIFT</span>
           <span>SCHEDULE</span>
-        </div>
+        </div> }
       </React.Fragment>
     );
   }

@@ -172,4 +172,17 @@ describe('SiteManagerStore', () => {
     expect(subject.squadron).toEqual(squad);
     expect(subject.squadron).not.toBe(squad);
   });
+
+  it('should respond correctly to calls to shouldExpandFlight', () => {
+    expect(subject.shouldExpandFlight(1)).toBeFalsy();
+    subject.addFlightToExpandedFlights(1);
+    expect(subject.shouldExpandFlight(1)).toBeTruthy();
+    subject.addFlightToExpandedFlights(1);
+    expect(subject.shouldExpandFlight(1)).toBeTruthy();
+    expect(subject.expandedFlights.length).toBe(1);
+    subject.addFlightToExpandedFlights(2);
+    expect(subject.expandedFlights.length).toBe(2);
+    subject.removeFlightFromExpandedFlights(2);
+    expect(subject.shouldExpandFlight(2)).toBeFalsy();
+  });
 });
