@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { SiteManagerStore } from '../../site-manager/stores/SiteManagerStore';
 import { StyledPopupModal } from './PopupModal';
-import { inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { StyledTextInput } from '../inputs/TextInput';
 import { SiteManagerActions } from '../../site-manager/actions/SiteManagerActions';
 
@@ -12,20 +12,12 @@ interface Props {
   className?: string;
 }
 
-interface State {
-  flightName: string;
-}
-
-export class AddFlightPopup extends React.Component<Props, State> {
-  state = {flightName: ''};
-
-  onChange = (e: any) => {
-    this.setState({flightName: e.target.value});
-    this.props.siteManagerStore!.setPendingFlightName(e.target.value);
-  }
-
+@observer
+export class AddFlightPopup extends React.Component<Props> {
   render() {
-    const {siteManagerActions} = this.props;
+    const {siteManagerActions, siteManagerStore} = this.props;
+    const {setPendingFlightName, pendingNewFlightName} = siteManagerStore!;
+
     return (
       <div className={this.props.className}>
         <StyledPopupModal
@@ -36,10 +28,10 @@ export class AddFlightPopup extends React.Component<Props, State> {
           <div className="flight-name-input">
             <span>FLIGHT NAME</span>
             <StyledTextInput
-              value={this.state.flightName}
-              name="name-input"
+              value={pendingNewFlightName}
+              name="name"
               className="flight-popup"
-              onChange={this.onChange}
+              onChange={(e) => setPendingFlightName(e.target.value)}
             />
           </div>
         </StyledPopupModal>

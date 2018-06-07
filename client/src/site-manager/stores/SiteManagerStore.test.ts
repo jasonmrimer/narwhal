@@ -120,12 +120,6 @@ describe('SiteManagerStore', () => {
     expect(subject.pendingScheduleId).toBe(2);
   });
 
-  it('should set pending variables when calling addNewFlights', () => {
-    expect(subject.shouldShowAddFlightPrompt).toBeFalsy();
-    subject.setAddNewFlightPrompt();
-    expect(subject.shouldShowAddFlightPrompt).toBeTruthy();
-  });
-
   it('should set pending start date when setPendingScheduleStartDate is called', () => {
     const currentMomentString = '2018-05-21T13:53:09-04:00';
     const currentMoment = moment(currentMomentString);
@@ -146,14 +140,16 @@ describe('SiteManagerStore', () => {
   });
 
   it('should trigger a pending flight to add when adding flight', () => {
+    expect(subject.pendingNewFlight).toBeNull();
     subject.addPendingNewFlight();
     expect(subject.pendingNewFlight).toBeDefined();
   });
 
-  it('should cancel the pending new flight', () => {
+  it('should cancel the pending new flight and flight name', () => {
     subject.addPendingNewFlight();
     subject.cancelPendingNewFlight();
     expect(subject.pendingNewFlight).toBeNull();
+    expect(subject.pendingNewFlightName).toBe('');
   });
 
   it('should save a new flight', async () => {
@@ -162,7 +158,8 @@ describe('SiteManagerStore', () => {
     subject.addPendingNewFlight();
     subject.setPendingFlightName('foo');
     await subject.savePendingNewFlight();
-    expect(subject.pendingNewFlight).toBeFalsy();
+    expect(subject.pendingNewFlight).toBeNull();
+    expect(subject.pendingNewFlightName).toBe('');
     expect(flightRepoSaveSpy).toHaveBeenCalledWith(flight);
   });
 

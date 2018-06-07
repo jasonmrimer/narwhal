@@ -55,9 +55,10 @@ export class SiteManagerActions {
     this.stores.siteManagerStore!.cancelPendingNewFlight();
   }
 
-  // todo only refresh if flight saved
   async saveNewFlight() {
-    await this.stores.siteManagerStore!.savePendingNewFlight();
-    await this.stores.siteManagerStore!.refreshFlights();
+    this.stores.siteManagerStore!.performLoading(async () => {
+      await this.stores.siteManagerStore!.savePendingNewFlight();
+      await this.stores.siteManagerStore!.refreshFlights();
+    });
   }
 }

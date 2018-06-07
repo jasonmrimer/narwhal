@@ -21,11 +21,11 @@ export class SiteManagerStore extends NotificationStore {
   @observable private _certifications: CertificationModel[] = [];
   @observable private _schedules: ScheduleModel[] = [];
   @observable private _shouldShowSchedulePrompt: boolean = false;
-  @observable private _shouldShowAddFlightPrompt: boolean = false;
   @observable private _pendingFlightId: number | null = null;
   @observable private _pendingScheduleId: number | null = null;
   @observable private _pendingScheduleStartDate: any = moment(moment.now());
   @observable private _pendingNewFlight: FlightModel | null = null;
+  @observable private _pendingNewFlightName: string = '';
 
   constructor(repositories: Repositories) {
     super();
@@ -50,11 +50,6 @@ export class SiteManagerStore extends NotificationStore {
   @computed
   get shouldShowSchedulePrompt() {
     return this._shouldShowSchedulePrompt;
-  }
-
-  @computed
-  get shouldShowAddFlightPrompt() {
-    return this._shouldShowAddFlightPrompt;
   }
 
   @computed
@@ -106,6 +101,12 @@ export class SiteManagerStore extends NotificationStore {
       return {value: schedule.id, label: schedule.type};
     });
   }
+
+  @computed
+  get pendingNewFlightName() {
+    return this._pendingNewFlightName;
+  }
+
 
   getAirmenByFlightId = (flightId: number) => {
     return this.airmen.filter(a => a.flightId === flightId);
@@ -165,11 +166,6 @@ export class SiteManagerStore extends NotificationStore {
   }
 
   @action.bound
-  hideAddFlightPrompt() {
-    this._shouldShowAddFlightPrompt = false;
-  }
-
-  @action.bound
   setAirmenShiftByFlightId(flightId: number, shift: ShiftType) {
     this._airmen
       .filter(airman => airman.flightId === flightId)
@@ -202,15 +198,9 @@ export class SiteManagerStore extends NotificationStore {
   }
 
   @action.bound
-  setAddNewFlightPrompt() {
-    this._shouldShowAddFlightPrompt = true;
-  }
-
-  @action.bound
   setPendingFlightName(name: string) {
-    if (this._pendingNewFlight) {
-      this._pendingNewFlight.name = name;
-    }
+    this._pendingNewFlightName = name;
+    this._pendingNewFlight!.name = this._pendingNewFlightName;
   }
 
   @action.bound
@@ -222,6 +212,7 @@ export class SiteManagerStore extends NotificationStore {
   @action.bound
   cancelPendingNewFlight() {
     this._pendingNewFlight = null;
+    this._pendingNewFlightName = '';
   }
 
   @action.bound
@@ -229,6 +220,7 @@ export class SiteManagerStore extends NotificationStore {
     if (this._pendingNewFlight) {
       await this.flightRepository.save(this._pendingNewFlight);
       this._pendingNewFlight = null;
+      this._pendingNewFlightName = '';
     }
   }
 
