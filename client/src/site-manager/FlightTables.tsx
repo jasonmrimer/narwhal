@@ -12,6 +12,7 @@ import { StyledDropdown } from '../widgets/inputs/Dropdown';
 import { StyledFlightSchedulePopup } from '../widgets/popups/FlightSchedulePopup';
 import * as classNames from 'classnames';
 import { ExpandIcon } from '../icons/ExpandIcon';
+import { CollapseIcon } from '../icons/CollapseIcon';
 
 interface FlightTableRowProps {
   airman: AirmanModel;
@@ -86,43 +87,52 @@ export class FlightTables extends React.Component<FlightTablesProps> {
   private renderHeader = (flight: FlightModel) => {
     return (
       <React.Fragment>
-        <div className="flight-header">
-          <div className="header-section">
-            <h3>{flight.name}
+      <div className="flight-header">
+        <div className="header-section">
+          <h3>{flight.name}
             <span>
               {this.printNumberOfOperators(flight)}
             </span>
-            </h3>
-          </div>
-          <div className="header-section">
-            <StyledShiftDropdown
-              selectedShift={this.props.siteManagerStore!.getShiftByFlightId(flight.id)}
-              setShift={(shift: ShiftType) => {
-                return this.props.siteManagerActions!.setFlightShift(flight.id, shift);
-              }}
-              className="shift"
-            />
-          </div>
-          <div className="header-section">
-            <StyledDropdown
-              onChange={(e) => {
-                return this.props.siteManagerActions!.setFlightSchedule(flight.id, Number(e.target.value));
-              }}
-              name="schedule-select"
-              id="schedule-select"
-              options={this.props.siteManagerStore!.scheduleOptions}
-              value={this.props.siteManagerStore!.getScheduleIdByFlightId(flight.id)}
-            />
-          </div>
-          <ExpandIcon />
+          </h3>
         </div>
+        <div className="header-section">
+          <StyledShiftDropdown
+            selectedShift={this.props.siteManagerStore!.getShiftByFlightId(flight.id)}
+            setShift={(shift: ShiftType) => {
+              return this.props.siteManagerActions!.setFlightShift(flight.id, shift);
+            }}
+            className="shift"
+          />
+        </div>
+        <div className="header-section">
+          <StyledDropdown
+            onChange={(e) => {
+              return this.props.siteManagerActions!.setFlightSchedule(flight.id, Number(e.target.value));
+            }}
+            name="schedule-select"
+            id="schedule-select"
+            options={this.props.siteManagerStore!.scheduleOptions}
+            value={this.props.siteManagerStore!.getScheduleIdByFlightId(flight.id)}
+          />
+        </div>
+        {!this.props.siteManagerStore!.shouldExpandFlight(flight.id) &&
+        <div className="expandFlight" onClick={() => this.props.siteManagerActions!.expandFlight(flight.id)}>
+        <ExpandIcon />
+        </div>
+        }
         {this.props.siteManagerStore!.shouldExpandFlight(flight.id) &&
-        <div className="flight-sub-header">
-          <span>NAME</span>
-          <span>SHIFT</span>
-          <span>SCHEDULE</span>
-        </div> }
-      </React.Fragment>
+        <div className="collapseFlight" onClick={() => this.props.siteManagerActions!.collapseFlight(flight.id)}>
+        <CollapseIcon />
+        </div>
+        }
+      </div>
+      {this.props.siteManagerStore!.shouldExpandFlight(flight.id) &&
+      <div className="flight-sub-header">
+        <span>NAME</span>
+        <span>SHIFT</span>
+        <span>SCHEDULE</span>
+      </div>}
+    </React.Fragment>
     );
   }
 
@@ -141,7 +151,12 @@ export const StyledFlightTables = inject(
     border: 1px solid ${props => props.theme.graySteel};
     margin-bottom: 2rem;
     
-    
+    .collapseFlight, .expandFlight {
+      cursor: pointer;
+      width:5rem;
+      display:flex;
+      flex-direction: row-reverse;
+    }
     .flight-header {
       display: flex;
       align-items: center;

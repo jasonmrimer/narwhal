@@ -29,7 +29,10 @@ describe('FlightTables', () => {
     shouldShowSchedulePrompt: () => {
       return true;
     },
-    scheduleOptions: [{label: 'Front Half', value: 1}, {label: 'Back Half', value: 2}]
+    scheduleOptions: [{label: 'Front Half', value: 1}, {label: 'Back Half', value: 2}],
+    shouldExpandFlight: () => {
+      return true;
+    }
   };
 
   let siteManagerActions: any;
@@ -39,6 +42,7 @@ describe('FlightTables', () => {
     siteManagerActions = {
       setFlightShift: jest.fn(),
       setFlightSchedule: jest.fn(),
+      expandFlight: jest.fn()
     };
 
     subject = shallow(

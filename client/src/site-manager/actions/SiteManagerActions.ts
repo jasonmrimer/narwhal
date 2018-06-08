@@ -60,4 +60,13 @@ export class SiteManagerActions {
     await this.stores.siteManagerStore!.savePendingNewFlight();
     await this.stores.siteManagerStore!.refreshFlights();
   }
+
+  expandFlight(flightId: number) {
+    this.stores.siteManagerStore!.addFlightToExpandedFlights(flightId);
+  }
+
+  collapseFlight(flightId: number) {
+    console.log('clickColl');
+    this.stores.siteManagerStore!.removeFlightFromExpandedFlights(flightId);
+  }
 }

@@ -53,7 +53,7 @@ export class SiteManagerStore extends NotificationStore {
     return this._flightsExpanded;
   }
 
-  @action.bound
+  @observable
   shouldExpandFlight(flightId: number) {
     return this._flightsExpanded.find(x => x === flightId) !== undefined;
   }

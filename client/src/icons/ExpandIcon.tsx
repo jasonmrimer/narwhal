@@ -20,8 +20,8 @@ export const ExpandIcon = () => {
         fill="white"
       />
       <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
+        fillRule="evenodd"
+        clipRule="evenodd"
         d={path2d}
         transform="translate(2 2)"
         fill="white"
