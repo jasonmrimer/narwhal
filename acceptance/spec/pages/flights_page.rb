@@ -143,21 +143,6 @@ class FlightsPage
     expect(page).to have_content 'MAGNETIC MANIPULATION'
   end
 
-  def assert_edit_flight_schedule
-    schedule_to_test = 'Panama A'
-    page.within('#DOC') do
-      find('.expandFlight').click
-      find('#schedule-select').find(:option, text: schedule_to_test).select_option
-    end
-    expect(page.has_content?('Schedule Settings')).to be true
-
-    page.within('.actions') do
-      click_link_or_button 'CONFIRM'
-    end
-
-    expect(page).to have_selector('#DOC .airman-schedule', count: 20, text: schedule_to_test)
-  end
-
   private
 
   def click_on_airman(name)

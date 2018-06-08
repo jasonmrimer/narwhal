@@ -36,10 +36,6 @@ describe 'Flights page', type: :feature do
     flights_page.assert_edit_certification
   end
 
-  it 'can change the schedule for an entire flight' do
-    flights_page.assert_edit_flight_schedule
-  end
-
   it 'can delete a certification' do
     flights_page.assert_delete_certification
   end
