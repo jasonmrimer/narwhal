@@ -71,11 +71,22 @@ public abstract class BaseIntegrationTest {
 
     rank = rankRepository.save(new Rank("No Rank"));
 
-    readerRole = roleRepository.save(new Role(RoleName.READER));
-    writerRole = roleRepository.save(new Role(RoleName.WRITER));
-    adminRole = roleRepository.save(new Role(RoleName.ADMIN));
-
-    tytus = profileRepository.save(new Profile("tytus",  site, adminRole, "password"));
+    readerRole = roleRepository.findByName(RoleName.READER);
+    if( readerRole == null){
+      readerRole = roleRepository.save(new Role(RoleName.READER));
+    }
+    writerRole = roleRepository.findByName(RoleName.WRITER);
+    if( writerRole  == null){
+      writerRole = roleRepository.save(new Role(RoleName.WRITER));
+    }
+    adminRole = roleRepository.findByName(RoleName.ADMIN);
+    if( adminRole  == null){
+      adminRole = roleRepository.save(new Role(RoleName.ADMIN));
+    }
+    tytus = profileRepository.findOneByUsername("tytus");
+    if(tytus == null){
+      tytus = profileRepository.save(new Profile("tytus",  site, adminRole, "password"));
+    }
   }
 
   public void tearDown() {

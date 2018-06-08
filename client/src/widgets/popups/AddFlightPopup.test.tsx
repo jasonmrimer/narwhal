@@ -34,7 +34,7 @@ describe('AddFlightPopup', () => {
   });
 
   it('should render an input for the flight name', () => {
-    expect(subject.find(StyledTextInput).prop('value')).toBe(siteManagerStore.pendingNewFlightName);
+    expect(subject.find(StyledTextInput).prop('value')).toBe(siteManagerStore.pendingNewFlight.name);
   });
 
   it('should save a new flight when confirm is clicked', () => {

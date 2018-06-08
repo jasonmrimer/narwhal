@@ -2,10 +2,10 @@ package mil.af.us.narwhal.flight;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import mil.af.us.narwhal.BaseIntegrationTest;
+import mil.af.us.narwhal.airman.AirmanController;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
 import mil.af.us.narwhal.squadron.Squadron;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +17,7 @@ import static org.hamcrest.Matchers.notNullValue;
 
 public class FlightControllerTest extends BaseIntegrationTest {
   @Autowired private SiteRepository siteRepository;
+  @Autowired private FlightRepository flightRepository;
 
   private Squadron squadron;
   private Site site;
@@ -28,11 +29,6 @@ public class FlightControllerTest extends BaseIntegrationTest {
     site = new Site("site");
     site.addSquadron(squadron);
     siteRepository.save(asList(site));
-  }
-
-  @After
-  public void tearDown() {
-    super.tearDown();
   }
 
   @Test

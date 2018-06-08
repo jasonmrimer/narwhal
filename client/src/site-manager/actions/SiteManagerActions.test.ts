@@ -24,12 +24,17 @@ describe('SiteManagerActions', () => {
       setAirmenScheduleByFlightId: jest.fn(),
       setSchedulePrompt: jest.fn(),
       updateScheduleByFlightId: jest.fn(),
+      setAddNewFlightPrompt: jest.fn(),
       getScheduleByScheduleId: (id: number) => schedule,
       setPendingScheduleStartDate: jest.fn(),
       addPendingNewFlight: jest.fn(),
       savePendingNewFlight: jest.fn(),
       refreshFlights: jest.fn(),
-      cancelPendingNewFlight: jest.fn()
+      cancelPendingNewFlight: jest.fn(),
+      addFlightToExpandedFlights: jest.fn(),
+      removeFlightFromExpandedFlights : jest.fn(),
+      shouldExpandFlight : jest.fn(),
+      hideSchedulePrompt: jest.fn()
     };
 
     airmanRepository = {
@@ -76,5 +81,15 @@ describe('SiteManagerActions', () => {
   it('should cancel the addition of a new flight', () => {
     subject.cancelNewFlight();
     expect(siteManagerStore.cancelPendingNewFlight).toHaveBeenCalled();
+  });
+
+  it('should enable expand when a flight is expanded', () => {
+    subject.expandFlight(1);
+    expect(siteManagerStore.addFlightToExpandedFlights).toBeCalledWith(1);
+  });
+
+  it('should enable collapse when a flight is collapsed', () => {
+    subject.collapseFlight(2);
+    expect(siteManagerStore.removeFlightFromExpandedFlights).toBeCalledWith(2);
   });
 });

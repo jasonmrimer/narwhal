@@ -4,10 +4,12 @@ class FlightsPage
 
   def initialize
     visit '/flights'
-    expect(page).to have_css('.airman-name')
   end
 
   def assert_shows_airmen
+    page.within('#DOB') do
+      find('.expandFlight').click
+    end
     expect(page).to have_css('.airman-name', minimum: 1)
   end
 
@@ -16,12 +18,19 @@ class FlightsPage
   end
 
   def assert_shows_airman
+    page.within('#DOB') do
+      find('.expandFlight').click
+    end
     click_on_airman('Angie, Patton')
     expect(page).to have_content('94 IS')
     expect(page).to have_content('DMS Maryland')
   end
 
   def assert_edit_airman
+    page.within('#DOB') do
+      find('.expandFlight').click
+    end
+
     click_on_airman('Angie, Patton')
 
     fill_in 'lastName', with: 'Bob'
@@ -96,6 +105,7 @@ class FlightsPage
   end
 
   def assert_create_and_delete_airman
+
     page.find('span', text: 'New Operator').click
 
     fill_in 'lastName', with: 'Aaron'
@@ -105,7 +115,9 @@ class FlightsPage
     find('input[type="submit"]').click
 
     visit '/flights'
-
+    page.within('#DOB') do
+    find('.expandFlight').click
+    end
     expect(page).to have_content 'Aaron, Aadam'
 
     click_on_airman 'Aaron, Aadam'
@@ -134,6 +146,7 @@ class FlightsPage
   def assert_edit_flight_schedule
     schedule_to_test = 'Panama A'
     page.within('#DOC') do
+      find('.expandFlight').click
       find('#schedule-select').find(:option, text: schedule_to_test).select_option
     end
     expect(page.has_content?('Schedule Settings')).to be true

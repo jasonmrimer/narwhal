@@ -55,10 +55,18 @@ export class SiteManagerActions {
     this.stores.siteManagerStore!.cancelPendingNewFlight();
   }
 
+  // todo only refresh if flight saved
   async saveNewFlight() {
-    this.stores.siteManagerStore!.performLoading(async () => {
-      await this.stores.siteManagerStore!.savePendingNewFlight();
-      await this.stores.siteManagerStore!.refreshFlights();
-    });
+    await this.stores.siteManagerStore!.savePendingNewFlight();
+    await this.stores.siteManagerStore!.refreshFlights();
+  }
+
+  expandFlight(flightId: number) {
+    this.stores.siteManagerStore!.addFlightToExpandedFlights(flightId);
+  }
+
+  collapseFlight(flightId: number) {
+    console.log('clickColl');
+    this.stores.siteManagerStore!.removeFlightFromExpandedFlights(flightId);
   }
 }

@@ -103,6 +103,7 @@ public class AirmanController {
       new ResponseEntity<>(airman, HttpStatus.OK);
   }
 
+
   @PutMapping(path = "/{id}/qualifications")
   public Airman updateAirmanQualification(
     @PathVariable("id") Long id,

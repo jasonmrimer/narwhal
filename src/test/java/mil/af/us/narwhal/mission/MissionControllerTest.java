@@ -34,7 +34,7 @@ public class MissionControllerTest extends BaseIntegrationTest {
   public void setUp() {
     super.setUp();
 
-    Flight flight = new Flight("flight");
+    Flight flight = new Flight("missionFlight");
 
     final Squadron squadron = new Squadron("squadron");
     squadron.addFlight(flight);

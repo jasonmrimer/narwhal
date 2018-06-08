@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
+import { observer } from 'mobx-react';
 
 /* tslint:disable:no-any */
 interface Props {
@@ -13,21 +14,24 @@ interface Props {
   className?: string;
 }
 
-export const TextInput = (props: Props) => {
-  return (
-    <input
-      id={props.id}
-      className={props.className}
-      type="text"
-      placeholder={props.placeholder}
-      value={props.value}
-      name={props.name}
-      onChange={props.onChange}
-      onKeyPress={props.onKeyPress}
-      disabled={props.disabled}
-    />
-  );
-};
+@observer
+export class TextInput extends React.Component<Props> {
+  render() {
+    return (
+      <input
+        id={this.props.id}
+        className={this.props.className}
+        type="text"
+        placeholder={this.props.placeholder}
+        value={this.props.value}
+        name={this.props.name}
+        onChange={this.props.onChange}
+        onKeyPress={this.props.onKeyPress}
+        disabled={this.props.disabled}
+      />
+    );
+  }
+}
 
 export const StyledTextInput = styled(TextInput)`
   &::placeholder {

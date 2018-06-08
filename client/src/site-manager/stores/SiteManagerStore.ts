@@ -21,11 +21,12 @@ export class SiteManagerStore extends NotificationStore {
   @observable private _certifications: CertificationModel[] = [];
   @observable private _schedules: ScheduleModel[] = [];
   @observable private _shouldShowSchedulePrompt: boolean = false;
+  @observable private _shouldShowAddFlightPrompt: boolean = false;
   @observable private _pendingFlightId: number | null = null;
   @observable private _pendingScheduleId: number | null = null;
   @observable private _pendingScheduleStartDate: any = moment(moment.now());
   @observable private _pendingNewFlight: FlightModel | null = null;
-  @observable private _pendingNewFlightName: string = '';
+  @observable private _flightsExpanded: number[] = [];
 
   constructor(repositories: Repositories) {
     super();
@@ -48,8 +49,35 @@ export class SiteManagerStore extends NotificationStore {
   }
 
   @computed
+  get expandedFlights () {
+    return this._flightsExpanded;
+  }
+
+  @observable
+  shouldExpandFlight(flightId: number) {
+    return this._flightsExpanded.find(x => x === flightId) !== undefined;
+  }
+
+  @action.bound
+  addFlightToExpandedFlights(flightId: number) {
+    if (!this.shouldExpandFlight(flightId)) {
+      this._flightsExpanded.push(flightId);
+    }
+  }
+
+  @action.bound
+  removeFlightFromExpandedFlights(flightId: number) {
+      this._flightsExpanded = this._flightsExpanded.filter(x => x !== flightId);
+  }
+
+  @computed
   get shouldShowSchedulePrompt() {
     return this._shouldShowSchedulePrompt;
+  }
+
+  @computed
+  get shouldShowAddFlightPrompt() {
+    return this._shouldShowAddFlightPrompt;
   }
 
   @computed
@@ -101,12 +129,6 @@ export class SiteManagerStore extends NotificationStore {
       return {value: schedule.id, label: schedule.type};
     });
   }
-
-  @computed
-  get pendingNewFlightName() {
-    return this._pendingNewFlightName;
-  }
-
 
   getAirmenByFlightId = (flightId: number) => {
     return this.airmen.filter(a => a.flightId === flightId);
@@ -166,6 +188,11 @@ export class SiteManagerStore extends NotificationStore {
   }
 
   @action.bound
+  hideAddFlightPrompt() {
+    this._shouldShowAddFlightPrompt = false;
+  }
+
+  @action.bound
   setAirmenShiftByFlightId(flightId: number, shift: ShiftType) {
     this._airmen
       .filter(airman => airman.flightId === flightId)
@@ -198,9 +225,15 @@ export class SiteManagerStore extends NotificationStore {
   }
 
   @action.bound
+  setAddNewFlightPrompt() {
+    this._shouldShowAddFlightPrompt = true;
+  }
+
+  @action.bound
   setPendingFlightName(name: string) {
-    this._pendingNewFlightName = name;
-    this._pendingNewFlight!.name = this._pendingNewFlightName;
+    if (this._pendingNewFlight) {
+      this._pendingNewFlight.name = name;
+    }
   }
 
   @action.bound
@@ -212,7 +245,6 @@ export class SiteManagerStore extends NotificationStore {
   @action.bound
   cancelPendingNewFlight() {
     this._pendingNewFlight = null;
-    this._pendingNewFlightName = '';
   }
 
   @action.bound
@@ -220,7 +252,6 @@ export class SiteManagerStore extends NotificationStore {
     if (this._pendingNewFlight) {
       await this.flightRepository.save(this._pendingNewFlight);
       this._pendingNewFlight = null;
-      this._pendingNewFlightName = '';
     }
   }
 
@@ -230,8 +261,8 @@ export class SiteManagerStore extends NotificationStore {
 
     if (site) {
       const squadronId = this._profile!.squadronId ? this._profile!.squadronId : this._squadron.id;
-      const squad = site.squadrons.find((squadron: SquadronModel) => squadron.id === squadronId);
-      this._squadron = squad ? squad : this._squadron;
+      const squadron = site.squadrons.find((squadron: SquadronModel) => squadron.id === squadronId);
+      this._squadron = squadron ? squadron : this._squadron;
     }
   }
 }

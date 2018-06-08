@@ -41,19 +41,19 @@ public class Flight {
     this.name = name;
   }
 
+  @Override
+  public String toString() {
+    return "Flight{" +
+      "id=" + id +
+      ", squadronId=" + squadron.getId() +
+      ", name='" + name + '\'' +
+      '}';
+  }
+
   @JsonProperty
   public Long squadronId(){
     return this.squadron != null
       ? this.squadron.getId()
       : null;
-  }
-
-  @Override
-  public String toString() {
-    return "Flight{" +
-      "id=" + id +
-      ", squadron=" + squadron.getId() +
-      ", name='" + name + '\'' +
-      '}';
   }
 }
