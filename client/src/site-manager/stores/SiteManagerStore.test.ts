@@ -20,6 +20,7 @@ describe('SiteManagerStore', () => {
   let subject: SiteManagerStore;
   let schedules: ScheduleModel[];
   let flightRepoSaveSpy: jest.Mock;
+  let flightRepoDeleteSpy: jest.Mock;
   const schedule = new ScheduleModel(1, ScheduleType.FrontHalf);
   const schedule2 = new ScheduleModel(2, ScheduleType.BackHalf);
 
@@ -41,7 +42,9 @@ describe('SiteManagerStore', () => {
     certifications = CertificationModelFactory.buildList(3, 1);
 
     flightRepoSaveSpy = jest.fn();
+    flightRepoDeleteSpy = jest.fn();
     DoubleRepositories.flightRepository.save = flightRepoSaveSpy;
+    DoubleRepositories.flightRepository.delete = flightRepoDeleteSpy;
 
     subject = new SiteManagerStore(DoubleRepositories);
 
@@ -166,6 +169,11 @@ describe('SiteManagerStore', () => {
     expect(flightRepoSaveSpy).toHaveBeenCalledWith(flight);
   });
 
+  it('should delete a flight', () => {
+    subject.deleteFlight(3);
+    expect(flightRepoDeleteSpy).toBeCalledWith(3);
+  });
+
   it('should refresh the flights', async () => {
     const squad = Object.assign({}, subject.squadron);
     await subject.refreshFlights();
@@ -184,5 +192,10 @@ describe('SiteManagerStore', () => {
     expect(subject.expandedFlights.length).toBe(2);
     subject.removeFlightFromExpandedFlights(2);
     expect(subject.shouldExpandFlight(2)).toBeFalsy();
+  });
+
+  it('should hide Delete Flight when no airman are in flight', () => {
+    expect(subject.shouldAllowFlightDelete(1)).toBeFalsy();
+    expect(subject.shouldAllowFlightDelete(2)).toBeTruthy();
   });
 });

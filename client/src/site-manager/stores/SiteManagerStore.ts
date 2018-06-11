@@ -58,6 +58,11 @@ export class SiteManagerStore extends NotificationStore {
     return this._flightsExpanded.find(x => x === flightId) !== undefined;
   }
 
+  @observable
+  shouldAllowFlightDelete(flightId: number) {
+    return this.getAirmenByFlightId(flightId).length === 0;
+  }
+
   @action.bound
   addFlightToExpandedFlights(flightId: number) {
     if (!this.shouldExpandFlight(flightId)) {
@@ -256,13 +261,18 @@ export class SiteManagerStore extends NotificationStore {
   }
 
   @action.bound
+  async deleteFlight(flightId: number) {
+    await this.flightRepository.delete(flightId);
+  }
+
+  @action.bound
   async refreshFlights() {
     const site = await this.siteRepository.findOne(this._profile!.siteId!);
 
     if (site) {
       const squadronId = this._profile!.squadronId ? this._profile!.squadronId : this._squadron.id;
-      const squadron = site.squadrons.find((squadron: SquadronModel) => squadron.id === squadronId);
-      this._squadron = squadron ? squadron : this._squadron;
+      const squad = site.squadrons.find((squadron: SquadronModel) => squadron.id === squadronId);
+      this._squadron = squad ? squad : this._squadron;
     }
   }
 }

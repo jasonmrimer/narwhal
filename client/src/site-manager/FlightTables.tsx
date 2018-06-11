@@ -13,6 +13,7 @@ import { StyledFlightSchedulePopup } from '../widgets/popups/FlightSchedulePopup
 import * as classNames from 'classnames';
 import { ExpandIcon } from '../icons/ExpandIcon';
 import { CollapseIcon } from '../icons/CollapseIcon';
+import { DeleteIcon } from '../icons/DeleteIcon';
 
 interface FlightTableRowProps {
   airman: AirmanModel;
@@ -68,6 +69,9 @@ export class FlightTables extends React.Component<FlightTablesProps> {
                 {this.renderHeader(flight)}
                 {this.props.siteManagerStore!.shouldExpandFlight(flight.id)
                   && this.renderRows(flight.id)}
+                {this.props.siteManagerStore!.shouldExpandFlight(flight.id) &&
+                  this.props.siteManagerStore!.shouldAllowFlightDelete(flight.id)
+                    && this.renderDeleteFlight(flight.id)}
               </div>
             );
           })
@@ -136,6 +140,21 @@ export class FlightTables extends React.Component<FlightTablesProps> {
     );
   }
 
+  private renderDeleteFlight = (flightId: number) => {
+    return (
+      <div
+        className="delete-flight"
+        onClick={async () => {
+          this.props.siteManagerStore!.performLoading( async () => {
+            await this.props.siteManagerActions!.deleteFlight(flightId);
+          });
+        }}
+      >
+        <DeleteIcon />
+        <span className="delete-label">Delete Flight</span>
+      </div>
+    );
+  }
   private renderRows = (flightId: number) => {
     return this.props.siteManagerStore!.getAirmenByFlightId(flightId)
       .map((airman) => {
@@ -157,6 +176,31 @@ export const StyledFlightTables = inject(
       display:flex;
       flex-direction: row-reverse;
     }
+    .delete-label {
+      margin-left: 0.25rem
+    }
+    
+     
+    
+    .delete-flight {
+    font-size: 0.75rem;
+    font-weight: 400;
+    cursor: pointer;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    justify-content: center;
+    padding: 1.53125rem;
+    
+    :hover {
+      background: ${props => props.theme.light};
+      font-weight: 500;
+      color: ${props => props.theme.fontColor};
+      text-decoration: underline;
+    }
+  }
+    
     .flight-header {
       display: flex;
       align-items: center;

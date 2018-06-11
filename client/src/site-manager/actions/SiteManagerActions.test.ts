@@ -34,7 +34,8 @@ describe('SiteManagerActions', () => {
       addFlightToExpandedFlights: jest.fn(),
       removeFlightFromExpandedFlights : jest.fn(),
       shouldExpandFlight : jest.fn(),
-      hideSchedulePrompt: jest.fn()
+      hideSchedulePrompt: jest.fn(),
+      deleteFlight: jest.fn()
     };
 
     airmanRepository = {
@@ -91,5 +92,11 @@ describe('SiteManagerActions', () => {
   it('should enable collapse when a flight is collapsed', () => {
     subject.collapseFlight(2);
     expect(siteManagerStore.removeFlightFromExpandedFlights).toBeCalledWith(2);
+  });
+
+  it('should delete and refresh Flight when Delete Flight is clicked', async () => {
+    await subject.deleteFlight(4);
+    expect(siteManagerStore.deleteFlight).toBeCalledWith(4);
+    expect(siteManagerStore.refreshFlights).toBeCalled();
   });
 });

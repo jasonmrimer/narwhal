@@ -66,7 +66,11 @@ export class SiteManagerActions {
   }
 
   collapseFlight(flightId: number) {
-    console.log('clickColl');
     this.stores.siteManagerStore!.removeFlightFromExpandedFlights(flightId);
+  }
+
+  async deleteFlight(flightId: number) {
+    await  this.stores.siteManagerStore!.deleteFlight(flightId);
+    await this.stores.siteManagerStore!.refreshFlights();
   }
 }

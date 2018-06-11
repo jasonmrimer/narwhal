@@ -11,4 +11,8 @@ export class WebFlightRepository implements FlightRepository {
     const body = JSON.stringify(flight);
     return await this.client.postJSON('/api/flights', body);
   }
+
+  async delete(flightId: number): Promise<void> {
+    return await this.client.delete('api/flights/' + flightId.toString());
+  }
 }

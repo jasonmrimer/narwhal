@@ -32,6 +32,9 @@ describe('FlightTables', () => {
     scheduleOptions: [{label: 'Front Half', value: 1}, {label: 'Back Half', value: 2}],
     shouldExpandFlight: () => {
       return true;
+    },
+    shouldAllowFlightDelete: () => {
+      return true;
     }
   };
 

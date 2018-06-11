@@ -16,6 +16,7 @@ public class SharedWebSecurityConfig extends WebSecurityConfigurerAdapter {
       .antMatchers(HttpMethod.POST, "/api/airmen/*/certifications", "/api/airmen/*/qualifications").hasAnyRole("ADMIN", "WRITER")
       .antMatchers(HttpMethod.PUT, "/api/airmen/*/certifications", "/api/airmen/*/qualifications").hasAnyRole("ADMIN", "WRITER")
       .antMatchers(HttpMethod.POST, "/api/flights").hasAnyRole("ADMIN", "WRITER")
+      .antMatchers(HttpMethod.DELETE, "/api/flights/*").hasAnyRole("ADMIN", "WRITER")
       .antMatchers(HttpMethod.PUT, "/api/crews").hasAnyRole("ADMIN", "WRITER")
       .antMatchers(HttpMethod.DELETE, "/api/crews/*/airmen/*").hasAnyRole("ADMIN", "WRITER")
       .antMatchers(HttpMethod.DELETE, "/api/crew_positions").hasAnyRole("ADMIN", "WRITER")

@@ -21,6 +21,7 @@ public class FlightControllerTest extends BaseIntegrationTest {
 
   private Squadron squadron;
   private Site site;
+  private Flight flight;
 
   @Before
   public void setUp() {
@@ -28,6 +29,8 @@ public class FlightControllerTest extends BaseIntegrationTest {
     squadron = new Squadron("squadron");
     site = new Site("site");
     site.addSquadron(squadron);
+    flight = new Flight(squadron, "flight");
+    squadron.addFlight(flight);
     siteRepository.save(asList(site));
   }
 
@@ -53,6 +56,22 @@ public class FlightControllerTest extends BaseIntegrationTest {
       .body("id", notNullValue())
       .body("name", equalTo("flightName"))
       .body("squadronId", equalTo(squadron.getId().intValue()));
+    // @formatter:on
+  }
+
+  @Test
+  public void deleteTest() throws JsonProcessingException {
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .contentType("application/json")
+      .when()
+      .delete(FlightController.URI + "/" + flight.getId())
+      .then()
+      .statusCode(200);
     // @formatter:on
   }
 }

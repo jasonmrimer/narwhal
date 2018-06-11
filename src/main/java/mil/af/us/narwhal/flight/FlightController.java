@@ -4,12 +4,14 @@ import mil.af.us.narwhal.squadron.Squadron;
 import mil.af.us.narwhal.squadron.SquadronRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.util.Collections.emptyList;
 
 @RestController
 @RequestMapping(FlightController.URI)
@@ -35,5 +37,17 @@ public class FlightController {
     Flight flight = new Flight(squadron, flightJSON.getName());
     flightRepository.save(flight);
     return new ResponseEntity<>(flight, HttpStatus.CREATED);
+  }
+
+  @DeleteMapping(value = "/{id}")
+  public ResponseEntity<Object> deleteFlight(@PathVariable Long id) {
+    Flight flight = this.flightRepository.findOne(id);
+    List<Flight> lists = new ArrayList<>();
+    lists.add(flight);
+    this.flightRepository.deleteInBatch(lists);
+    return new ResponseEntity<>(
+      emptyList(),
+      HttpStatus.OK
+    );
   }
 }

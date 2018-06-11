@@ -6,4 +6,7 @@ export class FlightRepositoryStub implements FlightRepository {
     return Promise.resolve(new FlightModel(1, flight.name, flight.squadronId));
   }
 
+  async delete(flightId: number): Promise<void> {
+    return;
+  }
 }
