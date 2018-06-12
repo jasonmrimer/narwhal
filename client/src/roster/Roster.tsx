@@ -17,6 +17,7 @@ import { RosterList } from './models/RosterList';
 import { StyledRosterSubHeaderRow } from '../widgets/RosterSubHeaderRow';
 import { FlightModel } from '../flight/model/FlightModel';
 import { SidePanelActions } from '../tracker/SidePanelActions';
+import { StyledSkillsField } from '../skills/SkillsField';
 
 const cache = new CellMeasurerCache({
   defaultHeight: 60,
@@ -169,33 +170,14 @@ const Row = observer(
               tab={TabType.CURRENCY}
               className="airman-qual"
             >
-              {airman.qualifications.map(
-                (qual, index) => {
-                  return (
-                    <React.Fragment key={index}>
-                    <span
-                      className={classNames({expired: qual.isExpired})}
-                    >
-                      {qual.acronym}
-                    </span>
-                      {!(index === airman.qualifications.length - 1) && <span> / </span>}
-                    </React.Fragment>
-                  );
-                })}
+                <StyledSkillsField items={airman.qualifications}/>
             </StyledAirmanDatum>
             <StyledAirmanDatum
               airman={airman}
               tab={TabType.CURRENCY}
               className="airman-cert"
             >
-              {airman.certifications.map((certification, index) => {
-                return (
-                  <React.Fragment key={index}>
-                    <span className={classNames({expired: certification.isExpired})}>{certification.title}</span>
-                    {!(index === airman.certifications.length - 1) && <span key={index}> / </span>}
-                  </React.Fragment>
-                );
-              })}
+              <StyledSkillsField items={airman.certifications}/>
             </StyledAirmanDatum>
           </div>
           <div

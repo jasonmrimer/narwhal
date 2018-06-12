@@ -21,6 +21,7 @@ import { WebRepositories } from '../utils/Repositories';
 import { AirmanProfileManagerStore } from '../site-manager/stores/AirmanProfileManagerStore';
 import { SiteManagerStore } from '../site-manager/stores/SiteManagerStore';
 import { CertificationFormStore } from '../skills/certification/stores/CertificationFormStore';
+import { SkillsFieldStore } from '../skills/stores/SkillsFieldStore';
 
 const timeService = new MomentTimeService();
 const profileStore = new ProfileSitePickerStore(WebRepositories);
@@ -35,6 +36,7 @@ const sidePanelStore = new SidePanelStore();
 const currencyStore = new CurrencyStore(WebRepositories);
 const airmanRipItemFormStore = new AirmanRipItemFormStore(WebRepositories.ripItemRepository);
 const skillFormStore = new SkillFormStore();
+const skillsFieldStore = new SkillsFieldStore();
 
 const availabilityStore = new AvailabilityStore(WebRepositories);
 const appointmentFormStore = new AppointmentFormStore(timeService);
@@ -61,6 +63,7 @@ export interface Stores {
   currencyStore: CurrencyStore;
   airmanRipItemFormStore: AirmanRipItemFormStore;
   skillFormStore: SkillFormStore;
+  skillsFieldStore: SkillsFieldStore;
   availabilityStore: AvailabilityStore;
   appointmentFormStore: AppointmentFormStore;
   leaveFormStore: LeaveFormStore;
@@ -92,6 +95,7 @@ export const stores = {
   rosterHeaderStore,
   sidePanelStore,
   skillFormStore,
+  skillsFieldStore,
   tdyDeploymentFormStore,
   trackerStore,
   airmanProfileManagerStore,

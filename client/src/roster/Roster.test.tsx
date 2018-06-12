@@ -20,6 +20,10 @@ import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 import { makeFakeProfile } from '../utils/testUtils';
 import { adminAbility } from '../app/abilities';
+import {SkillsFieldStore} from "../skills/stores/SkillsFieldStore";
+import {Theme} from "../themes/default";
+import {ThemeProvider} from "styled-components";
+import {MemoryRouter} from "react-router";
 
 describe('Roster', () => {
   let trackerStore: TrackerStore;
@@ -27,19 +31,26 @@ describe('Roster', () => {
   let rosterHeaderStore: RosterHeaderStore;
   let subject: ReactWrapper;
   let airmen: AirmanModel[];
+  let skillsFieldStore: SkillsFieldStore;
 
   describe('when the list of airmen is empty', () => {
     beforeEach(async () => {
       trackerStore = new TrackerStore(DoubleRepositories);
       rosterHeaderStore = new RosterHeaderStore();
       locationFilterStore = new LocationFilterStore();
-
+      skillsFieldStore = new SkillsFieldStore();
       subject = mount(
+        <ThemeProvider theme={Theme}>
+          <MemoryRouter>
+        <Provider skillsFieldStore={skillsFieldStore }>
         <Roster
           trackerStore={trackerStore}
           rosterHeaderStore={rosterHeaderStore}
           locationFilterStore={locationFilterStore}
         />
+        </Provider>
+          </MemoryRouter>
+        </ThemeProvider>
       );
     });
 
@@ -76,6 +87,7 @@ describe('Roster', () => {
           plannerStore={plannerStore}
           profileStore={profileStore}
           sidePanelActions={null}
+          skillsFieldStore={skillsFieldStore}
         >
           <StyledRoster/>
         </Provider>

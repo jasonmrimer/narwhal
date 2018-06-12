@@ -30,9 +30,4 @@ export const AirmanDatum =
   };
 
 export const StyledAirmanDatum = inject('sidePanelActions')(styled(AirmanDatum)`
-  .expired {
-    border-bottom: 2px solid ${props => props.theme.yellow};
-    padding: 0.125rem;
-    border-radius: 2px;
-  }
 `);

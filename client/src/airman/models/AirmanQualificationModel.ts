@@ -2,8 +2,9 @@ import * as moment from 'moment';
 import { Moment } from 'moment';
 import { QualificationModel } from '../../skills/qualifications/models/QualificationModel';
 import { SkillType } from '../../skills/models/SkillType';
+import { SkillModel } from './SkillModel';
 
-export class AirmanQualificationModel {
+export class AirmanQualificationModel implements SkillModel {
   constructor(public airmanId: number,
               public qualification: QualificationModel,
               public earnDate: Moment,
@@ -16,6 +17,10 @@ export class AirmanQualificationModel {
   }
 
   get acronym() {
+    return this.qualification.acronym;
+  }
+
+  get displayText() {
     return this.qualification.acronym;
   }
 
