@@ -3,18 +3,19 @@ import { PlannerActions } from './PlannerActions';
 describe('PlannerActions', () => {
   let subject: PlannerActions;
   let refreshEventsSpy: jest.Mock;
-  let incrementPlannerWeek: jest.Mock;
+  let incrementPlannerTimeSpanSpy: jest.Mock;
   let refreshAirmanEventsSpy: jest.Mock;
-  let decrementPlannerWeek: jest.Mock;
+  let decrementPlannerTimeSpanSpy: jest.Mock;
   let plannerStore: any;
   const week = Symbol('week');
+  const timeSpan = Symbol('timeSpan');
   const airman = {id: 1, isEmpty: false};
 
   beforeEach(() => {
     refreshEventsSpy = jest.fn();
     refreshAirmanEventsSpy = jest.fn();
-    incrementPlannerWeek = jest.fn();
-    decrementPlannerWeek = jest.fn();
+    incrementPlannerTimeSpanSpy = jest.fn();
+    decrementPlannerTimeSpanSpy = jest.fn();
 
     const trackerStore = {
       refreshEvents: refreshEventsSpy,
@@ -26,26 +27,27 @@ describe('PlannerActions', () => {
     };
 
     plannerStore = {
-      incrementPlannerWeek: incrementPlannerWeek,
-      decrementPlannerWeek: decrementPlannerWeek,
+      incrementPlannerTimeSpan: incrementPlannerTimeSpanSpy,
+      decrementPlannerTimeSpan: decrementPlannerTimeSpanSpy,
       plannerWeek: week,
+      plannerTimeSpan: timeSpan,
       sidePanelWeek: week
     };
 
     subject = new PlannerActions(({trackerStore, availabilityStore, plannerStore} as any));
   });
 
-  it('should increment the week by a day', async () => {
+  it('should increment the time span by a day', async () => {
     await subject.incrementDay();
-    expect(plannerStore.incrementPlannerWeek).toHaveBeenCalled();
-    expect(refreshEventsSpy).toHaveBeenCalledWith(plannerStore.plannerWeek);
+    expect(plannerStore.incrementPlannerTimeSpan).toHaveBeenCalled();
+    expect(refreshEventsSpy).toHaveBeenCalledWith(plannerStore.plannerTimeSpan);
     expect(refreshAirmanEventsSpy).toHaveBeenCalledWith(airman.id, plannerStore.sidePanelWeek);
   });
 
-  it('should decrement the week by a day', async () => {
+  it('should decrement the time span by a day', async () => {
     await subject.decrementDay();
-    expect(plannerStore.decrementPlannerWeek).toHaveBeenCalled();
-    expect(refreshEventsSpy).toHaveBeenCalledWith(plannerStore.plannerWeek);
+    expect(plannerStore.decrementPlannerTimeSpan).toHaveBeenCalled();
+    expect(refreshEventsSpy).toHaveBeenCalledWith(plannerStore.plannerTimeSpan);
     expect(refreshAirmanEventsSpy).toHaveBeenCalledWith(airman.id, plannerStore.sidePanelWeek);
   });
 });

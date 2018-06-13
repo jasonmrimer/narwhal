@@ -34,12 +34,12 @@ interface Props {
 export class TrackerPage extends React.Component<Props> {
   async componentDidMount() {
     await this.props.trackerStore!.performLoading(async () => {
-      const week = this.props.plannerStore!.plannerWeek;
+      const timeSpan = this.props.plannerStore!.plannerTimeSpan;
       const siteId = this.props.profileStore!.profile!.siteId!;
 
       const [airmen, events, certifications, qualifications, missions, sites] = await Promise.all([
         WebRepositories.airmanRepository.findBySiteId(siteId),
-        WebRepositories.eventRepository.findAllBySiteIdAndWithinPeriod(siteId, week[0], week[6]),
+        WebRepositories.eventRepository.findAllBySiteIdAndWithinPeriod(siteId, timeSpan[0], timeSpan[timeSpan.length -1]),
         WebRepositories.certificationRepository.findAllCertifications(),
         WebRepositories.qualificationRepository.findAllQualifications(),
         WebRepositories.missionRepository.findAll(),

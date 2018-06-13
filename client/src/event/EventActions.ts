@@ -23,7 +23,7 @@ export class EventActions {
 
       await this.stores.availabilityStore!.refreshAirmanEvents(airmanId, eventWeek);
 
-      await this.stores.trackerStore!.refreshEvents(this.stores.plannerStore!.plannerWeek);
+      await this.stores.trackerStore!.refreshEvents(this.stores.plannerStore!.plannerTimeSpan);
 
       this.stores.availabilityStore!.closeEventForm();
 
@@ -48,7 +48,7 @@ export class EventActions {
 
     await this.stores.availabilityStore!.refreshAirmanEvents(airmanId, eventWeek);
 
-    await this.stores.trackerStore!.refreshEvents(this.stores.plannerStore!.plannerWeek);
+    await this.stores.trackerStore!.refreshEvents(this.stores.plannerStore!.plannerTimeSpan);
 
     this.stores.availabilityStore!.closeEventForm();
   }

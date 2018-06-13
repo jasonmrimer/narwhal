@@ -7,11 +7,13 @@ export class PlannerStore {
 
   @observable private _plannerWeek: Moment[] = [];
   @observable private _sidePanelWeek: Moment[] = [];
+  @observable private _plannerTimeSpan: Moment[] = [];
 
   constructor(timeService: TimeService) {
     this.timeService = timeService;
     this._plannerWeek = this.timeService.getCurrentWeek();
     this._sidePanelWeek = this.timeService.getCurrentWeek();
+    this._plannerTimeSpan = this.timeService.getCurrentTimeSpan();
   }
 
   @computed
@@ -19,9 +21,24 @@ export class PlannerStore {
     return this._plannerWeek;
   }
 
+  @computed
+  get plannerTimeSpan() {
+    return this._plannerTimeSpan;
+  }
+
   @action.bound
   incrementPlannerWeek() {
     this._plannerWeek = this.timeService.incrementWeekByDay(this.plannerWeek);
+  }
+
+  @action.bound
+  incrementPlannerTimeSpan() {
+    this._plannerTimeSpan = this.timeService.incrementTimeSpanByDay(this.plannerTimeSpan);
+  }
+
+  @action.bound
+  decrementPlannerTimeSpan() {
+    this._plannerTimeSpan = this.timeService.decrementTimeSpanByDay(this.plannerTimeSpan);
   }
 
   @action.bound

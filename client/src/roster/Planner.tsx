@@ -17,16 +17,14 @@ export class Planner extends React.Component<Props> {
   render() {
     return (
       <div className={classNames(this.props.className, 'planner-row', 'tr')}>
-        <span className="blank"/>
         <div>{this.renderEvents()}</div>
-        <span className="blank"/>
       </div>
     );
   }
 
   private renderEvents = () => {
     const {airman, plannerStore} = this.props;
-    return plannerStore!.plannerWeek.map((day, i) => {
+    return plannerStore!.plannerTimeSpan.map((day, i) => {
       return <StyledPlannerEvent key={i} airman={airman} day={day}/>;
     });
   }
@@ -50,5 +48,9 @@ export const StyledPlanner =
     
     .blank {
       width: 30px;
+    }
+    
+    svg {
+      margin: 0 0.375rem;
     }
 `);

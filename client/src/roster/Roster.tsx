@@ -213,15 +213,12 @@ export const StyledRow = inject(
   }
   
   & > div > span {
-    width: 23%;
+    width: 11.75rem;
   }
   
   .left {
-    width: 868px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 0.75rem;
     cursor: pointer;
     border-right: 1px solid ${props => props.theme.graySteel};
   }
@@ -232,11 +229,11 @@ export const StyledRow = inject(
     align-items: center;
     padding: 0.75rem;
     cursor: pointer;
-    width: 530px;
   }
   
   .shift {
-    width: 5rem;
+    width: 6rem;
+    padding: 0 0.5rem;
   }
   
   &.selected {

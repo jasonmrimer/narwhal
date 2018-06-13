@@ -2,8 +2,8 @@ import * as moment from 'moment';
 import { TimeService } from './TimeService';
 
 export function TimeServiceContract(subject: TimeService) {
-  describe('getCurrentWeek', () => {
-    it('returns a 7-day week array', async () => {
+  describe('get current times', () => {
+    it('should return a current week array of 7 days', () => {
       const week = subject.getCurrentWeek();
       expect(week).toBeDefined();
 
@@ -12,6 +12,17 @@ export function TimeServiceContract(subject: TimeService) {
         expect(moment.isMoment(day)).toBeTruthy();
         expect(day).toBeTruthy();
       });
+    });
+
+    it('should return a current time span of 14 days', () => {
+      const timeSpan = subject.getCurrentTimeSpan();
+      expect(timeSpan).toBeDefined();
+
+      expect(timeSpan.length).toBe(14);
+      timeSpan.forEach((day) => {
+        expect(moment.isMoment(day)).toBeTruthy();
+        expect(day).toBeTruthy();
+      })
     });
   });
 
@@ -23,14 +34,21 @@ export function TimeServiceContract(subject: TimeService) {
       expect(week[0].isSame(startOfWeek.add(7, 'days'))).toBeTruthy();
     });
 
-    it('should increment by a day', () => {
+    it('should increment week by a day', () => {
+      let timeSpan = subject.getCurrentTimeSpan();
+      const startOfTimeSpan = timeSpan[0].clone();
+      timeSpan = subject.incrementTimeSpanByDay(timeSpan);
+      expect(timeSpan[0].isSame(startOfTimeSpan.add(1, 'days'))).toBeTruthy();
+    });
+
+    it('should increment time span by a day', () => {
       let week = subject.getCurrentWeek();
       const startOfWeek = week[0].clone();
       week = subject.incrementWeekByDay(week);
       expect(week[0].isSame(startOfWeek.add(1, 'days'))).toBeTruthy();
     });
 
-    it('should decrement by a day', () => {
+    it('should decrement week by a day', () => {
       let week = subject.getCurrentWeek();
       const startOfWeek = week[0].clone();
       week = subject.decrementWeekByDay(week);

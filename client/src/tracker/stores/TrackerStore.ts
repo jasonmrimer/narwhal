@@ -81,9 +81,9 @@ export class TrackerStore extends NotificationStore {
   }
 
   @action.bound
-  async refreshEvents(week: Moment[]) {
+  async refreshEvents(timeSpan: Moment[]) {
     this._events = await this.repositories.eventRepository
-      .findAllBySiteIdAndWithinPeriod(this._siteId, week[ 0 ], week[ 6 ]);
+      .findAllBySiteIdAndWithinPeriod(this._siteId, timeSpan[ 0 ], timeSpan[timeSpan.length - 1]);
   }
 
   async refreshAirmen(siteId: number, airmanId: number) {

@@ -20,7 +20,7 @@ describe('EventActions', () => {
   let airman: AirmanModel;
   let event: EventModel;
   let eventWeek: Moment[];
-  let plannerWeek: Symbol;
+  let plannerTimeSpan: Symbol;
   let removeEventSpy: jest.Mock;
 
   beforeEach(() => {
@@ -45,12 +45,12 @@ describe('EventActions', () => {
       close: closeSpy
     };
 
-    plannerWeek = Symbol('plannerWeek');
+    plannerTimeSpan = Symbol('plannerTimeSpan');
 
     const plannerStore = {
       navigateToWeek: navigateToWeekSpy,
       setSidePanelWeek: setSidePanelWeekSpy,
-      plannerWeek: plannerWeek
+      plannerTimeSpan: plannerTimeSpan
     };
 
     const availabilityStore = {
@@ -78,7 +78,7 @@ describe('EventActions', () => {
     expect(addEventSpy).toHaveBeenCalledWith(event);
     expect(setSidePanelWeekSpy).toHaveBeenCalledWith(eventWeek);
     expect(refreshAirmanEventsSpy).toHaveBeenCalledWith(airman.id, eventWeek);
-    expect(refreshEventsSpy).toHaveBeenCalledWith(plannerWeek);
+    expect(refreshEventsSpy).toHaveBeenCalledWith(plannerTimeSpan);
     expect(closeEventFormSpy).toHaveBeenCalled();
     expect(closeSpy).toHaveBeenCalled();
   });
@@ -91,7 +91,7 @@ describe('EventActions', () => {
   it('should call executePendingDelete', async () => {
     await subject.executePendingDelete();
     expect(refreshAirmanEventsSpy).toHaveBeenCalledWith(airman.id, eventWeek);
-    expect(refreshEventsSpy).toHaveBeenCalledWith(plannerWeek);
+    expect(refreshEventsSpy).toHaveBeenCalledWith(plannerTimeSpan);
     expect(closeEventFormSpy).toHaveBeenCalled();
   });
 });

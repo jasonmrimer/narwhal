@@ -51,6 +51,8 @@ export const StyledDropdown = styled(Dropdown)`
   appearance: none;
   border-radius: 0;
   width: 75%;
+  font-family: ${props => props.theme.fontFamily};
+  font-weight: 300;
   
   &:disabled {
     color: ${props => props.theme.graySteel};

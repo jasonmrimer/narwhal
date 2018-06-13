@@ -18,6 +18,6 @@ describe('Planner', () => {
   });
 
   it('renders a planner event for each day of the week', () => {
-    expect(subject.find(StyledPlannerEvent).length).toBe(7);
+    expect(subject.find(StyledPlannerEvent).length).toBe(14);
   });
 });

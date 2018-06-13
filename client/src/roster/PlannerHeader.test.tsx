@@ -19,7 +19,9 @@ describe('PlannerHeader', () => {
   });
 
   it('should render header text', () => {
-    expect(subject.text()).toContain('26SUN27MON28TUE29WED30THU01FRI02SAT');
+    expect(subject.find('.month-header').text()).toContain('NOVEMBER 2017');
+    expect(subject.find('.planner-day-header').text()).toBe('26SUN27MON28TUE29WED30THU01FRI02SAT' +
+      '03SUN04MON05TUE06WED07THU08FRI09SAT');
   });
 
   it('should render a date picker with icon', () => {

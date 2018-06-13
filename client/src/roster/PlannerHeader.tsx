@@ -1,8 +1,6 @@
 import * as React from 'react';
-import { BackIcon } from '../icons/BackIcon';
-import { NextIcon } from '../icons/NextIcon';
-import { Moment } from 'moment';
 import * as moment from 'moment';
+import { Moment } from 'moment';
 import styled from 'styled-components';
 import * as classNames from 'classnames';
 import { PlannerStore } from './stores/PlannerStore';
@@ -12,6 +10,8 @@ import { AvailabilityStore } from '../availability/stores/AvailabilityStore';
 import { PlannerActions } from './PlannerActions';
 import { StyledDatePicker } from '../widgets/inputs/DatePicker';
 import { DatePickerIcon } from './DatePickerIcon';
+import { PlannerNavBackIcon } from "../icons/PlannerNavBackIcon";
+import { PlannerNavNextIcon } from "../icons/PlannerNavNextIcon";
 
 interface Props {
   plannerStore?: PlannerStore;
@@ -21,7 +21,7 @@ interface Props {
   className?: string;
 }
 
-const renderWeek = (plannerWeek: Moment[]) => {
+const renderTimeSpan = (plannerWeek: Moment[]) => {
   return (
     <div className="planner-day-header">
       {
@@ -40,7 +40,7 @@ const renderWeek = (plannerWeek: Moment[]) => {
 export class PlannerHeader extends React.Component<Props> {
   state = {calendarFocus: false};
 
-  handleFocus = ({focused}: {focused: boolean}) => {
+  handleFocus = ({focused}: { focused: boolean }) => {
     this.setState({calendarFocus: focused});
   }
 
@@ -52,38 +52,42 @@ export class PlannerHeader extends React.Component<Props> {
     const {plannerStore, plannerActions} = this.props;
     return (
       <div className={classNames(this.props.className, 'planner-header')}>
-        <div
-          onClick={() => {
-            this.setState({calendarFocus: true});
-          }}
-          className="month-header"
-        >
-          <span>
-            {plannerStore!.plannerWeek[0].format('MMMM YYYY').toUpperCase()}
+        <div className="navigation-header">
+          <span className="calendar-clicky">
+            <span
+              onClick={() => {
+                this.setState({calendarFocus: true});
+              }}
+              className="month-header"
+            >
+                <span>
+                  {plannerStore!.plannerTimeSpan[0].format('MMMM YYYY').toUpperCase()}
+                </span>
+                <DatePickerIcon fill="#fff"/>
+              </span>
+              <StyledDatePicker
+                value=""
+                onChange={this.handleDateChange}
+                id="planner-date-picker"
+                name="date-picker"
+                focused={this.state.calendarFocus}
+                handleFocusChange={this.handleFocus}
+              />
           </span>
-          <DatePickerIcon fill="#fff"/>
+          <span className="nav-arrows">
+             <span className="button-header">
+                <button className="last-week" onClick={async () => await plannerActions!.decrementDay()}>
+                  <PlannerNavBackIcon/>
+                </button>
+              </span>
+              <span className="button-header">
+                <button className="next-week" onClick={async () => await plannerActions!.incrementDay()}>
+                  <PlannerNavNextIcon/>
+                </button>
+              </span>
+          </span>
         </div>
-        <StyledDatePicker
-          value=""
-          onChange={this.handleDateChange}
-          id="planner-date-picker"
-          name="date-picker"
-          focused={this.state.calendarFocus}
-          handleFocusChange={this.handleFocus}
-        />
-        <span className="planner-day-navigation">
-        <span className="button-header">
-          <button className="last-week" onClick={async () => await plannerActions!.decrementDay()}>
-            <BackIcon height={14} width={14}/>
-          </button>
-        </span>
-          {renderWeek(plannerStore!.plannerWeek)}
-        <span className="button-header">
-         <button className="next-week" onClick={async () => await plannerActions!.incrementDay()}>
-            <NextIcon height={14} width={14}/>
-          </button>
-        </span>
-      </span>
+        {renderTimeSpan(plannerStore!.plannerTimeSpan)}
       </div>
     );
   }
@@ -95,6 +99,10 @@ export const StyledPlannerHeader = inject('plannerStore', 'trackerStore', 'plann
   flex-grow: 2;
   border-left: 1px solid ${props => props.theme.graySteel};
   border-right: 1px solid ${props => props.theme.graySteel};
+  
+  .navigation-header {
+    display: flex;
+  }
   
   .planner-day-navigation {
     display: flex;
@@ -111,15 +119,20 @@ export const StyledPlannerHeader = inject('plannerStore', 'trackerStore', 'plann
     cursor: pointer;
    }
    
-  .last-week {
-    padding-right: 1rem;
-    cursor: pointer;
-  }
+  .nav-arrows {
+    margin-left: 13.25rem;
+    
+    .last-week {
+      padding-right: 0.75rem;
+      cursor: pointer;
+    }
+    
+    .next-week {
+      padding-left: 0.75rem;
+      cursor: pointer;
+}
+   }
   
-  .next-week {
-    padding-left: 1rem;
-    cursor: pointer;
-  }
    
   .planner-day-header {
     display: flex;

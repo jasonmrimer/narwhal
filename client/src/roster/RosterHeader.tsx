@@ -56,7 +56,7 @@ export class RosterHeader extends React.Component<Props> {
           />
         </span>
         <span>
-          <div className="header-column-title">NAME</div>
+          <div className={classNames("header-column-title", "name-header")}>NAME</div>
           <StyledTextInput
             value={selectedLastName}
             name="last-name"
@@ -94,12 +94,7 @@ export const StyledRosterHeader = inject('rosterHeaderStore')(styled(RosterHeade
   background-color: ${props => props.theme.lightest};
   border-left: 1px solid ${props => props.theme.graySteel};
   display: flex;
-  flex-grow: 3;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.75rem;
-  max-width: 868px;
-  min-width: 837px;
+  vertical-align: center;
   
   .header-column-title {
     font-size: 0.875rem;
@@ -107,14 +102,31 @@ export const StyledRosterHeader = inject('rosterHeaderStore')(styled(RosterHeade
   }
   
   & > span {
-    width: 23%;
+    padding: 0.5rem;
+    width: 11.75rem;
       
+    
+    .header-column-title {
+      margin-bottom: 1.125rem;
+    }
+    
+    .name-header {
+      margin-bottom: 1.1875rem;
+    }
+     
+    .rbt-input {
+      padding-bottom: 0.25rem;
+    }
+    
     & > input, select {
       padding: 0.5rem 0;
     }  
   }
   
   .shift {
-   width: 5rem;
+   width: 6rem;
+   .header-column-title {
+      margin-bottom: 1.25rem;
+    }
   }
 `);

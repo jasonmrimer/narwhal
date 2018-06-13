@@ -29,5 +29,9 @@ export const AirmanDatum =
     );
   };
 
-export const StyledAirmanDatum = inject('sidePanelActions')(styled(AirmanDatum)`
+export const StyledAirmanDatum = inject(
+  'sidePanelActions'
+)(styled(AirmanDatum)`
+  width: 11.75rem;
+  padding: 0.75rem 0.5rem;
 `);
