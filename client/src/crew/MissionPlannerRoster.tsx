@@ -85,6 +85,7 @@ export class MissionPlannerRoster extends React.Component<Props> {
             airman={airman}
             onCrew={this.props.crewStore!.crew!.hasAirman(airman)}
             onClick={async () => await this.props.missionPlannerActions!.addAirman(airman)}
+            missionDate={this.props.crewStore!.crew!.missionDate}
           />
         );
       case EmptyNotification:

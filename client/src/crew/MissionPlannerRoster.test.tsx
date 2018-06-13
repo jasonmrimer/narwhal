@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { MissionPlannerRoster } from './MissionPlannerRoster';
+import { StyledMissionPlannerRoster } from './MissionPlannerRoster';
 import { mount, ReactWrapper } from 'enzyme';
 import { CrewModelFactory } from './factories/CrewModelFactory';
 import { StyledRosterSubHeaderRow } from '../widgets/RosterSubHeaderRow';
@@ -9,12 +9,18 @@ import { MissionPlannerActions } from './MissionPlannerActions';
 import { MissionPlannerRosterRow, StyledMissionPlannerRosterRow } from './MissionPlannerRosterRow';
 import { StyledNotification } from '../widgets/Notification';
 import { EmptyNotification } from './models/MissionPlannerRosterList';
+import { MemoryRouter } from 'react-router';
+import { Provider } from 'mobx-react';
 
 describe('MissionPlannerRoster', () => {
   let airman: AirmanModel;
   let missionPlannerStore: any;
+  let skillsFieldStore: any;
   let crewStore: any;
   let subject: ReactWrapper;
+  let locationFilterStore: any;
+  let rosterHeaderStore: any;
+  let missionPlannerActions: any;
 
   beforeEach(async () => {
     const crew = CrewModelFactory.build();
@@ -27,34 +33,44 @@ describe('MissionPlannerRoster', () => {
       refreshAllEvents: jest.fn()
     };
 
+    skillsFieldStore = {
+      isCloseToExpiration: () => false,
+      isExpired: () => false
+    };
+
     crewStore = {
       crew: crew,
       setNewEntry: jest.fn(),
       save: jest.fn()
     };
 
-    const locationFilterStore: any = {
+    locationFilterStore = {
       filterAirmen: (airmen: AirmanModel[]) => airmen
     };
 
-    const rosterHeaderStore: any = {
+    rosterHeaderStore = {
       filterAirmen: (airmen: AirmanModel[]) => airmen
     };
 
-    const missionPlannerActions = new MissionPlannerActions({
+    missionPlannerActions = new MissionPlannerActions({
       missionPlannerStore,
       crewStore,
       locationFilterStore
     });
 
     subject = mount(
-      <MissionPlannerRoster
-        missionPlannerStore={missionPlannerStore}
-        crewStore={crewStore}
-        locationFilterStore={locationFilterStore}
-        rosterHeaderStore={rosterHeaderStore}
-        missionPlannerActions={missionPlannerActions}
-      />
+            <MemoryRouter>
+              <Provider
+                        skillsFieldStore={skillsFieldStore}
+                        missionPlannerStore={missionPlannerStore}
+                        crewStore={crewStore}
+                        locationFilterStore={locationFilterStore}
+                        rosterHeaderStore={rosterHeaderStore}
+                        missionPlannerActions={missionPlannerActions}
+              >
+                <StyledMissionPlannerRoster/>
+              </Provider>
+              </MemoryRouter>
     );
   });
 
@@ -70,11 +86,22 @@ describe('MissionPlannerRoster', () => {
     missionPlannerStore.availableAirmen = [];
     missionPlannerStore.unavailableAirmen = [];
 
-    subject.instance().forceUpdate();
-    subject.update();
-
-    expect(subject.find(StyledNotification).at(0).text()).toContain(EmptyNotification.NoneAvailable().text);
-    expect(subject.find(StyledNotification).at(1).text()).toContain(EmptyNotification.NoneAssigned().text);
+    const updatedSubject = mount(
+      <MemoryRouter>
+        <Provider
+          skillsFieldStore={skillsFieldStore}
+          missionPlannerStore={missionPlannerStore}
+          crewStore={crewStore}
+          locationFilterStore={locationFilterStore}
+          rosterHeaderStore={rosterHeaderStore}
+          missionPlannerActions={missionPlannerActions}
+        >
+          <StyledMissionPlannerRoster/>
+        </Provider>
+      </MemoryRouter>
+    );
+    expect(updatedSubject.find(StyledNotification).at(0).text()).toContain(EmptyNotification.NoneAvailable().text);
+    expect(updatedSubject.find(StyledNotification).at(1).text()).toContain(EmptyNotification.NoneAssigned().text);
   });
 
   it('should render the available sub header before the unavailable', () => {

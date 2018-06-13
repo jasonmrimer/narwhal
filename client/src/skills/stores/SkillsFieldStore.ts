@@ -9,7 +9,7 @@ export class SkillsFieldStore {
       currentDate = moment();
     }
     return !this.isExpired(expirationDate, currentDate) &&
-    expirationDate.isBefore(currentDate.add(14, 'days'));
+    expirationDate.isBefore(currentDate.clone().add(14, 'days'));
   }
 
   isExpired(expirationDate: Moment, currentDate?: Moment | undefined) {

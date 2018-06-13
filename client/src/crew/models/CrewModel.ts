@@ -12,6 +12,10 @@ export class CrewModel {
     this.crewPositions = crewPositions;
   }
 
+  get missionDate() {
+    return this.mission.startDateTime;
+  }
+
   hasAirman(airman: AirmanModel) {
     return this.crewPositions.filter(cp => cp.airman.id === airman.id).length >= 1;
   }

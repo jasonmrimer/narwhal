@@ -1,16 +1,18 @@
 import * as React from 'react';
-import { formatAttributes } from '../utils/StyleUtils';
 import { AirmanModel } from '../airman/models/AirmanModel';
 import styled from 'styled-components';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { cache } from './MissionPlannerRoster';
 import { CellMeasurer } from 'react-virtualized';
 import { ShiftDisplay } from '../roster/ShiftDisplay';
 import * as classNames from 'classnames';
 import { PlusIcon } from '../icons/PlusIcon';
+import { StyledSkillsField } from '../skills/SkillsField';
+import { Moment } from 'moment';
 
 interface Props {
   airman: AirmanModel;
+  missionDate: Moment;
   onCrew: boolean;
   style: object;
   index: number;
@@ -21,7 +23,7 @@ interface Props {
 }
 
 export const MissionPlannerRosterRow = observer((props: Props) => {
-  const {airman, className} = props;
+  const {airman, className, missionDate} = props;
   return (
     <CellMeasurer
       cache={cache}
@@ -37,15 +39,25 @@ export const MissionPlannerRosterRow = observer((props: Props) => {
             {!props.onCrew && <PlusIcon/>}
             <span>{`${airman.lastName}, ${airman.firstName}`}</span>
           </span>
-          <span className="airman-qual">{formatAttributes(airman.qualifications, 'acronym')}</span>
-          <span className="airman-cert">{formatAttributes(airman.certifications, 'title')}</span>
+          <span className="airman-qual">
+            <StyledSkillsField
+              items={airman.qualifications}
+              currencyDate={missionDate}
+            />
+          </span>
+          <span className="airman-cert">
+            <StyledSkillsField
+              items={airman.certifications}
+              currencyDate={missionDate}
+            />
+          </span>
         </div>
       </div>
     </CellMeasurer>
   );
 });
 
-export const StyledMissionPlannerRosterRow = styled(MissionPlannerRosterRow)`
+export const StyledMissionPlannerRosterRow = inject('skillsFieldStore')(styled(MissionPlannerRosterRow)`
   .clickable {
     cursor: pointer;
     
@@ -91,4 +103,4 @@ export const StyledMissionPlannerRosterRow = styled(MissionPlannerRosterRow)`
   .airman-shift {
     width: 5rem;
   }
-`;
+`);

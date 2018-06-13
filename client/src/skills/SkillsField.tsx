@@ -4,9 +4,11 @@ import { inject, observer } from 'mobx-react';
 import styled from 'styled-components';
 import { SkillModel } from '../airman/models/SkillModel';
 import * as classNames from 'classnames';
+import { Moment } from 'moment';
 
 interface Props {
   skillsFieldStore?: SkillsFieldStore;
+  currencyDate?: Moment;
   items: SkillModel[];
   className?: string;
 }
@@ -22,8 +24,13 @@ export class SkillsField extends React.Component<Props> {
               <span className="skill" key={index}>
                 <span
                   className={classNames({
-                    closeExpiration: this.props.skillsFieldStore!.isCloseToExpiration(item.expirationDate),
-                    expired: this.props.skillsFieldStore!.isExpired(item.expirationDate)
+                    closeExpiration: this.props.skillsFieldStore!.isCloseToExpiration(
+                      item.expirationDate,
+                      this.props.currencyDate),
+                    expired: this.props.skillsFieldStore!.isExpired(
+                      item.expirationDate,
+                      this.props.currencyDate
+                    )
                   })}
                 >
                   {item.displayText}
