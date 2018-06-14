@@ -6,6 +6,7 @@ import mil.af.us.narwhal.airman.AirmanController;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
 import mil.af.us.narwhal.squadron.Squadron;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,11 @@ public class FlightControllerTest extends BaseIntegrationTest {
     flight = new Flight(squadron, "flight");
     squadron.addFlight(flight);
     siteRepository.save(asList(site));
+  }
+
+  @After
+  public void tearDown() {
+    super.tearDown();
   }
 
   @Test
