@@ -10,4 +10,5 @@ export interface TimeService {
   decrementTimeSpanByDay(timeSpan: Moment[]): Moment[];
   decrementWeek(week: Moment[]): Moment[];
   navigateToWeek(date: Moment): Moment[];
+  navigateToTimeSpan(date: Moment): Moment[];
 }

@@ -20,10 +20,10 @@ import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 import { makeFakeProfile } from '../utils/testUtils';
 import { adminAbility } from '../app/abilities';
-import { SkillsFieldStore } from "../skills/stores/SkillsFieldStore";
-import { Theme } from "../themes/default";
-import { ThemeProvider } from "styled-components";
-import { MemoryRouter } from "react-router";
+import { SkillsFieldStore } from '../skills/stores/SkillsFieldStore';
+import { Theme } from '../themes/default';
+import { ThemeProvider } from 'styled-components';
+import { MemoryRouter } from 'react-router';
 
 describe('Roster', () => {
   let trackerStore: TrackerStore;
@@ -42,7 +42,7 @@ describe('Roster', () => {
       subject = mount(
         <ThemeProvider theme={Theme}>
           <MemoryRouter>
-        <Provider skillsFieldStore={skillsFieldStore }>
+        <Provider skillsFieldStore={skillsFieldStore}>
         <Roster
           trackerStore={trackerStore}
           rosterHeaderStore={rosterHeaderStore}

@@ -13,7 +13,7 @@ describe('PlannerHeader', () => {
 
   beforeEach(() => {
     plannerStore = new PlannerStore(new TimeServiceStub());
-    plannerStore.navigateToPlannerWeek = jest.fn();
+    plannerStore.navigateToPlannerTimeSpan = jest.fn();
 
     subject = shallow(<PlannerHeader plannerStore={plannerStore}/>);
   });
@@ -29,10 +29,10 @@ describe('PlannerHeader', () => {
     expect(subject.find(DatePickerIcon).exists()).toBeTruthy();
   });
 
-  it('should handle a calendar change to navigate the planner week', () => {
+  it('should handle a calendar change to navigate the planner time span', () => {
     const selectedDate = moment();
     subject.find(StyledDatePicker).simulate('change', {target: {name: '', value: selectedDate}});
-    expect(plannerStore.navigateToPlannerWeek).toHaveBeenCalledWith(selectedDate);
+    expect(plannerStore.navigateToPlannerTimeSpan).toHaveBeenCalledWith(selectedDate);
   });
 
   it('should set the calendar calendarFocus state', () => {

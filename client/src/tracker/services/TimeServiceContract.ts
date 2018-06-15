@@ -22,7 +22,7 @@ export function TimeServiceContract(subject: TimeService) {
       timeSpan.forEach((day) => {
         expect(moment.isMoment(day)).toBeTruthy();
         expect(day).toBeTruthy();
-      })
+      });
     });
   });
 
@@ -67,6 +67,14 @@ export function TimeServiceContract(subject: TimeService) {
       const week = subject.navigateToWeek(date);
       const startOfWeek = date.clone().startOf('week');
       expect(week[0].isSame(startOfWeek)).toBeTruthy();
+    });
+
+    it('should navigate to a time span that starts on a date', () => {
+      const date = moment();
+      const timeSpan = subject.navigateToTimeSpan(date);
+      const startOfTimeSpan = date.clone().startOf('week');
+      expect(timeSpan[0].isSame(startOfTimeSpan)).toBeTruthy();
+      expect(timeSpan[13].isSame(startOfTimeSpan.add(13, 'days').endOf('day'))).toBeTruthy();
     });
   });
 }

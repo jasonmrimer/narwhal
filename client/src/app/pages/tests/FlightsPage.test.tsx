@@ -33,7 +33,8 @@ describe('FlightsPage', () => {
         <Provider
           profileStore={profileStore}
           siteManagerStore={siteManagerStore}
-          topBarActions={topBarActions}>
+          topBarActions={topBarActions}
+        >
           <FlightsPage repositories={DoubleRepositories}/>
         </Provider>
       </MemoryRouter>

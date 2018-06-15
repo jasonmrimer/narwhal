@@ -39,7 +39,11 @@ export class TrackerPage extends React.Component<Props> {
 
       const [airmen, events, certifications, qualifications, missions, sites] = await Promise.all([
         WebRepositories.airmanRepository.findBySiteId(siteId),
-        WebRepositories.eventRepository.findAllBySiteIdAndWithinPeriod(siteId, timeSpan[0], timeSpan[timeSpan.length -1]),
+        WebRepositories.eventRepository.findAllBySiteIdAndWithinPeriod(
+          siteId,
+          timeSpan[0],
+          timeSpan[timeSpan.length - 1]
+        ),
         WebRepositories.certificationRepository.findAllCertifications(),
         WebRepositories.qualificationRepository.findAllQualifications(),
         WebRepositories.missionRepository.findAll(),

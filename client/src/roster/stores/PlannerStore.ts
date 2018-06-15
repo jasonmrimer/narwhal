@@ -34,11 +34,20 @@ export class PlannerStore {
   @action.bound
   incrementPlannerTimeSpan() {
     this._plannerTimeSpan = this.timeService.incrementTimeSpanByDay(this.plannerTimeSpan);
+    this.setPlannerWeek(this._plannerTimeSpan);
   }
 
   @action.bound
   decrementPlannerTimeSpan() {
     this._plannerTimeSpan = this.timeService.decrementTimeSpanByDay(this.plannerTimeSpan);
+    this.setPlannerWeek(this._plannerTimeSpan);
+  }
+
+  @action.bound
+  setPlannerWeek(timeSpan: Moment[]) {
+    timeSpan.slice(0, 7);
+    timeSpan[6] = timeSpan[6].endOf('day');
+    this._plannerWeek = timeSpan;
   }
 
   @action.bound
@@ -64,6 +73,12 @@ export class PlannerStore {
   @action.bound
   navigateToPlannerWeek(date: Moment) {
     this._plannerWeek = this.timeService.navigateToWeek(date);
+  }
+
+  @action.bound
+  navigateToPlannerTimeSpan(date: Moment) {
+    this._plannerTimeSpan = this.timeService.navigateToTimeSpan(date);
+    this.setPlannerWeek(this._plannerTimeSpan);
   }
 
   @action.bound

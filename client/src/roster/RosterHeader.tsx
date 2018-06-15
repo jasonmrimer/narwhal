@@ -56,7 +56,7 @@ export class RosterHeader extends React.Component<Props> {
           />
         </span>
         <span>
-          <div className={classNames("header-column-title", "name-header")}>NAME</div>
+          <div className={classNames('header-column-title', 'name-header')}>NAME</div>
           <StyledTextInput
             value={selectedLastName}
             name="last-name"

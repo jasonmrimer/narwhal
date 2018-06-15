@@ -3,7 +3,7 @@ import * as moment from 'moment';
 import { Moment } from 'moment';
 
 describe('SkillsFieldStore', () => {
-  let subject: SkillsFieldStore
+  let subject: SkillsFieldStore;
   let expires: Moment;
   let afterExpiration: Moment;
   beforeEach(() => {

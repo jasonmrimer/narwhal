@@ -10,8 +10,8 @@ import { AvailabilityStore } from '../availability/stores/AvailabilityStore';
 import { PlannerActions } from './PlannerActions';
 import { StyledDatePicker } from '../widgets/inputs/DatePicker';
 import { DatePickerIcon } from './DatePickerIcon';
-import { PlannerNavBackIcon } from "../icons/PlannerNavBackIcon";
-import { PlannerNavNextIcon } from "../icons/PlannerNavNextIcon";
+import { PlannerNavBackIcon } from '../icons/PlannerNavBackIcon';
+import { PlannerNavNextIcon } from '../icons/PlannerNavNextIcon';
 
 interface Props {
   plannerStore?: PlannerStore;
@@ -45,7 +45,7 @@ export class PlannerHeader extends React.Component<Props> {
   }
 
   handleDateChange = (event: any) => {
-    this.props.plannerStore!.navigateToPlannerWeek(moment(event.target.value));
+    this.props.plannerStore!.navigateToPlannerTimeSpan(moment(event.target.value));
   }
 
   render() {
@@ -64,7 +64,7 @@ export class PlannerHeader extends React.Component<Props> {
                   {plannerStore!.plannerTimeSpan[0].format('MMMM YYYY').toUpperCase()}
                 </span>
                 <DatePickerIcon fill="#fff"/>
-              </span>
+            </span>
               <StyledDatePicker
                 value=""
                 onChange={this.handleDateChange}

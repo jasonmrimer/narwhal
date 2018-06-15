@@ -65,6 +65,11 @@ export class TimeServiceStub implements TimeService {
     return this.createWeek(sunday);
   }
 
+  navigateToTimeSpan(date: Moment) {
+    const sunday = date.clone().startOf('week');
+    return this.createTimeSpan(sunday);
+  }
+
   createWeek(startOfWeek: Moment) {
     return [
       startOfWeek,

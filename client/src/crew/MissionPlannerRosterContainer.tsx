@@ -2,7 +2,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import { StyledMissionPlannerRoster } from './MissionPlannerRoster';
-import { StyledRosterHeader } from '../roster/RosterHeader';
+import { StyledMissionPlannerRosterHeader } from './MissionPlannerRosterHeader';
 
 interface Props {
   className?: string;
@@ -15,7 +15,7 @@ export class MissionPlannerRosterContainer extends React.Component<Props> {
       <div className={this.props.className}>
         <div className="header-top"/>
         <div className="roster-header">
-          <StyledRosterHeader/>
+          <StyledMissionPlannerRosterHeader/>
         </div>
         <StyledMissionPlannerRoster/>
       </div>

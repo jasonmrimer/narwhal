@@ -1,6 +1,6 @@
 import * as moment from 'moment';
-import {TimeServiceStub} from '../../tracker/services/doubles/TimeServiceStub';
-import {PlannerStore} from './PlannerStore';
+import { TimeServiceStub } from '../../tracker/services/doubles/TimeServiceStub';
+import { PlannerStore } from './PlannerStore';
 
 describe('PlannerStore', () => {
   let subject: PlannerStore;
@@ -46,19 +46,31 @@ describe('PlannerStore', () => {
     expect(subject.plannerTimeSpan[13].isSame(moment('2017-12-09').endOf('day'))).toBeTruthy();
   });
 
-  it('should increment time span by one day', () => {
+  it('should increment time span by one day and set planner week', () => {
     expect(subject.plannerTimeSpan[0].isSame(moment('2017-11-26'))).toBeTruthy();
     expect(subject.plannerTimeSpan[13].isSame(moment('2017-12-09').endOf('day'))).toBeTruthy();
     subject.incrementPlannerTimeSpan();
     expect(subject.plannerTimeSpan[0].isSame(moment('2017-11-27'))).toBeTruthy();
+    expect(subject.plannerWeek[0].isSame(moment('2017-11-27'))).toBeTruthy();
+    expect(subject.plannerWeek[6].isSame(moment('2017-12-03').endOf('day'))).toBeTruthy();
     expect(subject.plannerTimeSpan[13].isSame(moment('2017-12-10').endOf('day'))).toBeTruthy();
   });
 
-  it('should decrement time span by one day', () => {
+  it('should decrement time span by one day and set planner week', () => {
     expect(subject.plannerTimeSpan[0].isSame(moment('2017-11-26'))).toBeTruthy();
     expect(subject.plannerTimeSpan[13].isSame(moment('2017-12-09').endOf('day'))).toBeTruthy();
     subject.decrementPlannerTimeSpan();
     expect(subject.plannerTimeSpan[0].isSame(moment('2017-11-25'))).toBeTruthy();
+    expect(subject.plannerWeek[0].isSame(moment('2017-11-25'))).toBeTruthy();
+    expect(subject.plannerWeek[6].isSame(moment('2017-12-01').endOf('day'))).toBeTruthy();
     expect(subject.plannerTimeSpan[13].isSame(moment('2017-12-08').endOf('day'))).toBeTruthy();
+  });
+
+  it('should navigate to a time span', () => {
+    const date = moment('2017-12-31').startOf('day');
+    subject.navigateToPlannerTimeSpan(date);
+    expect(subject.plannerTimeSpan[0]).toEqual(date);
+    expect(subject.plannerWeek[0]).toEqual(date);
+    expect(subject.plannerTimeSpan[13]).toEqual(date.clone().add(13, 'days').endOf('day'));
   });
 });
