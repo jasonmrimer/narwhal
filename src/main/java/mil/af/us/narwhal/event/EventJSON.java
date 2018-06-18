@@ -34,6 +34,9 @@ public class EventJSON {
   @Enumerated(EnumType.STRING)
   private EventType type;
 
+  @Enumerated(EnumType.STRING)
+  private EventStatus status;
+
   @NotNull(message = emptyFieldMessage)
   private Long airmanId;
 

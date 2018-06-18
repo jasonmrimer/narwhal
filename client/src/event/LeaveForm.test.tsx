@@ -3,7 +3,7 @@ import * as moment from 'moment';
 import { mount, shallow, ShallowWrapper } from 'enzyme';
 import { LeaveForm } from './LeaveForm';
 import { LeaveFormStore } from './stores/LeaveFormStore';
-import { eventStub } from '../utils/testUtils';
+import { eventStub, makeFakeProfile } from '../utils/testUtils';
 import { StyledTextInput } from '../widgets/inputs/TextInput';
 import { StyledDatePicker } from '../widgets/inputs/DatePicker';
 import { StyledTimeInput } from '../widgets/inputs/TimeInput';
@@ -14,10 +14,14 @@ import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { DoubleRepositories } from '../utils/Repositories';
 import { StyledEventCreationInfo } from '../widgets/EventCreationInfo';
+import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
+import { readerAbility } from '../app/abilities';
+import { StyledSubmitButton } from '../widgets/forms/SubmitButton';
 
 /* tslint:disable:no-empty*/
 describe('LeaveForm', () => {
   let store: LeaveFormStore;
+  let profileStore: ProfileSitePickerStore;
   let wrapper: ShallowWrapper;
   let subject: LeaveForm;
   let trackerStore: TrackerStore;
@@ -29,6 +33,11 @@ describe('LeaveForm', () => {
       handleDeleteEvent: jest.fn(),
     };
     store = new LeaveFormStore(new TimeServiceStub());
+    profileStore = new ProfileSitePickerStore(DoubleRepositories);
+    profileStore.hydrate(
+      [],
+      makeFakeProfile('READER', readerAbility)
+    );
 
     trackerStore = new TrackerStore(DoubleRepositories);
     wrapper = shallow(
@@ -36,6 +45,7 @@ describe('LeaveForm', () => {
         airmanId={123}
         leaveFormStore={store}
         trackerStore={trackerStore}
+        profileStore={profileStore}
         eventActions={eventActions}
         event={null}
       />
@@ -109,12 +119,17 @@ describe('LeaveForm', () => {
         airmanId={123}
         leaveFormStore={store}
         trackerStore={trackerStore}
+        profileStore={profileStore}
         eventActions={eventActions}
         event={event}
       />
     );
 
     expect(mountedWrapper.find(StyledEventCreationInfo).exists()).toBeTruthy();
+  });
+
+  it('should render a submit request button', () => {
+    expect(wrapper.find(StyledSubmitButton).prop('text')).toBe('SUBMIT REQUEST');
   });
 });
 

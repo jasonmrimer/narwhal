@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { EventModel, EventType } from '../event/models/EventModel';
+import { EventModel, EventStatus, EventType } from '../event/models/EventModel';
 import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
@@ -15,7 +15,13 @@ export const AvailabilityTile = observer((props: Props) => {
   return (
     <div className={props.className} onClick={() => props.editEvent(props.event)}>
       <div className="event-title">
+        {
+          props.event.status === EventStatus.Pending &&
+            <span className="event-status">[PENDING]</span>
+        }
+
         <span>{props.event.title}</span>
+
         {
           props.event.type === EventType.Mission &&
           <Link to={`/dashboard/crew/${props.event.id}`} className="mission-list">
@@ -40,7 +46,6 @@ export const StyledAvailabilityTile = styled(AvailabilityTile)`
   
   & > div {
     display: flex;
-    justify-content: space-between;
     padding: 0.35rem;
   }
     
@@ -49,8 +54,13 @@ export const StyledAvailabilityTile = styled(AvailabilityTile)`
     border-radius: 0.25rem 0.25rem 0 0;
   }
   
+  .event-status {
+    padding-right: 0.5rem;
+  }
+  
   .event-description {
     background: ${props => props.theme.lighter};
+    justify-content: space-between;
     font-size: 12px;
   }
   

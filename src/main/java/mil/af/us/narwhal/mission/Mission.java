@@ -11,6 +11,7 @@ import mil.af.us.narwhal.airman.Airman;
 import mil.af.us.narwhal.crew.CrewJSON;
 import mil.af.us.narwhal.crew.CrewPosition;
 import mil.af.us.narwhal.event.Event;
+import mil.af.us.narwhal.event.EventStatus;
 import mil.af.us.narwhal.event.EventType;
 import mil.af.us.narwhal.site.Site;
 
@@ -119,6 +120,7 @@ public class Mission {
       this.getStartDateTime(),
       this.getEndDateTime(),
       EventType.MISSION,
+      EventStatus.APPROVED,
       airman,
       null,
       null

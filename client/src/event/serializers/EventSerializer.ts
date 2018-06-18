@@ -16,6 +16,7 @@ export class EventSerializer implements Serializer<EventModel> {
       item.airmanId,
       item.type,
       item.id,
+      item.status,
       item.createdBy,
       moment(item.createdOn)
     );

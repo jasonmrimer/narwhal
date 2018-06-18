@@ -3,6 +3,7 @@ package mil.af.us.narwhal.crew;
 import mil.af.us.narwhal.airman.Airman;
 import mil.af.us.narwhal.airman.AirmanRepository;
 import mil.af.us.narwhal.event.EventJSON;
+import mil.af.us.narwhal.event.EventStatus;
 import mil.af.us.narwhal.event.EventType;
 import mil.af.us.narwhal.mission.Mission;
 import mil.af.us.narwhal.mission.MissionRepository;
@@ -51,6 +52,7 @@ public class CrewServiceTest {
       mission.getStartDateTime(),
       mission.getEndDateTime(),
       EventType.MISSION,
+      EventStatus.APPROVED,
       airman.getId()
     );
 

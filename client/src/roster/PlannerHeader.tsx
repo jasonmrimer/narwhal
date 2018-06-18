@@ -63,7 +63,7 @@ export class PlannerHeader extends React.Component<Props> {
                 <span>
                   {plannerStore!.plannerTimeSpan[0].format('MMMM YYYY').toUpperCase()}
                 </span>
-                <DatePickerIcon fill="#fff"/>
+              <DatePickerIcon fill="#fff"/>
             </span>
               <StyledDatePicker
                 value=""

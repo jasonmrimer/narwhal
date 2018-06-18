@@ -39,6 +39,9 @@ public class Event {
   @Enumerated(EnumType.STRING)
   private EventType type;
 
+  @Enumerated(EnumType.STRING)
+  private EventStatus status;
+
   @NotNull(message = emptyFieldMessage)
   @ManyToOne
   @JoinColumn(name = "airman_id", referencedColumnName = "id", nullable = false)
@@ -57,6 +60,7 @@ public class Event {
       json.getStartTime(),
       json.getEndTime(),
       json.getType(),
+      json.getStatus(),
       airman,
       null,
       null
@@ -77,9 +81,10 @@ public class Event {
     Instant startTime,
     Instant endTime,
     EventType eventType,
+    EventStatus eventStatus,
     Airman airman
   ) {
-    this(null, title, description, startTime, endTime, eventType, airman, null, null);
+    this(null, title, description, startTime, endTime, eventType, eventStatus, airman, null, null);
   }
 
   @JsonProperty

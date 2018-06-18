@@ -7,6 +7,11 @@ export enum EventType {
   TDY_DEPLOYMENT = 'TDY_DEPLOYMENT'
 }
 
+export enum EventStatus {
+  Pending = 'PENDING',
+  Approved = 'APPROVED',
+}
+
 export class EventModel {
   constructor(public title: string,
               public description: string,
@@ -15,6 +20,7 @@ export class EventModel {
               public airmanId: number,
               public type: EventType = EventType.Mission,
               public id: number | null = null,
+              public status: EventStatus | null = null,
               public createdBy: string | null = null,
               public createdOn: Moment | null = null) {
   }

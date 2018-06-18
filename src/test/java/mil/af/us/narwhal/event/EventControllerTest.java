@@ -74,6 +74,7 @@ public class EventControllerTest extends BaseIntegrationTest {
       Instant.now(),
       Instant.now(),
       EventType.APPOINTMENT,
+      EventStatus.APPROVED,
       airman
     );
 
@@ -105,6 +106,7 @@ public class EventControllerTest extends BaseIntegrationTest {
       null,
       null,
       EventType.APPOINTMENT,
+      EventStatus.APPROVED,
       airman
     );
 
@@ -135,6 +137,7 @@ public class EventControllerTest extends BaseIntegrationTest {
       now,
       now.minusSeconds(100),
       EventType.APPOINTMENT,
+      EventStatus.APPROVED,
       airman
     );
 
@@ -164,6 +167,7 @@ public class EventControllerTest extends BaseIntegrationTest {
       Instant.now(),
       Instant.now(),
       EventType.APPOINTMENT,
+      EventStatus.APPROVED,
       airman
     );
     existingEvent = eventRepository.save(existingEvent);
@@ -193,6 +197,7 @@ public class EventControllerTest extends BaseIntegrationTest {
       Instant.now(),
       Instant.now(),
       EventType.APPOINTMENT,
+      EventStatus.APPROVED,
       airman
     );
     event = eventRepository.save(event);
@@ -224,6 +229,7 @@ public class EventControllerTest extends BaseIntegrationTest {
       start,
       start,
       EventType.APPOINTMENT,
+      EventStatus.APPROVED,
       airman
     );
     final Event event2 = new Event(
@@ -232,6 +238,7 @@ public class EventControllerTest extends BaseIntegrationTest {
       start.minus(30, ChronoUnit.DAYS),
       start.minus(30, ChronoUnit.DAYS),
       EventType.APPOINTMENT,
+      EventStatus.APPROVED,
       airman
     );
     final Event event3 = new Event(
@@ -240,6 +247,7 @@ public class EventControllerTest extends BaseIntegrationTest {
       start,
       start,
       EventType.APPOINTMENT,
+      EventStatus.APPROVED,
       airman3
     );
     eventRepository.save(asList(event1, event2, event3));
@@ -275,14 +283,17 @@ public class EventControllerTest extends BaseIntegrationTest {
       start,
       start,
       EventType.APPOINTMENT,
+      EventStatus.APPROVED,
       airman2
     );
+
     final Event event2 = new Event(
       "New Event",
       "New Description",
       start.minus(30, ChronoUnit.DAYS),
       start.minus(30, ChronoUnit.DAYS),
       EventType.APPOINTMENT,
+      EventStatus.PENDING,
       airman
     );
     eventRepository.save(asList(event1, event2));
@@ -305,7 +316,8 @@ public class EventControllerTest extends BaseIntegrationTest {
     .then()
       .statusCode(200)
       .body("$.size()", equalTo(1))
-      .body("id", hasItem(event1.getId().intValue()));
+      .body("id", hasItem(event1.getId().intValue()))
+      .body("status", hasItem(event1.getStatus().toString()));
     // @formatter:on
   }
 }

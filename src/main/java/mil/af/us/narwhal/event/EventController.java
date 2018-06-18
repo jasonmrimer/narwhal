@@ -1,6 +1,7 @@
 package mil.af.us.narwhal.event;
 
 import mil.af.us.narwhal.profile.Profile;
+import mil.af.us.narwhal.profile.RoleName;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,6 +24,12 @@ public class EventController {
 
   @PostMapping
   public Event create(@Valid @RequestBody EventJSON json, @AuthenticationPrincipal Profile profile) {
+    if (profile.getRole().getName() == RoleName.READER) {
+      json.setStatus(EventStatus.PENDING);
+    } else {
+      json.setStatus(EventStatus.APPROVED);
+    }
+
     if (json.getType().equals(EventType.APPOINTMENT)) {
       return service.createAppointment(json, profile);
     } else if (json.getType().equals(EventType.LEAVE)) {

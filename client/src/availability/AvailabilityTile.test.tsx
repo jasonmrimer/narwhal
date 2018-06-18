@@ -1,4 +1,4 @@
-import { EventModel, EventType } from '../event/models/EventModel';
+import { EventModel, EventStatus, EventType } from '../event/models/EventModel';
 import * as moment from 'moment';
 import { shallow, ShallowWrapper } from 'enzyme';
 import * as React from 'react';
@@ -10,7 +10,16 @@ describe('AvailabilityTile', () => {
   const editEventSpy = jest.fn();
   const startTime = moment('2017-11-22');
   const endTime = moment('2017-11-22');
-  const event = new EventModel('XYZTEST-MISSION-1', '', startTime, endTime, 1, EventType.Mission, 1);
+  const event = new EventModel(
+    'XYZTEST-MISSION-1',
+    '',
+    startTime,
+    endTime,
+    1,
+    EventType.Mission,
+    1,
+    EventStatus.Pending,
+  );
 
   beforeEach(() => {
     subject = shallow(
@@ -33,5 +42,9 @@ describe('AvailabilityTile', () => {
   it('renders a button that links to the missions crew if the event is a mission', () => {
     expect(subject.find(Link).exists()).toBeTruthy();
     expect(subject.find(Link).prop('to')).toBe(`/dashboard/crew/${event.id}`);
+  });
+
+  it('should render event status', () => {
+    expect(subject.text()).toContain('[PENDING]');
   });
 });

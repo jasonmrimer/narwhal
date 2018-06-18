@@ -14,9 +14,11 @@ import { EventModel } from './models/EventModel';
 import { EventActions } from './EventActions';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { StyledEventCreationInfo } from '../widgets/EventCreationInfo';
+import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 
 interface Props {
   appointmentFormStore?: AppointmentFormStore;
+  profileStore?: ProfileSitePickerStore;
   trackerStore?: TrackerStore;
   eventActions?: EventActions;
   airmanId: number;
@@ -108,7 +110,11 @@ export class AppointmentForm extends React.Component<Props> {
         }
 
         <StyledFormRow reversed={true}>
-          <StyledSubmitButton text="CONFIRM"/>
+          {
+          this.props.profileStore!.profile!.roleName === 'READER' ?
+            <StyledSubmitButton text="SUBMIT REQUEST"/> :
+            <StyledSubmitButton text="CONFIRM"/>
+          }
           {
             hasModel &&
             <StyledButton
@@ -126,7 +132,8 @@ export class AppointmentForm extends React.Component<Props> {
 export const StyledAppointmentForm = inject(
   'appointmentFormStore',
   'trackerStore',
-  'eventActions'
+  'eventActions',
+  'profileStore'
 )(styled(AppointmentForm)`
   min-width: ${props => props.theme.sidePanelWidth};
 `);

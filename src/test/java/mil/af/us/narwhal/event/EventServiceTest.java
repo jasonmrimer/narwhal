@@ -37,6 +37,7 @@ public class EventServiceTest {
       Instant.now(),
       Instant.now(),
       EventType.APPOINTMENT,
+      EventStatus.APPROVED,
       456L
     );
 
@@ -72,6 +73,7 @@ public class EventServiceTest {
       Instant.now(),
       Instant.now(),
       EventType.APPOINTMENT,
+      EventStatus.APPROVED,
       456L
     );
 

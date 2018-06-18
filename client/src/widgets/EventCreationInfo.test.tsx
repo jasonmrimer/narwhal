@@ -1,5 +1,5 @@
 import { shallow, ShallowWrapper } from 'enzyme';
-import { EventModel, EventType } from '../event/models/EventModel';
+import { EventModel, EventStatus, EventType } from '../event/models/EventModel';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 import { EventCreationInfo } from './EventCreationInfo';
@@ -12,7 +12,18 @@ describe('EventCreationInfo', () => {
 
   beforeEach(() => {
     time = moment();
-    event = new EventModel('test', '', moment(), moment(), 123, EventType.Leave, null, 'user', time);
+    event = new EventModel(
+      'test',
+      '',
+      moment(),
+      moment(),
+      123,
+      EventType.Leave,
+      null,
+      EventStatus.Approved,
+      'user',
+      time
+    );
 
     subject = shallow(
       <EventCreationInfo event={event}/>

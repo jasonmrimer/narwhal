@@ -7,17 +7,19 @@ import { StyledDatePicker } from '../widgets/inputs/DatePicker';
 import { StyledTimeInput } from '../widgets/inputs/TimeInput';
 import { StyledSubmitButton } from '../widgets/forms/SubmitButton';
 import { StyledFieldValidation } from '../widgets/inputs/FieldValidation';
-import { StyledButton } from '../widgets/buttons/Button';
 import { StyledForm, StyledFormRow } from '../widgets/forms/Form';
-import { DeleteIcon } from '../icons/DeleteIcon';
 import { EventModel } from './models/EventModel';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { EventActions } from './EventActions';
 import { StyledEventCreationInfo } from '../widgets/EventCreationInfo';
+import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
+import { StyledButton } from '../widgets/buttons/Button';
+import { DeleteIcon } from '../icons/DeleteIcon';
 
 interface Props {
   leaveFormStore?: LeaveFormStore;
   trackerStore?: TrackerStore;
+  profileStore?: ProfileSitePickerStore;
   airmanId: number;
   event: EventModel | null;
   eventActions?: EventActions;
@@ -93,7 +95,11 @@ export class LeaveForm extends React.Component<Props> {
             null
         }
         <StyledFormRow reversed={true}>
-          <StyledSubmitButton text="CONFIRM"/>
+          {
+            this.props.profileStore!.profile!.roleName === 'READER' ?
+              <StyledSubmitButton text="SUBMIT REQUEST"/> :
+              <StyledSubmitButton text="CONFIRM"/>
+          }
           {
             hasModel &&
             <StyledButton
@@ -108,6 +114,11 @@ export class LeaveForm extends React.Component<Props> {
   }
 }
 
-export const StyledLeaveForm = inject('leaveFormStore', 'trackerStore', 'eventActions')(styled(LeaveForm)`
+export const StyledLeaveForm = inject(
+  'leaveFormStore',
+  'trackerStore',
+  'eventActions',
+  'profileStore'
+)(styled(LeaveForm)`
   min-width: ${props => props.theme.sidePanelWidth};
 `);

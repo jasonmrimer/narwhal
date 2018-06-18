@@ -4,11 +4,11 @@ import mil.af.us.narwhal.BaseIntegrationTest;
 import mil.af.us.narwhal.airman.Airman;
 import mil.af.us.narwhal.airman.AirmanRepository;
 import mil.af.us.narwhal.event.EventJSON;
+import mil.af.us.narwhal.event.EventStatus;
 import mil.af.us.narwhal.event.EventType;
 import mil.af.us.narwhal.flight.Flight;
 import mil.af.us.narwhal.mission.Mission;
 import mil.af.us.narwhal.mission.MissionRepository;
-import mil.af.us.narwhal.profile.Profile;
 import mil.af.us.narwhal.profile.ProfileRepository;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
@@ -21,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.time.Instant;
 
 import static io.restassured.RestAssured.given;
-import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -33,7 +32,6 @@ public class CrewControllerTest extends BaseIntegrationTest {
   @Autowired private SiteRepository siteRepository;
   @Autowired private MissionRepository missionRepository;
   @Autowired private AirmanRepository airmanRepository;
-  @Autowired private ProfileRepository profileRepository;
 
   @Before
   public void setUp() {
@@ -89,6 +87,7 @@ public class CrewControllerTest extends BaseIntegrationTest {
       Instant.now(),
       Instant.now(),
       EventType.MISSION,
+      EventStatus.APPROVED,
       airman2.getId()
     );
 

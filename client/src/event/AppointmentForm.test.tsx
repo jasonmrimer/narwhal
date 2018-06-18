@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { mount, shallow, ShallowWrapper } from 'enzyme';
 import { AppointmentForm } from './AppointmentForm';
-import { eventStub } from '../utils/testUtils';
+import { eventStub, makeFakeProfile } from '../utils/testUtils';
 import { StyledTextInput } from '../widgets/inputs/TextInput';
 import { StyledDatePicker } from '../widgets/inputs/DatePicker';
 import { StyledTimeInput } from '../widgets/inputs/TimeInput';
@@ -14,11 +14,15 @@ import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { DoubleRepositories } from '../utils/Repositories';
 import { StyledEventCreationInfo } from '../widgets/EventCreationInfo';
 import * as moment from 'moment';
+import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
+import { readerAbility } from '../app/abilities';
+import { StyledSubmitButton } from '../widgets/forms/SubmitButton';
 
 /* tslint:disable:no-empty*/
 describe('AppointmentForm', () => {
   let trackerStore: TrackerStore;
   let appointmentFormStore: AppointmentFormStore;
+  let profileStore: ProfileSitePickerStore;
   let wrapper: ShallowWrapper;
   let subject: AppointmentForm;
   let eventActions: any;
@@ -31,11 +35,17 @@ describe('AppointmentForm', () => {
 
     trackerStore = new TrackerStore(DoubleRepositories);
     appointmentFormStore = new AppointmentFormStore(new TimeServiceStub());
+    profileStore = new ProfileSitePickerStore(DoubleRepositories);
+    profileStore.hydrate(
+      [],
+      makeFakeProfile('READER', readerAbility)
+      );
 
     wrapper = shallow(
       <AppointmentForm
         airmanId={123}
         appointmentFormStore={appointmentFormStore}
+        profileStore={profileStore}
         trackerStore={trackerStore}
         eventActions={eventActions}
         event={null}
@@ -116,6 +126,7 @@ describe('AppointmentForm', () => {
       <AppointmentForm
         airmanId={123}
         appointmentFormStore={appointmentFormStore}
+        profileStore={profileStore}
         trackerStore={trackerStore}
         eventActions={eventActions}
         event={event}
@@ -123,6 +134,10 @@ describe('AppointmentForm', () => {
     );
 
     expect(mountedWrapper.find(StyledEventCreationInfo).exists()).toBeTruthy();
+  });
+
+  it('should render a submit request button', () => {
+    expect(wrapper.find(StyledSubmitButton).prop('text')).toBe('SUBMIT REQUEST');
   });
 });
 
