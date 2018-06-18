@@ -16,22 +16,28 @@ interface Props {
 @observer
 export class FlightSchedulePopup extends React.Component<Props> {
   render() {
+    const {siteManagerStore, siteManagerActions} = this.props;
+    const {getAirmenByFlightId, pendingFlightId} = siteManagerStore!;
+
     return (
       <StyledPopupModal
         title="Schedule Settings"
         className={this.props.className}
         onCancel={this.props.onCancel}
-        onConfirm={async () => await this.props.siteManagerActions!.saveFlightSchedule()}
+        onConfirm={async () => await siteManagerActions!.saveFlightSchedule()}
       >
         <div className="startDate">
           <div>Schedule Start Date:</div>
           <StyledDatePicker
             name="startDate"
             onChange={(e) => {
-              this.props.siteManagerActions!.setPendingScheduleStartDate(e.target.value);
+              siteManagerActions!.setPendingScheduleStartDate(e.target.value);
             }}
-            value={this.props.siteManagerStore!.pendingScheduleStartDate}
+            value={siteManagerStore!.pendingScheduleStartDate}
           />
+        </div>
+        <div className="flight-count">
+          This change will affect {getAirmenByFlightId(pendingFlightId!).length} operators.
         </div>
       </StyledPopupModal>
     );
@@ -60,6 +66,12 @@ export const StyledFlightSchedulePopup = inject(
     
     .DayPicker, .DayPicker div {
       background: ${props => props.theme.dark}
-    }
+    }    
+  }
+
+  .flight-count {
+    margin: auto;
+    font-weight: 500;
+    padding-bottom: 0.5rem;
   }
 `);

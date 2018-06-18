@@ -4,6 +4,7 @@ import { FlightSchedulePopup } from './FlightSchedulePopup';
 import Mock = jest.Mock;
 import { StyledDatePicker } from '../inputs/DatePicker';
 import * as moment from 'moment';
+import { AirmanModelFactory } from '../../airman/factories/AirmanModelFactory';
 
 describe('FlightSchedulePopup', () => {
   let subject: ShallowWrapper;
@@ -13,7 +14,8 @@ describe('FlightSchedulePopup', () => {
     saveFlightSchedule: jest.fn()
   };
   const siteManagerStore: any = {
-    pendingScheduleStartDate: moment()
+    pendingScheduleStartDate: moment(),
+    getAirmenByFlightId: () => {return AirmanModelFactory.buildList(2)}
   };
 
   beforeEach(() => {
@@ -32,5 +34,9 @@ describe('FlightSchedulePopup', () => {
     expect(datePicker.exists()).toBeTruthy();
     datePicker.simulate('change', {target: {value: 'Some Time'}});
     expect(siteManagerActions.setPendingScheduleStartDate).toHaveBeenCalledWith('Some Time');
+  });
+
+  it('should render number of affected people', () => {
+    expect(subject.find('.flight-count').text()).toBe('This change will affect 2 operators.');
   });
 });
