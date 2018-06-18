@@ -175,4 +175,20 @@ public class ProfileControllerTest extends BaseIntegrationTest {
       .body("roleName", equalTo(writerRole.getName().name()));
     // @formatter:on
   }
+
+  @Test
+  public void deleteProfileTest() {
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .contentType("application/json")
+      .when()
+      .delete(ProfileController.URI + "/me")
+      .then()
+      .statusCode(200);
+    // @formatter:on
+  }
 }

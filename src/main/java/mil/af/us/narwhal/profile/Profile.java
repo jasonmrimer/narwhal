@@ -54,6 +54,12 @@ public class Profile implements UserDetails {
     this.site = site;
   }
 
+  public Profile(String username, Site site, Long squadronId) {
+    this.username = username;
+    this.site = site;
+    this.squadronId = squadronId;
+  }
+
   public Profile(String username, Site site, Role role) {
     this.username = username;
     this.site = site;

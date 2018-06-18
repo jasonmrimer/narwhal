@@ -4,8 +4,8 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import { CrewPositionRow } from './CrewPositionRow';
 import { CrewModelFactory } from './factories/CrewModelFactory';
 import { CrewPositionModel } from './models/CrewPositionModel';
-import Mock = jest.Mock;
 import { StyledCheckbox } from '../widgets/inputs/Checkbox';
+import Mock = jest.Mock;
 
 describe('CrewPostionRow', () => {
   let subject: ShallowWrapper;

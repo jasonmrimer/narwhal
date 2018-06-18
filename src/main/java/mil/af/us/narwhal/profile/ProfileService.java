@@ -72,4 +72,10 @@ public class ProfileService {
 
     return profileRepository.save(profile);
   }
+
+  public void resetSiteAndSquadron(Profile profile) {
+    profile.setSquadronId(null);
+    profile.setSite(null);
+    profileRepository.save(profile);
+  }
 }

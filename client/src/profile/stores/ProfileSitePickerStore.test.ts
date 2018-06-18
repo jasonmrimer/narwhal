@@ -66,4 +66,11 @@ describe('ProfileSitePickerStore', () => {
     subject.setPendingSquadron(squadron);
     expect(subject.pendingSquadron).toBe(squadron);
   });
+
+  it('should reset profile', () => {
+    const resetProfileSpy = jest.fn();
+    DoubleRepositories.profileRepository.resetProfile = resetProfileSpy;
+    subject.resetProfile();
+    expect(resetProfileSpy).toHaveBeenCalled();
+  });
 });

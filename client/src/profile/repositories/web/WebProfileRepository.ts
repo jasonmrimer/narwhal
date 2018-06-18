@@ -30,4 +30,8 @@ export class WebProfileRepository implements ProfileRepository {
   async findAllRoles(): Promise<{ id: number; name: string }[]> {
     return (await this.client.getJSON('api/profiles/roles'));
   }
+
+  async resetProfile(): Promise<void> {
+    return (await this.client.delete('api/profiles/me'));
+  }
 }

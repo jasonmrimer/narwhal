@@ -7,10 +7,12 @@ import { DoubleRepositories } from '../../../utils/Repositories';
 import { readerAbility } from '../../abilities';
 import { MemoryRouter } from 'react-router';
 import { StyledDashboard } from '../../../dashboard/Dashboard';
+import { TopBarActions } from '../../../widgets/TopBarActions';
 
 describe('DashboardPage', () => {
   it('should not render if profile is a reader', () => {
     const profileStore = new ProfileSitePickerStore(DoubleRepositories);
+    const topBarActions = new TopBarActions({profileStore: profileStore});
     const profile = {
       id: 1,
       username: 'Tytus',
@@ -25,7 +27,10 @@ describe('DashboardPage', () => {
 
     const subject = mount(
       <MemoryRouter>
-        <Provider profileStore={profileStore}>
+        <Provider
+          profileStore={profileStore}
+          topBarActions={topBarActions}
+        >
           <DashboardPage/>
         </Provider>
       </MemoryRouter>

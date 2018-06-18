@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import static org.assertj.core.api.Java6Assertions.assertThat;
 
 import static java.util.Collections.emptyList;
 import static org.mockito.Mockito.verify;
@@ -81,6 +82,17 @@ public class ProfileServiceTest {
     subject.update(json);
 
     profile.setRole(updatedRole);
+    verify(profileRepository).save(profile);
+  }
+
+  @Test
+  public void resetSiteAndSquadron(){
+    final Site site = new Site(2L, "Test Site", emptyList());
+    final Profile profile = new Profile("username", site, 1L);
+    subject.resetSiteAndSquadron(profile);
+
+    assertThat(profile.getSite()).isNull();
+    assertThat(profile.getSquadronId()).isNull();
     verify(profileRepository).save(profile);
   }
 }

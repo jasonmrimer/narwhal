@@ -48,6 +48,11 @@ export class ProfileSitePickerStore extends NotificationStore {
     }
   }
 
+  @action.bound
+  async resetProfile() {
+    await this.profileRepository.resetProfile();
+  }
+
   @computed
   get pendingSite() {
     return this._pendingSite;

@@ -1,9 +1,9 @@
 import { shallow, ShallowWrapper } from 'enzyme';
 import { EventModel, EventType } from '../event/models/EventModel';
 import * as moment from 'moment';
+import { Moment } from 'moment';
 import { EventCreationInfo } from './EventCreationInfo';
 import * as React from 'react';
-import { Moment } from 'moment';
 
 describe('EventCreationInfo', () => {
   let subject: ShallowWrapper;

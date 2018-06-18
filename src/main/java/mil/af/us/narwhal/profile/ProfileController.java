@@ -35,9 +35,9 @@ public class ProfileController {
     return profile.toProfileJSON(classified);
   }
 
-  @GetMapping(path = "/roles")
-  public List<Role> getRoles() {
-    return roleRepository.findAll();
+  @DeleteMapping(path = "/me")
+  public void deleteProfile(@AuthenticationPrincipal Profile profile) {
+    this.profileService.resetSiteAndSquadron(profile);
   }
 
   @PutMapping(path = "/me")
@@ -62,5 +62,10 @@ public class ProfileController {
     return profile != null ?
       new ResponseEntity<>(profile.toProfileJSON(classified), HttpStatus.OK) :
       new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+  }
+
+  @GetMapping(path = "/roles")
+  public List<Role> getRoles() {
+    return roleRepository.findAll();
   }
 }

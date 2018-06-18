@@ -4,16 +4,19 @@ import { NavLink } from 'react-router-dom';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 import { inject, observer } from 'mobx-react';
 import { Can } from '@casl/react';
+import { TopBarActions } from './TopBarActions';
+import { ProfileIcon } from '../icons/ProfileIcon';
 
 interface Props {
   profileStore?: ProfileSitePickerStore;
+  topBarActions?: TopBarActions;
   className?: string;
 }
 
 @observer
 export class TopBar extends React.Component<Props> {
   render() {
-    const {profileStore} = this.props;
+    const {profileStore, topBarActions} = this.props;
     return (
       <React.Fragment>
         <div className={this.props.className}>
@@ -50,11 +53,21 @@ export class TopBar extends React.Component<Props> {
               </NavLink>
             </Can>
           </span>
-          <span>
-          {`${profileStore!.profile!.username} (${profileStore!.profile!.roleName})`}
-          </span>
+            <div className="profile">
+                <div className="profilebtn">
+            <span className="name">
+              {`${profileStore!.profile!.username} (${profileStore!.profile!.roleName})`}
+            </span>
+                    <span className="icon">
+              <ProfileIcon/>
+            </span>
+                </div>
+                <div className="profile-content">
+                    <a onClick={() => profileStore!.performLoading(topBarActions!.resetProfile)}>Reset Profile</a>
+                </div>
+            </div>
         </div>
-        <TopBarSpacer/>
+          <TopBarSpacer/>
       </React.Fragment>
     );
   }
@@ -64,7 +77,10 @@ const TopBarSpacer = styled('div')`
   margin-bottom: 9rem;
 `;
 
-export const StyledTopBar = inject('profileStore')(styled(TopBar)`
+export const StyledTopBar = inject(
+  'profileStore',
+  'topBarActions'
+)(styled(TopBar)`
   border-collapse: collapse;
   
   background-color: ${props => props.theme.lighter};
@@ -121,14 +137,20 @@ export const StyledTopBar = inject('profileStore')(styled(TopBar)`
   
   span:first-child {
     font-size: 1.25rem;
-    margin-left: 1.5rem;
   }
   
   span:last-child {
     font-size: 1rem;
-    margin-left: 1rem;
   }
   
+  span:first-child.logo {
+    margin-left: 1.5rem;
+  }
+  
+  span:last-child.logo {
+    margin-left: 1rem;
+  }
+
   .tab {
     display: flex;
     align-items: center;
@@ -141,5 +163,43 @@ export const StyledTopBar = inject('profileStore')(styled(TopBar)`
   
   @media print {
     display: none;
+  }
+  
+  .profile span {
+    margin-right: 0.5rem;
+  }
+  
+  .profilebtn {
+    border: none;
+    background-color: none;
+    padding: 2rem 0;
+  }
+  
+  .profile {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .profile-content {
+    display: none;
+    position: absolute;
+    background-color: ${props => props.theme.darker};
+    border: 1px solid ${props => props.theme.fontColor};
+    min-width: 4rem;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 0.25rem;
+    cursor: pointer;
+  }
+  
+  .profile-content a {
+    color: ${props => props.theme.fontColor};
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+    
+  .profile:hover .profile-content {
+    display: block;
   }
 `);

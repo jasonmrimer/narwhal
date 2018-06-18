@@ -82,4 +82,8 @@ export class ProfileRepositoryStub implements ProfileRepository {
       {id: 3, name: 'READER'}
     ]);
   }
+
+  resetProfile(): Promise<void> {
+    return Promise.resolve();
+  }
 }

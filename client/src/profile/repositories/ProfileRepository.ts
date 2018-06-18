@@ -13,4 +13,6 @@ export interface ProfileRepository {
   save(profile: ProfileModel): Promise<ProfileModel>;
 
   findAllRoles(): Promise<{ id: number, name: string }[]>;
+
+  resetProfile(): Promise<void>;
 }

@@ -8,10 +8,12 @@ import { MemoryRouter } from 'react-router';
 import { StyledDashboard } from '../../../dashboard/Dashboard';
 import { FlightsPage } from '../FlightsPage';
 import { SiteManagerStore } from '../../../site-manager/stores/SiteManagerStore';
+import { TopBarActions } from '../../../widgets/TopBarActions';
 
 describe('FlightsPage', () => {
   const siteManagerStore = new SiteManagerStore(DoubleRepositories);
   const profileStore = new ProfileSitePickerStore(DoubleRepositories);
+  const topBarActions = new TopBarActions({profileStore: profileStore});
   let subject: ReactWrapper;
   beforeEach(() => {
     const profile = {
@@ -28,7 +30,10 @@ describe('FlightsPage', () => {
 
     subject = mount(
       <MemoryRouter>
-        <Provider profileStore={profileStore} siteManagerStore={siteManagerStore}>
+        <Provider
+          profileStore={profileStore}
+          siteManagerStore={siteManagerStore}
+          topBarActions={topBarActions}>
           <FlightsPage repositories={DoubleRepositories}/>
         </Provider>
       </MemoryRouter>

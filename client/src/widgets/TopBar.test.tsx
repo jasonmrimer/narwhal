@@ -76,6 +76,6 @@ describe('TopBar', () => {
         <TopBar profileStore={profileStore}/>
       </MemoryRouter>
     );
-    expect(mountedSubject.find('a').length).toBe(1);
+    expect(mountedSubject.find('a .tab').length).toBe(1);
   });
 });

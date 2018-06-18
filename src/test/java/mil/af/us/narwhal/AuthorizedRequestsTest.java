@@ -115,6 +115,7 @@ public class AuthorizedRequestsTest {
           .setStatusCodeDictionaryPUT(adminOnly)
         , new EndpointAuthorizationExpectations("/api/profiles/me")
           .setStatusCodeDictionaryPUT(everyone)
+          .setStatusCodeDictionaryDELETE(everyone)
         , new EndpointAuthorizationExpectations("/api/skill/rip-items")
           .setStatusCodeDictionaryPUT(modifiersOnly)
         , new EndpointAuthorizationExpectations("/api/upload/airmen")
