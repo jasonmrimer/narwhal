@@ -29,7 +29,7 @@ const trackerActions = new TrackerActions(stores);
 const appActions = new AppActions(stores, WebRepositories);
 const siteManagerActions = new SiteManagerActions(stores, WebRepositories);
 const certificationActions = new CertificationActions(stores, WebRepositories);
-const topBarActions = new TopBarActions(stores);
+const topBarActions = new TopBarActions(stores, WebRepositories);
 
 export const actions = {
   availabilityActions,

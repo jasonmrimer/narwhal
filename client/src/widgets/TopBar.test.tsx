@@ -7,11 +7,17 @@ import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore
 import { DoubleRepositories } from '../utils/Repositories';
 import { adminAbility, readerAbility } from '../app/abilities';
 import { MemoryRouter } from 'react-router';
+import { PendingEventStore } from './stores/PendingEventStore';
+import { SiteModelFactory } from '../site/factories/SiteModelFactory';
+import { TopBarActions } from './TopBarActions';
+import { stores } from '../app/stores';
 
 describe('TopBar', async () => {
   let subject: ShallowWrapper;
   let profile: ProfileModel;
   let profileStore: ProfileSitePickerStore;
+  let pendingEventStore: PendingEventStore;
+  let topBarActions: TopBarActions;
 
   beforeEach(async () => {
 
@@ -27,7 +33,22 @@ describe('TopBar', async () => {
 
     profileStore = new ProfileSitePickerStore(DoubleRepositories);
     await profileStore.hydrate([], profile);
-    subject = shallow(<TopBar profileStore={profileStore}/>);
+    pendingEventStore = new PendingEventStore();
+    topBarActions = new TopBarActions(stores, DoubleRepositories);
+    pendingEventStore.hydrate(
+      [],
+      [],
+      SiteModelFactory.build(1, 1)
+    );
+    subject = shallow(
+      (
+        <TopBar
+          pendingEventStore={pendingEventStore}
+          profileStore={profileStore}
+          topBarActions={topBarActions}
+        />
+      )
+    );
   });
 
   it('renders the username with role', () => {
@@ -73,7 +94,11 @@ describe('TopBar', async () => {
 
     const mountedSubject = mount(
       <MemoryRouter>
-        <TopBar profileStore={profileStore}/>
+        <TopBar
+          pendingEventStore={pendingEventStore}
+          profileStore={profileStore}
+          topBarActions={topBarActions}
+        />
       </MemoryRouter>
     );
     expect(mountedSubject.find('a .tab').length).toBe(1);

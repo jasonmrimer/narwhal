@@ -2,8 +2,6 @@ import { ProfileSitePickerStore } from './ProfileSitePickerStore';
 import { DoubleRepositories } from '../../utils/Repositories';
 import { SiteModel, SiteType } from '../../site/models/SiteModel';
 import { SquadronModel } from '../../squadron/models/SquadronModel';
-import { makeFakeProfile } from '../../utils/testUtils';
-import {adminAbility, readerAbility, writerAbility} from '../../app/abilities';
 
 describe('ProfileSitePickerStore', () => {
   let subject: ProfileSitePickerStore;
