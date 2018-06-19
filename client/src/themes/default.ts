@@ -22,6 +22,7 @@ export const Theme = Object.freeze({
   purpleSteel: '#BDC9D6',
   blueSteel: '#5C6977',
   hoverBlueSteel: '#475767',
+  purpleSplash: '#686EA1',
 
   sidePanelWidth: '380px'
 });

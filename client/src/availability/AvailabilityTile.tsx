@@ -58,6 +58,10 @@ export const StyledAvailabilityTile = styled(AvailabilityTile)`
     padding-right: 0.5rem;
   }
   
+  .event-title {
+    background: ${props => props.event.status === EventStatus.Pending ? props.theme.purpleSplash : 'none'};
+  }
+  
   .event-description {
     background: ${props => props.theme.lighter};
     justify-content: space-between;
