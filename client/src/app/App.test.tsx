@@ -11,7 +11,7 @@ describe('App', () => {
   let subject: ShallowWrapper;
 
   describe('ProfileSitePicker', () => {
-    beforeEach(async ()=> {
+    beforeEach(async () => {
       profileStore = new ProfileSitePickerStore(DoubleRepositories);
       await profileStore.hydrate([], {
         id: 1,

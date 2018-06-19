@@ -6,9 +6,12 @@ import { inject, observer } from 'mobx-react';
 import { Can } from '@casl/react';
 import { TopBarActions } from './TopBarActions';
 import { ProfileIcon } from '../icons/ProfileIcon';
+import { PendingEventStore } from './stores/PendingEventStore';
+import { StyledPendingEventTileList } from './PendingEventTileList';
 
 interface Props {
   profileStore?: ProfileSitePickerStore;
+  pendingEventStore?: PendingEventStore;
   topBarActions?: TopBarActions;
   className?: string;
 }
@@ -16,7 +19,7 @@ interface Props {
 @observer
 export class TopBar extends React.Component<Props> {
   render() {
-    const {profileStore, topBarActions} = this.props;
+    const {profileStore, topBarActions, pendingEventStore} = this.props;
     return (
       <React.Fragment>
         <div className={this.props.className}>
@@ -53,26 +56,33 @@ export class TopBar extends React.Component<Props> {
               </NavLink>
             </Can>
           </span>
-          {profileStore!.hasPendingRequests &&
-          <div className="requests-pending">
-            Requests Pending
-          </div>
+          <div className="requests">
+          {
+            profileStore!.hasPendingRequests &&
+            <div className="requests-button" onClick={topBarActions!.getPendingRequests}>
+              Requests Pending
+            </div>
           }
-            <div className="profile">
-                <div className="profilebtn">
+          {
+            pendingEventStore!.showList &&
+            <StyledPendingEventTileList/>
+          }
+          </div>
+          <div className="profile">
+            <div className="profile-button">
             <span className="name">
               {`${profileStore!.profile!.username} (${profileStore!.profile!.roleName})`}
             </span>
-                    <span className="icon">
+              <span className="icon">
               <ProfileIcon/>
             </span>
-                </div>
-                <div className="profile-content">
-                    <a onClick={() => profileStore!.performLoading(topBarActions!.resetProfile)}>Reset Profile</a>
-                </div>
             </div>
+            <div className="profile-content">
+              <a onClick={() => profileStore!.performLoading(topBarActions!.resetProfile)}>Reset Profile</a>
+            </div>
+          </div>
         </div>
-          <TopBarSpacer/>
+        <TopBarSpacer/>
       </React.Fragment>
     );
   }
@@ -84,13 +94,13 @@ const TopBarSpacer = styled('div')`
 
 export const StyledTopBar = inject(
   'profileStore',
-  'topBarActions'
+  'topBarActions',
+  'pendingEventStore'
 )(styled(TopBar)`
   border-collapse: collapse;
   
   background-color: ${props => props.theme.lighter};
   border-bottom: 2px solid ${props => props.theme.yellow};
-  
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -174,23 +184,23 @@ export const StyledTopBar = inject(
     margin-right: 0.5rem;
   }
   
-  .profilebtn {
+  .profile-button {
     border: none;
-    background-color: none;
     padding: 2rem 0;
   }
   
-  .profile, .requests-pending {
+  .profile, requests {
     position: relative;
     display: inline-block;
   }
   
-  .requests-pending {
+  .requests-button {
     background-color: ${props => props.theme.yellow};
     border-radius: 0.5rem;
     color: ${props => props.theme.darkest};
-    padding: 0.25rem;
     font-weight: 500;
+    padding: 0.25rem;
+    cursor: pointer;
   }
   
   .profile-content {
@@ -207,7 +217,7 @@ export const StyledTopBar = inject(
   
   .profile-content a {
     color: ${props => props.theme.fontColor};
-    padding: 12px 16px;
+    padding: 0.75rem 1rem;
     text-decoration: none;
     display: block;
   }

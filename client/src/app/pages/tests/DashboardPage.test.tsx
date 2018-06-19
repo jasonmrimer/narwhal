@@ -8,11 +8,16 @@ import { readerAbility } from '../../abilities';
 import { MemoryRouter } from 'react-router';
 import { StyledDashboard } from '../../../dashboard/Dashboard';
 import { TopBarActions } from '../../../widgets/TopBarActions';
+import { PendingEventStore } from '../../../widgets/stores/PendingEventStore';
 
 describe('DashboardPage', () => {
   it('should not render if profile is a reader', async () => {
     const profileStore = new ProfileSitePickerStore(DoubleRepositories);
-    const topBarActions = new TopBarActions({profileStore: profileStore});
+    const pendingEventStore = new PendingEventStore();
+    const topBarActions = new TopBarActions(
+      {profileStore: profileStore},
+      DoubleRepositories
+    );
     const profile = {
       id: 1,
       username: 'Tytus',
@@ -30,6 +35,7 @@ describe('DashboardPage', () => {
         <Provider
           profileStore={profileStore}
           topBarActions={topBarActions}
+          pendingEventStore={pendingEventStore}
         >
           <DashboardPage/>
         </Provider>

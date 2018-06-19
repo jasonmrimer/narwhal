@@ -4,7 +4,8 @@ import { Moment } from 'moment';
 export interface EventRepository {
   save(event: EventModel): Promise<EventModel>;
   delete(event: EventModel): Promise<void>;
-  findAllBySiteIdAndWithinPeriod(id: number, start: Moment, end: Moment): Promise<EventModel[]>;
-  findAllByAirmanIdAndWithinPeriod(id: number, start: Moment, end: Moment): Promise<EventModel[]>;
+  findAllBySiteIdAndWithinPeriod(siteId: number, start: Moment, end: Moment): Promise<EventModel[]>;
+  findAllByAirmanIdAndWithinPeriod(airmanId: number, start: Moment, end: Moment): Promise<EventModel[]>;
+  findAllPendingEventsBySiteId(siteId: number): Promise<EventModel[]>;
   hasPendingRequests(): Promise<boolean>;
 }

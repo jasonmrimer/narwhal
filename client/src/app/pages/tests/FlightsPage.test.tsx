@@ -9,11 +9,16 @@ import { StyledDashboard } from '../../../dashboard/Dashboard';
 import { FlightsPage } from '../FlightsPage';
 import { SiteManagerStore } from '../../../site-manager/stores/SiteManagerStore';
 import { TopBarActions } from '../../../widgets/TopBarActions';
+import { PendingEventStore } from '../../../widgets/stores/PendingEventStore';
 
 describe('FlightsPage', () => {
   const siteManagerStore = new SiteManagerStore(DoubleRepositories);
   const profileStore = new ProfileSitePickerStore(DoubleRepositories);
-  const topBarActions = new TopBarActions({profileStore: profileStore});
+  const pendingEventStore = new PendingEventStore();
+  const topBarActions = new TopBarActions(
+    {profileStore: profileStore},
+    DoubleRepositories
+  );
   let subject: ReactWrapper;
   beforeEach(async () => {
     const profile = {
@@ -33,6 +38,7 @@ describe('FlightsPage', () => {
         <Provider
           profileStore={profileStore}
           siteManagerStore={siteManagerStore}
+          pendingEventStore={pendingEventStore}
           topBarActions={topBarActions}
         >
           <FlightsPage repositories={DoubleRepositories}/>

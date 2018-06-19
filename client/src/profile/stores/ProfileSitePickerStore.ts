@@ -105,7 +105,7 @@ export class ProfileSitePickerStore extends NotificationStore {
     return this._sites.filter(site => site.siteType === SiteType.GuardSite);
   }
 
-  getSiteByName(name: string) {
-    return this._sites.find(s => s.name === name)!;
+  get currentProfileSite() {
+    return this._sites.find(x => x.id === this.profile!.siteId );
   }
 }
