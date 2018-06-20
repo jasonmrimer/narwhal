@@ -31,7 +31,7 @@ export class AppActions {
       this.repositories.profileRepository!.findOne(),
     ]);
 
-    this.stores.profileStore!.hydrate(sites, AppActions.getProfileAbilities(profile));
+    await this.stores.profileStore!.hydrate(sites, AppActions.getProfileAbilities(profile));
   }
 
 }

@@ -39,7 +39,7 @@ describe('Currency', () => {
     profileStore = new ProfileSitePickerStore(DoubleRepositories);
     trackerStore = new TrackerStore(DoubleRepositories);
     trackerStore.setSelectedAirman(airman);
-    profileStore.hydrate([], makeFakeProfile('ADMIN', adminAbility));
+    await profileStore.hydrate([], makeFakeProfile('ADMIN', adminAbility));
 
     currencyActions = {
       addSkill: jest.fn(),
@@ -95,8 +95,8 @@ describe('Currency', () => {
 
   describe('Currency as a reader', () => {
     let mountedSubject: ReactWrapper;
-    beforeEach(() => {
-      profileStore.hydrate([], makeFakeProfile('READER', readerAbility));
+    beforeEach(async () => {
+      await profileStore.hydrate([], makeFakeProfile('READER', readerAbility));
 
       mountedSubject = mount(
         <ThemeProvider theme={{}}>

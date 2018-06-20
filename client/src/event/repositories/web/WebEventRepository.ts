@@ -35,4 +35,9 @@ export class WebEventRepository implements EventRepository {
     );
     return json.map((item: any) => this.serializer.deserialize(item));
   }
+
+  async hasPendingRequests(): Promise<boolean> {
+    const json = await this.client.getJSON('api/events/pending');
+    return json.success;
+  }
 }

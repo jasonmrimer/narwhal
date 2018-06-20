@@ -69,6 +69,10 @@ public class EventService {
     ).collect(Collectors.toList());
   }
 
+  public Long pendingEventCountBySiteId(Long siteId, Instant startDate, Instant limit){
+    return eventRepository.findPendingCountBySiteId(siteId, startDate, limit);
+  }
+
   private Event saveEvent(EventJSON json, Profile profile) {
     final Airman airman = airmanRepository.findOne(json.getAirmanId());
     final Event event = Event.fromJSON(json, airman);

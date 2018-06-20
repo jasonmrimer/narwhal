@@ -15,7 +15,9 @@ describe('FlightSchedulePopup', () => {
   };
   const siteManagerStore: any = {
     pendingScheduleStartDate: moment(),
-    getAirmenByFlightId: () => {return AirmanModelFactory.buildList(2)}
+    getAirmenByFlightId: () => {
+      return AirmanModelFactory.buildList(2);
+    }
   };
 
   beforeEach(() => {

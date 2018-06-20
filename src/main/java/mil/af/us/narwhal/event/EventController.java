@@ -1,5 +1,6 @@
 package mil.af.us.narwhal.event;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import mil.af.us.narwhal.profile.Profile;
 import mil.af.us.narwhal.profile.RoleName;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -7,7 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.Instant;
-import java.util.List;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
 
 @RestController
 @RequestMapping(EventController.URI)
@@ -59,5 +61,24 @@ public class EventController {
     return airmanId == null ?
       service.combineCrewsAndEventsBySite(siteId, start, end) :
       service.combineCrewsAndEventsByAirman(airmanId, start, end);
+  }
+
+  @GetMapping("/pending")
+  public Map<String, Boolean> pendingCount(@AuthenticationPrincipal Profile profile){
+    Calendar date = new GregorianCalendar();
+    date.set(Calendar.HOUR_OF_DAY, 0);
+    date.set(Calendar.MINUTE, 0);
+    date.set(Calendar.SECOND, 0);
+    date.set(Calendar.MILLISECOND, 0);
+    Instant today = date.toInstant();
+    Long result = service.pendingEventCountBySiteId(
+      profile.getSite().getId(),
+      today,
+      today.plus(60, ChronoUnit.DAYS)
+    );
+    System.out.println("result is " + result);
+    final Boolean countIsGreaterThanZero = result > 0;
+    System.out.println(profile.getSite().getId());
+    return Collections.singletonMap("success", countIsGreaterThanZero);
   }
 }

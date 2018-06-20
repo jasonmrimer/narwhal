@@ -24,7 +24,7 @@ export class AdminPage extends React.Component<Props> {
           WebRepositories.profileRepository.findOne(),
         ]);
         this.props.adminStore!.hydrate(profilesResp, rolesResp);
-        this.props.profileStore!.hydrate(sites, profile);
+        await this.props.profileStore!.hydrate(sites, profile);
       }
     );
   }

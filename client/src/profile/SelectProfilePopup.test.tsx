@@ -12,14 +12,14 @@ describe('SelectProfilePopup', () => {
   let profileStore = new ProfileSitePickerStore(DoubleRepositories);
   const squadron = new SquadronModel(1, 'squad', []);
 
-  beforeEach(() => {
+  beforeEach(async () => {
     profileStore = new ProfileSitePickerStore(DoubleRepositories);
     sites = [
       new SiteModel(1, 'DGS', [squadron], SiteType.DGSCoreSite, 'DGS CORE SITE'),
       new SiteModel(2, 'DMS', [], SiteType.DMSSite, 'DMS CORE SITE'),
     ];
 
-    profileStore.hydrate(
+    await profileStore.hydrate(
       sites, {
         id: 1,
         username: 'user',

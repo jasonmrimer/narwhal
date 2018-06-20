@@ -53,6 +53,11 @@ export class TopBar extends React.Component<Props> {
               </NavLink>
             </Can>
           </span>
+          {profileStore!.hasPendingRequests &&
+          <div className="requests-pending">
+            Requests Pending
+          </div>
+          }
             <div className="profile">
                 <div className="profilebtn">
             <span className="name">
@@ -175,9 +180,17 @@ export const StyledTopBar = inject(
     padding: 2rem 0;
   }
   
-  .profile {
+  .profile, .requests-pending {
     position: relative;
     display: inline-block;
+  }
+  
+  .requests-pending {
+    background-color: ${props => props.theme.yellow};
+    border-radius: 0.5rem;
+    color: ${props => props.theme.darkest};
+    padding: 0.25rem;
+    font-weight: 500;
   }
   
   .profile-content {

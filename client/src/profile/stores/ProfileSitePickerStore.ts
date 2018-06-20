@@ -6,28 +6,40 @@ import { Repositories } from '../../utils/Repositories';
 import { NotificationStore } from '../../widgets/stores/NotificationStore';
 import { SquadronModel } from '../../squadron/models/SquadronModel';
 import { AppActions } from '../../app/AppActions';
+import { EventRepository } from '../../event/repositories/EventRepository';
+import { readerAbility } from '../../app/abilities';
 
 export class ProfileSitePickerStore extends NotificationStore {
   private profileRepository: ProfileRepository;
+  private eventRepository: EventRepository;
   @observable private _profile: ProfileModel | null = null;
   @observable private _sites: SiteModel[];
   @observable private _pendingSite: SiteModel | null = null;
   @observable private _pendingSquadron: SquadronModel | null = null;
+  @observable private _pendingRequest: boolean = false;
 
   constructor(repositories: Repositories) {
     super();
     this.profileRepository = repositories.profileRepository;
+    this.eventRepository = repositories.eventRepository;
   }
 
   @action.bound
-  hydrate(sites: SiteModel[], profile: ProfileModel) {
+  async hydrate(sites: SiteModel[], profile: ProfileModel) {
     this._sites = sites;
     this._profile = profile;
+    this._pendingRequest =
+      profile.ability === readerAbility ? false : await this.eventRepository.hasPendingRequests();
   }
 
   @computed
   get profile() {
     return this._profile;
+  }
+
+  @computed
+  get hasPendingRequests() {
+    return this._pendingRequest;
   }
 
   @action.bound

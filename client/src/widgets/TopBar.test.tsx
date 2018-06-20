@@ -8,12 +8,12 @@ import { DoubleRepositories } from '../utils/Repositories';
 import { adminAbility, readerAbility } from '../app/abilities';
 import { MemoryRouter } from 'react-router';
 
-describe('TopBar', () => {
+describe('TopBar', async () => {
   let subject: ShallowWrapper;
   let profile: ProfileModel;
   let profileStore: ProfileSitePickerStore;
 
-  beforeEach(() => {
+  beforeEach(async () => {
 
     profile = {id: 1,
       username: 'Tytus',
@@ -26,7 +26,7 @@ describe('TopBar', () => {
     };
 
     profileStore = new ProfileSitePickerStore(DoubleRepositories);
-    profileStore.hydrate([], profile);
+    await profileStore.hydrate([], profile);
     subject = shallow(<TopBar profileStore={profileStore}/>);
   });
 
@@ -58,7 +58,7 @@ describe('TopBar', () => {
     expect(subject.find(NavLink).at(1).prop('to')).toBe('/');
   });
 
-  it('should not see the mission or flight tab if a reader', () => {
+  it('should not see the mission or flight tab if a reader', async () => {
     profile = {
       id: 1,
       username: 'Tytus',
@@ -69,7 +69,7 @@ describe('TopBar', () => {
       classified: false,
       ability: readerAbility
     };
-    profileStore.hydrate([], profile);
+    await profileStore.hydrate([], profile);
 
     const mountedSubject = mount(
       <MemoryRouter>

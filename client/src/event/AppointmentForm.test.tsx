@@ -27,7 +27,7 @@ describe('AppointmentForm', () => {
   let subject: AppointmentForm;
   let eventActions: any;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     eventActions = {
       handleFormSubmit: jest.fn(),
       handleDeleteEvent: jest.fn(),
@@ -36,7 +36,7 @@ describe('AppointmentForm', () => {
     trackerStore = new TrackerStore(DoubleRepositories);
     appointmentFormStore = new AppointmentFormStore(new TimeServiceStub());
     profileStore = new ProfileSitePickerStore(DoubleRepositories);
-    profileStore.hydrate(
+    await profileStore.hydrate(
       [],
       makeFakeProfile('READER', readerAbility)
       );

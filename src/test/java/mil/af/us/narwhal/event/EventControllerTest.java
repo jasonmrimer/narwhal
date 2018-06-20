@@ -25,7 +25,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
 
 public class EventControllerTest extends BaseIntegrationTest {
-  private Site site;
   private Airman airman;
   private Airman airman2;
   private Airman airman3;
@@ -37,15 +36,6 @@ public class EventControllerTest extends BaseIntegrationTest {
   @Before
   public void setUp() {
     super.setUp();
-
-    final Flight flight = new Flight("flight");
-
-    final Squadron squadron = new Squadron("squadron");
-    squadron.addFlight(flight);
-
-    site = new Site("site");
-    site.addSquadron(squadron);
-    siteRepository.save(site);
 
     final Flight flight2 = new Flight("flight2");
 
@@ -318,6 +308,44 @@ public class EventControllerTest extends BaseIntegrationTest {
       .body("$.size()", equalTo(1))
       .body("id", hasItem(event1.getId().intValue()))
       .body("status", hasItem(event1.getStatus().toString()));
+    // @formatter:on
+  }
+
+  @Test
+  public void pendingCount() {
+    Instant start = Instant.now();
+    final Event event1 = new Event(
+      "New Event",
+      "New Description",
+      start,
+      start,
+      EventType.APPOINTMENT,
+      EventStatus.PENDING,
+      airman3
+    );
+
+    final Event event2 = new Event(
+      "New Event",
+      "New Description",
+      start.plus(30, ChronoUnit.DAYS),
+      start.plus(30, ChronoUnit.DAYS),
+      EventType.APPOINTMENT,
+      EventStatus.PENDING,
+      airman
+    );
+    eventRepository.save(asList(event1, event2));
+
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .when()
+      .get(EventController.URI + "/pending")
+      .then()
+      .statusCode(200)
+      .body("success", equalTo(true));
     // @formatter:on
   }
 }

@@ -6,4 +6,5 @@ export interface EventRepository {
   delete(event: EventModel): Promise<void>;
   findAllBySiteIdAndWithinPeriod(id: number, start: Moment, end: Moment): Promise<EventModel[]>;
   findAllByAirmanIdAndWithinPeriod(id: number, start: Moment, end: Moment): Promise<EventModel[]>;
+  hasPendingRequests(): Promise<boolean>;
 }

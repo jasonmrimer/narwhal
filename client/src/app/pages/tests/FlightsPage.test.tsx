@@ -15,7 +15,7 @@ describe('FlightsPage', () => {
   const profileStore = new ProfileSitePickerStore(DoubleRepositories);
   const topBarActions = new TopBarActions({profileStore: profileStore});
   let subject: ReactWrapper;
-  beforeEach(() => {
+  beforeEach(async () => {
     const profile = {
       id: 1,
       username: 'Tytus',
@@ -26,7 +26,7 @@ describe('FlightsPage', () => {
       classified: false,
       ability: readerAbility
     };
-    profileStore.hydrate([], profile);
+    await profileStore.hydrate([], profile);
 
     subject = mount(
       <MemoryRouter>

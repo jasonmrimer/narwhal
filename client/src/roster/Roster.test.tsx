@@ -61,7 +61,7 @@ describe('Roster', () => {
   });
 
   describe('when this list of airmen is not empty', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       trackerStore = new TrackerStore(DoubleRepositories);
       rosterHeaderStore = new RosterHeaderStore();
       locationFilterStore = new LocationFilterStore();
@@ -73,7 +73,7 @@ describe('Roster', () => {
       let airman = AirmanModelFactory.build(1);
       let event = EventModelFactory.build();
 
-      profileStore.hydrate([], makeFakeProfile('ADMIN', adminAbility));
+      await profileStore.hydrate([], makeFakeProfile('ADMIN', adminAbility));
       trackerStore.hydrate([airman], [event], airman.siteId);
 
       subject = mount(

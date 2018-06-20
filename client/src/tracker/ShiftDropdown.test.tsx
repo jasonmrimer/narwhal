@@ -23,7 +23,7 @@ describe('ShiftDropdown', () => {
 
     profileStore = new ProfileSitePickerStore(DoubleRepositories);
 
-    profileStore.hydrate([], profile);
+    await profileStore.hydrate([], profile);
 
     subject = shallow(
       <ShiftDropdown
@@ -43,9 +43,9 @@ describe('ShiftDropdown', () => {
     expect(setShift).toHaveBeenCalledWith(ShiftType.Swing);
   });
 
-  it('should not render dropdown when viewing page as a reader', () => {
+  it('should not render dropdown when viewing page as a reader', async () => {
     profile = makeFakeProfile('READER', readerAbility);
-    profileStore.hydrate([], profile);
+    await profileStore.hydrate([], profile);
 
     const mountedSubject = mount(
       <ShiftDropdown

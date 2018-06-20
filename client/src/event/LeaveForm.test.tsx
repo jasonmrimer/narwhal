@@ -27,14 +27,14 @@ describe('LeaveForm', () => {
   let trackerStore: TrackerStore;
   let eventActions: any;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     eventActions = {
       handleFormSubmit: jest.fn(),
       handleDeleteEvent: jest.fn(),
     };
     store = new LeaveFormStore(new TimeServiceStub());
     profileStore = new ProfileSitePickerStore(DoubleRepositories);
-    profileStore.hydrate(
+    await profileStore.hydrate(
       [],
       makeFakeProfile('READER', readerAbility)
     );

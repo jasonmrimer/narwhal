@@ -10,7 +10,7 @@ import { StyledDashboard } from '../../../dashboard/Dashboard';
 import { TopBarActions } from '../../../widgets/TopBarActions';
 
 describe('DashboardPage', () => {
-  it('should not render if profile is a reader', () => {
+  it('should not render if profile is a reader', async () => {
     const profileStore = new ProfileSitePickerStore(DoubleRepositories);
     const topBarActions = new TopBarActions({profileStore: profileStore});
     const profile = {
@@ -23,7 +23,7 @@ describe('DashboardPage', () => {
       classified: false,
       ability: readerAbility
     };
-    profileStore.hydrate([], profile);
+    await profileStore.hydrate([], profile);
 
     const subject = mount(
       <MemoryRouter>

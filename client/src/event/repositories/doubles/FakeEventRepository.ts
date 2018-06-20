@@ -72,4 +72,8 @@ export class FakeEventRepository implements EventRepository {
   get count() {
     return this._events.length;
   }
+
+  async hasPendingRequests(): Promise<boolean> {
+    return true;
+  }
 }

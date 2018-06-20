@@ -2,6 +2,8 @@ import { ProfileSitePickerStore } from './ProfileSitePickerStore';
 import { DoubleRepositories } from '../../utils/Repositories';
 import { SiteModel, SiteType } from '../../site/models/SiteModel';
 import { SquadronModel } from '../../squadron/models/SquadronModel';
+import { makeFakeProfile } from '../../utils/testUtils';
+import {adminAbility, readerAbility, writerAbility} from '../../app/abilities';
 
 describe('ProfileSitePickerStore', () => {
   let subject: ProfileSitePickerStore;
@@ -14,7 +16,7 @@ describe('ProfileSitePickerStore', () => {
         new SiteModel(14, 'CoryPc', [], SiteType.DMSSite, ''),
         new SiteModel(5, 'CoryPc', [], SiteType.DGSCoreSite, '')
     ];
-    subject.hydrate(sites, {
+    await subject.hydrate(sites, {
       id: 1,
       username: 'FontFace',
       siteId: 14,
@@ -72,5 +74,21 @@ describe('ProfileSitePickerStore', () => {
     DoubleRepositories.profileRepository.resetProfile = resetProfileSpy;
     subject.resetProfile();
     expect(resetProfileSpy).toHaveBeenCalled();
+  });
+
+  it('should provide whether they have pending Requests for Admin/Writer', async () => {
+    const pendingRequestSpy = jest.fn();
+    DoubleRepositories.eventRepository.hasPendingRequests = pendingRequestSpy;
+    await subject.hydrate([], makeFakeProfile('ADMIN', adminAbility));
+    await subject.hydrate([], makeFakeProfile('WRITER', writerAbility));
+    expect(pendingRequestSpy).toHaveBeenCalledTimes(2);
+  });
+
+  it('should provide false for pending Requests for Reader', async () => {
+    const pendingRequestSpy = jest.fn();
+    DoubleRepositories.eventRepository.hasPendingRequests = pendingRequestSpy;
+    await subject.hydrate([], makeFakeProfile('READER', readerAbility));
+    expect(pendingRequestSpy).toHaveBeenCalledTimes(0);
+    expect(subject.hasPendingRequests).toBeFalsy();
   });
 });

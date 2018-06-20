@@ -12,7 +12,7 @@ describe('ProfileList', () => {
   let store: AdminStore;
   let profileStore: ProfileSitePickerStore;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     store = new AdminStore(DoubleRepositories);
     profileStore = new ProfileSitePickerStore(DoubleRepositories);
 
@@ -21,7 +21,7 @@ describe('ProfileList', () => {
       {id: 2, roleName: '', roleId: 1, classified: false, siteId: 1, siteName: '1', username: 'User2'}
     ];
     store.hydrate(profiles, [{value: 1, name: 'role1'}, {value: 1, name: 'role1'}]);
-    profileStore.hydrate([], profiles[0]);
+    await profileStore.hydrate([], profiles[0]);
     store.setProfileRole = jest.fn();
 
     subject = shallow(<ProfileList adminStore={store} profileStore={profileStore}/>);

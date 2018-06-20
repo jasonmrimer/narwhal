@@ -16,13 +16,13 @@ describe('ProfileSitePicker', () => {
   const dmsFullName = 'DMS CORE SITE';
 
   let profileStore = new ProfileSitePickerStore(DoubleRepositories);
-  beforeEach(() => {
+  beforeEach(async () => {
     const squadron = new SquadronModel(1, 'Squad 1', []);
     sites = [
       new SiteModel(1, 'DGS', [squadron], SiteType.DGSCoreSite, dgsFullName),
       new SiteModel(2, 'DMS', [], SiteType.DMSSite, dmsFullName),
     ];
-    profileStore.hydrate(
+    await profileStore.hydrate(
       sites,
       {
         id: 1,

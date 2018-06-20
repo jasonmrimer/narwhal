@@ -11,27 +11,29 @@ describe('App', () => {
   let subject: ShallowWrapper;
 
   describe('ProfileSitePicker', () => {
-    profileStore = new ProfileSitePickerStore(DoubleRepositories);
-    profileStore.hydrate([], {
-      id: 1,
-      roleId: 1,
-      username: 'user',
-      siteId: null,
-      siteName: 'DGS',
-      roleName: 'role',
-      classified: false
+    beforeEach(async ()=> {
+      profileStore = new ProfileSitePickerStore(DoubleRepositories);
+      await profileStore.hydrate([], {
+        id: 1,
+        roleId: 1,
+        username: 'user',
+        siteId: null,
+        siteName: 'DGS',
+        roleName: 'role',
+        classified: false
+      });
+
+      const appActions: any = {
+        getSiteAndProfile: jest.fn()
+      };
+
+      subject = shallow(
+        <App
+          profileStore={profileStore}
+          appActions={appActions}
+        />
+      );
     });
-
-    const appActions: any = {
-      getSiteAndProfile: jest.fn()
-    };
-
-    subject = shallow(
-      <App
-        profileStore={profileStore}
-        appActions={appActions}
-      />
-    );
 
     it('renders the correct classification banner', () => {
       expect(subject.find(StyledClassificationBanner).prop('classified')).toBeFalsy();
@@ -42,7 +44,7 @@ describe('App', () => {
     });
 
     it('should render the Tracker page after saving a profile', async () => {
-      profileStore.hydrate([], {
+      await profileStore.hydrate([], {
         id: 1,
         roleId: 1,
         username: 'user',
