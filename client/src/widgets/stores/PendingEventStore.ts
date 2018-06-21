@@ -8,6 +8,7 @@ export class PendingEventStore extends NotificationStore {
   @observable private _airmen: AirmanModel[];
   @observable private _events: EventModel[];
   @observable private _site: SiteModel;
+  @observable private _showList: boolean = false;
 
   constructor() {
     super();
@@ -20,11 +21,11 @@ export class PendingEventStore extends NotificationStore {
   }
 
   findAirman(airmanId: number) {
-    const airman = this._airmen.find((airman: AirmanModel) => airman.id === airmanId);
-    if (airman) {
-      return airman;
+    const myAirman = this._airmen.find((airman: AirmanModel) => airman.id === airmanId);
+    if (myAirman) {
+      return myAirman;
     }
-    return;
+    return AirmanModel.empty();
   }
 
   @computed
@@ -40,5 +41,15 @@ export class PendingEventStore extends NotificationStore {
   @computed
   get site() {
     return this._site;
+  }
+
+  @computed
+  get showList() {
+    return this._showList;
+  }
+
+  @action.bound
+  setShowList() {
+    this._showList = !this._showList;
   }
 }

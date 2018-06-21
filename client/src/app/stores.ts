@@ -22,6 +22,7 @@ import { AirmanProfileManagerStore } from '../site-manager/stores/AirmanProfileM
 import { SiteManagerStore } from '../site-manager/stores/SiteManagerStore';
 import { CertificationFormStore } from '../skills/certification/stores/CertificationFormStore';
 import { SkillsFieldStore } from '../skills/stores/SkillsFieldStore';
+import { PendingEventStore } from '../widgets/stores/PendingEventStore';
 
 const timeService = new MomentTimeService();
 const profileStore = new ProfileSitePickerStore(WebRepositories);
@@ -52,6 +53,7 @@ const adminStore = new AdminStore(WebRepositories);
 const airmanProfileManagerStore = new AirmanProfileManagerStore(WebRepositories.airmanRepository);
 const siteManagerStore = new SiteManagerStore(WebRepositories);
 const certificationFormStore = new CertificationFormStore();
+const pendingEventStore = new PendingEventStore();
 
 export interface Stores {
   profileStore: ProfileSitePickerStore;
@@ -76,6 +78,7 @@ export interface Stores {
   airmanProfileManagerStore: AirmanProfileManagerStore;
   siteManagerStore: SiteManagerStore;
   certificationFormStore: CertificationFormStore;
+  pendingEventStore: PendingEventStore;
 }
 
 export const stores = {
@@ -100,5 +103,6 @@ export const stores = {
   trackerStore,
   airmanProfileManagerStore,
   siteManagerStore,
-  certificationFormStore
+  certificationFormStore,
+  pendingEventStore,
 };
