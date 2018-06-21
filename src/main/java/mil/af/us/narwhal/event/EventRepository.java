@@ -15,4 +15,7 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
   @Query("SELECT COUNT(e) FROM Event e WHERE e.id IN (SELECT evt.id FROM Event evt LEFT JOIN evt.airman a WHERE a.flight.squadron.site.id = ?1) AND e.startTime >= ?2 AND e.startTime < ?3 AND e.status = 'PENDING'")
   Long findPendingCountBySiteId(Long siteId, Instant startDate, Instant limit);
+
+  @Query("SELECT e FROM Event e WHERE e.id IN (SELECT evt.id FROM Event evt LEFT JOIN evt.airman a WHERE a.flight.squadron.site.id = ?1) AND e.startTime >= ?2 AND e.startTime < ?3 AND e.status = 'PENDING'")
+  List<Event> findPendingEventsBySiteId(Long siteId, Instant startDate, Instant limit);
 }

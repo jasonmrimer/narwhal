@@ -342,10 +342,50 @@ public class EventControllerTest extends BaseIntegrationTest {
       .preemptive()
       .basic("tytus", "password")
       .when()
-      .get(EventController.URI + "/pending")
+      .get(EventController.URI + "/hasPending")
       .then()
       .statusCode(200)
       .body("success", equalTo(true));
+    // @formatter:on
+  }
+
+  @Test
+  public void pending() {
+    Instant start = Instant.now();
+    final Event event1 = new Event(
+      "New Event",
+      "New Description",
+      start,
+      start,
+      EventType.APPOINTMENT,
+      EventStatus.PENDING,
+      airman3
+    );
+
+    final Event event2 = new Event(
+      "New Event",
+      "New Description",
+      start.plus(30, ChronoUnit.DAYS),
+      start.plus(30, ChronoUnit.DAYS),
+      EventType.APPOINTMENT,
+      EventStatus.PENDING,
+      airman
+    );
+    eventRepository.save(asList(event1, event2));
+
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .when()
+      .get(EventController.URI + "/pending")
+      .then()
+      .statusCode(200)
+      .body("$.size()", equalTo(1))
+      .body("id", hasItem(event2.getId().intValue()))
+      .body("status", hasItem(event2.getStatus().toString()));
     // @formatter:on
   }
 }
