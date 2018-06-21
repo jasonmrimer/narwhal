@@ -1,4 +1,4 @@
-import { EventModel, EventType } from '../models/EventModel';
+import { EventModel, EventStatus, EventType } from '../models/EventModel';
 import * as moment from 'moment';
 import { Moment } from 'moment';
 
@@ -9,7 +9,8 @@ export class EventModelFactory {
                endTime: Moment = moment(),
                airmanId: number = 1,
                type: EventType = EventType.Leave,
-               id: number | null = 1) {
-    return new EventModel(title, description, startTime, endTime, airmanId, type, id);
+               id: number | null = 1,
+               status: EventStatus = EventStatus.Pending) {
+    return new EventModel(title, description, startTime, endTime, airmanId, type, id, status);
   }
 }
