@@ -57,6 +57,7 @@ export class TopBar extends React.Component<Props> {
           <div className="requests-pending">
             Requests Pending
           </div>
+
           }
             <div className="profile">
                 <div className="profilebtn">

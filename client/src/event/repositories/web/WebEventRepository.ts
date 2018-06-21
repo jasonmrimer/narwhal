@@ -37,7 +37,7 @@ export class WebEventRepository implements EventRepository {
   }
 
   async hasPendingRequests(): Promise<boolean> {
-    const json = await this.client.getJSON('api/events/pending');
+    const json = await this.client.getJSON('api/events/hasPending');
     return json.success;
   }
 }

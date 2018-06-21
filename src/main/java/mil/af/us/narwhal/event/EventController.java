@@ -63,7 +63,7 @@ public class EventController {
       service.combineCrewsAndEventsByAirman(airmanId, start, end);
   }
 
-  @GetMapping("/pending")
+  @GetMapping("/hasPending")
   public Map<String, Boolean> pendingCount(@AuthenticationPrincipal Profile profile){
     Calendar date = new GregorianCalendar();
     date.set(Calendar.HOUR_OF_DAY, 0);
@@ -76,9 +76,22 @@ public class EventController {
       today,
       today.plus(60, ChronoUnit.DAYS)
     );
-    System.out.println("result is " + result);
     final Boolean countIsGreaterThanZero = result > 0;
-    System.out.println(profile.getSite().getId());
     return Collections.singletonMap("success", countIsGreaterThanZero);
+  }
+
+  @GetMapping("/pending")
+  public List<Event> pendingEvents(@AuthenticationPrincipal Profile profile) {
+    Calendar date = new GregorianCalendar();
+    date.set(Calendar.HOUR_OF_DAY, 0);
+    date.set(Calendar.MINUTE, 0);
+    date.set(Calendar.SECOND, 0);
+    date.set(Calendar.MILLISECOND, 0);
+    Instant today = date.toInstant();
+    return service.pendingEventsBySiteId(
+      profile.getSite().getId(),
+      today,
+      today.plus(60, ChronoUnit.DAYS)
+    );
   }
 }

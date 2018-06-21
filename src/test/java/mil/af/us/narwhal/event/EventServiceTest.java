@@ -93,19 +93,4 @@ public class EventServiceTest {
     verify(eventRepository).save(eventArgumentCaptor.capture());
     assertThat(eventArgumentCaptor.getValue()).isEqualTo(event);
   }
-
-  @Test
-  public void pendingEventCountBySiteId(){
-    Instant now = Instant.now();
-    Instant sixtyDaysFromNow = now.plus(60, ChronoUnit.DAYS);
-    when(eventRepository.findPendingCountBySiteId(1L, now, sixtyDaysFromNow))
-    .thenReturn(1L);
-    subject = new EventService(eventRepository, missionRepository, airmanRepository);
-    final Long result = subject.pendingEventCountBySiteId(
-      1L,
-      now,
-      sixtyDaysFromNow
-    );
-    assertThat(result).isEqualTo(1L);
-  }
 }
