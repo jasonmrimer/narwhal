@@ -12,7 +12,10 @@ import { TopBarActions } from '../../../widgets/TopBarActions';
 describe('DashboardPage', () => {
   it('should not render if profile is a reader', async () => {
     const profileStore = new ProfileSitePickerStore(DoubleRepositories);
-    const topBarActions = new TopBarActions({profileStore: profileStore});
+    const topBarActions = new TopBarActions(
+      {profileStore: profileStore},
+      DoubleRepositories
+    );
     const profile = {
       id: 1,
       username: 'Tytus',

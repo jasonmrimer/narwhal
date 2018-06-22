@@ -56,9 +56,10 @@ export class TopBar extends React.Component<Props> {
               </NavLink>
             </Can>
           </span>
+          <div className="requests">
           {
             profileStore!.hasPendingRequests &&
-            <div className="requests-pending" onClick={pendingEventStore!.setShowList}>
+            <div className="requests-button" onClick={topBarActions!.getPendingRequests}>
               Requests Pending
             </div>
           }
@@ -66,8 +67,9 @@ export class TopBar extends React.Component<Props> {
             pendingEventStore!.showList &&
             <StyledPendingEventTileList/>
           }
+          </div>
           <div className="profile">
-            <div className="profilebtn">
+            <div className="profile-button">
             <span className="name">
               {`${profileStore!.profile!.username} (${profileStore!.profile!.roleName})`}
             </span>
@@ -99,7 +101,6 @@ export const StyledTopBar = inject(
   
   background-color: ${props => props.theme.lighter};
   border-bottom: 2px solid ${props => props.theme.yellow};
-  
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -183,23 +184,22 @@ export const StyledTopBar = inject(
     margin-right: 0.5rem;
   }
   
-  .profilebtn {
+  .profile-button {
     border: none;
-    background-color: none;
     padding: 2rem 0;
   }
   
-  .profile, .requests-pending {
+  .profile, requests {
     position: relative;
     display: inline-block;
   }
   
-  .requests-pending {
+  .requests-button {
     background-color: ${props => props.theme.yellow};
     border-radius: 0.5rem;
     color: ${props => props.theme.darkest};
-    padding: 0.25rem;
     font-weight: 500;
+    padding: 0.25rem;
   }
   
   .profile-content {
@@ -216,7 +216,7 @@ export const StyledTopBar = inject(
   
   .profile-content a {
     color: ${props => props.theme.fontColor};
-    padding: 12px 16px;
+    padding: 0.75rem 1rem;
     text-decoration: none;
     display: block;
   }

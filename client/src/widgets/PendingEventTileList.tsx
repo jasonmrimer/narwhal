@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import * as React from 'react';
-import { inject } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { StyledPendingEventTile } from './PendingEventTile';
 import { EventModel } from '../event/models/EventModel';
 import { PendingEventStore } from './stores/PendingEventStore';
@@ -12,11 +12,14 @@ interface Props {
   profileStore?: ProfileSitePickerStore;
   className?: string;
 }
-
+@inject(
+  'pendingEventStore',
+  'profileStore'
+)
+@observer
 export class PendingEventTileList extends React.Component<Props> {
-  async componentDidMount() {
+  async componentDidMount(): Promise<void> {
     const siteId = this.props.profileStore!.profile!.siteId!;
-
     await this.props.pendingEventStore!.performLoading(async () => {
       const [airmen, events, site] = await Promise.all([
         WebRepositories.airmanRepository.findBySiteId(siteId),
@@ -49,9 +52,19 @@ export class PendingEventTileList extends React.Component<Props> {
   }
 }
 
-export const StyledPendingEventTileList = inject(
-  'pendingEventStore',
-  'profileStore'
-)(styled(PendingEventTileList)`
-
-`);
+export const StyledPendingEventTileList = styled(PendingEventTileList)`
+    position: absolute;
+    background-color: ${props => props.theme.darker};
+    border: 1px solid ${props => props.theme.fontColor};
+    min-width: 4rem;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 0.25rem;
+    cursor: pointer;  
+    margin-top: 1.85rem;
+    padding: 0.75rem 1rem;
+    &:nth-child(odd) {
+    /* NOT WORKING*/
+      background: ${props => props.theme.purpleSplash};
+    }
+`;

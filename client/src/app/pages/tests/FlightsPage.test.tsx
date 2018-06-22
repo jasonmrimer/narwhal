@@ -13,7 +13,10 @@ import { TopBarActions } from '../../../widgets/TopBarActions';
 describe('FlightsPage', () => {
   const siteManagerStore = new SiteManagerStore(DoubleRepositories);
   const profileStore = new ProfileSitePickerStore(DoubleRepositories);
-  const topBarActions = new TopBarActions({profileStore: profileStore});
+  const topBarActions = new TopBarActions(
+    {profileStore: profileStore},
+    DoubleRepositories
+  );
   let subject: ReactWrapper;
   beforeEach(async () => {
     const profile = {

@@ -32,5 +32,6 @@ export const PendingEventTile = (props: Props) => {
 };
 
 export const StyledPendingEventTile = styled(PendingEventTile)`
+  padding: 0.25rem 0;
   
 `;
