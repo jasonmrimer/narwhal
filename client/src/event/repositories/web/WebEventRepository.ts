@@ -22,9 +22,9 @@ export class WebEventRepository implements EventRepository {
       await this.client.delete(`api/events/${event.id}`);
   }
 
-  async findAllBySiteIdAndWithinPeriod(id: number, start: Moment, end: Moment): Promise<EventModel[]> {
+  async findAllBySiteIdAndWithinPeriod(siteId: number, start: Moment, end: Moment): Promise<EventModel[]> {
     const json = await this.client.getJSON(
-      `api/events?siteId=${id}&start=${start.toISOString()}&end=${end.toISOString()}`
+      `api/events?siteId=${siteId}&start=${start.toISOString()}&end=${end.toISOString()}`
     );
     return json.map((item: any) => this.serializer.deserialize(item));
   }
@@ -32,6 +32,13 @@ export class WebEventRepository implements EventRepository {
   async findAllByAirmanIdAndWithinPeriod(airmanId: number, start: Moment, end: Moment): Promise<EventModel[]> {
     const json = await this.client.getJSON(
       `api/events?airmanId=${airmanId}&start=${start.toISOString()}&end=${end.toISOString()}`
+    );
+    return json.map((item: any) => this.serializer.deserialize(item));
+  }
+
+  async findAllPendingEventsBySiteId(siteId: number) {
+    const json = await this.client.getJSON(
+      `api/events/pending?siteId=${siteId}`
     );
     return json.map((item: any) => this.serializer.deserialize(item));
   }

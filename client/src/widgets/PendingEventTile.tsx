@@ -29,7 +29,7 @@ export const PendingEventTile = (props: Props) => {
       </div>
     </div>
   );
-  }
+};
 
 export const StyledPendingEventTile = styled(PendingEventTile)`
   

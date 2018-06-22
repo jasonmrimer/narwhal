@@ -1,12 +1,16 @@
 import { EventRepository } from '../EventRepository';
-import { EventModel } from '../../models/EventModel';
+import { EventModel, EventStatus } from '../../models/EventModel';
 import { Moment } from 'moment';
 import { FakeAirmanRepository } from '../../../airman/repositories/doubles/FakeAirmanRepository';
 import { FormErrors } from '../../../widgets/inputs/FieldValidation';
+import * as moment from 'moment';
+import { EventModelFactory } from '../../factories/EventModelFactory';
 
 export class FakeEventRepository implements EventRepository {
   private static counter: number = 0;
-  private _events: EventModel[] = [];
+  private _events: EventModel[] = [
+    EventModelFactory.build()
+  ];
 
   save(event: EventModel): Promise<EventModel> {
     let copy = Object.assign({}, event);
@@ -52,6 +56,14 @@ export class FakeEventRepository implements EventRepository {
       this._events
         .filter(event => event.airmanId === id)
         .filter(event => event.startTime.isBetween(start, end))
+    );
+  }
+
+  async findAllPendingEventsBySiteId(siteId: number): Promise<EventModel[]> {
+    return Promise.resolve(
+      this._events
+        .filter(event => event.status === EventStatus.Pending)
+        .filter(event => event.startTime.isBetween(moment().startOf('day'), moment().add(60, 'days')))
     );
   }
 

@@ -75,8 +75,7 @@ public class EventService {
 
 
   public List<Event> pendingEventsBySiteId(Long siteId, Instant startDate, Instant limit){
-    List<> events =  eventRepository.findPendingEventsBySiteId(siteId, startDate, limit);
-
+    return eventRepository.findPendingEventsBySiteId(siteId, startDate, limit);
   }
 
   private Event saveEvent(EventJSON json, Profile profile) {
