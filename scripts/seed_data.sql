@@ -192,6 +192,33 @@ INSERT INTO mission(mission_id, ato_mission_number, start_date_time, end_date_ti
   ('18', 'BBB1F02', NOW() + INTERVAL 20 DAY, NOW() + INTERVAL 20 DAY, 2, 18, 'Global Hawk'),
   ('19', 'BBB1F03', NOW() + INTERVAL 20 DAY, NOW() + INTERVAL 20 DAY, 2, 19, 'Global Hawk');
 
+  INSERT INTO event(id, title, description, start_time, end_time, airman_id, type, created_by, created_on, status)
+  VALUES
+  (
+    1,
+    'newAppointment',
+    'letsGo',
+    NOW() + INTERVAL 1 HOUR,
+    NOW() + INTERVAL 1 DAY,
+    20,
+    'APPOINTMENT',
+    'tytus',
+    NOW(),
+    'PENDING'
+  ),
+  (
+    2,
+    'newLeave',
+    'letsReallyGo',
+    NOW() + INTERVAL 1 HOUR,
+    NOW() + INTERVAL 1 DAY,
+    20,
+    'LEAVE',
+    'tytus',
+    NOW(),
+    'PENDING'
+  );
+
 
 INSERT INTO profile (username, site_id, role_id) VALUES
   (

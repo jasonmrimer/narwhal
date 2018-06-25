@@ -1,5 +1,5 @@
 import { FormStore } from '../widgets/forms/FormStore';
-import { EventModel, EventType } from './models/EventModel';
+import { EventApproval, EventApprovalRole, EventModel, EventType } from './models/EventModel';
 import { TimeService } from '../tracker/services/TimeService';
 import { Stores } from '../app/stores';
 
@@ -51,5 +51,11 @@ export class EventActions {
     await this.stores.trackerStore!.refreshEvents(this.stores.plannerStore!.plannerTimeSpan);
 
     this.stores.availabilityStore!.closeEventForm();
+  }
+
+  updateEventApproval = async (approvalChoice: EventApproval, approvalRole: EventApprovalRole) => {
+    const event = await this.stores.availabilityStore!.updateEventApproval(approvalChoice, approvalRole);
+    this.stores.availabilityStore!.closeEventForm();
+    this.stores.availabilityStore!.openEditEventForm(event);
   }
 }

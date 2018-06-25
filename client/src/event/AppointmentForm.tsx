@@ -10,11 +10,12 @@ import { StyledButton } from '../widgets/buttons/Button';
 import { StyledForm, StyledFormRow } from '../widgets/forms/Form';
 import { DeleteIcon } from '../icons/DeleteIcon';
 import { AppointmentFormStore } from './stores/AppointmentFormStore';
-import { EventModel } from './models/EventModel';
+import { EventApproval, EventApprovalRole, EventModel } from './models/EventModel';
 import { EventActions } from './EventActions';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { StyledEventCreationInfo } from '../widgets/EventCreationInfo';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
+import { StyledEventApprovalRow } from './EventApprovalRow';
 
 interface Props {
   appointmentFormStore?: AppointmentFormStore;
@@ -34,16 +35,20 @@ export class AppointmentForm extends React.Component<Props> {
 
   handleChange = ({target}: any) => {
     this.props.appointmentFormStore!.setState(target.name, target.value);
-  }
+  };
 
   handleDelete = async () => {
     await this.props.eventActions!.handleDeleteEvent(this.props.appointmentFormStore!.model!);
-  }
+  };
 
   handleSubmit = async (e: any) => {
     e.preventDefault();
     await this.props.eventActions!.handleFormSubmit(this.props.airmanId, this.props.appointmentFormStore!);
-  }
+  };
+
+  handleApprovalDecision = async (approvalChoice: EventApproval, approvalRole: EventApprovalRole) => {
+    await this.props.eventActions!.updateEventApproval(approvalChoice, approvalRole);
+  };
 
   render() {
     const {trackerStore, appointmentFormStore} = this.props;
@@ -109,12 +114,43 @@ export class AppointmentForm extends React.Component<Props> {
             null
         }
 
+        {
+          this.props.event ?
+            <StyledEventApprovalRow
+              event={this.props.event}
+              role={EventApprovalRole.Supervisor}
+              onClickApprove={
+                async () => await this.handleApprovalDecision(EventApproval.Approved, EventApprovalRole.Supervisor)
+              }
+              onClickDeny={
+                async () => await this.handleApprovalDecision(EventApproval.Denied, EventApprovalRole.Supervisor)
+              }
+            /> :
+            null
+        }
+
+        {
+          this.props.event ?
+            <StyledEventApprovalRow
+              event={this.props.event}
+              role={EventApprovalRole.Scheduler}
+              onClickApprove={
+                async () => await this.handleApprovalDecision(EventApproval.Approved, EventApprovalRole.Scheduler)
+              }
+              onClickDeny={
+                async () => await this.handleApprovalDecision(EventApproval.Denied, EventApprovalRole.Scheduler)
+              }
+            /> :
+            null
+        }
+
         <StyledFormRow reversed={true}>
           {
-          this.props.profileStore!.profile!.roleName === 'READER' ?
-            <StyledSubmitButton text="SUBMIT REQUEST"/> :
-            <StyledSubmitButton text="CONFIRM"/>
+            this.props.profileStore!.profile!.roleName === 'READER' ?
+              <StyledSubmitButton text="SUBMIT REQUEST"/> :
+              <StyledSubmitButton text="SAVE"/>
           }
+
           {
             hasModel &&
             <StyledButton

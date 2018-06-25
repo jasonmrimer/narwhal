@@ -17,6 +17,8 @@ import { StyledEventCreationInfo } from '../widgets/EventCreationInfo';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 import { readerAbility } from '../app/abilities';
 import { StyledSubmitButton } from '../widgets/forms/SubmitButton';
+import { StyledEventApprovalRow } from './EventApprovalRow';
+import { EventStatus, EventType } from './models/EventModel';
 
 /* tslint:disable:no-empty*/
 describe('LeaveForm', () => {
@@ -130,6 +132,29 @@ describe('LeaveForm', () => {
 
   it('should render a submit request button', () => {
     expect(wrapper.find(StyledSubmitButton).prop('text')).toBe('SUBMIT REQUEST');
+  });
+
+  describe('eventApproval process', () => {
+    beforeEach(() => {
+      const pendingEvent = EventModelFactory.build();
+      pendingEvent.type = EventType.Leave;
+      pendingEvent.status = EventStatus.Pending;
+
+      wrapper = shallow(
+        <LeaveForm
+          airmanId={123}
+          leaveFormStore={store}
+          trackerStore={trackerStore}
+          profileStore={profileStore}
+          eventActions={eventActions}
+          event={pendingEvent}
+        />
+      );
+    });
+
+    it('should render StyledEventApprovalRows if it is a pending event', () => {
+      expect(wrapper.find(StyledEventApprovalRow).length).toBe(2);
+    });
   });
 });
 

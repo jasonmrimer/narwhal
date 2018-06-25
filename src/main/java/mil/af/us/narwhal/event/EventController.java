@@ -1,6 +1,5 @@
 package mil.af.us.narwhal.event;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import mil.af.us.narwhal.profile.Profile;
 import mil.af.us.narwhal.profile.RoleName;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -65,12 +64,7 @@ public class EventController {
 
   @GetMapping("/hasPending")
   public Map<String, Boolean> pendingCount(@AuthenticationPrincipal Profile profile){
-    Calendar date = new GregorianCalendar();
-    date.set(Calendar.HOUR_OF_DAY, 0);
-    date.set(Calendar.MINUTE, 0);
-    date.set(Calendar.SECOND, 0);
-    date.set(Calendar.MILLISECOND, 0);
-    Instant today = date.toInstant();
+    Instant today = getStartOfDay();
     Long result = service.pendingEventCountBySiteId(
       profile.getSite().getId(),
       today,
@@ -82,16 +76,36 @@ public class EventController {
 
   @GetMapping("/pending")
   public List<Event> pendingEvents(@AuthenticationPrincipal Profile profile) {
-    Calendar date = new GregorianCalendar();
-    date.set(Calendar.HOUR_OF_DAY, 0);
-    date.set(Calendar.MINUTE, 0);
-    date.set(Calendar.SECOND, 0);
-    date.set(Calendar.MILLISECOND, 0);
-    Instant today = date.toInstant();
+    Instant today = getStartOfDay();
     return service.pendingEventsBySiteId(
       profile.getSite().getId(),
       today,
       today.plus(60, ChronoUnit.DAYS)
     );
+  }
+
+  @PutMapping("/pending")
+  public Event updateApprovalStatus(@RequestBody EventApprovalJSON json, @AuthenticationPrincipal Profile profile) {
+    Instant currentTime = Instant.now();
+    final Event event = eventRepository.findOne(json.getEventId());
+    if (json.getApprovalRole() == EventApprovalRole.SUPERVISOR) {
+      event.setSupervisor(profile);
+      event.setSupervisorApproval(json.getApproval());
+      event.setSupervisorApprovalTime(currentTime);
+    } else {
+      event.setScheduler(profile);
+      event.setSchedulerApproval(json.getApproval());
+      event.setSchedulerApprovalTime(currentTime);
+    }
+    return eventRepository.save(event);
+  }
+
+  private Instant getStartOfDay() {
+    Calendar date = new GregorianCalendar();
+    date.set(Calendar.HOUR_OF_DAY, 0);
+    date.set(Calendar.MINUTE, 0);
+    date.set(Calendar.SECOND, 0);
+    date.set(Calendar.MILLISECOND, 0);
+    return date.toInstant();
   }
 }

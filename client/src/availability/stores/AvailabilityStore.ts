@@ -1,4 +1,4 @@
-import { EventModel, EventType } from '../../event/models/EventModel';
+import { EventApproval, EventApprovalRole, EventModel, EventType } from '../../event/models/EventModel';
 import { action, computed, observable } from 'mobx';
 import { Moment } from 'moment';
 import { Repositories } from '../../utils/Repositories';
@@ -109,6 +109,11 @@ export class AvailabilityStore {
   @action.bound
   async addEvent(event: EventModel) {
     return await this.repositories.eventRepository.save(event);
+  }
+
+  @action.bound
+  async updateEventApproval(approval: EventApproval, role: EventApprovalRole) {
+    return this._event = await this.repositories.eventRepository.updateEventApproval(this._event!.id!, approval, role);
   }
 
   @action.bound

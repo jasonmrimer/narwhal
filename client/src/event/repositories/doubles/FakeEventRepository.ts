@@ -1,5 +1,5 @@
 import { EventRepository } from '../EventRepository';
-import { EventModel, EventStatus } from '../../models/EventModel';
+import { EventApproval, EventApprovalRole, EventModel, EventStatus } from '../../models/EventModel';
 import { Moment } from 'moment';
 import { FakeAirmanRepository } from '../../../airman/repositories/doubles/FakeAirmanRepository';
 import { FormErrors } from '../../../widgets/inputs/FieldValidation';
@@ -87,5 +87,20 @@ export class FakeEventRepository implements EventRepository {
 
   async hasPendingRequests(): Promise<boolean> {
     return true;
+  }
+
+  updateEventApproval(eventId: number, approval: EventApproval, role: EventApprovalRole): Promise<EventModel> {
+    const event = EventModelFactory.build();
+    event.id = eventId;
+    if (role === EventApprovalRole.Supervisor) {
+      event.supervisorApproval = approval;
+      event.supervisorApprovalTime = moment();
+      event.supervisorUsername = 'tytus';
+    } else {
+      event.schedulerApproval = approval;
+      event.schedulerApprovalTime = moment();
+      event.schedulerUsername = 'tytus';
+    }
+    return Promise.resolve(event);
   }
 }

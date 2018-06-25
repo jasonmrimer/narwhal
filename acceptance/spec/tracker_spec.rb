@@ -55,6 +55,14 @@ describe 'Tracker page', type: :feature do
     it 'can create, update, and delete an event for a selected airman' do
       tracker_page.assert_create_update_delete_event
     end
+
+    it 'can approve pending appointment events' do
+      tracker_page.assert_approve_pending_appointment
+    end
+
+    it 'can approve pending leave events' do
+      tracker_page.assert_approve_pending_leave
+    end
   end
 
   describe 'skill' do

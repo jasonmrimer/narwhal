@@ -1,5 +1,5 @@
 import { EventRepository } from '../EventRepository';
-import { EventModel, EventType } from '../../models/EventModel';
+import { EventApproval, EventApprovalRole, EventModel, EventType } from '../../models/EventModel';
 import { EventSerializer } from '../../serializers/EventSerializer';
 import { HTTPClient } from '../../../utils/HTTPClient';
 import { Moment } from 'moment';
@@ -46,5 +46,16 @@ export class WebEventRepository implements EventRepository {
   async hasPendingRequests(): Promise<boolean> {
     const json = await this.client.getJSON('api/events/hasPending');
     return json.success;
+  }
+
+  async updateEventApproval(
+    eventId: number,
+    approval: EventApproval,
+    approvalRole: EventApprovalRole
+  ): Promise<EventModel> {
+    const json = await this.client.putJSON(
+      'api/events/pending', JSON.stringify({eventId: eventId, approval: approval, approvalRole: approvalRole})
+    );
+    return this.serializer.deserialize(json);
   }
 }

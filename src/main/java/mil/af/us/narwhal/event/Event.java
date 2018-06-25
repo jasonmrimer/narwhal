@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import mil.af.us.narwhal.airman.Airman;
+import mil.af.us.narwhal.profile.Profile;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
@@ -52,6 +53,26 @@ public class Event {
 
   private Instant createdOn;
 
+  @ManyToOne
+  @JoinColumn(name = "supervisor_profile_id", referencedColumnName = "id")
+  @JsonIgnore
+  private Profile supervisor;
+
+  @Enumerated(EnumType.STRING)
+  private EventApproval supervisorApproval;
+
+  private Instant supervisorApprovalTime;
+
+  @ManyToOne
+  @JoinColumn(name = "scheduler_profile_id", referencedColumnName = "id")
+  @JsonIgnore
+  private Profile scheduler;
+
+  @Enumerated(EnumType.STRING)
+  private EventApproval schedulerApproval;
+
+  private Instant schedulerApprovalTime;
+
   public static Event fromJSON(EventJSON json, Airman airman) {
     return new Event(
       json.getId(),
@@ -62,6 +83,12 @@ public class Event {
       json.getType(),
       json.getStatus(),
       airman,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null,
       null
     );
@@ -84,12 +111,45 @@ public class Event {
     EventStatus eventStatus,
     Airman airman
   ) {
-    this(null, title, description, startTime, endTime, eventType, eventStatus, airman, null, null);
+    this(
+      null,
+      title,
+      description,
+      startTime,
+      endTime,
+      eventType,
+      eventStatus,
+      airman,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null
+    );
   }
 
   @JsonProperty
   public Long airmanId() {
     return this.airman.getId();
+  }
+
+  @JsonProperty
+  public String supervisorUsername() {
+    if (supervisor != null) {
+      return this.supervisor.getUsername();
+    }
+    return null;
+  }
+
+  @JsonProperty
+  public String schedulerUsername() {
+    if (scheduler != null) {
+      return this.scheduler.getUsername();
+    }
+    return null;
   }
 
   @AssertTrue(message = "End Date cannot be before Start Date.")

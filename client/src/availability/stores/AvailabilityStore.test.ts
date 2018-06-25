@@ -1,5 +1,5 @@
 import { AvailabilityStore } from './AvailabilityStore';
-import { EventModel, EventType } from '../../event/models/EventModel';
+import { EventApproval, EventApprovalRole, EventModel, EventStatus, EventType } from '../../event/models/EventModel';
 import { EventModelFactory } from '../../event/factories/EventModelFactory';
 import * as moment from 'moment';
 import { DoubleRepositories } from '../../utils/Repositories';
@@ -8,9 +8,14 @@ import { FakeEventRepository } from '../../event/repositories/doubles/FakeEventR
 describe('AvailabilityStore', () => {
   let eventRepository: FakeEventRepository;
   let subject: AvailabilityStore;
+  let eventRepoSpy: jest.Mock;
 
   beforeEach(() => {
+    eventRepoSpy = jest.fn();
+
     eventRepository = (DoubleRepositories.eventRepository as FakeEventRepository);
+    eventRepository.updateEventApproval = eventRepoSpy;
+
     subject = new AvailabilityStore(DoubleRepositories);
   });
 
@@ -162,6 +167,30 @@ describe('AvailabilityStore', () => {
 
       expect(eventRepository.count).toBe(eventCount);
       expect(eventRepository.hasItem(updatedEvent)).toBeTruthy();
+    });
+  });
+
+  describe('approving pending events', async () => {
+    const pendingEvent = new EventModel(
+      'Title',
+      'Description',
+      moment(),
+      moment(),
+      1,
+      EventType.Leave,
+      1,
+      EventStatus.Pending
+    );
+
+    it('should update an existing event with eventApproval changes', async () => {
+      subject.openEditEventForm(pendingEvent);
+      await subject.updateEventApproval(EventApproval.Approved, EventApprovalRole.Supervisor);
+
+      expect(eventRepoSpy).toHaveBeenCalledWith(
+        pendingEvent.id,
+        EventApproval.Approved,
+        EventApprovalRole.Supervisor
+      );
     });
   });
 });
