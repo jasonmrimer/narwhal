@@ -5,7 +5,7 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import { AvailableIcon } from '../icons/AvailableIcon';
 import { OffDayIcon } from '../icons/OffDayIcon';
 import { LeaveIcon } from '../icons/LeaveIcon';
-import { EventType } from '../event/models/EventModel';
+import { EventStatus, EventType } from '../event/models/EventModel';
 import { EventModelFactory } from '../event/factories/EventModelFactory';
 import { AppointmentIcon } from '../icons/AppointmentIcon';
 import { TDYDeploymentIcon } from '../icons/TDYDeploymentIcon';
@@ -13,6 +13,7 @@ import { MissionIcon } from '../icons/MissionIcon';
 
 describe('PlannerEvent', () => {
   const event = EventModelFactory.build();
+  event.status = EventStatus.Approved;
   const day = moment(0);
   const airman: any = {
     isAvailableForWork: () => true
