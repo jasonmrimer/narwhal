@@ -27,7 +27,7 @@ export class SiteManagerStore extends NotificationStore {
   @observable private _pendingScheduleStartDate: any = moment(moment.now());
   @observable private _pendingNewFlight: FlightModel | null = null;
   @observable private _flightsExpanded: number[] = [];
-
+  @observable private _pendingFlightShift: boolean = false;
   constructor(repositories: Repositories) {
     super();
     this.flightRepository = repositories.flightRepository;
@@ -73,6 +73,11 @@ export class SiteManagerStore extends NotificationStore {
   @action.bound
   removeFlightFromExpandedFlights(flightId: number) {
       this._flightsExpanded = this._flightsExpanded.filter(x => x !== flightId);
+  }
+
+  @computed
+  get pendingFlightShift() {
+    return this._pendingFlightShift;
   }
 
   @computed

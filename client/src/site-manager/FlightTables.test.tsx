@@ -8,6 +8,7 @@ import { StyledShiftDropdown } from '../tracker/ShiftDropdown';
 import { ShiftType } from '../airman/models/AirmanModel';
 import { StyledDropdown } from '../widgets/inputs/Dropdown';
 import { StyledFlightSchedulePopup } from '../widgets/popups/FlightSchedulePopup';
+import {StyledFlightShiftPopup} from "../widgets/popups/FlightShiftPopup";
 
 describe('FlightTables', () => {
   const flights = [
@@ -16,32 +17,35 @@ describe('FlightTables', () => {
     new FlightModel(3, 'C', 1)
   ];
   const airman = AirmanModelFactory.build();
-  const siteManagerStore: any = {
-    getAirmenByFlightId: () => {
-      return [airman];
-    },
-    getShiftByFlightId: () => {
-      return ShiftType.Day;
-    },
-    getScheduleIdByFlightId: () => {
-      return '1';
-    },
-    shouldShowSchedulePrompt: () => {
-      return true;
-    },
-    scheduleOptions: [{label: 'Front Half', value: 1}, {label: 'Back Half', value: 2}],
-    shouldExpandFlight: () => {
-      return true;
-    },
-    shouldAllowFlightDelete: () => {
-      return true;
-    }
-  };
-
   let siteManagerActions: any;
-  let subject: ShallowWrapper;
+  let siteManagerStore: any;
 
+  let subject: ShallowWrapper;
   beforeEach(() => {
+
+    siteManagerStore = {
+      getAirmenByFlightId: () => {
+        return [airman];
+      },
+      getShiftByFlightId: () => {
+        return ShiftType.Day;
+      },
+      getScheduleIdByFlightId: () => {
+        return '1';
+      },
+      shouldShowSchedulePrompt: () => {
+        return true;
+      },
+      scheduleOptions: [{label: 'Front Half', value: 1}, {label: 'Back Half', value: 2}],
+      shouldExpandFlight: () => {
+        return true;
+      },
+      shouldAllowFlightDelete: () => {
+        return true;
+      },
+      pendingFlightShift: () => {return false},
+    };
+
     siteManagerActions = {
       setFlightShift: jest.fn(),
       setFlightSchedule: jest.fn(),
@@ -97,4 +101,17 @@ describe('FlightTables', () => {
     expect(subject.find(StyledFlightSchedulePopup).prop('onConfirm'))
       .toBe(siteManagerStore.saveSchedule);
   });
+
+  it('should render a Flight Shift popup when pending shift change', () => {
+    Object.assign(siteManagerStore, {pendingFlightShift: () => {return true}});
+    subject.update();
+    expect(subject.find(StyledFlightShiftPopup).exists()).toBeTruthy();
+  });
+
+  it('should not render a Flight Shift popup on load', () => {
+    Object.assign(siteManagerStore, {pendingFlightShift: () => {return false}});
+    subject.update();
+    expect(subject.find(StyledFlightShiftPopup).exists()).toBeFalsy();
+  });
+
 });
