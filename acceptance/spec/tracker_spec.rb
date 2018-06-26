@@ -57,7 +57,7 @@ describe 'Tracker page', type: :feature do
     end
 
     it 'can approve pending events' do
-      tracker_page.assert_approve_pending_event
+      tracker_page.assert_approve_pending_appointment
     end
   end
 

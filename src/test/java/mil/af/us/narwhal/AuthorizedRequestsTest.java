@@ -96,6 +96,7 @@ public class AuthorizedRequestsTest {
           .setStatusCodeDictionaryGET(modifiersOnly)
         , new EndpointAuthorizationExpectations("/api/events/pending")
           .setStatusCodeDictionaryGET(modifiersOnly)
+          .setStatusCodeDictionaryPUT(modifiersOnly)
         , new EndpointAuthorizationExpectations("/api/airmen/1/qualifications")
           .setStatusCodeDictionaryPOST(modifiersOnly)
           .setStatusCodeDictionaryPUT(modifiersOnly)

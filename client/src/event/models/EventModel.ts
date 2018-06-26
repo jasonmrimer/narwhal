@@ -12,6 +12,16 @@ export enum EventStatus {
   Approved = 'APPROVED',
 }
 
+export enum EventApproval {
+  Denied = 'DENIED',
+  Approved = 'APPROVED',
+}
+
+export enum EventApprovalRole {
+  Scheduler = 'SCHEDULER',
+  Supervisor = 'SUPERVISOR',
+}
+
 export class EventModel {
   constructor(public title: string,
               public description: string,
@@ -22,7 +32,13 @@ export class EventModel {
               public id: number | null = null,
               public status: EventStatus | null = null,
               public createdBy: string | null = null,
-              public createdOn: Moment | null = null) {
+              public createdOn: Moment | null = null,
+              public supervisorUsername: string | null = null,
+              public supervisorApproval: EventApproval | null = null,
+              public supervisorApprovalTime: Moment | null = null,
+              public schedulerUsername: string | null = null,
+              public schedulerApproval: EventApproval | null = null,
+              public schedulerApprovalTime: Moment | null = null) {
   }
 
   isOnDay(day: Moment) {

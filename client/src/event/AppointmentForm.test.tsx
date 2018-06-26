@@ -17,6 +17,7 @@ import * as moment from 'moment';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 import { readerAbility } from '../app/abilities';
 import { StyledSubmitButton } from '../widgets/forms/SubmitButton';
+import { EventStatus } from './models/EventModel';
 
 /* tslint:disable:no-empty*/
 describe('AppointmentForm', () => {
@@ -138,6 +139,31 @@ describe('AppointmentForm', () => {
 
   it('should render a submit request button', () => {
     expect(wrapper.find(StyledSubmitButton).prop('text')).toBe('SUBMIT REQUEST');
+  });
+
+  describe('approval process', () => {
+    const pendingEvent = EventModelFactory.build();
+    pendingEvent.status = EventStatus.Pending;
+
+    wrapper = shallow(
+      <AppointmentForm
+        airmanId={123}
+        appointmentFormStore={appointmentFormStore}
+        profileStore={profileStore}
+        trackerStore={trackerStore}
+        eventActions={eventActions}
+        event={pendingEvent}
+      />
+    );
+
+    it('should render approval buttons if it is a pending event',() => {
+      expect(wrapper.find(StyledButton).at(0).prop('text')).toBe('DENY');
+      expect(wrapper.find(StyledButton).at(1).prop('text')).toBe('APPROVE');
+    });
+
+    it('should call handleDecision when a button is clicked', () => {
+      expect(wrapper.find(StyledButton).at(1).prop('onClick')).toEqual(subject.handleDecision)
+    });
   });
 });
 

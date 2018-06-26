@@ -1,5 +1,6 @@
 package mil.af.us.narwhal.event;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import mil.af.us.narwhal.BaseIntegrationTest;
 import mil.af.us.narwhal.airman.Airman;
 import mil.af.us.narwhal.airman.AirmanRepository;
@@ -7,7 +8,6 @@ import mil.af.us.narwhal.crew.CrewPosition;
 import mil.af.us.narwhal.flight.Flight;
 import mil.af.us.narwhal.mission.Mission;
 import mil.af.us.narwhal.mission.MissionRepository;
-import mil.af.us.narwhal.rank.Rank;
 import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
 import mil.af.us.narwhal.squadron.Squadron;
@@ -386,6 +386,43 @@ public class EventControllerTest extends BaseIntegrationTest {
       .body("$.size()", equalTo(1))
       .body("id", hasItem(event2.getId().intValue()))
       .body("status", hasItem(event2.getStatus().toString()));
+    // @formatter:on
+  }
+
+  @Test
+  public void updateApprovalStatus() throws JsonProcessingException {
+    Instant start = Instant.now().plus(10, ChronoUnit.DAYS);
+    final Event event1 = new Event(
+            "New Event",
+            "New Description",
+            start,
+            start,
+            EventType.APPOINTMENT,
+            EventStatus.PENDING,
+            airman
+    );
+
+    eventRepository.save(event1);
+
+    final String json = objectMapper.writeValueAsString(
+            new EventApprovalJSON(event1.getId(), EventApproval.APPROVED, EventApprovalRole.SCHEDULER)
+    );
+
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .body(json)
+      .contentType("application/json")
+    .when()
+     .put(EventController.URI + "/pending")
+    .then()
+      .statusCode(200)
+      .body("schedulerApproval", is(EventApproval.APPROVED.toString()))
+      .body("schedulerUsername", notNullValue())
+      .body("schedulerApprovalTime", notNullValue());
     // @formatter:on
   }
 }

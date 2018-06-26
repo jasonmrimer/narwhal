@@ -3,7 +3,7 @@ import { AirmanModel } from '../airman/models/AirmanModel';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
 import { EventModelFactory } from './factories/EventModelFactory';
-import { EventModel } from './models/EventModel';
+import {EventApproval, EventApprovalRole, EventModel} from './models/EventModel';
 import { Moment } from 'moment';
 
 describe('EventActions', () => {
@@ -14,6 +14,7 @@ describe('EventActions', () => {
   let setSidePanelWeekSpy: jest.Mock;
   let setAirmanEventsSpy: jest.Mock;
   let closeEventFormSpy: jest.Mock;
+  let updateEventApprovalSpy: jest.Mock;
   let closeSpy: jest.Mock;
   let refreshAirmanEventsSpy: jest.Mock;
   let formStore: any;
@@ -32,6 +33,7 @@ describe('EventActions', () => {
     setSidePanelWeekSpy = jest.fn();
     setAirmanEventsSpy = jest.fn();
     closeEventFormSpy = jest.fn();
+    updateEventApprovalSpy = jest.fn();
     event = EventModelFactory.build();
     const timeService = new TimeServiceStub();
     eventWeek = timeService.navigateToWeek(event.startTime);
@@ -58,6 +60,7 @@ describe('EventActions', () => {
       refreshAirmanEvents: refreshAirmanEventsSpy,
       setAirmanEvents: setAirmanEventsSpy,
       closeEventForm: closeEventFormSpy,
+      updateEventApproval: updateEventApprovalSpy,
       removeEvent: removeEventSpy,
       executePendingDelete: () => event,
     };
@@ -93,5 +96,10 @@ describe('EventActions', () => {
     expect(refreshAirmanEventsSpy).toHaveBeenCalledWith(airman.id, eventWeek);
     expect(refreshEventsSpy).toHaveBeenCalledWith(plannerTimeSpan);
     expect(closeEventFormSpy).toHaveBeenCalled();
+  });
+
+  it('should call updateEventStatusAction', async () => {
+    await subject.updateEventApproval(EventApproval.Approved, EventApprovalRole.Supervisor);
+    expect(updateEventApprovalSpy).toHaveBeenCalled();
   });
 });

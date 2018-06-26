@@ -123,6 +123,12 @@ public class Mission {
       EventStatus.APPROVED,
       airman,
       null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
       null
     )).orElse(null);
   }

@@ -1,20 +1,21 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import { inject, observer } from 'mobx-react';
-import { StyledTextInput } from '../widgets/inputs/TextInput';
-import { StyledDatePicker } from '../widgets/inputs/DatePicker';
-import { StyledTimeInput } from '../widgets/inputs/TimeInput';
-import { StyledSubmitButton } from '../widgets/forms/SubmitButton';
-import { StyledFieldValidation } from '../widgets/inputs/FieldValidation';
-import { StyledButton } from '../widgets/buttons/Button';
-import { StyledForm, StyledFormRow } from '../widgets/forms/Form';
-import { DeleteIcon } from '../icons/DeleteIcon';
-import { AppointmentFormStore } from './stores/AppointmentFormStore';
-import { EventModel } from './models/EventModel';
-import { EventActions } from './EventActions';
-import { TrackerStore } from '../tracker/stores/TrackerStore';
-import { StyledEventCreationInfo } from '../widgets/EventCreationInfo';
-import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
+import {inject, observer} from 'mobx-react';
+import {StyledTextInput} from '../widgets/inputs/TextInput';
+import {StyledDatePicker} from '../widgets/inputs/DatePicker';
+import {StyledTimeInput} from '../widgets/inputs/TimeInput';
+import {StyledSubmitButton} from '../widgets/forms/SubmitButton';
+import {StyledFieldValidation} from '../widgets/inputs/FieldValidation';
+import {StyledButton} from '../widgets/buttons/Button';
+import {StyledForm, StyledFormRow} from '../widgets/forms/Form';
+import {DeleteIcon} from '../icons/DeleteIcon';
+import {AppointmentFormStore} from './stores/AppointmentFormStore';
+import {EventApproval, EventApprovalRole, EventModel} from './models/EventModel';
+import {EventActions} from './EventActions';
+import {TrackerStore} from '../tracker/stores/TrackerStore';
+import {StyledEventCreationInfo} from '../widgets/EventCreationInfo';
+import {ProfileSitePickerStore} from '../profile/stores/ProfileSitePickerStore';
+import {StyledEventApprovalRow} from "./EventApprovalRow";
 
 interface Props {
   appointmentFormStore?: AppointmentFormStore;
@@ -43,6 +44,10 @@ export class AppointmentForm extends React.Component<Props> {
   handleSubmit = async (e: any) => {
     e.preventDefault();
     await this.props.eventActions!.handleFormSubmit(this.props.airmanId, this.props.appointmentFormStore!);
+  }
+
+  handleDecision = async (approvalChoice: EventApproval, approvalRole: EventApprovalRole) => {
+    await this.props.eventActions!.updateEventApproval(approvalChoice, approvalRole);
   }
 
   render() {
@@ -109,11 +114,37 @@ export class AppointmentForm extends React.Component<Props> {
             null
         }
 
+        {
+          this.props.event ?
+            <StyledEventApprovalRow
+              event={this.props.event}
+              role={EventApprovalRole.Supervisor}
+              onClickApprove={
+                async () => await this.handleDecision(EventApproval.Approved, EventApprovalRole.Supervisor)
+              }
+              onClickDeny={
+                async () => await this.handleDecision(EventApproval.Denied, EventApprovalRole.Supervisor)
+              }
+            /> :
+            null
+        }
+
+        {
+          this.props.event ?
+            <StyledEventApprovalRow
+              event={this.props.event}
+              role={EventApprovalRole.Scheduler}
+              onClickApprove={async () => await this.handleDecision(EventApproval.Denied, EventApprovalRole.Scheduler)}
+              onClickDeny={async () => await this.handleDecision(EventApproval.Approved, EventApprovalRole.Scheduler)}
+            /> :
+            null
+        }
+
         <StyledFormRow reversed={true}>
           {
-          this.props.profileStore!.profile!.roleName === 'READER' ?
-            <StyledSubmitButton text="SUBMIT REQUEST"/> :
-            <StyledSubmitButton text="CONFIRM"/>
+            this.props.profileStore!.profile!.roleName === 'READER' ?
+              <StyledSubmitButton text="SUBMIT REQUEST"/> :
+              <StyledSubmitButton text="CONFIRM"/>
           }
           {
             hasModel &&

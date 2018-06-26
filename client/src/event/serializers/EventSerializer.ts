@@ -18,7 +18,13 @@ export class EventSerializer implements Serializer<EventModel> {
       item.id,
       item.status,
       item.createdBy,
-      moment(item.createdOn)
+      moment(item.createdOn),
+      item.supervisorUsername,
+      item.supervisorApproval,
+      moment(item.supervisorApprovalTime),
+      item.schedulerUsername,
+      item.schedulerApproval,
+      moment(item.schedulerApprovalTime)
     );
   }
 }

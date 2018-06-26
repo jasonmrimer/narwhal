@@ -123,7 +123,7 @@ class TrackerPage
     expect(event).not_to exist
   end
 
-  def assert_approve_pending_event
+  def assert_approve_pending_appointment
     click_on_airman('Gene, Cain')
 
     page.within('.side-panel') do
