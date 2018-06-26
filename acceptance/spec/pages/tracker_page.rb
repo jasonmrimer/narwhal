@@ -123,6 +123,20 @@ class TrackerPage
     expect(event).not_to exist
   end
 
+  def assert_approve_pending_event
+    click_on_airman('Gene, Cain')
+
+    page.within('.side-panel') do
+      find('a', text: 'AVAILABILITY').click
+      click(page.all('.event-title', text: '[PENDING] newAppointment')[0])
+      expect(find_field('title').value).to eq '[PENDING] newAppointment'
+
+      click(page.all('.approve-button', text: 'APPROVE')[0])
+      expect(page).to have_content('Approved')
+      expect(page.find('.approver')).to have_content('tytus')
+    end
+  end
+
   def assert_create_event_validation
     click_on_airman('Keeter, Tracy')
     event = Event.new
