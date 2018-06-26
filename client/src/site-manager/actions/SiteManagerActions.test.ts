@@ -29,6 +29,7 @@ describe('SiteManagerActions', () => {
       setPendingScheduleStartDate: jest.fn(),
       addPendingNewFlight: jest.fn(),
       savePendingNewFlight: jest.fn(),
+      setShiftPrompt: jest.fn(),
       refreshFlights: jest.fn(),
       cancelPendingNewFlight: jest.fn(),
       addFlightToExpandedFlights: jest.fn(),
@@ -52,9 +53,7 @@ describe('SiteManagerActions', () => {
   it('should set the shift for a flight', async () => {
     await subject.setFlightShift(1, ShiftType.Day);
 
-    expect(airmanRepository.updateShiftByFlightId)
-      .toHaveBeenCalledWith(1, ShiftType.Day);
-    expect(siteManagerStore.setAirmenShiftByFlightId)
+    expect(siteManagerStore.setShiftPrompt)
       .toHaveBeenCalledWith(1, ShiftType.Day);
   });
 
@@ -98,5 +97,10 @@ describe('SiteManagerActions', () => {
     await subject.deleteFlight(4);
     expect(siteManagerStore.deleteFlight).toBeCalledWith(4);
     expect(siteManagerStore.refreshFlights).toBeCalled();
+  });
+
+  it('should show prompt when flight shift is changed', () => {
+    subject.setFlightShift(1, ShiftType.Day);
+    expect(siteManagerStore.setShiftPrompt).toHaveBeenCalledWith(1, ShiftType.Day);
   });
 });

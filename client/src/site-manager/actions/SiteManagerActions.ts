@@ -11,11 +11,25 @@ export class SiteManagerActions {
   }
 
   async setFlightShift(flightId: number, shift: ShiftType) {
+      const {siteManagerStore} = this.stores;
+
+      siteManagerStore!.setShiftPrompt(flightId, shift);
+      return Promise.resolve();
+  }
+
+  async saveFlightShift() {
     const {siteManagerStore} = this.stores;
 
     await siteManagerStore!.performLoading(async () => {
-      await this.airmanRepository.updateShiftByFlightId(flightId, shift);
-      siteManagerStore!.setAirmenShiftByFlightId(flightId, shift);
+      await this.airmanRepository.updateShiftByFlightId(
+        siteManagerStore!.pendingFlightId!,
+        siteManagerStore!.pendingShift!
+      );
+      siteManagerStore!.setAirmenShiftByFlightId(
+        siteManagerStore!.pendingFlightId!,
+        siteManagerStore!.pendingShift!
+      );
+      siteManagerStore!.hideShiftPrompt();
     });
   }
 

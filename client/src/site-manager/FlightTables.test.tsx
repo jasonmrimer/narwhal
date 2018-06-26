@@ -8,6 +8,7 @@ import { StyledShiftDropdown } from '../tracker/ShiftDropdown';
 import { ShiftType } from '../airman/models/AirmanModel';
 import { StyledDropdown } from '../widgets/inputs/Dropdown';
 import { StyledFlightSchedulePopup } from '../widgets/popups/FlightSchedulePopup';
+import { StyledFlightShiftPopup } from '../widgets/popups/FlightShiftPopup';
 
 describe('FlightTables', () => {
   const flights = [
@@ -25,6 +26,12 @@ describe('FlightTables', () => {
     },
     getScheduleIdByFlightId: () => {
       return '1';
+    },
+    hideShiftPrompt: () => {
+      return;
+    },
+    shouldShowShiftPrompt: () => {
+      return true;
     },
     shouldShowSchedulePrompt: () => {
       return true;
@@ -45,7 +52,8 @@ describe('FlightTables', () => {
     siteManagerActions = {
       setFlightShift: jest.fn(),
       setFlightSchedule: jest.fn(),
-      expandFlight: jest.fn()
+      expandFlight: jest.fn(),
+      saveFlightShift: jest.fn()
     };
 
     subject = shallow(
@@ -96,5 +104,10 @@ describe('FlightTables', () => {
       .toBe(siteManagerStore.hideSchedulePrompt);
     expect(subject.find(StyledFlightSchedulePopup).prop('onConfirm'))
       .toBe(siteManagerStore.saveSchedule);
+  });
+
+  it('should setup bindings Flight Shift Popup', () => {
+    expect(subject.find(StyledFlightShiftPopup).prop('onCancel'))
+      .toBe(siteManagerStore.hideShiftPrompt);
   });
 });

@@ -20,10 +20,12 @@ export class SiteManagerStore extends NotificationStore {
   @observable private _airmen: AirmanModel[] = [];
   @observable private _certifications: CertificationModel[] = [];
   @observable private _schedules: ScheduleModel[] = [];
+  @observable private _shouldShowShiftPrompt: boolean = false;
   @observable private _shouldShowSchedulePrompt: boolean = false;
   @observable private _shouldShowAddFlightPrompt: boolean = false;
   @observable private _pendingFlightId: number | null = null;
   @observable private _pendingScheduleId: number | null = null;
+  @observable private _pendingShift: ShiftType | null = null;
   @observable private _pendingScheduleStartDate: any = moment(moment.now());
   @observable private _pendingNewFlight: FlightModel | null = null;
   @observable private _flightsExpanded: number[] = [];
@@ -53,6 +55,16 @@ export class SiteManagerStore extends NotificationStore {
     return this._flightsExpanded;
   }
 
+  @computed
+  get currentPendingFlight () {
+    return this._squadron.flights.find(f => f.id === this.pendingFlightId);
+  }
+
+  @computed
+  get currentPendingFlightName () {
+    return this.currentPendingFlight!.name;
+  }
+
   @observable
   shouldExpandFlight(flightId: number) {
     return this._flightsExpanded.find(x => x === flightId) !== undefined;
@@ -78,6 +90,11 @@ export class SiteManagerStore extends NotificationStore {
   @computed
   get shouldShowSchedulePrompt() {
     return this._shouldShowSchedulePrompt;
+  }
+
+  @computed
+  get shouldShowShiftPrompt() {
+    return this._shouldShowShiftPrompt;
   }
 
   @computed
@@ -119,6 +136,11 @@ export class SiteManagerStore extends NotificationStore {
   }
 
   @computed
+  get pendingShift() {
+    return this._pendingShift;
+  }
+
+  @computed
   get pendingScheduleStartDate() {
     return this._pendingScheduleStartDate;
   }
@@ -135,11 +157,19 @@ export class SiteManagerStore extends NotificationStore {
     });
   }
 
+  @computed
+    get shiftPopupMessage() {
+    return `Set a ${this.pendingShift}s shift for ${this.currentPendingFlightName}.`;
+  }
+
   getAirmenByFlightId = (flightId: number) => {
     return this.airmen.filter(a => a.flightId === flightId);
   }
 
   getShiftByFlightId = (flightId: number) => {
+    if (this._pendingShift !== null && this.pendingFlightId === flightId) {
+      return this.pendingShift;
+    }
     const object = this.getAirmenByFlightId(flightId).reduce(
       (prev: any, curr: AirmanModel) => {
         if (!curr.shift) {
@@ -193,6 +223,13 @@ export class SiteManagerStore extends NotificationStore {
   }
 
   @action.bound
+  hideShiftPrompt() {
+    this._shouldShowShiftPrompt = false;
+    this._pendingFlightId = null;
+    this._pendingShift = null;
+  }
+
+  @action.bound
   hideAddFlightPrompt() {
     this._shouldShowAddFlightPrompt = false;
   }
@@ -209,6 +246,13 @@ export class SiteManagerStore extends NotificationStore {
     this._shouldShowSchedulePrompt = true;
     this._pendingFlightId = flightId;
     this._pendingScheduleId = scheduleId;
+  }
+
+  @action.bound
+  setShiftPrompt(flightId: number, shift: ShiftType) {
+    this._shouldShowShiftPrompt = true;
+    this._pendingFlightId = flightId;
+    this._pendingShift = shift;
   }
 
   @action.bound

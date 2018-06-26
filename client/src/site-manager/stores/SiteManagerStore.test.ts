@@ -123,6 +123,14 @@ describe('SiteManagerStore', () => {
     expect(subject.pendingScheduleId).toBe(2);
   });
 
+  it('should set pending variables when calling shiftPrompt', () => {
+    expect(subject.shouldShowShiftPrompt).toBeFalsy();
+    subject.setShiftPrompt(1, ShiftType.Day);
+    expect(subject.shouldShowShiftPrompt).toBeTruthy();
+    expect(subject.pendingFlightId).toBe(1);
+    expect(subject.pendingShift).toBe(ShiftType.Day);
+  });
+
   it('should set pending variables when calling addNewFlights', () => {
     expect(subject.shouldShowAddFlightPrompt).toBeFalsy();
     subject.setAddNewFlightPrompt();
@@ -146,6 +154,14 @@ describe('SiteManagerStore', () => {
     const isAfter = currentDate.isBefore(subject.pendingScheduleStartDate);
     expect(isAfter).toBeTruthy();
     expect(subject.pendingScheduleId).toBeFalsy();
+  });
+
+  it('should hide and reset defaults when hideShiftPrompt is called', () => {
+    subject.setShiftPrompt(1, ShiftType.Day);
+    subject.hideShiftPrompt();
+    expect(subject.shouldShowShiftPrompt).toBeFalsy();
+    expect(subject.pendingFlightId).toBeFalsy();
+    expect(subject.pendingShift).toBeFalsy();
   });
 
   it('should trigger a pending flight to add when adding flight', () => {
@@ -197,5 +213,18 @@ describe('SiteManagerStore', () => {
   it('should hide Delete Flight when no airman are in flight', () => {
     expect(subject.shouldAllowFlightDelete(1)).toBeFalsy();
     expect(subject.shouldAllowFlightDelete(2)).toBeTruthy();
+  });
+
+  it('should return pending shift when working with unconfirmed flight shift change', () => {
+    subject.setShiftPrompt(12, ShiftType.Swing);
+
+    expect(subject.getShiftByFlightId(12)).toBe(ShiftType.Swing);
+    expect(subject.getShiftByFlightId(1)).toBe(ShiftType.Night);
+  });
+
+  it('should return flight popup message', () => {
+    subject.setShiftPrompt(2, ShiftType.Day);
+
+    expect(subject.shiftPopupMessage).toContain(`Set a Days shift for Flight 2.`);
   });
 });

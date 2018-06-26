@@ -14,6 +14,7 @@ import * as classNames from 'classnames';
 import { ExpandIcon } from '../icons/ExpandIcon';
 import { CollapseIcon } from '../icons/CollapseIcon';
 import { DeleteIcon } from '../icons/DeleteIcon';
+import { StyledFlightShiftPopup } from '../widgets/popups/FlightShiftPopup';
 
 interface FlightTableRowProps {
   airman: AirmanModel;
@@ -56,6 +57,12 @@ export class FlightTables extends React.Component<FlightTablesProps> {
           this.props.siteManagerStore!.shouldShowSchedulePrompt &&
           <StyledFlightSchedulePopup
             onCancel={this.props.siteManagerStore!.hideSchedulePrompt}
+          />
+        }
+        {
+          this.props.siteManagerStore!.shouldShowShiftPrompt &&
+          <StyledFlightShiftPopup
+            onCancel={this.props.siteManagerStore!.hideShiftPrompt}
           />
         }
         {
