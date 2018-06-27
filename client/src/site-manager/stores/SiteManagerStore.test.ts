@@ -65,7 +65,7 @@ describe('SiteManagerStore', () => {
   it('should give the flights with their airmen', () => {
     expect(subject.squadron.flights.length)
       .toBe(2);
-    expect(subject.getAirmenByFlightId(1))
+    expect(subject.getAirmenByFlightId(1).map(a => a.model))
       .toEqual(airmen);
   });
 
@@ -75,11 +75,22 @@ describe('SiteManagerStore', () => {
   });
 
   it('should set the airmen shift by flight', () => {
-    subject.setAirmenShiftByFlightId(1, ShiftType.Swing);
+    subject.setAirmenShiftByFlightId(1, ShiftType.Swing, airmen.map(a => a.id));
     expect(subject.getShiftByFlightId(1))
       .toBe(ShiftType.Swing);
-    expect(subject.getAirmenByFlightId(1).map(a => a.shift))
+    expect(subject.getAirmenByFlightId(1).map(a => a.model.shift))
       .toEqual([ShiftType.Swing, ShiftType.Swing, ShiftType.Swing]);
+  });
+
+  it('should allow partial list of airman to have the Shift set', () => {
+    airmen[0].shift = ShiftType.Day;
+    airmen[1].shift = ShiftType.Swing;
+    airmen[2].shift = ShiftType.Swing;
+    const toChange = [airmen[1], airmen[2]].map(a => a.id);
+    subject.setAirmenShiftByFlightId(1, ShiftType.Night, toChange);
+    expect(airmen[0].shift).toBe(ShiftType.Day);
+    expect(airmen[1].shift).toBe(ShiftType.Night);
+    expect(airmen[2].shift).toBe(ShiftType.Night);
   });
 
   it('should provide a list of certifications belonging to the current site', () => {
@@ -111,7 +122,7 @@ describe('SiteManagerStore', () => {
     subject.setAirmenScheduleByFlightId(1, airmen);
     expect(subject.getScheduleIdByFlightId(1))
       .toBe('2');
-    expect(subject.getAirmenByFlightId(1).map(a => a.currentAirmanSchedule!.schedule))
+    expect(subject.getAirmenByFlightId(1).map(a => a.model.currentAirmanSchedule!.schedule))
       .toEqual([schedule2, schedule2, schedule2]);
   });
 

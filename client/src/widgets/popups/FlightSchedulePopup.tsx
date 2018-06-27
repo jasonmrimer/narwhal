@@ -10,15 +10,14 @@ interface Props {
   onCancel: () => void;
   siteManagerActions?: SiteManagerActions;
   siteManagerStore?: SiteManagerStore;
+  count: number;
   className?: string;
 }
 
 @observer
 export class FlightSchedulePopup extends React.Component<Props> {
   render() {
-    const {siteManagerStore, siteManagerActions} = this.props;
-    const {getAirmenByFlightId, pendingFlightId} = siteManagerStore!;
-
+    const {siteManagerStore, siteManagerActions, count} = this.props;
     return (
       <StyledPopupModal
         title="Schedule Settings"
@@ -37,7 +36,7 @@ export class FlightSchedulePopup extends React.Component<Props> {
           />
         </div>
         <div className="flight-count">
-          This change will affect {getAirmenByFlightId(pendingFlightId!).length} operators.
+          This change will affect {count} operators.
         </div>
       </StyledPopupModal>
     );

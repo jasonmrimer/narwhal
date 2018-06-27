@@ -105,13 +105,13 @@ export class FakeAirmanRepository implements AirmanRepository {
     return Promise.resolve();
   }
 
-  updateShiftByFlightId(flightId: number, shift: ShiftType): Promise<AirmanModel[]> {
+  updateShiftByFlightId(flightId: number, shift: ShiftType, airmenIds: number[]): Promise<AirmanModel[]> {
     const filteredAirmen = airmen.filter(airman => airman.flightId === flightId);
     filteredAirmen.forEach(airman => airman.shift = shift);
     return Promise.resolve(filteredAirmen);
   }
 
-  updateScheduleByFlightId(flightId: number, schedule: ScheduleModel, startDate: Moment | null)
+  updateScheduleByFlightId(flightId: number, schedule: ScheduleModel, airmenIds: number[], startDate: Moment | null)
     : Promise<AirmanModel[]> {
     return Promise.resolve(airmen.filter(a => a.flightId === flightId));
   }

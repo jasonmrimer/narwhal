@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
@@ -35,8 +36,12 @@ public class AirmanControllerTest extends BaseIntegrationTest {
   @Autowired private ScheduleRepository scheduleRepository;
   @Autowired private RankRepository rankRepository;
   private Airman airman1;
+  private Airman airman2;
+  private Airman airman3;
+  private Airman airman4;
   private Rank newRank;
   private Flight flight1;
+  private Flight flight2;
   private Flight flight3;
   private Site site;
   private Qualification qualification1;
@@ -52,7 +57,7 @@ public class AirmanControllerTest extends BaseIntegrationTest {
     final Squadron squadron1 = new Squadron("squadron1");
     squadron1.addFlight(flight1);
 
-    final Flight flight2 = new Flight("flight2");
+    flight2 = new Flight("flight2");
     final Squadron squadron2 = new Squadron("squadron2");
     squadron2.addFlight(flight2);
 
@@ -82,11 +87,13 @@ public class AirmanControllerTest extends BaseIntegrationTest {
     airman1 = new Airman(flight1, "first1", "last1", rank);
     airman1.setShift(ShiftType.Day);
 
-    final Airman airman2 = new Airman(flight2, "first2", "last2", rank);
-    final Airman airman3 = new Airman(flight2, "first3", "last3", rank);
-    final Airman airman4 = new Airman(flight3, "first4", "last4", rank);
+    airman2 = new Airman(flight2, "first2", "last2", rank);
+    airman2.setShift(ShiftType.Night);
+    airman3 = new Airman(flight2, "first3", "last3", rank);
+    airman3.setShift(ShiftType.Night);
+    airman4 = new Airman(flight3, "first4", "last4", rank);
 
-    airman1.addSchedule(new AirmanSchedule(schedule,  controlDate));
+    airman2.addSchedule(new AirmanSchedule(schedule,  controlDate));
 
     final List<Airman> airmen = airmanRepository.save(asList(airman1, airman2, airman3, airman4));
 
@@ -131,9 +138,9 @@ public class AirmanControllerTest extends BaseIntegrationTest {
       .statusCode(200)
       .body("$.size()", equalTo(3))
       .body("[0].firstName", equalTo("first1"))
-      .body("[0].schedules.size()", equalTo(1))
+      .body("[0].schedules.size()", equalTo(0))
       .body("[0].shift", equalTo("Day"))
-      .body("[1].shift", equalTo(null));
+      .body("[1].shift", equalTo("Night"));
     // @formatter:on
   }
 
@@ -210,7 +217,7 @@ public class AirmanControllerTest extends BaseIntegrationTest {
       .body("flightId", equalTo(flight3.getId().intValue()))
       .body("siteId", equalTo(flight3.getSquadron().getSite().getId().intValue()))
       .body("squadronId", equalTo(flight3.getSquadron().getId().intValue()))
-      .body("schedules.size()", equalTo(2))
+      .body("schedules.size()", equalTo(1))
       .body("rank.id", equalTo(newRank.getId().intValue()));
     // @formatter:on
   }
@@ -391,7 +398,8 @@ public class AirmanControllerTest extends BaseIntegrationTest {
 
   @Test
   public void updateShiftsTest() throws JsonProcessingException {
-    ShiftTypeJson shiftTypeJson = new ShiftTypeJson(ShiftType.Day);
+    List<Long> airmen = new ArrayList(asList(airman2.getId()));
+    AirmenShiftTypeJSON shiftTypeJson = new AirmenShiftTypeJSON(ShiftType.Day, airmen);
     final String json = objectMapper.writeValueAsString(shiftTypeJson);
     // @formatter:off
     given()
@@ -401,18 +409,23 @@ public class AirmanControllerTest extends BaseIntegrationTest {
       .basic("tytus", "password")
       .body(json)
       .contentType("application/json")
-      .param("flightId", flight1.getId())
+      .param("flightId", flight2.getId())
     .when()
       .put(AirmanController.URI + "/shift")
     .then()
       .statusCode(200)
-      .body("[0].shift", equalTo("Day"));
+      .body("[0].id", equalTo(airman2.getId().intValue()))
+      .body("[0].shift", equalTo("Day"))
+      .body("[1].id", equalTo(airman3.getId().intValue()))
+      .body("[1].shift", equalTo("Night"));
     // @formatter:on
   }
 
   @Test
   public void updateScheduleTest() throws JsonProcessingException {
-    final String json = objectMapper.writeValueAsString(schedule);
+    List<Long> airmen = new ArrayList(asList(airman2.getId()));
+    AirmenScheduleJSON request = new AirmenScheduleJSON(schedule, airmen);
+    final String json = objectMapper.writeValueAsString(request);
     // @formatter:off
     given()
       .port(port)
@@ -421,21 +434,26 @@ public class AirmanControllerTest extends BaseIntegrationTest {
       .basic("tytus", "password")
       .body(json)
       .contentType("application/json")
-      .param("flightId", flight1.getId())
+      .param("flightId", flight2.getId())
       .when()
       .put(AirmanController.URI + "/schedules")
       .then()
       .statusCode(200)
+      .body("$.size()", equalTo(2))
       .body("[0].schedules.size()", equalTo(2))
       .body("[0].schedules[1].schedule.type", equalTo("Front Half"))
       .body("[0].schedules[0].endDate", notNullValue())
-      .body("[0].schedules[1].endDate", nullValue());
+      .body("[0].schedules[1].endDate", nullValue())
+      .body("[1].schedules.size()", equalTo(0));
     // @formatter:on
   }
 
   @Test
   public void updateScheduleTestWithStartDate() throws JsonProcessingException {
-    final String json = objectMapper.writeValueAsString(schedule);
+
+    List<Long> airmen = new ArrayList(asList(airman2.getId()));
+    AirmenScheduleJSON request = new AirmenScheduleJSON(schedule, airmen);
+    final String json = objectMapper.writeValueAsString(request);
     final String startDate = Instant.now().toString();
 
     // @formatter:off
@@ -446,7 +464,7 @@ public class AirmanControllerTest extends BaseIntegrationTest {
       .basic("tytus", "password")
       .body(json)
       .contentType("application/json")
-      .param("flightId", flight1.getId())
+      .param("flightId", flight2.getId())
       .param("startDate", startDate)
       .when()
       .put(AirmanController.URI + "/schedules")

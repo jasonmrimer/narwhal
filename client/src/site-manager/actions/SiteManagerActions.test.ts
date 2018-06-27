@@ -2,18 +2,22 @@ import { SiteManagerActions } from './SiteManagerActions';
 import { AirmanModel, ShiftType } from '../../airman/models/AirmanModel';
 import { ScheduleModel, ScheduleType } from '../../schedule/models/ScheduleModel';
 import { AirmanModelFactory } from '../../airman/factories/AirmanModelFactory';
+import { FlightAirmanSelectionStore } from '../stores/FlightAirmanSelectionStore';
+import { Selectable } from '../models/Selectable';
 
 describe('SiteManagerActions', () => {
   let siteManagerStore: any;
   let airmanRepository: any;
   let subject: SiteManagerActions;
+  let flightAirmanSelectionStore: FlightAirmanSelectionStore;
   let schedule: ScheduleModel;
   const airman = AirmanModelFactory.build();
   let airmen: AirmanModel[] = [airman];
+  let selectableAirmen: Selectable<AirmanModel>[] = Selectable.transform(airmen);
 
   beforeEach(() => {
     schedule = new ScheduleModel(1, ScheduleType.NoSchedule);
-
+    flightAirmanSelectionStore = new FlightAirmanSelectionStore();
     siteManagerStore = {
       performLoading: (fn: any) => {
         fn();
@@ -36,7 +40,8 @@ describe('SiteManagerActions', () => {
       removeFlightFromExpandedFlights : jest.fn(),
       shouldExpandFlight : jest.fn(),
       hideSchedulePrompt: jest.fn(),
-      deleteFlight: jest.fn()
+      deleteFlight: jest.fn(),
+      getAirmenByFlightId: (id: number) => selectableAirmen
     };
 
     airmanRepository = {
@@ -45,7 +50,7 @@ describe('SiteManagerActions', () => {
     };
 
     subject = new SiteManagerActions(
-      {siteManagerStore} as any,
+      {siteManagerStore, flightAirmanSelectionStore} as any,
       {airmanRepository} as any
     );
   });

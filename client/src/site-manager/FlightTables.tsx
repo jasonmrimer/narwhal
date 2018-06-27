@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { AirmanModel, ShiftType } from '../airman/models/AirmanModel';
 import { ShiftDisplay } from '../roster/ShiftDisplay';
-import { Link } from 'react-router-dom';
 import { FlightModel } from '../flight/model/FlightModel';
 import { SiteManagerStore } from './stores/SiteManagerStore';
 import { inject, observer } from 'mobx-react';
@@ -15,34 +14,65 @@ import { ExpandIcon } from '../icons/ExpandIcon';
 import { CollapseIcon } from '../icons/CollapseIcon';
 import { DeleteIcon } from '../icons/DeleteIcon';
 import { StyledFlightShiftPopup } from '../widgets/popups/FlightShiftPopup';
+import { StyledCheckbox } from '../widgets/inputs/Checkbox';
+import { FlightAirmanSelectionStore } from './stores/FlightAirmanSelectionStore';
+import { Selectable } from './models/Selectable';
+import { ProfileIcon } from '../icons/ProfileIcon';
 
 interface FlightTableRowProps {
-  airman: AirmanModel;
+  airman: Selectable<AirmanModel>;
 }
 
 export const FlightTableRow = observer((props: FlightTableRowProps) => {
   const {airman} = props;
+  const navigateToAirman = () => location.href = `/flights/${airman.model.id}`;
   return (
-    <Link to={`/flights/${airman.id}`}>
-      <span className="airman-name airman-attribute">
-            {`${airman.lastName}, ${airman.firstName}`}
+    <React.Fragment>
+      <div
+        className="airman-row"
+      >
+
+      <span className="airman-checkbox">
+      <StyledCheckbox
+        name={'checkbox-airman-' + airman.model.id}
+        onChange={(e) => {
+          e.stopPropagation();
+          airman.setSelected(!airman.selected);
+        }}
+        checked={airman.selected}
+      />
+      </span>
+
+        <span
+          className="airman-name airman-attribute"
+          onClick={navigateToAirman}
+        >
+            {`${airman.model.lastName}, ${airman.model.firstName}`}
         </span>
-      <span className="airman-attribute airman-shift">
-        <ShiftDisplay shift={airman.shift}/>
-        <span>{airman.shift}</span>
-      </span>
-      <span className="airman-attribute airman-schedule">
-        {
-          airman.currentAirmanSchedule &&
-          airman.currentAirmanSchedule.schedule.type
-        }
-      </span>
-    </Link>
+        <span
+          className="airman-attribute airman-shift"
+          onClick={navigateToAirman}
+        >
+        <ShiftDisplay shift={airman.model.shift}/>
+        <span>{airman.model.shift}</span>
+        </span>
+          <span
+            className="airman-attribute airman-schedule"
+            onClick={navigateToAirman}
+          >
+            {
+              airman.model.currentAirmanSchedule &&
+              airman.model.currentAirmanSchedule.schedule.type
+            }
+          </span>
+      </div>
+    </React.Fragment>
   );
 });
 
 interface FlightTablesProps {
   flights: FlightModel[];
+  flightAirmanSelectionStore?: FlightAirmanSelectionStore;
   siteManagerStore?: SiteManagerStore;
   siteManagerActions?: SiteManagerActions;
   className?: string;
@@ -51,34 +81,56 @@ interface FlightTablesProps {
 @observer
 export class FlightTables extends React.Component<FlightTablesProps> {
   render() {
+    const {
+      flights,
+      flightAirmanSelectionStore,
+      siteManagerStore,
+      className
+    } = this.props;
+
     return (
       <React.Fragment>
         {
-          this.props.siteManagerStore!.shouldShowSchedulePrompt &&
+          siteManagerStore!.shouldShowSchedulePrompt &&
           <StyledFlightSchedulePopup
-            onCancel={this.props.siteManagerStore!.hideSchedulePrompt}
+            onCancel={siteManagerStore!.hideSchedulePrompt}
+            count={
+              flightAirmanSelectionStore!.getSelections(
+                siteManagerStore!.getAirmenByFlightId(
+                  siteManagerStore!.pendingFlightId!
+                )
+              ).length
+            }
           />
         }
         {
-          this.props.siteManagerStore!.shouldShowShiftPrompt &&
+          siteManagerStore!.shouldShowShiftPrompt &&
           <StyledFlightShiftPopup
-            onCancel={this.props.siteManagerStore!.hideShiftPrompt}
+            onCancel={siteManagerStore!.hideShiftPrompt}
+            count={
+              flightAirmanSelectionStore!.getSelections(
+                siteManagerStore!.getAirmenByFlightId(
+                  siteManagerStore!.pendingFlightId!
+                )
+              ).length
+            }
           />
         }
         {
-          this.props.flights.map(flight => {
+          flights.map(flight => {
+            const flightAirmen = siteManagerStore!.getAirmenByFlightId(flight.id);
             return (
               <div
                 id={flight.name}
-                className={classNames('flight-table', flight.name, this.props.className)}
+                className={classNames('flight-table', flight.name, className)}
                 key={flight.id}
               >
-                {this.renderHeader(flight)}
-                {this.props.siteManagerStore!.shouldExpandFlight(flight.id)
-                  && this.renderRows(flight.id)}
-                {this.props.siteManagerStore!.shouldExpandFlight(flight.id) &&
-                  this.props.siteManagerStore!.shouldAllowFlightDelete(flight.id)
-                    && this.renderDeleteFlight(flight.id)}
+                {this.renderHeader(flight, flightAirmen)}
+                {siteManagerStore!.shouldExpandFlight(flight.id)
+                && this.renderRows(flight.id, flightAirmen)}
+                {siteManagerStore!.shouldExpandFlight(flight.id) &&
+                siteManagerStore!.shouldAllowFlightDelete(flight.id)
+                && this.renderDeleteFlight(flight.id)}
               </div>
             );
           })
@@ -87,92 +139,117 @@ export class FlightTables extends React.Component<FlightTablesProps> {
     );
   }
 
-  private printNumberOfOperators(flight: FlightModel ) {
+  private printNumberOfOperators(flight: FlightModel) {
     const length = this.props.siteManagerStore!
       .getAirmenByFlightId(flight.id)
       .length;
-    const numOfOps = length < 10 ?  `0${length}` : length.toString();
-    return `${numOfOps} Operators`;
+    const numOfOps = length < 10 ? `0${length}` : length.toString();
+    return `${numOfOps}`;
   }
 
-  private renderHeader = (flight: FlightModel) => {
+  private renderHeader = (flight: FlightModel, airmen: Selectable<AirmanModel>[]) => {
+    const {
+      flightAirmanSelectionStore,
+      siteManagerStore,
+      siteManagerActions
+    } = this.props;
     return (
       <React.Fragment>
-      <div className="flight-header">
-        <div className="header-section">
-          <h3>{flight.name}
+        <div className="flight-header">
+          <div className="header-section">
+            <h3>{flight.name}</h3>
             <span>
               {this.printNumberOfOperators(flight)}
             </span>
-          </h3>
+            <span>
+              <ProfileIcon/>
+            </span>
+          </div>
+          <div className="header-section">
+            <StyledShiftDropdown
+              selectedShift={siteManagerStore!.getShiftByFlightId(flight.id)}
+              setShift={(shift: ShiftType) => {
+                return siteManagerActions!.setFlightShift(flight.id, shift);
+              }}
+              className="shift"
+            />
+          </div>
+          <div className="header-section">
+            <StyledDropdown
+              onChange={(e) => {
+                return siteManagerActions!.setFlightSchedule(flight.id, Number(e.target.value));
+              }}
+              name="schedule-select"
+              id="schedule-select"
+              options={siteManagerStore!.scheduleOptions}
+              value={siteManagerStore!.getScheduleIdByFlightId(flight.id)}
+            />
+          </div>
+          {!siteManagerStore!.shouldExpandFlight(flight.id) &&
+          <div className="expandFlight" onClick={() => siteManagerActions!.expandFlight(flight.id)}>
+            <ExpandIcon/>
+          </div>
+          }
+          {siteManagerStore!.shouldExpandFlight(flight.id) &&
+          <div className="collapseFlight" onClick={() => siteManagerActions!.collapseFlight(flight.id)}>
+            <CollapseIcon/>
+          </div>
+          }
         </div>
-        <div className="header-section">
-          <StyledShiftDropdown
-            selectedShift={this.props.siteManagerStore!.getShiftByFlightId(flight.id)}
-            setShift={(shift: ShiftType) => {
-              return this.props.siteManagerActions!.setFlightShift(flight.id, shift);
-            }}
-            className="shift"
+        {siteManagerStore!.shouldExpandFlight(flight.id) &&
+        <div className="flight-sub-header">
+          <span className="selection">
+          <StyledCheckbox
+            name={'checkbox-flight-' + flight.id}
+            onChange={() => flightAirmanSelectionStore!.toggleAll(airmen)}
+            checked={flightAirmanSelectionStore!.areSelected(airmen)}
           />
-        </div>
-        <div className="header-section">
-          <StyledDropdown
-            onChange={(e) => {
-              return this.props.siteManagerActions!.setFlightSchedule(flight.id, Number(e.target.value));
-            }}
-            name="schedule-select"
-            id="schedule-select"
-            options={this.props.siteManagerStore!.scheduleOptions}
-            value={this.props.siteManagerStore!.getScheduleIdByFlightId(flight.id)}
-          />
-        </div>
-        {!this.props.siteManagerStore!.shouldExpandFlight(flight.id) &&
-        <div className="expandFlight" onClick={() => this.props.siteManagerActions!.expandFlight(flight.id)}>
-        <ExpandIcon />
-        </div>
-        }
-        {this.props.siteManagerStore!.shouldExpandFlight(flight.id) &&
-        <div className="collapseFlight" onClick={() => this.props.siteManagerActions!.collapseFlight(flight.id)}>
-        <CollapseIcon />
-        </div>
-        }
-      </div>
-      {this.props.siteManagerStore!.shouldExpandFlight(flight.id) &&
-      <div className="flight-sub-header">
-        <span>NAME</span>
-        <span>SHIFT</span>
-        <span>SCHEDULE</span>
-      </div>}
-    </React.Fragment>
+          </span>
+          <span>
+             NAME
+          </span>
+          <span>SHIFT</span>
+          <span>SCHEDULE</span>
+        </div>}
+      </React.Fragment>
     );
-  }
+  };
 
   private renderDeleteFlight = (flightId: number) => {
     return (
       <div
         className="delete-flight"
         onClick={async () => {
-          this.props.siteManagerStore!.performLoading( async () => {
+          this.props.siteManagerStore!.performLoading(async () => {
             await this.props.siteManagerActions!.deleteFlight(flightId);
           });
         }}
       >
-        <DeleteIcon />
+        <DeleteIcon/>
         <span className="delete-label">Delete Flight</span>
       </div>
     );
-  }
-  private renderRows = (flightId: number) => {
-    return this.props.siteManagerStore!.getAirmenByFlightId(flightId)
-      .map((airman) => {
-        return <FlightTableRow key={airman.id} airman={airman}/>;
+  };
+
+  private renderRows =
+    (flightId: number,
+     airmen: Selectable<AirmanModel>[]
+    ) => {
+      return airmen.map((airman) => {
+        return (
+          <FlightTableRow
+            key={airman.model.id}
+            airman={airman}
+          />
+        );
       });
-  }
+    };
 }
 
 export const StyledFlightTables = inject(
   'siteManagerStore',
-  'siteManagerActions'
+  'siteManagerActions',
+  'flightAirmanSelectionStore'
 )(styled(FlightTables)`    
     border: 1px solid ${props => props.theme.graySteel};
     margin-bottom: 2rem;
@@ -186,8 +263,6 @@ export const StyledFlightTables = inject(
     .delete-label {
       margin-left: 0.25rem
     }
-    
-     
     
     .delete-flight {
     font-size: 0.75rem;
@@ -211,21 +286,23 @@ export const StyledFlightTables = inject(
     .flight-header {
       display: flex;
       align-items: center;
-      justify-content: space-around;
       padding: 1rem;
       background: ${props => props.theme.blueSteel};
       
       h3 {
         font-size: 1.25rem;
         font-weight: 500;
-        margin: 0 5rem 0 0;
-        
-        span{
-          font-weight: 300;
-          padding-left: 0.75rem;
-          margin: 0 5rem 0 0;
-        }
+        margin-right: 0.25rem;
+        display: inline;   
+        vertical-align: middle;    
       }
+      
+      span{
+          font-size: 1.25rem;
+          font-weight: 300;
+          margin: 0 0.25rem 0 0;
+          vertical-align: middle;
+        }
       
       
       .shift {
@@ -237,17 +314,23 @@ export const StyledFlightTables = inject(
         width: 33%;
       }
     }
+    
+    .airman-checkbox {
+      width: 4%;
+      padding: 1px;
+      display: inline;
+    }
         
-    a {
+    .airman-row {
       padding: 1rem;
       cursor: pointer;
       display: flex;
       justify-content: space-between;
-      
+
       .airman-attribute {
         display: flex;
         align-items: center;
-        width: 33%;
+        width: 32%;
         
         > span {
           margin-left: 0.75rem;
@@ -276,13 +359,18 @@ export const StyledFlightTables = inject(
     background-color: ${props => props.theme.lightest};
     padding: 1rem;
     display: flex;
+    & input[checkbox] {
+      padding-right: 0.25rem;
+    }
     
     & > span {
-      width: 33%;
-      
-      &:nth-child(2) {
-        margin-left: 0.75rem;
-      }
+      width: 32%;
+      justify-content: space-evenly;
+    }
+    
+    .selection {
+      width: 4%;
+      padding: 1px;
     }
   }
 `);
