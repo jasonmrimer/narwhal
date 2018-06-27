@@ -15,6 +15,7 @@ import { ExpandIcon } from '../icons/ExpandIcon';
 import { CollapseIcon } from '../icons/CollapseIcon';
 import { DeleteIcon } from '../icons/DeleteIcon';
 import { StyledFlightShiftPopup } from '../widgets/popups/FlightShiftPopup';
+import { Checkbox } from '../widgets/inputs/Checkbox';
 
 interface FlightTableRowProps {
   airman: AirmanModel;
@@ -23,6 +24,8 @@ interface FlightTableRowProps {
 export const FlightTableRow = observer((props: FlightTableRowProps) => {
   const {airman} = props;
   return (
+    <React.Fragment>
+    <Checkbox name={'checkbox-airman-' + airman.id} onChange={() => {return; }} checked={false}/>
     <Link to={`/flights/${airman.id}`}>
       <span className="airman-name airman-attribute">
             {`${airman.lastName}, ${airman.firstName}`}
@@ -38,6 +41,7 @@ export const FlightTableRow = observer((props: FlightTableRowProps) => {
         }
       </span>
     </Link>
+    </React.Fragment>
   );
 });
 
@@ -99,6 +103,9 @@ export class FlightTables extends React.Component<FlightTablesProps> {
     return (
       <React.Fragment>
       <div className="flight-header">
+        <div className="header-section">
+          <Checkbox name={'checkbox-flight-' + flight.id} onChange={() => {return; }} checked={false}/>
+        </div>
         <div className="header-section">
           <h3>{flight.name}
             <span>

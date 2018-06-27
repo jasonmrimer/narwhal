@@ -19,15 +19,17 @@ export class SiteManagerActions {
 
   async saveFlightShift() {
     const {siteManagerStore} = this.stores;
-
+    const pendingFlightId = siteManagerStore!.pendingFlightId!;
+    const pendingShiftId = siteManagerStore!.pendingShift!;
+    const flightAirmenIds = siteManagerStore!
+      .getAirmenByFlightId(pendingFlightId)
+      .map(a => a.id);
     await siteManagerStore!.performLoading(async () => {
-      await this.airmanRepository.updateShiftByFlightId(
-        siteManagerStore!.pendingFlightId!,
-        siteManagerStore!.pendingShift!
-      );
+      await this.airmanRepository.updateShiftByFlightId(pendingFlightId, pendingShiftId, flightAirmenIds);
       siteManagerStore!.setAirmenShiftByFlightId(
-        siteManagerStore!.pendingFlightId!,
-        siteManagerStore!.pendingShift!
+        pendingFlightId,
+        pendingShiftId,
+        flightAirmenIds
       );
       siteManagerStore!.hideShiftPrompt();
     });
@@ -51,6 +53,7 @@ export class SiteManagerActions {
       const updatedAirmen = await this.airmanRepository.updateScheduleByFlightId(
         flightId,
         schedule,
+        siteManagerStore!.getAirmenByFlightId(flightId).map(a => a.id),
         siteManagerStore!.pendingScheduleStartDate);
       siteManagerStore!.setAirmenScheduleByFlightId(flightId, updatedAirmen);
       siteManagerStore!.hideSchedulePrompt();

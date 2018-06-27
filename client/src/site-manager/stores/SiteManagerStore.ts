@@ -235,9 +235,10 @@ export class SiteManagerStore extends NotificationStore {
   }
 
   @action.bound
-  setAirmenShiftByFlightId(flightId: number, shift: ShiftType) {
+  setAirmenShiftByFlightId(flightId: number, shift: ShiftType, airmenIds: number[]) {
     this._airmen
       .filter(airman => airman.flightId === flightId)
+      .filter(airman => airmenIds.find(i => i === airman.id) !== -1)
       .forEach(airman => airman.shift = shift);
   }
 

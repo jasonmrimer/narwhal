@@ -16,7 +16,7 @@ export interface AirmanRepository {
 
   deleteSkill(skill: Skill): Promise<AirmanModel>;
 
-  updateShiftByFlightId(flightId: number, shift: ShiftType): Promise<AirmanModel[]>;
+  updateShiftByFlightId(flightId: number, shift: ShiftType, airmenIds: number[]): Promise<AirmanModel[]>;
 
-  updateScheduleByFlightId(flightId: number, schedule: ScheduleModel, startDate: Moment | null): Promise<AirmanModel[]>;
+  updateScheduleByFlightId(flightId: number, schedule: ScheduleModel, airmenIds: number[], startDate: Moment | null): Promise<AirmanModel[]>;
 }

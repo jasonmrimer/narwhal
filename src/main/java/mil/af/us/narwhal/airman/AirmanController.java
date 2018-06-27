@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.time.Instant;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RestController
@@ -146,13 +147,21 @@ public class AirmanController {
     return airmanRepository.save(airman);
   }
 
+  private List<Airman>  filterAirmanByIds(List<Airman> airmen, List<Long> ids) {
+      return airmen.stream()
+      .filter(airman -> ids.contains(airman.getId()))
+      .collect(Collectors.toList());
+  }
+
   @PutMapping(path = "/shift")
   public List<Airman> updateShift(
     @RequestParam Long flightId,
-    @RequestBody ShiftTypeJson json
+    @RequestBody AirmenShiftTypeJson json
   ) {
     final Flight flight = flightRepository.findOne(flightId);
-    flight.getAirmen().forEach(airman -> airman.setShift(json.getShiftType()));
+    List<Airman> unfilteredList = flight.getAirmen();
+      filterAirmanByIds(unfilteredList, json.getAirmanIds())
+      .forEach(airman -> airman.setShift(json.getShiftType()));
     return flightRepository.save(flight).getAirmen();
   }
 
@@ -160,10 +169,13 @@ public class AirmanController {
   public List<Airman> updateSchedules(
     @RequestParam(value = "startDate", required = false) String startDate,
     @RequestParam Long flightId,
-    @RequestBody Schedule schedule
+    @RequestBody AirmenScheduleJson json
   ) {
+    Schedule schedule = json.getSchedule();
     final Flight flight = flightRepository.findOne(flightId);
-      flight.getAirmen().forEach(airman -> {
+    List<Airman> unfilteredList = flight.getAirmen();
+    filterAirmanByIds(unfilteredList, json.getAirmanIds())
+        .forEach(airman -> {
         if(startDate == null) {
           AirmanSchedule as = new AirmanSchedule(schedule, Instant.now());
           airman.addSchedule(as);
@@ -171,8 +183,8 @@ public class AirmanController {
           Stream<AirmanSchedule> currentSchedules =
             airman.getSchedules()
               .stream()
-              .filter(sched -> sched.getEndDate() == null);
-          currentSchedules.forEach(sched -> sched.setEndDate(Instant.now()));
+              .filter(item -> item.getEndDate() == null);
+          currentSchedules.forEach(item -> item.setEndDate(Instant.now()));
           AirmanSchedule as = new AirmanSchedule(schedule, Instant.parse(startDate));
           airman.addSchedule(as);
         }

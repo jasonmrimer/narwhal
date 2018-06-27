@@ -4,9 +4,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ShiftTypeJson {
+public class AirmenShiftTypeJson {
   private ShiftType shiftType;
+  private List<Long> airmanIds = new ArrayList<>();
 }
