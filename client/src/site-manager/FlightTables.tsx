@@ -26,14 +26,14 @@ interface FlightTableRowProps {
 }
 
 export const FlightTableRow = observer((props: FlightTableRowProps) => {
-  const {airman, flightAirmanSelectionStore, flightSelections} = props;
+  const {airman, flightAirmanSelectionStore} = props;
 
   return (
     <React.Fragment>
     <StyledCheckbox
       name={'checkbox-airman-' + airman.id}
-      onChange={() => flightAirmanSelectionStore!.toggleChild(flightSelections, airman.id)}
-      checked={flightAirmanSelectionStore!.isChildSelected(flightSelections, airman.id)}
+      onChange={() => flightAirmanSelectionStore!.toggleChild(props.flightSelections, airman.id)}
+      checked={flightAirmanSelectionStore!.isChildSelected(props.flightSelections, airman.id)}
     />
     <Link to={`/flights/${airman.id}`}>
       <span className="airman-name airman-attribute">

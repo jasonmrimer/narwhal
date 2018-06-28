@@ -1,23 +1,36 @@
-import { HierarchySelectionModel } from '../../airman/models/HierarchySelectionModel';
-import { action, observable } from 'mobx';
+import {HierarchySelectionModel} from '../../airman/models/HierarchySelectionModel';
+import {action, computed, observable} from 'mobx';
 
 export class HierarchySelectionStore {
-  parents: HierarchySelectionModel[] = [];
+  @observable _parents: HierarchySelectionModel[] = [];
+
+  @computed
+  get parents() {
+    return this._parents;
+  }
 
   @action.bound
   findParent(id: number) {
-    let parent = this.parents.find(p => p.parentId === id);
+    let parent = this._parents.find(p => p.parentId === id);
     if (parent === undefined) {
       parent = new HierarchySelectionModel(id);
-      this.parents.push(parent);
+      this._parents.push(parent);
     }
     return parent;
   }
 
   @action.bound
+  parentPosition(parent: HierarchySelectionModel) {
+    return this._parents.indexOf(parent);
+  }
+
+  @action.bound
   addChild(parent: HierarchySelectionModel, childId: number) {
-    if (parent.childIds.find(c => c === childId) === undefined) {
-      parent.childIds.push(childId);
+    const chickenParent = this.findParent(parent.parentId);
+    const parentIndex = this.parentPosition(chickenParent);
+
+    if (!this._parents[parentIndex].isChild(childId)) {
+      this._parents[parentIndex].addChild(childId);
     }
   }
 
@@ -29,35 +42,31 @@ export class HierarchySelectionStore {
 
   @action.bound
   removeChild(parent: HierarchySelectionModel, childId: number) {
-    this.removeItem(childId, parent.childIds);
-  }
-
-  @action.bound
-  removeItem(item: any, array: any[]) {
-    var index = array.indexOf(item);
-    if (index !== -1) {
-      array.splice(index, 1);
-    }
+    const parentIndex = this.parentPosition(parent);
+    this._parents[parentIndex].removeChild(childId);
   }
 
   @action.bound
   clearParent(id: number) {
-    this.removeItem(this.findParent(id), this.parents);
+    const index = this._parents.indexOf(this.findParent(id));
+    if (index !== -1) {
+      this._parents.splice(index, 1);
+    }
   }
 
-  @observable
-  isChildSelected(parent: HierarchySelectionModel, id: number) {
-    const result = parent.childIds.find(c => c === id) !== undefined;
-    console.log(result);
-    return result;
+  @action.bound
+  isChildSelected(parent: HierarchySelectionModel, childId: number) {
+    const parentIndex = this.parentPosition(parent);
+    return this._parents[parentIndex].isChild(childId);
   }
 
-  @observable
+  @action.bound
   isParentSelected(id: number, childrenIds: number[]) {
     const parent = this.findParent(id);
+    const parentIndex = this.parentPosition(parent);
 
     const result = childrenIds.map(
-      c => parent.childIds.find(c2 => c === c2) !== undefined
+      c => this._parents[parentIndex].isChild(c)
     );
 
     return result.find(r => r === false) === undefined;
@@ -74,8 +83,9 @@ export class HierarchySelectionStore {
 
   @action.bound
   toggleChild(parent: HierarchySelectionModel, id: number) {
-    console.log(this.isChildSelected(parent, id))
-    if (this.isChildSelected(parent, id)) {
+    const parentIndex = this.parentPosition(parent);
+
+    if (this._parents[parentIndex].isChild(id)) {
       this.removeChild(parent, id);
     } else {
       this.addChild(parent, id);

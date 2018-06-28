@@ -18,7 +18,7 @@ describe('HierarchySelectionStore', () => {
   });
 
   it('should add a child', () => {
-    expect(parent.childIds).toContain(1);
+    expect(parent.childIds.length).toBe(1);
   });
 
   it('should add children', () => {
