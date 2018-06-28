@@ -16,16 +16,25 @@ import { CollapseIcon } from '../icons/CollapseIcon';
 import { DeleteIcon } from '../icons/DeleteIcon';
 import { StyledFlightShiftPopup } from '../widgets/popups/FlightShiftPopup';
 import { Checkbox } from '../widgets/inputs/Checkbox';
+import { FlightAirmanSelectionStore } from './stores/FlightAirmanSelectionStore';
+import { HierarchySelectionModel } from '../airman/models/HierarchySelectionModel';
 
 interface FlightTableRowProps {
   airman: AirmanModel;
+  flightAirmanSelectionStore: FlightAirmanSelectionStore;
+  flightSelections: HierarchySelectionModel;
 }
 
 export const FlightTableRow = observer((props: FlightTableRowProps) => {
-  const {airman} = props;
+  const {airman, flightAirmanSelectionStore, flightSelections} = props;
+
   return (
     <React.Fragment>
-    <Checkbox name={'checkbox-airman-' + airman.id} onChange={() => {return; }} checked={false}/>
+    <Checkbox
+      name={'checkbox-airman-' + airman.id}
+      onChange={() => {flightAirmanSelectionStore!.toggleChild(flightSelections, airman.id);}}
+      checked={flightAirmanSelectionStore!.isChildSelected(flightSelections, airman.id)}
+    />
     <Link to={`/flights/${airman.id}`}>
       <span className="airman-name airman-attribute">
             {`${airman.lastName}, ${airman.firstName}`}
@@ -47,6 +56,7 @@ export const FlightTableRow = observer((props: FlightTableRowProps) => {
 
 interface FlightTablesProps {
   flights: FlightModel[];
+  flightAirmanSelectionStore?: FlightAirmanSelectionStore;
   siteManagerStore?: SiteManagerStore;
   siteManagerActions?: SiteManagerActions;
   className?: string;
@@ -55,33 +65,41 @@ interface FlightTablesProps {
 @observer
 export class FlightTables extends React.Component<FlightTablesProps> {
   render() {
+    const {
+      flights,
+      flightAirmanSelectionStore,
+      siteManagerStore,
+      className
+    } = this.props;
+
     return (
       <React.Fragment>
         {
-          this.props.siteManagerStore!.shouldShowSchedulePrompt &&
+          siteManagerStore!.shouldShowSchedulePrompt &&
           <StyledFlightSchedulePopup
-            onCancel={this.props.siteManagerStore!.hideSchedulePrompt}
+            onCancel={siteManagerStore!.hideSchedulePrompt}
           />
         }
         {
-          this.props.siteManagerStore!.shouldShowShiftPrompt &&
+          siteManagerStore!.shouldShowShiftPrompt &&
           <StyledFlightShiftPopup
-            onCancel={this.props.siteManagerStore!.hideShiftPrompt}
+            onCancel={siteManagerStore!.hideShiftPrompt}
           />
         }
         {
-          this.props.flights.map(flight => {
+          flights.map(flight => {
+            const flightAirmen = siteManagerStore!.getAirmenByFlightId(flight.id);
             return (
               <div
                 id={flight.name}
-                className={classNames('flight-table', flight.name, this.props.className)}
+                className={classNames('flight-table', flight.name, className)}
                 key={flight.id}
               >
-                {this.renderHeader(flight)}
-                {this.props.siteManagerStore!.shouldExpandFlight(flight.id)
-                  && this.renderRows(flight.id)}
-                {this.props.siteManagerStore!.shouldExpandFlight(flight.id) &&
-                  this.props.siteManagerStore!.shouldAllowFlightDelete(flight.id)
+                {this.renderHeader(flight, flightAirmen)}
+                {siteManagerStore!.shouldExpandFlight(flight.id)
+                  && this.renderRows(flight.id, flightAirmen, flightAirmanSelectionStore!)}
+                {siteManagerStore!.shouldExpandFlight(flight.id) &&
+                  siteManagerStore!.shouldAllowFlightDelete(flight.id)
                     && this.renderDeleteFlight(flight.id)}
               </div>
             );
@@ -99,12 +117,23 @@ export class FlightTables extends React.Component<FlightTablesProps> {
     return `${numOfOps} Operators`;
   }
 
-  private renderHeader = (flight: FlightModel) => {
+  private renderHeader = (flight: FlightModel, airmen: AirmanModel[]) => {
+    const airmenIds = airmen.map(a => a.id);
+    const {
+      flightAirmanSelectionStore,
+      siteManagerStore,
+      siteManagerActions
+      } = this.props;
     return (
       <React.Fragment>
       <div className="flight-header">
         <div className="header-section">
-          <Checkbox name={'checkbox-flight-' + flight.id} onChange={() => {return; }} checked={false}/>
+          <Checkbox
+            name={'checkbox-flight-' + flight.id}
+            onChange={
+              () => {flightAirmanSelectionStore!.toggleParent(flight.id, airmenIds);}}
+            checked={flightAirmanSelectionStore!.isParentSelected(flight.id, airmenIds)}
+          />
         </div>
         <div className="header-section">
           <h3>{flight.name}
@@ -115,9 +144,9 @@ export class FlightTables extends React.Component<FlightTablesProps> {
         </div>
         <div className="header-section">
           <StyledShiftDropdown
-            selectedShift={this.props.siteManagerStore!.getShiftByFlightId(flight.id)}
+            selectedShift={siteManagerStore!.getShiftByFlightId(flight.id)}
             setShift={(shift: ShiftType) => {
-              return this.props.siteManagerActions!.setFlightShift(flight.id, shift);
+              return siteManagerActions!.setFlightShift(flight.id, shift);
             }}
             className="shift"
           />
@@ -125,26 +154,26 @@ export class FlightTables extends React.Component<FlightTablesProps> {
         <div className="header-section">
           <StyledDropdown
             onChange={(e) => {
-              return this.props.siteManagerActions!.setFlightSchedule(flight.id, Number(e.target.value));
+              return siteManagerActions!.setFlightSchedule(flight.id, Number(e.target.value));
             }}
             name="schedule-select"
             id="schedule-select"
-            options={this.props.siteManagerStore!.scheduleOptions}
-            value={this.props.siteManagerStore!.getScheduleIdByFlightId(flight.id)}
+            options={siteManagerStore!.scheduleOptions}
+            value={siteManagerStore!.getScheduleIdByFlightId(flight.id)}
           />
         </div>
-        {!this.props.siteManagerStore!.shouldExpandFlight(flight.id) &&
-        <div className="expandFlight" onClick={() => this.props.siteManagerActions!.expandFlight(flight.id)}>
+        {!siteManagerStore!.shouldExpandFlight(flight.id) &&
+        <div className="expandFlight" onClick={() => siteManagerActions!.expandFlight(flight.id)}>
         <ExpandIcon />
         </div>
         }
-        {this.props.siteManagerStore!.shouldExpandFlight(flight.id) &&
-        <div className="collapseFlight" onClick={() => this.props.siteManagerActions!.collapseFlight(flight.id)}>
+        {siteManagerStore!.shouldExpandFlight(flight.id) &&
+        <div className="collapseFlight" onClick={() => siteManagerActions!.collapseFlight(flight.id)}>
         <CollapseIcon />
         </div>
         }
       </div>
-      {this.props.siteManagerStore!.shouldExpandFlight(flight.id) &&
+      {siteManagerStore!.shouldExpandFlight(flight.id) &&
       <div className="flight-sub-header">
         <span>NAME</span>
         <span>SHIFT</span>
@@ -169,17 +198,24 @@ export class FlightTables extends React.Component<FlightTablesProps> {
       </div>
     );
   }
-  private renderRows = (flightId: number) => {
-    return this.props.siteManagerStore!.getAirmenByFlightId(flightId)
-      .map((airman) => {
-        return <FlightTableRow key={airman.id} airman={airman}/>;
+
+  private renderRows = (flightId: number, airmen: AirmanModel[], flightAirmanSelectionStore: FlightAirmanSelectionStore) => {
+    const flightSelections = flightAirmanSelectionStore.findParent(flightId);
+    return airmen.map((airman) => {
+        return <FlightTableRow
+          key={airman.id}
+          airman={airman}
+          flightSelections={flightSelections}
+          flightAirmanSelectionStore={flightAirmanSelectionStore}
+        />;
       });
   }
 }
 
 export const StyledFlightTables = inject(
   'siteManagerStore',
-  'siteManagerActions'
+  'siteManagerActions',
+  'flightAirmanSelectionStore'
 )(styled(FlightTables)`    
     border: 1px solid ${props => props.theme.graySteel};
     margin-bottom: 2rem;

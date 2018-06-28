@@ -9,6 +9,8 @@ import { ShiftType } from '../airman/models/AirmanModel';
 import { StyledDropdown } from '../widgets/inputs/Dropdown';
 import { StyledFlightSchedulePopup } from '../widgets/popups/FlightSchedulePopup';
 import { StyledFlightShiftPopup } from '../widgets/popups/FlightShiftPopup';
+import { HierarchySelectionModel } from '../airman/models/HierarchySelectionModel';
+import { FlightAirmanSelectionStore } from './stores/FlightAirmanSelectionStore';
 
 describe('FlightTables', () => {
   const flights = [
@@ -48,6 +50,8 @@ describe('FlightTables', () => {
   let siteManagerActions: any;
   let subject: ShallowWrapper;
 
+  let flightAirmanSelectionStore = new FlightAirmanSelectionStore();
+
   beforeEach(() => {
     siteManagerActions = {
       setFlightShift: jest.fn(),
@@ -61,6 +65,7 @@ describe('FlightTables', () => {
         flights={flights}
         siteManagerStore={siteManagerStore}
         siteManagerActions={siteManagerActions}
+        flightAirmanSelectionStore={flightAirmanSelectionStore}
       />
     );
   });
@@ -93,7 +98,13 @@ describe('FlightTables', () => {
   });
 
   it('should render a link to the airmans profile', () => {
-    subject = shallow(<FlightTableRow airman={airman}/>);
+    subject = shallow(
+      <FlightTableRow
+        airman={airman}
+        flightSelections={new HierarchySelectionModel(14)}
+        flightAirmanSelectionStore={new FlightAirmanSelectionStore()}
+      />
+    );
     const link = subject.find(Link).at(0);
     expect(link.prop('to')).toBe(`/flights/${airman.id}`);
     expect(link.children().at(0).text()).toContain(`${airman.lastName}, ${airman.firstName}`);
