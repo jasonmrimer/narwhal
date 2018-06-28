@@ -8,13 +8,14 @@ import { StyledTimeInput } from '../widgets/inputs/TimeInput';
 import { StyledSubmitButton } from '../widgets/forms/SubmitButton';
 import { StyledFieldValidation } from '../widgets/inputs/FieldValidation';
 import { StyledForm, StyledFormRow } from '../widgets/forms/Form';
-import { EventModel } from './models/EventModel';
+import { EventApproval, EventApprovalRole, EventModel } from './models/EventModel';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { EventActions } from './EventActions';
 import { StyledEventCreationInfo } from '../widgets/EventCreationInfo';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 import { StyledButton } from '../widgets/buttons/Button';
 import { DeleteIcon } from '../icons/DeleteIcon';
+import { StyledEventApprovalRow } from './EventApprovalRow';
 
 interface Props {
   leaveFormStore?: LeaveFormStore;
@@ -34,16 +35,20 @@ export class LeaveForm extends React.Component<Props> {
 
   handleChange = ({target}: any) => {
     this.props.leaveFormStore!.setState(target.name, target.value);
-  }
+  };
 
   handleDelete = async () => {
     await this.props.eventActions!.handleDeleteEvent(this.props.leaveFormStore!.model!);
-  }
+  };
 
   handleSubmit = async (e: any) => {
     e.preventDefault();
     await this.props.eventActions!.handleFormSubmit(this.props.airmanId, this.props.leaveFormStore!);
-  }
+  };
+
+  handleApprovalDecision = async (approvalChoice: EventApproval, approvalRole: EventApprovalRole) => {
+    await this.props.eventActions!.updateEventApproval(approvalChoice, approvalRole);
+  };
 
   render() {
     const {state, errors, hasModel} = this.props.leaveFormStore!;
@@ -94,6 +99,37 @@ export class LeaveForm extends React.Component<Props> {
               <StyledEventCreationInfo event={this.props.event!}/> :
             null
         }
+
+        {
+          this.props.event ?
+            <StyledEventApprovalRow
+              event={this.props.event}
+              role={EventApprovalRole.Supervisor}
+              onClickApprove={
+                async () => await this.handleApprovalDecision(EventApproval.Approved, EventApprovalRole.Supervisor)
+              }
+              onClickDeny={
+                async () => await this.handleApprovalDecision(EventApproval.Denied, EventApprovalRole.Supervisor)
+              }
+            /> :
+            null
+        }
+
+        {
+          this.props.event ?
+            <StyledEventApprovalRow
+              event={this.props.event}
+              role={EventApprovalRole.Scheduler}
+              onClickApprove={
+                async () => await this.handleApprovalDecision(EventApproval.Approved, EventApprovalRole.Scheduler)
+              }
+              onClickDeny={
+                async () => await this.handleApprovalDecision(EventApproval.Denied, EventApprovalRole.Scheduler)
+              }
+            /> :
+            null
+        }
+
         <StyledFormRow reversed={true}>
           {
             this.props.profileStore!.profile!.roleName === 'READER' ?

@@ -18,6 +18,7 @@ import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore
 import { readerAbility } from '../app/abilities';
 import { StyledSubmitButton } from '../widgets/forms/SubmitButton';
 import { EventStatus } from './models/EventModel';
+import { StyledEventApprovalRow } from './EventApprovalRow';
 
 /* tslint:disable:no-empty*/
 describe('AppointmentForm', () => {
@@ -40,7 +41,7 @@ describe('AppointmentForm', () => {
     await profileStore.hydrate(
       [],
       makeFakeProfile('READER', readerAbility)
-      );
+    );
 
     wrapper = shallow(
       <AppointmentForm
@@ -142,27 +143,24 @@ describe('AppointmentForm', () => {
   });
 
   describe('eventApproval process', () => {
-    const pendingEvent = EventModelFactory.build();
-    pendingEvent.status = EventStatus.Pending;
+    beforeEach(() => {
+      const pendingEvent = EventModelFactory.build();
+      pendingEvent.status = EventStatus.Pending;
 
-    wrapper = shallow(
-      <AppointmentForm
-        airmanId={123}
-        appointmentFormStore={appointmentFormStore}
-        profileStore={profileStore}
-        trackerStore={trackerStore}
-        eventActions={eventActions}
-        event={pendingEvent}
-      />
-    );
-
-    it('should render eventApproval buttons if it is a pending event',() => {
-      expect(wrapper.find(StyledButton).at(0).prop('text')).toBe('DENY');
-      expect(wrapper.find(StyledButton).at(1).prop('text')).toBe('APPROVE');
+      wrapper = shallow(
+        <AppointmentForm
+          airmanId={123}
+          appointmentFormStore={appointmentFormStore}
+          profileStore={profileStore}
+          trackerStore={trackerStore}
+          eventActions={eventActions}
+          event={pendingEvent}
+        />
+      );
     });
 
-    it('should call handleApprovalDecision when a button is clicked', () => {
-      expect(wrapper.find(StyledButton).at(1).prop('onClick')).toEqual(subject.handleApprovalDecision)
+    it('should render StyledEventApprovalRows if it is a pending event', () => {
+      expect(wrapper.find(StyledEventApprovalRow).length).toBe(2);
     });
   });
 });

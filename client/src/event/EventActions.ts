@@ -1,5 +1,5 @@
 import { FormStore } from '../widgets/forms/FormStore';
-import {EventApproval, EventApprovalRole, EventModel, EventType} from './models/EventModel';
+import { EventApproval, EventApprovalRole, EventModel, EventType } from './models/EventModel';
 import { TimeService } from '../tracker/services/TimeService';
 import { Stores } from '../app/stores';
 

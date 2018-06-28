@@ -1,21 +1,21 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import {inject, observer} from 'mobx-react';
-import {StyledTextInput} from '../widgets/inputs/TextInput';
-import {StyledDatePicker} from '../widgets/inputs/DatePicker';
-import {StyledTimeInput} from '../widgets/inputs/TimeInput';
-import {StyledSubmitButton} from '../widgets/forms/SubmitButton';
-import {StyledFieldValidation} from '../widgets/inputs/FieldValidation';
-import {StyledButton} from '../widgets/buttons/Button';
-import {StyledForm, StyledFormRow} from '../widgets/forms/Form';
-import {DeleteIcon} from '../icons/DeleteIcon';
-import {AppointmentFormStore} from './stores/AppointmentFormStore';
-import {EventApproval, EventApprovalRole, EventModel} from './models/EventModel';
-import {EventActions} from './EventActions';
-import {TrackerStore} from '../tracker/stores/TrackerStore';
-import {StyledEventCreationInfo} from '../widgets/EventCreationInfo';
-import {ProfileSitePickerStore} from '../profile/stores/ProfileSitePickerStore';
-import {StyledEventApprovalRow} from "./EventApprovalRow";
+import { inject, observer } from 'mobx-react';
+import { StyledTextInput } from '../widgets/inputs/TextInput';
+import { StyledDatePicker } from '../widgets/inputs/DatePicker';
+import { StyledTimeInput } from '../widgets/inputs/TimeInput';
+import { StyledSubmitButton } from '../widgets/forms/SubmitButton';
+import { StyledFieldValidation } from '../widgets/inputs/FieldValidation';
+import { StyledButton } from '../widgets/buttons/Button';
+import { StyledForm, StyledFormRow } from '../widgets/forms/Form';
+import { DeleteIcon } from '../icons/DeleteIcon';
+import { AppointmentFormStore } from './stores/AppointmentFormStore';
+import { EventApproval, EventApprovalRole, EventModel } from './models/EventModel';
+import { EventActions } from './EventActions';
+import { TrackerStore } from '../tracker/stores/TrackerStore';
+import { StyledEventCreationInfo } from '../widgets/EventCreationInfo';
+import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
+import { StyledEventApprovalRow } from './EventApprovalRow';
 
 interface Props {
   appointmentFormStore?: AppointmentFormStore;
@@ -135,10 +135,10 @@ export class AppointmentForm extends React.Component<Props> {
               event={this.props.event}
               role={EventApprovalRole.Scheduler}
               onClickApprove={
-                async () => await this.handleApprovalDecision(EventApproval.Denied, EventApprovalRole.Scheduler)
+                async () => await this.handleApprovalDecision(EventApproval.Approved, EventApprovalRole.Scheduler)
               }
               onClickDeny={
-                async () => await this.handleApprovalDecision(EventApproval.Approved, EventApprovalRole.Scheduler)
+                async () => await this.handleApprovalDecision(EventApproval.Denied, EventApprovalRole.Scheduler)
               }
             /> :
             null
@@ -148,8 +148,9 @@ export class AppointmentForm extends React.Component<Props> {
           {
             this.props.profileStore!.profile!.roleName === 'READER' ?
               <StyledSubmitButton text="SUBMIT REQUEST"/> :
-              <StyledSubmitButton text="CONFIRM"/>
+              <StyledSubmitButton text="SAVE"/>
           }
+
           {
             hasModel &&
             <StyledButton

@@ -1,9 +1,9 @@
-import {AvailabilityStore} from './AvailabilityStore';
-import {EventApproval, EventApprovalRole, EventModel, EventStatus, EventType} from '../../event/models/EventModel';
-import {EventModelFactory} from '../../event/factories/EventModelFactory';
+import { AvailabilityStore } from './AvailabilityStore';
+import { EventApproval, EventApprovalRole, EventModel, EventStatus, EventType } from '../../event/models/EventModel';
+import { EventModelFactory } from '../../event/factories/EventModelFactory';
 import * as moment from 'moment';
-import {DoubleRepositories} from '../../utils/Repositories';
-import {FakeEventRepository} from '../../event/repositories/doubles/FakeEventRepository';
+import { DoubleRepositories } from '../../utils/Repositories';
+import { FakeEventRepository } from '../../event/repositories/doubles/FakeEventRepository';
 
 describe('AvailabilityStore', () => {
   let eventRepository: FakeEventRepository;

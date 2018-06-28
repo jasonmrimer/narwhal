@@ -4,7 +4,8 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import { EventApprovalRow } from './EventApprovalRow';
 import { EventModelFactory } from './factories/EventModelFactory';
 import * as moment from 'moment';
-import { EventApproval, EventStatus, EventType } from './models/EventModel';
+import { EventApproval, EventApprovalRole, EventStatus, EventType } from './models/EventModel';
+import { ApprovedIcon } from '../icons/ApprovedIcon';
 
 describe('EventApprovalRow', () => {
   let subject: ShallowWrapper;
@@ -16,6 +17,7 @@ describe('EventApprovalRow', () => {
     beforeEach(() => {
       onClickDenySpy = jest.fn();
       onClickApproveSpy = jest.fn();
+
       subject = shallow(
         <EventApprovalRow
           event={EventModelFactory.build(
@@ -30,9 +32,7 @@ describe('EventApprovalRow', () => {
           )}
           onClickDeny={onClickDenySpy}
           onClickApprove={onClickApproveSpy}
-          eventApproval={null}
-          username={'tytus'}
-          approvalTime={moment('2018-09-09 1332', 'YYYY-MM-DD HHmm')}
+          role={EventApprovalRole.Supervisor}
         />
       );
     });
@@ -46,40 +46,46 @@ describe('EventApprovalRow', () => {
       expect(subject.find(StyledButton).at(1).prop('text')).toBe('APPROVE');
       expect(subject.find(StyledButton).at(1).prop('onClick')).toBe(onClickApproveSpy);
     });
-
   });
 
   describe('with an event that was acted upon', () => {
     beforeEach(() => {
+      let event = EventModelFactory.build(
+        '',
+        '',
+        moment(),
+        moment(),
+        1,
+        EventType.Appointment,
+        null,
+        EventStatus.Pending
+      );
+      event.supervisorUsername = 'tytus';
+      event.supervisorApproval = EventApproval.Approved;
+      event.supervisorApprovalTime = moment('2018-09-09 1332', 'YYYY-MM-DD HHmm');
+
       subject = shallow(
         <EventApprovalRow
-          event={EventModelFactory.build(
-            '',
-            '',
-            moment(),
-            moment(),
-            1,
-            EventType.Appointment,
-            null,
-            EventStatus.Pending
-          )}
+          event={event}
           onClickDeny={() => {}}
           onClickApprove={() => {}}
-          eventApproval={EventApproval.Approved}
-          username={'tytus'}
-          approvalTime={moment('2018-09-09 1332', 'YYYY-MM-DD HHmm')}
+          role={EventApprovalRole.Supervisor}
         />
       );
     });
 
     it('should render eventApproval information', () => {
-      expect(subject.find('span').at(0).text()).toBe('APPROVED');
-      expect(subject.find('span').at(1).text()).toBe('tytus');
-      expect(subject.find('span').at(2).text()).toBe('09 SEP 18 / 1332');
+      expect(subject.find('.approval-decision').text()).toBe('approved');
+      expect(subject.find('.event-approval-decisions').text()).toContain('tytus');
+      expect(subject.find('.event-approval-decisions').text()).toContain('09 SEP 18 / 1332');
     });
 
-    it('should render an approval svg'), () => }
-    
-  });
+    it('should render an approval svg', () => {
+      expect(subject.find(ApprovedIcon).exists()).toBeTruthy();
+    });
 
+    it('should render which role is being displayed', () => {
+      expect(subject.find('.approval-role').text()).toBe('supervisor approval');
+    });
+  });
 });
