@@ -399,7 +399,7 @@ public class AirmanControllerTest extends BaseIntegrationTest {
   @Test
   public void updateShiftsTest() throws JsonProcessingException {
     List<Long> airmen = new ArrayList(asList(airman2.getId()));
-    AirmenShiftTypeJson shiftTypeJson = new AirmenShiftTypeJson(ShiftType.Day, airmen);
+    AirmenShiftTypeJSON shiftTypeJson = new AirmenShiftTypeJSON(ShiftType.Day, airmen);
     final String json = objectMapper.writeValueAsString(shiftTypeJson);
     // @formatter:off
     given()
@@ -424,7 +424,7 @@ public class AirmanControllerTest extends BaseIntegrationTest {
   @Test
   public void updateScheduleTest() throws JsonProcessingException {
     List<Long> airmen = new ArrayList(asList(airman2.getId()));
-    AirmenScheduleJson request = new AirmenScheduleJson(schedule, airmen);
+    AirmenScheduleJSON request = new AirmenScheduleJSON(schedule, airmen);
     final String json = objectMapper.writeValueAsString(request);
     // @formatter:off
     given()
@@ -452,7 +452,7 @@ public class AirmanControllerTest extends BaseIntegrationTest {
   public void updateScheduleTestWithStartDate() throws JsonProcessingException {
 
     List<Long> airmen = new ArrayList(asList(airman2.getId()));
-    AirmenScheduleJson request = new AirmenScheduleJson(schedule, airmen);
+    AirmenScheduleJSON request = new AirmenScheduleJSON(schedule, airmen);
     final String json = objectMapper.writeValueAsString(request);
     final String startDate = Instant.now().toString();
 

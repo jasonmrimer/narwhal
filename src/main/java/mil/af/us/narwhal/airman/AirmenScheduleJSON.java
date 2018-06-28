@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AirmenScheduleJson {
+public class AirmenScheduleJSON {
   private Schedule schedule = new Schedule();
   private List<Long> airmanIds = new ArrayList<>();
 }

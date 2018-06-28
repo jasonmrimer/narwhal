@@ -15,7 +15,7 @@ import { ExpandIcon } from '../icons/ExpandIcon';
 import { CollapseIcon } from '../icons/CollapseIcon';
 import { DeleteIcon } from '../icons/DeleteIcon';
 import { StyledFlightShiftPopup } from '../widgets/popups/FlightShiftPopup';
-import { Checkbox } from '../widgets/inputs/Checkbox';
+import { StyledCheckbox } from '../widgets/inputs/Checkbox';
 import { FlightAirmanSelectionStore } from './stores/FlightAirmanSelectionStore';
 import { HierarchySelectionModel } from '../airman/models/HierarchySelectionModel';
 
@@ -30,9 +30,9 @@ export const FlightTableRow = observer((props: FlightTableRowProps) => {
 
   return (
     <React.Fragment>
-    <Checkbox
+    <StyledCheckbox
       name={'checkbox-airman-' + airman.id}
-      onChange={() => {flightAirmanSelectionStore!.toggleChild(flightSelections, airman.id);}}
+      onChange={() => flightAirmanSelectionStore!.toggleChild(flightSelections, airman.id)}
       checked={flightAirmanSelectionStore!.isChildSelected(flightSelections, airman.id)}
     />
     <Link to={`/flights/${airman.id}`}>
@@ -128,10 +128,9 @@ export class FlightTables extends React.Component<FlightTablesProps> {
       <React.Fragment>
       <div className="flight-header">
         <div className="header-section">
-          <Checkbox
+          <StyledCheckbox
             name={'checkbox-flight-' + flight.id}
-            onChange={
-              () => {flightAirmanSelectionStore!.toggleParent(flight.id, airmenIds);}}
+            onChange={() => flightAirmanSelectionStore!.toggleParent(flight.id, airmenIds)}
             checked={flightAirmanSelectionStore!.isParentSelected(flight.id, airmenIds)}
           />
         </div>
@@ -202,12 +201,14 @@ export class FlightTables extends React.Component<FlightTablesProps> {
   private renderRows = (flightId: number, airmen: AirmanModel[], flightAirmanSelectionStore: FlightAirmanSelectionStore) => {
     const flightSelections = flightAirmanSelectionStore.findParent(flightId);
     return airmen.map((airman) => {
-        return <FlightTableRow
-          key={airman.id}
-          airman={airman}
-          flightSelections={flightSelections}
-          flightAirmanSelectionStore={flightAirmanSelectionStore}
-        />;
+        return (
+          <FlightTableRow
+            key={airman.id}
+            airman={airman}
+            flightSelections={flightSelections}
+            flightAirmanSelectionStore={flightAirmanSelectionStore}
+          />
+        );
       });
   }
 }

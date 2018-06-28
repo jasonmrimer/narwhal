@@ -19,7 +19,6 @@ export class HierarchySelectionStore {
     if (parent.childIds.find(c => c === childId) === undefined) {
       parent.childIds.push(childId);
     }
-    return parent;
   }
 
   @action.bound
@@ -48,7 +47,9 @@ export class HierarchySelectionStore {
 
   @observable
   isChildSelected(parent: HierarchySelectionModel, id: number) {
-    return parent.childIds.find(c => c === id) !== undefined;
+    const result = parent.childIds.find(c => c === id) !== undefined;
+    console.log(result);
+    return result;
   }
 
   @observable
@@ -73,11 +74,11 @@ export class HierarchySelectionStore {
 
   @action.bound
   toggleChild(parent: HierarchySelectionModel, id: number) {
+    console.log(this.isChildSelected(parent, id))
     if (this.isChildSelected(parent, id)) {
       this.removeChild(parent, id);
     } else {
       this.addChild(parent, id);
     }
-
   }
 }

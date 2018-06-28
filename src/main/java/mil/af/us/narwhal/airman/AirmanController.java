@@ -156,7 +156,7 @@ public class AirmanController {
   @PutMapping(path = "/shift")
   public List<Airman> updateShift(
     @RequestParam Long flightId,
-    @RequestBody AirmenShiftTypeJson json
+    @RequestBody AirmenShiftTypeJSON json
   ) {
     final Flight flight = flightRepository.findOne(flightId);
     List<Airman> unfilteredList = flight.getAirmen();
@@ -169,7 +169,7 @@ public class AirmanController {
   public List<Airman> updateSchedules(
     @RequestParam(value = "startDate", required = false) String startDate,
     @RequestParam Long flightId,
-    @RequestBody AirmenScheduleJson json
+    @RequestBody AirmenScheduleJSON json
   ) {
     Schedule schedule = json.getSchedule();
     final Flight flight = flightRepository.findOne(flightId);

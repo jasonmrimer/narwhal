@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AirmenShiftTypeJson {
+public class AirmenShiftTypeJSON {
   private ShiftType shiftType;
   private List<Long> airmanIds = new ArrayList<>();
 }

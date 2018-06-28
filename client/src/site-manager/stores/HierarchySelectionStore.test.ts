@@ -65,13 +65,11 @@ describe('HierarchySelectionStore', () => {
   });
 
   it('should tell us if a child is selected', () => {
-    const parent = subject.findParent(14);
     const result = subject.isChildSelected(parent, 1);
     expect(result).toBeTruthy();
   });
 
   it('should tell us if a child is not selected', () => {
-    const parent = subject.findParent(14);
     const result2 = subject.isChildSelected(parent, 112);
     expect(result2).toBeFalsy();
   });
