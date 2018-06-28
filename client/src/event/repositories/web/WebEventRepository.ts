@@ -48,7 +48,11 @@ export class WebEventRepository implements EventRepository {
     return json.success;
   }
 
-  async updateEventApproval(eventId: number, approval: EventApproval, approvalRole: EventApprovalRole): Promise<EventModel> {
+  async updateEventApproval(
+    eventId: number,
+    approval: EventApproval,
+    approvalRole: EventApprovalRole
+  ): Promise<EventModel> {
     const json = await this.client.putJSON(
       'api/events/pending', JSON.stringify({eventId: eventId, approval: approval, approvalRole: approvalRole})
     );

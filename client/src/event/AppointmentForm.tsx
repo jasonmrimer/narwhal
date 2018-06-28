@@ -35,20 +35,20 @@ export class AppointmentForm extends React.Component<Props> {
 
   handleChange = ({target}: any) => {
     this.props.appointmentFormStore!.setState(target.name, target.value);
-  }
+  };
 
   handleDelete = async () => {
     await this.props.eventActions!.handleDeleteEvent(this.props.appointmentFormStore!.model!);
-  }
+  };
 
   handleSubmit = async (e: any) => {
     e.preventDefault();
     await this.props.eventActions!.handleFormSubmit(this.props.airmanId, this.props.appointmentFormStore!);
-  }
+  };
 
-  handleDecision = async (approvalChoice: EventApproval, approvalRole: EventApprovalRole) => {
+  handleApprovalDecision = async (approvalChoice: EventApproval, approvalRole: EventApprovalRole) => {
     await this.props.eventActions!.updateEventApproval(approvalChoice, approvalRole);
-  }
+  };
 
   render() {
     const {trackerStore, appointmentFormStore} = this.props;
@@ -120,10 +120,10 @@ export class AppointmentForm extends React.Component<Props> {
               event={this.props.event}
               role={EventApprovalRole.Supervisor}
               onClickApprove={
-                async () => await this.handleDecision(EventApproval.Approved, EventApprovalRole.Supervisor)
+                async () => await this.handleApprovalDecision(EventApproval.Approved, EventApprovalRole.Supervisor)
               }
               onClickDeny={
-                async () => await this.handleDecision(EventApproval.Denied, EventApprovalRole.Supervisor)
+                async () => await this.handleApprovalDecision(EventApproval.Denied, EventApprovalRole.Supervisor)
               }
             /> :
             null
@@ -134,8 +134,12 @@ export class AppointmentForm extends React.Component<Props> {
             <StyledEventApprovalRow
               event={this.props.event}
               role={EventApprovalRole.Scheduler}
-              onClickApprove={async () => await this.handleDecision(EventApproval.Denied, EventApprovalRole.Scheduler)}
-              onClickDeny={async () => await this.handleDecision(EventApproval.Approved, EventApprovalRole.Scheduler)}
+              onClickApprove={
+                async () => await this.handleApprovalDecision(EventApproval.Denied, EventApprovalRole.Scheduler)
+              }
+              onClickDeny={
+                async () => await this.handleApprovalDecision(EventApproval.Approved, EventApprovalRole.Scheduler)
+              }
             /> :
             null
         }

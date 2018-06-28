@@ -100,6 +100,6 @@ describe('EventActions', () => {
 
   it('should call updateEventStatusAction', async () => {
     await subject.updateEventApproval(EventApproval.Approved, EventApprovalRole.Supervisor);
-    expect(updateEventApprovalSpy).toHaveBeenCalled();
+    expect(updateEventApprovalSpy).toHaveBeenCalledWith(EventApproval.Approved, EventApprovalRole.Supervisor);
   });
 });

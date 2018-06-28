@@ -141,7 +141,7 @@ describe('AppointmentForm', () => {
     expect(wrapper.find(StyledSubmitButton).prop('text')).toBe('SUBMIT REQUEST');
   });
 
-  describe('approval process', () => {
+  describe('eventApproval process', () => {
     const pendingEvent = EventModelFactory.build();
     pendingEvent.status = EventStatus.Pending;
 
@@ -156,13 +156,13 @@ describe('AppointmentForm', () => {
       />
     );
 
-    it('should render approval buttons if it is a pending event',() => {
+    it('should render eventApproval buttons if it is a pending event',() => {
       expect(wrapper.find(StyledButton).at(0).prop('text')).toBe('DENY');
       expect(wrapper.find(StyledButton).at(1).prop('text')).toBe('APPROVE');
     });
 
-    it('should call handleDecision when a button is clicked', () => {
-      expect(wrapper.find(StyledButton).at(1).prop('onClick')).toEqual(subject.handleDecision)
+    it('should call handleApprovalDecision when a button is clicked', () => {
+      expect(wrapper.find(StyledButton).at(1).prop('onClick')).toEqual(subject.handleApprovalDecision)
     });
   });
 });

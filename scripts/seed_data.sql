@@ -194,8 +194,30 @@ INSERT INTO mission(mission_id, ato_mission_number, start_date_time, end_date_ti
 
   INSERT INTO event(id, title, description, start_time, end_time, airman_id, type, created_by, created_on, status)
   VALUES
-  (1, 'newAppointment', 'letsGo', NOW() + INTERVAL 3 DAY, NOW() + INTERVAL 4 DAY, 20, 'APPOINTMENT', 'tytus', NOW(), 'PENDING'),
-  (2, 'newLeave', 'letsReallyGo', NOW() + INTERVAL 3 DAY, NOW() + INTERVAL 4 DAY, 20, 'LEAVE', 'tytus', NOW(), 'PENDING');
+  (
+    1,
+    'newAppointment',
+    'letsGo',
+    NOW() + INTERVAL 3 DAY,
+    NOW() + INTERVAL 4 DAY,
+    20,
+    'APPOINTMENT',
+    'tytus',
+    NOW(),
+    'PENDING'
+  ),
+  (
+    2,
+    'newLeave',
+    'letsReallyGo',
+    NOW() + INTERVAL 3 DAY,
+    NOW() + INTERVAL 4 DAY,
+    20,
+    'LEAVE',
+    'tytus',
+    NOW(),
+    'PENDING'
+  );
 
 
 INSERT INTO profile (username, site_id, role_id) VALUES

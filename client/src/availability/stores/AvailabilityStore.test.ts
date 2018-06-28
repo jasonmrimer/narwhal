@@ -1,9 +1,9 @@
-import { AvailabilityStore } from './AvailabilityStore';
-import { EventApproval, EventApprovalRole, EventModel, EventStatus, EventType } from '../../event/models/EventModel';
-import { EventModelFactory } from '../../event/factories/EventModelFactory';
+import {AvailabilityStore} from './AvailabilityStore';
+import {EventApproval, EventApprovalRole, EventModel, EventStatus, EventType} from '../../event/models/EventModel';
+import {EventModelFactory} from '../../event/factories/EventModelFactory';
 import * as moment from 'moment';
-import { DoubleRepositories } from '../../utils/Repositories';
-import { FakeEventRepository } from '../../event/repositories/doubles/FakeEventRepository';
+import {DoubleRepositories} from '../../utils/Repositories';
+import {FakeEventRepository} from '../../event/repositories/doubles/FakeEventRepository';
 
 describe('AvailabilityStore', () => {
   let eventRepository: FakeEventRepository;
@@ -171,20 +171,26 @@ describe('AvailabilityStore', () => {
   });
 
   describe('approving pending events', async () => {
-    const pendingEvent = new EventModel('Title',
-                                        'Description',
-                                        moment(),
-                                        moment(),
-                                        1,
-                                        EventType.Leave,
-                                        1,
-                                        EventStatus.Pending);
+    const pendingEvent = new EventModel(
+      'Title',
+      'Description',
+      moment(),
+      moment(),
+      1,
+      EventType.Leave,
+      1,
+      EventStatus.Pending
+    );
 
-    it('should update an existing event with approval changes', async () => {
+    it('should update an existing event with eventApproval changes', async () => {
       subject.openEditEventForm(pendingEvent);
       await subject.updateEventApproval(EventApproval.Approved, EventApprovalRole.Supervisor);
 
-      expect(eventRepoSpy).toHaveBeenCalled();
+      expect(eventRepoSpy).toHaveBeenCalledWith(
+        pendingEvent.id,
+        EventApproval.Approved,
+        EventApprovalRole.Supervisor
+      );
     });
   });
 });
