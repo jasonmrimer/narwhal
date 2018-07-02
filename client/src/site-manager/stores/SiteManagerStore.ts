@@ -242,7 +242,10 @@ export class SiteManagerStore extends NotificationStore {
     this._airmen
       .filter(airman => airman.model.flightId === flightId)
       .filter(airman => airmenIds.find(i => i === airman.model.id) !== undefined)
-      .forEach(airman => airman.model.shift = shift);
+      .forEach(airman => {
+        airman.model.shift = shift;
+        airman.setSelected(false);
+      });
   }
 
   @action.bound
