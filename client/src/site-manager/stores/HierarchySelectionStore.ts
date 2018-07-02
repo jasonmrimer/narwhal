@@ -1,7 +1,7 @@
 import {HierarchySelectionModel} from '../../airman/models/HierarchySelectionModel';
 import {action, computed, observable} from 'mobx';
 
-export class HierarchySelectionStore {
+export class HierarchySelectionStore<T> where T:  {
   @observable _parents: HierarchySelectionModel[] = [];
 
   @computed
