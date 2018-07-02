@@ -65,7 +65,7 @@ describe('SiteManagerStore', () => {
   it('should give the flights with their airmen', () => {
     expect(subject.squadron.flights.length)
       .toBe(2);
-    expect(subject.getAirmenByFlightId(1))
+    expect(subject.getAirmenByFlightId(1).map(a => a.model))
       .toEqual(airmen);
   });
 
@@ -78,7 +78,7 @@ describe('SiteManagerStore', () => {
     subject.setAirmenShiftByFlightId(1, ShiftType.Swing, airmen.map(a => a.id));
     expect(subject.getShiftByFlightId(1))
       .toBe(ShiftType.Swing);
-    expect(subject.getAirmenByFlightId(1).map(a => a.shift))
+    expect(subject.getAirmenByFlightId(1).map(a => a.model.shift))
       .toEqual([ShiftType.Swing, ShiftType.Swing, ShiftType.Swing]);
   });
 
@@ -122,7 +122,7 @@ describe('SiteManagerStore', () => {
     subject.setAirmenScheduleByFlightId(1, airmen);
     expect(subject.getScheduleIdByFlightId(1))
       .toBe('2');
-    expect(subject.getAirmenByFlightId(1).map(a => a.currentAirmanSchedule!.schedule))
+    expect(subject.getAirmenByFlightId(1).map(a => a.model.currentAirmanSchedule!.schedule))
       .toEqual([schedule2, schedule2, schedule2]);
   });
 

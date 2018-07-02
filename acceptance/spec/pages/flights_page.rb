@@ -146,7 +146,7 @@ class FlightsPage
   private
 
   def click_on_airman(name)
-    page.find('a', text: name).click
+    page.find('.airman-name', text: name).click
     expect(page).to have_content('Personal Information')
   end
 

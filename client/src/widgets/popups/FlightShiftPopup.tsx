@@ -8,6 +8,7 @@ import { SiteManagerActions } from '../../site-manager/actions/SiteManagerAction
 
 interface Props {
   onCancel: () => void;
+  count: number;
   siteManagerActions?: SiteManagerActions;
   siteManagerStore?: SiteManagerStore;
   className?: string;
@@ -16,15 +17,14 @@ interface Props {
 @observer
 export class FlightShiftPopup extends React.Component<Props> {
   render() {
-    const {siteManagerStore} = this.props;
-    const {getAirmenByFlightId, pendingFlightId} = siteManagerStore!;
+    const {siteManagerStore, count, siteManagerActions} = this.props;
 
     return (
       <StyledPopupModal
         title="Shift Settings"
         className={this.props.className}
         onCancel={this.props.onCancel}
-        onConfirm={async () => await this.props.siteManagerActions!.saveFlightShift()}
+        onConfirm={async () => await siteManagerActions!.saveFlightShift()}
       >
         <div className="message">
           {siteManagerStore!.shiftPopupMessage}
@@ -32,12 +32,12 @@ export class FlightShiftPopup extends React.Component<Props> {
 
         <div className="icon">
           <ShiftDisplay
-            shift={this.props.siteManagerStore!.pendingShift!}
+            shift={siteManagerStore!.pendingShift!}
           />
         </div>
 
         <div className="flight-count">
-          This change will affect {getAirmenByFlightId(pendingFlightId!).length} operators.
+          This change will affect {count} operators.
         </div>
       </StyledPopupModal>
     );

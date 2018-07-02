@@ -18,12 +18,14 @@ export class SiteManagerActions {
   }
 
   async saveFlightShift() {
-    const {siteManagerStore} = this.stores;
+    const {siteManagerStore, flightAirmanSelectionStore} = this.stores;
     const pendingFlightId = siteManagerStore!.pendingFlightId!;
+    const selections = flightAirmanSelectionStore!.getSelections(
+      siteManagerStore!.getAirmenByFlightId(pendingFlightId));
+
     const pendingShiftId = siteManagerStore!.pendingShift!;
-    const flightAirmenIds = siteManagerStore!
-      .getAirmenByFlightId(pendingFlightId)
-      .map(a => a.id);
+    const flightAirmenIds = selections.map(a => a.model.id);
+
     await siteManagerStore!.performLoading(async () => {
       await this.airmanRepository.updateShiftByFlightId(pendingFlightId, pendingShiftId, flightAirmenIds);
       siteManagerStore!.setAirmenShiftByFlightId(
@@ -40,7 +42,7 @@ export class SiteManagerActions {
   }
 
   async saveFlightSchedule() {
-    const {siteManagerStore} = this.stores;
+    const {siteManagerStore, flightAirmanSelectionStore} = this.stores;
     const flightId = siteManagerStore!.pendingFlightId!;
     const scheduleId = siteManagerStore!.pendingScheduleId;
     const schedule = siteManagerStore!.getScheduleByScheduleId(scheduleId!);
@@ -50,11 +52,14 @@ export class SiteManagerActions {
     }
 
     await siteManagerStore!.performLoading(async () => {
+      const selections = flightAirmanSelectionStore!.getSelections(
+        siteManagerStore!.getAirmenByFlightId(flightId));
       const updatedAirmen = await this.airmanRepository.updateScheduleByFlightId(
         flightId,
         schedule,
-        siteManagerStore!.getAirmenByFlightId(flightId).map(a => a.id),
-        siteManagerStore!.pendingScheduleStartDate);
+        selections.map(a => a.model.id),
+        siteManagerStore!.pendingScheduleStartDate
+      );
       siteManagerStore!.setAirmenScheduleByFlightId(flightId, updatedAirmen);
       siteManagerStore!.hideSchedulePrompt();
     });

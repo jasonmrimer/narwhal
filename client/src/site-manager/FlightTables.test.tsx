@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { FlightTableRow, FlightTables } from './FlightTables';
 import { FlightModel } from '../flight/model/FlightModel';
@@ -9,8 +8,8 @@ import { ShiftType } from '../airman/models/AirmanModel';
 import { StyledDropdown } from '../widgets/inputs/Dropdown';
 import { StyledFlightSchedulePopup } from '../widgets/popups/FlightSchedulePopup';
 import { StyledFlightShiftPopup } from '../widgets/popups/FlightShiftPopup';
-import { HierarchySelectionModel } from '../airman/models/HierarchySelectionModel';
 import { FlightAirmanSelectionStore } from './stores/FlightAirmanSelectionStore';
+import { Selectable } from './models/Selectable';
 
 describe('FlightTables', () => {
   const flights = [
@@ -18,7 +17,7 @@ describe('FlightTables', () => {
     new FlightModel(2, 'B', 1),
     new FlightModel(3, 'C', 1)
   ];
-  const airman = AirmanModelFactory.build();
+  const airman = new Selectable(AirmanModelFactory.build());
   const siteManagerStore: any = {
     getAirmenByFlightId: () => {
       return [airman];
@@ -95,19 +94,6 @@ describe('FlightTables', () => {
 
   it('renders a row for each airman', () => {
     expect(subject.find(FlightTableRow).exists()).toBeTruthy();
-  });
-
-  it('should render a link to the airmans profile', () => {
-    subject = shallow(
-      <FlightTableRow
-        airman={airman}
-        flightSelections={new HierarchySelectionModel(14)}
-        flightAirmanSelectionStore={new FlightAirmanSelectionStore()}
-      />
-    );
-    const link = subject.find(Link).at(0);
-    expect(link.prop('to')).toBe(`/flights/${airman.id}`);
-    expect(link.children().at(0).text()).toContain(`${airman.lastName}, ${airman.firstName}`);
   });
 
   it('should setup bindings Flight Schedule Popup', () => {

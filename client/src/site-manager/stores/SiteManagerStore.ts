@@ -11,13 +11,14 @@ import { FlightRepository } from '../../flight/repositories/FlightRepository';
 import { FlightModel } from '../../flight/model/FlightModel';
 import { SiteRepository } from '../../site/repositories/SiteRepository';
 import { Repositories } from '../../utils/Repositories';
+import { Selectable } from '../models/Selectable';
 
 export class SiteManagerStore extends NotificationStore {
   private flightRepository: FlightRepository;
   private siteRepository: SiteRepository;
   @observable private _profile: ProfileModel | null = null;
   @observable private _squadron: SquadronModel;
-  @observable private _airmen: AirmanModel[] = [];
+  @observable private _airmen: Selectable<AirmanModel>[] = [];
   @observable private _certifications: CertificationModel[] = [];
   @observable private _schedules: ScheduleModel[] = [];
   @observable private _shouldShowShiftPrompt: boolean = false;
@@ -45,7 +46,9 @@ export class SiteManagerStore extends NotificationStore {
   ) {
     this._profile = profile;
     this._squadron = squadron;
-    this._airmen = airmen.filter(a => a.squadronId === squadron.id);
+    this._airmen = Selectable.transform(
+      airmen.filter(a => a.squadronId === squadron.id)
+    );
     this._certifications = certifications;
     this._schedules = schedules;
   }
@@ -163,7 +166,7 @@ export class SiteManagerStore extends NotificationStore {
   }
 
   getAirmenByFlightId = (flightId: number) => {
-    return this.airmen.filter(a => a.flightId === flightId);
+    return this._airmen.filter(a => a.model.flightId === flightId);
   }
 
   getShiftByFlightId = (flightId: number) => {
@@ -171,12 +174,12 @@ export class SiteManagerStore extends NotificationStore {
       return this.pendingShift;
     }
     const object = this.getAirmenByFlightId(flightId).reduce(
-      (prev: any, curr: AirmanModel) => {
-        if (!curr.shift) {
+      (prev: any, curr: Selectable<AirmanModel>) => {
+        if (!curr.model.shift) {
           return prev;
         }
 
-        const type = curr.shift;
+        const type = curr.model.shift;
         prev[type] = prev[type] ? prev[type] += 1 : 1;
         return prev;
       },
@@ -191,12 +194,12 @@ export class SiteManagerStore extends NotificationStore {
 
   getScheduleIdByFlightId = (flightId: number) => {
     const object = this.getAirmenByFlightId(flightId).reduce(
-      (prev: any, curr: AirmanModel) => {
-        if (!curr.currentAirmanSchedule) {
+      (prev: any, curr: Selectable<AirmanModel>) => {
+        if (!curr.model.currentAirmanSchedule) {
           return prev;
         }
 
-        const type = curr.currentAirmanSchedule.schedule.id;
+        const type = curr.model.currentAirmanSchedule.schedule.id;
         prev[type] = prev[type] ? prev[type] + 1 : 1;
         return prev;
       },
@@ -237,9 +240,9 @@ export class SiteManagerStore extends NotificationStore {
   @action.bound
   setAirmenShiftByFlightId(flightId: number, shift: ShiftType, airmenIds: number[]) {
     this._airmen
-      .filter(airman => airman.flightId === flightId)
-      .filter(airman => airmenIds.find(i => i === airman.id) !== -1)
-      .forEach(airman => airman.shift = shift);
+      .filter(airman => airman.model.flightId === flightId)
+      .filter(airman => airmenIds.find(i => i === airman.model.id) !== undefined)
+      .forEach(airman => airman.model.shift = shift);
   }
 
   @action.bound
@@ -258,9 +261,10 @@ export class SiteManagerStore extends NotificationStore {
 
   @action.bound
   setAirmenScheduleByFlightId(flightId: number, airmen: AirmanModel[]) {
-    airmen.forEach(updatedAirman => {
+    Selectable.transform(airmen)
+    .forEach(updatedAirman => {
       this._airmen = this._airmen.map(airman => {
-        if (airman.id === updatedAirman.id) {
+        if (airman.model.id === updatedAirman.model.id) {
           return updatedAirman;
         } else {
           return airman;

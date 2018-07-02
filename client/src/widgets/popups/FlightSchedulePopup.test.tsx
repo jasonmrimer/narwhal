@@ -27,6 +27,7 @@ describe('FlightSchedulePopup', () => {
         onCancel={onCancelSpy}
         siteManagerStore={siteManagerStore}
         siteManagerActions={siteManagerActions}
+        count={42}
       />
     );
   });
@@ -39,6 +40,6 @@ describe('FlightSchedulePopup', () => {
   });
 
   it('should render number of affected people', () => {
-    expect(subject.find('.flight-count').text()).toBe('This change will affect 2 operators.');
+    expect(subject.find('.flight-count').text()).toBe('This change will affect 42 operators.');
   });
 });
