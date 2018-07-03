@@ -1,12 +1,12 @@
 import * as React from 'react';
-import {EventModel, EventStatus, EventType} from '../../event/models/EventModel';
-import {MissionIcon} from '../../icons/MissionIcon';
-import {AppointmentIcon} from '../../icons/AppointmentIcon';
-import {LeaveIcon} from '../../icons/LeaveIcon';
-import {TDYDeploymentIcon} from '../../icons/TDYDeploymentIcon';
-import {PendingLeaveIcon} from '../../icons/PendingLeaveIcon';
-import {PendingAppointmentIcon} from '../../icons/PendingAppointmentIcon';
-import {AvailableIcon} from "../../icons/AvailableIcon";
+import { EventModel, EventStatus, EventType } from '../../event/models/EventModel';
+import { MissionIcon } from '../../icons/MissionIcon';
+import { AppointmentIcon } from '../../icons/AppointmentIcon';
+import { LeaveIcon } from '../../icons/LeaveIcon';
+import { TDYDeploymentIcon } from '../../icons/TDYDeploymentIcon';
+import { PendingLeaveIcon } from '../../icons/PendingLeaveIcon';
+import { PendingAppointmentIcon } from '../../icons/PendingAppointmentIcon';
+import { AvailableIcon } from '../../icons/AvailableIcon';
 
 export class DailyEvents extends Array<EventModel> {
   constructor(events: EventModel[]) {
@@ -51,6 +51,6 @@ export class DailyEvents extends Array<EventModel> {
       }
       i++;
     }
-    return <AvailableIcon/>
+    return <AvailableIcon/>;
   }
 }

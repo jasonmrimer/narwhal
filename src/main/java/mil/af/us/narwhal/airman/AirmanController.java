@@ -180,12 +180,13 @@ public class AirmanController {
           AirmanSchedule as = new AirmanSchedule(schedule, Instant.now());
           airman.addSchedule(as);
         } else {
+          Instant start = Instant.parse(startDate);
           Stream<AirmanSchedule> currentSchedules =
             airman.getSchedules()
               .stream()
               .filter(item -> item.getEndDate() == null);
-          currentSchedules.forEach(item -> item.setEndDate(Instant.now()));
-          AirmanSchedule as = new AirmanSchedule(schedule, Instant.parse(startDate));
+          currentSchedules.forEach(item -> item.setEndDate(start));
+          AirmanSchedule as = new AirmanSchedule(schedule, start);
           airman.addSchedule(as);
         }
       });

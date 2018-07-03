@@ -1,4 +1,4 @@
-import {EventApproval, EventApprovalRole, EventModel, EventStatus, EventType} from '../../event/models/EventModel';
+import { EventApproval, EventApprovalRole, EventModel, EventStatus, EventType } from '../../event/models/EventModel';
 import { action, computed, observable } from 'mobx';
 import { Moment } from 'moment';
 import { Repositories } from '../../utils/Repositories';

@@ -1,9 +1,9 @@
 import * as React from 'react';
-import {EventModel, EventStatus, EventType} from '../event/models/EventModel';
+import { EventModel, EventStatus, EventType } from '../event/models/EventModel';
 import styled from 'styled-components';
-import {observer} from 'mobx-react';
-import {Link} from 'react-router-dom';
-import {LookingGlass} from '../icons/LookingGlass';
+import { observer } from 'mobx-react';
+import { Link } from 'react-router-dom';
+import { LookingGlass } from '../icons/LookingGlass';
 
 interface Props {
   event: EventModel;
@@ -42,16 +42,15 @@ export class AvailabilityTile extends React.Component<Props> {
     if (event.status === EventStatus.Pending) {
       return (
         <span className="event-status">[PENDING]</span>
-      )
+      );
     } else if (event.status === EventStatus.Denied) {
       return (
         <span className="event-status">[DENIED]</span>
-      )
+      );
     }
     return null;
   }
 }
-
 
 export const StyledAvailabilityTile = styled(AvailabilityTile)`
   background: ${props => props.theme.blueSteel};
