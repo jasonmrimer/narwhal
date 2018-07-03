@@ -32,12 +32,22 @@ describe('CrewPostionRow', () => {
   });
 
   it('renders a position title input', () => {
-    expect(subject.find(StyledTextInput).prop('value')).toBe(crewPosition.title);
+    expect(subject.find(StyledTextInput).at(0).prop('value')).toBe(crewPosition.title);
+  });
+
+  it('renders a position title input', () => {
+    expect(subject.find(StyledTextInput).at(1).prop('value')).toBe(crewPosition.remarks);
   });
 
   it('should call the onChange callback when changing the title', () => {
     const event = {target: {value: 'hello', name: 'foo'}};
-    subject.find(StyledTextInput).simulate('change', event);
+    subject.find(StyledTextInput).at(0).simulate('change', event);
+    expect(onChange).toBeCalledWith(event);
+  });
+
+  it('should call the onChange callback when changing the remarks', () => {
+    const event = {target: {value: 'hello', name: 'foo'}};
+    subject.find(StyledTextInput).at(1).simulate('change', event);
     expect(onChange).toBeCalledWith(event);
   });
 

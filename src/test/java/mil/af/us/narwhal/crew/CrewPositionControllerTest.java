@@ -72,7 +72,14 @@ public class CrewPositionControllerTest extends BaseIntegrationTest {
     CrewPosition crewPosition = crewPositionRepository.findAll().get(0);
     crewPosition.setCritical(true);
     crewPosition.setTitle("UPDATED CREW POSITION");
-    CrewPositionJSON crewPositionJSON = new CrewPositionJSON(crewPosition.getId(), crewPosition.getTitle(), crewPosition.getCritical(), crewPosition.getAirman().getId());
+    crewPosition.setRemarks("New Remarks");
+    CrewPositionJSON crewPositionJSON = new CrewPositionJSON(
+      crewPosition.getId(),
+      crewPosition.getTitle(),
+      crewPosition.getCritical(),
+      crewPosition.getAirman().getId(),
+      crewPosition.getRemarks()
+    );
     String json = objectMapper.writeValueAsString(singletonList(crewPositionJSON));
 
     // @formatter:off
@@ -87,14 +94,21 @@ public class CrewPositionControllerTest extends BaseIntegrationTest {
       .put(CrewPositionController.URI + "/" + mission.getId())
     .then()
       .statusCode(200)
-      .body("crewPositions[0].title", equalTo("UPDATED CREW POSITION"));
+      .body("crewPositions[0].title", equalTo("UPDATED CREW POSITION"))
+      .body("crewPositions[0].remarks", equalTo(crewPosition.getRemarks()));
     // @formatter:on
   }
 
   @Test
   public void deleteTest() throws JsonProcessingException {
     CrewPosition crewPosition = crewPositionRepository.findAll().get(0);
-    CrewPositionJSON crewPositionJSON = new CrewPositionJSON(crewPosition.getId(), crewPosition.getTitle(), crewPosition.getCritical(), crewPosition.getAirman().getId());
+    CrewPositionJSON crewPositionJSON = new CrewPositionJSON(
+      crewPosition.getId(),
+      crewPosition.getTitle(),
+      crewPosition.getCritical(),
+      crewPosition.getAirman().getId(),
+      crewPosition.getRemarks()
+    );
     String json = objectMapper.writeValueAsString(singletonList(crewPositionJSON));
 
     // @formatter:off

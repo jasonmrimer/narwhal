@@ -38,6 +38,8 @@ public class CrewPosition {
 
   private String title;
 
+  private String remarks;
+
   private Boolean critical;
 
   public CrewPosition(Airman airman) {

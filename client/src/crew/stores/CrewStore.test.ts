@@ -32,12 +32,15 @@ describe('CrewStore', () => {
 
   it('sets the position attributes on a crew', () => {
     const expectedTitle = 'chimichanga';
+    const expectedRemarks = 'XFORCE!';
     subject.setCrewEntry(1, {title: expectedTitle});
     subject.setCrewEntry(1, {critical: true});
+    subject.setCrewEntry(1, {remarks: expectedRemarks});
     if (subject.crew) {
       const crewPosition = subject.crew.crewPositions.find(position => position.id === 1)!;
       expect(crewPosition.title).toBe(expectedTitle);
       expect(crewPosition.critical).toBeTruthy();
+      expect(crewPosition.remarks).toBe(expectedRemarks);
     }
   });
 

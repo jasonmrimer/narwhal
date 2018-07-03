@@ -1,0 +1,1 @@
+ALTER TABLE join_mission_airman ADD COLUMN remarks VARCHAR (64) DEFAULT NULL;

@@ -38,6 +38,7 @@ public class CrewPositionController {
       final Airman airman = airmanRepository.findOne(position.getAirmanId());
       CrewPosition crewPosition = new CrewPosition();
       crewPosition.setTitle(position.getTitle());
+      crewPosition.setRemarks(position.getRemarks());
       crewPosition.setCritical(position.isCritical());
       crewPosition.setAirman(airman);
       crewPosition.setMission(mission);

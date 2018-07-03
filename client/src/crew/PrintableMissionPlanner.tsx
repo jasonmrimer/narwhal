@@ -51,7 +51,7 @@ export class PrintableMissionPlanner extends React.Component<Props, {}> {
           <span className="position-col underlined">{position.title}</span>
           <span className="member-col underlined">{position.displayFullName}</span>
           <span className="signature-col underlined"/>
-          <span className="remarks-col underlined"/>
+          <span className="remarks-col underlined">{position.remarks}</span>
         </div>
       );
     });

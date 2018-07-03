@@ -41,6 +41,13 @@ export const CrewPositionRow = observer((props: Props) => {
           <button onClick={handleDelete}>×</button>
         }
       </span>
+      <span className="remarks">
+        <StyledTextInput
+          name="remarks"
+          value={crewPosition.remarks || ''}
+          onChange={onChange}
+        />
+      </span>
     </div>
   );
 });

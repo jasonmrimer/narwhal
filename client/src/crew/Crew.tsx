@@ -36,6 +36,7 @@ export class Crew extends React.Component<Props> {
             <span className="critical">CRITICAL</span>
             <span className="position">POSITION</span>
             <span className="member">ASSIGNED CREW MEMBER</span>
+            <span className="remarks">REMARKS</span>
           </div>
           <div
             className={
