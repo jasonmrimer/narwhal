@@ -158,7 +158,7 @@ describe('LeaveForm', () => {
     });
 
     it('should not render StyledEventApprovalRows if it is an auto approved event', () => {
-      pendingEvent.status = EventStatus.AutoAuthorized;
+      pendingEvent.status = EventStatus.AutoApproved;
 
       wrapper = shallow(
         <LeaveForm

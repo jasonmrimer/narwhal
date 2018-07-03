@@ -101,7 +101,7 @@ export class LeaveForm extends React.Component<Props> {
         }
 
         {
-          this.props.event && this.props.event!.status !== EventStatus.AutoAuthorized ?
+          this.props.event && this.props.event!.status !== EventStatus.AutoApproved  ?
             <StyledEventApprovalRow
               event={this.props.event}
               role={EventApprovalRole.Supervisor}
@@ -116,7 +116,7 @@ export class LeaveForm extends React.Component<Props> {
         }
 
         {
-          this.props.event && this.props.event!.status !== EventStatus.AutoAuthorized ?
+          this.props.event && this.props.event!.status !== EventStatus.AutoApproved  ?
             <StyledEventApprovalRow
               event={this.props.event}
               role={EventApprovalRole.Scheduler}

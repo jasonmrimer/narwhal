@@ -38,7 +38,7 @@ export class EventApprovalRow extends React.Component<Props> {
       <div className={this.props.className}>
         <div className="approval-role">{this.props.role.toString().toLowerCase()} approval</div>
         {
-          this.props.event.status !== EventStatus.AutoAuthorized && eventApproval === null &&
+          this.props.event.status !== EventStatus.AutoApproved && eventApproval === null &&
           <div className="event-approval-buttons">
             <StyledButton className="deny-button" text="DENY" onClick={this.props.onClickDeny}/>
             <StyledButton className="approve-button" text="APPROVE" onClick={this.props.onClickApprove}/>
@@ -46,7 +46,7 @@ export class EventApprovalRow extends React.Component<Props> {
         }
 
         {
-          this.props.event.status !== EventStatus.AutoAuthorized && eventApproval !== null &&
+          this.props.event.status !== EventStatus.AutoApproved && eventApproval !== null &&
           <div className="event-approval-decisions">
             <span className="approval-decision-row">
               {

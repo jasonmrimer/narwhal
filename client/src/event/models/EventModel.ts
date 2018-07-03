@@ -10,7 +10,7 @@ export enum EventType {
 export enum EventStatus {
   Pending = 'PENDING',
   Approved = 'APPROVED',
-  AutoAuthorized = 'AUTO_AUTHORIZED'
+  AutoApproved = 'AUTO_APPROVED'
 }
 
 export enum EventApproval {
