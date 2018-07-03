@@ -78,6 +78,27 @@ public class EventService {
     return eventRepository.findPendingEventsBySiteId(siteId, startDate, limit);
   }
 
+  public Event setApproval(Event event, EventApprovalJSON json, Profile profile) {
+    final Instant currentTime = Instant.now();
+
+    if (json.getApprovalRole() == EventApprovalRole.SUPERVISOR) {
+      event.setSupervisor(profile);
+      event.setSupervisorApproval(json.getApproval());
+      event.setSupervisorApprovalTime(currentTime);
+    } else {
+      event.setScheduler(profile);
+      event.setSchedulerApproval(json.getApproval());
+      event.setSchedulerApprovalTime(currentTime);
+    }
+
+    if (event.getSchedulerApproval() == EventApproval.APPROVED &&
+      event.getSupervisorApproval() == EventApproval.APPROVED) {
+      event.setStatus(EventStatus.APPROVED);
+    }
+
+    return event;
+  }
+
   private Event saveEvent(EventJSON json, Profile profile) {
     final Airman airman = airmanRepository.findOne(json.getAirmanId());
     final Event event = Event.fromJSON(json, airman);

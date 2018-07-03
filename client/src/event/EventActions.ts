@@ -55,6 +55,11 @@ export class EventActions {
 
   updateEventApproval = async (approvalChoice: EventApproval, approvalRole: EventApprovalRole) => {
     const event = await this.stores.availabilityStore!.updateEventApproval(approvalChoice, approvalRole);
+    const eventWeek = this.timeSerivce.navigateToWeek(event.startTime);
+
+    await this.stores.availabilityStore!.refreshAirmanEvents(event.airmanId, eventWeek);
+    await this.stores.trackerStore!.refreshEvents(this.stores.plannerStore!.plannerTimeSpan);
+
     this.stores.availabilityStore!.closeEventForm();
     this.stores.availabilityStore!.openEditEventForm(event);
   }

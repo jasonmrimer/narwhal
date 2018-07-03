@@ -17,7 +17,7 @@ import * as moment from 'moment';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 import { readerAbility } from '../app/abilities';
 import { StyledSubmitButton } from '../widgets/forms/SubmitButton';
-import { EventStatus } from './models/EventModel';
+import { EventModel, EventStatus } from './models/EventModel';
 import { StyledEventApprovalRow } from './EventApprovalRow';
 
 /* tslint:disable:no-empty*/
@@ -143,8 +143,10 @@ describe('AppointmentForm', () => {
   });
 
   describe('eventApproval process', () => {
+    let pendingEvent: EventModel;
+
     beforeEach(() => {
-      const pendingEvent = EventModelFactory.build();
+      pendingEvent = EventModelFactory.build();
       pendingEvent.status = EventStatus.Pending;
 
       wrapper = shallow(
@@ -159,8 +161,27 @@ describe('AppointmentForm', () => {
       );
     });
 
-    it('should render StyledEventApprovalRows if it is a pending event', () => {
+    it('should render StyledEventApprovalRows if it is a pending/approved event', () => {
       expect(wrapper.find(StyledEventApprovalRow).length).toBe(2);
+    });
+
+    it('should not render StyledEventApprovalRows if it is an auto approved event', () => {
+      pendingEvent.status = EventStatus.AutoAuthorized;
+
+      wrapper = shallow(
+        <AppointmentForm
+          airmanId={123}
+          appointmentFormStore={appointmentFormStore}
+          trackerStore={trackerStore}
+          profileStore={profileStore}
+          eventActions={eventActions}
+          event={pendingEvent}
+        />
+      );
+
+      wrapper.update();
+
+      expect(wrapper.find(StyledEventApprovalRow).length).toBe(0);
     });
   });
 });

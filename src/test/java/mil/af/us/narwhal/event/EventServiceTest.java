@@ -4,6 +4,7 @@ import mil.af.us.narwhal.airman.Airman;
 import mil.af.us.narwhal.airman.AirmanRepository;
 import mil.af.us.narwhal.mission.MissionRepository;
 import mil.af.us.narwhal.profile.Profile;
+import mil.af.us.narwhal.profile.ProfileRepository;
 import mil.af.us.narwhal.profile.Role;
 import mil.af.us.narwhal.profile.RoleName;
 import org.junit.Test;
@@ -25,6 +26,7 @@ public class EventServiceTest {
   @Mock private EventRepository eventRepository;
   @Mock private MissionRepository missionRepository;
   @Mock private AirmanRepository airmanRepository;
+  @Mock private ProfileRepository profileRepository;
   @Mock private Airman airman;
   @Captor private ArgumentCaptor<Event> eventArgumentCaptor;
   private EventService subject;
@@ -107,5 +109,30 @@ public class EventServiceTest {
       sixtyDaysFromNow
     );
     assertThat(result).isEqualTo(1L);
+  }
+
+  @Test
+  public void setApproval(){
+    Event event = new Event(
+    "Event",
+      "",
+      Instant.now(),
+      Instant.now(),
+      EventType.APPOINTMENT,
+      EventStatus.PENDING,
+      airman);
+
+    EventApprovalJSON eventApprovalJSON = new EventApprovalJSON(
+      1L,
+      EventApproval.APPROVED,
+      EventApprovalRole.SUPERVISOR
+    );
+
+    Profile tytus = profileRepository.save(new Profile("tytus", new Role(RoleName.ADMIN)));
+    subject = new EventService(eventRepository, missionRepository, airmanRepository);
+
+    event = subject.setApproval(event, eventApprovalJSON, tytus);
+
+    assertThat(event.getSupervisorApproval()).isEqualTo(EventApproval.APPROVED);
   }
 }

@@ -28,7 +28,7 @@ public class EventController {
     if (profile.getRole().getName() == RoleName.READER) {
       json.setStatus(EventStatus.PENDING);
     } else {
-      json.setStatus(EventStatus.APPROVED);
+      json.setStatus(EventStatus.AUTO_APPROVED);
     }
 
     if (json.getType().equals(EventType.APPOINTMENT)) {
@@ -64,8 +64,8 @@ public class EventController {
 
   @GetMapping("/hasPending")
   public Map<String, Boolean> pendingCount(@AuthenticationPrincipal Profile profile){
-    Instant today = getStartOfDay();
-    Long result = service.pendingEventCountBySiteId(
+    final Instant today = getStartOfDay();
+    final Long result = service.pendingEventCountBySiteId(
       profile.getSite().getId(),
       today,
       today.plus(60, ChronoUnit.DAYS)
@@ -76,27 +76,14 @@ public class EventController {
 
   @GetMapping("/pending")
   public List<Event> pendingEvents(@AuthenticationPrincipal Profile profile) {
-    Instant today = getStartOfDay();
-    return service.pendingEventsBySiteId(
-      profile.getSite().getId(),
-      today,
-      today.plus(60, ChronoUnit.DAYS)
-    );
+    final Instant today = getStartOfDay();
+    return service.pendingEventsBySiteId(profile.getSite().getId(), today, today.plus(60, ChronoUnit.DAYS));
   }
 
   @PutMapping("/pending")
   public Event updateApprovalStatus(@RequestBody EventApprovalJSON json, @AuthenticationPrincipal Profile profile) {
-    Instant currentTime = Instant.now();
-    final Event event = eventRepository.findOne(json.getEventId());
-    if (json.getApprovalRole() == EventApprovalRole.SUPERVISOR) {
-      event.setSupervisor(profile);
-      event.setSupervisorApproval(json.getApproval());
-      event.setSupervisorApprovalTime(currentTime);
-    } else {
-      event.setScheduler(profile);
-      event.setSchedulerApproval(json.getApproval());
-      event.setSchedulerApprovalTime(currentTime);
-    }
+    Event event = eventRepository.findOne(json.getEventId());
+    event = service.setApproval(event, json, profile);
     return eventRepository.save(event);
   }
 

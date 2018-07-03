@@ -8,7 +8,7 @@ import { StyledTimeInput } from '../widgets/inputs/TimeInput';
 import { StyledSubmitButton } from '../widgets/forms/SubmitButton';
 import { StyledFieldValidation } from '../widgets/inputs/FieldValidation';
 import { StyledForm, StyledFormRow } from '../widgets/forms/Form';
-import { EventApproval, EventApprovalRole, EventModel } from './models/EventModel';
+import { EventApproval, EventApprovalRole, EventModel, EventStatus } from './models/EventModel';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { EventActions } from './EventActions';
 import { StyledEventCreationInfo } from '../widgets/EventCreationInfo';
@@ -101,7 +101,7 @@ export class LeaveForm extends React.Component<Props> {
         }
 
         {
-          this.props.event ?
+          this.props.event && this.props.event!.status !== EventStatus.AutoAuthorized ?
             <StyledEventApprovalRow
               event={this.props.event}
               role={EventApprovalRole.Supervisor}
@@ -116,7 +116,7 @@ export class LeaveForm extends React.Component<Props> {
         }
 
         {
-          this.props.event ?
+          this.props.event && this.props.event!.status !== EventStatus.AutoAuthorized ?
             <StyledEventApprovalRow
               event={this.props.event}
               role={EventApprovalRole.Scheduler}

@@ -18,7 +18,7 @@ import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore
 import { readerAbility } from '../app/abilities';
 import { StyledSubmitButton } from '../widgets/forms/SubmitButton';
 import { StyledEventApprovalRow } from './EventApprovalRow';
-import { EventStatus, EventType } from './models/EventModel';
+import { EventModel, EventStatus, EventType } from './models/EventModel';
 
 /* tslint:disable:no-empty*/
 describe('LeaveForm', () => {
@@ -135,8 +135,9 @@ describe('LeaveForm', () => {
   });
 
   describe('eventApproval process', () => {
+    let pendingEvent: EventModel;
     beforeEach(() => {
-      const pendingEvent = EventModelFactory.build();
+      pendingEvent = EventModelFactory.build();
       pendingEvent.type = EventType.Leave;
       pendingEvent.status = EventStatus.Pending;
 
@@ -152,8 +153,25 @@ describe('LeaveForm', () => {
       );
     });
 
-    it('should render StyledEventApprovalRows if it is a pending event', () => {
+    it('should render StyledEventApprovalRows if it is a pending/approved event', () => {
       expect(wrapper.find(StyledEventApprovalRow).length).toBe(2);
+    });
+
+    it('should not render StyledEventApprovalRows if it is an auto approved event', () => {
+      pendingEvent.status = EventStatus.AutoAuthorized;
+
+      wrapper = shallow(
+        <LeaveForm
+          airmanId={123}
+          leaveFormStore={store}
+          trackerStore={trackerStore}
+          profileStore={profileStore}
+          eventActions={eventActions}
+          event={pendingEvent}
+        />
+      );
+
+      expect(wrapper.find(StyledEventApprovalRow).length).toBe(0);
     });
   });
 });

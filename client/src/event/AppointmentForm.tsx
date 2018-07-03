@@ -10,7 +10,7 @@ import { StyledButton } from '../widgets/buttons/Button';
 import { StyledForm, StyledFormRow } from '../widgets/forms/Form';
 import { DeleteIcon } from '../icons/DeleteIcon';
 import { AppointmentFormStore } from './stores/AppointmentFormStore';
-import { EventApproval, EventApprovalRole, EventModel } from './models/EventModel';
+import { EventApproval, EventApprovalRole, EventModel, EventStatus } from './models/EventModel';
 import { EventActions } from './EventActions';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { StyledEventCreationInfo } from '../widgets/EventCreationInfo';
@@ -115,7 +115,7 @@ export class AppointmentForm extends React.Component<Props> {
         }
 
         {
-          this.props.event ?
+          this.props.event && this.props.event!.status !== EventStatus.AutoAuthorized ?
             <StyledEventApprovalRow
               event={this.props.event}
               role={EventApprovalRole.Supervisor}
@@ -130,7 +130,7 @@ export class AppointmentForm extends React.Component<Props> {
         }
 
         {
-          this.props.event ?
+          this.props.event && this.props.event!.status !== EventStatus.AutoAuthorized ?
             <StyledEventApprovalRow
               event={this.props.event}
               role={EventApprovalRole.Scheduler}
