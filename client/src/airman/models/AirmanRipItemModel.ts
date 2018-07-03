@@ -13,9 +13,16 @@ export class AirmanRipItemModel {
     this.expirationDate = expirationDate;
   }
 
-  get isExpired() {
+  get isAboutToExpire() {
     if (this.expirationDate) {
       return this.expirationDate.isBefore(moment().add(14, 'days'));
+    }
+    return false;
+  }
+
+  get isExpired() {
+    if (this.expirationDate) {
+      return this.expirationDate.isBefore(moment());
     }
     return false;
   }

@@ -65,7 +65,7 @@ export class AirmanRipItems extends React.Component<Props> {
         {ripItems.map((item: AirmanRipItemModel, index: number) => {
             return (
               <StyledFormRow key={index} direction="column">
-                <div className={classNames('item', {expired: item.isExpired})}>
+                <div className={classNames('item', {expired: item.isAboutToExpire})}>
                   {item.ripItem.title}
                 </div>
                 <div className="item-date-controls">

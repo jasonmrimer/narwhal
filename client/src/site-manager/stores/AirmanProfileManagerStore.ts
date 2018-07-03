@@ -156,7 +156,7 @@ export class AirmanProfileManagerStore extends NotificationStore {
   @computed
   get expiredItemCount(): number {
     return this._ripItems
-      .filter(item => item.isExpired)
+      .filter(item => item.isAboutToExpire)
       .length;
   }
 

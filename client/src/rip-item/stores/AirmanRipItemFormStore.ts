@@ -42,7 +42,7 @@ export class AirmanRipItemFormStore extends NotificationStore {
   @computed
   get expiredItemCount() {
     return this._airmanRipItems
-      .filter(item => item.isExpired)
+      .filter(item => item.isAboutToExpire)
       .length;
   }
 

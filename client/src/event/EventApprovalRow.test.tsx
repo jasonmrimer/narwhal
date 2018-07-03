@@ -67,8 +67,8 @@ describe('EventApprovalRow', () => {
       subject = shallow(
         <EventApprovalRow
           event={event}
-          onClickDeny={() => {}}
-          onClickApprove={() => {}}
+          onClickDeny={() => {return; }}
+          onClickApprove={() => {return; }}
           role={EventApprovalRole.Supervisor}
         />
       );

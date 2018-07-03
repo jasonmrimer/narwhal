@@ -3,6 +3,8 @@ import * as moment from 'moment';
 import { SkillType } from '../../skills/models/SkillType';
 import { AirmanCertificationModelFactory } from '../../airman/factories/AirmanCertificationModelFactory';
 import { Repositories } from '../../utils/Repositories';
+import { RipItemRepository } from '../../airman/repositories/AirmanRipItemRepository';
+import { RipItemRepositoryStub } from '../../airman/repositories/doubles/AirmanRipItemRepositoryStub';
 
 describe('CurrencyStore', () => {
   const skill = {
@@ -15,8 +17,10 @@ describe('CurrencyStore', () => {
   };
   let subject: CurrencyStore;
   let repos: Partial<Repositories>;
+  let airmanRipItemRepositoryStub: RipItemRepository;
 
   beforeEach(() => {
+    airmanRipItemRepositoryStub = new RipItemRepositoryStub();
     repos = {
       airmanRepository: {
         findBySiteId: jest.fn(),
@@ -30,12 +34,17 @@ describe('CurrencyStore', () => {
       },
 
       ripItemRepository: {
-        findBySelectedAirman: jest.fn(),
+        findBySelectedAirman: airmanRipItemRepositoryStub.findBySelectedAirman,
         updateAirmanRipItems: jest.fn()
       }
     };
 
     subject = new CurrencyStore(repos);
+  });
+
+  it('should only show expired', async () => {
+    await subject.setRipItemsForAirman(2);
+    expect(subject.expiredItemCount).toBe(1);
   });
 
   it('should open an skill form for create', () => {
@@ -92,6 +101,7 @@ describe('CurrencyStore', () => {
 
   describe('rip items', () => {
     it('should set rip items for an airman', async () => {
+      repos.ripItemRepository!.findBySelectedAirman = jest.fn();
       await subject.setRipItemsForAirman(123);
       expect(repos.ripItemRepository!.findBySelectedAirman).toHaveBeenCalledWith(123);
     });
