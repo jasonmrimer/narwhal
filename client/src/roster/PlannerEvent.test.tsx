@@ -13,7 +13,7 @@ import { MissionIcon } from '../icons/MissionIcon';
 
 describe('PlannerEvent', () => {
   const event = EventModelFactory.build();
-  event.status = EventStatus.Approved;
+  event.status = EventStatus.AutoApproved;
   const day = moment(0);
   const airman: any = {
     isAvailableForWork: () => true
@@ -60,6 +60,24 @@ describe('PlannerEvent', () => {
       subject.update();
 
       expect(subject.find(item[1] as any).exists()).toBeTruthy();
+    });
+  });
+
+  it('does not render denied events', () => {
+    event.status = EventStatus.Denied;
+
+    [
+      [EventType.Leave, LeaveIcon],
+      [EventType.Appointment, AppointmentIcon]
+    ].forEach(item => {
+      event.type = item[0] as any;
+      trackerStore.getDailyEventsByAirmanId = () => [event];
+
+      subject.instance().forceUpdate();
+      subject.update();
+
+      expect(subject.find(item[0] as any).exists()).toBeFalsy();
+      expect(subject.find(item[1] as any).exists()).toBeFalsy();
     });
   });
 });

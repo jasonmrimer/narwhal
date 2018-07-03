@@ -1,4 +1,4 @@
-import { EventApproval, EventApprovalRole, EventModel, EventType } from '../../event/models/EventModel';
+import {EventApproval, EventApprovalRole, EventModel, EventStatus, EventType} from '../../event/models/EventModel';
 import { action, computed, observable } from 'mobx';
 import { Moment } from 'moment';
 import { Repositories } from '../../utils/Repositories';
@@ -75,7 +75,9 @@ export class AvailabilityStore {
         this._selectedDate,
         this._selectedDate,
         airmanId,
-        EventType[this._eventFormType]
+        EventType[this._eventFormType],
+        null,
+        EventStatus.AutoApproved
       );
     }
   }

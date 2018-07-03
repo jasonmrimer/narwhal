@@ -10,18 +10,20 @@ describe('AvailabilityTile', () => {
   const editEventSpy = jest.fn();
   const startTime = moment('2017-11-22');
   const endTime = moment('2017-11-22');
-  const event = new EventModel(
-    'XYZTEST-MISSION-1',
-    '',
-    startTime,
-    endTime,
-    1,
-    EventType.Mission,
-    1,
-    EventStatus.Pending,
-  );
+  let event: EventModel;
 
   beforeEach(() => {
+    event = new EventModel(
+      'XYZTEST-MISSION-1',
+      '',
+      startTime,
+      endTime,
+      1,
+      EventType.Mission,
+      1,
+      EventStatus.Pending,
+    );
+
     subject = shallow(
         <AvailabilityTile
           event={event}
@@ -44,7 +46,20 @@ describe('AvailabilityTile', () => {
     expect(subject.find(Link).prop('to')).toBe(`/dashboard/crew/${event.id}`);
   });
 
-  it('should render event status', () => {
+  it('should render a pending event status', () => {
     expect(subject.text()).toContain('[PENDING]');
+  });
+
+  it('should render a denied event status', () => {
+    event.status = EventStatus.Denied;
+
+    subject = shallow(
+      <AvailabilityTile
+        event={event}
+        editEvent={editEventSpy}
+      />
+    );
+
+    expect(subject.text()).toContain('[DENIED]');
   });
 });

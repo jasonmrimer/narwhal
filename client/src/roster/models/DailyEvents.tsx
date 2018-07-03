@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { EventModel, EventStatus, EventType } from '../../event/models/EventModel';
-import { MissionIcon } from '../../icons/MissionIcon';
-import { AppointmentIcon } from '../../icons/AppointmentIcon';
-import { LeaveIcon } from '../../icons/LeaveIcon';
-import { TDYDeploymentIcon } from '../../icons/TDYDeploymentIcon';
-import { PendingLeaveIcon } from '../../icons/PendingLeaveIcon';
-import { PendingAppointmentIcon } from '../../icons/PendingAppointmentIcon';
+import {EventModel, EventStatus, EventType} from '../../event/models/EventModel';
+import {MissionIcon} from '../../icons/MissionIcon';
+import {AppointmentIcon} from '../../icons/AppointmentIcon';
+import {LeaveIcon} from '../../icons/LeaveIcon';
+import {TDYDeploymentIcon} from '../../icons/TDYDeploymentIcon';
+import {PendingLeaveIcon} from '../../icons/PendingLeaveIcon';
+import {PendingAppointmentIcon} from '../../icons/PendingAppointmentIcon';
+import {AvailableIcon} from "../../icons/AvailableIcon";
 
 export class DailyEvents extends Array<EventModel> {
   constructor(events: EventModel[]) {
@@ -33,15 +34,23 @@ export class DailyEvents extends Array<EventModel> {
   }
 
   private renderSwitch = () => {
-    switch (this[0].type) {
-      case EventType.Appointment:
-        return this[0].status === EventStatus.Pending ? <PendingAppointmentIcon/> : <AppointmentIcon/>;
-      case EventType.Leave:
-        return this[0].status === EventStatus.Pending ? <PendingLeaveIcon/> : <LeaveIcon/>;
-      case EventType.TDY_DEPLOYMENT:
-        return <TDYDeploymentIcon/>;
-      default:
-        return null;
+    let i = 0;
+
+    while (i < this.length) {
+      if (this[i].status !== EventStatus.Denied) {
+        switch (this[i].type) {
+          case EventType.Appointment:
+            return this[i].status === EventStatus.Pending ? <PendingAppointmentIcon/> : <AppointmentIcon/>;
+          case EventType.Leave:
+            return this[i].status === EventStatus.Pending ? <PendingLeaveIcon/> : <LeaveIcon/>;
+          case EventType.TDY_DEPLOYMENT:
+            return <TDYDeploymentIcon/>;
+          default:
+            return;
+        }
+      }
+      i++;
     }
+    return <AvailableIcon/>
   }
 }

@@ -112,7 +112,7 @@ public class EventServiceTest {
   }
 
   @Test
-  public void setApproval(){
+  public void setApproval_Accepted(){
     Event event = new Event(
     "Event",
       "",
@@ -134,5 +134,31 @@ public class EventServiceTest {
     event = subject.setApproval(event, eventApprovalJSON, tytus);
 
     assertThat(event.getSupervisorApproval()).isEqualTo(EventApproval.APPROVED);
+  }
+
+  @Test
+  public void setApproval_Denied(){
+    Event event = new Event(
+      "Event",
+      "",
+      Instant.now(),
+      Instant.now(),
+      EventType.APPOINTMENT,
+      EventStatus.PENDING,
+      airman);
+
+    EventApprovalJSON eventApprovalJSON = new EventApprovalJSON(
+      1L,
+      EventApproval.DENIED,
+      EventApprovalRole.SUPERVISOR
+    );
+
+    Profile tytus = profileRepository.save(new Profile("tytus", new Role(RoleName.ADMIN)));
+    subject = new EventService(eventRepository, missionRepository, airmanRepository);
+
+    event = subject.setApproval(event, eventApprovalJSON, tytus);
+
+    assertThat(event.getSupervisorApproval()).isEqualTo(EventApproval.DENIED);
+    assertThat(event.getStatus()).isEqualTo(EventStatus.DENIED);
   }
 }

@@ -96,6 +96,11 @@ public class EventService {
       event.setStatus(EventStatus.APPROVED);
     }
 
+    if (event.getSchedulerApproval() == EventApproval.DENIED ||
+      event.getSupervisorApproval() == EventApproval.DENIED) {
+      event.setStatus(EventStatus.DENIED);
+    }
+
     return event;
   }
 

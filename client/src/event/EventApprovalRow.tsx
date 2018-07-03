@@ -26,7 +26,7 @@ export class EventApprovalRow extends React.Component<Props> {
      eventApproval = this.props.event.supervisorApproval;
      username = this.props.event.supervisorUsername!;
      approvalTime = this.props.event.supervisorApprovalTime!;
-    } else if (this.props.event.schedulerApproval !== null) {
+    } else if (this.props.role  === EventApprovalRole.Scheduler && this.props.event.schedulerApproval !== null) {
       eventApproval = this.props.event.schedulerApproval;
       username = this.props.event.schedulerUsername!;
       approvalTime = this.props.event.schedulerApprovalTime!;
