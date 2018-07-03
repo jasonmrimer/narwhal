@@ -91,7 +91,9 @@ export class MissionFormStore extends FormStore<EventModel, State> {
       this.makeMoment(this._state.endDate, this._state.endTime),
       airmanId,
       EventType.Mission,
-      this.model ? Number(this.model.id) : Number(this._state.id)
+      this.model && this.model.id !== null ?
+        Number(this.model.id) :
+        Number(this._state.id)
     );
   }
 
