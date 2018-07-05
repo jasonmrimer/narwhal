@@ -3,37 +3,55 @@ import * as React from 'react';
 import { EventModel } from '../event/models/EventModel';
 import { AirmanModel } from '../airman/models/AirmanModel';
 import { SiteModel } from '../site/models/SiteModel';
+import { SidePanelActions } from '../tracker/SidePanelActions';
+import { TabType } from '../tracker/stores/SidePanelStore';
+import { inject } from 'mobx-react';
+import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 
 interface Props {
   event: EventModel;
   airman: AirmanModel;
   site: SiteModel;
-  className?: string;
+  sidePanelActions?: SidePanelActions;
+  profileStore?: ProfileSitePickerStore;
 }
 
 export class PendingEventTile extends React.Component<Props> {
-
   render() {
-    const squadron = this.props.site.squadrons.find(s => s.id === this.props.airman.squadronId);
-    const flight = squadron!.flights.find(f => f.id === this.props.airman.flightId);
+    const { event, airman, site, sidePanelActions, profileStore } = this.props;
+    const squadron = site.squadrons.find(s => s.id === airman.squadronId);
+    const flight = squadron!.flights.find(f => f.id === airman.flightId);
+
     return (
-      <div className={this.props.className}>
+      <div
+        className="event-tile"
+        onClick={async () => await profileStore!.performLoading(async () =>
+          await sidePanelActions!.openSidePanel(
+            airman,
+            TabType.AVAILABILITY,
+            event.startTime
+          )
+        )}
+      >
         <div className="airman">
         <span className="airman-name">
-          {this.props.airman.firstName} {this.props.airman.lastName}, </span>
+          {airman.firstName} {airman.lastName}, </span>
           {squadron!.name} {flight!.name}
         </div>
         <div className="event">
-          {this.props.event.title}
+          {event.title}
         </div>
       </div>
     );
   }
 }
 
-export const StyledPendingEventTile = styled(PendingEventTile)`
+export const StyledPendingEventTile = inject(
+  'sidePanelActions',
+  'profileStore'
+)(styled(PendingEventTile)`
       padding: 0.75rem 1rem;
      .airman-name { 
       font-weight: 500;
      }
-`;
+`);
