@@ -9,13 +9,19 @@ import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore
 import { DoubleRepositories } from '../utils/Repositories';
 import { makeFakeProfile } from '../utils/testUtils';
 import { adminAbility } from '../app/abilities';
+import { Provider } from 'mobx-react';
+import { MemoryRouter } from 'react-router';
 
 describe('PendingEventTileList', () => {
   let subject: ShallowWrapper;
+  let sidePanelActions: any;
   let pendingEventStore: PendingEventStore;
   let profileStore: ProfileSitePickerStore;
 
   beforeEach(async () => {
+    sidePanelActions = {
+      openFromPendingEvent: jest.fn(),
+    };
     const site = SiteModelFactory.build(14, 1);
     const profile = makeFakeProfile('ADMIN', adminAbility);
     const airmen = [
@@ -34,9 +40,16 @@ describe('PendingEventTileList', () => {
 
     pendingEventStore = new PendingEventStore();
 
-    pendingEventStore.hydrate(airmen, events,  site);
+    pendingEventStore.hydrate(airmen, events, site);
     subject = shallow(
-      <PendingEventTileList pendingEventStore={pendingEventStore} profileStore={profileStore}/>
+      <MemoryRouter>
+        <Provider sidePanelActions={sidePanelActions}>
+          <PendingEventTileList
+            pendingEventStore={pendingEventStore}
+            profileStore={profileStore}
+          />
+        </Provider>
+      </MemoryRouter>
     );
   });
 

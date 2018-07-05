@@ -19,6 +19,7 @@ interface Props {
   plannerStore?: PlannerStore;
   locationFilterStore?: LocationFilterStore;
   rosterHeaderStore?: RosterHeaderStore;
+  history?: any;
 }
 
 @inject(
@@ -59,11 +60,11 @@ export class TrackerPage extends React.Component<Props> {
   }
 
   render() {
-    const {profileStore} = this.props;
+    const {profileStore, history} = this.props;
     const {profile} = profileStore!;
     return (
       <React.Fragment>
-        <StyledTopBar/>
+        <StyledTopBar history={history}/>
         <StyledTracker profile={profile!}/>
       </React.Fragment>
     );

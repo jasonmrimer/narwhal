@@ -19,7 +19,9 @@ describe('PlannerActions', () => {
 
     const trackerStore = {
       refreshEvents: refreshEventsSpy,
-      selectedAirman: airman
+      selectedAirman: airman,performLoading: (fn: any) => {
+        fn();
+      },
     };
 
     const availabilityStore = {

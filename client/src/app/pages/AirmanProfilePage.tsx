@@ -39,10 +39,12 @@ export class AirmanProfilePage extends React.Component<Props> {
   }
 
   render() {
+    const {history} = this.props;
+
     return (
       <React.Fragment>
-        <StyledTopBar/>
-        <StyledAirmanProfileManager history={this.props.history}/>
+        <StyledTopBar history={history}/>
+        <StyledAirmanProfileManager history={history}/>
         {
           this.props.airmanProfileManagerStore!.loading &&
           <StyledLoadingOverlay/>

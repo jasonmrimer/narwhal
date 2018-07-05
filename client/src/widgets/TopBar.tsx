@@ -13,6 +13,7 @@ interface Props {
   profileStore?: ProfileSitePickerStore;
   pendingEventStore?: PendingEventStore;
   topBarActions?: TopBarActions;
+  history?: any;
   className?: string;
 }
 
@@ -57,16 +58,16 @@ export class TopBar extends React.Component<Props> {
             </Can>
           </span>
           <div className="requests">
-          {
-            profileStore!.hasPendingRequests &&
-            <div className="requests-button" onClick={topBarActions!.getPendingRequests}>
-              Requests Pending
-            </div>
-          }
-          {
-            pendingEventStore!.showList &&
-            <StyledPendingEventTileList/>
-          }
+            {
+              profileStore!.hasPendingRequests &&
+              <div className="requests-button" onClick={topBarActions!.getPendingRequests}>
+                Requests Pending
+              </div>
+            }
+            {
+              pendingEventStore!.showList &&
+              <StyledPendingEventTileList history={this.props.history}/>
+            }
           </div>
           <div className="profile">
             <div className="profile-button">

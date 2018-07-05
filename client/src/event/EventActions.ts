@@ -4,7 +4,7 @@ import { TimeService } from '../tracker/services/TimeService';
 import { Stores } from '../app/stores';
 
 export class EventActions {
-  constructor(private stores: Partial<Stores>, private timeSerivce: TimeService) {
+  constructor(private stores: Partial<Stores>, private timeService: TimeService) {
   }
 
   handleFormSubmit = async (airmanId: number, formStore: FormStore<EventModel, any>) => {
@@ -17,7 +17,7 @@ export class EventActions {
         await this.stores.availabilityStore!.addEvent(event);
       }
 
-      const eventWeek = this.timeSerivce.navigateToWeek(event.startTime);
+      const eventWeek = this.timeService.navigateToWeek(event.startTime);
 
       this.stores.plannerStore!.setSidePanelWeek(eventWeek);
 
@@ -42,7 +42,7 @@ export class EventActions {
 
     const event = await this.stores.availabilityStore!.executePendingDelete();
 
-    const eventWeek = this.timeSerivce.navigateToWeek(event!.startTime);
+    const eventWeek = this.timeService.navigateToWeek(event!.startTime);
 
     this.stores.plannerStore!.setSidePanelWeek(eventWeek);
 
@@ -55,7 +55,7 @@ export class EventActions {
 
   updateEventApproval = async (approvalChoice: EventApproval, approvalRole: EventApprovalRole) => {
     const event = await this.stores.availabilityStore!.updateEventApproval(approvalChoice, approvalRole);
-    const eventWeek = this.timeSerivce.navigateToWeek(event.startTime);
+    const eventWeek = this.timeService.navigateToWeek(event.startTime);
 
     await this.stores.availabilityStore!.refreshAirmanEvents(event.airmanId, eventWeek);
     await this.stores.trackerStore!.refreshEvents(this.stores.plannerStore!.plannerTimeSpan);

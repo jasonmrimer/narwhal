@@ -10,12 +10,17 @@ import * as moment from 'moment';
 describe('PlannerHeader', () => {
   let subject: ShallowWrapper;
   let plannerStore: PlannerStore;
+  let plannerActions: any;
 
   beforeEach(() => {
     plannerStore = new PlannerStore(new TimeServiceStub());
     plannerStore.navigateToPlannerTimeSpan = jest.fn();
 
-    subject = shallow(<PlannerHeader plannerStore={plannerStore}/>);
+    plannerActions = {
+      refreshPlannerEventData: jest.fn
+    }
+
+    subject = shallow(<PlannerHeader plannerStore={plannerStore} plannerActions={plannerActions}/>);
   });
 
   it('should render header text', () => {

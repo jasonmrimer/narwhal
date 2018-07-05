@@ -8,9 +8,10 @@ import { Repositories } from '../../utils/Repositories';
 import { SiteManagerStore } from '../../site-manager/stores/SiteManagerStore';
 
 interface Props {
+  repositories: Repositories;
   profileStore?: ProfileSitePickerStore;
   siteManagerStore?: SiteManagerStore;
-  repositories: Repositories;
+  history?: any;
 }
 
 @inject('profileStore', 'siteManagerStore')
@@ -30,10 +31,10 @@ export class FlightsPage extends React.Component<Props> {
   }
 
   render() {
-    const {profileStore} = this.props;
+    const {profileStore, history} = this.props;
     return (
       <React.Fragment>
-        <StyledTopBar/>
+        <StyledTopBar history={history}/>
         <Can do="read" on="mission" ability={profileStore!.profile!.ability!}>
           <StyledSiteManager/>
         </Can>

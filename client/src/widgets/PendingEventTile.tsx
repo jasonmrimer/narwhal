@@ -3,37 +3,55 @@ import * as React from 'react';
 import { EventModel } from '../event/models/EventModel';
 import { AirmanModel } from '../airman/models/AirmanModel';
 import { SiteModel } from '../site/models/SiteModel';
+import { SidePanelActions } from '../tracker/SidePanelActions';
+import { inject } from 'mobx-react';
+import { TabType } from '../tracker/stores/SidePanelStore';
 
 interface Props {
   event: EventModel;
   airman: AirmanModel;
   site: SiteModel;
+  sidePanelActions?: SidePanelActions;
+  history: any;
   className?: string;
 }
 
 export class PendingEventTile extends React.Component<Props> {
 
   render() {
-    const squadron = this.props.site.squadrons.find(s => s.id === this.props.airman.squadronId);
-    const flight = squadron!.flights.find(f => f.id === this.props.airman.flightId);
+    const { event, airman, site, history } = this.props;
+    const squadron = site.squadrons.find(s => s.id === airman.squadronId);
+    const flight = squadron!.flights.find(f => f.id === airman.flightId);
+
     return (
-      <div className={this.props.className}>
+      <div
+        className={this.props.className}
+        onClick={async () => this.props.sidePanelActions!.openFromPendingEvent(
+          airman,
+          TabType.AVAILABILITY,
+          event.startTime,
+          history
+        )}
+      >
         <div className="airman">
         <span className="airman-name">
-          {this.props.airman.firstName} {this.props.airman.lastName}, </span>
+          {airman.firstName} {airman.lastName}, </span>
           {squadron!.name} {flight!.name}
         </div>
         <div className="event">
-          {this.props.event.title}
+          {event.title}
         </div>
       </div>
     );
   }
 }
 
-export const StyledPendingEventTile = styled(PendingEventTile)`
+export const StyledPendingEventTile = inject(
+  'sidePanelActions'
+)(styled(PendingEventTile)`
+      cursor: pointer;
       padding: 0.75rem 1rem;
      .airman-name { 
       font-weight: 500;
      }
-`;
+`);

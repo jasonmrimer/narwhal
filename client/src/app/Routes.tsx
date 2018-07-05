@@ -16,14 +16,18 @@ export class Routes extends React.Component {
   render() {
     return (
       <Switch>
-        <Route exact={true} path="/" render={() => <TrackerPage/>}/>
+        <Route exact={true} path="/" render={({history}) => <TrackerPage history={history}/>}/>
         <Route path="/upload" render={() => <UploadPage/>}/>
-        <Route exact={true} path="/dashboard" render={() => <DashboardPage/>}/>
+        <Route exact={true} path="/dashboard" render={({history}) => <DashboardPage history={history}/>}/>
         <Route
           path="/dashboard/crew/:id"
           render={({match}) => <CrewPage crewId={match.params.id}/>}
         />
-        <Route exact={true} path="/flights" render={() => <FlightsPage repositories={WebRepositories}/>}/>
+        <Route
+          exact={true}
+          path="/flights"
+          render={({history}) => <FlightsPage history={history} repositories={WebRepositories}/>}
+        />
         <Route path="/flights/new" render={({history}) => <AirmanProfilePage history={history}/>}/>
         <Route
           path="/flights/:airmanId"

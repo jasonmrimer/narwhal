@@ -7,13 +7,14 @@ import { ProfileSitePickerStore } from '../../profile/stores/ProfileSitePickerSt
 
 interface Props {
   profileStore?: ProfileSitePickerStore;
+  history?: any;
 }
 
 export const DashboardPage = inject('profileStore')(observer((props: Props) => {
   const {profileStore} = props;
   return (
     <React.Fragment>
-      <StyledTopBar/>
+      <StyledTopBar history={props.history}/>
       <Can do="read" on="mission" ability={profileStore!.profile!.ability!}>
         <StyledDashboard/>
       </Can>

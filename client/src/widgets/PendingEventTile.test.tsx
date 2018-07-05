@@ -4,9 +4,11 @@ import { PendingEventTile } from './PendingEventTile';
 import { EventModelFactory } from '../event/factories/EventModelFactory';
 import { SiteModelFactory } from '../site/factories/SiteModelFactory';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
+import { historyMock } from "../utils/testUtils";
 
 describe('PendingEventTitle', () => {
   let subject: ShallowWrapper;
+  let sidePanelActions: any;
   const site = SiteModelFactory.build(1, 5);
   const airman = AirmanModelFactory.build(
     1,
@@ -15,13 +17,20 @@ describe('PendingEventTitle', () => {
     site.id
   );
   const event = EventModelFactory.build();
+  const openFromPendingEventSpy = jest.fn();
 
   beforeEach(() => {
+    sidePanelActions = {
+      openFromPendingEvent: openFromPendingEventSpy,
+    };
+
     subject = shallow(
       <PendingEventTile
         site={site}
         airman={airman}
         event={event}
+        sidePanelActions={sidePanelActions}
+        history={historyMock}
       />);
   });
 
@@ -37,5 +46,10 @@ describe('PendingEventTitle', () => {
 
   it('should render the event info', () => {
     expect(subject.find('.event').text()).toContain(event.title);
+  });
+
+  it('should call openFromPendingEvent onClick', () => {
+    subject.simulate('click');
+    expect(openFromPendingEventSpy).toHaveBeenCalled();
   });
 });
