@@ -16,6 +16,7 @@ interface Props {
 }
 
 export class PendingEventTile extends React.Component<Props> {
+
   render() {
     const { event, airman, site } = this.props;
     const squadron = site.squadrons.find(s => s.id === airman.squadronId);
