@@ -9,18 +9,12 @@ export class AvailabilityActions {
 
   incrementWeek = async () => {
     await this.stores.plannerStore!.incrementSidePanelWeek();
-    await this.stores.availabilityStore!.refreshAirmanEvents(
-      this.stores.trackerStore!.selectedAirman.id,
-      this.stores.plannerStore!.sidePanelWeek
-    );
+    await this.refreshAvailabilityEventData();
   }
 
   decrementWeek = async () => {
     await this.stores.plannerStore!.decrementSidePanelWeek();
-    await this.stores.availabilityStore!.refreshAirmanEvents(
-      this.stores.trackerStore!.selectedAirman.id,
-      this.stores.plannerStore!.sidePanelWeek
-    );
+    await this.refreshAvailabilityEventData();
   }
 
   openEventForm = () => {
@@ -41,5 +35,12 @@ export class AvailabilityActions {
     } else {
       return options;
     }
+  }
+
+  async refreshAvailabilityEventData() {
+    await this.stores.availabilityStore!.refreshAirmanEvents(
+      this.stores.trackerStore!.selectedAirman.id,
+      this.stores.plannerStore!.sidePanelWeek
+    );
   }
 }

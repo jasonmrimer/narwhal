@@ -2,6 +2,7 @@ import { SidePanelActions } from './SidePanelActions';
 import { TabType } from './stores/SidePanelStore';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 import * as moment from 'moment';
+import { historyMock } from "../utils/testUtils";
 
 describe('SidePanelActions', () => {
   let subject: SidePanelActions;
@@ -16,6 +17,9 @@ describe('SidePanelActions', () => {
   let setAirmanEventsSpy: jest.Mock;
   let setSelectedDateSpy: jest.Mock;
   let showEventFormSpy: jest.Mock;
+  let navigateToPlannerWeekSpy: jest.Mock;
+  let setShowListSpy: jest.Mock;
+  let refreshAirmanEventsSpy: jest.Mock;
 
   const week = Symbol('week');
   const airman = AirmanModelFactory.build();
@@ -33,11 +37,18 @@ describe('SidePanelActions', () => {
     setAirmanEventsSpy = jest.fn();
     setSelectedDateSpy = jest.fn();
     showEventFormSpy = jest.fn();
+    navigateToPlannerWeekSpy = jest.fn();
+    setShowListSpy = jest.fn();
+    refreshAirmanEventsSpy = jest.fn();
 
     const trackerStore = {
       clearSelectedAirman: clearSelectedAirmanSpy,
       setSelectedAirman: setSelectedAirmanSpy,
+      selectedAirman: () => AirmanModelFactory.build(),
       getEventsByAirmanId: () => airmanEvents,
+      performLoading: (fn: any) => {
+        fn();
+      },
     };
 
     const currencyStore = {
@@ -50,10 +61,17 @@ describe('SidePanelActions', () => {
       closeEventForm: closeEventFormSpy,
       setAirmanEvents: setAirmanEventsSpy,
       setSelectedDate: setSelectedDateSpy,
-      showEventForm: showEventFormSpy
+      showEventForm: showEventFormSpy,
+      refreshAirmanEvents: refreshAirmanEventsSpy,
     };
 
-    const plannerStore = {setSidePanelWeek: setSidePanelWeekSpy, plannerWeek: week};
+    const plannerStore = {
+      setSidePanelWeek: setSidePanelWeekSpy,
+      plannerWeek: week,
+      navigateToPlannerWeek: navigateToPlannerWeekSpy
+    };
+
+    const pendingEventStore = {setShowList: setShowListSpy};
 
     const sidePanelStore = {setSelectedTab: setSelectedTabSpy};
 
@@ -62,7 +80,8 @@ describe('SidePanelActions', () => {
       availabilityStore,
       currencyStore,
       plannerStore,
-      sidePanelStore
+      sidePanelStore,
+      pendingEventStore,
     } as any);
   });
 
@@ -98,6 +117,7 @@ describe('SidePanelActions', () => {
 
       expect(setRipItemsForAirmanSpy).toHaveBeenCalledWith(airman.id);
       expect(setAirmanEventsSpy).toHaveBeenCalledWith(airmanEvents);
+      expect(refreshAirmanEventsSpy).toHaveBeenCalled();
 
       expect(setSelectedDateSpy).toHaveBeenCalledWith(date);
       expect(showEventFormSpy).toHaveBeenCalled();
@@ -116,10 +136,19 @@ describe('SidePanelActions', () => {
 
       expect(setRipItemsForAirmanSpy).toHaveBeenCalledWith(airman.id);
       expect(setAirmanEventsSpy).toHaveBeenCalledWith(airmanEvents);
+      expect(refreshAirmanEventsSpy).toHaveBeenCalled();
 
       expect(setSelectedDateSpy).not.toHaveBeenCalled();
       expect(showEventFormSpy).not.toHaveBeenCalled();
     });
   });
 
+  it('should open the side panel on clicking pending event', async () => {
+    const date = moment();
+    await subject.openFromPendingEvent(airman, TabType.AVAILABILITY, date, historyMock);
+
+    expect(navigateToPlannerWeekSpy).toHaveBeenCalledWith(date);
+    expect(historyMock.replace).toHaveBeenCalled();
+    expect(setShowListSpy).toHaveBeenCalled();
+  });
 });

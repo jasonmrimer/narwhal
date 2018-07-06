@@ -11,6 +11,7 @@ import { findDOMNode } from 'react-dom';
 interface Props {
   pendingEventStore?: PendingEventStore;
   profileStore?: ProfileSitePickerStore;
+  history?: any;
   className?: string;
 }
 
@@ -54,6 +55,7 @@ export class PendingEventTileList extends React.Component<Props> {
                     event={event}
                     airman={this.props.pendingEventStore!.findAirman(event.airmanId)}
                     site={this.props.pendingEventStore!.site}
+                    history={this.props.history}
                   />
                 </div>
               );

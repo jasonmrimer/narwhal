@@ -44,8 +44,9 @@ export class PlannerHeader extends React.Component<Props> {
     this.setState({calendarFocus: focused});
   }
 
-  handleDateChange = (event: any) => {
+  handleDateChange = async (event: any) => {
     this.props.plannerStore!.navigateToPlannerTimeSpan(moment(event.target.value));
+    await this.props.plannerActions!.refreshPlannerEventData();
   }
 
   render() {

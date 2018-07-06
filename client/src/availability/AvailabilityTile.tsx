@@ -74,8 +74,8 @@ export const StyledAvailabilityTile = styled(AvailabilityTile)`
   }
   
   .event-title {
-    background: ${props => props.event.status === EventStatus.Pending ? props.theme.purpleSplash : 'none'};
-    background: ${props => props.event.status === EventStatus.Denied ? props.theme.redSteel : 'none'};
+    background: ${props => props.event.status === EventStatus.Pending ? props.theme.purpleSplash :
+      props.event.status === EventStatus.Denied ? props.theme.redSteel : 'none'};
   }
   
   .event-description {

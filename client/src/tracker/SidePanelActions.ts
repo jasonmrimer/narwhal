@@ -15,21 +15,28 @@ export class SidePanelActions {
   }
 
   openSidePanel = async (airman: AirmanModel, tabType: TabType, date?: Moment) => {
-    this.stores.trackerStore!.setSelectedAirman(airman);
-    this.stores.sidePanelStore!.setSelectedTab(tabType);
-    this.stores.plannerStore!.setSidePanelWeek(this.stores.plannerStore!.plannerWeek);
+    await this.stores.trackerStore!.performLoading(async () => {
+      this.stores.trackerStore!.setSelectedAirman(airman);
+      this.stores.sidePanelStore!.setSelectedTab(tabType);
+      this.stores.plannerStore!.setSidePanelWeek(this.stores.plannerStore!.plannerWeek);
 
-    this.stores.availabilityStore!.closeEventForm();
-    this.stores.currencyStore!.closeSkillForm();
-    this.stores.currencyStore!.closeAirmanRipItemForm();
+      this.stores.availabilityStore!.closeEventForm();
+      this.stores.currencyStore!.closeSkillForm();
+      this.stores.currencyStore!.closeAirmanRipItemForm();
 
-    await this.stores.currencyStore!.setRipItemsForAirman(airman.id);
-    this.stores.availabilityStore!.setAirmanEvents(this.stores.trackerStore!.getEventsByAirmanId(airman.id));
+      await this.stores.currencyStore!.setRipItemsForAirman(airman.id);
+      this.stores.availabilityStore!.setAirmanEvents(this.stores.trackerStore!.getEventsByAirmanId(airman.id));
 
-    if (date) {
-      this.stores.availabilityStore!.setSelectedDate(date);
-      this.stores.availabilityStore!.showEventForm(airman.id);
-    }
+      await this.stores.availabilityStore!.refreshAirmanEvents(
+        this.stores.trackerStore!.selectedAirman.id,
+        this.stores.plannerStore!.sidePanelWeek
+      );
+
+      if (date) {
+        this.stores.availabilityStore!.setSelectedDate(date);
+        this.stores.availabilityStore!.showEventForm(airman.id);
+      }
+    });
   }
 
   closeSidePanel = () => {
@@ -40,9 +47,13 @@ export class SidePanelActions {
     this.stores.plannerStore!.setSidePanelWeek(this.stores.plannerStore!.plannerWeek);
   }
 
-  openFromPendingEvent = async (airman: AirmanModel, tabType: TabType, date: Moment) => {
+  openFromPendingEvent = async (airman: AirmanModel, tabType: TabType, date: Moment, history: any) => {
+    await this.stores.trackerStore!.performLoading(async () => {
       this.stores.plannerStore!.navigateToPlannerWeek(date);
       await this.openSidePanel(airman, TabType.AVAILABILITY);
+
+      history.replace('/');
       this.stores.pendingEventStore!.setShowList();
-    }
+    });
+  }
 }

@@ -12,13 +12,14 @@ interface Props {
   airman: AirmanModel;
   site: SiteModel;
   sidePanelActions?: SidePanelActions;
+  history: any;
   className?: string;
 }
 
 export class PendingEventTile extends React.Component<Props> {
 
   render() {
-    const { event, airman, site } = this.props;
+    const { event, airman, site, history } = this.props;
     const squadron = site.squadrons.find(s => s.id === airman.squadronId);
     const flight = squadron!.flights.find(f => f.id === airman.flightId);
 
@@ -28,7 +29,8 @@ export class PendingEventTile extends React.Component<Props> {
         onClick={async () => this.props.sidePanelActions!.openFromPendingEvent(
           airman,
           TabType.AVAILABILITY,
-          event.startTime
+          event.startTime,
+          history
         )}
       >
         <div className="airman">
@@ -47,6 +49,7 @@ export class PendingEventTile extends React.Component<Props> {
 export const StyledPendingEventTile = inject(
   'sidePanelActions'
 )(styled(PendingEventTile)`
+      cursor: pointer;
       padding: 0.75rem 1rem;
      .airman-name { 
       font-weight: 500;

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { mount, ReactWrapper } from 'enzyme';
+import { shallow, ShallowWrapper } from 'enzyme';
 import { PendingEventTileList } from './PendingEventTileList';
 import { PendingEventStore } from './stores/PendingEventStore';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
@@ -13,7 +13,7 @@ import { Provider } from 'mobx-react';
 import { MemoryRouter } from 'react-router';
 
 describe('PendingEventTileList', () => {
-  let subject: ReactWrapper;
+  let subject: ShallowWrapper;
   let sidePanelActions: any;
   let pendingEventStore: PendingEventStore;
   let profileStore: ProfileSitePickerStore;
@@ -41,10 +41,13 @@ describe('PendingEventTileList', () => {
     pendingEventStore = new PendingEventStore();
 
     pendingEventStore.hydrate(airmen, events, site);
-    subject = mount(
+    subject = shallow(
       <MemoryRouter>
-        <Provider sidePanelActions={sidePanelActions} pendingEventStore={pendingEventStore} profileStore={profileStore}>
-          <PendingEventTileList/>
+        <Provider sidePanelActions={sidePanelActions}>
+          <PendingEventTileList
+            pendingEventStore={pendingEventStore}
+            profileStore={profileStore}
+          />
         </Provider>
       </MemoryRouter>
     );

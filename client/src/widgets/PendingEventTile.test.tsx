@@ -4,6 +4,7 @@ import { PendingEventTile } from './PendingEventTile';
 import { EventModelFactory } from '../event/factories/EventModelFactory';
 import { SiteModelFactory } from '../site/factories/SiteModelFactory';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
+import { historyMock } from "../utils/testUtils";
 
 describe('PendingEventTitle', () => {
   let subject: ShallowWrapper;
@@ -29,6 +30,7 @@ describe('PendingEventTitle', () => {
         airman={airman}
         event={event}
         sidePanelActions={sidePanelActions}
+        history={historyMock}
       />);
   });
 

@@ -25,10 +25,11 @@ export class CertificationManagerPage extends React.Component<Props> {
   }
 
   render() {
+    const {history} = this.props;
     return (
       <React.Fragment>
-        <StyledTopBar/>
-        <StyledCertificationForm history={this.props.history}/>
+        <StyledTopBar history={history}/>
+        <StyledCertificationForm history={history}/>
       </React.Fragment>
     );
   }
