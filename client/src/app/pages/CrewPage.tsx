@@ -14,6 +14,7 @@ interface Props {
   rosterHeaderStore?: RosterHeaderStore;
   locationFilterStore?: LocationFilterStore;
   crewStore?: CrewStore;
+  history?: any;
   profileStore?: ProfileSitePickerStore;
   crewId: number;
 }
@@ -62,7 +63,7 @@ export class CrewPage extends React.Component<Props> {
   render() {
     return (
       <React.Fragment>
-        <StyledTopBar/>
+        <StyledTopBar history={this.props.history}/>
         <StyledMissionPlanner/>
       </React.Fragment>
     );

@@ -4,27 +4,29 @@ import styled from 'styled-components';
 import { observer } from 'mobx-react';
 import { Link } from 'react-router-dom';
 import { LookingGlass } from '../icons/LookingGlass';
+import { ProfileModel } from '../profile/models/ProfileModel';
+import { readerAbility } from '../app/abilities';
 
 interface Props {
   event: EventModel;
   editEvent: (event: EventModel) => void;
+  profile: ProfileModel;
   className?: string;
 }
 
 @observer
 export class AvailabilityTile extends React.Component<Props> {
   render() {
-    const {event, editEvent, className} = this.props;
+    const {event, editEvent, className, profile} = this.props;
     return (
       <div className={className} onClick={() => editEvent(event)}>
         <div className="event-title">
-
-          {this.EventStatusTag(event)}
-
-          <span>{event.title}</span>
-
+          <span>
+            {this.EventStatusTag(event)}
+            <span>{event.title}</span>
+          </span>
           {
-            event.type === EventType.Mission &&
+            event.type === EventType.Mission && profile.ability !== readerAbility &&
             <Link to={`/dashboard/crew/${event.id}`} className="mission-list">
               <LookingGlass/> Mission List
             </Link>
@@ -75,7 +77,9 @@ export const StyledAvailabilityTile = styled(AvailabilityTile)`
   
   .event-title {
     background: ${props => props.event.status === EventStatus.Pending ? props.theme.purpleSplash :
-      props.event.status === EventStatus.Denied ? props.theme.redSteel : 'none'};
+  props.event.status === EventStatus.Denied ? props.theme.redSteel : 'none'};
+    display: flex;
+    justify-content: space-between;
   }
   
   .event-description {

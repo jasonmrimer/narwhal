@@ -6,10 +6,12 @@ import { findEventsForDay } from '../utils/eventUtil';
 import { StyledAvailabilityTile } from './AvailabilityTile';
 import { AvailabilityStore } from './stores/AvailabilityStore';
 import styled from 'styled-components';
+import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 
 interface Props {
   availabilityActions?: AvailabilityActions;
   availabilityStore?: AvailabilityStore;
+  profileStore?: ProfileSitePickerStore;
   day: Moment;
 }
 
@@ -33,7 +35,7 @@ export class Event extends React.Component<Props> {
 
   private scheduledEventsForDate = (day: Moment) => {
     let events;
-    const {availabilityStore} = this.props;
+    const {availabilityStore, profileStore} = this.props;
     const eventsForDay = findEventsForDay(availabilityStore!.airmanEvents, day);
     events = <div className="event-name">No Events Scheduled</div>;
 
@@ -44,8 +46,9 @@ export class Event extends React.Component<Props> {
             key={index}
             event={event}
             editEvent={() => {
-              this.props.availabilityStore!.openEditEventForm(event);
+              availabilityStore!.openEditEventForm(event);
             }}
+            profile={profileStore!.profile!}
           />
         );
       });
@@ -55,4 +58,10 @@ export class Event extends React.Component<Props> {
   }
 }
 
-export const StyledEvent = inject('availabilityActions', 'availabilityStore')(styled(Event)``);
+export const StyledEvent = inject(
+  'availabilityActions',
+  'availabilityStore',
+  'profileStore'
+)(styled(Event)`
+
+`);

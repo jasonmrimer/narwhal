@@ -128,8 +128,7 @@ class TrackerPage
 
     page.within('.side-panel') do
       find('a', text: 'AVAILABILITY').click
-      click(page.all('.event-title', text: '[PENDING] newAppointment')[0])
-
+      click(page.all('.event-status', text: '[PENDING]')[0])
       expect(find_field('title').value).to eq 'newAppointment'
 
       click_button('APPROVE', match: :first)
@@ -146,7 +145,7 @@ class TrackerPage
 
     page.within('.side-panel') do
       find('a', text: 'AVAILABILITY').click
-      click(page.all('.event-title', text: '[PENDING] newLeave')[0])
+      click(page.all('.event-status', text: '[PENDING]')[1])
 
       expect(find_field('description').value).to eq 'letsReallyGo'
 
