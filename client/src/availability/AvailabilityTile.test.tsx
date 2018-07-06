@@ -4,6 +4,8 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import * as React from 'react';
 import { AvailabilityTile } from './AvailabilityTile';
 import { Link } from 'react-router-dom';
+import { makeFakeProfile } from '../utils/testUtils';
+import { readerAbility, writerAbility } from '../app/abilities';
 
 describe('AvailabilityTile', () => {
   let subject: ShallowWrapper;
@@ -28,6 +30,7 @@ describe('AvailabilityTile', () => {
         <AvailabilityTile
           event={event}
           editEvent={editEventSpy}
+          profile={makeFakeProfile('WRITER', writerAbility)}
         />
     );
   });
@@ -57,9 +60,22 @@ describe('AvailabilityTile', () => {
       <AvailabilityTile
         event={event}
         editEvent={editEventSpy}
+        profile={makeFakeProfile('WRITER', writerAbility)}
       />
     );
 
     expect(subject.text()).toContain('[DENIED]');
+  });
+
+  it('should not render sweet nocs when profile is reader', () => {
+    subject = shallow(
+      <AvailabilityTile
+        event={event}
+        editEvent={editEventSpy}
+        profile={makeFakeProfile('READER', readerAbility)}
+      />
+    );
+
+    expect(subject.find(Link).exists()).toBeFalsy();
   });
 });

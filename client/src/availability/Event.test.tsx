@@ -7,16 +7,22 @@ import { AvailabilityActions } from './AvailabilityActions';
 import { DoubleRepositories } from '../utils/Repositories';
 import { StyledAvailabilityTile } from './AvailabilityTile';
 import { EventModelFactory } from '../event/factories/EventModelFactory';
+import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
+import { makeFakeProfile } from '../utils/testUtils';
+import { writerAbility } from '../app/abilities';
 
 describe('Event', () => {
   let subject: ShallowWrapper;
   let availabilityStore: AvailabilityStore;
   let availabilityActions: AvailabilityActions;
+  let profileStore: ProfileSitePickerStore;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     availabilityActions = new AvailabilityActions({});
     availabilityActions.openEventFormForDay = jest.fn();
     availabilityStore = new AvailabilityStore(DoubleRepositories);
+    profileStore = new ProfileSitePickerStore(DoubleRepositories);
+    await profileStore.hydrate([], makeFakeProfile('WRITER', writerAbility));
     const event = EventModelFactory.build('', '', moment('2017-11-26'), moment('2017-11-26'));
     availabilityStore.setAirmanEvents([event]);
     subject = shallow(
@@ -24,6 +30,7 @@ describe('Event', () => {
         day={moment('2017-11-26')}
         availabilityStore={availabilityStore}
         availabilityActions={availabilityActions}
+        profileStore={profileStore}
       />
     );
   });
