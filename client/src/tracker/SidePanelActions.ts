@@ -39,4 +39,10 @@ export class SidePanelActions {
     this.stores.currencyStore!.closeAirmanRipItemForm();
     this.stores.plannerStore!.setSidePanelWeek(this.stores.plannerStore!.plannerWeek);
   }
+
+  openFromPendingEvent = async (airman: AirmanModel, tabType: TabType, date: Moment) => {
+      this.stores.plannerStore!.navigateToPlannerWeek(date);
+      await this.openSidePanel(airman, TabType.AVAILABILITY);
+      this.stores.pendingEventStore!.setShowList();
+    }
 }

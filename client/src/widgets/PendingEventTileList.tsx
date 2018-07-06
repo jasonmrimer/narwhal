@@ -13,10 +13,7 @@ interface Props {
   profileStore?: ProfileSitePickerStore;
   className?: string;
 }
-@inject(
-  'pendingEventStore',
-  'profileStore'
-)
+
 @observer
 export class PendingEventTileList extends React.Component<Props> {
 
@@ -68,7 +65,11 @@ export class PendingEventTileList extends React.Component<Props> {
   }
 }
 
-export const StyledPendingEventTileList = styled(PendingEventTileList)`
+export const StyledPendingEventTileList = inject(
+  'pendingEventStore',
+  'profileStore'
+)
+(styled(PendingEventTileList)`
     position: absolute;
     border: 1px solid ${props => props.theme.fontColor};
     min-width: 4rem;
@@ -91,4 +92,4 @@ export const StyledPendingEventTileList = styled(PendingEventTileList)`
     .tile:last-child {
       border-bottom: none;
     }
-`;
+`);

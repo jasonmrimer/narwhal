@@ -4,16 +4,10 @@ import { PendingEventTile } from './PendingEventTile';
 import { EventModelFactory } from '../event/factories/EventModelFactory';
 import { SiteModelFactory } from '../site/factories/SiteModelFactory';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
-import { SidePanelActions } from '../tracker/SidePanelActions';
-import { TabType } from '../tracker/stores/SidePanelStore';
-import { DoubleRepositories } from '../utils/Repositories';
-import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 
 describe('PendingEventTitle', () => {
   let subject: ShallowWrapper;
-  let sidePanelActions: SidePanelActions;
-  let profileStore: any;
-
+  let sidePanelActions: any;
   const site = SiteModelFactory.build(1, 5);
   const airman = AirmanModelFactory.build(
     1,
@@ -22,18 +16,19 @@ describe('PendingEventTitle', () => {
     site.id
   );
   const event = EventModelFactory.build();
-
-  sidePanelActions = new SidePanelActions({});
+  const openFromPendingEventSpy = jest.fn();
 
   beforeEach(() => {
-    profileStore = new ProfileSitePickerStore(DoubleRepositories);
+    sidePanelActions = {
+      openFromPendingEvent: openFromPendingEventSpy,
+    };
+
     subject = shallow(
       <PendingEventTile
         site={site}
         airman={airman}
         event={event}
         sidePanelActions={sidePanelActions}
-        profileStore={profileStore}
       />);
   });
 
@@ -51,9 +46,8 @@ describe('PendingEventTitle', () => {
     expect(subject.find('.event').text()).toContain(event.title);
   });
 
-  it('should open side panel when clicked', () => {
-    sidePanelActions.openSidePanel = jest.fn();
-    subject.find('.event-tile').at(0).simulate('click');
-    expect(sidePanelActions.openSidePanel).toHaveBeenCalledWith(airman, TabType.AVAILABILITY, event.startTime);
+  it('should call openFromPendingEvent onClick', () => {
+    subject.simulate('click');
+    expect(openFromPendingEventSpy).toHaveBeenCalled();
   });
 });
