@@ -30,13 +30,11 @@ export class AirmanRipItems extends React.Component<Props> {
   }
 
   onUpdateClicked = (id: number) => {
-    const expirationDate = this.getExpirationDate();
-    this.props.ripItemsActions!.updateRipItem(id, expirationDate);
+    this.props.ripItemsActions!.updateRipItem(id, this.getExpirationDate());
   }
 
   onUpdateAllClicked = () => {
-    const expirationDate = this.getExpirationDate();
-    this.props.ripItemsActions!.updateAllRipItems(expirationDate);
+    this.props.ripItemsActions!.updateAllRipItems(this.getExpirationDate());
   }
 
   onSubmit = async (e: any) => {

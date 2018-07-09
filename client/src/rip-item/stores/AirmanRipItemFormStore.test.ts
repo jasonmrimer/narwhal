@@ -39,4 +39,24 @@ describe('AirmanRipItemFormStore', () => {
   it('should return the count of assigned RIP items', () => {
     expect(subject.assignedItemCount).toBe(3);
   });
+
+  it('updateAllRipItems should only update previously assigned rip items', () => {
+    let date = moment();
+    let nullAmountBefore: number = 0;
+    let nullAmountAfter: number = 0;
+
+    subject.ripItems.map(ripItem => ripItem.expirationDate === null ? nullAmountBefore++ : null);
+
+    subject.updateAllRipItems(date);
+
+    subject.ripItems.map(ripItem => ripItem.expirationDate === null ? nullAmountAfter++ : null);
+
+    subject.ripItems.forEach(ripItem => {
+      if (ripItem.expirationDate !== null) {
+        expect(ripItem.expirationDate.isSame(date))
+      }
+    });
+
+    expect(nullAmountBefore === nullAmountAfter).toBeTruthy();
+  });
 });

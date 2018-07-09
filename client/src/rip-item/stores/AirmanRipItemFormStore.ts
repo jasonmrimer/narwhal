@@ -31,7 +31,9 @@ export class AirmanRipItemFormStore extends NotificationStore {
 
   @action.bound
   updateAllRipItems(expirationDate: Moment | null) {
-    this._airmanRipItems.forEach((item: AirmanRipItemModel) => item.expirationDate = expirationDate);
+    this._airmanRipItems.forEach((item: AirmanRipItemModel) => {
+      return item.expirationDate !== null ? item.expirationDate = expirationDate : null;
+    });
   }
 
   @action.bound

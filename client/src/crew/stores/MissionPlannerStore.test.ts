@@ -53,8 +53,8 @@ describe('MissionPlannerStore', () => {
   it('should return unavailable airmen', () => {
     expect(subject.unavailableAirmen.length).toEqual(2);
     const airmenIds = subject.unavailableAirmen.map(airman => airman.id);
-    expect(airmenIds[0]).toBe(1);
-    expect(airmenIds[1]).toBe(3);
+    expect(airmenIds.map(airmenId => airmenId)).toContain(1);
+    expect(airmenIds.map(airmenId => airmenId)).toContain(3);
   });
 
 });
