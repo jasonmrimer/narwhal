@@ -101,7 +101,10 @@ export class FlightTables extends React.Component<FlightTablesProps> {
           <div className="header-section">
             {
               !siteManagerStore!.shouldExpandFlight(flight.id) ?
-                <div>{siteManagerStore!.getShiftByFlightId(flight.id)}</div> :
+                <div className="shift-label">
+                  <ShiftDisplay shift={siteManagerStore!.getShiftByFlightId(flight.id)!}/>
+                  {siteManagerStore!.getShiftByFlightId(flight.id)}
+                </div> :
                 <StyledShiftDropdown
                   selectedShift={siteManagerStore!.getShiftByFlightId(flight.id)}
                   setShift={(shift: ShiftType) => {
@@ -249,7 +252,7 @@ export class FlightTables extends React.Component<FlightTablesProps> {
     if (scheduleIdByFlightId) {
       return this.props.siteManagerStore!.schedules.find(s => s.id === Number(scheduleIdByFlightId))!.type
     }
-     return 'No Schedule';
+    return 'No Schedule';
   }
 
   private printNumberOfOperators(flight: FlightModel) {
@@ -327,6 +330,11 @@ export const StyledFlightTables = inject(
       
       .header-section {
         width: 33%;
+        .shift-label {
+          & > svg {
+             margin-right: 0.25rem;
+          }
+        }
       }
     }
     
