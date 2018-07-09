@@ -124,6 +124,11 @@ export class SiteManagerStore extends NotificationStore {
   }
 
   @computed
+  get schedules() {
+    return this._schedules;
+  }
+
+  @computed
   get airmen() {
     return this._airmen;
   }
@@ -207,7 +212,7 @@ export class SiteManagerStore extends NotificationStore {
     );
 
     if (Object.keys(object).length === 0) {
-      return -1;
+      return null;
     }
 
     return Object.keys(object).reduce((a, b) => object[a] > object[b] ? a : b);
