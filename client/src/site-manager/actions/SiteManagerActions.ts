@@ -77,7 +77,7 @@ export class SiteManagerActions {
     this.stores.siteManagerStore!.cancelPendingNewFlight();
   }
 
-  //TODO: only refresh if flight saved
+  // TODO: only refresh if flight saved
   async saveNewFlight() {
     await this.stores.siteManagerStore!.savePendingNewFlight();
     await this.stores.siteManagerStore!.refreshFlights();

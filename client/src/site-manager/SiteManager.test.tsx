@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { SiteManager } from './SiteManager';
-import { Link } from 'react-router-dom';
 import { SiteManagerStore } from './stores/SiteManagerStore';
 import { FlightModel } from '../flight/model/FlightModel';
 import { SquadronModel } from '../squadron/models/SquadronModel';
@@ -46,10 +45,6 @@ describe('SiteManager', () => {
 
   it('should render user\'s site name in the header', () => {
     expect(subject.find('h2').at(0).text()).toBe(`SITE 14 Personnel`);
-  });
-
-  it('should render an New Operator link', () => {
-    expect(subject.find('.header').find(Link).prop('to')).toBe('/flights/new');
   });
 
   it('should render a table for every flight', () => {

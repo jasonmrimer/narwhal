@@ -9,13 +9,14 @@ import { StyledDropdown } from '../widgets/inputs/Dropdown';
 import { StyledFlightSchedulePopup } from '../widgets/popups/FlightSchedulePopup';
 import { StyledFlightShiftPopup } from '../widgets/popups/FlightShiftPopup';
 import { FlightAirmanSelectionStore } from './stores/FlightAirmanSelectionStore';
-import { SiteManagerStore } from "./stores/SiteManagerStore";
-import { DoubleRepositories } from "../utils/Repositories";
-import { makeFakeProfile } from "../utils/testUtils";
-import { adminAbility } from "../app/abilities";
-import { SquadronModel } from "../squadron/models/SquadronModel";
-import { CertificationModelFactory } from "../skills/certification/factories/CertificationModelFactory";
-import { ScheduleModel, ScheduleType } from "../schedule/models/ScheduleModel";
+import { SiteManagerStore } from './stores/SiteManagerStore';
+import { DoubleRepositories } from '../utils/Repositories';
+import { makeFakeProfile } from '../utils/testUtils';
+import { adminAbility } from '../app/abilities';
+import { SquadronModel } from '../squadron/models/SquadronModel';
+import { CertificationModelFactory } from '../skills/certification/factories/CertificationModelFactory';
+import { ScheduleModel, ScheduleType } from '../schedule/models/ScheduleModel';
+import { Link } from "react-router-dom";
 
 describe('FlightTables', () => {
   const flights = [
@@ -38,7 +39,6 @@ describe('FlightTables', () => {
 
   beforeEach(() => {
     siteManagerStore = new SiteManagerStore(DoubleRepositories);
-
 
     siteManagerStore.hydrate(
       profile,
@@ -125,5 +125,12 @@ describe('FlightTables', () => {
 
     expect(subject.find(StyledFlightShiftPopup).prop('onCancel'))
       .toBe(siteManagerStore.hideShiftPrompt);
+  });
+
+  it('should render an New Operator link', () => {
+    siteManagerStore.addFlightToExpandedFlights(1);
+    subject.update();
+
+    expect(subject.find('.new-operator-button').find(Link).prop('to')).toBe('/flights/new');
   });
 });

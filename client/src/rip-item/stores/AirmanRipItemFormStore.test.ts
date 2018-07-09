@@ -53,7 +53,7 @@ describe('AirmanRipItemFormStore', () => {
 
     subject.ripItems.forEach(ripItem => {
       if (ripItem.expirationDate !== null) {
-        expect(ripItem.expirationDate.isSame(date))
+        expect(ripItem.expirationDate.isSame(date));
       }
     });
 

@@ -18,6 +18,8 @@ import { StyledCheckbox } from '../widgets/inputs/Checkbox';
 import { FlightAirmanSelectionStore } from './stores/FlightAirmanSelectionStore';
 import { Selectable } from './models/Selectable';
 import { ProfileIcon } from '../icons/ProfileIcon';
+import { Link } from "react-router-dom";
+import { OperatorIcon } from "../icons/OperatorIcon";
 
 interface FlightTableRowProps {
   airman: Selectable<AirmanModel>;
@@ -28,43 +30,31 @@ export const FlightTableRow = observer((props: FlightTableRowProps) => {
   const navigateToAirman = () => location.href = `/flights/${airman.model.id}`;
   return (
     <React.Fragment>
-      <div
-        className="airman-row"
-      >
-
-      <span className="airman-checkbox">
-      <StyledCheckbox
-        name={'checkbox-airman-' + airman.model.id}
-        onChange={(e) => {
-          e.stopPropagation();
-          airman.setSelected(!airman.selected);
-        }}
-        checked={airman.selected}
-      />
-      </span>
-
-        <span
-          className="airman-name airman-attribute"
-          onClick={navigateToAirman}
-        >
-            {`${airman.model.lastName}, ${airman.model.firstName}`}
+      <div className="airman-row">
+        <span className="airman-checkbox">
+          <StyledCheckbox
+            name={'checkbox-airman-' + airman.model.id}
+            onChange={(e) => {
+              e.stopPropagation();
+              airman.setSelected(!airman.selected);
+            }}
+            checked={airman.selected}
+          />
         </span>
-        <span
-          className="airman-attribute airman-shift"
-          onClick={navigateToAirman}
-        >
-        <ShiftDisplay shift={airman.model.shift}/>
-        <span>{airman.model.shift}</span>
+
+        <span className="airman-name airman-attribute" onClick={navigateToAirman}>
+          {`${airman.model.lastName}, ${airman.model.firstName}`}
         </span>
-        <span
-          className="airman-attribute airman-schedule"
-          onClick={navigateToAirman}
-        >
-            {
-              airman.model.currentAirmanSchedule &&
-              airman.model.currentAirmanSchedule.schedule.type
-            }
-          </span>
+        <span className="airman-attribute airman-shift" onClick={navigateToAirman}>
+          <ShiftDisplay shift={airman.model.shift}/>
+          <span>{airman.model.shift}</span>
+        </span>
+        <span className="airman-attribute airman-schedule" onClick={navigateToAirman}>
+          {
+            airman.model.currentAirmanSchedule &&
+            airman.model.currentAirmanSchedule.schedule.type
+          }
+        </span>
       </div>
     </React.Fragment>
   );
@@ -114,6 +104,7 @@ export class FlightTables extends React.Component<FlightTablesProps> {
                 />
             }
           </div>
+
           <div className="header-section">
             {
               !siteManagerStore!.shouldExpandFlight(flight.id) ?
@@ -129,15 +120,28 @@ export class FlightTables extends React.Component<FlightTablesProps> {
                 />
             }
           </div>
-          {!siteManagerStore!.shouldExpandFlight(flight.id) &&
-          <div className="expandFlight" onClick={() => siteManagerActions!.expandFlight(flight.id)}>
-            <ExpandIcon/>
-          </div>
+          {
+            siteManagerStore!.shouldExpandFlight(flight.id) &&
+            <div className="new-operator-button">
+              <Link to="/flights/new">
+                <OperatorIcon/>
+                <div>New Operator</div>
+              </Link>
+            </div>
           }
-          {siteManagerStore!.shouldExpandFlight(flight.id) &&
-          <div className="collapseFlight" onClick={() => siteManagerActions!.collapseFlight(flight.id)}>
-            <CollapseIcon/>
-          </div>
+
+          {
+            !siteManagerStore!.shouldExpandFlight(flight.id) &&
+            <div className="expandFlight" onClick={() => siteManagerActions!.expandFlight(flight.id)}>
+              <ExpandIcon/>
+            </div>
+          }
+
+          {
+            siteManagerStore!.shouldExpandFlight(flight.id) &&
+            <div className="collapseFlight" onClick={() => siteManagerActions!.collapseFlight(flight.id)}>
+              <CollapseIcon/>
+            </div>
           }
         </div>
         {siteManagerStore!.shouldExpandFlight(flight.id) &&
@@ -173,19 +177,16 @@ export class FlightTables extends React.Component<FlightTablesProps> {
       </div>
     );
   };
-  private renderRows =
-    (flightId: number,
-     airmen: Selectable<AirmanModel>[]
-    ) => {
-      return airmen.map((airman) => {
-        return (
-          <FlightTableRow
-            key={airman.model.id}
-            airman={airman}
-          />
-        );
-      });
-    };
+  private renderRows = (flightId: number, airmen: Selectable<AirmanModel>[]) => {
+    return airmen.map((airman) => {
+      return (
+        <FlightTableRow
+          key={airman.model.id}
+          airman={airman}
+        />
+      );
+    });
+  };
 
   render() {
     const {
@@ -250,7 +251,7 @@ export class FlightTables extends React.Component<FlightTablesProps> {
     const scheduleIdByFlightId = this.props.siteManagerStore!.getScheduleIdByFlightId(flight.id);
 
     if (scheduleIdByFlightId) {
-      return this.props.siteManagerStore!.schedules.find(s => s.id === Number(scheduleIdByFlightId))!.type
+      return this.props.siteManagerStore!.schedules.find(s => s.id === Number(scheduleIdByFlightId))!.type;
     }
     return 'No Schedule';
   }
@@ -303,6 +304,7 @@ export const StyledFlightTables = inject(
     
     .flight-header {
       display: flex;
+      justify-content: space-between;
       align-items: center;
       padding: 1rem;
       background: ${props => props.theme.blueSteel};
@@ -315,7 +317,7 @@ export const StyledFlightTables = inject(
         vertical-align: middle;    
       }
       
-      span{
+      span {
           font-size: 1.25rem;
           font-weight: 300;
           margin: 0 0.25rem 0 0;
@@ -329,12 +331,21 @@ export const StyledFlightTables = inject(
       }
       
       .header-section {
-        width: 33%;
+        width: 20%;
         
         .shift-label {
           & > svg {
              margin-right: 0.25rem;
           }
+        }
+      }
+      
+      .new-operator-button {
+        font-size: 1rem;
+        
+        div {
+          margin-left: 0.25rem;
+          display: inline;
         }
       }
     }

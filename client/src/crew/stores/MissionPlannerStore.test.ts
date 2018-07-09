@@ -23,7 +23,7 @@ describe('MissionPlannerStore', () => {
         new ScheduleModel(1, ScheduleType.MondayToFriday, false, true, true, true, true, true, false),
         crew.mission.startDateTime.clone().subtract(15, 'days'),
       )
-    )
+    );
 
     airmen[1].schedules.push(
       new AirmanScheduleModel(
@@ -31,7 +31,7 @@ describe('MissionPlannerStore', () => {
         new ScheduleModel(1, ScheduleType.MondayToFriday, false, true, true, true, true, true, false),
         crew.mission.startDateTime.clone().subtract(15, 'days'),
       )
-    )
+    );
 
     airmen[2].schedules.push(
       new AirmanScheduleModel(
@@ -39,7 +39,7 @@ describe('MissionPlannerStore', () => {
         new ScheduleModel(2, ScheduleType.BackHalf, false, false, false, true, true, true, true),
         crew.mission.startDateTime.clone().subtract(15, 'days'),
       )
-    )
+    );
     subject = new MissionPlannerStore(DoubleRepositories);
     subject.hydrate(crew.mission, airmen, events);
   });
