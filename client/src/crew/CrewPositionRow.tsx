@@ -40,7 +40,7 @@ export const CrewPositionRow = observer((props: Props) => {
           crewPosition.displayFullName !== '' &&
           <button onClick={handleDelete}>×</button>
         }
-      </span>
+      </span>tra
       <span className="remarks">
         <StyledTextInput
           name="remarks"

@@ -17,12 +17,14 @@ class CrewPage
 
   def fill_in_position_and_make_critical
     page.first('input[name="title"]').set 'Chimichanga'
+    page.first('input[name="remarks"]').set 'Tacos'
     page.find('#critical-0', visible: false).set(true)
     click_button 'SAVE'
 
     page.refresh
 
     expect(page).to have_selector('input[value="Chimichanga"]')
+    expect(page).to have_selector('input[value="Tacos"]')
     expect(page.find('#critical-0', visible: false)).to be_checked
   end
 

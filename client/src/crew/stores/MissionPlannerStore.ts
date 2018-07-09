@@ -23,14 +23,19 @@ export class MissionPlannerStore extends NotificationStore {
 
   @computed
   get availableAirmen() {
-    const busyAirmen = this.getIdsForBusyAirmen();
-    return this._airmen.filter(airman => !busyAirmen.includes(airman.id));
+    const busyAirmenIds = this.getIdsForBusyAirmen();
+    const filteredAirmen = this._airmen.filter(airman => !busyAirmenIds.includes(airman.id));
+    return filteredAirmen.filter(filteredAirman => filteredAirman.isAvailableForWork(this._mission.startDateTime));
   }
 
   @computed
   get unavailableAirmen() {
-    const busyAirmen = this.getIdsForBusyAirmen();
-    return this._airmen.filter(airman => busyAirmen.includes(airman.id));
+    const busyAirmenIds = this.getIdsForBusyAirmen();
+    const filteredAirmenByEvents = this._airmen.filter(airman => busyAirmenIds.includes(airman.id));
+    const filteredAirmenByDayOff = this._airmen
+      .filter(airman => !busyAirmenIds.includes(airman.id))
+      .filter(filteredAirman => !filteredAirman.isAvailableForWork(this._mission.startDateTime));
+    return filteredAirmenByEvents.concat(filteredAirmenByDayOff);
   }
 
   async refreshAllAirmen(siteId: number) {

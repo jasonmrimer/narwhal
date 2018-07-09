@@ -35,7 +35,7 @@ describe('CrewPostionRow', () => {
     expect(subject.find(StyledTextInput).at(0).prop('value')).toBe(crewPosition.title);
   });
 
-  it('renders a position title input', () => {
+  it('renders a position remarks input', () => {
     expect(subject.find(StyledTextInput).at(1).prop('value')).toBe(crewPosition.remarks);
   });
 
