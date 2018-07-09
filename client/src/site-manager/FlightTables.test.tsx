@@ -9,7 +9,13 @@ import { StyledDropdown } from '../widgets/inputs/Dropdown';
 import { StyledFlightSchedulePopup } from '../widgets/popups/FlightSchedulePopup';
 import { StyledFlightShiftPopup } from '../widgets/popups/FlightShiftPopup';
 import { FlightAirmanSelectionStore } from './stores/FlightAirmanSelectionStore';
-import { Selectable } from './models/Selectable';
+import { SiteManagerStore } from "./stores/SiteManagerStore";
+import { DoubleRepositories } from "../utils/Repositories";
+import { makeFakeProfile } from "../utils/testUtils";
+import { adminAbility } from "../app/abilities";
+import { SquadronModel } from "../squadron/models/SquadronModel";
+import { CertificationModelFactory } from "../skills/certification/factories/CertificationModelFactory";
+import { ScheduleModel, ScheduleType } from "../schedule/models/ScheduleModel";
 
 describe('FlightTables', () => {
   const flights = [
@@ -17,34 +23,13 @@ describe('FlightTables', () => {
     new FlightModel(2, 'B', 1),
     new FlightModel(3, 'C', 1)
   ];
-  const airman = new Selectable(AirmanModelFactory.build());
-  const siteManagerStore: any = {
-    getAirmenByFlightId: () => {
-      return [airman];
-    },
-    getShiftByFlightId: () => {
-      return ShiftType.Day;
-    },
-    getScheduleIdByFlightId: () => {
-      return '1';
-    },
-    hideShiftPrompt: () => {
-      return;
-    },
-    shouldShowShiftPrompt: () => {
-      return true;
-    },
-    shouldShowSchedulePrompt: () => {
-      return true;
-    },
-    scheduleOptions: [{label: 'Front Half', value: 1}, {label: 'Back Half', value: 2}],
-    shouldExpandFlight: () => {
-      return true;
-    },
-    shouldAllowFlightDelete: () => {
-      return true;
-    }
-  };
+
+  const airman = AirmanModelFactory.build();
+  const squadron = new SquadronModel(1, 'squadron', flights);
+  const profile = makeFakeProfile('ADMIN', adminAbility);
+  const schedules = [new ScheduleModel(1, ScheduleType.BackHalf), new ScheduleModel(2, ScheduleType.FrontHalf)];
+
+  let siteManagerStore: SiteManagerStore;
 
   let siteManagerActions: any;
   let subject: ShallowWrapper;
@@ -52,9 +37,20 @@ describe('FlightTables', () => {
   let flightAirmanSelectionStore = new FlightAirmanSelectionStore();
 
   beforeEach(() => {
+    siteManagerStore = new SiteManagerStore(DoubleRepositories);
+
+
+    siteManagerStore.hydrate(
+      profile,
+      squadron,
+      [airman],
+      CertificationModelFactory.buildList(3, profile.siteId),
+      schedules);
+
     siteManagerActions = {
       setFlightShift: jest.fn(),
       setFlightSchedule: jest.fn(),
+      saveFlightSchedule: jest.fn(),
       expandFlight: jest.fn(),
       saveFlightShift: jest.fn()
     };
@@ -70,15 +66,27 @@ describe('FlightTables', () => {
   });
 
   it('should render StyledDropdown for schedules', () => {
+    expect(subject.find(StyledDropdown).length).toBe(0);
+
+    siteManagerStore.addFlightToExpandedFlights(1);
+    siteManagerStore.addFlightToExpandedFlights(2);
+    siteManagerStore.addFlightToExpandedFlights(3);
+
+    subject.update();
+
     const scheduleDropdowns = subject.find(StyledDropdown);
     expect(scheduleDropdowns.length).toBe(flights.length);
     expect(scheduleDropdowns.at(0).prop('options')).toBe(siteManagerStore.scheduleOptions);
-    expect(scheduleDropdowns.at(0).prop('value')).toBe(siteManagerStore.getScheduleIdByFlightId());
+    expect(scheduleDropdowns.at(0).prop('value')).toBe(siteManagerStore.getScheduleIdByFlightId(1));
+
     scheduleDropdowns.at(0).simulate('change', {target: {value: 2}});
     expect(siteManagerActions.setFlightSchedule).toHaveBeenCalledWith(flights[0].id, 2);
   });
 
   it('should call setFlightShift when selecting a shift', () => {
+    siteManagerStore.addFlightToExpandedFlights(1);
+    subject.update();
+
     const setShift = subject.find(StyledShiftDropdown).at(0).prop('setShift');
     setShift(ShiftType.Night);
     expect(siteManagerActions.setFlightShift)
@@ -86,24 +94,35 @@ describe('FlightTables', () => {
   });
 
   it('should shows a header above the list of airmen', () => {
+    siteManagerStore.addFlightToExpandedFlights(1);
+    subject.update();
+
     const headers = subject.find('.flight-sub-header');
+
     expect(headers.at(0).text()).toContain('NAME');
     expect(headers.at(0).text()).toContain('SHIFT');
     expect(headers.at(0).text()).toContain('SCHEDULE');
   });
 
   it('renders a row for each airman', () => {
+    siteManagerStore.addFlightToExpandedFlights(1);
+    subject.update();
+
     expect(subject.find(FlightTableRow).exists()).toBeTruthy();
   });
 
   it('should setup bindings Flight Schedule Popup', () => {
+    siteManagerStore.setSchedulePrompt(1, Number(ScheduleType.FrontHalf));
+    subject.update();
+
     expect(subject.find(StyledFlightSchedulePopup).prop('onCancel'))
       .toBe(siteManagerStore.hideSchedulePrompt);
-    expect(subject.find(StyledFlightSchedulePopup).prop('onConfirm'))
-      .toBe(siteManagerStore.saveSchedule);
   });
 
   it('should setup bindings Flight Shift Popup', () => {
+    siteManagerStore.setShiftPrompt(1, ShiftType.Day);
+    subject.update();
+
     expect(subject.find(StyledFlightShiftPopup).prop('onCancel'))
       .toBe(siteManagerStore.hideShiftPrompt);
   });

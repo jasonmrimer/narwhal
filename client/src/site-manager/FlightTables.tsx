@@ -56,10 +56,10 @@ export const FlightTableRow = observer((props: FlightTableRowProps) => {
         <ShiftDisplay shift={airman.model.shift}/>
         <span>{airman.model.shift}</span>
         </span>
-          <span
-            className="airman-attribute airman-schedule"
-            onClick={navigateToAirman}
-          >
+        <span
+          className="airman-attribute airman-schedule"
+          onClick={navigateToAirman}
+        >
             {
               airman.model.currentAirmanSchedule &&
               airman.model.currentAirmanSchedule.schedule.type
@@ -80,6 +80,113 @@ interface FlightTablesProps {
 
 @observer
 export class FlightTables extends React.Component<FlightTablesProps> {
+  private renderHeader = (flight: FlightModel, airmen: Selectable<AirmanModel>[]) => {
+    const {
+      flightAirmanSelectionStore,
+      siteManagerStore,
+      siteManagerActions
+    } = this.props;
+    return (
+      <React.Fragment>
+        <div className="flight-header">
+          <div className="header-section">
+            <h3>{flight.name}</h3>
+            <span>
+              {this.printNumberOfOperators(flight)}
+            </span>
+            <span>
+              <ProfileIcon/>
+            </span>
+          </div>
+          <div className="header-section">
+            {
+              !siteManagerStore!.shouldExpandFlight(flight.id) ?
+                <div className="shift-label">
+                  <ShiftDisplay shift={siteManagerStore!.getShiftByFlightId(flight.id)!}/>
+                  {siteManagerStore!.getShiftByFlightId(flight.id)}
+                </div> :
+                <StyledShiftDropdown
+                  selectedShift={siteManagerStore!.getShiftByFlightId(flight.id)}
+                  setShift={(shift: ShiftType) => {
+                    return siteManagerActions!.setFlightShift(flight.id, shift);
+                  }}
+                  className="shift"
+                />
+            }
+          </div>
+          <div className="header-section">
+            {
+              !siteManagerStore!.shouldExpandFlight(flight.id) ?
+                <div>{this.flightScheduleLabel(flight)}</div> :
+                <StyledDropdown
+                  onChange={(e) => {
+                    return siteManagerActions!.setFlightSchedule(flight.id, Number(e.target.value));
+                  }}
+                  name="schedule-select"
+                  id="schedule-select"
+                  options={siteManagerStore!.scheduleOptions}
+                  value={siteManagerStore!.getScheduleIdByFlightId(flight.id)}
+                />
+            }
+          </div>
+          {!siteManagerStore!.shouldExpandFlight(flight.id) &&
+          <div className="expandFlight" onClick={() => siteManagerActions!.expandFlight(flight.id)}>
+            <ExpandIcon/>
+          </div>
+          }
+          {siteManagerStore!.shouldExpandFlight(flight.id) &&
+          <div className="collapseFlight" onClick={() => siteManagerActions!.collapseFlight(flight.id)}>
+            <CollapseIcon/>
+          </div>
+          }
+        </div>
+        {siteManagerStore!.shouldExpandFlight(flight.id) &&
+        <div className="flight-sub-header">
+          <span className="selection">
+          <StyledCheckbox
+            name={'checkbox-flight-' + flight.id}
+            onChange={() => flightAirmanSelectionStore!.toggleAll(airmen)}
+            checked={flightAirmanSelectionStore!.areSelected(airmen)}
+          />
+          </span>
+          <span>
+             NAME
+          </span>
+          <span>SHIFT</span>
+          <span>SCHEDULE</span>
+        </div>}
+      </React.Fragment>
+    );
+  };
+  private renderDeleteFlight = (flightId: number) => {
+    return (
+      <div
+        className="delete-flight"
+        onClick={async () => {
+          await this.props.siteManagerStore!.performLoading(async () => {
+            await this.props.siteManagerActions!.deleteFlight(flightId);
+          });
+        }}
+      >
+        <DeleteIcon/>
+        <span className="delete-label">Delete Flight</span>
+      </div>
+    );
+  };
+  private renderRows =
+    (flightId: number,
+     airmen: Selectable<AirmanModel>[]
+    ) => {
+      return airmen.map((airman) => {
+        return (
+          <FlightTableRow
+            key={airman.model.id}
+            airman={airman}
+          />
+        );
+      });
+    };
+
   render() {
     const {
       flights,
@@ -139,6 +246,15 @@ export class FlightTables extends React.Component<FlightTablesProps> {
     );
   }
 
+  private flightScheduleLabel(flight: FlightModel) {
+    const scheduleIdByFlightId = this.props.siteManagerStore!.getScheduleIdByFlightId(flight.id);
+
+    if (scheduleIdByFlightId) {
+      return this.props.siteManagerStore!.schedules.find(s => s.id === Number(scheduleIdByFlightId))!.type
+    }
+    return 'No Schedule';
+  }
+
   private printNumberOfOperators(flight: FlightModel) {
     const length = this.props.siteManagerStore!
       .getAirmenByFlightId(flight.id)
@@ -146,104 +262,6 @@ export class FlightTables extends React.Component<FlightTablesProps> {
     const numOfOps = length < 10 ? `0${length}` : length.toString();
     return `${numOfOps}`;
   }
-
-  private renderHeader = (flight: FlightModel, airmen: Selectable<AirmanModel>[]) => {
-    const {
-      flightAirmanSelectionStore,
-      siteManagerStore,
-      siteManagerActions
-    } = this.props;
-    return (
-      <React.Fragment>
-        <div className="flight-header">
-          <div className="header-section">
-            <h3>{flight.name}</h3>
-            <span>
-              {this.printNumberOfOperators(flight)}
-            </span>
-            <span>
-              <ProfileIcon/>
-            </span>
-          </div>
-          <div className="header-section">
-            <StyledShiftDropdown
-              selectedShift={siteManagerStore!.getShiftByFlightId(flight.id)}
-              setShift={(shift: ShiftType) => {
-                return siteManagerActions!.setFlightShift(flight.id, shift);
-              }}
-              className="shift"
-            />
-          </div>
-          <div className="header-section">
-            <StyledDropdown
-              onChange={(e) => {
-                return siteManagerActions!.setFlightSchedule(flight.id, Number(e.target.value));
-              }}
-              name="schedule-select"
-              id="schedule-select"
-              options={siteManagerStore!.scheduleOptions}
-              value={siteManagerStore!.getScheduleIdByFlightId(flight.id)}
-            />
-          </div>
-          {!siteManagerStore!.shouldExpandFlight(flight.id) &&
-          <div className="expandFlight" onClick={() => siteManagerActions!.expandFlight(flight.id)}>
-            <ExpandIcon/>
-          </div>
-          }
-          {siteManagerStore!.shouldExpandFlight(flight.id) &&
-          <div className="collapseFlight" onClick={() => siteManagerActions!.collapseFlight(flight.id)}>
-            <CollapseIcon/>
-          </div>
-          }
-        </div>
-        {siteManagerStore!.shouldExpandFlight(flight.id) &&
-        <div className="flight-sub-header">
-          <span className="selection">
-          <StyledCheckbox
-            name={'checkbox-flight-' + flight.id}
-            onChange={() => flightAirmanSelectionStore!.toggleAll(airmen)}
-            checked={flightAirmanSelectionStore!.areSelected(airmen)}
-          />
-          </span>
-          <span>
-             NAME
-          </span>
-          <span>SHIFT</span>
-          <span>SCHEDULE</span>
-        </div>}
-      </React.Fragment>
-    );
-  };
-
-  private renderDeleteFlight = (flightId: number) => {
-    return (
-      <div
-        className="delete-flight"
-        onClick={async () => {
-          this.props.siteManagerStore!.performLoading(async () => {
-            await this.props.siteManagerActions!.deleteFlight(flightId);
-          });
-        }}
-      >
-        <DeleteIcon/>
-        <span className="delete-label">Delete Flight</span>
-      </div>
-    );
-  };
-
-  private renderRows =
-    (flightId: number,
-     airmen: Selectable<AirmanModel>[]
-    ) => {
-      return airmen.map((airman) => {
-        return (
-          <FlightTableRow
-            key={airman.model.id}
-            airman={airman}
-          />
-        );
-      });
-    };
 }
 
 export const StyledFlightTables = inject(
@@ -312,6 +330,12 @@ export const StyledFlightTables = inject(
       
       .header-section {
         width: 33%;
+        
+        .shift-label {
+          & > svg {
+             margin-right: 0.25rem;
+          }
+        }
       }
     }
     
