@@ -104,7 +104,7 @@ public abstract class BaseIntegrationTest {
     mission = new Mission("MISSION_ID", "MISSION_NUMBER", Instant.now(), Instant.now(), "U-2", site, Instant.now());
     missionRepository.save(mission);
 
-    CrewPosition crewPosition = new CrewPosition(airman, "TITLE", false);
+    CrewPosition crewPosition = new CrewPosition(airman, "TITLE", false, 13L, 1L);
     crewPosition.setMission(mission);
     crewPosition = crewPositionRepository.save(crewPosition);
     mission.addCrewPosition(crewPosition);

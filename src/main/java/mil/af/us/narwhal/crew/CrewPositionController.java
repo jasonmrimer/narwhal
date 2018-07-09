@@ -42,6 +42,8 @@ public class CrewPositionController {
       crewPosition.setCritical(position.isCritical());
       crewPosition.setAirman(airman);
       crewPosition.setMission(mission);
+      crewPosition.setOrder(position.getOrder());
+      crewPosition.setTemplateItemId(position.getTemplateItemId());
 
       if (position.getId() != null) crewPosition.setId(position.getId());
       mission.addCrewPosition(crewPosition);

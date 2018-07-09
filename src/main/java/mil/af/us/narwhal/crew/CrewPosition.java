@@ -7,11 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import mil.af.us.narwhal.airman.Airman;
 import mil.af.us.narwhal.mission.Mission;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 
 @Entity
 @Data
@@ -40,16 +37,50 @@ public class CrewPosition {
 
   private String remarks;
 
+  @Column(name = "order_int")
+  private Long order;
+
+  @Column(name = "template_item_id")
+  private Long templateItemId;
+
   private Boolean critical;
 
   public CrewPosition(Airman airman) {
     this.airman = airman;
   }
 
-  public CrewPosition(Airman airman, String title, Boolean critical) {
+  public CrewPosition(
+    Airman airman,
+    String title,
+    Boolean critical
+  ) {
     this.airman = airman;
     this.title = title;
     this.critical = critical;
+  }
+
+  public CrewPosition(
+    Airman airman,
+    String title,
+    Boolean critical,
+    Long order,
+    Long templateItemId
+  ) {
+    this.airman = airman;
+    this.title = title;
+    this.critical = critical;
+    this.order = order;
+    this.templateItemId = templateItemId;
+  }
+
+  public CrewPosition(
+    Boolean critical,
+    Long order,
+    Long templateItemId
+  ) {
+    this.critical = critical;
+    this.order = order;
+    this.templateItemId = templateItemId;
   }
 
   @Override public String toString() {

@@ -4,11 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import mil.af.us.narwhal.BaseIntegrationTest;
 import mil.af.us.narwhal.airman.Airman;
 import mil.af.us.narwhal.airman.AirmanRepository;
-import mil.af.us.narwhal.flight.Flight;
-import mil.af.us.narwhal.rank.Rank;
-import mil.af.us.narwhal.site.Site;
 import mil.af.us.narwhal.site.SiteRepository;
-import mil.af.us.narwhal.squadron.Squadron;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,12 +22,16 @@ import static org.junit.Assert.assertThat;
 public class CrewPositionControllerTest extends BaseIntegrationTest {
   @Autowired SiteRepository siteRepository;
   @Autowired AirmanRepository airmanRepository;
+  @Autowired TemplateItemRepository templateItemRepository;
+  private TemplateItem templateItem;
+  private static final String templateTitle = "Title";
 
   @Before
   public void setup() {
     super.setUp();
 
     super.buildAirman();
+    templateItem = templateItemRepository.save(new TemplateItem(1L, 1L, true, 1L));
   }
 
   @After
@@ -44,10 +44,20 @@ public class CrewPositionControllerTest extends BaseIntegrationTest {
     Airman airman = new Airman(flight, "FirstTwo", "LastTwo", rank);
     airmanRepository.save(airman);
 
-    CrewPosition crewPosition = new CrewPosition(airman);
+    CrewPosition crewPosition = new CrewPosition(
+      airman,
+      templateTitle,
+      templateItem.getCritical(),
+      templateItem.getOrder(),
+      templateItem.getTemplateId()
+    );
 
     CrewPositionJSON crewPositionJSON = new CrewPositionJSON();
     crewPositionJSON.setAirmanId(crewPosition.getAirman().getId());
+    crewPositionJSON.setTitle(crewPosition.getTitle());
+    crewPositionJSON.setCritical(crewPosition.getCritical());
+    crewPositionJSON.setOrder(crewPosition.getOrder());
+    crewPositionJSON.setTemplateItemId(crewPosition.getTemplateItemId());
 
     String json = objectMapper.writeValueAsString(singletonList(crewPositionJSON));
 
@@ -63,7 +73,11 @@ public class CrewPositionControllerTest extends BaseIntegrationTest {
       .put(CrewPositionController.URI + "/" + mission.getId())
     .then()
       .statusCode(200)
-      .body("id", notNullValue());
+      .body("id", notNullValue())
+      .body("crewPositions[0].title", equalTo(templateTitle))
+      .body("crewPositions[0].critical", equalTo(templateItem.getCritical()))
+      .body("crewPositions[0].order", equalTo(templateItem.getOrder().intValue()))
+      .body("crewPositions[0].templateItemId", equalTo(templateItem.getTemplateId().intValue()));
     // @formatter:on
   }
 
@@ -78,7 +92,9 @@ public class CrewPositionControllerTest extends BaseIntegrationTest {
       crewPosition.getTitle(),
       crewPosition.getCritical(),
       crewPosition.getAirman().getId(),
-      crewPosition.getRemarks()
+      crewPosition.getRemarks(),
+      crewPosition.getOrder(),
+      crewPosition.getTemplateItemId()
     );
     String json = objectMapper.writeValueAsString(singletonList(crewPositionJSON));
 
@@ -95,7 +111,9 @@ public class CrewPositionControllerTest extends BaseIntegrationTest {
     .then()
       .statusCode(200)
       .body("crewPositions[0].title", equalTo("UPDATED CREW POSITION"))
-      .body("crewPositions[0].remarks", equalTo(crewPosition.getRemarks()));
+      .body("crewPositions[0].remarks", equalTo(crewPosition.getRemarks()))
+      .body("crewPositions[0].order", equalTo(crewPosition.getOrder()))
+      .body("crewPositions[0].templateItemId", equalTo(crewPosition.getTemplateItemId()));
     // @formatter:on
   }
 
@@ -107,7 +125,9 @@ public class CrewPositionControllerTest extends BaseIntegrationTest {
       crewPosition.getTitle(),
       crewPosition.getCritical(),
       crewPosition.getAirman().getId(),
-      crewPosition.getRemarks()
+      crewPosition.getRemarks(),
+      crewPosition.getOrder(),
+      crewPosition.getTemplateItemId()
     );
     String json = objectMapper.writeValueAsString(singletonList(crewPositionJSON));
 

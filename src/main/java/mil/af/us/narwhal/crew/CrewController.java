@@ -2,12 +2,13 @@ package mil.af.us.narwhal.crew;
 
 import mil.af.us.narwhal.event.Event;
 import mil.af.us.narwhal.event.EventJSON;
+import mil.af.us.narwhal.mission.Mission;
 import mil.af.us.narwhal.mission.MissionRepository;
-import mil.af.us.narwhal.profile.Profile;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(CrewController.URI)
@@ -17,16 +18,48 @@ public class CrewController {
   private CrewPositionRepository crewPositionRepository;
   private CrewService crewService;
   private MissionRepository missionRepository;
+  private TemplateItemRepository templateItemRepository;
 
-  public CrewController(CrewPositionRepository crewPositionRepository, CrewService crewService, MissionRepository missionRepository) {
+  public CrewController(
+    CrewPositionRepository crewPositionRepository,
+    CrewService crewService,
+    MissionRepository missionRepository,
+    TemplateItemRepository templateItemRepository
+  ) {
     this.crewPositionRepository = crewPositionRepository;
     this.crewService = crewService;
     this.missionRepository = missionRepository;
+    this.templateItemRepository = templateItemRepository;
   }
 
   @GetMapping(value = "/{id}")
   public CrewJSON show(@PathVariable Long id) {
-    return missionRepository.findOne(id).toCrewJSON();
+    Mission mission = missionRepository.findOne(id);
+
+    if (mission.getCrewPositions().size() == 0) {
+      List<TemplateItem> ourItems = this.templateItemRepository.findAllByTemplateId(1L);
+
+      System.out.println(ourItems);
+
+      List<CrewPosition> defaultPositions =
+        ourItems
+        .stream()
+        .map(x ->
+          new CrewPosition(
+            x.getCritical(),
+            x.getOrder(),
+            x.getTemplateId()
+          )
+        ).collect(Collectors.toList());
+
+      mission.setCrewPositions(defaultPositions);
+      System.out.println("HERE IS THE SIZE");
+      System.out.println(mission.getCrewPositions().size());
+      System.out.println(mission.getCrewPositions().get(0));
+      System.out.println(mission.getCrewPositions().get(1));
+    }
+
+    return mission.toCrewJSON();
   }
 
   @PutMapping
