@@ -35,7 +35,9 @@ export class MissionPlannerStore extends NotificationStore {
     const filteredAirmenByDayOff = this._airmen
       .filter(airman => !busyAirmenIds.includes(airman.id))
       .filter(filteredAirman => !filteredAirman.isAvailableForWork(this._mission.startDateTime));
-    return filteredAirmenByEvents.concat(filteredAirmenByDayOff);
+    return filteredAirmenByEvents
+      .concat(filteredAirmenByDayOff)
+      .sort((a, b) => a.lastName.localeCompare(b.lastName));
   }
 
   async refreshAllAirmen(siteId: number) {
