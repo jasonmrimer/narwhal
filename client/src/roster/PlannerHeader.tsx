@@ -9,7 +9,7 @@ import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { AvailabilityStore } from '../availability/stores/AvailabilityStore';
 import { PlannerActions } from './PlannerActions';
 import { StyledDatePicker } from '../widgets/inputs/DatePicker';
-import { DatePickerIcon } from './DatePickerIcon';
+import { DatePickerIcon } from '../icons/DatePickerIcon';
 import { PlannerNavBackIcon } from '../icons/PlannerNavBackIcon';
 import { PlannerNavNextIcon } from '../icons/PlannerNavNextIcon';
 

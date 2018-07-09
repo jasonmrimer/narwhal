@@ -2,8 +2,6 @@ import * as React from 'react';
 import { SiteManagerStore } from './stores/SiteManagerStore';
 import { inject, observer } from 'mobx-react';
 import { CellMeasurerCache } from 'react-virtualized';
-import { Link } from 'react-router-dom';
-import { OperatorIcon } from '../icons/OperatorIcon';
 import styled from 'styled-components';
 import { StyledCertificationList } from './CertificationList';
 import { StyledFlightTables } from './FlightTables';
@@ -37,10 +35,6 @@ export class SiteManager extends React.Component<Props> {
         }
         <div className="header">
           <h2>{siteManagerStore!.siteName} Personnel</h2>
-          <Link to="/flights/new">
-            <OperatorIcon/>
-            <span>New Operator</span>
-          </Link>
         </div>
         {
           squadron &&

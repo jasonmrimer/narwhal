@@ -4,7 +4,7 @@ import { PlannerHeader } from './PlannerHeader';
 import { PlannerStore } from './stores/PlannerStore';
 import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
 import { StyledDatePicker } from '../widgets/inputs/DatePicker';
-import { DatePickerIcon } from './DatePickerIcon';
+import { DatePickerIcon } from '../icons/DatePickerIcon';
 import * as moment from 'moment';
 
 describe('PlannerHeader', () => {
@@ -18,7 +18,7 @@ describe('PlannerHeader', () => {
 
     plannerActions = {
       refreshPlannerEventData: jest.fn
-    }
+    };
 
     subject = shallow(<PlannerHeader plannerStore={plannerStore} plannerActions={plannerActions}/>);
   });

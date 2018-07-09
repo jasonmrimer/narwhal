@@ -7,9 +7,7 @@ class FlightsPage
   end
 
   def assert_shows_airmen
-    page.within('#DOB') do
-      find('.expandFlight').click
-    end
+    expandFlightContainer
     expect(page).to have_css('.airman-name', minimum: 1)
   end
 
@@ -18,18 +16,14 @@ class FlightsPage
   end
 
   def assert_shows_airman
-    page.within('#DOB') do
-      find('.expandFlight').click
-    end
+    expandFlightContainer
     click_on_airman('Angie, Patton')
     expect(page).to have_content('94 IS')
     expect(page).to have_content('DMS Maryland')
   end
 
   def assert_edit_airman
-    page.within('#DOB') do
-      find('.expandFlight').click
-    end
+    expandFlightContainer
 
     click_on_airman('Angie, Patton')
 
@@ -105,8 +99,9 @@ class FlightsPage
   end
 
   def assert_create_and_delete_airman
+    expandFlightContainer
 
-    page.find('span', text: 'New Operator').click
+    first('.new-operator-button').click
 
     fill_in 'lastName', with: 'Aaron'
     fill_in 'firstName', with: 'Aadam'
@@ -115,9 +110,9 @@ class FlightsPage
     find('input[type="submit"]').click
 
     visit '/flights'
-    page.within('#DOB') do
-    find('.expandFlight').click
-    end
+
+    expandFlightContainer
+
     expect(page).to have_content 'Aaron, Aadam'
 
     click_on_airman 'Aaron, Aadam'
@@ -144,6 +139,12 @@ class FlightsPage
   end
 
   private
+
+  def expandFlightContainer
+    page.within('#DOB') do
+      find('.expandFlight').click
+    end
+  end
 
   def click_on_airman(name)
     page.find('.airman-name', text: name).click
