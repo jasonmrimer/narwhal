@@ -17,10 +17,20 @@ public class ProfileJSON {
   private Long squadronId;
   private boolean classified;
 
-  public ProfileJSON(Long id, String username, Long siteId, String siteName, Long roleId, String roleName, boolean classified) {
+  public ProfileJSON(
+    Long id,
+    String username,
+    Long siteId,
+    Long squadronId,
+    String siteName,
+    Long roleId,
+    String roleName,
+    boolean classified
+  ) {
     this.id = id;
     this.username = username;
     this.siteId = siteId;
+    this.squadronId = squadronId;
     this.siteName = siteName;
     this.roleId = roleId;
     this.roleName = roleName;

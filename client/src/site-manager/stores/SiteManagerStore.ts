@@ -12,6 +12,8 @@ import { FlightModel } from '../../flight/model/FlightModel';
 import { SiteRepository } from '../../site/repositories/SiteRepository';
 import { Repositories } from '../../utils/Repositories';
 import { Selectable } from '../models/Selectable';
+import { RankModel } from '../../rank/models/RankModel';
+import { AirmanScheduleModel } from '../../airman/models/AirmanScheduleModel';
 
 export class SiteManagerStore extends NotificationStore {
   private flightRepository: FlightRepository;
@@ -29,6 +31,7 @@ export class SiteManagerStore extends NotificationStore {
   @observable private _pendingShift: ShiftType | null = null;
   @observable private _pendingScheduleStartDate: any = moment(moment.now());
   @observable private _pendingNewFlight: FlightModel | null = null;
+  @observable private _pendingOperatorFlightId: number | null = null;
   @observable private _flightsExpanded: number[] = [];
 
   constructor(repositories: Repositories) {
@@ -166,8 +169,13 @@ export class SiteManagerStore extends NotificationStore {
   }
 
   @computed
-    get shiftPopupMessage() {
+  get shiftPopupMessage() {
     return `Set a ${this.pendingShift}s shift for ${this.currentPendingFlightName}.`;
+  }
+
+  @computed
+  get pendingOperatorFlightId() {
+    return this._pendingOperatorFlightId;
   }
 
   getAirmenByFlightId = (flightId: number) => {
@@ -331,5 +339,37 @@ export class SiteManagerStore extends NotificationStore {
       const squad = site.squadrons.find((squadron: SquadronModel) => squadron.id === squadronId);
       this._squadron = squad ? squad : this._squadron;
     }
+  }
+
+  @action.bound
+  setPendingOperatorFlightId(flightId: number | null) {
+    this._pendingOperatorFlightId = flightId;
+  }
+
+  @action.bound
+  makePendingAirman() {
+    const flightId = this._pendingOperatorFlightId!;
+    let scheduleId = Number(this.getScheduleIdByFlightId(flightId));
+
+    if (!scheduleId) {
+      scheduleId = 1;
+    }
+
+    const schedule = this.getScheduleByScheduleId(scheduleId);
+    const airmanSchedule = new AirmanScheduleModel(-1, schedule!, moment());
+
+    return new AirmanModel(
+      -1,
+      flightId,
+      this._squadron.id,
+      this._profile!.siteId!,
+      '',
+      '',
+      new RankModel(-1, ''),
+      [],
+      [],
+      [airmanSchedule],
+      this.getShiftByFlightId(flightId)!
+    );
   }
 }

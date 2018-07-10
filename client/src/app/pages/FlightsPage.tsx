@@ -26,7 +26,8 @@ export class FlightsPage extends React.Component<Props> {
         this.props.repositories.certificationRepository.findAllCertificationsBySiteId(profile!.siteId!),
         this.props.repositories.scheduleRepository.findAll(),
       ]);
-      this.props.siteManagerStore!.hydrate(profile, site.squadrons[0], airmen, certifications, schedules);
+      const squadron = site.squadrons.find(s => s.id === profile!.squadronId);
+      this.props.siteManagerStore!.hydrate(profile, squadron!, airmen, certifications, schedules);
     });
   }
 

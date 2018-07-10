@@ -135,7 +135,7 @@ export class FlightTables extends React.Component<Props> {
           <div className="new-operator-button">
             {
               siteManagerStore!.shouldExpandFlight(flight.id) &&
-              <Link to="/flights/new">
+              <Link to="/flights/new" onClick={() => siteManagerStore!.setPendingOperatorFlightId(flight.id)}>
                 <OperatorIcon/>
                 <div>New Operator</div>
               </Link>

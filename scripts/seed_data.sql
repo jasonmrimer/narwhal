@@ -220,7 +220,7 @@ INSERT INTO mission(mission_id, ato_mission_number, start_date_time, end_date_ti
   );
 
 
-INSERT INTO profile (username, site_id, role_id) VALUES
+INSERT INTO profile (username, site_id, role_id, squadron_id) VALUES
   (
     'tytus',
     (SELECT id
@@ -228,7 +228,10 @@ INSERT INTO profile (username, site_id, role_id) VALUES
      WHERE name = 'DMS-MD'),
     (SELECT id
      FROM role
-     WHERE name = 'ADMIN')
+     WHERE name = 'ADMIN'),
+     (SELECT id
+     FROM squadron
+     WHERE name = '94 IS')
   );
 
 INSERT INTO join_airman_rip_item (airman_id, rip_item_id)
