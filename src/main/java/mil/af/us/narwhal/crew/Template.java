@@ -10,18 +10,11 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "template_item")
-public class TemplateItem {
+@Table(name = "template")
+public class Template {
   @Id
   @GeneratedValue
   private Long id;
 
-  @Column(name = "order_int")
-  private Long order;
-
-  private Boolean critical;
-
-  @Column(name = "template_id")
-  @JoinColumn
-  private Long templateId;
+  private String title;
 }

@@ -83,7 +83,7 @@ export class MissionPlannerRoster extends React.Component<Props> {
             {...props}
             key={airman.id}
             airman={airman}
-            onCrew={this.props.crewStore!.crew!.hasAirman(airman)}
+            onCrew={this.props.crewStore!.hasAirman(airman)}
             onClick={async () => await this.props.missionPlannerActions!.addAirman(airman)}
             missionDate={this.props.crewStore!.crew!.missionDate}
           />

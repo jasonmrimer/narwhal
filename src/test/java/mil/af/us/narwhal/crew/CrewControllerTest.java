@@ -44,6 +44,7 @@ public class CrewControllerTest extends BaseIntegrationTest {
   @Before
   public void setUp() {
     super.setUp();
+    super.buildTemplates();
 
     Flight flight = new Flight();
 
@@ -58,8 +59,8 @@ public class CrewControllerTest extends BaseIntegrationTest {
     airman2 = airmanRepository.save(new Airman(flight, "B", "C", rank));
     airman3 = airmanRepository.save(new Airman(flight, "C", "D", rank));
 
-    templateItem = templateItemRepository.save(new TemplateItem(1L, 1L, true, 1L));
-    templateItem2 = templateItemRepository.save(new TemplateItem(2L, 2L, false, 1L));
+    templateItem = templateItemRepository.save(new TemplateItem(6L, 1L, true, 2L));
+    templateItem2 = templateItemRepository.save(new TemplateItem(7L, 2L, false, 2L));
 
     mission = new Mission("A", "B", Instant.now(), Instant.now(), "U-2", site, Instant.now());
     emptyMission = new Mission("C", "D", Instant.now(), Instant.now(), "U-2", site, Instant.now());
@@ -118,9 +119,8 @@ public class CrewControllerTest extends BaseIntegrationTest {
 
   @Test
   public void showEmptyTest() {
+    List<TemplateItem> emptyTemplateItems = templateItemRepository.findAllByTemplateIdOrderByOrder(1L);
     // @formatter:off
-    List<TemplateItem> emptyTemplateItems = templateItemRepository.findAllByTemplateId(1L);
-
     given()
       .port(port)
       .auth()
@@ -133,23 +133,23 @@ public class CrewControllerTest extends BaseIntegrationTest {
       .body("id", equalTo(emptyMission.getId().intValue()))
       .body("crewPositions.size()", equalTo(5))
       .body("crewPositions[0].title", equalTo(""))
-      .body("crewPositions[0].order", equalTo(emptyTemplateItems.get(0).getOrder()))
+      .body("crewPositions[0].order", equalTo(emptyTemplateItems.get(0).getOrder().intValue()))
       .body("crewPositions[0].templateItemId", equalTo(emptyTemplateItems.get(0).getTemplateId().intValue()))
       .body("crewPositions[0].critical", equalTo(emptyTemplateItems.get(0).getCritical()))
       .body("crewPositions[1].title", equalTo(""))
-      .body("crewPositions[1].order", equalTo(emptyTemplateItems.get(1).getOrder()))
+      .body("crewPositions[1].order", equalTo(emptyTemplateItems.get(1).getOrder().intValue()))
       .body("crewPositions[1].templateItemId", equalTo(emptyTemplateItems.get(1).getTemplateId().intValue()))
       .body("crewPositions[1].critical", equalTo(emptyTemplateItems.get(1).getCritical()))
       .body("crewPositions[2].title", equalTo(""))
-      .body("crewPositions[2].order", equalTo(emptyTemplateItems.get(2).getOrder()))
+      .body("crewPositions[2].order", equalTo(emptyTemplateItems.get(2).getOrder().intValue()))
       .body("crewPositions[2].templateItemId", equalTo(emptyTemplateItems.get(2).getTemplateId().intValue()))
       .body("crewPositions[2].critical", equalTo(emptyTemplateItems.get(2).getCritical()))
       .body("crewPositions[3].title", equalTo(""))
-      .body("crewPositions[3].order", equalTo(emptyTemplateItems.get(3).getOrder()))
+      .body("crewPositions[3].order", equalTo(emptyTemplateItems.get(3).getOrder().intValue()))
       .body("crewPositions[3].templateItemId", equalTo(emptyTemplateItems.get(3).getTemplateId().intValue()))
       .body("crewPositions[3].critical", equalTo(emptyTemplateItems.get(3).getCritical()))
       .body("crewPositions[4].title", equalTo(""))
-      .body("crewPositions[4].order", equalTo(emptyTemplateItems.get(4).getOrder()))
+      .body("crewPositions[4].order", equalTo(emptyTemplateItems.get(4).getOrder().intValue()))
       .body("crewPositions[4].templateItemId", equalTo(emptyTemplateItems.get(4).getTemplateId().intValue()))
       .body("crewPositions[4].critical", equalTo(emptyTemplateItems.get(4).getCritical()));
     // @formatter:on

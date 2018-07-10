@@ -18,7 +18,7 @@ ALTER TABLE template_item
 ALTER TABLE join_mission_airman
   ADD COLUMN order_int INT(11) DEFAULT 0;
 ALTER TABLE join_mission_airman
-  ADD COLUMN template_item_id INT(11);
+  ADD COLUMN template_item_id INT(11) DEFAULT NULL;
 ALTER TABLE join_mission_airman
   ADD CONSTRAINT fk_template_item_id FOREIGN KEY (template_item_id) REFERENCES template_item (id);
 ALTER TABLE join_mission_airman

@@ -25,6 +25,18 @@ export class CrewStore {
 
   hydrate(c: CrewModel, airmen: AirmanModel[]) {
     this._crew = c;
+    if (this._crew != null) {
+      this._crew.crewPositions = this._crew.crewPositions.sort((a, b) => {
+        if (a.order < b.order) {
+          return -1;
+        }
+        if (a.order > b.order) {
+          return 1;
+        }
+        return 0;
+      });
+    }
+
     this._airmen = airmen;
   }
 
@@ -73,12 +85,15 @@ export class CrewStore {
     const airman = this._airmen.find((a) => a.lastName === name[0] && a.firstName === name[1]);
 
     if (airman) {
-      this._crew.crewPositions.push(
-        new CrewPositionModel(
-          airman,
-          this._newEntry.title,
-          this._newEntry.critical
-        ));
+      const orders = this._crew.crewPositions!.map(c => c.order).sort();
+      const maxOrder = orders[orders.length - 1];
+      const newPosition = new CrewPositionModel(
+        airman,
+        this._newEntry.title,
+        this._newEntry.critical
+      );
+      newPosition.order = maxOrder + 1;
+      this._crew.crewPositions.push(newPosition);
       this._newEntry = {airmanName: '', title: '', critical: false};
     }
 
@@ -93,5 +108,13 @@ export class CrewStore {
 
     const crewPositionIndex = this._crew!.crewPositions.findIndex(crewPos => crewPos.id === id);
     this._crew!.crewPositions.splice(crewPositionIndex, 1);
+  }
+
+  @action.bound
+  hasAirman(airman: AirmanModel) {
+    return this.crew!.crewPositions.filter(
+      cp => cp.airman !== null &&
+        cp.airman.id === airman.id
+    ).length >= 1;
   }
 }

@@ -6,6 +6,5 @@ import javax.persistence.OrderBy;
 import java.util.List;
 
 public interface TemplateItemRepository extends JpaRepository<TemplateItem, Long> {
-  @OrderBy("order_int ASC")
-  List<TemplateItem> findAllByTemplateId(Long templateId);
+  List<TemplateItem> findAllByTemplateIdOrderByOrder( Long templateId);
 }

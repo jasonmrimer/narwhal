@@ -2,10 +2,10 @@ package mil.af.us.narwhal;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import mil.af.us.narwhal.airman.Airman;
 import mil.af.us.narwhal.airman.AirmanRepository;
-import mil.af.us.narwhal.crew.CrewPosition;
-import mil.af.us.narwhal.crew.CrewPositionRepository;
+import mil.af.us.narwhal.crew.*;
 import mil.af.us.narwhal.flight.Flight;
 import mil.af.us.narwhal.flight.FlightRepository;
 import mil.af.us.narwhal.mission.Mission;
@@ -25,6 +25,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 @ActiveProfiles("test")
@@ -42,6 +45,9 @@ public abstract class BaseIntegrationTest {
   @Autowired protected CrewPositionRepository crewPositionRepository;
   @Autowired protected RankRepository rankRepository;
   @Autowired protected ProfileRepository profileRepository;
+  @Autowired protected TemplateRepository templateRepository;
+  @Autowired protected TemplateItemRepository templateItemRepository;
+
   public Profile tytus;
   protected Mission mission;
   protected Flight flight;
@@ -50,6 +56,12 @@ public abstract class BaseIntegrationTest {
   protected Role readerRole;
   protected Role writerRole;
   protected Rank rank;
+  protected Template defaultTemplate;
+  protected TemplateItem defaultTemplateItem0;
+  protected TemplateItem defaultTemplateItem1;
+  protected TemplateItem defaultTemplateItem2;
+  protected TemplateItem defaultTemplateItem3;
+  protected TemplateItem defaultTemplateItem4;
 
   static {
     objectMapper.registerModule(module);
@@ -109,5 +121,26 @@ public abstract class BaseIntegrationTest {
     crewPosition = crewPositionRepository.save(crewPosition);
     mission.addCrewPosition(crewPosition);
     mission = missionRepository.save(mission);
+  }
+
+  public void buildTemplates() {
+    defaultTemplate = templateRepository.findOne(1L);
+    if(defaultTemplate == null){
+      defaultTemplate = templateRepository.save(new Template(1L, "Default"));
+    }
+
+    defaultTemplateItem0 = BuildTemplateItem(1L, 1L, true, defaultTemplate.getId());
+    defaultTemplateItem1 = BuildTemplateItem(2L, 2L, true, defaultTemplate.getId());
+    defaultTemplateItem2 = BuildTemplateItem(3L, 3L, true, defaultTemplate.getId());
+    defaultTemplateItem3 = BuildTemplateItem(4L, 4L, false, defaultTemplate.getId());
+    defaultTemplateItem4 = BuildTemplateItem(5L, 5L, false, defaultTemplate.getId());
+  }
+
+  private TemplateItem BuildTemplateItem(Long id, Long order, Boolean critical, Long templateId) {
+    TemplateItem current = templateItemRepository.findOne(id);
+    if(current == null){
+      current = templateItemRepository.save(new TemplateItem(id, order, critical, templateId));
+    }
+    return current;
   }
 }

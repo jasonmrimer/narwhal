@@ -35,12 +35,15 @@ public class CrewPositionController {
     mission.getCrewPositions().clear();
 
     positions.forEach(position -> {
-      final Airman airman = airmanRepository.findOne(position.getAirmanId());
+
       CrewPosition crewPosition = new CrewPosition();
       crewPosition.setTitle(position.getTitle());
       crewPosition.setRemarks(position.getRemarks());
       crewPosition.setCritical(position.isCritical());
-      crewPosition.setAirman(airman);
+      if(position.getAirmanId() != null) {
+        final Airman airman = airmanRepository.findOne(position.getAirmanId());
+        crewPosition.setAirman(airman);
+      }
       crewPosition.setMission(mission);
       crewPosition.setOrder(position.getOrder());
       crewPosition.setTemplateItemId(position.getTemplateItemId());

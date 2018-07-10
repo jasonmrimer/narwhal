@@ -135,6 +135,7 @@ public class Mission {
 
   public List<Event> toAllEvents() {
     return this.crewPositions.stream()
+      .filter(c -> c.getAirman() != null)
       .map(CrewPosition::getAirman)
       .map(Airman::getId)
       .map(this::toEvent)

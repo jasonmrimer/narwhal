@@ -37,9 +37,7 @@ public class CrewController {
     Mission mission = missionRepository.findOne(id);
 
     if (mission.getCrewPositions().size() == 0) {
-      List<TemplateItem> ourItems = this.templateItemRepository.findAllByTemplateId(1L);
-
-      System.out.println(ourItems);
+      List<TemplateItem> ourItems = this.templateItemRepository.findAllByTemplateIdOrderByOrder(1L);
 
       List<CrewPosition> defaultPositions =
         ourItems
@@ -48,15 +46,12 @@ public class CrewController {
           new CrewPosition(
             x.getCritical(),
             x.getOrder(),
-            x.getTemplateId()
+            x.getTemplateId(),
+            ""
           )
         ).collect(Collectors.toList());
 
       mission.setCrewPositions(defaultPositions);
-      System.out.println("HERE IS THE SIZE");
-      System.out.println(mission.getCrewPositions().size());
-      System.out.println(mission.getCrewPositions().get(0));
-      System.out.println(mission.getCrewPositions().get(1));
     }
 
     return mission.toCrewJSON();

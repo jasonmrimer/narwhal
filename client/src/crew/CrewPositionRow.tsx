@@ -13,6 +13,7 @@ interface Props {
   onChange: (e: any) => void;
   handleDelete: (e: any) => void;
   className?: string;
+  airmanName?: string;
 }
 
 export const CrewPositionRow = observer((props: Props) => {
@@ -35,11 +36,10 @@ export const CrewPositionRow = observer((props: Props) => {
         />
       </span>
       <span className="member">
-        <span className="airman">{crewPosition.displayFullName}</span>
-        {
-          crewPosition.displayFullName !== '' &&
-          <button onClick={handleDelete}>×</button>
-        }
+        <span className="airman">
+          {props.airmanName === undefined ? '' : props.airmanName}
+          </span>
+        <button onClick={handleDelete}>×</button>
       </span>
       <span className="remarks">
         <StyledTextInput

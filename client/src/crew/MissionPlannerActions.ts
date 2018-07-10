@@ -23,7 +23,7 @@ export class MissionPlannerActions {
 
   addAirman = async (airman: AirmanModel) => {
     const {crewStore} = this.stores;
-    if (crewStore!.crew!.hasAirman(airman)) {
+    if (crewStore!.hasAirman(airman)) {
       return;
     }
     crewStore!.setNewEntry({airmanName: `${airman.lastName}, ${airman.firstName}`});

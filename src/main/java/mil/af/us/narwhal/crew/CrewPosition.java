@@ -29,7 +29,7 @@ public class CrewPosition {
   private Mission mission;
 
   @ManyToOne
-  @JoinColumn(name = "airman_id", referencedColumnName = "id", nullable = false)
+  @JoinColumn(name = "airman_id", referencedColumnName = "id")
   @JsonManagedReference
   private Airman airman;
 
@@ -76,11 +76,13 @@ public class CrewPosition {
   public CrewPosition(
     Boolean critical,
     Long order,
-    Long templateItemId
+    Long templateItemId,
+    String title
   ) {
     this.critical = critical;
     this.order = order;
     this.templateItemId = templateItemId;
+    this.title = title;
   }
 
   @Override public String toString() {

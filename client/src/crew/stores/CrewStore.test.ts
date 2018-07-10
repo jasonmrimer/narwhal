@@ -5,6 +5,8 @@ import { DoubleRepositories } from '../../utils/Repositories';
 import { CrewPositionModel } from '../models/CrewPositionModel';
 import { CrewRepositorySpy } from '../repositories/doubles/CrewRepositorySpy';
 import { AirmanModel } from '../../airman/models/AirmanModel';
+import { AirmanModelFactory } from '../../airman/factories/AirmanModelFactory';
+import { RankModel } from '../../rank/models/RankModel';
 
 describe('CrewStore', () => {
   let crew: CrewModel;
@@ -65,5 +67,12 @@ describe('CrewStore', () => {
 
     expect(DoubleRepositories.crewPositionRepository.delete).toHaveBeenCalledWith(deletePositions);
     expect(crewPositions.length).toBe(0);
+  });
+
+  it('should return false when it cannot find an airman even with blank airman lines', () => {
+    crewPositions.push(new CrewPositionModel());
+    const rank = new RankModel(1, 'slu');
+    const airman = AirmanModelFactory.build(23, 23, 24, 23, rank);
+    expect(subject.hasAirman(airman)).toBeFalsy();
   });
 });

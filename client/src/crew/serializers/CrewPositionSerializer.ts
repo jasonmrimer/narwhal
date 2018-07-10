@@ -7,8 +7,10 @@ export class CrewPositionSerializer implements Serializer<CrewPositionModel> {
       id: item.id,
       title: item.title,
       critical: item.critical,
-      airmanId: item.airman.id,
-      remarks: item.remarks
+      airmanId: item.airman == null ? null : item.airman.id,
+      remarks: item.remarks,
+      order: item.order,
+      templateItemId: item.templateItemId
     };
   }
 
@@ -18,7 +20,9 @@ export class CrewPositionSerializer implements Serializer<CrewPositionModel> {
       item.title,
       item.critical,
       item.id,
-      item.remarks
+      item.remarks,
+      item.order,
+      item.templateItemId
     );
   }
 }

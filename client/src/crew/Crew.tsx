@@ -64,6 +64,7 @@ export class Crew extends React.Component<Props> {
           onCheck={(e) => this.onCheck(e, crewPosition.id!)}
           onChange={(e) => this.onChange(e, crewPosition.id!)}
           handleDelete={(e) => this.handleDeleteChange(e, crewPosition.id!)}
+          airmanName={crewPosition.displayFullName}
         />
       );
     });

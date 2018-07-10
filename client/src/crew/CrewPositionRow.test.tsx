@@ -27,8 +27,13 @@ describe('CrewPostionRow', () => {
         onCheck={onCheck}
         onChange={onChange}
         handleDelete={handleDelete}
+        airmanName={'Sequel, The'}
       />
     );
+  });
+
+  it('renders Airman name', () => {
+    expect(subject.find('.airman').text()).toContain('Sequel');
   });
 
   it('renders a position title input', () => {
