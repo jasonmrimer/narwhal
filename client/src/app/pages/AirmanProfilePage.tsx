@@ -7,14 +7,16 @@ import { StyledLoadingOverlay } from '../../widgets/LoadingOverlay';
 import { observer, inject } from 'mobx-react';
 import { AirmanModel } from '../../airman/models/AirmanModel';
 import { History } from 'history';
+import { SiteManagerStore } from '../../site-manager/stores/SiteManagerStore';
 
 interface Props {
   airmanProfileManagerStore?: AirmanProfileManagerStore;
+  siteManagerStore?: SiteManagerStore;
   history: History;
   airmanId?: number;
 }
 
-@inject('airmanProfileManagerStore')
+@inject('airmanProfileManagerStore', 'siteManagerStore')
 @observer
 export class AirmanProfilePage extends React.Component<Props> {
   async componentDidMount() {
@@ -25,15 +27,18 @@ export class AirmanProfilePage extends React.Component<Props> {
         WebRepositories.rankRepository.findAll()
       ]);
 
-      const {airmanId} = this.props;
+      const {airmanId, airmanProfileManagerStore, siteManagerStore} = this.props;
       if (airmanId) {
         const [airman, ripItems] = await Promise.all([
           WebRepositories.airmanRepository.findOne(airmanId),
           WebRepositories.ripItemRepository.findBySelectedAirman(airmanId),
         ]);
-        this.props.airmanProfileManagerStore!.hydrate(airman, sites, schedules, ranks, ripItems);
+        airmanProfileManagerStore!.hydrate(airman, sites, schedules, ranks, ripItems);
+      } else if (siteManagerStore!.pendingOperatorFlightId) {
+        airmanProfileManagerStore!.hydrate(siteManagerStore!.makePendingAirman(), sites, schedules, ranks);
+        siteManagerStore!.setPendingOperatorFlightId(null);
       } else {
-        this.props.airmanProfileManagerStore!.hydrate(AirmanModel.empty(), sites, schedules, ranks);
+        airmanProfileManagerStore!.hydrate(AirmanModel.empty(), sites, schedules, ranks);
       }
     });
   }

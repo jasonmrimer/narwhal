@@ -116,6 +116,7 @@ public class Profile implements UserDetails {
       id,
       username,
       siteId,
+      squadronId,
       siteName,
       role.getId(),
       role.getName().name(),

@@ -41,6 +41,8 @@ describe('FlightTables', () => {
   beforeEach(() => {
     siteManagerStore = new SiteManagerStore(DoubleRepositories);
 
+    siteManagerStore.setPendingOperatorFlightId = jest.fn();
+
     siteManagerStore.hydrate(
       profile,
       squadron,
@@ -133,5 +135,14 @@ describe('FlightTables', () => {
     subject.update();
 
     expect(subject.find('.new-operator-button').find(Link).prop('to')).toBe('/flights/new');
+  });
+
+  it('new operator link should call setPendingOperatorFlightId onClick', () => {
+    siteManagerStore.addFlightToExpandedFlights(1);
+    subject.update();
+
+    subject.find('.new-operator-button').find(Link).simulate('click');
+
+    expect(siteManagerStore.setPendingOperatorFlightId).toHaveBeenCalledWith(flights[0].id);
   });
 });

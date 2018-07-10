@@ -256,7 +256,7 @@ export class AirmanProfileManager extends React.Component<Props> {
 
 export const StyledAirmanProfileManager = inject(
   'airmanProfileManagerStore',
-  'profileActions'
+  'profileActions',
 )(styled(AirmanProfileManager)`
   .side-nav{
     position: fixed;
