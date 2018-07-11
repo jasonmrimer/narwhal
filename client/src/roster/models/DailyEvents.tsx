@@ -19,7 +19,13 @@ export class DailyEvents extends Array<EventModel> {
 
   renderEvent = () => {
     if (this.hasMission()) {
-      return <MissionIcon title={this.getMission().title.substring(0, 3)} viewBox="0 2 36 25"/>;
+      return (
+        <MissionIcon
+          title={this.getMission().title.substring(0, 3)}
+          viewBox="0 2 36 25"
+          styled={{marginTop: '0.35rem'}}
+        />
+      );
     } else {
       return this.renderSwitch();
     }

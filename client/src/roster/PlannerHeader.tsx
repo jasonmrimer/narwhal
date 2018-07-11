@@ -96,7 +96,7 @@ export class PlannerHeader extends React.Component<Props> {
 
 export const StyledPlannerHeader = inject('plannerStore', 'trackerStore', 'plannerActions')(styled(PlannerHeader)`
   background: ${props => props.theme.lightest};
-  padding: 0.75rem;
+  padding: 0.75rem 1.1rem;
   flex-grow: 2;
   border-left: 1px solid ${props => props.theme.graySteel};
   border-right: 1px solid ${props => props.theme.graySteel};

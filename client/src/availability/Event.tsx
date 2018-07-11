@@ -7,6 +7,7 @@ import { StyledAvailabilityTile } from './AvailabilityTile';
 import { AvailabilityStore } from './stores/AvailabilityStore';
 import styled from 'styled-components';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
+import { BabyPlusIcon } from '../icons/BabyPlusIcon';
 
 interface Props {
   availabilityActions?: AvailabilityActions;
@@ -26,7 +27,7 @@ export class Event extends React.Component<Props> {
           onClick={() => availabilityActions!.openEventFormForDay(day)}
         >
           <span>{day.format('ddd, DD MMM YY').toUpperCase()}</span>
-          <span className="add-event-on-date">+ Add Event</span>
+          <span className="add-event-on-date">{<BabyPlusIcon/>} Add Event</span>
         </div>
         {this.scheduledEventsForDate(day)}
       </div>

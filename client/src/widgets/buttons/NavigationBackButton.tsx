@@ -13,7 +13,7 @@ interface Props {
 export const NavigationBackButton = (props: Props) => {
   return (
     <Link to={props.location} className={props.className}>
-      <BackArrow color={Theme.graySteel}/>
+      <BackArrow color={Theme.purpleSteel}/>
       <span>{props.text || 'Back'}</span>
     </Link>
   );
@@ -37,5 +37,6 @@ export const StyledNavigationBackButton = styled(NavigationBackButton)`
 
   span {
     margin-left: 0.5rem;
+    font-weight: 400;
   }
 `;

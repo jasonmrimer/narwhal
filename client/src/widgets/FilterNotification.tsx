@@ -15,7 +15,8 @@ export const FilterNotification = (props: Props) => {
 };
 
 export const StyledFilterNotification = styled(FilterNotification)`
-    position: fixed;
+    width:230px;
+    position: absolute;
     transform: translateY(3.5rem);
     padding: 0.25rem;
     background: ${props => props.theme.yellow};

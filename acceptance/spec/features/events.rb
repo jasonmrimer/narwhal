@@ -10,7 +10,7 @@ class Event
   def create_invalid
     page.within('.side-panel') do
       find('a', text: 'AVAILABILITY').click
-      click_link_or_button '+ Add Event'
+      click_link_or_button 'Add Event'
       find('label', text: 'APPOINTMENT').click
 
       fill_in 'description', with: "invalid event"
@@ -21,7 +21,7 @@ class Event
   def create
     page.within('.side-panel') do
       find('a', text: 'AVAILABILITY').click
-      click_link_or_button '+ Add Event'
+      click_link_or_button 'Add Event'
       find('label', text: 'APPOINTMENT').click
 
       fill_in 'title', with: @title
@@ -31,6 +31,7 @@ class Event
       page.all('.DateInput_input')[1].set(@end.strftime('%m/%d/%Y'))
       fill_in 'endTime', with: @end.strftime('%H:%M')
       click(find('input[type="submit"]'))
+      sleep 10
     end
   end
 
@@ -92,7 +93,7 @@ class Event
   def set_attrs
     @start = Time.now
     @end = @start + (60 * 60 * 36)
-    @title = "Test Event #{Time.now}"
+    @title = "Test Event"
   end
 
   def click(element)

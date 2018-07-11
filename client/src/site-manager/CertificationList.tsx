@@ -12,13 +12,13 @@ interface Props {
 export const CertificationList = (props: Props) => {
   return (
     <div className={props.className}>
-      <div className="certification-header">
+      <div className="certification-title">
         <span>CERTIFICATIONS</span>
         <Link to="/certifications/new">
           <PlusIcon/> ADD CERTIFICATION
         </Link>
       </div>
-      <div className="certification-spacer"/>
+      <div className="certification-header">ACRONYM</div>
       {
         props.certifications.map((certification: CertificationModel, index: number) => {
           return (
@@ -36,7 +36,7 @@ export const StyledCertificationList = styled(CertificationList)`
   border: 1px solid ${props => props.theme.graySteel};
   margin-bottom: 2rem;
   
-  .certification-header {
+  .certification-title {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -58,8 +58,9 @@ export const StyledCertificationList = styled(CertificationList)`
     }
   }
   
-  .certification-spacer {
+  .certification-header {
     background-color: ${props => props.theme.lightest};
+    font-weight: 500;
     padding: 1rem;
   }
   

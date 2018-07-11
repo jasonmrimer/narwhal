@@ -129,13 +129,13 @@ class FlightsPage
   def assert_create_certification
     visit '/certifications/new'
 
-    fill_in 'title', with: 'MAGNETIC MANIPULATION'
+    fill_in 'title', with: 'SLEEP'
 
     find('input[type="submit"]').click
 
     click_link 'Back'
 
-    expect(page).to have_content 'MAGNETIC MANIPULATION'
+    expect(page).to have_content 'SLEEP'
   end
 
   private

@@ -25,6 +25,7 @@ describe('FlightsPage', () => {
       id: 1,
       username: 'Tytus',
       siteId: 14,
+      squadronId: 14,
       siteName: '14',
       roleName: 'READER',
       roleId: 1,

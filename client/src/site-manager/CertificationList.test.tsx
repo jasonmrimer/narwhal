@@ -14,8 +14,12 @@ describe('CertificationList', () => {
     subject = shallow(<CertificationList certifications={certifications}/>);
   });
 
+  it('should render a title', () => {
+    expect(subject.find('.certification-title').text()).toContain('CERTIFICATIONS');
+  });
+
   it('should render a header', () => {
-    expect(subject.find('.certification-header').text()).toContain('CERTIFICATIONS');
+    expect(subject.find('.certification-header').text()).toContain('ACRONYM');
   });
 
   it('should render a new certification button', () => {

@@ -14,6 +14,7 @@ import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore
 import { Can } from '@casl/react';
 import { AirmanCertificationModel } from '../airman/models/AirmanCertificationModel';
 import { AirmanQualificationModel } from '../airman/models/AirmanQualificationModel';
+import { PlusIcon } from '../icons/PlusIcon';
 
 interface Props {
   currencyStore?: CurrencyStore;
@@ -65,7 +66,7 @@ export class Currency extends React.Component<Props> {
               className="add-skill"
               onClick={this.props.currencyActions!.addSkill}
             >
-              + Add Skill
+              {<PlusIcon/>} Add Skill
             </button>
           </Can>
         </div>

@@ -6,20 +6,20 @@ const path =
 export const CollapseIcon = () => {
   return (
     <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
+      width="24"
+      height="24"
+      viewBox="0 0 14 14"
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"
     >
       <g id="Rectangle">
-        <rect width="8" height="1" transform="translate(4 7.5)" fill="black"/>
+        <rect width="8" height="1" transform="translate(4 7.5)" fill="white"/>
         <path
           fillRule="evenodd"
           clipRule="evenodd"
           d={path}
           transform="translate(2 2)"
-          fill="black"
+          fill="white"
         />
       </g>
     </svg>

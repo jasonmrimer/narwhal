@@ -106,7 +106,7 @@ export const StyledTopBar = inject(
   justify-content: space-between;
   align-items: center;
   
-  font-weight: 100;
+  font-weight: 400;
   
   position: fixed;
   top: 3rem;
