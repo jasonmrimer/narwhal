@@ -109,7 +109,7 @@ export const StyledCrew = inject('crewStore')(styled(Crew)`
   }
   
   .member {
-    width: 50%;
+    width: 40%;
     padding: 0 1rem 0 0;
   }
   

@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { CrewPositionModel } from './models/CrewPositionModel';
 import { observer } from 'mobx-react';
 import * as classNames from 'classnames';
+import { CloseIcon } from '../icons/CloseIcon';
 
 interface Props {
   crewPosition: CrewPositionModel;
@@ -36,10 +37,6 @@ export const CrewPositionRow = observer((props: Props) => {
       </span>
       <span className="member">
         <span className="airman">{crewPosition.displayFullName}</span>
-        {
-          crewPosition.displayFullName !== '' &&
-          <button onClick={handleDelete}>×</button>
-        }
       </span>
       <span className="remarks">
         <StyledTextInput
@@ -48,6 +45,10 @@ export const CrewPositionRow = observer((props: Props) => {
           onChange={onChange}
         />
       </span>
+      {
+        crewPosition.displayFullName !== '' &&
+        <button onClick={handleDelete}>{<CloseIcon/>}</button>
+      }
     </div>
   );
 });
@@ -65,29 +66,31 @@ export const StyledCrewPositionRow = styled(CrewPositionRow)`
     background: ${props => props.theme.light};
   }
     
- .member {
-    display: flex;
-    justify-content: space-between;
-    width: 50%;
-    
-    button {
-      background: none;
-      color: ${props => props.theme.fontColor};
-      border: none;
-      font-size: 1.25rem;
-      font-weight: 300;
-      padding: 0;
-      cursor: pointer;
-    }
-  }
-    
   .critical {
     width: 10%;
     padding: 0 1rem 0 0;
+    margin-right: 2rem;
   }
   
   .position {
-    width: 40%;
+    width: 20%;
+    padding: 0 2rem 0 0;
+  }
+  
+  .member {
+    width: 50%;
     padding: 0 1rem 0 0;
   }
+  
+  .remarks {
+    padding-right: 1rem;
+  }
+  
+   button {
+      background: none;
+      color: ${props => props.theme.fontColor};
+      border: none;
+      padding: 0;
+      cursor: pointer;
+    }
 `;

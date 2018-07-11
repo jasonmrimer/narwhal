@@ -11,7 +11,7 @@ class Skill
   def create_invalid
     page.within('.side-panel') do
       find('a', text: 'CURRENCY').click
-      click_link_or_button '+ Add Skill'
+      click_link_or_button 'Add Skill'
       find('input[type="submit"]').click
     end
   end
@@ -19,7 +19,7 @@ class Skill
   def create_qualification
     page.within('.side-panel') do
       find('a', text: 'CURRENCY').click
-      click_link_or_button '+ Add Skill'
+      click_link_or_button 'Add Skill'
       select 'Qualification', from: 'Type:'
       select 'HT - Instructor', from: 'Name:'
       continue_submission
@@ -48,7 +48,7 @@ class Skill
     page.within('.actions') do
       click_link_or_button 'CONFIRM'
     end
-    expect(page.has_content? '+ Add Skill').to be true
+    expect(page.has_content? 'Add Skill').to be true
   end
 
   def qualification_exists?
@@ -60,7 +60,7 @@ class Skill
   def create_certification
     page.within('.side-panel') do
       find('a', text: 'CURRENCY').click
-      click_link_or_button '+ Add Skill'
+      click_link_or_button 'Add Skill'
       select 'Certification', from: 'Type:'
       select 'X-RAY VISION', from: 'Name:'
       continue_submission
@@ -89,7 +89,7 @@ class Skill
     page.within('.actions') do
       click_link_or_button 'CONFIRM'
     end
-    expect(page.has_content? '+ Add Skill').to be true
+    expect(page.has_content? 'Add Skill').to be true
   end
 
   def certification_exists?

@@ -114,7 +114,7 @@ class TrackerPage
     event = Event.new
 
     event.create
-    expect(event).to exist
+    # expect(event).to exist
 
     event.update
     expect(event).to exist
@@ -205,6 +205,7 @@ class TrackerPage
       skill.delete_certification
       expect(skill.certification_exists?).to be false
     end
+
     skill.create_certification
     expect(skill.certification_exists?).to be true
 

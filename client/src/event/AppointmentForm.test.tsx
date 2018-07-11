@@ -15,9 +15,9 @@ import { DoubleRepositories } from '../utils/Repositories';
 import { StyledEventCreationInfo } from '../widgets/EventCreationInfo';
 import * as moment from 'moment';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
-import { readerAbility } from '../app/abilities';
+import { adminAbility, readerAbility } from '../app/abilities';
 import { StyledSubmitButton } from '../widgets/forms/SubmitButton';
-import { EventModel, EventStatus } from './models/EventModel';
+import { EventModel, EventStatus, EventType } from './models/EventModel';
 import { StyledEventApprovalRow } from './EventApprovalRow';
 
 /* tslint:disable:no-empty*/
@@ -28,6 +28,7 @@ describe('AppointmentForm', () => {
   let wrapper: ShallowWrapper;
   let subject: AppointmentForm;
   let eventActions: any;
+  let pendingEvent: EventModel;
 
   beforeEach(async () => {
     eventActions = {
@@ -38,10 +39,7 @@ describe('AppointmentForm', () => {
     trackerStore = new TrackerStore(DoubleRepositories);
     appointmentFormStore = new AppointmentFormStore(new TimeServiceStub());
     profileStore = new ProfileSitePickerStore(DoubleRepositories);
-    await profileStore.hydrate(
-      [],
-      makeFakeProfile('READER', readerAbility)
-    );
+    await profileStore.hydrate([], makeFakeProfile('ADMIN', adminAbility));
 
     wrapper = shallow(
       <AppointmentForm
@@ -55,6 +53,69 @@ describe('AppointmentForm', () => {
     );
 
     subject = (wrapper.instance() as AppointmentForm);
+  });
+
+  describe('as Admin', () => {
+    beforeEach(async () => {
+      pendingEvent = EventModelFactory.build();
+      pendingEvent.type = EventType.Appointment;
+      pendingEvent.status = EventStatus.Pending;
+
+      wrapper = shallow(
+        <AppointmentForm
+          airmanId={123}
+          appointmentFormStore={appointmentFormStore}
+          profileStore={profileStore}
+          trackerStore={trackerStore}
+          eventActions={eventActions}
+          event={pendingEvent}
+        />
+      );
+
+      subject = (wrapper.instance() as AppointmentForm);
+    });
+
+    it('should render a confirm button', () => {
+      expect(wrapper.find(StyledSubmitButton).prop('text')).toBe('CONFIRM');
+    });
+
+    it('should render StyledEventApprovalRows if it is a pending/approved event and you are not a viewer', () => {
+      expect(wrapper.find(StyledEventApprovalRow).length).toBe(2);
+    });
+  });
+
+  describe('as Reader', () => {
+    beforeEach(async () => {
+      pendingEvent = EventModelFactory.build();
+      pendingEvent.type = EventType.Appointment;
+      pendingEvent.status = EventStatus.Pending;
+
+      await profileStore.hydrate(
+        [],
+        makeFakeProfile('READER', readerAbility)
+      );
+
+      wrapper = shallow(
+        <AppointmentForm
+          airmanId={123}
+          appointmentFormStore={appointmentFormStore}
+          profileStore={profileStore}
+          trackerStore={trackerStore}
+          eventActions={eventActions}
+          event={pendingEvent}
+        />
+      );
+
+      subject = (wrapper.instance() as AppointmentForm);
+    });
+
+    it('should render a submit request button', () => {
+      expect(wrapper.find(StyledSubmitButton).prop('text')).toBe('SUBMIT REQUEST');
+    });
+
+    it('should not render StyledEventApprovalRows you are a viewer', async () => {
+      expect(wrapper.find(StyledEventApprovalRow).length).toBe(0);
+    });
   });
 
   it('manages the state via form changes', () => {
@@ -138,51 +199,23 @@ describe('AppointmentForm', () => {
     expect(mountedWrapper.find(StyledEventCreationInfo).exists()).toBeTruthy();
   });
 
-  it('should render a submit request button', () => {
-    expect(wrapper.find(StyledSubmitButton).prop('text')).toBe('SUBMIT REQUEST');
-  });
+  it('should not render StyledEventApprovalRows if it is an auto approved event', () => {
+    pendingEvent.status = EventStatus.AutoApproved;
 
-  describe('eventApproval process', () => {
-    let pendingEvent: EventModel;
+    wrapper = shallow(
+      <AppointmentForm
+        airmanId={123}
+        appointmentFormStore={appointmentFormStore}
+        trackerStore={trackerStore}
+        profileStore={profileStore}
+        eventActions={eventActions}
+        event={pendingEvent}
+      />
+    );
 
-    beforeEach(() => {
-      pendingEvent = EventModelFactory.build();
-      pendingEvent.status = EventStatus.Pending;
+    wrapper.update();
 
-      wrapper = shallow(
-        <AppointmentForm
-          airmanId={123}
-          appointmentFormStore={appointmentFormStore}
-          profileStore={profileStore}
-          trackerStore={trackerStore}
-          eventActions={eventActions}
-          event={pendingEvent}
-        />
-      );
-    });
-
-    it('should render StyledEventApprovalRows if it is a pending/approved event', () => {
-      expect(wrapper.find(StyledEventApprovalRow).length).toBe(2);
-    });
-
-    it('should not render StyledEventApprovalRows if it is an auto approved event', () => {
-      pendingEvent.status = EventStatus.AutoApproved;
-
-      wrapper = shallow(
-        <AppointmentForm
-          airmanId={123}
-          appointmentFormStore={appointmentFormStore}
-          trackerStore={trackerStore}
-          profileStore={profileStore}
-          eventActions={eventActions}
-          event={pendingEvent}
-        />
-      );
-
-      wrapper.update();
-
-      expect(wrapper.find(StyledEventApprovalRow).length).toBe(0);
-    });
+    expect(wrapper.find(StyledEventApprovalRow).length).toBe(0);
   });
 });
 

@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import { inject, observer } from 'mobx-react';
 import { AvailabilityActions } from './AvailabilityActions';
 import { StyledEvent } from './Event';
+import { PlusIcon } from '../icons/PlusIcon';
 
 interface Props {
   availabilityStore?: AvailabilityStore;
@@ -28,7 +29,7 @@ export class EventsList extends React.Component<Props> {
             className="add-event"
             onClick={availabilityActions!.openEventForm}
           >
-            + Add Event
+            {<PlusIcon/>} Add Event
           </button>
         </div>
 

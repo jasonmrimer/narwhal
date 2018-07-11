@@ -10,7 +10,7 @@ class MsnAssignment
   def create
     page.within('.side-panel') do
       find('a', text: 'AVAILABILITY').click
-      click_link_or_button '+ Add Event'
+      click_link_or_button 'Add Event'
       find('label', text: 'MISSION').click
       typeahead('Mission ID', @msn_title)
       click(find('input[type="submit"]'))

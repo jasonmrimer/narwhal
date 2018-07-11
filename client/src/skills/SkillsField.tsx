@@ -49,13 +49,14 @@ export class SkillsField extends React.Component<Props> {
 export const StyledSkillsField = inject('skillsFieldStore')(styled(SkillsField)`  
   .closeExpiration {
     border-bottom: 2px solid ${props => props.theme.yellow};
-    padding: 0.05rem;
-    border-radius: 2px;
+    padding: 0.05rem 0.05rem 0 0.05rem;
   }
+  
   .expired {
     position: relative;
     display: inline-block;
   }
+  
   .expired:after {
      content: '';
      border-bottom: 3px solid ${props => props.theme.red};

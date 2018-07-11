@@ -84,7 +84,7 @@ describe('Currency', () => {
   });
 
   it('opens skill form on + Add Skill click', () => {
-    findSelectorWithText(subject, 'button', '+ Add Skill').simulate('click');
+    findSelectorWithText(subject, 'button', 'Add Skill').simulate('click');
     expect(currencyActions.addSkill).toHaveBeenCalled();
   });
 

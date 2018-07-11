@@ -10,6 +10,7 @@ import { EventModelFactory } from '../event/factories/EventModelFactory';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 import { makeFakeProfile } from '../utils/testUtils';
 import { writerAbility } from '../app/abilities';
+import { BabyPlusIcon } from '../icons/BabyPlusIcon';
 
 describe('Event', () => {
   let subject: ShallowWrapper;
@@ -36,8 +37,9 @@ describe('Event', () => {
   });
 
   it('renders Add Events buttons', () => {
-      expect(subject.find('.add-event-on-date').exists()).toBeTruthy();
-      expect(subject.find('.add-event-on-date').text()).toBe('+ Add Event');
+    expect(subject.find('.add-event-on-date').exists()).toBeTruthy();
+    expect(subject.find('.add-event-on-date').find(BabyPlusIcon)).toBeTruthy();
+    expect(subject.find('.add-event-on-date').text()).toContain('Add Event');
   });
 
   it('calls the createEvent on date click', () => {

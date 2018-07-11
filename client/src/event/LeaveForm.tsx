@@ -16,6 +16,7 @@ import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore
 import { StyledButton } from '../widgets/buttons/Button';
 import { DeleteIcon } from '../icons/DeleteIcon';
 import { StyledEventApprovalRow } from './EventApprovalRow';
+import { readerAbility } from '../app/abilities';
 
 interface Props {
   leaveFormStore?: LeaveFormStore;
@@ -52,6 +53,7 @@ export class LeaveForm extends React.Component<Props> {
 
   render() {
     const {state, errors, hasModel} = this.props.leaveFormStore!;
+    const {event, profileStore} = this.props;
     return (
       <StyledForm onSubmit={this.handleSubmit} performLoading={this.props.trackerStore!.performLoading}>
         <StyledFormRow>
@@ -94,16 +96,16 @@ export class LeaveForm extends React.Component<Props> {
           </StyledFieldValidation>
         </StyledFieldValidation>
         {
-          this.props.event ?
-            this.props.event!.createdBy &&
-              <StyledEventCreationInfo event={this.props.event!}/> :
+          event ?
+            event!.createdBy &&
+              <StyledEventCreationInfo event={event!}/> :
             null
         }
 
         {
-          this.props.event && this.props.event!.status !== EventStatus.AutoApproved  ?
+          event && event!.status !== EventStatus.AutoApproved && profileStore!.profile!.ability !== readerAbility ?
             <StyledEventApprovalRow
-              event={this.props.event}
+              event={event}
               role={EventApprovalRole.Supervisor}
               onClickApprove={
                 async () => await this.handleApprovalDecision(EventApproval.Approved, EventApprovalRole.Supervisor)
@@ -116,9 +118,9 @@ export class LeaveForm extends React.Component<Props> {
         }
 
         {
-          this.props.event && this.props.event!.status !== EventStatus.AutoApproved  ?
+          event && event!.status !== EventStatus.AutoApproved && profileStore!.profile!.ability !== readerAbility ?
             <StyledEventApprovalRow
-              event={this.props.event}
+              event={event}
               role={EventApprovalRole.Scheduler}
               onClickApprove={
                 async () => await this.handleApprovalDecision(EventApproval.Approved, EventApprovalRole.Scheduler)

@@ -15,7 +15,7 @@ import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { DoubleRepositories } from '../utils/Repositories';
 import { StyledEventCreationInfo } from '../widgets/EventCreationInfo';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
-import { readerAbility } from '../app/abilities';
+import { adminAbility, readerAbility } from '../app/abilities';
 import { StyledSubmitButton } from '../widgets/forms/SubmitButton';
 import { StyledEventApprovalRow } from './EventApprovalRow';
 import { EventModel, EventStatus, EventType } from './models/EventModel';
@@ -28,20 +28,23 @@ describe('LeaveForm', () => {
   let subject: LeaveForm;
   let trackerStore: TrackerStore;
   let eventActions: any;
+  let pendingEvent: EventModel;
 
   beforeEach(async () => {
     eventActions = {
       handleFormSubmit: jest.fn(),
       handleDeleteEvent: jest.fn(),
     };
+
     store = new LeaveFormStore(new TimeServiceStub());
     profileStore = new ProfileSitePickerStore(DoubleRepositories);
+    trackerStore = new TrackerStore(DoubleRepositories);
+
     await profileStore.hydrate(
       [],
-      makeFakeProfile('READER', readerAbility)
+      makeFakeProfile('ADMIN', adminAbility)
     );
 
-    trackerStore = new TrackerStore(DoubleRepositories);
     wrapper = shallow(
       <LeaveForm
         airmanId={123}
@@ -54,6 +57,69 @@ describe('LeaveForm', () => {
     );
 
     subject = (wrapper.instance() as LeaveForm);
+  });
+
+  describe('as Admin', () => {
+    beforeEach(async () => {
+      pendingEvent = EventModelFactory.build();
+      pendingEvent.type = EventType.Leave;
+      pendingEvent.status = EventStatus.Pending;
+
+      wrapper = shallow(
+        <LeaveForm
+          airmanId={123}
+          leaveFormStore={store}
+          trackerStore={trackerStore}
+          profileStore={profileStore}
+          eventActions={eventActions}
+          event={pendingEvent}
+        />
+      );
+
+      subject = (wrapper.instance() as LeaveForm);
+    });
+
+    it('should render a confirm button', () => {
+      expect(wrapper.find(StyledSubmitButton).prop('text')).toBe('CONFIRM');
+    });
+
+    it('should render StyledEventApprovalRows if it is a pending/approved event and you are not a viewer', () => {
+      expect(wrapper.find(StyledEventApprovalRow).length).toBe(2);
+    });
+  });
+
+  describe('as Reader', () => {
+    beforeEach(async () => {
+      pendingEvent = EventModelFactory.build();
+      pendingEvent.type = EventType.Leave;
+      pendingEvent.status = EventStatus.Pending;
+
+      await profileStore.hydrate(
+        [],
+        makeFakeProfile('READER', readerAbility)
+      );
+
+      wrapper = shallow(
+        <LeaveForm
+          airmanId={123}
+          leaveFormStore={store}
+          trackerStore={trackerStore}
+          profileStore={profileStore}
+          eventActions={eventActions}
+          event={pendingEvent}
+        />
+      );
+
+      subject = (wrapper.instance() as LeaveForm);
+    });
+
+    it('should render a submit request button', () => {
+      expect(wrapper.find(StyledSubmitButton).prop('text')).toBe('SUBMIT REQUEST');
+    });
+
+    it('should not render StyledEventApprovalRows you are a viewer', async () => {
+      expect(wrapper.find(StyledEventApprovalRow).length).toBe(0);
+    });
   });
 
   it('manages the state via form changes', () => {
@@ -130,49 +196,23 @@ describe('LeaveForm', () => {
     expect(mountedWrapper.find(StyledEventCreationInfo).exists()).toBeTruthy();
   });
 
-  it('should render a submit request button', () => {
-    expect(wrapper.find(StyledSubmitButton).prop('text')).toBe('SUBMIT REQUEST');
-  });
+  it('should not render StyledEventApprovalRows if it is an auto approved event', () => {
+    pendingEvent.status = EventStatus.AutoApproved;
 
-  describe('eventApproval process', () => {
-    let pendingEvent: EventModel;
-    beforeEach(() => {
-      pendingEvent = EventModelFactory.build();
-      pendingEvent.type = EventType.Leave;
-      pendingEvent.status = EventStatus.Pending;
+    wrapper = shallow(
+      <LeaveForm
+        airmanId={123}
+        leaveFormStore={store}
+        trackerStore={trackerStore}
+        profileStore={profileStore}
+        eventActions={eventActions}
+        event={pendingEvent}
+      />
+    );
 
-      wrapper = shallow(
-        <LeaveForm
-          airmanId={123}
-          leaveFormStore={store}
-          trackerStore={trackerStore}
-          profileStore={profileStore}
-          eventActions={eventActions}
-          event={pendingEvent}
-        />
-      );
-    });
+    wrapper.update();
 
-    it('should render StyledEventApprovalRows if it is a pending/approved event', () => {
-      expect(wrapper.find(StyledEventApprovalRow).length).toBe(2);
-    });
-
-    it('should not render StyledEventApprovalRows if it is an auto approved event', () => {
-      pendingEvent.status = EventStatus.AutoApproved;
-
-      wrapper = shallow(
-        <LeaveForm
-          airmanId={123}
-          leaveFormStore={store}
-          trackerStore={trackerStore}
-          profileStore={profileStore}
-          eventActions={eventActions}
-          event={pendingEvent}
-        />
-      );
-
-      expect(wrapper.find(StyledEventApprovalRow).length).toBe(0);
-    });
+    expect(wrapper.find(StyledEventApprovalRow).length).toBe(0);
   });
 });
 

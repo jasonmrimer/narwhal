@@ -1,19 +1,16 @@
 import * as React from 'react';
+import { CSSProperties } from 'react';
 
 interface Props {
   title: string;
   viewBox: string;
+  styled?: CSSProperties;
 }
 
 /* tslint:disable:max-line-length */
 export const MissionIcon = (props: Props) => {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="36"
-      height="24"
-      viewBox={props.viewBox}
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="24" viewBox={props.viewBox} style={props.styled}>
       <g fill="none" fillRule="evenodd">
         <text
           fill="#FFF"

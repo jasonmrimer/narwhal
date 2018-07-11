@@ -16,6 +16,7 @@ import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { StyledEventCreationInfo } from '../widgets/EventCreationInfo';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 import { StyledEventApprovalRow } from './EventApprovalRow';
+import { readerAbility } from '../app/abilities';
 
 interface Props {
   appointmentFormStore?: AppointmentFormStore;
@@ -51,7 +52,7 @@ export class AppointmentForm extends React.Component<Props> {
   };
 
   render() {
-    const {trackerStore, appointmentFormStore} = this.props;
+    const {trackerStore, appointmentFormStore, event, profileStore} = this.props;
     const {state, errors, hasModel} = appointmentFormStore!;
     return (
       <StyledForm onSubmit={this.handleSubmit} performLoading={trackerStore!.performLoading}>
@@ -108,16 +109,16 @@ export class AppointmentForm extends React.Component<Props> {
         </StyledFieldValidation>
 
         {
-          this.props.event ?
-            this.props.event!.createdBy &&
-              <StyledEventCreationInfo event={this.props.event!}/> :
+          event ?
+            event!.createdBy &&
+              <StyledEventCreationInfo event={event!}/> :
             null
         }
 
         {
-          this.props.event && this.props.event!.status !== EventStatus.AutoApproved ?
+          event && event!.status !== EventStatus.AutoApproved && profileStore!.profile!.ability !== readerAbility ?
             <StyledEventApprovalRow
-              event={this.props.event}
+              event={event}
               role={EventApprovalRole.Supervisor}
               onClickApprove={
                 async () => await this.handleApprovalDecision(EventApproval.Approved, EventApprovalRole.Supervisor)
@@ -130,9 +131,9 @@ export class AppointmentForm extends React.Component<Props> {
         }
 
         {
-          this.props.event && this.props.event!.status !== EventStatus.AutoApproved ?
+          event && event!.status !== EventStatus.AutoApproved && profileStore!.profile!.ability !== readerAbility ?
             <StyledEventApprovalRow
-              event={this.props.event}
+              event={event}
               role={EventApprovalRole.Scheduler}
               onClickApprove={
                 async () => await this.handleApprovalDecision(EventApproval.Approved, EventApprovalRole.Scheduler)
@@ -148,7 +149,7 @@ export class AppointmentForm extends React.Component<Props> {
           {
             this.props.profileStore!.profile!.roleName === 'READER' ?
               <StyledSubmitButton text="SUBMIT REQUEST"/> :
-              <StyledSubmitButton text="SAVE"/>
+              <StyledSubmitButton text="CONFIRM"/>
           }
 
           {

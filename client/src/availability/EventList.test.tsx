@@ -5,6 +5,7 @@ import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
 import { EventsList } from './EventsList';
 import { AvailabilityActions } from './AvailabilityActions';
 import { StyledEvent } from './Event';
+import { PlusIcon } from '../icons/PlusIcon';
 
 describe('EventList', () => {
   let subject: ShallowWrapper;
@@ -27,7 +28,8 @@ describe('EventList', () => {
 
   it('renders an Add Event button', () => {
     expect(subject.find('button.add-event').exists()).toBeTruthy();
-    expect(subject.find('button.add-event').text()).toBe('+ Add Event');
+    expect(subject.find('button.add-event').find(PlusIcon)).toBeTruthy();
+    expect(subject.find('button.add-event').text()).toContain('Add Event');
   });
 
   it('forwards availability to next week', () => {

@@ -28,6 +28,7 @@ export class TextInput extends React.Component<Props> {
         onChange={this.props.onChange}
         onKeyPress={this.props.onKeyPress}
         disabled={this.props.disabled}
+        maxLength={15}
       />
     );
   }
