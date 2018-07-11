@@ -25,10 +25,10 @@ export class SkillsField extends React.Component<Props> {
                 <span
                   className={classNames({
                     closeExpiration: this.props.skillsFieldStore!.isCloseToExpiration(
-                      item.expirationDate,
+                      item.periodicDue,
                       this.props.currencyDate),
                     expired: this.props.skillsFieldStore!.isExpired(
-                      item.expirationDate,
+                      item.periodicDue,
                       this.props.currencyDate
                     )
                   })}

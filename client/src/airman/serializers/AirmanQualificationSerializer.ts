@@ -17,7 +17,9 @@ export class AirmanQualificationSerializer implements Serializer<AirmanQualifica
         item.qualification.title
       ),
       moment(item.earnDate),
-      moment(item.expirationDate),
+      moment(item.periodicDue),
+      moment(item.currencyExpiration),
+      moment(item.lastSat),
       item.id
     );
   }

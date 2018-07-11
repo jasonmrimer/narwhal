@@ -80,7 +80,9 @@ public class AirmanUploadService {
   @Transactional
   public void attachCertifications(List<AttachCertificationCSVRow> rows, ZoneId zoneId) throws ImportException {
     Instant earnDate;
-    Instant expirationDate;
+    Instant periodicDue;
+    Instant currencyExpiration;
+    Instant lastSat;
     List<Integer> failedRows = new ArrayList<>();
 
     for (int i = 0; i < rows.size(); i++) {
@@ -107,7 +109,9 @@ public class AirmanUploadService {
 
       try {
         earnDate = instantFromDateString(row.getEarnDate(), zoneId);
-        expirationDate = instantFromDateString(row.getExpirationDate(), zoneId);
+        periodicDue = instantFromDateString(row.getPeriodicDue(), zoneId);
+        currencyExpiration = instantFromDateString(row.getCurrencyExpiration(), zoneId);
+        lastSat = instantFromDateString(row.getLastSat(), zoneId);
       } catch (DateTimeParseException e) {
         failedRows.add(i + 1);
         continue;
@@ -116,7 +120,9 @@ public class AirmanUploadService {
       airman.addCertification(new AirmanCertification(
         certification,
         earnDate,
-        expirationDate
+        periodicDue,
+        currencyExpiration,
+        lastSat
       ));
 
       airmanRepository.save(airman);
@@ -130,7 +136,9 @@ public class AirmanUploadService {
   @Transactional
   public void attachQualifications(List<AttachQualificationCSVRow> rows, ZoneId zoneId) {
     Instant earnDate;
-    Instant expirationDate;
+    Instant periodicDue;
+    Instant lastSat;
+    Instant currencyExpiration;
     List<Integer> failedRows = new ArrayList<>();
 
     for (int i = 0; i < rows.size(); i++) {
@@ -154,7 +162,9 @@ public class AirmanUploadService {
 
       try {
         earnDate = instantFromDateString(row.getEarnDate(), zoneId);
-        expirationDate = instantFromDateString(row.getExpirationDate(), zoneId);
+        periodicDue = instantFromDateString(row.getPeriodicDue(), zoneId);
+        lastSat = instantFromDateString(row.getLastSat(), zoneId);
+        currencyExpiration = instantFromDateString(row.getCurrencyExpiration(), zoneId);
       } catch (DateTimeParseException e) {
         failedRows.add(i + 1);
         continue;
@@ -163,7 +173,9 @@ public class AirmanUploadService {
       airman.addQualification(new AirmanQualification(
         qualification,
         earnDate,
-        expirationDate
+        periodicDue,
+        lastSat,
+        currencyExpiration
       ));
 
       airmanRepository.save(airman);

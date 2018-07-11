@@ -137,14 +137,18 @@ public class AirmanUploadServiceTest extends BaseIntegrationTest {
           airman.getLastName(),
           certification1.getTitle(),
           "03/22/2018",
-          "05/22/2018"
+          "05/22/2018",
+          "04/22/2018",
+          "06/22/2018"
         ),
         new AttachCertificationCSVRow(
           airman.getFirstName(),
           airman.getLastName(),
           certification2.getTitle(),
           "03/22/2018",
-          "05/22/2018"
+          "05/22/2018",
+          "04/22/2018",
+          "06/22/2018"
         )
       ),
       ZoneId.of("America/New_York")
@@ -174,7 +178,10 @@ public class AirmanUploadServiceTest extends BaseIntegrationTest {
           airman.getLastName(),
           qualification1.getTitle(),
           "03/22/2018",
-          "05/22/2018")
+          "05/22/2018",
+          "04/22/2018",
+          "06/22/2018"
+        )
       ),
       ZoneId.of("America/New_York")
     );

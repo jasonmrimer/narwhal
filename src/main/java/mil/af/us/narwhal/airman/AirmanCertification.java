@@ -34,19 +34,28 @@ public class AirmanCertification {
   private Instant earnDate;
 
   @NotNull
-  @Column(name = "expiration_date")
-  private Instant expirationDate;
+  @Column(name = "periodic_due")
+  private Instant periodicDue;
 
-  public AirmanCertification(Long airmanId, Certification certification, Instant earnDate, Instant expirationDate) {
-    this.airmanId = airmanId;
+  @NotNull
+  @Column(name = "currency_expiration")
+  private Instant currencyExpiration;
+
+  @NotNull
+  @Column(name = "last_sat")
+  private Instant lastSat;
+
+  public AirmanCertification(
+    Certification certification,
+    Instant earnDate,
+    Instant periodicDue,
+    Instant currencyExpiration,
+    Instant lastSat
+  ) {
     this.certification = certification;
     this.earnDate = earnDate;
-    this.expirationDate = expirationDate;
-  }
-
-  public AirmanCertification(Certification certification, Instant earnDate, Instant expirationDate) {
-    this.certification = certification;
-    this.earnDate = earnDate;
-    this.expirationDate = expirationDate;
+    this.periodicDue = periodicDue;
+    this.currencyExpiration = currencyExpiration;
+    this.lastSat = lastSat;
   }
 }

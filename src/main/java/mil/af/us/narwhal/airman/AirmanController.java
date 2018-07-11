@@ -79,7 +79,9 @@ public class AirmanController {
     final AirmanQualification airmanQualification = new AirmanQualification(
       qualification,
       skill.getEarnDate(),
-      skill.getExpirationDate()
+      skill.getPeriodicDue(),
+      skill.getCurrencyExpiration(),
+      skill.getLastSat()
     );
     return airman.addQualification(airmanQualification) ?
       new ResponseEntity<>(airmanRepository.save(airman), HttpStatus.CREATED) :
@@ -97,7 +99,9 @@ public class AirmanController {
     final AirmanCertification airmanCertification = new AirmanCertification(
       certification,
       skill.getEarnDate(),
-      skill.getExpirationDate()
+      skill.getPeriodicDue(),
+      skill.getCurrencyExpiration(),
+      skill.getLastSat()
     );
     return airman.addCertification(airmanCertification) ?
       new ResponseEntity<>(airmanRepository.save(airman), HttpStatus.CREATED) :
@@ -112,7 +116,13 @@ public class AirmanController {
     @RequestBody AirmanSkillJSON skill
   ) {
     final Airman airman = airmanRepository.findOne(id);
-    airman.updateQualification(skill.getId(), skill.getEarnDate(), skill.getExpirationDate());
+    airman.updateQualification(
+      skill.getId(),
+      skill.getEarnDate(),
+      skill.getPeriodicDue(),
+      skill.getCurrencyExpiration(),
+      skill.getLastSat()
+    );
     return airmanRepository.save(airman);
   }
 
@@ -123,7 +133,13 @@ public class AirmanController {
     @RequestBody AirmanSkillJSON skill
   ) {
     final Airman airman = airmanRepository.findOne(id);
-    airman.updateCertification(skill.getId(), skill.getEarnDate(), skill.getExpirationDate());
+    airman.updateCertification(
+      skill.getId(),
+      skill.getEarnDate(),
+      skill.getPeriodicDue(),
+      skill.getCurrencyExpiration(),
+      skill.getLastSat()
+    );
     return airmanRepository.save(airman);
   }
 

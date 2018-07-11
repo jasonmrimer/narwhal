@@ -13,7 +13,9 @@ describe('CurrencyStore', () => {
     skillId: 3,
     type: SkillType.Certification,
     earnDate: moment(),
-    expirationDate: moment()
+    periodicDue: moment(),
+    currencyExpiration: moment(),
+    lastSat: moment()
   };
   let subject: CurrencyStore;
   let repos: Partial<Repositories>;

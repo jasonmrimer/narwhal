@@ -9,7 +9,9 @@ export class AirmanCertificationModel implements SkillModel {
   constructor(public airmanId: number,
               public certification: CertificationModel,
               public earnDate: Moment,
-              public expirationDate: Moment,
+              public periodicDue: Moment,
+              public currencyExpiration: Moment,
+              public lastSat: Moment,
               public id: number | null = null) {
   }
 
@@ -30,6 +32,6 @@ export class AirmanCertificationModel implements SkillModel {
   }
 
   get isExpired() {
-    return this.expirationDate.isBefore(moment().add(DaysToExpiration, 'days'));
+    return this.periodicDue.isBefore(moment().add(DaysToExpiration, 'days'));
   }
 }

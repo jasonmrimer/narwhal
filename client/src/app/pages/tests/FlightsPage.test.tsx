@@ -32,6 +32,7 @@ describe('FlightsPage', () => {
       classified: false,
       ability: readerAbility
     };
+
     await profileStore.hydrate([], profile);
 
     subject = mount(

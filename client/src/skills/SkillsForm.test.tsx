@@ -21,7 +21,9 @@ describe('SkillsForm', () => {
   let currencyStore: CurrencyStore;
   let skillActions: any;
   const earnDate = moment('2018-02-01');
-  const expirationDate = moment('2019-02-01');
+  const periodicDue = moment('2019-02-01');
+  const currencyExpiration = moment('2020-02-01');
+  const lastSat = moment('2021-02-01');
 
   beforeEach(() => {
     const store = new SkillFormStore();
@@ -45,7 +47,9 @@ describe('SkillsForm', () => {
     skillForm.handleChange({target: {name: 'skillType', value: SkillType.Qualification}});
     skillForm.handleChange({target: {name: 'skillId', value: 1}});
     skillForm.handleChange({target: {name: 'earnDate', value: earnDate}});
-    skillForm.handleChange({target: {name: 'expirationDate', value: expirationDate}});
+    skillForm.handleChange({target: {name: 'periodicDue', value: periodicDue}});
+    skillForm.handleChange({target: {name: 'currencyExpiration', value: currencyExpiration}});
+    skillForm.handleChange({target: {name: 'lastSat', value: lastSat}});
 
     subject.find(StyledForm).simulate('submit', eventStub);
     expect(skillActions.submitSkill).toHaveBeenCalled();
@@ -59,7 +63,9 @@ describe('SkillsForm', () => {
       airmanId: 1,
       skillId: 123,
       earnDate: earnDate,
-      expirationDate: expirationDate
+      periodicDue: periodicDue,
+      currencyExpiration: currencyExpiration,
+      lastSat: lastSat
     };
 
     beforeEach(() => {
@@ -76,15 +82,15 @@ describe('SkillsForm', () => {
       };
 
       mountedSubject = mount(
-        <Provider
-          skillFormStore={store}
-          trackerStore={trackerStore}
-          currencyStore={currencyStore}
-          locationFilterStore={locationFilterStore}
-          skillActions={skillActions}
-        >
-          <StyledSkillsForm airmanId={1}/>
-        </Provider>
+          <Provider
+            skillFormStore={store}
+            trackerStore={trackerStore}
+            currencyStore={currencyStore}
+            locationFilterStore={locationFilterStore}
+            skillActions={skillActions}
+          >
+            <StyledSkillsForm airmanId={1}/>
+          </Provider>
       );
     });
 

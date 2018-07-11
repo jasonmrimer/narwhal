@@ -12,9 +12,9 @@ describe('SkillsField', () => {
   let skillsFieldStore: SkillsFieldStore;
   beforeEach(() => {
     skillsFieldStore = new SkillsFieldStore();
-    items[0].expirationDate = moment('2017-04-20 0000', 'YYYY-MM-DD HHmm');
-    items[1].expirationDate = moment('2017-03-01 0000', 'YYYY-MM-DD HHmm');
-    items[2].expirationDate = moment('2017-02-28 0000', 'YYYY-MM-DD HHmm');
+    items[0].periodicDue = moment('2017-04-20 0000', 'YYYY-MM-DD HHmm');
+    items[1].periodicDue = moment('2017-03-01 0000', 'YYYY-MM-DD HHmm');
+    items[2].periodicDue = moment('2017-02-28 0000', 'YYYY-MM-DD HHmm');
     subject = shallow(
       <SkillsField
         items={items}

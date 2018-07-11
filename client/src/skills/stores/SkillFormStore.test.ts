@@ -13,7 +13,9 @@ describe('SkillFormStore', () => {
     airmanId: airmanId,
     skillId: 2,
     earnDate: moment(),
-    expirationDate: moment()
+    periodicDue: moment(),
+    currencyExpiration: moment(),
+    lastSat: moment()
   };
 
   let subject: SkillFormStore;
@@ -45,7 +47,9 @@ describe('SkillFormStore', () => {
       expect(subject.state.skillType).toBe(SkillType.Qualification);
       expect(subject.state.skillId).toBe('0');
       expect(subject.state.earnDate).toBe('');
-      expect(subject.state.expirationDate).toBe('');
+      expect(subject.state.periodicDue).toBe('');
+      expect(subject.state.currencyExpiration).toBe('');
+      expect(subject.state.lastSat).toBe('');
       expect(subject.errors).toEqual({});
     });
 
@@ -55,7 +59,9 @@ describe('SkillFormStore', () => {
       expect(subject.state.skillType).toBe(skill.type);
       expect(subject.state.skillId).toBe(String(skill.skillId));
       expect(subject.state.earnDate).toBe(skill.earnDate.format('YYYY-MM-DD'));
-      expect(subject.state.expirationDate).toBe(skill.expirationDate.format('YYYY-MM-DD'));
+      expect(subject.state.periodicDue).toBe(skill.periodicDue.format('YYYY-MM-DD'));
+      expect(subject.state.currencyExpiration).toBe(skill.currencyExpiration.format('YYYY-MM-DD'));
+      expect(subject.state.lastSat).toBe(skill.lastSat.format('YYYY-MM-DD'));
       expect(subject.errors).toEqual({});
     });
   });
@@ -69,7 +75,9 @@ describe('SkillFormStore', () => {
       expect(subject.state.skillType).toBe(SkillType.Qualification);
       expect(subject.state.skillId).toBe('0');
       expect(subject.state.earnDate).toBe('');
-      expect(subject.state.expirationDate).toBe('');
+      expect(subject.state.periodicDue).toBe('');
+      expect(subject.state.currencyExpiration).toBe('');
+      expect(subject.state.lastSat).toBe('');
       expect(subject.errors).toEqual({});
       expect(subject.hasModel).toBeFalsy();
     });
@@ -84,28 +92,28 @@ describe('SkillFormStore', () => {
     expect(model.skillId).toBe(skill.skillId);
   });
 
-  it('should set the expirationDate 24 months ahead when adding an earnDate for quals', () => {
+  it('should set the periodicDue 24 months ahead when adding an earnDate for quals', () => {
     subject.setState('skillType', SkillType.Qualification);
     subject.setState('earnDate', skill.earnDate.format('YYYY-MM-DD'));
-    expect(subject.state.expirationDate).toBe(skill.earnDate.clone().startOf('day').add(2, 'y').format('YYYY-MM-DD'));
+    expect(subject.state.periodicDue).toBe(skill.earnDate.clone().startOf('day').add(2, 'y').format('YYYY-MM-DD'));
   });
 
-  it('should set the expirationDate 90 days ahead when adding an earnDate for certs', () => {
+  it('should set the periodicDue 90 days ahead when adding an earnDate for certs', () => {
     subject.setState('skillType', SkillType.Certification);
     subject.setState('earnDate', skill.earnDate.format('YYYY-MM-DD'));
-    expect(subject.state.expirationDate).toBe(skill.earnDate.clone().startOf('day').add(90, 'd').format('YYYY-MM-DD'));
+    expect(subject.state.periodicDue).toBe(skill.earnDate.clone().startOf('day').add(90, 'd').format('YYYY-MM-DD'));
   });
 
-  it('should not set the expirationDate when adding a blank earnDate for quals', () => {
+  it('should not set the periodicDue when adding a blank earnDate for quals', () => {
     subject.setState('skillType', SkillType.Qualification);
     subject.setState('earnDate', '');
-    expect(subject.state.expirationDate).toBe('');
+    expect(subject.state.periodicDue).toBe('');
   });
 
-  it('should not set the expirationDate when adding a blank earnDate for certs', () => {
+  it('should not set the periodicDue when adding a blank earnDate for certs', () => {
     subject.setState('skillType', SkillType.Certification);
     subject.setState('earnDate', '');
-    expect(subject.state.expirationDate).toBe('');
+    expect(subject.state.periodicDue).toBe('');
   });
 
   it('should render certification options based off the site of the selected airman', () => {

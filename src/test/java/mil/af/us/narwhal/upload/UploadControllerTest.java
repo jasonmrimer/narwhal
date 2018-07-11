@@ -270,12 +270,12 @@ public class UploadControllerTest extends BaseIntegrationTest {
   public void testAttachCertificationsCSV_handlesNullValues() throws IOException {
     final File file = File.createTempFile("test", "csv");
     try (final FileOutputStream stream = new FileOutputStream(file)) {
-      stream.write(("firstName,lastName,certificationName,earnDate,expirationDate\n" +
-        "FIRST?,LAST,TITLE,09/22/2018,09/22/2019\n" +
-        "FIRST,LAST?,TITLE,09/22/2018,09/22/2019\n" +
-        "FIRST,LAST,TITLE?,09/22/2018,09/22/2019\n" +
-        "FIRST,LAST,TITLE,09/22/2018?,09/22/2019\n" +
-        "FIRST,LAST,TITLE,09/22/2018,09/22/2019?").getBytes());
+      stream.write(("firstName,lastName,certificationName,earnDate,periodicDue,currencyExpiration,lastSat\n" +
+        "FIRST?,LAST,TITLE,09/22/2018,09/22/2019,09/22/2018,09/22/2018\n" +
+        "FIRST,LAST?,TITLE,09/22/2018,09/22/2019,09/22/2018,09/22/2018\n" +
+        "FIRST,LAST,TITLE?,09/22/2018,09/22/2019,09/22/2018,09/22/2018\n" +
+        "FIRST,LAST,TITLE,09/22/2018?,09/22/2019,09/22/2018,09/22/2018\n" +
+        "FIRST,LAST,TITLE,09/22/2018,09/22/2019?,09/22/2018,09/22/2018").getBytes());
     }
 
     final int count = airmanRepository.findOne(airman.getId()).getCertifications().size();
@@ -309,8 +309,8 @@ public class UploadControllerTest extends BaseIntegrationTest {
   public void testAttachCertificationsCSV_handlesBadHeaders() throws IOException {
     final File file = File.createTempFile("test", "csv");
     try (final FileOutputStream stream = new FileOutputStream(file)) {
-      stream.write(("firstName?,lastName?,certificationName?,earnDate?,expirationDate?\n" +
-        "FIRST,LAST,TITLE,09/22/2018,09/22/2019").getBytes());
+      stream.write(("firstName?,lastName?,certificationName?,earnDate?,periodicDue,currencyExpiration,lastSat?\n" +
+        "FIRST,LAST,TITLE,09/22/2018,09/22/2019,09/22/2018").getBytes());
     }
 
     final long count = certificationRepository.count();
@@ -332,7 +332,7 @@ public class UploadControllerTest extends BaseIntegrationTest {
       .asString();
     // @formatter:on
 
-    assertThat(message).isEqualTo("Upload was unsuccessful. Header is missing required fields [LASTNAME,EARNDATE,CERTIFICATIONNAME,FIRSTNAME,EXPIRATIONDATE]");
+    assertThat(message).isEqualTo("Upload was unsuccessful. Header is missing required fields [LASTNAME,EARNDATE,CERTIFICATIONNAME,FIRSTNAME,LASTSAT]");
     assertThat(certificationRepository.count()).isEqualTo(count);
   }
 
@@ -340,8 +340,8 @@ public class UploadControllerTest extends BaseIntegrationTest {
   public void testAttachCertificationsCSV_handlesBadRows() throws IOException {
     final File file = File.createTempFile("test", "csv");
     try (final FileOutputStream stream = new FileOutputStream(file)) {
-      stream.write(("firstName,lastName,certificationName,earnDate,expirationDate\n" +
-        "FIRST,LAST,TITLE,09/22/2018").getBytes());
+      stream.write(("firstName,lastName,certificationName,earnDate,periodicDue,currencyExpiration,lastSat\n" +
+        "FIRST,LAST,TITLE,09/22/2018,09/22/2018,09/22/2018").getBytes());
     }
 
     final long count = certificationRepository.count();
@@ -365,7 +365,7 @@ public class UploadControllerTest extends BaseIntegrationTest {
 
     assertThat(message).isEqualTo("Upload was unsuccessful.\n" +
       "The following required fields were not present for one record of the input: " +
-      "expirationDate at line 1.");
+      "lastSat at line 1.");
     assertThat(certificationRepository.count()).isEqualTo(count);
   }
 
@@ -373,12 +373,12 @@ public class UploadControllerTest extends BaseIntegrationTest {
   public void testAttachQualificationsCSV_handlesNullValues() throws IOException {
     final File file = File.createTempFile("test", "csv");
     try (final FileOutputStream stream = new FileOutputStream(file)) {
-      stream.write(("firstName,lastName,qualificationName,earnDate,expirationDate\n" +
-        "FIRST?,LAST,TITLE,09/22/2018,09/22/2019\n" +
-        "FIRST,LAST?,TITLE,09/22/2018,09/22/2019\n" +
-        "FIRST,LAST,TITLE?,09/22/2018,09/22/2019\n" +
-        "FIRST,LAST,TITLE,09/22/2018?,09/22/2019\n" +
-        "FIRST,LAST,TITLE,09/22/2018,09/22/2019?").getBytes());
+      stream.write(("firstName,lastName,qualificationName,earnDate,periodicDue,currencyExpiration,lastSat\n" +
+        "FIRST?,LAST,TITLE,09/22/2018,09/22/2019,09/22/2019,09/22/2019\n" +
+        "FIRST,LAST?,TITLE,09/22/2018,09/22/2019,09/22/2019,09/22/2019\n" +
+        "FIRST,LAST,TITLE?,09/22/2018,09/22/2019,09/22/2019,09/22/2019\n" +
+        "FIRST,LAST,TITLE,09/22/2018?,09/22/2019,09/22/2019,09/22/2019\n" +
+        "FIRST,LAST,TITLE,09/22/2018,09/22/2019?,09/22/2019,09/22/2019").getBytes());
     }
 
     final int count = airmanRepository.findOne(airman.getId()).getQualifications().size();
@@ -412,8 +412,8 @@ public class UploadControllerTest extends BaseIntegrationTest {
   public void testAttachQualificationsCSV_handlesBadHeaders() throws IOException {
     final File file = File.createTempFile("test", "csv");
     try (final FileOutputStream stream = new FileOutputStream(file)) {
-      stream.write(("firstName?,lastName?,qualificationName?,earnDate?,expirationDate?\n" +
-        "FIRST,LAST,TITLE,09/22/2018,09/22/2019").getBytes());
+      stream.write(("firstName?,lastName?,qualificationName?,earnDate?,periodicDue,currencyExpiration,lastSat?\n" +
+        "FIRST,LAST,TITLE,09/22/2018,09/22/2019,09/22/2019").getBytes());
     }
 
     final long count = qualificationRepository.count();
@@ -435,7 +435,7 @@ public class UploadControllerTest extends BaseIntegrationTest {
       .asString();
     // @formatter:on
 
-    assertThat(message).isEqualTo("Upload was unsuccessful. Header is missing required fields [LASTNAME,EARNDATE,QUALIFICATIONNAME,FIRSTNAME,EXPIRATIONDATE]");
+    assertThat(message).isEqualTo("Upload was unsuccessful. Header is missing required fields [LASTNAME,EARNDATE,QUALIFICATIONNAME,FIRSTNAME,LASTSAT]");
     assertThat(qualificationRepository.count()).isEqualTo(count);
   }
 
@@ -443,8 +443,8 @@ public class UploadControllerTest extends BaseIntegrationTest {
   public void testAttachQualificationsCSV_handlesBadRows() throws IOException {
     final File file = File.createTempFile("test", "csv");
     try (final FileOutputStream stream = new FileOutputStream(file)) {
-      stream.write(("firstName,lastName,qualificationName,earnDate,expirationDate\n" +
-        "FIRST,LAST,TITLE,09/22/2018").getBytes());
+      stream.write(("firstName,lastName,qualificationName,earnDate,periodicDue,currencyExpiration,lastSat\n" +
+        "FIRST,LAST,TITLE,09/22/2018,09/22/2018,09/22/2018").getBytes());
     }
 
     final long count = qualificationRepository.count();
@@ -468,7 +468,7 @@ public class UploadControllerTest extends BaseIntegrationTest {
 
     assertThat(message).isEqualTo("Upload was unsuccessful.\n" +
       "The following required fields were not present for one record of the input: " +
-      "expirationDate at line 1.");
+      "lastSat at line 1.");
     assertThat(qualificationRepository.count()).isEqualTo(count);
   }
 }

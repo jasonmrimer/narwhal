@@ -21,7 +21,7 @@ describe('SkillTile', () => {
   });
 
   it('should render the still title and expiration date', () => {
-    const expirationDate = timeToExpire(skill.expirationDate);
+    const expirationDate = timeToExpire(skill.periodicDue);
 
     expect(subject.text()).toContain(skill.title);
     expect(subject.text()).toContain(`${expirationDate}`);
@@ -35,12 +35,14 @@ describe('SkillTile', () => {
       airmanId: skill.airmanId,
       skillId: skill.qualification.id,
       earnDate: skill.earnDate,
-      expirationDate: skill.expirationDate
+      periodicDue: skill.periodicDue,
+      currencyExpiration: skill.currencyExpiration,
+      lastSat: skill.lastSat,
     });
   });
 
   it('renders an expiration alert when skill is expired', () => {
-    skill.expirationDate = moment();
+    skill.periodicDue = moment();
     subject.setProps({skill: skill});
     expect(subject.find(StyledExpirationSleeve).exists()).toBeTruthy();
   });

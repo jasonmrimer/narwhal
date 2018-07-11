@@ -11,7 +11,9 @@ interface State {
   skillType: string;
   skillId: string;
   earnDate: string;
-  expirationDate: string;
+  periodicDue: string;
+  currencyExpiration: string;
+  lastSat: string;
 }
 
 export class SkillFormStore extends FormStore<Skill, State> {
@@ -25,7 +27,9 @@ export class SkillFormStore extends FormStore<Skill, State> {
       skillType: '',
       skillId: '',
       earnDate: '',
-      expirationDate: '',
+      periodicDue: '',
+      currencyExpiration: '',
+      lastSat: '',
     };
   }
 
@@ -54,7 +58,9 @@ export class SkillFormStore extends FormStore<Skill, State> {
       skillType: model.type,
       skillId: String(model.skillId),
       earnDate: model.earnDate.format('YYYY-MM-DD'),
-      expirationDate: model.expirationDate.format('YYYY-MM-DD'),
+      periodicDue: model.periodicDue.format('YYYY-MM-DD'),
+      currencyExpiration: model.currencyExpiration.format('YYYY-MM-DD'),
+      lastSat: model.lastSat.format('YYYY-MM-DD'),
     };
   }
 
@@ -64,7 +70,9 @@ export class SkillFormStore extends FormStore<Skill, State> {
       skillType: SkillType.Qualification,
       skillId: options.length > 0 ? String(options[0].value) : '',
       earnDate: '',
-      expirationDate: '',
+      periodicDue: '',
+      currencyExpiration: '',
+      lastSat: '',
     };
   }
 
@@ -74,7 +82,9 @@ export class SkillFormStore extends FormStore<Skill, State> {
       airmanId: airmanId,
       skillId: Number(this._state.skillId),
       earnDate: moment(this._state.earnDate),
-      expirationDate: moment(this._state.expirationDate),
+      periodicDue: moment(this._state.periodicDue),
+      currencyExpiration: moment(this._state.currencyExpiration),
+      lastSat: moment(this._state.lastSat),
       id: this.model ? this.model.id : null,
     };
   }
@@ -101,12 +111,12 @@ export class SkillFormStore extends FormStore<Skill, State> {
   }
 
   private setExpirationDate(value: string) {
-    const expirationDate = (this._state.skillType === SkillType.Qualification) ?
+    const periodicDue = (this._state.skillType === SkillType.Qualification) ?
       moment(value).startOf('day').add(2, 'y') :
       moment(value).startOf('day').add(90, 'd');
 
-    if (expirationDate.isValid()) {
-      super.setState('expirationDate', expirationDate.format('YYYY-MM-DD'));
+    if (periodicDue.isValid()) {
+      super.setState('periodicDue', periodicDue.format('YYYY-MM-DD'));
     }
   }
 }

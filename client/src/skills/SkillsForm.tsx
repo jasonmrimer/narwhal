@@ -92,18 +92,42 @@ export class SkillsForm extends React.Component<Props> {
             </StyledFormRow>
           </StyledFieldValidation>
 
-          <StyledFieldValidation fieldName="expirationDate" errors={skillFormStore!.errors}>
+          <StyledFieldValidation fieldName="periodicDate" errors={skillFormStore!.errors}>
             <StyledFormRow>
-              <label htmlFor="expiration-date">Expiration Date:</label>
+              <label htmlFor="periodic-due">Periodic Due:</label>
               <StyledDatePicker
-                id="expiration-date"
-                value={skillFormStore!.state.expirationDate}
+                id="periodic-due"
+                value={skillFormStore!.state.periodicDue}
                 onChange={this.handleChange}
-                name="expirationDate"
+                name="periodicDue"
               />
             </StyledFormRow>
           </StyledFieldValidation>
         </StyledFieldValidation>
+
+          <StyledFieldValidation fieldName="currencyExpiration" errors={skillFormStore!.errors}>
+              <StyledFormRow>
+                  <label htmlFor="currency-expiration">Currency Expiration:</label>
+                  <StyledDatePicker
+                      id="currency-expiration"
+                      value={skillFormStore!.state.currencyExpiration}
+                      onChange={this.handleChange}
+                      name="currencyExpiration"
+                  />
+              </StyledFormRow>
+          </StyledFieldValidation>
+
+          <StyledFieldValidation fieldName="lastSat" errors={skillFormStore!.errors}>
+              <StyledFormRow>
+                  <label htmlFor="last-sat">Last Sat:</label>
+                  <StyledDatePicker
+                      id="last-sat"
+                      value={skillFormStore!.state.lastSat}
+                      onChange={this.handleChange}
+                      name="lastSat"
+                  />
+              </StyledFormRow>
+          </StyledFieldValidation>
 
         <StyledFormRow reversed={true}>
           <StyledSubmitButton text="CONFIRM"/>

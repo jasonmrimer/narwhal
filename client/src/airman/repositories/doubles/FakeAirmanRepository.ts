@@ -50,9 +50,19 @@ export class FakeAirmanRepository implements AirmanRepository {
       errors[earnDate] = 'This field is required.';
     }
 
-    if (!skill.expirationDate.isValid()) {
-      const expirationDate = 'expirationDate';
-      errors[expirationDate] = 'This field is required.';
+    if (!skill.periodicDue.isValid()) {
+      const periodicDue = 'periodicDue';
+      errors[periodicDue] = 'This field is required.';
+    }
+
+    if (!skill.currencyExpiration.isValid()) {
+      const currencyExpiration = 'currencyExpiration';
+      errors[currencyExpiration] = 'This field is required.';
+    }
+
+    if (!skill.lastSat.isValid()) {
+      const lastSat = 'lastSat';
+      errors[lastSat] = 'This field is required.';
     }
 
     if (Object.keys(errors).length > 0) {
@@ -65,7 +75,9 @@ export class FakeAirmanRepository implements AirmanRepository {
         airman.id,
         new QualificationModel(skill.skillId, 'A', 'A'),
         skill.earnDate,
-        skill.expirationDate
+        skill.periodicDue,
+        skill.currencyExpiration,
+        skill.lastSat
       );
       this.save(airman.qualifications, aq);
     } else {
@@ -73,7 +85,9 @@ export class FakeAirmanRepository implements AirmanRepository {
         airman.id,
         new CertificationModel(skill.skillId, 'A', 1),
         skill.earnDate,
-        skill.expirationDate
+        skill.periodicDue,
+        skill.currencyExpiration,
+        skill.lastSat
       );
       this.save(airman.certifications, ac);
     }

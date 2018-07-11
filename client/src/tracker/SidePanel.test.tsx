@@ -26,7 +26,9 @@ describe('SidePanel', () => {
       airman.id,
       CertificationModelFactory.build(1, 1),
       moment(),
-      moment().subtract(3, 'year')
+      moment().subtract(3, 'year'),
+      moment().subtract(4, 'year'),
+      moment().subtract(5, 'year')
     );
     airman.certifications.push(certification);
     trackerStore = new TrackerStore(DoubleRepositories);

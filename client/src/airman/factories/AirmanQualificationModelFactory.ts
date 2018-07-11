@@ -9,6 +9,8 @@ export class AirmanQualificationModelFactory {
       new QualificationModel(id, `${id}`, `${id}`),
       moment().add(id, 'days'),
       moment().add(id, 'days'),
+      moment(0).add(id, 'days'),
+      moment(0).add(id, 'days'),
       1
     );
   }

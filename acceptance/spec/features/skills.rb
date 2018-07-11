@@ -112,6 +112,10 @@ class Skill
     page.all('.DateInput_input')[0].set(@earn.strftime('%m/%d/%Y'))
     page.all('.DateInput_input')[1].set('')
     page.all('.DateInput_input')[1].set(@expiration.strftime('%m/%d/%Y'))
+    page.all('.DateInput_input')[2].set('')
+    page.all('.DateInput_input')[2].set(@expiration.strftime('%m/%d/%Y'))
+    page.all('.DateInput_input')[3].set('')
+    page.all('.DateInput_input')[3].set(@expiration.strftime('%m/%d/%Y'))
     find('input[type="submit"]').click
   end
 

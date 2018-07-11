@@ -53,7 +53,9 @@ export function airmanRepositoryContract(subject: AirmanRepository) {
         airmanId: airmen[0].id,
         skillId: certId,
         earnDate: moment(),
-        expirationDate: moment()
+        periodicDue: moment(),
+        currencyExpiration: moment(),
+        lastSat: moment()
       });
       expect(airman.certifications.find(c => c.certification.id === certId)!.id).toBeDefined();
     });
@@ -66,11 +68,15 @@ export function airmanRepositoryContract(subject: AirmanRepository) {
         airmanId: airmen[0].id,
         skillId: certId,
         earnDate: moment(),
-        expirationDate: moment()
+        periodicDue: moment(),
+        currencyExpiration: moment(),
+        lastSat: moment()
       });
 
       const savedCert = airman.certifications.find(c => c.certification.id === certId)!;
-      const newExpirationDate = savedCert.expirationDate.add(1, 'year');
+      const newPeriodicDue = savedCert.periodicDue.add(1, 'year');
+      const newCurrencyExpiration = savedCert.currencyExpiration.add(1, 'year');
+      const newLastSat = savedCert.lastSat.add(1, 'year');
 
       airman = await subject.saveSkill({
         id: savedCert.id,
@@ -78,12 +84,24 @@ export function airmanRepositoryContract(subject: AirmanRepository) {
         airmanId: airmen[0].id,
         skillId: certId,
         earnDate: savedCert.earnDate,
-        expirationDate: newExpirationDate
+        periodicDue: newPeriodicDue,
+        currencyExpiration: newCurrencyExpiration,
+        lastSat: newLastSat
       });
 
       expect(airman.certifications
         .find(c => c.certification.id === certId)!
-        .expirationDate.isSame(newExpirationDate))
+        .periodicDue.isSame(newPeriodicDue))
+        .toBeTruthy();
+
+      expect(airman.certifications
+        .find(c => c.certification.id === certId)!
+        .currencyExpiration.isSame(newCurrencyExpiration))
+        .toBeTruthy();
+
+      expect(airman.certifications
+        .find(c => c.certification.id === certId)!
+        .lastSat.isSame(newLastSat))
         .toBeTruthy();
     });
 
@@ -95,7 +113,9 @@ export function airmanRepositoryContract(subject: AirmanRepository) {
         airmanId: airmen[0].id,
         skillId: qualId,
         earnDate: moment(),
-        expirationDate: moment()
+        periodicDue: moment(),
+        currencyExpiration: moment(),
+        lastSat: moment()
       });
       expect(airman.qualifications.find(q => q.qualification.id === qualId)!.id).toBeDefined();
     });
@@ -108,11 +128,15 @@ export function airmanRepositoryContract(subject: AirmanRepository) {
         airmanId: airmen[0].id,
         skillId: qualId,
         earnDate: moment(),
-        expirationDate: moment()
+        periodicDue: moment(),
+        currencyExpiration: moment(),
+        lastSat: moment()
       });
 
       const savedQual = airman.qualifications.find(q => q.qualification.id === qualId)!;
-      const newExpirationDate = savedQual.expirationDate.add(1, 'year');
+      const newPeriodicDue = savedQual.periodicDue.add(1, 'year');
+      const newCurrencyExpiration = savedQual.currencyExpiration.add(1, 'year');
+      const newLastSat = savedQual.lastSat.add(1, 'year');
 
       airman = await subject.saveSkill({
         id: savedQual.id,
@@ -120,12 +144,24 @@ export function airmanRepositoryContract(subject: AirmanRepository) {
         airmanId: airmen[0].id,
         skillId: qualId,
         earnDate: savedQual.earnDate,
-        expirationDate: newExpirationDate
+        periodicDue: newPeriodicDue,
+        currencyExpiration: newCurrencyExpiration,
+        lastSat: newLastSat
       });
 
       expect(airman.qualifications
         .find(q => q.qualification.id === qualId)!
-        .expirationDate.isSame(newExpirationDate))
+        .periodicDue.isSame(newPeriodicDue))
+        .toBeTruthy();
+
+      expect(airman.qualifications
+        .find(q => q.qualification.id === qualId)!
+        .currencyExpiration.isSame(newCurrencyExpiration))
+        .toBeTruthy();
+
+      expect(airman.qualifications
+        .find(q => q.qualification.id === qualId)!
+        .lastSat.isSame(newLastSat))
         .toBeTruthy();
     });
 
@@ -141,7 +177,12 @@ export function airmanRepositoryContract(subject: AirmanRepository) {
     describe('validation', () => {
       it('correctly handles validations from the server', async () => {
         const qualId = 5;
-        const errors = {earnDate: 'This field is required.', expirationDate: 'This field is required.'};
+        const errors =  {
+          "currencyExpiration": "This field is required.",
+          "earnDate": "This field is required.",
+          "lastSat": "This field is required.",
+          "periodicDue": "This field is required."
+        };
 
         try {
           await subject.saveSkill({
@@ -150,7 +191,9 @@ export function airmanRepositoryContract(subject: AirmanRepository) {
             airmanId: airmen[0].id,
             skillId: qualId,
             earnDate: moment.invalid(),
-            expirationDate: moment.invalid()
+            periodicDue: moment.invalid(),
+            currencyExpiration: moment.invalid(),
+            lastSat: moment.invalid()
           });
         } catch (e) {
           expect(e).toEqual(errors);
@@ -169,7 +212,9 @@ export function airmanRepositoryContract(subject: AirmanRepository) {
         airmanId: airmen[0].id,
         skillId: 1,
         earnDate: moment(),
-        expirationDate: moment()
+        periodicDue: moment(),
+        currencyExpiration: moment(),
+        lastSat: moment()
       });
       const savedSkill = airman.qualifications.find(q => q.skillId === 1)!;
 
@@ -179,7 +224,9 @@ export function airmanRepositoryContract(subject: AirmanRepository) {
         airmanId: airmen[0].id,
         skillId: 1,
         earnDate: savedSkill.earnDate,
-        expirationDate: savedSkill.expirationDate
+        periodicDue: savedSkill.periodicDue,
+        currencyExpiration: savedSkill.currencyExpiration,
+        lastSat: savedSkill.lastSat
       });
       expect(updatedAirman.qualifications.find(q => q.id === savedSkill.id)).toBeUndefined();
     });
@@ -191,7 +238,9 @@ export function airmanRepositoryContract(subject: AirmanRepository) {
         airmanId: airmen[0].id,
         skillId: 4,
         earnDate: moment(),
-        expirationDate: moment()
+        periodicDue: moment(),
+        currencyExpiration: moment(),
+        lastSat: moment()
       });
       const savedSkill = airman.certifications.find(c => c.skillId === 4)!;
 
@@ -201,7 +250,9 @@ export function airmanRepositoryContract(subject: AirmanRepository) {
         airmanId: airmen[0].id,
         skillId: 4,
         earnDate: savedSkill.earnDate,
-        expirationDate: savedSkill.expirationDate
+        periodicDue: savedSkill.periodicDue,
+        currencyExpiration: savedSkill.currencyExpiration,
+        lastSat: savedSkill.lastSat
       });
       expect(updatedAirman.certifications.find(c => c.id === savedSkill.id)).toBeUndefined();
     });

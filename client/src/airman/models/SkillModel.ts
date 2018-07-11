@@ -2,5 +2,7 @@ import { Moment } from 'moment';
 
 export interface SkillModel {
   displayText: string;
-  expirationDate: Moment;
+  periodicDue: Moment;
+  currencyExpiration: Moment;
+  lastSat: Moment;
 }

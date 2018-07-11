@@ -7,5 +7,7 @@ export interface Skill {
   airmanId: number;
   skillId: number;
   earnDate: Moment;
-  expirationDate: Moment;
+  periodicDue: Moment;
+  currencyExpiration: Moment;
+  lastSat: Moment;
 }

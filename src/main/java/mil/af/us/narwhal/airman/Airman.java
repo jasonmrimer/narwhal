@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@SuppressWarnings("Duplicates")
 @Entity
 @Data
 @NoArgsConstructor
@@ -132,23 +133,31 @@ public class Airman {
     return true;
   }
 
-  public void updateCertification(long id, Instant earnDate, Instant expirationDate) {
-    certifications.stream()
-      .filter(cert -> cert.getId().equals(id))
-      .findFirst()
-      .ifPresent(cert -> {
-        cert.setEarnDate(earnDate);
-        cert.setExpirationDate(expirationDate);
-      });
+  public void updateCertification(
+    long id,
+    Instant earnDate,
+    Instant periodicDue,
+    Instant currencyExpiration,
+    Instant lastSat
+  ) {
+    updateSkill(id, earnDate, periodicDue, currencyExpiration, lastSat);
   }
 
-  public void updateQualification(long id, Instant earnDate, Instant expirationDate) {
+  public void updateQualification(
+    long id,
+    Instant earnDate,
+    Instant periodicDue,
+    Instant currencyExpiration,
+    Instant lastSat
+  ) {
     qualifications.stream()
       .filter(qual -> qual.getId().equals(id))
       .findFirst()
       .ifPresent(qual -> {
         qual.setEarnDate(earnDate);
-        qual.setExpirationDate(expirationDate);
+        qual.setPeriodicDue(periodicDue);
+        qual.setCurrencyExpiration(currencyExpiration);
+        qual.setLastSat(lastSat);
       });
   }
 
@@ -168,5 +177,17 @@ public class Airman {
 
     schedule.setAirman(this);
     this.schedules.add(schedule);
+  }
+
+  private void updateSkill(long id, Instant earnDate, Instant periodicDue, Instant currencyExpiration, Instant lastSat) {
+    certifications.stream()
+      .filter(cert -> cert.getId().equals(id))
+      .findFirst()
+      .ifPresent(cert -> {
+        cert.setEarnDate(earnDate);
+        cert.setPeriodicDue(periodicDue);
+        cert.setCurrencyExpiration(currencyExpiration);
+        cert.setLastSat(lastSat);
+      });
   }
 }

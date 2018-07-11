@@ -23,7 +23,9 @@ const convertToSkill = (skill: AirmanQualificationModel | AirmanCertificationMod
       airmanId: skill.airmanId,
       skillId: skill.qualification.id,
       earnDate: skill.earnDate,
-      expirationDate: skill.expirationDate
+      periodicDue: skill.periodicDue,
+      currencyExpiration: skill.currencyExpiration,
+      lastSat: skill.lastSat,
     };
   } else {
     return {
@@ -32,7 +34,9 @@ const convertToSkill = (skill: AirmanQualificationModel | AirmanCertificationMod
       airmanId: skill.airmanId,
       skillId: skill.certification.id,
       earnDate: skill.earnDate,
-      expirationDate: skill.expirationDate
+      periodicDue: skill.periodicDue,
+      currencyExpiration: skill.currencyExpiration,
+      lastSat: skill.lastSat,
     };
   }
 };
@@ -58,7 +62,7 @@ export const SkillTile = (props: Props) => {
         <span>{skill.title}</span>
         {skill.isExpired && <StyledExpirationSleeve/>}
       </div>
-      <div className="currency-description">{timeToExpire(skill.expirationDate)}.</div>
+      <div className="currency-description">{timeToExpire(skill.periodicDue)}.</div>
     </div>
   );
 };

@@ -9,6 +9,8 @@ export class AirmanCertificationModelFactory {
       new CertificationModel(id, `${id}`, siteId),
       moment(0).add(id, 'days'),
       moment(0).add(id, 'days'),
+      moment(0).add(id, 'days'),
+      moment(0).add(id, 'days'),
       1
     );
   }
