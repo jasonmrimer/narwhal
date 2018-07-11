@@ -48,6 +48,7 @@ public class Mission {
   private Site site;
 
   @OneToMany(mappedBy = "mission", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OrderBy(value = "order_int asc")
   @JsonIgnore
   private List<CrewPosition> crewPositions = new ArrayList<>();
 
@@ -109,6 +110,7 @@ public class Mission {
 
   public Event toEvent(Long airmanId) {
     Optional<Airman> optionalAirman = this.crewPositions.stream()
+      .filter(c -> c.getAirman() != null)
       .map(CrewPosition::getAirman)
       .filter(a -> a.getId().equals(airmanId))
       .findFirst();

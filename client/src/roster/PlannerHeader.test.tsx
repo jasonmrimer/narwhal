@@ -18,7 +18,7 @@ describe('PlannerHeader', () => {
 
     plannerActions = {
       refreshPlannerEventData: jest.fn
-    }
+    };
 
     subject = shallow(<PlannerHeader plannerStore={plannerStore} plannerActions={plannerActions}/>);
   });

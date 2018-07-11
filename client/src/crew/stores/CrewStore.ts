@@ -25,18 +25,6 @@ export class CrewStore {
 
   hydrate(c: CrewModel, airmen: AirmanModel[]) {
     this._crew = c;
-    if (this._crew != null) {
-      this._crew.crewPositions = this._crew.crewPositions.sort((a, b) => {
-        if (a.order < b.order) {
-          return -1;
-        }
-        if (a.order > b.order) {
-          return 1;
-        }
-        return 0;
-      });
-    }
-
     this._airmen = airmen;
   }
 

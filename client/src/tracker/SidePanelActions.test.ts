@@ -2,7 +2,7 @@ import { SidePanelActions } from './SidePanelActions';
 import { TabType } from './stores/SidePanelStore';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 import * as moment from 'moment';
-import { historyMock } from "../utils/testUtils";
+import { historyMock } from '../utils/testUtils';
 
 describe('SidePanelActions', () => {
   let subject: SidePanelActions;

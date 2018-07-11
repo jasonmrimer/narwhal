@@ -6,7 +6,7 @@ import { StyledRosterSubHeaderRow } from '../widgets/RosterSubHeaderRow';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 import { AirmanModel } from '../airman/models/AirmanModel';
 import { MissionPlannerActions } from './MissionPlannerActions';
-import { MissionPlannerRosterRow, StyledMissionPlannerRosterRow } from './MissionPlannerRosterRow';
+import { StyledMissionPlannerRosterRow } from './MissionPlannerRosterRow';
 import { StyledNotification } from '../widgets/Notification';
 import { EmptyNotification } from './models/MissionPlannerRosterList';
 import { MemoryRouter } from 'react-router';
@@ -30,7 +30,8 @@ describe('MissionPlannerRoster', () => {
     missionPlannerStore = {
       availableAirmen: [airman],
       unavailableAirmen: [crew.crewPositions[0].airman],
-      refreshAllEvents: jest.fn()
+      refreshAllEvents: jest.fn(),
+      performLoading: jest.fn()
     };
 
     skillsFieldStore = {
@@ -41,7 +42,8 @@ describe('MissionPlannerRoster', () => {
     crewStore = {
       crew: crew,
       setNewEntry: jest.fn(),
-      save: jest.fn()
+      save: jest.fn(),
+      hasAirman: jest.fn()
     };
 
     locationFilterStore = {
@@ -111,16 +113,6 @@ describe('MissionPlannerRoster', () => {
 
   it('should call CrewStore set new entry when one clicks on an airman row', () => {
     subject.find('.airman-row').at(0).simulate('click');
-    expect(crewStore.setNewEntry).toHaveBeenCalledWith({airmanName: `${airman.lastName}, ${airman.firstName}`});
-  });
-
-  it('should call CrewStore save when one clicks on an airman row', () => {
-    subject.find('.airman-row').at(0).simulate('click');
-    expect(crewStore.save).toHaveBeenCalled();
-  });
-
-  it('should not be able to click on an airman assigned to the crew', () => {
-    const assignedAirmanRow = subject.find(MissionPlannerRosterRow).at(1);
-    expect(assignedAirmanRow.prop('onCrew')).toBeTruthy();
+    expect(missionPlannerStore.performLoading).toHaveBeenCalled();
   });
 });

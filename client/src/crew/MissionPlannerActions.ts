@@ -12,21 +12,28 @@ export class MissionPlannerActions {
 
   submit = async () => {
     const {missionPlannerStore, locationFilterStore, crewStore} = this.stores;
-    await crewStore!.save();
-    await missionPlannerStore!.refreshAllEvents(locationFilterStore!.selectedSiteId);
+    await missionPlannerStore!.performLoading(async () => {
+      await crewStore!.save();
+      await missionPlannerStore!.refreshAllEvents(locationFilterStore!.selectedSiteId);
+    });
   }
 
   submitAndPrint = async () => {
-    await this.submit();
-    (window as any).print();
+    const {missionPlannerStore} = this.stores;
+    await missionPlannerStore!.performLoading(async () => {
+      await this.submit();
+      (window as any).print();
+    });
   }
 
   addAirman = async (airman: AirmanModel) => {
-    const {crewStore} = this.stores;
+    const {crewStore, missionPlannerStore} = this.stores;
     if (crewStore!.hasAirman(airman)) {
       return;
     }
-    crewStore!.setNewEntry({airmanName: `${airman.lastName}, ${airman.firstName}`});
-    await this.submit();
+    await missionPlannerStore!.performLoading(async () => {
+      crewStore!.setNewEntry({airmanName: `${airman.lastName}, ${airman.firstName}`});
+      await this.submit();
+    });
   }
 }
