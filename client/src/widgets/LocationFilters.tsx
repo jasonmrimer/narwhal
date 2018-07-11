@@ -1,11 +1,9 @@
 import * as React from 'react';
-import { StyledDropdown } from './inputs/Dropdown';
-import { TopLevelFilter } from './inputs/Filter';
 import styled from 'styled-components';
-import { caret } from '../utils/StyleUtils';
 import * as classNames from 'classnames';
 import { inject, observer } from 'mobx-react';
 import { LocationFilterStore } from './stores/LocationFilterStore';
+import { StyledSingleTypeahead } from './inputs/SingleTypeahead';
 
 interface Props {
   locationFilterStore?: LocationFilterStore;
@@ -17,12 +15,12 @@ export const LocationFilters = observer((props: Props) => {
   const {locationFilterStore} = props;
   const {
     siteOptions,
-    selectedSiteId,
+    selectedSiteOption,
     setSelectedSite,
-    selectedSquadronId,
+    selectedSquadronOption,
     setSelectedSquadron,
     squadronOptions,
-    selectedFlightId,
+    selectedFlightOption,
     setSelectedFlight,
     flightOptions
   } = locationFilterStore!;
@@ -32,35 +30,47 @@ export const LocationFilters = observer((props: Props) => {
       <div id="site-filter-container">
         <label htmlFor="site-filter">SITE</label>
         <br/>
-        <StyledDropdown
-          id="site-filter"
-          name="siteId"
+        <StyledSingleTypeahead
           options={siteOptions}
-          value={selectedSiteId}
-          onChange={async (e: any) => {
-            setSelectedSite(Number(e.target.value));
-            await props.refreshAirmen();
+          onChange={async (e) => {
+            await locationFilterStore!.performLoading(async () => {
+              setSelectedSite(e === null ? null : Number(e.value));
+              await props.refreshAirmen();
+            });
           }}
+          clearButton={true}
+          className="site-filter"
+          selected={selectedSiteOption}
+          placeholder="Select Site"
         />
       </div>
-      <TopLevelFilter
-        id="squadron-filter"
-        label="SQUADRON"
-        unfilteredOptionLabel="All Squadrons"
-        value={selectedSquadronId}
-        callback={setSelectedSquadron}
-        options={squadronOptions}
-        notification="Please select a site first."
-      />
-      <TopLevelFilter
-        id="flight-filter"
-        label="FLIGHT"
-        unfilteredOptionLabel="All Flights"
-        value={selectedFlightId}
-        callback={setSelectedFlight}
-        options={flightOptions}
-        notification="Please select a squadron first."
-      />
+      <div id="site-filter-container">
+        <label htmlFor="squadron-filter">SQUADRON</label>
+        <br/>
+        <StyledSingleTypeahead
+          options={squadronOptions}
+          onChange={(e) => {
+            setSelectedSquadron(e === null ? null : Number(e.value));
+          }}
+          clearButton={true}
+          className="squadron-filter"
+          selected={selectedSquadronOption}
+          placeholder="All Squadrons"
+        />
+      </div>
+      <div id="site-filter-container">
+        <label htmlFor="flight-filter">FLIGHT</label>
+        <StyledSingleTypeahead
+          options={flightOptions}
+          onChange={(e) => {
+            setSelectedFlight(e === null ? null : Number(e.value));
+          }}
+          clearButton={true}
+          className="flight-filter"
+          selected={selectedFlightOption}
+          placeholder="All Flights"
+        />
+      </div>
     </div>
   );
 });
@@ -87,7 +97,6 @@ export const StyledLocationFilters = inject('locationFilterStore')(styled(Locati
 
     &:after {
       content: ' ';
-      background: ${props => caret(false)};
       right: 0;
       height: 14px;
       width: 20px;
@@ -97,7 +106,7 @@ export const StyledLocationFilters = inject('locationFilterStore')(styled(Locati
     }
   }
   
-  #site-filter {
+  .site-filter {
     background: transparent;
     display: block;
     width: 100%;
@@ -107,7 +116,6 @@ export const StyledLocationFilters = inject('locationFilterStore')(styled(Locati
     font-size: 1rem;
     font-weight: 300;
     border: none;
-    border-bottom: 1px solid ${props => props.theme.purpleSteel};
     color: ${props => props.theme.fontColor};
     border-radius: 0;
     cursor: pointer;

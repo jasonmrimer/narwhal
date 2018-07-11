@@ -9,7 +9,7 @@ export class RosterHeaderStore {
   private _siteId: number = UnfilteredValue;
   @observable private _selectedCertificationOptions: FilterOption[] = [];
   @observable private _selectedQualificationOptions: FilterOption[] = [];
-  @observable private _selectedShift: number = UnfilteredValue;
+  @observable private _selectedShift: FilterOption;
   @observable private _selectedLastName: string = '';
   @observable private _certifications: CertificationModel[] = [];
   @observable private _qualifications: QualificationModel[] = [];
@@ -63,8 +63,8 @@ export class RosterHeaderStore {
   }
 
   @action.bound
-  setSelectedShift(shift: number) {
-    this._selectedShift = shift;
+  setSelectedShift = (e: FilterOption) => {
+    this._selectedShift = e;
   }
 
   get shiftOptions() {
@@ -92,11 +92,14 @@ export class RosterHeaderStore {
   }
 
   private byShift = (airman: AirmanModel) => {
-    if (this._selectedShift === UnfilteredValue) {
+    if (
+      this._selectedShift === undefined ||
+      this._selectedShift === null
+    ) {
       return true;
     }
 
-    return airman.shift === Object.keys(ShiftType)[this._selectedShift];
+    return airman.shift === Object.keys(ShiftType)[this._selectedShift.value];
   }
 
   private byQualifications = (airman: AirmanModel) => {

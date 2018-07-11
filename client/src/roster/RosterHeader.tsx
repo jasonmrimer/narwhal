@@ -1,15 +1,15 @@
 import * as React from 'react';
-import { RosterLevelFilter } from '../widgets/inputs/Filter';
 import { StyledTextInput } from '../widgets/inputs/TextInput';
 import { StyledMultiTypeahead } from '../widgets/inputs/MultiTypeahead';
 import styled from 'styled-components';
 import * as classNames from 'classnames';
 import { inject, observer } from 'mobx-react';
 import { FilterOption } from '../widgets/inputs/FilterOptionModel';
+import { StyledSingleTypeahead } from '../widgets/inputs/SingleTypeahead';
 
 export interface RosterHeaderStoreContract {
-  selectedShift: number;
-  setSelectedShift: (shift: number) => void;
+  selectedShift: FilterOption;
+  setSelectedShift: (e: FilterOption) => void;
   shiftOptions: FilterOption[];
   selectedLastName: string;
   setSelectedLastName: (e: any) => void;
@@ -47,12 +47,12 @@ export class RosterHeader extends React.Component<Props> {
       <div className={classNames('thead', className)}>
         <span className="shift">
           <div className="header-column-title">SHIFT</div>
-          <RosterLevelFilter
-            id="shift-filter"
-            unfilteredOptionLabel="All"
-            value={selectedShift}
-            callback={setSelectedShift}
+          <StyledSingleTypeahead
             options={shiftOptions}
+            onChange={setSelectedShift}
+            clearButton={true}
+            placeholder="All"
+            selected={selectedShift}
           />
         </span>
         <span>

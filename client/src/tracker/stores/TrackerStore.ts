@@ -11,7 +11,7 @@ export class TrackerStore extends NotificationStore {
   @observable private _airmen: AirmanModel[] = [];
   @observable private _events: EventModel[] = [];
   @observable private _selectedAirman: AirmanModel = AirmanModel.empty();
-  @observable private _siteId: number;
+  @observable private _siteId: number | null = null;
 
   constructor(repositories: Repositories) {
     super();
@@ -74,20 +74,28 @@ export class TrackerStore extends NotificationStore {
   }
 
   @action.bound
-  async refreshAllAirmen(selectedSiteId: number, week: Moment[]) {
+  async refreshAllAirmen(selectedSiteId: number | null, week: Moment[]) {
     this._siteId = selectedSiteId;
-    this._airmen = await  this.repositories.airmanRepository.findBySiteId(this._siteId);
-    await this.refreshEvents(week);
+
+    if (this._siteId === null) {
+      this._airmen = [];
+      this._events = [];
+    } else {
+      this._airmen = await this.repositories.airmanRepository.findBySiteId(this._siteId);
+      await this.refreshEvents(week);
+    }
   }
 
   @action.bound
   async refreshEvents(timeSpan: Moment[]) {
     this._events = await this.repositories.eventRepository
-      .findAllBySiteIdAndWithinPeriod(this._siteId, timeSpan[ 0 ], timeSpan[timeSpan.length - 1]);
+      .findAllBySiteIdAndWithinPeriod(this._siteId!, timeSpan[0], timeSpan[timeSpan.length - 1]);
   }
 
-  async refreshAirmen(siteId: number, airmanId: number) {
-    this._airmen = await this.repositories.airmanRepository.findBySiteId(siteId);
-    this._selectedAirman = this._airmen.find(a => a.id === airmanId) || AirmanModel.empty();
+  async refreshAirmen(siteId: number | null, airmanId: number) {
+    this._airmen = siteId === null ? [] : await this.repositories.airmanRepository.findBySiteId(siteId);
+    this._selectedAirman = siteId === null ?
+      AirmanModel.empty() :
+      this._airmen.find(a => a.id === airmanId) || AirmanModel.empty();
   }
 }
