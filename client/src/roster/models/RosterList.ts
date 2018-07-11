@@ -1,6 +1,5 @@
 import { SquadronModel } from '../../squadron/models/SquadronModel';
 import { AirmanModel } from '../../airman/models/AirmanModel';
-import { UnfilteredValue } from '../../widgets/inputs/FilterOptionModel';
 import { FlightModel } from '../../flight/model/FlightModel';
 
 export type RosterListItem = AirmanModel | FlightModel | string;
@@ -8,8 +7,8 @@ export type RosterListItem = AirmanModel | FlightModel | string;
 export class RosterList {
   readonly list: RosterListItem[] = [];
 
-  constructor(selectedFlightId: number, squadron: SquadronModel | null, airmen: AirmanModel[]) {
-    if (squadron == null || selectedFlightId !== UnfilteredValue) {
+  constructor(selectedFlightId: number | null, squadron: SquadronModel | null, airmen: AirmanModel[]) {
+    if (squadron == null || selectedFlightId !== null) {
       this.list = airmen;
     } else {
       squadron.flights.forEach(flight => {

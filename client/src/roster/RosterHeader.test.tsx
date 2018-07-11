@@ -12,7 +12,7 @@ describe('RosterHeader', () => {
 
     beforeEach(async () => {
       rosterHeaderStore = {
-        selectedShift: -1,
+        selectedShift: {label:'All', value: -1},
         setSelectedShift: jest.fn(),
         shiftOptions: [{label: 'days', value: 0}],
         selectedLastName: '',

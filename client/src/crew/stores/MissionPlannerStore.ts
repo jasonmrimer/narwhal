@@ -40,12 +40,12 @@ export class MissionPlannerStore extends NotificationStore {
       .sort((a, b) => a.lastName.localeCompare(b.lastName));
   }
 
-  async refreshAllAirmen(siteId: number) {
-    this._airmen = await this.repositories.airmanRepository.findBySiteId(siteId);
+  async refreshAllAirmen(siteId: number | null) {
+    this._airmen = siteId === null ? [] : await this.repositories.airmanRepository.findBySiteId(siteId);
   }
 
-  async refreshAllEvents(siteId: number) {
-    this._events = await this.repositories.eventRepository.findAllBySiteIdAndWithinPeriod(
+  async refreshAllEvents(siteId: number | null) {
+    this._events = siteId === null ? [] : await this.repositories.eventRepository.findAllBySiteIdAndWithinPeriod(
       siteId,
       this._mission.startDateTime,
       this._mission.endDateTime || this._mission.startDateTime.clone().add(12, 'hours')
