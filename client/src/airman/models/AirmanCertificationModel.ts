@@ -3,6 +3,7 @@ import { CertificationModel } from '../../skills/certification/models/Certificat
 import { SkillType } from '../../skills/models/SkillType';
 import { Moment } from 'moment';
 import { SkillModel } from './SkillModel';
+import { DaysToExpiration } from './AirmanModel';
 
 export class AirmanCertificationModel implements SkillModel {
   constructor(public airmanId: number,
@@ -29,6 +30,6 @@ export class AirmanCertificationModel implements SkillModel {
   }
 
   get isExpired() {
-    return this.expirationDate.isBefore(moment().add(14, 'days'));
+    return this.expirationDate.isBefore(moment().add(DaysToExpiration, 'days'));
   }
 }

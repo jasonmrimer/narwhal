@@ -2,6 +2,7 @@ import * as moment from 'moment';
 import { Moment } from 'moment';
 import { RipItemModel } from '../../rip-item/models/RipItemModel';
 import { observable } from 'mobx';
+import { DaysToExpiration } from './AirmanModel';
 
 export class AirmanRipItemModel {
   @observable public expirationDate: Moment | null = null;
@@ -15,7 +16,7 @@ export class AirmanRipItemModel {
 
   get isAboutToExpire() {
     if (this.expirationDate) {
-      return this.expirationDate.isBefore(moment().add(14, 'days'));
+      return this.expirationDate.isBefore(moment().add(DaysToExpiration, 'days'));
     }
     return false;
   }

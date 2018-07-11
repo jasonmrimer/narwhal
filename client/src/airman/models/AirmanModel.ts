@@ -97,6 +97,8 @@ export class AirmanModel {
   }
 }
 
+export const DaysToExpiration = 14;
+
 export enum ShiftType {
   Day = 'Day',
   Swing = 'Swing',
