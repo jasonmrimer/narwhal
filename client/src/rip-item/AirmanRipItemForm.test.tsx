@@ -57,7 +57,7 @@ describe('RipItems', () => {
     expect(subject.find(StyledButton).length).toBe(2);
   });
 
-  it('should update the rip items expirationDate', () => {
+  it('should update the rip items periodicDue', () => {
     const expirationDate = moment().startOf('day');
     const modifiedExpirationDate = expirationDate.clone().add(10, 'days');
 
@@ -77,12 +77,12 @@ describe('RipItems', () => {
     expect(ripItemsActions.submit).toHaveBeenCalled();
   });
 
-  it('should update the rip items expirationDate upon clicking the 90 day button', () => {
+  it('should update the rip items periodicDue upon clicking the 90 day button', () => {
     subject.find(StyledButton).at(1).simulate('click');
     expect(ripItemsActions.updateRipItem).toHaveBeenCalled();
   });
 
-  it('should update all the rip items expirationDate upon clicking the update all button', () => {
+  it('should update all the rip items periodicDue upon clicking the update all button', () => {
     subject
       .find(StyledButton)
       .findWhere(btn => btn.prop('text') === 'ALL 90 DAYS')

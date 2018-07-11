@@ -307,7 +307,7 @@ public class AirmanControllerTest extends BaseIntegrationTest {
     .then()
       .statusCode(200)
       .body("qualifications[0].earnDate", equalTo("1970-01-01T00:00:00Z"))
-      .body("qualifications[0].expirationDate", equalTo("1970-01-01T00:00:00Z"));
+      .body("qualifications[0].periodicDue", equalTo("1970-01-01T00:00:00Z"));
     // @formatter:on
   }
 
@@ -344,7 +344,7 @@ public class AirmanControllerTest extends BaseIntegrationTest {
     .then()
       .statusCode(200)
       .body("certifications[0].earnDate", equalTo("1970-01-01T00:00:00Z"))
-      .body("certifications[0].expirationDate", equalTo("1970-01-01T00:00:00Z"));
+      .body("certifications[0].periodicDue", equalTo("1970-01-01T00:00:00Z"));
     // @formatter:on
   }
 

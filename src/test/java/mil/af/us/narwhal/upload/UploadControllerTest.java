@@ -270,7 +270,7 @@ public class UploadControllerTest extends BaseIntegrationTest {
   public void testAttachCertificationsCSV_handlesNullValues() throws IOException {
     final File file = File.createTempFile("test", "csv");
     try (final FileOutputStream stream = new FileOutputStream(file)) {
-      stream.write(("firstName,lastName,certificationName,earnDate,expirationDate\n" +
+      stream.write(("firstName,lastName,certificationName,earnDate,periodicDue\n" +
         "FIRST?,LAST,TITLE,09/22/2018,09/22/2019\n" +
         "FIRST,LAST?,TITLE,09/22/2018,09/22/2019\n" +
         "FIRST,LAST,TITLE?,09/22/2018,09/22/2019\n" +
@@ -309,7 +309,7 @@ public class UploadControllerTest extends BaseIntegrationTest {
   public void testAttachCertificationsCSV_handlesBadHeaders() throws IOException {
     final File file = File.createTempFile("test", "csv");
     try (final FileOutputStream stream = new FileOutputStream(file)) {
-      stream.write(("firstName?,lastName?,certificationName?,earnDate?,expirationDate?\n" +
+      stream.write(("firstName?,lastName?,certificationName?,earnDate?,periodicDue?\n" +
         "FIRST,LAST,TITLE,09/22/2018,09/22/2019").getBytes());
     }
 
@@ -340,7 +340,7 @@ public class UploadControllerTest extends BaseIntegrationTest {
   public void testAttachCertificationsCSV_handlesBadRows() throws IOException {
     final File file = File.createTempFile("test", "csv");
     try (final FileOutputStream stream = new FileOutputStream(file)) {
-      stream.write(("firstName,lastName,certificationName,earnDate,expirationDate\n" +
+      stream.write(("firstName,lastName,certificationName,earnDate,periodicDue\n" +
         "FIRST,LAST,TITLE,09/22/2018").getBytes());
     }
 
@@ -365,7 +365,7 @@ public class UploadControllerTest extends BaseIntegrationTest {
 
     assertThat(message).isEqualTo("Upload was unsuccessful.\n" +
       "The following required fields were not present for one record of the input: " +
-      "expirationDate at line 1.");
+      "periodicDue at line 1.");
     assertThat(certificationRepository.count()).isEqualTo(count);
   }
 
@@ -373,7 +373,7 @@ public class UploadControllerTest extends BaseIntegrationTest {
   public void testAttachQualificationsCSV_handlesNullValues() throws IOException {
     final File file = File.createTempFile("test", "csv");
     try (final FileOutputStream stream = new FileOutputStream(file)) {
-      stream.write(("firstName,lastName,qualificationName,earnDate,expirationDate\n" +
+      stream.write(("firstName,lastName,qualificationName,earnDate,periodicDue\n" +
         "FIRST?,LAST,TITLE,09/22/2018,09/22/2019\n" +
         "FIRST,LAST?,TITLE,09/22/2018,09/22/2019\n" +
         "FIRST,LAST,TITLE?,09/22/2018,09/22/2019\n" +
@@ -412,7 +412,7 @@ public class UploadControllerTest extends BaseIntegrationTest {
   public void testAttachQualificationsCSV_handlesBadHeaders() throws IOException {
     final File file = File.createTempFile("test", "csv");
     try (final FileOutputStream stream = new FileOutputStream(file)) {
-      stream.write(("firstName?,lastName?,qualificationName?,earnDate?,expirationDate?\n" +
+      stream.write(("firstName?,lastName?,qualificationName?,earnDate?,periodicDue?\n" +
         "FIRST,LAST,TITLE,09/22/2018,09/22/2019").getBytes());
     }
 
@@ -443,7 +443,7 @@ public class UploadControllerTest extends BaseIntegrationTest {
   public void testAttachQualificationsCSV_handlesBadRows() throws IOException {
     final File file = File.createTempFile("test", "csv");
     try (final FileOutputStream stream = new FileOutputStream(file)) {
-      stream.write(("firstName,lastName,qualificationName,earnDate,expirationDate\n" +
+      stream.write(("firstName,lastName,qualificationName,earnDate,periodicDue\n" +
         "FIRST,LAST,TITLE,09/22/2018").getBytes());
     }
 
@@ -468,7 +468,7 @@ public class UploadControllerTest extends BaseIntegrationTest {
 
     assertThat(message).isEqualTo("Upload was unsuccessful.\n" +
       "The following required fields were not present for one record of the input: " +
-      "expirationDate at line 1.");
+      "periodicDue at line 1.");
     assertThat(qualificationRepository.count()).isEqualTo(count);
   }
 }

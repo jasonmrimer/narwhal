@@ -13,5 +13,7 @@ public class AttachCertificationCSVRow {
   @CsvBindByName(required = true) private String lastName;
   @CsvBindByName(required = true) private String certificationName;
   @CsvBindByName(required = true) private String earnDate;
-  @CsvBindByName(required = true) private String expirationDate;
+  @CsvBindByName(required = true) private String periodicDue;
+  @CsvBindByName(required = true) private String lastSat;
+  @CsvBindByName(required = true) private String currencyExpiration;
 }

@@ -34,19 +34,35 @@ public class AirmanQualification {
   private Instant earnDate;
 
   @NotNull
-  @Column(name = "expiration_date")
-  private Instant expirationDate;
+  @Column(name = "periodic_due")
+  private Instant periodicDue;
 
-  public AirmanQualification(Long airmanId, Qualification qualification, Instant earnDate, Instant expirationDate) {
+  @NotNull
+  @Column(name = "currency_expiration")
+  private Instant currencyExpiration;
+
+  @NotNull
+  @Column(name = "last_sat")
+  private Instant lastSat;
+
+  public AirmanQualification(Long airmanId, Qualification qualification, Instant earnDate, Instant periodicDue) {
     this.airmanId = airmanId;
     this.qualification = qualification;
     this.earnDate = earnDate;
-    this.expirationDate = expirationDate;
+    this.periodicDue = periodicDue;
   }
 
-  public AirmanQualification(Qualification qualification, Instant earnDate, Instant expirationDate) {
+  public AirmanQualification(
+    Qualification qualification,
+    Instant earnDate,
+    Instant periodicDue,
+    Instant lastSat,
+    Instant currencyExpiration
+  ) {
     this.qualification = qualification;
     this.earnDate = earnDate;
-    this.expirationDate = expirationDate;
+    this.periodicDue = periodicDue;
+    this.lastSat = lastSat;
+    this.currencyExpiration = currencyExpiration;
   }
 }

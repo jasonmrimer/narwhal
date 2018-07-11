@@ -23,18 +23,31 @@ public class AirmanSkillJSON {
   private Instant earnDate;
 
   @NotNull(message = emptyFieldMessage)
-  private Instant expirationDate;
+  private Instant periodicDue;
 
-  public AirmanSkillJSON(Long skillId, Instant earnDate, Instant expirationDate) {
+  @NotNull(message = emptyFieldMessage)
+  private Instant currencyExpiration;
+
+  @NotNull(message = emptyFieldMessage)
+  private Instant lastSat;
+
+  public AirmanSkillJSON(
+    Long skillId,
+    Instant earnDate,
+    Instant periodicDue,
+    Instant currencyExpiration,
+    Instant lastSat) {
     this.skillId = skillId;
     this.earnDate = earnDate;
-    this.expirationDate = expirationDate;
+    this.periodicDue = periodicDue;
+    this.currencyExpiration = currencyExpiration;
+    this.lastSat = lastSat;
   }
 
   @AssertTrue(message = "End Date cannot be before Start Date.")
   public boolean isValidDateRange() {
-    if (this.expirationDate != null && this.earnDate != null) {
-      return this.expirationDate.compareTo(this.earnDate) >= 0;
+    if (this.periodicDue != null && this.earnDate != null) {
+      return this.periodicDue.compareTo(this.earnDate) >= 0;
     } else {
       return true;
     }

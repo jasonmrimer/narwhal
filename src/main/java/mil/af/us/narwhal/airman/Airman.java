@@ -148,7 +148,7 @@ public class Airman {
       .findFirst()
       .ifPresent(qual -> {
         qual.setEarnDate(earnDate);
-        qual.setExpirationDate(expirationDate);
+        qual.setPeriodicDue(expirationDate);
       });
   }
 
