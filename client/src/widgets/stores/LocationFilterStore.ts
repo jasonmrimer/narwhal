@@ -25,8 +25,6 @@ export class LocationFilterStore extends NotificationStore {
 
   @action.bound
   setSelectedSite(id: number | null) {
-    this.setSelectedFlight(null);
-    this.setSelectedSquadron(null);
     this.setSiteId(id);
   }
 
