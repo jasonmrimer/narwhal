@@ -27,7 +27,7 @@ export const LocationFilters = observer((props: Props) => {
 
   return (
     <div className={classNames('filters', props.className)}>
-      <div id="site-filter-container">
+      <div className="filter-container">
         <label htmlFor="site-filter">SITE</label>
         <br/>
         <StyledSingleTypeahead
@@ -44,7 +44,7 @@ export const LocationFilters = observer((props: Props) => {
           placeholder="Select Site"
         />
       </div>
-      <div id="site-filter-container">
+      <div className="filter-container">
         <label htmlFor="squadron-filter">SQUADRON</label>
         <br/>
         <StyledSingleTypeahead
@@ -58,7 +58,7 @@ export const LocationFilters = observer((props: Props) => {
           placeholder="All Squadrons"
         />
       </div>
-      <div id="site-filter-container">
+      <div className="filter-container">
         <label htmlFor="flight-filter">FLIGHT</label>
         <StyledSingleTypeahead
           options={flightOptions}
@@ -76,17 +76,8 @@ export const LocationFilters = observer((props: Props) => {
 });
 
 export const StyledLocationFilters = inject('locationFilterStore')(styled(LocationFilters)`
-  .filters {
-    &:after {
-      content: "."; 
-      visibility: hidden; 
-      display: block; 
-      height: 0;
-      clear: both;
-    }
-  }
-
-  #site-filter-container {
+  .filter-container {
+    margin: 0 2.5rem 0 0;
     min-width: 28%;
     display: inline-block;
     position: relative;
@@ -94,30 +85,20 @@ export const StyledLocationFilters = inject('locationFilterStore')(styled(Locati
     font-size: 0.875rem;
     font-weight: 300;
     color: ${props => props.theme.purpleSteel};
-
-    &:after {
-      content: ' ';
-      right: 0;
-      height: 14px;
-      width: 20px;
-      top: 40px;
-      position: absolute;
-      pointer-events: none;
-    }
   }
-  
-  .site-filter {
-    background: transparent;
-    display: block;
-    width: 100%;
-    height: 48px;
-    float: right;
-    margin: 0 0 5px 0;
-    font-size: 1rem;
-    font-weight: 300;
-    border: none;
-    color: ${props => props.theme.fontColor};
-    border-radius: 0;
-    cursor: pointer;
-  }
+  //
+  // .site-filter {
+  //   background: transparent;
+  //   display: block;
+  //   width: 100%;
+  //   //height: 48px;
+  //   float: right;
+  //   //margin: 0 0 0px 0;
+  //   font-size: 1rem;
+  //   font-weight: 300;
+  //   border: none;
+  //   color: ${props => props.theme.fontColor};
+  //   border-radius: 0;
+  //   cursor: pointer;
+  // }
 `);

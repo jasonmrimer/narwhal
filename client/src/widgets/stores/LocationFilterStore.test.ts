@@ -44,9 +44,11 @@ describe('LocationFilterStore', () => {
       ]);
     });
 
-    it('should return a site selection of null', async () => {
+    it('should return a site selection of null and blank flight/squadron', async () => {
       await subject.setSelectedSite(null);
       expect(subject.selectedSiteOption).toBeNull();
+      expect(subject.selectedSquadronOption).toBeNull();
+      expect(subject.selectedFlightOption).toBeNull();
     });
 
     it('resets squadron and flight when it sets a new site', async () => {

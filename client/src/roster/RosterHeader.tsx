@@ -95,38 +95,38 @@ export const StyledRosterHeader = inject('rosterHeaderStore')(styled(RosterHeade
   border-left: 1px solid ${props => props.theme.graySteel};
   display: flex;
   vertical-align: center;
-  
-  .header-column-title {
-    font-size: 0.875rem;
-    font-weight: 500;  
-  }
-  
-  & > span {
-    padding: 0.5rem;
-    width: 11.75rem;
-      
-    
-    .header-column-title {
-      margin-bottom: 1.125rem;
-    }
-    
-    .name-header {
-      margin-bottom: 1.1875rem;
-    }
-     
-    .rbt-input {
-      padding-bottom: 0.25rem;
-    }
-    
-    & > input, select {
-      padding: 0.5rem 0;
-    }  
-  }
-  
-  .shift {
-   width: 6rem;
+
    .header-column-title {
-      margin-bottom: 1.25rem;
-    }
-  }
+     font-size: 0.875rem;
+     font-weight: 500;  
+   }
+
+   & > span {
+     padding: 0.5rem;
+     width: 11.75rem;
+      
+     .header-column-title {
+       margin-bottom: 1.125rem;
+     }
+
+     .name-header {
+       margin-bottom: 1.1875rem;
+     }
+
+     .rbt-input {
+       padding-bottom: 0.25rem;
+       height: 2.3125rem;
+     }
+
+     & > input, select {
+       padding: 0.5rem 0;
+     }  
+   }
+
+   .shift {
+    width: 6rem;
+    //.header-column-title {
+    //   margin-bottom: 1.25rem;
+    // }
+   }
 `);
