@@ -105,29 +105,29 @@ export class SkillsForm extends React.Component<Props> {
           </StyledFieldValidation>
         </StyledFieldValidation>
 
-          <StyledFieldValidation fieldName="currencyExpiration" errors={skillFormStore!.errors}>
-              <StyledFormRow>
-                  <label htmlFor="currency-expiration">Currency Expiration:</label>
-                  <StyledDatePicker
-                      id="currency-expiration"
-                      value={skillFormStore!.state.currencyExpiration}
-                      onChange={this.handleChange}
-                      name="currencyExpiration"
-                  />
-              </StyledFormRow>
-          </StyledFieldValidation>
+        <StyledFieldValidation fieldName="lastSat" errors={skillFormStore!.errors}>
+          <StyledFormRow>
+            <label htmlFor="last-sat">Last Sat:</label>
+            <StyledDatePicker
+              id="last-sat"
+              value={skillFormStore!.state.lastSat}
+              onChange={this.handleChange}
+              name="lastSat"
+            />
+          </StyledFormRow>
+        </StyledFieldValidation>
 
-          <StyledFieldValidation fieldName="lastSat" errors={skillFormStore!.errors}>
-              <StyledFormRow>
-                  <label htmlFor="last-sat">Last Sat:</label>
-                  <StyledDatePicker
-                      id="last-sat"
-                      value={skillFormStore!.state.lastSat}
-                      onChange={this.handleChange}
-                      name="lastSat"
-                  />
-              </StyledFormRow>
-          </StyledFieldValidation>
+        <StyledFieldValidation fieldName="currencyExpiration" errors={skillFormStore!.errors}>
+          <StyledFormRow>
+            <label htmlFor="currency-expiration">Currency Expiration:</label>
+            <StyledDatePicker
+              id="currency-expiration"
+              value={skillFormStore!.state.currencyExpiration}
+              onChange={this.handleChange}
+              name="currencyExpiration"
+            />
+          </StyledFormRow>
+        </StyledFieldValidation>
 
         <StyledFormRow reversed={true}>
           <StyledSubmitButton text="CONFIRM"/>
