@@ -242,11 +242,11 @@ class TrackerPage
   end
 
   def assert_return_to_tracker_with_previous_filter_values
-    filter('site', 'DMS-MD')
-    filter('squadron', '94 IS')
+    typeahead_filters('Select Site', 'DMS-MD')
+    typeahead_filters('All Squadrons', '94 IS')
     squadron_count = page.find_all('.airman-name').count
 
-    filter('flight', 'DOB')
+    typeahead_filters('All Flights', 'DOB')
     typeahead('Filter Qualifications', 'QB')
     typeahead('Filter Certifications', 'SUPER SPEED')
 
@@ -258,9 +258,16 @@ class TrackerPage
 
     expect(page).to have_css('a.selected', text: 'AVAILABILITY')
     expect(page.find_all('.airman-name').count).to be < squadron_count
-    expect(page).to have_select('site-filter', selected: 'DMS-MD')
-    expect(page).to have_select('squadron-filter', selected: '94 IS')
-    expect(page).to have_select('flight-filter', selected: 'DOB')
+
+    page.within('.site-filter') do
+      expect(page.find('.rbt-input-main').text).to eq 'DMS-MD'
+    end
+    page.within('.squadron-filter') do
+      expect(page.find('.rbt-input-main').text).to eq '94 IS'
+    end
+    page.within('.flight-filter') do
+      expect(page.find('.rbt-input-main').text).to eq 'DOB'
+    end
     page.within('.qualifications-multitypeahead') do
       expect(page.find('.rbt-token').text).to eq 'QB ×'
     end
@@ -268,8 +275,6 @@ class TrackerPage
       expect(page.find('.rbt-token').text).to eq 'SUPER SPEED ×'
     end
   end
-
-  private
 
   def click_on_airman(name)
     fill_in('last-name', with: name.split(',')[0])
@@ -287,11 +292,18 @@ class TrackerPage
   end
 
   def filter(item, value)
-    page.find("##{item}-filter").find(:option, text: value).select_option
+    page.find(".#{item}-filter").find(:option, text: value).select_option
   end
 
   def typeahead(item, value)
     page.within('.roster-header') do
+      fill_in(item, with: value)
+      click_link(value)
+    end
+  end
+
+  def typeahead_filters(item, value)
+    page.within('.filters') do
       fill_in(item, with: value)
       click_link(value)
     end

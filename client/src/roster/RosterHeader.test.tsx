@@ -12,7 +12,7 @@ describe('RosterHeader', () => {
 
     beforeEach(async () => {
       rosterHeaderStore = {
-        selectedShift: {label:'All', value: -1},
+        selectedShift: {label: 'All', value: -1},
         setSelectedShift: jest.fn(),
         shiftOptions: [{label: 'days', value: 0}],
         selectedLastName: '',
@@ -60,7 +60,7 @@ describe('RosterHeader', () => {
         let shiftFilter: ShallowWrapper;
 
         beforeEach(() => {
-          shiftFilter = subject.find('#shift-filter');
+          shiftFilter = subject.find('.shift-filter');
         });
 
         it('which renders all shifts', () => {

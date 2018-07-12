@@ -1,4 +1,3 @@
-import { UnfilteredValue } from '../inputs/FilterOptionModel';
 import { LocationFilterStore } from './LocationFilterStore';
 import { FakeAirmanRepository } from '../../airman/repositories/doubles/FakeAirmanRepository';
 import { AirmanModel } from '../../airman/models/AirmanModel';
@@ -56,8 +55,8 @@ describe('LocationFilterStore', () => {
       subject.setSelectedSquadron(2);
       subject.setSelectedFlight(1);
       await subject.setSelectedSite(2);
-      expect(subject.selectedSquadronId).toBe(UnfilteredValue);
-      expect(subject.selectedFlightId).toBe(UnfilteredValue);
+      expect(subject.selectedSquadronId).toBe(null);
+      expect(subject.selectedFlightId).toBe(null);
     });
 
     describe('when a site only has one squadron', () => {
@@ -95,7 +94,7 @@ describe('LocationFilterStore', () => {
     it('resets the flight when a new squadron is set', () => {
       subject.setSelectedFlight(1);
       subject.setSelectedSquadron(2);
-      expect(subject.selectedFlightId).toBe(UnfilteredValue);
+      expect(subject.selectedFlightId).toBe(null);
     });
   });
 

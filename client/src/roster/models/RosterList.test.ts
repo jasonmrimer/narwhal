@@ -2,7 +2,6 @@ import { SquadronModel } from '../../squadron/models/SquadronModel';
 import { FlightModel } from '../../flight/model/FlightModel';
 import { AirmanModel } from '../../airman/models/AirmanModel';
 import { RosterList } from './RosterList';
-import { UnfilteredValue } from '../../widgets/inputs/FilterOptionModel';
 import { RankModel } from '../../rank/models/RankModel';
 
 describe('RosterList', () => {
@@ -20,7 +19,7 @@ describe('RosterList', () => {
 
   describe('with a squadron', () => {
     it('should return a list with flight headers', () => {
-      const list = new RosterList(UnfilteredValue, squadron, airmen);
+      const list = new RosterList(null, squadron, airmen);
       expect(list.size).toEqual(squadron.flights.length + airmen.length + 1);
       expect(list.get(0)).toEqual(squadron.flights[0]);
       expect(list.get(1)).toEqual(airmen[0]);
@@ -35,7 +34,7 @@ describe('RosterList', () => {
 
   describe('without a squadron', () => {
     it('should return the original list of airmen without headers', () => {
-      const list = new RosterList(UnfilteredValue, null, airmen);
+      const list = new RosterList(null, null, airmen);
       expect(list.size).toEqual(airmen.length);
       airmen.forEach((a, i) => {
         expect(a).toEqual(list.get(i));
