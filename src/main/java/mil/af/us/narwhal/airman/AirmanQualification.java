@@ -45,13 +45,6 @@ public class AirmanQualification {
   @Column(name = "last_sat")
   private Instant lastSat;
 
-  public AirmanQualification(Long airmanId, Qualification qualification, Instant earnDate, Instant periodicDue) {
-    this.airmanId = airmanId;
-    this.qualification = qualification;
-    this.earnDate = earnDate;
-    this.periodicDue = periodicDue;
-  }
-
   public AirmanQualification(
     Qualification qualification,
     Instant earnDate,

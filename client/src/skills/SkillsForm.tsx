@@ -28,7 +28,7 @@ interface Props {
 @observer
 export class SkillsForm extends React.Component<Props> {
   handleChange = ({target}: any) => {
-    this.props.skillFormStore!.setState(target.name, target.value);
+    this.props.skillFormStore!.setState(target.name, target.value)  ;
   }
 
   handleDelete = async () => {

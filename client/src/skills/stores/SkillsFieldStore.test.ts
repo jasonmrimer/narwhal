@@ -12,10 +12,16 @@ describe('SkillsFieldStore', () => {
     afterExpiration = moment('2018-02-23 0000', 'YYYY-MM-DD HHmm');
   });
 
-  it('should be able to say whether a skill is close to expiration', () => {
+  it('should be able to say whether a skill periodicDue is close to expiration', () => {
     const closeToExpiration = moment('2018-02-21 0000', 'YYYY-MM-DD HHmm');
-    expect(subject.isCloseToExpiration(expires, closeToExpiration)).toBeTruthy();
-    expect(subject.isCloseToExpiration(expires, afterExpiration)).toBeFalsy();
+    expect(subject.periodicDueIsCloseToExpiration(expires, closeToExpiration)).toBeTruthy();
+    expect(subject.periodicDueIsCloseToExpiration(expires, afterExpiration)).toBeFalsy();
+  });
+
+  it('should be able to say whether a skill currencyExpiration is close to expiration', () => {
+    const closeToExpiration = moment('2018-02-21 0000', 'YYYY-MM-DD HHmm');
+    expect(subject.periodicDueIsCloseToExpiration(expires, closeToExpiration)).toBeTruthy();
+    expect(subject.periodicDueIsCloseToExpiration(expires, afterExpiration)).toBeFalsy();
   });
 
   it('should be able to say a skill is expired', () => {
