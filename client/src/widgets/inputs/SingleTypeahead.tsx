@@ -18,7 +18,7 @@ export const SingleTypeahead = (props: Props) => {
   return (
     <div className={props.className}>
       <Typeahead
-        selected={props.selected != null ? [props.selected] : undefined}
+        selected={props.selected != null ? [props.selected] : []}
         disabled={props.disabled}
         highlightOnlyResult={true}
         selectHintOnEnter={true}

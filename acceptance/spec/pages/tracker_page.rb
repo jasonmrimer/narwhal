@@ -12,7 +12,7 @@ class TrackerPage
   EXPECTED_AVAILABILITY_DAYS = %w(SUN MON TUE WED THU FRI SAT).freeze
 
   def initialize
-    expect(page).to have_content('DMS-MD')
+    find_typeahead_text('.site-filter', 'DMS-MD')
     @all_airmen_count = page.find_all('.airman-name').count
   end
 
@@ -30,27 +30,34 @@ class TrackerPage
   end
 
   def assert_filters_by_site
-    expect(page).to have_content('DMS-MD')
-    filter('site', 'DMS-GA')
+    find_typeahead_text('.site-filter', 'DMS-MD')
+    typeahead_clear('.site-filter')
+    typeahead_filters('Select Site', 'DMS-GA')
     expect(page).to have_css('tbody tr', maximum: @all_airmen_count)
   end
 
   def assert_filters_by_squadron
-    filter('site', 'DMS-MD')
+    typeahead_clear('.site-filter')
+    typeahead_filters('Select Site', 'DMS-MD')
+
     site_count = page.find_all('tbody tr').count
 
-    expect(page).to have_content('All Squadrons')
-    filter('squadron', '94 IS')
+    typeahead_clear('.squadron-filter')
+    find_typeahead_text('.squadron-filter', '')
+
+    typeahead_filters('All Squadrons', '94 IS')
     expect(page).to have_css('tbody tr', maximum: site_count)
   end
 
   def assert_filters_by_flight
-    filter('site', 'DMS-MD')
-    filter('squadron', '94 IS')
+    typeahead_clear('.site-filter')
+    typeahead_filters('Select Site', 'DMS-MD')
+
     squadron_count = page.find_all('tbody tr').count
 
-    expect(page).to have_content('All Flights')
-    filter('flight', 'DOB')
+    find_typeahead_text('.flight-filter', '')
+
+    typeahead_filters('All Flights', 'DOB')
     expect(page).to have_css('tbody tr', maximum: squadron_count)
   end
 
@@ -67,20 +74,20 @@ class TrackerPage
   end
 
   def assert_filters_by_shift
-    filter('shift', 'Night')
+    typeahead_roster_header('All', 'Night')
     expect(page).to have_css('.airman-name', maximum: @all_airmen_count - 1)
 
-    filter('shift', 'All')
+    typeahead_clear('.shift-filter')
     expect(page).to have_css('.airman-name', count: @all_airmen_count)
   end
 
   def assert_filters_by_certification
-    typeahead('Filter Certifications', 'SUPER SPEED')
+    typeahead_roster_header('Filter Certifications', 'SUPER SPEED')
     expect(page).to have_css('.airman-name', maximum: @all_airmen_count - 1)
   end
 
   def assert_filters_by_qualification
-    typeahead('Filter Qualifications', 'QB')
+    typeahead_roster_header('Filter Qualifications', 'QB')
     expect(page).to have_css('.airman-name', maximum: @all_airmen_count - 1)
   end
 
@@ -114,7 +121,7 @@ class TrackerPage
     event = Event.new
 
     event.create
-    # expect(event).to exist
+    expect(event).to exist
 
     event.update
     expect(event).to exist
@@ -243,25 +250,24 @@ class TrackerPage
   end
 
   def assert_return_to_tracker_with_previous_filter_values
-    filter('site', 'DMS-MD')
-    filter('squadron', '94 IS')
     squadron_count = page.find_all('.airman-name').count
 
-    filter('flight', 'DOB')
-    typeahead('Filter Qualifications', 'QB')
-    typeahead('Filter Certifications', 'SUPER SPEED')
+    typeahead_filters('All Flights', 'DOB')
+    typeahead_roster_header('Filter Qualifications', 'QB')
+    typeahead_roster_header('Filter Certifications', 'SUPER SPEED')
 
     click(find('a', text: 'MISSION'))
-
 
     expect(page).to have_css('a.selected', text: 'MISSION')
     click(find('a', text: 'AVAILABILITY'))
 
     expect(page).to have_css('a.selected', text: 'AVAILABILITY')
     expect(page.find_all('.airman-name').count).to be < squadron_count
-    expect(page).to have_select('site-filter', selected: 'DMS-MD')
-    expect(page).to have_select('squadron-filter', selected: '94 IS')
-    expect(page).to have_select('flight-filter', selected: 'DOB')
+
+    find_typeahead_text('.site-filter', 'DMS-MD')
+    find_typeahead_text('.squadron-filter', '94 IS')
+    find_typeahead_text('.flight-filter', 'DOB')
+
     page.within('.qualifications-multitypeahead') do
       expect(page.find('.rbt-token').text).to eq 'QB ×'
     end
@@ -269,8 +275,6 @@ class TrackerPage
       expect(page.find('.rbt-token').text).to eq 'SUPER SPEED ×'
     end
   end
-
-  private
 
   def click_on_airman(name)
     fill_in('last-name', with: name.split(',')[0])
@@ -287,14 +291,29 @@ class TrackerPage
     expect(page).to have_content('DCGS Mission')
   end
 
-  def filter(item, value)
-    page.find("##{item}-filter").find(:option, text: value).select_option
-  end
-
-  def typeahead(item, value)
+  def typeahead_roster_header(item, value)
     page.within('.roster-header') do
       fill_in(item, with: value)
       click_link(value)
+    end
+  end
+
+  def typeahead_filters(item, value)
+    page.within('.filters') do
+      fill_in(item, with: value)
+      click_link(value)
+    end
+  end
+
+  def typeahead_clear(clearClass)
+    page.within(clearClass) do
+      click_button('×')
+    end
+  end
+
+  def find_typeahead_text(typeaheadClass, value)
+    page.within(typeaheadClass) do
+      expect(page.find('.rbt-input-main').value).to eq value
     end
   end
 

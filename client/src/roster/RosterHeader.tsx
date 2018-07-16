@@ -1,15 +1,15 @@
 import * as React from 'react';
-import { RosterLevelFilter } from '../widgets/inputs/Filter';
 import { StyledTextInput } from '../widgets/inputs/TextInput';
 import { StyledMultiTypeahead } from '../widgets/inputs/MultiTypeahead';
 import styled from 'styled-components';
 import * as classNames from 'classnames';
 import { inject, observer } from 'mobx-react';
 import { FilterOption } from '../widgets/inputs/FilterOptionModel';
+import { StyledSingleTypeahead } from '../widgets/inputs/SingleTypeahead';
 
 export interface RosterHeaderStoreContract {
-  selectedShift: number;
-  setSelectedShift: (shift: number) => void;
+  selectedShift: FilterOption;
+  setSelectedShift: (e: FilterOption) => void;
   shiftOptions: FilterOption[];
   selectedLastName: string;
   setSelectedLastName: (e: any) => void;
@@ -47,12 +47,13 @@ export class RosterHeader extends React.Component<Props> {
       <div className={classNames('thead', className)}>
         <span className="shift">
           <div className="header-column-title">SHIFT</div>
-          <RosterLevelFilter
-            id="shift-filter"
-            unfilteredOptionLabel="All"
-            value={selectedShift}
-            callback={setSelectedShift}
+          <StyledSingleTypeahead
             options={shiftOptions}
+            onChange={setSelectedShift}
+            className="shift-filter"
+            clearButton={true}
+            placeholder="All"
+            selected={selectedShift}
           />
         </span>
         <span>
@@ -95,38 +96,35 @@ export const StyledRosterHeader = inject('rosterHeaderStore')(styled(RosterHeade
   border-left: 1px solid ${props => props.theme.graySteel};
   display: flex;
   vertical-align: center;
-  
-  .header-column-title {
-    font-size: 0.875rem;
-    font-weight: 500;  
-  }
-  
-  & > span {
-    padding: 0.5rem;
-    width: 11.75rem;
-      
-    
-    .header-column-title {
-      margin-bottom: 1.125rem;
-    }
-    
-    .name-header {
-      margin-bottom: 1.1875rem;
-    }
-     
-    .rbt-input {
-      padding-bottom: 0.25rem;
-    }
-    
-    & > input, select {
-      padding: 0.5rem 0;
-    }  
-  }
-  
-  .shift {
-   width: 6rem;
+
    .header-column-title {
-      margin-bottom: 1.25rem;
-    }
-  }
+     font-size: 0.875rem;
+     font-weight: 500;  
+   }
+
+   & > span {
+     padding: 0.5rem;
+     width: 11.75rem;
+      
+     .header-column-title {
+       margin-bottom: 1.125rem;
+     }
+
+     .name-header {
+       margin-bottom: 1.1875rem;
+     }
+
+     .rbt-input {
+       padding-bottom: 0.25rem;
+       height: 2.3125rem;
+     }
+
+     & > input, select {
+       padding: 0.5rem 0;
+     }  
+   }
+
+   .shift {
+    width: 6rem;
+   }
 `);

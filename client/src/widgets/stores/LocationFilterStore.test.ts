@@ -1,4 +1,3 @@
-import { UnfilteredValue } from '../inputs/FilterOptionModel';
 import { LocationFilterStore } from './LocationFilterStore';
 import { FakeAirmanRepository } from '../../airman/repositories/doubles/FakeAirmanRepository';
 import { AirmanModel } from '../../airman/models/AirmanModel';
@@ -44,13 +43,20 @@ describe('LocationFilterStore', () => {
       ]);
     });
 
+    it('should return a site selection of null and blank flight/squadron', async () => {
+      await subject.setSelectedSite(null);
+      expect(subject.selectedSiteOption).toBeNull();
+      expect(subject.selectedSquadronOption).toBeNull();
+      expect(subject.selectedFlightOption).toBeNull();
+    });
+
     it('resets squadron and flight when it sets a new site', async () => {
       await subject.setSelectedSite(1);
       subject.setSelectedSquadron(2);
       subject.setSelectedFlight(1);
       await subject.setSelectedSite(2);
-      expect(subject.selectedSquadronId).toBe(UnfilteredValue);
-      expect(subject.selectedFlightId).toBe(UnfilteredValue);
+      expect(subject.selectedSquadronId).toBe(null);
+      expect(subject.selectedFlightId).toBe(null);
     });
 
     describe('when a site only has one squadron', () => {
@@ -88,7 +94,7 @@ describe('LocationFilterStore', () => {
     it('resets the flight when a new squadron is set', () => {
       subject.setSelectedFlight(1);
       subject.setSelectedSquadron(2);
-      expect(subject.selectedFlightId).toBe(UnfilteredValue);
+      expect(subject.selectedFlightId).toBe(null);
     });
   });
 

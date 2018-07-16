@@ -55,7 +55,11 @@ export class Roster extends React.Component<Props> {
         width={1400}
         overscanRowCount={15}
         deferredMeasurementCache={cache}
-        noRowsRenderer={this.renderNone}
+        noRowsRenderer={() => {
+          return this.props.locationFilterStore!.selectedSiteId === null ?
+            this.renderSiteWarning() :
+            this.renderNone();
+        }}
         rowRenderer={(props: ListRowProps) => {
           const item = list.get(props.index);
           if (item instanceof AirmanModel) {
@@ -67,6 +71,14 @@ export class Roster extends React.Component<Props> {
           }
         }}
       />
+    );
+  }
+
+  private renderSiteWarning = () => {
+    return (
+      <BorderedNotification>
+        Please select a site to search.
+      </BorderedNotification>
     );
   }
 
