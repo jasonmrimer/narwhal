@@ -4,12 +4,13 @@ import { Skill } from './models/Skill';
 import { AirmanQualificationModel } from '../airman/models/AirmanQualificationModel';
 import { AirmanCertificationModel } from '../airman/models/AirmanCertificationModel';
 import { SkillType } from './models/SkillType';
-import * as moment from 'moment';
-import { Moment } from 'moment';
 import { StyledExpirationSleeve } from '../widgets/ExpirationSleeve';
+import { SkillsFieldStore } from './stores/SkillsFieldStore';
+import { inject } from 'mobx-react';
 
 interface Props {
   skill: AirmanQualificationModel | AirmanCertificationModel;
+  skillsFieldStore?: SkillsFieldStore;
   onClick?: (skill: Skill) => void;
   editor?: boolean;
   className?: string;
@@ -41,14 +42,8 @@ const convertToSkill = (skill: AirmanQualificationModel | AirmanCertificationMod
   }
 };
 
-export const timeToExpire = (expirationDate: Moment) => {
-  return expirationDate.diff(moment(), 'days') > 0 ?
-    `Expires ${moment().to(expirationDate)}` :
-    `Expired ${moment().to(expirationDate)}`;
-};
-
 export const SkillTile = (props: Props) => {
-  const {skill} = props;
+  const {skill, skillsFieldStore} = props;
   return (
     <div
       className={props.className}
@@ -60,14 +55,21 @@ export const SkillTile = (props: Props) => {
     >
       <div className="currency-title">
         <span>{skill.title}</span>
-        {skill.isExpired && <StyledExpirationSleeve/>}
+        {
+          skillsFieldStore!.isFlaggedForExpiration(skill) &&
+          <StyledExpirationSleeve/>
+        }
       </div>
-      <div className="currency-description">{timeToExpire(skill.periodicDue)}.</div>
+      <div className="currency-description">{skillsFieldStore!.timeToExpire(skill)
+      }.
+      </div>
     </div>
   );
 };
 
-export const StyledSkillTile = styled(SkillTile)`
+export const StyledSkillTile = inject(
+  'skillsFieldStore'
+)(styled(SkillTile)`
   background: ${props => props.theme.blueSteel};
   border-radius: 0.25rem 0.25rem 0 0;
   margin: 0.5rem 0;
@@ -100,4 +102,4 @@ export const StyledSkillTile = styled(SkillTile)`
     font-size: 0.75rem;
     padding: 0.375rem;
   }
-`;
+`);

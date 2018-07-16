@@ -15,6 +15,8 @@ import { RankModel } from '../rank/models/RankModel';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 import { adminAbility, readerAbility } from '../app/abilities';
 import { ThemeProvider } from 'styled-components';
+import { Provider } from "mobx-react";
+import { SkillsFieldStore } from "../skills/stores/SkillsFieldStore";
 
 /* tslint:disable:no-empty*/
 describe('Currency', () => {
@@ -97,15 +99,18 @@ describe('Currency', () => {
     let mountedSubject: ReactWrapper;
     beforeEach(async () => {
       await profileStore.hydrate([], makeFakeProfile('READER', readerAbility));
+      const skillsFieldStore = new SkillsFieldStore();
 
       mountedSubject = mount(
         <ThemeProvider theme={{}}>
-          <Currency
-            trackerStore={trackerStore}
-            currencyStore={currencyStore}
-            currencyActions={currencyActions}
-            profileStore={profileStore}
-          />
+          <Provider skillsFieldStore={skillsFieldStore}>
+            <Currency
+              trackerStore={trackerStore}
+              currencyStore={currencyStore}
+              currencyActions={currencyActions}
+              profileStore={profileStore}
+            />
+          </Provider>
         </ThemeProvider>
       );
 

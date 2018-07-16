@@ -178,10 +178,10 @@ export function airmanRepositoryContract(subject: AirmanRepository) {
       it('correctly handles validations from the server', async () => {
         const qualId = 5;
         const errors =  {
-          "currencyExpiration": "This field is required.",
-          "earnDate": "This field is required.",
-          "lastSat": "This field is required.",
-          "periodicDue": "This field is required."
+          'currencyExpiration': 'This field is required.',
+          'earnDate': 'This field is required.',
+          'lastSat': 'This field is required.',
+          'periodicDue': 'This field is required.'
         };
 
         try {
