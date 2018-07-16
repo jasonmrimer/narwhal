@@ -126,8 +126,5 @@ export const StyledRosterHeader = inject('rosterHeaderStore')(styled(RosterHeade
 
    .shift {
     width: 6rem;
-    //.header-column-title {
-    //   margin-bottom: 1.25rem;
-    // }
    }
 `);

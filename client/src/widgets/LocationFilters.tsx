@@ -86,19 +86,4 @@ export const StyledLocationFilters = inject('locationFilterStore')(styled(Locati
     font-weight: 300;
     color: ${props => props.theme.purpleSteel};
   }
-  //
-  // .site-filter {
-  //   background: transparent;
-  //   display: block;
-  //   width: 100%;
-  //   //height: 48px;
-  //   float: right;
-  //   //margin: 0 0 0px 0;
-  //   font-size: 1rem;
-  //   font-weight: 300;
-  //   border: none;
-  //   color: ${props => props.theme.fontColor};
-  //   border-radius: 0;
-  //   cursor: pointer;
-  // }
 `);
