@@ -80,8 +80,9 @@ public class AirmanController {
       qualification,
       skill.getEarnDate(),
       skill.getPeriodicDue(),
-      skill.getCurrencyExpiration(),
-      skill.getLastSat()
+      skill.getLastSat(),
+      skill.getCurrencyExpiration()
+
     );
     return airman.addQualification(airmanQualification) ?
       new ResponseEntity<>(airmanRepository.save(airman), HttpStatus.CREATED) :
@@ -100,8 +101,8 @@ public class AirmanController {
       certification,
       skill.getEarnDate(),
       skill.getPeriodicDue(),
-      skill.getCurrencyExpiration(),
-      skill.getLastSat()
+      skill.getLastSat(),
+      skill.getCurrencyExpiration()
     );
     return airman.addCertification(airmanCertification) ?
       new ResponseEntity<>(airmanRepository.save(airman), HttpStatus.CREATED) :
@@ -120,8 +121,8 @@ public class AirmanController {
       skill.getId(),
       skill.getEarnDate(),
       skill.getPeriodicDue(),
-      skill.getCurrencyExpiration(),
-      skill.getLastSat()
+      skill.getLastSat(),
+      skill.getCurrencyExpiration()
     );
     return airmanRepository.save(airman);
   }
@@ -137,8 +138,8 @@ public class AirmanController {
       skill.getId(),
       skill.getEarnDate(),
       skill.getPeriodicDue(),
-      skill.getCurrencyExpiration(),
-      skill.getLastSat()
+      skill.getLastSat(),
+      skill.getCurrencyExpiration()
     );
     return airmanRepository.save(airman);
   }

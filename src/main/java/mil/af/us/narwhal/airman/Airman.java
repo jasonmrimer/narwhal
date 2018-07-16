@@ -137,8 +137,8 @@ public class Airman {
     long id,
     Instant earnDate,
     Instant periodicDue,
-    Instant currencyExpiration,
-    Instant lastSat
+    Instant lastSat,
+    Instant currencyExpiration
   ) {
     updateSkill(id, earnDate, periodicDue, currencyExpiration, lastSat);
   }
@@ -147,8 +147,8 @@ public class Airman {
     long id,
     Instant earnDate,
     Instant periodicDue,
-    Instant currencyExpiration,
-    Instant lastSat
+    Instant lastSat,
+    Instant currencyExpiration
   ) {
     qualifications.stream()
       .filter(qual -> qual.getId().equals(id))
