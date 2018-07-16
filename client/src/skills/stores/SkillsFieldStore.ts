@@ -4,18 +4,18 @@ import { Moment } from 'moment';
 
 export class SkillsFieldStore {
   @observable
-  isCloseToExpiration(expirationDate: Moment, currentDate?: Moment | undefined) {
+  isCloseToExpiration(date: Moment, currentDate?: Moment | undefined) {
     if (currentDate === undefined) {
       currentDate = moment();
     }
-    return !this.isExpired(expirationDate, currentDate) &&
-    expirationDate.isBefore(currentDate.clone().add(14, 'days'));
+    return !this.isExpired(date, currentDate) &&
+    date.isBefore(currentDate.clone().add(14, 'days'));
   }
 
-  isExpired(expirationDate: Moment, currentDate?: Moment | undefined) {
+  isExpired(date: Moment, currentDate?: Moment | undefined) {
     if (currentDate === undefined) {
       currentDate = moment();
     }
-    return currentDate.isAfter(expirationDate);
+    return currentDate.isAfter(date);
   }
 }
