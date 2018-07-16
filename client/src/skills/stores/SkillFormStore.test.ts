@@ -104,6 +104,14 @@ describe('SkillFormStore', () => {
     expect(subject.state.periodicDue).toBe(skill.earnDate.clone().startOf('day').add(90, 'd').format('YYYY-MM-DD'));
   });
 
+  it('should set the currencyExpiration 90 days ahead when adding an lastSat for certs/quals', () => {
+    subject.setState('skillType', SkillType.Certification);
+    subject.setState('lastSat', skill.lastSat.format('YYYY-MM-DD'));
+    expect(subject.state.currencyExpiration).toBe(
+      skill.lastSat.clone().startOf('day').add(90, 'd').format('YYYY-MM-DD')
+    );
+  });
+
   it('should not set the periodicDue when adding a blank earnDate for quals', () => {
     subject.setState('skillType', SkillType.Qualification);
     subject.setState('earnDate', '');

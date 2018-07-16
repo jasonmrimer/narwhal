@@ -45,7 +45,9 @@ export class SkillFormStore extends FormStore<Skill, State> {
     if (key === 'skillType') {
       this.setDefaultSkillSelection(value);
     } else if (key === 'earnDate') {
-      this.setExpirationDate(value);
+      this.setPeriodicDue(value);
+    } else if (key === 'lastSat') {
+      this.setCurrencyExpiration(value);
     }
     super.setState(key, value);
   }
@@ -110,13 +112,21 @@ export class SkillFormStore extends FormStore<Skill, State> {
     }
   }
 
-  private setExpirationDate(value: string) {
+  private setPeriodicDue(value: string) {
     const periodicDue = (this._state.skillType === SkillType.Qualification) ?
       moment(value).startOf('day').add(2, 'y') :
       moment(value).startOf('day').add(90, 'd');
 
     if (periodicDue.isValid()) {
       super.setState('periodicDue', periodicDue.format('YYYY-MM-DD'));
+    }
+  }
+
+  private setCurrencyExpiration(value: string) {
+    const periodicDue = moment(value).startOf('day').add(90, 'd');
+
+    if (periodicDue.isValid()) {
+      super.setState('currencyExpiration', periodicDue.format('YYYY-MM-DD'));
     }
   }
 }
