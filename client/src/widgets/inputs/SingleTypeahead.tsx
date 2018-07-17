@@ -3,6 +3,7 @@ import { Typeahead } from 'react-bootstrap-typeahead';
 import { FilterOption } from './FilterOptionModel';
 import styled from 'styled-components';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
+import { caret } from '../../utils/StyleUtils';
 
 interface  Props {
   options: FilterOption[];
@@ -12,6 +13,7 @@ interface  Props {
   placeholder?: string;
   selected?: FilterOption | null;
   className?: string;
+  filterBy?: any;
 }
 
 export const SingleTypeahead = (props: Props) => {
@@ -22,6 +24,7 @@ export const SingleTypeahead = (props: Props) => {
         disabled={props.disabled}
         highlightOnlyResult={true}
         selectHintOnEnter={true}
+        filterBy={props.filterBy}
         onChange={(opt: FilterOption[]) => {
           props.onChange(opt.length === 1 ? opt[0] : null);
         }}
@@ -40,6 +43,10 @@ export const StyledSingleTypeahead = styled(SingleTypeahead)`
     .rbt-sr-status {
       display: none;
     }
+    
+    .rbt-close {
+      padding-right: 50px;
+    }
         
     .rbt-input {
       border-bottom: 1px solid ${props => props.theme.graySteel} !important;
@@ -48,6 +55,17 @@ export const StyledSingleTypeahead = styled(SingleTypeahead)`
       input {
         font-size: 1rem;
         color: ${props => props.theme.fontColor};
+      }
+      
+      &:after {
+        content: ' ';
+        background: ${caret(false)};
+        right: 0;
+        height: 14px;
+        width: 20px;
+        top: 15px;
+        position: absolute;
+        pointer-events: none;
       }
       
       .rbt-input-wrapper {

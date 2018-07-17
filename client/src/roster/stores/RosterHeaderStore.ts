@@ -68,9 +68,12 @@ export class RosterHeaderStore {
   }
 
   get shiftOptions() {
-    return Object.keys(ShiftType).map((key, index) => {
+    const allShift = [{label: 'All', value: -1}];
+    const realShifts = Object.keys(ShiftType).map((key, index) => {
       return {label: ShiftType[key], value: index};
     });
+
+    return allShift.concat(realShifts);
   }
 
   @computed
@@ -94,7 +97,8 @@ export class RosterHeaderStore {
   private byShift = (airman: AirmanModel) => {
     if (
       this._selectedShift === undefined ||
-      this._selectedShift === null
+      this._selectedShift === null ||
+      this._selectedShift.label === 'All'
     ) {
       return true;
     }

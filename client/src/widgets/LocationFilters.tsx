@@ -38,10 +38,11 @@ export const LocationFilters = observer((props: Props) => {
               await props.refreshAirmen();
             });
           }}
-          clearButton={true}
+          clearButton={false}
           className="site-filter"
           selected={selectedSiteOption}
           placeholder="Select Site"
+          filterBy={() => {return true}}
         />
       </div>
       <div className="filter-container">
@@ -52,10 +53,11 @@ export const LocationFilters = observer((props: Props) => {
           onChange={(e) => {
             setSelectedSquadron(e === null ? null : Number(e.value));
           }}
-          clearButton={true}
+          clearButton={false}
           className="squadron-filter"
           selected={selectedSquadronOption}
           placeholder="All Squadrons"
+          filterBy={() => {return true}}
         />
       </div>
       <div className="filter-container">
@@ -65,10 +67,11 @@ export const LocationFilters = observer((props: Props) => {
           onChange={(e) => {
             setSelectedFlight(e === null ? null : Number(e.value));
           }}
-          clearButton={true}
+          clearButton={false}
           className="flight-filter"
           selected={selectedFlightOption}
           placeholder="All Flights"
+          filterBy={() => {return true}}
         />
       </div>
     </div>
