@@ -18,7 +18,10 @@ export class SidePanelActions {
     await this.stores.trackerStore!.performLoading(async () => {
       this.stores.trackerStore!.setSelectedAirman(airman);
       this.stores.sidePanelStore!.setSelectedTab(tabType);
-      this.stores.plannerStore!.setSidePanelWeek(this.stores.plannerStore!.plannerWeek);
+
+      this.stores.plannerStore!.setSidePanelWeek(
+        this.stores.plannerStore!.plannerWeek,
+        date === undefined ? null : date);
 
       this.stores.availabilityStore!.closeEventForm();
       this.stores.currencyStore!.closeSkillForm();

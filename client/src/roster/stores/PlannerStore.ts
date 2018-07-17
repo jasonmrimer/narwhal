@@ -56,8 +56,10 @@ export class PlannerStore {
   }
 
   @action.bound
-  setSidePanelWeek(week: Moment[]) {
-    this._sidePanelWeek = week;
+  setSidePanelWeek(week: Moment[], currentDay: Moment | null = null) {
+    currentDay = currentDay == null ? week[0] : currentDay;
+    const newWeek = week.indexOf(currentDay) === -1 ?  this.timeService.navigateToWeek(currentDay) : week;
+    this._sidePanelWeek = newWeek ;
   }
 
   @computed

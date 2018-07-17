@@ -21,8 +21,10 @@ interface Props {
 export class PlannerEvent extends React.Component<Props> {
   onClick = async (e: any) => {
     e.stopPropagation();
-    const {airman, day, sidePanelActions} = this.props;
-    await sidePanelActions!.openSidePanel(airman, TabType.AVAILABILITY, day);
+    await this.props.trackerStore!.performLoading(async () => {
+      const {airman, day, sidePanelActions} = this.props;
+      await sidePanelActions!.openSidePanel(airman, TabType.AVAILABILITY, day);
+    });
   }
 
   render() {
