@@ -3,7 +3,6 @@ import { MissionModel } from '../../models/MissionModel';
 import { MissionSerializer } from '../../serializers/MissionSerializer';
 import { HTTPClient } from '../../../utils/HTTPClient';
 import * as moment from 'moment';
-import { UnfilteredValue } from '../../../widgets/inputs/FilterOptionModel';
 
 export class WebMissionRepository implements MissionRepository {
   private serializer: MissionSerializer = new MissionSerializer();
@@ -16,11 +15,11 @@ export class WebMissionRepository implements MissionRepository {
     return json.map((obj: object) => this.serializer.deserialize(obj));
   }
 
-  async findPlatforms(siteId: number): Promise<string[]> {
+  async findPlatforms(siteId: number | null): Promise<string[]> {
     const startDateTime = moment();
     const endDateTime = moment().add(30, 'days');
 
-    return siteId === UnfilteredValue ?
+    return siteId === null ?
       await this.client.getJSON(
         `api/missions/platforms?startDateTime=${startDateTime.toISOString()}&endDateTime=${endDateTime.toISOString()}`
       ) :

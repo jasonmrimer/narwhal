@@ -3,7 +3,6 @@ import { Typeahead } from 'react-bootstrap-typeahead';
 import { FilterOption } from './FilterOptionModel';
 import styled from 'styled-components';
 import 'react-bootstrap-typeahead/css/Typeahead.css';
-import { caret } from '../../utils/StyleUtils';
 
 interface  Props {
   options: FilterOption[];
@@ -65,17 +64,6 @@ export const StyledMultiTypeahead = styled(MultiTypeahead)`
       input {
         font-size: 1rem;
         color: ${props => props.theme.fontColor};
-      }
-      
-      &:after {
-        content: ' ';
-        background: ${caret(false)};
-        right: 0;
-        height: 14px;
-        width: 20px;
-        top: 15px;
-        position: absolute;
-        pointer-events: none;
       }
       
       .rbt-input-wrapper {

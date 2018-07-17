@@ -51,9 +51,12 @@ export class RosterHeader extends React.Component<Props> {
             options={shiftOptions}
             onChange={setSelectedShift}
             className="shift-filter"
-            clearButton={true}
+            clearButton={false}
             placeholder="All"
             selected={selectedShift}
+            filterBy={() => {
+              return true;
+            }}
           />
         </span>
         <span>
