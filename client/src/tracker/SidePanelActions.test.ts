@@ -3,6 +3,7 @@ import { TabType } from './stores/SidePanelStore';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 import * as moment from 'moment';
 import { historyMock } from '../utils/testUtils';
+import { TimeServiceStub } from "./services/doubles/TimeServiceStub";
 
 describe('SidePanelActions', () => {
   let subject: SidePanelActions;
@@ -82,8 +83,9 @@ describe('SidePanelActions', () => {
       plannerStore,
       sidePanelStore,
       pendingEventStore,
-    } as any);
-  });
+    } as any,
+    new TimeServiceStub()
+    )});
 
   it('should close the side panel', () => {
     subject.closeSidePanel();

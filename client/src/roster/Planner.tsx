@@ -8,8 +8,8 @@ import { Moment } from 'moment';
 
 interface Props {
   airman: AirmanModel;
-  className?: string;
   plannerWeek: Moment[];
+  className?: string;
 }
 
 @observer

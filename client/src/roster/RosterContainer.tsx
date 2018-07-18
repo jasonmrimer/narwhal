@@ -19,10 +19,10 @@ export class RosterContainer extends React.Component<Props, State> {
     return (
       <div className={this.props.className}>
         <div className="roster-header">
-          <StyledRosterHeader />
-          <StyledPlannerHeader />
+          <StyledRosterHeader/>
+          <StyledPlannerHeader/>
         </div>
-        <StyledRoster />
+        <StyledRoster/>
       </div>
     );
   }

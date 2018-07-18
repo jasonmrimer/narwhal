@@ -30,6 +30,7 @@ export class PlannerEvent extends React.Component<Props> {
   render() {
     const {airman, day, trackerStore} = this.props;
     const dailyEvents = new DailyEvents(trackerStore!.getDailyEventsByAirmanId(airman.id, day));
+
     if (dailyEvents.isEmpty()) {
       return airman.isAvailableForWork(day)
         ? <AvailableIcon onClick={this.onClick}/>

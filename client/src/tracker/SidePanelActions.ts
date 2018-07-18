@@ -2,9 +2,13 @@ import { TabType } from './stores/SidePanelStore';
 import { AirmanModel } from '../airman/models/AirmanModel';
 import { Moment } from 'moment';
 import { Stores } from '../app/stores';
+import { TimeService } from './services/TimeService';
 
 export class SidePanelActions {
-  constructor(private stores: Partial<Stores>) {
+  private timeService: TimeService;
+
+  constructor(private stores: Partial<Stores>, timeService: TimeService) {
+    this.timeService = timeService;
   }
 
   selectTab = (tabType: TabType) => {
@@ -19,9 +23,11 @@ export class SidePanelActions {
       this.stores.trackerStore!.setSelectedAirman(airman);
       this.stores.sidePanelStore!.setSelectedTab(tabType);
 
+      console.log(this.timeService.navigateToWeek(date!));
+
       this.stores.plannerStore!.setSidePanelWeek(
-        this.stores.plannerStore!.plannerWeek,
-        date === undefined ? null : date);
+        date === undefined ? this.stores.plannerStore!.plannerWeek : this.timeService.navigateToWeek(date)
+      );
 
       this.stores.availabilityStore!.closeEventForm();
       this.stores.currencyStore!.closeSkillForm();
