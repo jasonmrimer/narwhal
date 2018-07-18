@@ -15,8 +15,8 @@ import { RankModel } from '../rank/models/RankModel';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 import { adminAbility, readerAbility } from '../app/abilities';
 import { ThemeProvider } from 'styled-components';
-import { Provider } from "mobx-react";
-import { SkillsFieldStore } from "../skills/stores/SkillsFieldStore";
+import { Provider } from 'mobx-react';
+import { SkillsFieldStore } from '../skills/stores/SkillsFieldStore';
 
 /* tslint:disable:no-empty*/
 describe('Currency', () => {

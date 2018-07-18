@@ -2,14 +2,14 @@ import * as React from 'react';
 import * as classNames from 'classnames';
 import styled from 'styled-components';
 import { AirmanModel } from '../airman/models/AirmanModel';
-import { inject, observer } from 'mobx-react';
-import { PlannerStore } from './stores/PlannerStore';
+import { observer } from 'mobx-react';
 import { StyledPlannerEvent } from './PlannerEvent';
+import { Moment } from 'moment';
 
 interface Props {
   airman: AirmanModel;
-  plannerStore?: PlannerStore;
   className?: string;
+  plannerWeek: Moment[];
 }
 
 @observer
@@ -23,17 +23,14 @@ export class Planner extends React.Component<Props> {
   }
 
   private renderEvents = () => {
-    const {airman, plannerStore} = this.props;
-    return plannerStore!.plannerTimeSpan.map((day, i) => {
+    const {airman, plannerWeek} = this.props;
+    return plannerWeek.map((day, i) => {
       return <StyledPlannerEvent key={i} airman={airman} day={day}/>;
     });
   }
 }
 
-export const StyledPlanner =
-  inject(
-    'plannerStore'
-  )(styled(Planner)`
+export const StyledPlanner = styled(Planner)`
     display: flex;
     justify-content: space-between;
     cursor: pointer;
@@ -49,8 +46,4 @@ export const StyledPlanner =
     .blank {
       width: 30px;
     }
-    
-    svg {
-      margin: 0 0.375rem;
-    }
-`);
+`;

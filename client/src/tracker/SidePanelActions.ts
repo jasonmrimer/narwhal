@@ -14,7 +14,7 @@ export class SidePanelActions {
     this.stores.sidePanelStore!.setSelectedTab(tabType);
   }
 
-  openSidePanel = async (airman: AirmanModel, tabType: TabType, date?: Moment) => {
+  openSidePanel = async (airman: AirmanModel, tabType: TabType, date?: Moment, hideEventForm: boolean = false) => {
     await this.stores.trackerStore!.performLoading(async () => {
       this.stores.trackerStore!.setSelectedAirman(airman);
       this.stores.sidePanelStore!.setSelectedTab(tabType);
@@ -35,7 +35,7 @@ export class SidePanelActions {
         this.stores.plannerStore!.sidePanelWeek
       );
 
-      if (date) {
+      if (date && !hideEventForm) {
         this.stores.availabilityStore!.setSelectedDate(date);
         this.stores.availabilityStore!.showEventForm(airman.id);
       }

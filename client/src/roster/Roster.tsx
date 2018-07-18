@@ -18,6 +18,7 @@ import { StyledRosterSubHeaderRow } from '../widgets/RosterSubHeaderRow';
 import { FlightModel } from '../flight/model/FlightModel';
 import { SidePanelActions } from '../tracker/SidePanelActions';
 import { StyledSkillsField } from '../skills/SkillsField';
+import { PlannerStore } from './stores/PlannerStore';
 
 const cache = new CellMeasurerCache({
   defaultHeight: 60,
@@ -137,6 +138,7 @@ interface RowProps {
   airman: AirmanModel;
   trackerStore?: TrackerStore;
   sidePanelActions?: SidePanelActions;
+  plannerStore?: PlannerStore;
   style: object;
   index: number;
   parent: any;
@@ -146,7 +148,7 @@ interface RowProps {
 
 const Row = observer(
   (props: RowProps) => {
-    const {airman, trackerStore, className} = props;
+    const {airman, trackerStore, className, plannerStore} = props;
     return (
       <CellMeasurer
         cache={cache}
@@ -194,9 +196,34 @@ const Row = observer(
           </div>
           <div
             className="right"
-            onClick={async () => await props.sidePanelActions!.openSidePanel(airman, TabType.AVAILABILITY)}
+
           >
-            <StyledPlanner airman={airman}/>
+            <nav
+              onClick={async () =>
+                await props.sidePanelActions!.openSidePanel(
+                  airman,
+                  TabType.AVAILABILITY, plannerStore!.plannerTimeSpan[0],
+                  true
+                )}
+            >
+              <StyledPlanner
+                airman={airman}
+                plannerWeek={plannerStore!.plannerTimeSpan.slice(0, 7)}
+              />
+            </nav>
+            <nav
+              onClick={async () =>
+                await props.sidePanelActions!.openSidePanel(
+                  airman,
+                  TabType.AVAILABILITY, plannerStore!.plannerTimeSpan[7],
+                  true
+                )}
+            >
+              <StyledPlanner
+                airman={airman}
+                plannerWeek={plannerStore!.plannerTimeSpan.slice(7, 14)}
+              />
+            </nav>
           </div>
         </div>
       </CellMeasurer>
@@ -206,7 +233,8 @@ const Row = observer(
 
 export const StyledRow = inject(
   'trackerStore',
-  'sidePanelActions'
+  'sidePanelActions',
+  'plannerStore'
 )(styled(Row)`
   display: flex;
   border: 1px solid ${props => props.theme.graySteel};
@@ -224,7 +252,11 @@ export const StyledRow = inject(
     background: ${props => props.theme.darkest};
   }
   
-  & > div > span {
+  .left > div > span {
+    width: 11.75rem;
+  }
+  
+  .right > div > span {
     width: 11.75rem;
   }
   
@@ -239,7 +271,7 @@ export const StyledRow = inject(
     display: flex;
     flex-grow: 2;
     align-items: center;
-    padding: 0.75rem;
+    padding: 0 0.75rem;
     cursor: pointer;
   }
   
@@ -250,5 +282,10 @@ export const StyledRow = inject(
   
   &.selected {
     box-shadow: inset 0.5rem 0 0 ${props => props.theme.yellow};
+  }
+  nav {
+    width: 50%;
+    padding: 0.75rem 0;
+    margin: 0 0.375rem;
   }
 `);

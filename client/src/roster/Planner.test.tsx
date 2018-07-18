@@ -2,9 +2,8 @@ import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { Planner } from './Planner';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
-import { PlannerStore } from './stores/PlannerStore';
-import { TimeServiceStub } from '../tracker/services/doubles/TimeServiceStub';
 import { StyledPlannerEvent } from './PlannerEvent';
+import * as moment from 'moment';
 
 describe('Planner', () => {
   let subject: ShallowWrapper;
@@ -13,11 +12,15 @@ describe('Planner', () => {
     subject = shallow(
       <Planner
         airman={AirmanModelFactory.build()}
-        plannerStore={new PlannerStore(new TimeServiceStub())}
+        plannerWeek={[
+          moment(),
+          moment(),
+          moment(),
+        ]}
       />);
   });
 
   it('renders a planner event for each day of the week', () => {
-    expect(subject.find(StyledPlannerEvent).length).toBe(14);
+    expect(subject.find(StyledPlannerEvent).length).toBe(3);
   });
 });

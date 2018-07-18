@@ -104,7 +104,7 @@ describe('SidePanelActions', () => {
 
   describe('open the side panel', () => {
     it('with date', async () => {
-      
+
       await subject.openSidePanel(airman, TabType.CURRENCY, moment('2018-07-17T19:20:30.291Z'));
 
       expect(setSelectedAirmanSpy).toHaveBeenCalledWith(airman);
@@ -121,6 +121,26 @@ describe('SidePanelActions', () => {
 
       expect(setSelectedDateSpy).toHaveBeenCalledWith( moment('2018-07-17T19:20:30.291Z'));
       expect(showEventFormSpy).toHaveBeenCalled();
+    });
+
+    it('with date do not show event form', async () => {
+
+      await subject.openSidePanel(airman, TabType.CURRENCY, moment('2018-07-17T19:20:30.291Z'), true);
+
+      expect(setSelectedAirmanSpy).toHaveBeenCalledWith(airman);
+      expect(setSelectedTabSpy).toHaveBeenCalledWith(TabType.CURRENCY);
+      expect(setSidePanelWeekSpy).toHaveBeenCalledWith(week, moment('2018-07-17T19:20:30.291Z'));
+
+      expect(closeEventFormSpy).toHaveBeenCalled();
+      expect(closeSkillFormSpy).toHaveBeenCalled();
+      expect(closeAirmanRipItemFormSpy).toHaveBeenCalled();
+
+      expect(setRipItemsForAirmanSpy).toHaveBeenCalledWith(airman.id);
+      expect(setAirmanEventsSpy).toHaveBeenCalledWith(airmanEvents);
+      expect(refreshAirmanEventsSpy).toHaveBeenCalled();
+
+      expect(setSelectedDateSpy).toHaveBeenCalledTimes(0);
+      expect(showEventFormSpy).toHaveBeenCalledTimes(0);
     });
 
     it('without date', async () => {
