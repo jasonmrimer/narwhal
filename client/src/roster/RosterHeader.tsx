@@ -54,7 +54,9 @@ export class RosterHeader extends React.Component<Props> {
             clearButton={false}
             placeholder="All"
             selected={selectedShift}
-            filterBy={() => {return true}}
+            filterBy={() => {
+              return true;
+            }}
           />
         </span>
         <span>

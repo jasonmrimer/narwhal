@@ -42,7 +42,9 @@ export const LocationFilters = observer((props: Props) => {
           className="site-filter"
           selected={selectedSiteOption}
           placeholder="Select Site"
-          filterBy={() => {return true}}
+          filterBy={() => {
+            return true;
+          }}
         />
       </div>
       <div className="filter-container">
@@ -57,7 +59,9 @@ export const LocationFilters = observer((props: Props) => {
           className="squadron-filter"
           selected={selectedSquadronOption}
           placeholder="All Squadrons"
-          filterBy={() => {return true}}
+          filterBy={() => {
+            return true;
+          }}
         />
       </div>
       <div className="filter-container">
@@ -71,7 +75,9 @@ export const LocationFilters = observer((props: Props) => {
           className="flight-filter"
           selected={selectedFlightOption}
           placeholder="All Flights"
-          filterBy={() => {return true}}
+          filterBy={() => {
+            return true;
+          }}
         />
       </div>
     </div>

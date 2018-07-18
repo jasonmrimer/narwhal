@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Dashboard } from './Dashboard';
 import { mount, ReactWrapper } from 'enzyme';
-import { findFilterById, forIt, selectOption } from '../utils/testUtils';
+import { forIt } from '../utils/testUtils';
 import { MissionModel } from '../mission/models/MissionModel';
 import { DashboardStore } from './stores/DashboardStore';
 import { StyledMission } from '../mission/Mission';
@@ -48,6 +48,20 @@ describe('Dashboard', () => {
     expect(subject.find(StyledMultiTypeahead).prop('options')).toBe(dashboardStore.platformOptions);
   });
 
+  it('should render an ato mission id search field', () => {
+    dashboardStore.handleFilterMission = jest.fn();
+    subject.setProps(dashboardStore);
+    expect(subject.find(StyledTextInput).exists()).toBeTruthy();
+    subject.find(StyledTextInput).simulate('change', {target: {value: 'mission1'}});
+    expect(dashboardStore.handleFilterMission).toHaveBeenCalledWith('mission1');
+  });
+
+  it('should set the mission filter value to dashBoard missionIdFilter', () => {
+    dashboardStore.handleFilterMission('fooface');
+    subject.update();
+    expect(subject.find(StyledTextInput).prop('value')).toBe('fooface');
+  });
+
   describe('sorting', () => {
     it('should render 5 Mission Card Sections', () => {
       expect(subject.find(StyledMissionCardSection).length).toBe(5);
@@ -81,43 +95,6 @@ describe('Dashboard', () => {
       const section = subject.find(StyledMissionCardSection).at(4);
       expect(section.find('h2').text()).toContain('LONG RANGE');
       expect(section.find(StyledMission).length).toBe(13);
-    });
-  });
-  describe('filtering', () => {
-    const siteId = 3;
-    beforeEach(async () => {
-      const filter = findFilterById(subject, 'site-filter');
-      await selectOption(subject, filter, siteId);
-    });
-
-    it('can filter a dashboard by site', () => {
-      dashboardMissions(subject).map(mission => {
-        expect(mission.site!.id).toEqual(siteId);
-      });
-    });
-
-    it('filters the setSelectedPlatformOptions when selecting a single qualification', () => {
-      const platformMultiTypeahead = subject.find(StyledMultiTypeahead);
-      const input = platformMultiTypeahead.find('input');
-      input.simulate('click');
-      input.simulate('keyDown', {keyCode: 40});
-      input.simulate('keyDown', {keyCode: 13});
-
-      expect(subject.find(StyledMission).length).toBe(9);
-    });
-
-    it('should render an ato mission id search field', () => {
-      dashboardStore.handleFilterMission = jest.fn();
-      subject.setProps(dashboardStore);
-      expect(subject.find(StyledTextInput).exists()).toBeTruthy();
-      subject.find(StyledTextInput).simulate('change', {target: {value: 'mission1'}});
-      expect(dashboardStore.handleFilterMission).toHaveBeenCalledWith('mission1');
-    });
-
-    it('should set the mission filter value to dashBoard missionIdFilter', () => {
-      dashboardStore.handleFilterMission('fooface');
-      subject.update();
-      expect(subject.find(StyledTextInput).prop('value')).toBe('fooface');
     });
   });
 });

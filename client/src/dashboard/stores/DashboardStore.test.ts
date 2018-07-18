@@ -22,6 +22,7 @@ describe('DashboardStore', () => {
 
   it('returns a list of site options', () => {
     expect(subject.siteOptions).toEqual([
+      {value: -1, label: 'All Sites'},
       {value: 14, label: 'DMS-GA'},
       {value: 2, label: 'DMS-MD'},
       {value: 3, label: 'DMS-HI'}
@@ -29,13 +30,13 @@ describe('DashboardStore', () => {
   });
 
   it('returns a list of platform options given a site', async () => {
-    await subject.setSiteId(1);
+    await subject.setSelectedSite(1);
     expect(subject.platformOptions.length).toBe(1);
     expect(subject.platformOptions[0]).toEqual({value: 0, label: 'U-2'});
   });
 
   it('returns a list of platform options for all sites', async () => {
-    await subject.setSiteId(-1);
+    await subject.setSelectedSite(null);
 
     expect(subject.platformOptions.length).toBe(2);
     expect(subject.platformOptions[0]).toEqual({value: 0, label: 'U-2'});
@@ -43,17 +44,29 @@ describe('DashboardStore', () => {
   });
 
   describe('filtering ', () => {
-    it('returns missions for the site', () => {
-      subject.setSiteId(1);
+    it('returns missions for the site', async () => {
+      await subject.setSelectedSite(1);
       const missions = filteredMissions(subject.missions);
 
-      expect(missions.length).toBeLessThan(allMissions.length);
+      expect(missions.length).toBe(2);
       expect(missions.map(msn => msn.site!.id)
         .filter((el, i, a) => i === a.indexOf(el))).toEqual([1]);
     });
 
+    it('should return missions for all sites', async () => {
+      await subject.setSelectedSite(null);
+
+      const missions = filteredMissions(subject.missions);
+
+      expect(missions.length).toBe(19);
+      console.log(missions);
+      // console.log(missions.map(msn => msn.site!.id).filter((el, i, a) => console.log(a)));
+      expect(missions.map(msn => msn.site!.id)
+        .filter((el, i, a) => i === a.indexOf(el))).toEqual([1, 2, 3]);
+    });
+
     it('returns missions filtered by the selected platform', async () => {
-      await subject.setSiteId(3);
+      await subject.setSelectedSite(3);
 
       subject.setSelectedPlatformOptions([]);
       let missions = filteredMissions(subject.missions);
@@ -66,7 +79,6 @@ describe('DashboardStore', () => {
       subject.setSelectedPlatformOptions([{value: 0, label: 'U-2'}, {value: 1, label: 'Global Hawk'}]);
       missions = filteredMissions(subject.missions);
       expect(missions.length).toBe(15);
-
     });
 
     it('should return missions based on matching ato mission number', () => {

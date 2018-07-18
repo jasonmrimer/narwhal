@@ -63,7 +63,7 @@ describe('RosterHeaderStore', () => {
 
   describe('filtering by shift', () => {
     it('should return the airmen with the selected shift', () => {
-      subject.setSelectedShift(subject.shiftOptions[2]);
+      subject.setSelectedShift(subject.shiftOptions[3]);
       const airmen = subject.filterAirmen(allAirmen);
       expect(airmen.length).toBeGreaterThanOrEqual(1);
 

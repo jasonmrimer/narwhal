@@ -3,7 +3,7 @@ import { SiteRepository } from '../../site/repositories/SiteRepository';
 import { MissionModel } from '../../mission/models/MissionModel';
 import { action, computed, observable, toJS } from 'mobx';
 import { SiteModel } from '../../site/models/SiteModel';
-import { FilterOption, UnfilteredValue } from '../../widgets/inputs/FilterOptionModel';
+import { FilterOption } from '../../widgets/inputs/FilterOptionModel';
 import { Repositories } from '../../utils/Repositories';
 import * as moment from 'moment';
 import * as Fuse from 'fuse.js';
@@ -14,7 +14,7 @@ export class DashboardStore extends NotificationStore {
   private missionRepository: MissionRepository;
   @observable private _sites: SiteModel[] = [];
   @observable private _missions: MissionModel[] = [];
-  @observable private _siteId: number = UnfilteredValue;
+  @observable private _selectedSiteId: number | null = null;
   @observable private _platforms: string[] = [];
   @observable private _selectedPlatformOptions: FilterOption[] = [];
   @observable private _atoMissionNumberFilter: string = '';
@@ -29,7 +29,7 @@ export class DashboardStore extends NotificationStore {
     const [sites, missions, platforms] = await Promise.all([
       this.siteRepository.findAll(),
       this.missionRepository.findAll(),
-      this.missionRepository.findPlatforms(this._siteId)
+      this.missionRepository.findPlatforms(this._selectedSiteId)
     ]);
     this._sites = sites;
     this._missions = missions;
@@ -37,15 +37,24 @@ export class DashboardStore extends NotificationStore {
   }
 
   @computed
-  get siteId() {
-    return this._siteId;
+  get selectedSiteId() {
+    return this._selectedSiteId;
   }
 
   @computed
   get siteOptions() {
-    return this._sites.map(site => {
+    const allSite = [{label: 'All Sites', value: -1}];
+    const realSites = this._sites.map(site => {
       return {value: site.id, label: site.name};
     });
+
+    return allSite.concat(realSites);
+  }
+
+  @computed
+  get selectedSiteOption() {
+    const found = this.siteOptions.find(x => x.value === this._selectedSiteId);
+    return found === undefined ? null : found;
   }
 
   @computed
@@ -66,9 +75,8 @@ export class DashboardStore extends NotificationStore {
   }
 
   @action.bound
-  async setSiteId(id: number) {
-    this._siteId = id;
-    this._platforms = await this.missionRepository.findPlatforms(this._siteId);
+  async setSelectedSite(id: number | null) {
+    await this.setSiteId(id);
   }
 
   @computed
@@ -82,10 +90,9 @@ export class DashboardStore extends NotificationStore {
     ];
 
     let filteredMissions =
-      this._siteId !== UnfilteredValue ?
+      this._selectedSiteId !== null ?
         this._missions
-          .filter(msn => msn.site != null)
-          .filter(msn => msn.site!.id === this._siteId)
+          .filter(this.bySite)
           .filter(this.byPlatforms) :
         this._missions
           .filter(this.byPlatforms);
@@ -114,6 +121,20 @@ export class DashboardStore extends NotificationStore {
     return this._atoMissionNumberFilter;
   }
 
+  private bySite = (msn: MissionModel) => {
+    if(msn.site != null) {
+      if (msn.site!.id === this._selectedSiteId) {
+        return true;
+      }
+    }
+
+    if (this._selectedSiteId === -1 || this._selectedSiteId === null) {
+      return true;
+    }
+
+    return false;
+  }
+
   private byPlatforms = (mission: MissionModel) => {
     if (this._selectedPlatformOptions.length === 0) {
       return true;
@@ -129,6 +150,15 @@ export class DashboardStore extends NotificationStore {
       return missions;
     }
 
-    return new Fuse(missions, {keys: ['atoMissionNumber'], threshold: 0.1, }).search(this._atoMissionNumberFilter);
+    return new Fuse(missions, {keys: ['atoMissionNumber'], threshold: 0.1}).search(this._atoMissionNumberFilter);
+  }
+
+  private async setSiteId(id: number | null) {
+    this._selectedSiteId = id;
+    this._platforms = await this.missionRepository.findPlatforms(
+      this._selectedSiteId === -1 ?
+        null :
+        this._selectedSiteId
+    );
   }
 }

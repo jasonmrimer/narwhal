@@ -7,10 +7,10 @@ export class MissionRepositoryStub implements MissionRepository {
     return Promise.resolve(MissionModelFactory.buildList());
   }
 
-  findPlatforms(siteId: number): Promise<string[]> {
+  findPlatforms(siteId: number | null): Promise<string[]> {
     const missions = MissionModelFactory.buildList();
     let platforms: string[];
-    if (siteId === -1) {
+    if (siteId === -1 || siteId === null) {
       platforms = missions.map((mission) => mission.platform).filter((el, i, a) => i === a.indexOf(el));
     } else {
       platforms = missions
