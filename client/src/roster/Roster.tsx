@@ -37,7 +37,7 @@ export class Roster extends React.Component<Props> {
   airmen = () => {
     const airmen = this.props.locationFilterStore!.filterAirmen(this.props.trackerStore!.airmen);
     return this.props.rosterHeaderStore!.filterAirmen(airmen);
-  }
+  };
 
   render() {
     const {className} = this.props;
@@ -81,7 +81,7 @@ export class Roster extends React.Component<Props> {
         Please select a site to search.
       </BorderedNotification>
     );
-  }
+  };
 
   private renderNone = () => {
     return (
@@ -89,7 +89,7 @@ export class Roster extends React.Component<Props> {
         No members at this location match your search.
       </BorderedNotification>
     );
-  }
+  };
 
   private renderAirmanRow = (props: ListRowProps, airman: AirmanModel) => {
     return (
@@ -100,7 +100,7 @@ export class Roster extends React.Component<Props> {
         style={props.style}
       />
     );
-  }
+  };
 
   private renderFlightRow = (props: ListRowProps, flight: FlightModel) => {
     return (
@@ -110,7 +110,7 @@ export class Roster extends React.Component<Props> {
         </StyledRosterSubHeaderRow>
       </CellMeasurer>
     );
-  }
+  };
 
   private renderEmptyRow = (props: ListRowProps, message: string) => {
     return (
@@ -122,7 +122,7 @@ export class Roster extends React.Component<Props> {
         </div>
       </CellMeasurer>
     );
-  }
+  };
 }
 
 export const StyledRoster = inject(
@@ -184,7 +184,7 @@ const Row = observer(
               tab={TabType.CURRENCY}
               className="airman-qual"
             >
-                <StyledSkillsField items={airman.qualifications}/>
+              <StyledSkillsField items={airman.qualifications}/>
             </StyledAirmanDatum>
             <StyledAirmanDatum
               airman={airman}
@@ -198,32 +198,10 @@ const Row = observer(
             className="right"
 
           >
-            <nav
-              onClick={async () =>
-                await props.sidePanelActions!.openSidePanel(
-                  airman,
-                  TabType.AVAILABILITY, plannerStore!.plannerTimeSpan[0],
-                  true
-                )}
-            >
-              <StyledPlanner
-                airman={airman}
-                plannerWeek={plannerStore!.plannerTimeSpan.slice(0, 7)}
-              />
-            </nav>
-            <nav
-              onClick={async () =>
-                await props.sidePanelActions!.openSidePanel(
-                  airman,
-                  TabType.AVAILABILITY, plannerStore!.plannerTimeSpan[7],
-                  true
-                )}
-            >
-              <StyledPlanner
-                airman={airman}
-                plannerWeek={plannerStore!.plannerTimeSpan.slice(7, 14)}
-              />
-            </nav>
+            <StyledPlanner
+              airman={airman}
+              plannerWeek={plannerStore!.plannerTimeSpan}
+            />
           </div>
         </div>
       </CellMeasurer>
@@ -285,7 +263,6 @@ export const StyledRow = inject(
   }
   nav {
     width: 50%;
-    padding: 0.75rem 0;
-    margin: 0 0.375rem;
+    padding: 0.75rem 0.375rem;
   }
 `);

@@ -3,6 +3,7 @@ import { TabType } from './stores/SidePanelStore';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 import * as moment from 'moment';
 import { historyMock } from '../utils/testUtils';
+import { TimeServiceStub } from './services/doubles/TimeServiceStub';
 
 describe('SidePanelActions', () => {
   let subject: SidePanelActions;
@@ -76,13 +77,15 @@ describe('SidePanelActions', () => {
     const sidePanelStore = {setSelectedTab: setSelectedTabSpy};
 
     subject = new SidePanelActions({
-      trackerStore,
-      availabilityStore,
-      currencyStore,
-      plannerStore,
-      sidePanelStore,
-      pendingEventStore,
-    } as any);
+        trackerStore,
+        availabilityStore,
+        currencyStore,
+        plannerStore,
+        sidePanelStore,
+        pendingEventStore,
+      } as any,
+      new TimeServiceStub()
+    );
   });
 
   it('should close the side panel', () => {
@@ -109,7 +112,7 @@ describe('SidePanelActions', () => {
 
       expect(setSelectedAirmanSpy).toHaveBeenCalledWith(airman);
       expect(setSelectedTabSpy).toHaveBeenCalledWith(TabType.CURRENCY);
-      expect(setSidePanelWeekSpy).toHaveBeenCalledWith(week, moment('2018-07-17T19:20:30.291Z'));
+      expect(setSidePanelWeekSpy).toHaveBeenCalled();
 
       expect(closeEventFormSpy).toHaveBeenCalled();
       expect(closeSkillFormSpy).toHaveBeenCalled();
@@ -119,7 +122,7 @@ describe('SidePanelActions', () => {
       expect(setAirmanEventsSpy).toHaveBeenCalledWith(airmanEvents);
       expect(refreshAirmanEventsSpy).toHaveBeenCalled();
 
-      expect(setSelectedDateSpy).toHaveBeenCalledWith( moment('2018-07-17T19:20:30.291Z'));
+      expect(setSelectedDateSpy).toHaveBeenCalledWith(moment('2018-07-17T19:20:30.291Z'));
       expect(showEventFormSpy).toHaveBeenCalled();
     });
 
@@ -129,7 +132,7 @@ describe('SidePanelActions', () => {
 
       expect(setSelectedAirmanSpy).toHaveBeenCalledWith(airman);
       expect(setSelectedTabSpy).toHaveBeenCalledWith(TabType.CURRENCY);
-      expect(setSidePanelWeekSpy).toHaveBeenCalledWith(week, moment('2018-07-17T19:20:30.291Z'));
+      expect(setSidePanelWeekSpy).toHaveBeenCalled();
 
       expect(closeEventFormSpy).toHaveBeenCalled();
       expect(closeSkillFormSpy).toHaveBeenCalled();
@@ -148,7 +151,7 @@ describe('SidePanelActions', () => {
 
       expect(setSelectedAirmanSpy).toHaveBeenCalledWith(airman);
       expect(setSelectedTabSpy).toHaveBeenCalledWith(TabType.CURRENCY);
-      expect(setSidePanelWeekSpy).toHaveBeenCalledWith(week, null);
+      expect(setSidePanelWeekSpy).toHaveBeenCalled();
 
       expect(closeEventFormSpy).toHaveBeenCalled();
       expect(closeSkillFormSpy).toHaveBeenCalled();

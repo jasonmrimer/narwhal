@@ -2,14 +2,17 @@ import * as React from 'react';
 import * as classNames from 'classnames';
 import styled from 'styled-components';
 import { AirmanModel } from '../airman/models/AirmanModel';
-import { observer } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 import { StyledPlannerEvent } from './PlannerEvent';
 import { Moment } from 'moment';
+import { TabType } from '../tracker/stores/SidePanelStore';
+import { SidePanelActions } from '../tracker/SidePanelActions';
 
 interface Props {
   airman: AirmanModel;
-  className?: string;
   plannerWeek: Moment[];
+  className?: string;
+  sidePanelActions?: SidePanelActions;
 }
 
 @observer
@@ -23,14 +26,22 @@ export class Planner extends React.Component<Props> {
   }
 
   private renderEvents = () => {
-    const {airman, plannerWeek} = this.props;
+    const {airman, plannerWeek, sidePanelActions} = this.props;
+
     return plannerWeek.map((day, i) => {
-      return <StyledPlannerEvent key={i} airman={airman} day={day}/>;
+      return (
+        <nav
+          key={i}
+          onClick={async () => await sidePanelActions!.openSidePanel(airman, TabType.AVAILABILITY, day, true)}
+        >
+          <StyledPlannerEvent  airman={airman} day={day}/>
+        </nav>);
     });
+
   }
 }
 
-export const StyledPlanner = styled(Planner)`
+export const StyledPlanner = inject('sidePanelActions')( styled(Planner)`
     display: flex;
     justify-content: space-between;
     cursor: pointer;
@@ -46,4 +57,4 @@ export const StyledPlanner = styled(Planner)`
     .blank {
       width: 30px;
     }
-`;
+`);
