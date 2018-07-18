@@ -79,6 +79,8 @@ export const StyledPendingEventTileList = inject(
     z-index: 1;
     border-radius: 0.25rem;
     margin-top: 1.85rem;
+    max-height: 16rem;
+    overflow: auto;
 
     .tile {
       border-bottom: 1px solid ${props => props.theme.fontColor};
