@@ -14,7 +14,7 @@ class DashboardPage
 
   def assert_filters_by_site
     assert_shows_site('All Sites')
-    filter_by_site(site: 'DGS-1')
+    typeahead_select('.site-filter', 'DGS-1')
     assert_shows_site('DGS-1')
   end
 
@@ -50,6 +50,13 @@ class DashboardPage
     page.within('.filters') do
       fill_in(item, with: value)
       click_link(value)
+    end
+  end
+
+  def typeahead_select(className, value)
+    page.within(className) do
+      find('.rbt-input').click
+      click_on(value);
     end
   end
 end

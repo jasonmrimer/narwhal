@@ -122,6 +122,12 @@ export class DashboardStore extends NotificationStore {
   }
 
   private bySite = (msn: MissionModel) => {
+    if (
+      msn.site === null ||
+      msn.site === undefined
+    ) {
+      return false;
+    }
     if(msn.site != null) {
       if (msn.site!.id === this._selectedSiteId) {
         return true;

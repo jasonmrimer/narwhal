@@ -31,33 +31,27 @@ class TrackerPage
 
   def assert_filters_by_site
     find_typeahead_text('.site-filter', 'DMS-MD')
-    typeahead_clear('.site-filter')
-    typeahead_filters('Select Site', 'DMS-GA')
+    typeahead_select('.site-filter', 'DMS-GA')
+
     expect(page).to have_css('tbody tr', maximum: @all_airmen_count)
   end
 
   def assert_filters_by_squadron
-    typeahead_clear('.site-filter')
-    typeahead_filters('Select Site', 'DMS-MD')
+    typeahead_select('.site-filter', 'DMS-MD')
 
     site_count = page.find_all('tbody tr').count
 
-    typeahead_clear('.squadron-filter')
-    find_typeahead_text('.squadron-filter', '')
+    typeahead_select('.squadron-filter', '94 IS')
 
-    typeahead_filters('All Squadrons', '94 IS')
     expect(page).to have_css('tbody tr', maximum: site_count)
   end
 
   def assert_filters_by_flight
-    typeahead_clear('.site-filter')
-    typeahead_filters('Select Site', 'DMS-MD')
+    typeahead_select('.site-filter', 'DMS-MD')
 
     squadron_count = page.find_all('tbody tr').count
 
-    find_typeahead_text('.flight-filter', '')
-
-    typeahead_filters('All Flights', 'DOB')
+    typeahead_select('.flight-filter', 'DOB')
     expect(page).to have_css('tbody tr', maximum: squadron_count)
   end
 
@@ -74,20 +68,20 @@ class TrackerPage
   end
 
   def assert_filters_by_shift
-    typeahead_roster_header('All', 'Night')
+    typeahead_select('.shift-filter', 'Night')
     expect(page).to have_css('.airman-name', maximum: @all_airmen_count - 1)
 
-    typeahead_clear('.shift-filter')
+    typeahead_select('.shift-filter', 'All')
     expect(page).to have_css('.airman-name', count: @all_airmen_count)
   end
 
   def assert_filters_by_certification
-    typeahead_roster_header('Filter Certifications', 'SUPER SPEED')
+    typeahead_select('.certifications-multitypeahead', 'SUPER SPEED')
     expect(page).to have_css('.airman-name', maximum: @all_airmen_count - 1)
   end
 
   def assert_filters_by_qualification
-    typeahead_roster_header('Filter Qualifications', 'QB')
+    typeahead_select('.qualifications-multitypeahead', 'QB')
     expect(page).to have_css('.airman-name', maximum: @all_airmen_count - 1)
   end
 
@@ -252,9 +246,9 @@ class TrackerPage
   def assert_return_to_tracker_with_previous_filter_values
     squadron_count = page.find_all('.airman-name').count
 
-    typeahead_filters('All Flights', 'DOB')
-    typeahead_roster_header('Filter Qualifications', 'QB')
-    typeahead_roster_header('Filter Certifications', 'SUPER SPEED')
+    typeahead_select('.flight-filter', 'DOB')
+    typeahead_select('.certifications-multitypeahead', 'SUPER SPEED')
+    typeahead_select('.qualifications-multitypeahead', 'QB')
 
     click(find('a', text: 'MISSION'))
 
@@ -291,23 +285,10 @@ class TrackerPage
     expect(page).to have_content('DCGS Mission')
   end
 
-  def typeahead_roster_header(item, value)
-    page.within('.roster-header') do
-      fill_in(item, with: value)
-      click_link(value)
-    end
-  end
-
-  def typeahead_filters(item, value)
-    page.within('.filters') do
-      fill_in(item, with: value)
-      click_link(value)
-    end
-  end
-
-  def typeahead_clear(clearClass)
-    page.within(clearClass) do
-      click_button('×')
+  def typeahead_select(className, value)
+    page.within(className) do
+      find('.rbt-input').click
+      click_on(value);
     end
   end
 

@@ -55,14 +55,9 @@ describe('DashboardStore', () => {
 
     it('should return missions for all sites', async () => {
       await subject.setSelectedSite(null);
-
       const missions = filteredMissions(subject.missions);
 
       expect(missions.length).toBe(19);
-      console.log(missions);
-      // console.log(missions.map(msn => msn.site!.id).filter((el, i, a) => console.log(a)));
-      expect(missions.map(msn => msn.site!.id)
-        .filter((el, i, a) => i === a.indexOf(el))).toEqual([1, 2, 3]);
     });
 
     it('returns missions filtered by the selected platform', async () => {
