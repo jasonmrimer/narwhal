@@ -7,13 +7,13 @@ import { StyledFieldValidation } from '../widgets/inputs/FieldValidation';
 import { inject, observer } from 'mobx-react';
 import { StyledSubmitButton } from '../widgets/forms/SubmitButton';
 import { StyledForm, StyledFormRow } from '../widgets/forms/Form';
-import { StyledDropdown } from '../widgets/inputs/Dropdown';
 import { DeleteIcon } from '../icons/DeleteIcon';
 import { SkillFormStore } from './stores/SkillFormStore';
 import { CurrencyStore } from '../currency/stores/CurrencyStore';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { LocationFilterStore } from '../widgets/stores/LocationFilterStore';
 import { SkillActions } from './SkillActions';
+import { StyledSingleTypeahead } from '../widgets/inputs/SingleTypeahead';
 
 interface Props {
   skillFormStore?: SkillFormStore;
@@ -28,6 +28,7 @@ interface Props {
 @observer
 export class SkillsForm extends React.Component<Props> {
   handleChange = ({target}: any) => {
+    console.log(target.label + " " + target.value);
     this.props.skillFormStore!.setState(target.name, target.value);
   }
 
@@ -55,29 +56,57 @@ export class SkillsForm extends React.Component<Props> {
           }
         </div>
 
-        <StyledFormRow>
-          <label htmlFor="skill-type-select">Type:</label>
-          <StyledDropdown
-            id="skill-type-select"
-            name="skillType"
+        <div className={"filter-container"}>
+          <label htmlFor="skill-type-filter">Type:</label>
+          <StyledSingleTypeahead
             options={allSkills().map(skill => ({value: skill, label: skill}))}
-            value={skillFormStore!.state.skillType}
-            onChange={this.handleChange}
+            onChange={async () => {
+              await trackerStore!.performLoading(async () => {
+                await skillFormStore!.setSelectedSkillType;
+              });
+            }}
+            className="skill-type-filter"
+            clearButton={false}
+            placeholder="All Sites"
+            selected={{value:1, label:"Qualification"}}
+            filterBy={() => {
+              return true;
+            }}
             disabled={disabled}
           />
-        </StyledFormRow>
+        </div>
 
-        <StyledFormRow>
-          <label htmlFor="skill-name-select">Name:</label>
-          <StyledDropdown
-            id="skill-name-select"
-            name="skillId"
+        {/*<StyledFormRow>*/}
+          {/*<StyledDropdown*/}
+            {/*value={skillFormStore!.state.skillType}*/}
+          {/*/>*/}
+        {/*</StyledFormRow>*/}
+
+        <div className={"filter-container"}>
+          <label htmlFor="skill-name-filter">Name:</label>
+          <StyledSingleTypeahead
             options={this.getSkillNameOptions()}
-            value={skillFormStore!.state.skillId}
-            onChange={this.handleChange}
+            onChange={async () => {
+              await trackerStore!.performLoading(async () => {
+                await skillFormStore!.setSelectedSkill;
+              });
+            }}
+            className="skill-name-filter"
+            clearButton={false}
+            placeholder="All Sites"
+            selected={{value:-1, label:""}}
+            filterBy={() => {
+              return true;
+            }}
             disabled={disabled}
           />
-        </StyledFormRow>
+        </div>
+
+        {/*<StyledFormRow>*/}
+          {/*<StyledDropdown*/}
+            {/*value={skillFormStore!.state.skillId}*/}
+          {/*/>*/}
+        {/*</StyledFormRow>*/}
 
         <StyledFieldValidation fieldName="validDateRange" errors={skillFormStore!.errors}>
           <StyledFieldValidation fieldName="earnDate" errors={skillFormStore!.errors}>
