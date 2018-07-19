@@ -13,6 +13,7 @@ export class AirmanModel {
   @observable public flightId: number;
   @observable public rank: RankModel;
   @observable public shift?: ShiftType;
+  @observable public remarks?: string;
 
   static empty(): AirmanModel {
     return new AirmanModel(-1, -1, -1, -1, '', '', new RankModel(-1, ''), [], [], []);
@@ -28,7 +29,9 @@ export class AirmanModel {
               public qualifications: AirmanQualificationModel[] = [],
               public certifications: AirmanCertificationModel[] = [],
               public schedules: AirmanScheduleModel[] = [],
-              shift?: ShiftType) {
+              shift?: ShiftType,
+              remarks?: string
+    ) {
     this.firstName = firstName;
     this.lastName = lastName;
     this.siteId = siteId;
@@ -36,6 +39,7 @@ export class AirmanModel {
     this.flightId = flightId;
     this.rank = rank;
     this.shift = shift;
+    this.remarks = remarks;
   }
 
   get fullName() {

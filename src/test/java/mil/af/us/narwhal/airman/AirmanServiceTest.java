@@ -104,6 +104,7 @@ public class AirmanServiceTest {
       2L,
       "Foo",
       "Bar",
+      "Foo knows Travis",
       rank,
       ShiftType.Day,
       new ArrayList<>(),
@@ -117,6 +118,7 @@ public class AirmanServiceTest {
     assertThat(savedAirman.getId()).isEqualTo(123L);
     assertThat(savedAirman.getFirstName()).isEqualTo("Foo");
     assertThat(savedAirman.getLastName()).isEqualTo("Bar");
+    assertThat(savedAirman.getRemarks()).isEqualTo("Foo knows Travis");
     assertThat(savedAirman.getShift()).isEqualTo(ShiftType.Day);
     assertThat(savedAirman.getFlight().getId()).isEqualTo(flight2.getId());
     assertThat(savedAirman.getRank().getId()).isEqualTo(rank.getId());
@@ -155,6 +157,7 @@ public class AirmanServiceTest {
       1L,
       "Foo",
       "Bar",
+      "Foo does not know what day it is",
       rank,
       ShiftType.Day,
       new ArrayList<>(),
@@ -168,6 +171,7 @@ public class AirmanServiceTest {
     assertThat(savedAirman.getId()).isNotNull();
     assertThat(savedAirman.getFirstName()).isEqualTo("Foo");
     assertThat(savedAirman.getLastName()).isEqualTo("Bar");
+    assertThat(savedAirman.getRemarks()).isEqualTo("Foo does not know what day it is");
     assertThat(savedAirman.getShift()).isEqualTo(ShiftType.Day);
     assertThat(savedAirman.getFlight().getId()).isEqualTo(flight.getId());
     assertThat(savedAirman.getRank().getId()).isEqualTo(rank.getId());

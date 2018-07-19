@@ -1,0 +1,1 @@
+ALTER TABLE airman ADD COLUMN remarks VARCHAR(512);

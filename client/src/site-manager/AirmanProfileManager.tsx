@@ -18,6 +18,7 @@ import { StyledAlert } from '../widgets/Alert';
 import { StyledButton } from '../widgets/buttons/Button';
 import { DeleteIcon } from '../icons/DeleteIcon';
 import { StyledDeletePopup } from '../widgets/popups/DeletePopup';
+import { StyledTextAreaInput } from '../widgets/inputs/TextAreaInput';
 
 interface Props {
   airmanProfileManagerStore?: AirmanProfileManagerStore;
@@ -31,7 +32,7 @@ export class AirmanProfileManager extends React.Component<Props> {
   render() {
     const {history, className, airmanProfileManagerStore} = this.props;
     const {airman, setState, didSaveAirman} = airmanProfileManagerStore!;
-    const {firstName, lastName} = airman;
+    const {firstName, lastName, remarks} = airman;
     return (
       <div className={className}>
 
@@ -104,6 +105,7 @@ export class AirmanProfileManager extends React.Component<Props> {
                     value={firstName}
                     name="firstName"
                     id="airman-first-name"
+                    maxLength={35}
                   />
                 </span>
               </StyledFieldValidation>
@@ -120,14 +122,24 @@ export class AirmanProfileManager extends React.Component<Props> {
                     value={lastName}
                     name="lastName"
                     id="airman-last-name"
+                    maxLength={35}
                   />
                 </span>
               </StyledFieldValidation>
-            </div>
 
+              <span className="multiple-lines">
+                <label htmlFor="airman-remarks">REMARKS</label>
+                <StyledTextAreaInput
+                  onChange={(e) => setState(e.target.name, e.target.value)}
+                  value={remarks}
+                  name="remarks"
+                  id="airman-remarks"
+                  maxLength={512}
+                />
+              </span>
+            </div>
             <div>
               <h2>Member Organization</h2>
-
               <StyledFieldValidation
                 fieldName="siteId"
                 errors={airmanProfileManagerStore!.errors}
@@ -223,7 +235,7 @@ export class AirmanProfileManager extends React.Component<Props> {
   private onSubmit = async (e: any) => {
     e.preventDefault();
     await this.props.profileActions!.handleFormSubmit(this.props.history);
-  }
+  };
 
   private renderQualifications = () => {
     return this.props.airmanProfileManagerStore!.airman.qualifications.map((qual, index) => (
@@ -232,7 +244,7 @@ export class AirmanProfileManager extends React.Component<Props> {
         skill={qual}
       />
     ));
-  }
+  };
 
   private renderCertifications = () => {
     return this.props.airmanProfileManagerStore!.airman.certifications.map((cert, index) => (
@@ -241,7 +253,7 @@ export class AirmanProfileManager extends React.Component<Props> {
         skill={cert}
       />
     ));
-  }
+  };
 
   private renderRipTile = () => {
     return (
@@ -251,7 +263,7 @@ export class AirmanProfileManager extends React.Component<Props> {
         expiredItemCount={this.props.airmanProfileManagerStore!.expiredItemCount}
       />
     );
-  }
+  };
 }
 
 export const StyledAirmanProfileManager = inject(
@@ -301,6 +313,13 @@ export const StyledAirmanProfileManager = inject(
       input, select {
         width: 14rem;
       }
+    }
+    
+    .multiple-lines {
+     textarea{
+      margin-top: 0.5rem;
+     }
+      
     }
     
     .airman-skills {

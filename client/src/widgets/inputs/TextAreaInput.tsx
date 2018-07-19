@@ -16,15 +16,14 @@ interface Props {
 }
 
 @observer
-export class TextInput extends React.Component<Props> {
+export class TextAreaInput extends React.Component<Props> {
   render() {
     return (
-      <input
+      <textarea
         id={this.props.id}
         className={this.props.className}
-        type="text"
         placeholder={this.props.placeholder}
-        value={this.props.value === undefined ? '' : this.props.value}
+        value={this.props.value == null ? '' : this.props.value}
         name={this.props.name}
         onChange={this.props.onChange}
         onKeyPress={this.props.onKeyPress}
@@ -35,7 +34,7 @@ export class TextInput extends React.Component<Props> {
   }
 }
 
-export const StyledTextInput = styled(TextInput)`
+export const StyledTextAreaInput = styled(TextAreaInput)`
   &::placeholder {
    color: ${props => props.theme.graySteel};
   }
@@ -43,13 +42,15 @@ export const StyledTextInput = styled(TextInput)`
   background: none;
   color: ${props => props.theme.fontColor};
   border: none;
-  border-bottom: 1px solid ${props => props.theme.graySteel};
+  border: 1px solid ${props => props.theme.graySteel};
   padding: 0;
   font: inherit;
   font-weight: 300;
   cursor: pointer;
   outline: inherit;
   width: 100%;
+  height: 7rem;
+  resize: none;
   
   &:disabled {
     color: ${props => props.theme.graySteel};

@@ -49,6 +49,7 @@ public class AirmanService {
     airman.setRank(rank);
     airman.setLastName(json.getLastName());
     airman.setFirstName(json.getFirstName());
+    airman.setRemarks(json.getRemarks());
     airman.setFlight(flight);
     airman.setShift(json.getShift());
     json.getSchedules().stream()

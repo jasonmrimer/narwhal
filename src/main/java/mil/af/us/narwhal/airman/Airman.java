@@ -31,6 +31,8 @@ public class Airman {
 
   private String lastName;
 
+  private String remarks;
+
   @ManyToOne
   @JoinColumn(name = "rank_id", nullable = false)
   private Rank rank;

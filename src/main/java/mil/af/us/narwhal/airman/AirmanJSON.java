@@ -28,6 +28,8 @@ public class AirmanJSON {
     @NotEmpty(message = emptyFieldMessage)
     private String lastName;
 
+    private String remarks;
+
     private Rank rank;
 
     private ShiftType shift;
@@ -45,6 +47,7 @@ public class AirmanJSON {
             Long flightId,
             String firstName,
             String lastName,
+            String remarks,
             ShiftType shift,
             List<AirmanQualification> qualifications,
             List<AirmanCertification> certifications,
@@ -55,6 +58,7 @@ public class AirmanJSON {
         this.flightId = flightId;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.remarks = remarks;
         this.shift = shift;
         this.qualifications = new ArrayList<>(qualifications);
         this.certifications = new ArrayList<>(certifications);
