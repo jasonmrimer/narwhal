@@ -19,6 +19,8 @@ interface State {
 export class SkillFormStore extends FormStore<Skill, State> {
   @observable private _certifications: CertificationModel[] = [];
   @observable private _qualifications: QualificationModel[] = [];
+  @observable private _currentSkillTypeSelection: string = SkillType.Qualification;
+  @observable private _currentSkillSelection: number;
   private _siteId: number;
 
   constructor() {
@@ -38,6 +40,7 @@ export class SkillFormStore extends FormStore<Skill, State> {
     this._certifications = certifications;
     this._qualifications = qualifications;
     this._siteId = siteId;
+    this.state.skillId = this.qualificationOptions[0].value.toString();
   }
 
   @action.bound
@@ -48,8 +51,20 @@ export class SkillFormStore extends FormStore<Skill, State> {
       this.setPeriodicDue(value);
     } else if (key === 'lastSat') {
       this.setCurrencyExpiration(value);
+    } else if (key === 'skillId') {
+      this.setCurrentSkillSelection(Number(value));
     }
     super.setState(key, value);
+  }
+
+  @action.bound
+  setCurrentSkillSelection(value: number) {
+    this._currentSkillSelection = value;
+  }
+
+  @action.bound
+  setCurrentSkillTypeSelection(value: string) {
+    this._currentSkillTypeSelection = value;
   }
 
   protected modelToState(model: Skill | null): State {
@@ -80,9 +95,9 @@ export class SkillFormStore extends FormStore<Skill, State> {
 
   stateToModel(airmanId: number) {
     return {
-      type: this._state.skillType as SkillType,
+      type: this.currentSkillTypeSelection as SkillType,
       airmanId: airmanId,
-      skillId: Number(this._state.skillId),
+      skillId: this._currentSkillSelection,
       earnDate: moment(this._state.earnDate),
       periodicDue: moment(this._state.periodicDue),
       currencyExpiration: moment(this._state.currencyExpiration),
@@ -96,6 +111,41 @@ export class SkillFormStore extends FormStore<Skill, State> {
     return (this._qualifications || []).map(qual => {
       return {value: qual.id, label: `${qual.acronym} - ${qual.title}`};
     });
+  }
+
+  @computed
+  get currentSkillTypeSelection() {
+    return this._currentSkillTypeSelection;
+  }
+
+  @computed
+  get currentSkillSelection() {
+    return this._currentSkillSelection;
+  }
+
+  @computed
+  get selectedSkillOption() {
+    const found = this.skillOptions.find(x => {
+      if (x !== null && typeof x.value === 'number') {
+        return x.value === Number(this.state.skillId);
+      }
+      return false;
+    });
+    return found === undefined ?
+        this.qualificationOptions[0]
+        : found;
+  }
+
+  @computed
+  get skillOptions() {
+    switch (this.currentSkillTypeSelection) {
+      case SkillType.Certification:
+        return this.certificationOptions;
+      case SkillType.Qualification:
+        return this.qualificationOptions;
+      default:
+        return [];
+    }
   }
 
   @computed

@@ -20,8 +20,8 @@ class Skill
     page.within('.side-panel') do
       find('a', text: 'CURRENCY').click
       click_link_or_button 'Add Skill'
-      select 'Qualification', from: 'Type:'
-      select 'HT - Instructor', from: 'Name:'
+      typeahead_select('.skill-type-filter', 'Qualification')
+      typeahead_select('.skill-name-filter', 'HT - Instructor')
       continue_submission
     end
   end
@@ -61,8 +61,8 @@ class Skill
     page.within('.side-panel') do
       find('a', text: 'CURRENCY').click
       click_link_or_button 'Add Skill'
-      select 'Certification', from: 'Type:'
-      select 'X-RAY VISION', from: 'Name:'
+      typeahead_select('.skill-type-filter', 'Certification')
+      typeahead_select('.skill-name-filter', 'X-RAY VISION')
       continue_submission
     end
   end
@@ -125,5 +125,12 @@ class Skill
     JS
 
     Capybara.current_session.driver.browser.execute_script(script, element.native)
+  end
+
+  def typeahead_select(className, value)
+    page.within(className) do
+      find('.rbt-input').click
+      click_on(value);
+    end
   end
 end

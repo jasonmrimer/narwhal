@@ -7,13 +7,13 @@ import { StyledFieldValidation } from '../widgets/inputs/FieldValidation';
 import { inject, observer } from 'mobx-react';
 import { StyledSubmitButton } from '../widgets/forms/SubmitButton';
 import { StyledForm, StyledFormRow } from '../widgets/forms/Form';
-import { StyledDropdown } from '../widgets/inputs/Dropdown';
 import { DeleteIcon } from '../icons/DeleteIcon';
 import { SkillFormStore } from './stores/SkillFormStore';
 import { CurrencyStore } from '../currency/stores/CurrencyStore';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { LocationFilterStore } from '../widgets/stores/LocationFilterStore';
 import { SkillActions } from './SkillActions';
+import { StyledSingleTypeahead } from '../widgets/inputs/SingleTypeahead';
 
 interface Props {
   skillFormStore?: SkillFormStore;
@@ -29,16 +29,23 @@ interface Props {
 export class SkillsForm extends React.Component<Props> {
   handleChange = ({target}: any) => {
     this.props.skillFormStore!.setState(target.name, target.value);
-  }
+  };
+
+  handleDropDown = (target: any) => {
+    if (target !== undefined) {
+      this.props.skillFormStore!.setState(target.name, target.value);
+    }
+  };
 
   handleDelete = async () => {
     await this.props.skillActions!.deleteSkill();
-  }
+  };
 
   handleSubmit = async (e: any) => {
     e.preventDefault();
     await this.props.skillActions!.submitSkill(this.props.airmanId);
-  }
+    this.props.skillFormStore!.setCurrentSkillTypeSelection(SkillType.Qualification);
+  };
 
   render() {
     const {skillFormStore, trackerStore} = this.props;
@@ -56,27 +63,47 @@ export class SkillsForm extends React.Component<Props> {
         </div>
 
         <StyledFormRow>
-          <label htmlFor="skill-type-select">Type:</label>
-          <StyledDropdown
-            id="skill-type-select"
-            name="skillType"
+          <label htmlFor="skill-dropdown">Type:</label>
+          <div className="skill-dropdown">
+          <StyledSingleTypeahead
             options={allSkills().map(skill => ({value: skill, label: skill}))}
-            value={skillFormStore!.state.skillType}
-            onChange={this.handleChange}
+            onChange={(e) => {
+              this.handleDropDown(e);
+              if (e !== null && typeof e.value === 'string') {
+                skillFormStore!.setCurrentSkillTypeSelection(e.value);
+              }
+            }}
+            clearButton={false}
+            className="skill-type-filter"
+            selected={{value: 'Qualification', label: 'Qualification'}}
+            filterBy={() => {
+              return true;
+            }}
             disabled={disabled}
           />
+          </div>
         </StyledFormRow>
 
         <StyledFormRow>
-          <label htmlFor="skill-name-select">Name:</label>
-          <StyledDropdown
-            id="skill-name-select"
-            name="skillId"
-            options={this.getSkillNameOptions()}
-            value={skillFormStore!.state.skillId}
-            onChange={this.handleChange}
+          <label htmlFor="skill-dropdown">Name:</label>
+          <div className="skill-dropdown">
+          <StyledSingleTypeahead
+            options={skillFormStore!.skillOptions}
+            onChange={e => {
+              this.handleDropDown(e);
+              if (e !== null && typeof e.value === 'number') {
+                skillFormStore!.setCurrentSkillSelection(e.value);
+              }
+            }}
+            clearButton={false}
+            className="skill-name-filter"
+            selected={skillFormStore!.selectedSkillOption}
+            filterBy={() => {
+              return true;
+            }}
             disabled={disabled}
           />
+          </div>
         </StyledFormRow>
 
         <StyledFieldValidation fieldName="validDateRange" errors={skillFormStore!.errors}>
@@ -143,19 +170,6 @@ export class SkillsForm extends React.Component<Props> {
       </StyledForm>
     );
   }
-
-  private getSkillNameOptions = () => {
-    const {skillFormStore} = this.props;
-    const {state, qualificationOptions} = skillFormStore!;
-    switch (state.skillType) {
-      case SkillType.Certification:
-        return skillFormStore!.certificationOptions;
-      case SkillType.Qualification:
-        return qualificationOptions;
-      default:
-        return [];
-    }
-  }
 }
 
 export const StyledSkillsForm = inject(
@@ -166,4 +180,8 @@ export const StyledSkillsForm = inject(
   'skillActions'
 )(styled(SkillsForm)`  
   min-width: ${props => props.theme.sidePanelWidth};
+  
+  .skill-dropdown {
+      width: 75%;
+  }
 `);
