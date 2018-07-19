@@ -43,10 +43,6 @@ export const StyledSingleTypeahead = styled(SingleTypeahead)`
     .rbt-sr-status {
       display: none;
     }
-    
-    .rbt-close {
-      padding-right: 50px;
-    }
         
     .rbt-input {
       border-bottom: 1px solid ${props => props.theme.graySteel} !important;
