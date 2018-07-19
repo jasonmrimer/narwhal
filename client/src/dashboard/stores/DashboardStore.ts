@@ -128,7 +128,7 @@ export class DashboardStore extends NotificationStore {
     ) {
       return false;
     }
-    if(msn.site != null) {
+    if (msn.site != null) {
       if (msn.site!.id === this._selectedSiteId) {
         return true;
       }
