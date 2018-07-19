@@ -19,6 +19,8 @@ interface State {
 export class SkillFormStore extends FormStore<Skill, State> {
   @observable private _certifications: CertificationModel[] = [];
   @observable private _qualifications: QualificationModel[] = [];
+  @observable private _currentSkillTypeSelection: string = SkillType.Qualification;
+  @observable private _currentSkillSelection: number;
   private _siteId: number;
 
   constructor() {
@@ -38,18 +40,31 @@ export class SkillFormStore extends FormStore<Skill, State> {
     this._certifications = certifications;
     this._qualifications = qualifications;
     this._siteId = siteId;
+    this.state.skillId = this.qualificationOptions[0].value.toString();
+    this._currentSkillSelection = this.qualificationOptions[0].value;
   }
 
   @action.bound
   setState(key: keyof State, value: string) {
-    if (key === 'skillType') {
-      this.setDefaultSkillSelection(value);
-    } else if (key === 'earnDate') {
+    // if (key === 'skillType') {
+    //   this.setDefaultSkillSelection(value);
+    // } else 
+      if (key === 'earnDate') {
       this.setPeriodicDue(value);
     } else if (key === 'lastSat') {
       this.setCurrencyExpiration(value);
     }
     super.setState(key, value);
+  }
+
+  @action.bound
+  setCurrentSkillSelection(value: number) {
+    this._currentSkillSelection = value;
+  }
+
+  @action.bound
+  setCurrentSkillTypeSelection(value: string) {
+    this._currentSkillTypeSelection = value;
   }
 
   protected modelToState(model: Skill | null): State {
@@ -96,6 +111,40 @@ export class SkillFormStore extends FormStore<Skill, State> {
     return (this._qualifications || []).map(qual => {
       return {value: qual.id, label: `${qual.acronym} - ${qual.title}`};
     });
+  }
+
+  @computed
+  get currentSkillTypeSelection() {
+    return this._currentSkillTypeSelection;
+  }
+
+  @computed
+  get currentSkillSelection() {
+    return this._currentSkillSelection;
+  }
+
+  @computed
+  get selectedSkillOption() {
+    return this.skillOptions.find(x => {
+      console.log(typeof x.value);
+      if (x !== null && typeof x.value === 'number') {
+        console.log('HALPppppppppppp')
+        x.value === Number(this.state.skillId)
+      }
+      return false;
+    });
+  }
+
+  @computed
+  get skillOptions() {
+    switch (this.currentSkillTypeSelection) {
+      case SkillType.Certification:
+        return this.certificationOptions;
+      case SkillType.Qualification:
+        return this.qualificationOptions;
+      default:
+        return [];
+    }
   }
 
   @computed
