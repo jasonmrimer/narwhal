@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { StyledDatePicker } from '../widgets/inputs/DatePicker';
-import { allSkills } from './models/SkillType';
+import { allSkills, SkillType } from './models/SkillType';
 import { StyledButton } from '../widgets/buttons/Button';
 import { StyledFieldValidation } from '../widgets/inputs/FieldValidation';
 import { inject, observer } from 'mobx-react';
@@ -28,19 +28,24 @@ interface Props {
 @observer
 export class SkillsForm extends React.Component<Props> {
   handleChange = ({target}: any) => {
+    this.props.skillFormStore!.setState(target.name, target.value);
+  };
+
+  handleDropDown = (target: any) => {
     if (target !== undefined) {
       this.props.skillFormStore!.setState(target.name, target.value);
     }
-  }
+  };
 
   handleDelete = async () => {
     await this.props.skillActions!.deleteSkill();
-  }
+  };
 
   handleSubmit = async (e: any) => {
     e.preventDefault();
     await this.props.skillActions!.submitSkill(this.props.airmanId);
-  }
+    this.props.skillFormStore!.setCurrentSkillTypeSelection(SkillType.Qualification);
+  };
 
   render() {
     const {skillFormStore, trackerStore} = this.props;
@@ -57,17 +62,19 @@ export class SkillsForm extends React.Component<Props> {
           }
         </div>
 
-        <div className={"filter-container"}>
+        <StyledFormRow>
           <label htmlFor="skill-type-filter">Type:</label>
           <StyledSingleTypeahead
             options={allSkills().map(skill => ({value: skill, label: skill}))}
-            onChange={ (e) => {
-              this.handleChange(e);
+            onChange={(e) => {
+              console.log('before all the mayhem and hype');
+              console.log(e);
+              this.handleDropDown(e);
               if (e !== null && typeof e.value === 'string') {
-                skillFormStore!.setCurrentSkillSelection(e.value);
+                skillFormStore!.setCurrentSkillTypeSelection(e.value);
               }
             }}
-            className="skill-type-filter"
+            className="skill-filter"
             clearButton={false}
             selected={{value: 'Qualification', label: 'Qualification'}}
             filterBy={() => {
@@ -75,20 +82,19 @@ export class SkillsForm extends React.Component<Props> {
             }}
             disabled={disabled}
           />
-        </div>
+        </StyledFormRow>
 
-        {/*<StyledFormRow>*/}
-        {/*<StyledDropdown*/}
-        {/*value={skillFormStore!.state.skillType}*/}
-        {/*/>*/}
-        {/*</StyledFormRow>*/}
-
-        <div className={"filter-container"}>
+        <StyledFormRow>
           <label htmlFor="skill-name-filter">Name:</label>
           <StyledSingleTypeahead
             options={skillFormStore!.skillOptions}
-            onChange={ e => this.handleChange(e) }
-            className="skill-name-filter"
+            onChange={e => {
+              this.handleDropDown(e);
+              if (e !== null && typeof e.value === 'number') {
+                skillFormStore!.setCurrentSkillSelection(e.value);
+              }
+            }}
+            className="skill-filter"
             clearButton={false}
             selected={skillFormStore!.selectedSkillOption}
             filterBy={() => {
@@ -96,13 +102,7 @@ export class SkillsForm extends React.Component<Props> {
             }}
             disabled={disabled}
           />
-        </div>
-
-        {/*<StyledFormRow>*/}
-        {/*<StyledDropdown*/}
-        {/*value={skillFormStore!.state.skillId}*/}
-        {/*/>*/}
-        {/*</StyledFormRow>*/}
+        </StyledFormRow>
 
         <StyledFieldValidation fieldName="validDateRange" errors={skillFormStore!.errors}>
           <StyledFieldValidation fieldName="earnDate" errors={skillFormStore!.errors}>
@@ -178,4 +178,8 @@ export const StyledSkillsForm = inject(
   'skillActions'
 )(styled(SkillsForm)`  
   min-width: ${props => props.theme.sidePanelWidth};
+  
+  .skill-filter {
+      width: 50%;
+  }
 `);

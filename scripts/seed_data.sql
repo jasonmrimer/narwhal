@@ -1,6 +1,6 @@
 INSERT INTO flight VALUES (1, 16, 'DOB'), (2, 16, 'DOC'), (3, 1, 'JKB'), (4, 1, 'JKA');
 
-INSERT INTO airman VALUES
+INSERT INTO airman (id, first_name, last_name, flight_id, shift, rank_id) VALUES
   (1, 'Corey', 'Spaceman', 1, 'Day', 3),
   (2, 'Tracy', 'Keeter', 1, 'Day', 3),
   (3, 'Jonathan', 'Graves', 2, 'Day', 4),

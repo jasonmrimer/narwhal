@@ -41,14 +41,13 @@ export class SkillFormStore extends FormStore<Skill, State> {
     this._qualifications = qualifications;
     this._siteId = siteId;
     this.state.skillId = this.qualificationOptions[0].value.toString();
-    this._currentSkillSelection = this.qualificationOptions[0].value;
   }
 
   @action.bound
   setState(key: keyof State, value: string) {
-    // if (key === 'skillType') {
-    //   this.setDefaultSkillSelection(value);
-    // } else 
+    if (key === 'skillType') {
+      this.setDefaultSkillSelection(value);
+    } else
       if (key === 'earnDate') {
       this.setPeriodicDue(value);
     } else if (key === 'lastSat') {
@@ -94,10 +93,12 @@ export class SkillFormStore extends FormStore<Skill, State> {
   }
 
   stateToModel(airmanId: number) {
+    console.log(this.currentSkillSelection);
+    console.log(this.currentSkillTypeSelection);
     return {
-      type: this._state.skillType as SkillType,
+      type: this.currentSkillTypeSelection as SkillType,
       airmanId: airmanId,
-      skillId: Number(this._state.skillId),
+      skillId: this._currentSkillSelection,
       earnDate: moment(this._state.earnDate),
       periodicDue: moment(this._state.periodicDue),
       currencyExpiration: moment(this._state.currencyExpiration),
@@ -125,14 +126,15 @@ export class SkillFormStore extends FormStore<Skill, State> {
 
   @computed
   get selectedSkillOption() {
-    return this.skillOptions.find(x => {
-      console.log(typeof x.value);
+    const found = this.skillOptions.find(x => {
       if (x !== null && typeof x.value === 'number') {
-        console.log('HALPppppppppppp')
-        x.value === Number(this.state.skillId)
+        return x.value === Number(this.state.skillId);
       }
       return false;
     });
+    return found === undefined ?
+        this.qualificationOptions[0]
+        : found;
   }
 
   @computed
