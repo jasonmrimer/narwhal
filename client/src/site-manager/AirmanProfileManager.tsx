@@ -1,8 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { StyledTextInput } from '../widgets/inputs/TextInput';
-import { StyledDropdown } from '../widgets/inputs/Dropdown';
-import { shiftOptions, unsetShiftOptions } from '../tracker/ShiftDropdown';
+import { shiftOptions } from '../tracker/ShiftDropdown';
 import { StyledSkillTile } from '../skills/SkillTile';
 import { StyledRipItemsTile } from '../rip-item/RipItemsTile';
 import { observer } from 'mobx-react';
@@ -19,6 +18,7 @@ import { StyledButton } from '../widgets/buttons/Button';
 import { DeleteIcon } from '../icons/DeleteIcon';
 import { StyledDeletePopup } from '../widgets/popups/DeletePopup';
 import { StyledTextAreaInput } from '../widgets/inputs/TextAreaInput';
+import { StyledSingleTypeahead } from '../widgets/inputs/SingleTypeahead';
 
 interface Props {
   airmanProfileManagerStore?: AirmanProfileManagerStore;
@@ -84,13 +84,18 @@ export class AirmanProfileManager extends React.Component<Props> {
 
               <span className="airman-profile-manager-row">
                   <label htmlFor="airman-rank">RANK</label>
-                  <StyledDropdown
-                    onChange={(e) => setState(e.target.name, Number(e.target.value))}
-                    name="rankId"
-                    value={airmanProfileManagerStore!.rankId}
-                    options={airmanProfileManagerStore!.rankOptions}
-                    id="airman-rank"
-                  />
+                <StyledSingleTypeahead
+                  options={airmanProfileManagerStore!.rankOptions}
+                  onChange={(e) => {
+                    if (e !== null) {
+                      setState('rankId', Number(e!.value));
+                    }
+                  }}
+                  clearButton={false}
+                  selected={airmanProfileManagerStore!.getSelectedRankOption(airmanProfileManagerStore!.rankId)}
+                  filterBy={() => true}
+                  className="airman-rank"
+                />
                 </span>
 
               <StyledFieldValidation
@@ -147,12 +152,17 @@ export class AirmanProfileManager extends React.Component<Props> {
               >
                 <span className="airman-profile-manager-row">
                   <label htmlFor="airman-site">SITE</label>
-                  <StyledDropdown
-                    onChange={(e) => setState(e.target.name, Number(e.target.value))}
-                    name="siteId"
-                    value={airman.siteId}
+                  <StyledSingleTypeahead
                     options={airmanProfileManagerStore!.siteOptions}
-                    id="airman-site"
+                    onChange={(e) => {
+                      if ( e !== null ) {
+                        setState('siteId', Number(e!.value));
+                      }
+                    }}
+                    clearButton={false}
+                    filterBy={() => true}
+                    selected={airmanProfileManagerStore!.getSelectedSiteOption(airman.siteId)}
+                    className="airman-site"
                   />
                 </span>
               </StyledFieldValidation>
@@ -164,13 +174,18 @@ export class AirmanProfileManager extends React.Component<Props> {
               >
                 <span className="airman-profile-manager-row">
                   <label htmlFor="airman-squadron">SQUADRON</label>
-                  <StyledDropdown
-                    onChange={(e) => setState(e.target.name, Number(e.target.value))}
-                    name="squadronId"
-                    value={airman.squadronId}
-                    disabled={airmanProfileManagerStore!.squadronOptions.length === 0}
+                  <StyledSingleTypeahead
                     options={airmanProfileManagerStore!.squadronOptions}
-                    id="airman-squadron"
+                    onChange={(e) => {
+                      if ( e !== null ) {
+                        setState('squadronId', Number(e!.value));
+                      }
+                    }}
+                    clearButton={false}
+                    filterBy={() => true}
+                    selected={airmanProfileManagerStore!.getSelectedSquadronOption(airman.squadronId)}
+                    disabled={airmanProfileManagerStore!.squadronOptions.length === 0}
+                    className="airman-squadron"
                   />
                 </span>
               </StyledFieldValidation>
@@ -182,36 +197,51 @@ export class AirmanProfileManager extends React.Component<Props> {
               >
                 <span className="airman-profile-manager-row">
                   <label htmlFor="airman-flight">FLIGHT</label>
-                  <StyledDropdown
-                    onChange={(e) => setState(e.target.name, Number(e.target.value))}
-                    name="flightId"
-                    value={airman.flightId}
-                    disabled={airmanProfileManagerStore!.flightOptions.length === 0}
-                    options={airmanProfileManagerStore!.flightOptions}
-                    id="airman-flight"
-                  />
+                    <StyledSingleTypeahead
+                      options={airmanProfileManagerStore!.flightOptions}
+                      onChange={(e) => {
+                        if ( e !== null ) {
+                          setState('flightId', Number(e!.value));
+                        }
+                      }}
+                      clearButton={false}
+                      filterBy={() => true}
+                      selected={airmanProfileManagerStore!.getSelectedFlightOption(airman.flightId)}
+                      disabled={airmanProfileManagerStore!.flightOptions.length === 0}
+                      className="airman-flight"
+                    />
                 </span>
               </StyledFieldValidation>
 
               <span className="airman-profile-manager-row">
                 <label htmlFor="airman-schedule">SCHEDULE</label>
-                <StyledDropdown
-                  onChange={(e) => setState(e.target.name, Number(e.target.value))}
-                  name="scheduleId"
-                  value={airmanProfileManagerStore!.scheduleId}
+                <StyledSingleTypeahead
                   options={airmanProfileManagerStore!.scheduleOptions}
-                  id="airman-schedule"
+                  onChange={(e) => {
+                    if ( e !== null ) {
+                      setState('scheduleId', Number(e!.value));
+                    }
+                  }}
+                  clearButton={false}
+                  filterBy={() => true}
+                  selected={airmanProfileManagerStore!.getSelectedScheduleOption(airmanProfileManagerStore!.scheduleId)}
+                  className="airman-schedule"
                 />
               </span>
 
               <span className="airman-profile-manager-row">
                 <label htmlFor="airman-shift">SHIFT</label>
-                  <StyledDropdown
-                    name="shift"
-                    options={airman.shift ? shiftOptions : unsetShiftOptions}
-                    value={airman.shift || -1}
-                    onChange={(e) => setState(e.target.name, e.target.value)}
-                    id="airman-shift"
+                  <StyledSingleTypeahead
+                    options={shiftOptions}
+                    onChange={(e) => {
+                      if ( e !== null ) {
+                        setState('shift', e!.value);
+                      }
+                    }}
+                    clearButton={false}
+                    filterBy={() => true}
+                    selected={airmanProfileManagerStore!.getSelectedShiftOption(airman.shift!)}
+                    className="airman-shift"
                   />
               </span>
             </div>
@@ -310,7 +340,7 @@ export const StyledAirmanProfileManager = inject(
         align-self: center;
       }
       
-      input, select {
+      input, select, .rbt {
         width: 14rem;
       }
     }

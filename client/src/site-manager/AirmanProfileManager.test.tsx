@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { AirmanProfileManager } from './AirmanProfileManager';
-import { AirmanModel, ShiftType } from '../airman/models/AirmanModel';
+import { AirmanModel } from '../airman/models/AirmanModel';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
 import { AirmanCertificationModelFactory } from '../airman/factories/AirmanCertificationModelFactory';
 import { AirmanQualificationModelFactory } from '../airman/factories/AirmanQualificationModelFactory';
@@ -83,48 +83,12 @@ describe('AirmanProfileManager', () => {
     expect(store.pendingDeleteAirman).toBeTruthy();
   });
 
-  it('should render the personal information about an Airman', () => {
-    expect(subject.find('#airman-rank').prop('value')).toBe(airman.rank.id);
-    expect(subject.find('#airman-last-name').prop('value')).toBe(airman.lastName);
-    expect(subject.find('#airman-first-name').prop('value')).toBe(airman.firstName);
-  });
-
-  it('should render the member organization about an Airman', () => {
-    expect(subject.find('#airman-site').props().value).toBe(airman.siteId);
-    expect(subject.find('#airman-squadron').props().value).toBe(airman.squadronId);
-    expect(subject.find('#airman-flight').props().value).toBe(airman.flightId);
-    expect(subject.find('#airman-schedule').props().value).toBe(4);
-    expect(subject.find('#airman-shift').props().value).toBe(airman.shift);
-  });
-
   it('should render the skills information about an Airman', () => {
     const skillCount = airman.qualifications.length + airman.certifications.length;
     expect(subject.find(StyledSkillTile).length).toBe(skillCount);
     expect(subject.find(StyledRipItemsTile).exists()).toBeTruthy();
   });
 
-  it('should allow for the editing of an Airman profile', () => {
-    changeValue(subject, 'rankId', 4);
-    changeValue(subject, 'lastName', 'Bob');
-    changeValue(subject, 'firstName', 'Sponge');
-    changeValue(subject, 'siteId', 2);
-    changeValue(subject, 'squadronId', 2);
-    changeValue(subject, 'flightId', 2);
-    changeValue(subject, 'scheduleId', 2);
-    changeValue(subject, 'shift', ShiftType.Night);
-
-    subject.instance().forceUpdate();
-    subject.update();
-
-    expectPropToBe(subject, 'rankId', 4);
-    expectPropToBe(subject, 'lastName', 'Bob');
-    expectPropToBe(subject, 'firstName', 'Sponge');
-    expectPropToBe(subject, 'siteId', 2);
-    expectPropToBe(subject, 'squadronId', 2);
-    expectPropToBe(subject, 'flightId', 2);
-    expectPropToBe(subject, 'scheduleId', 2);
-    expectPropToBe(subject, 'shift', ShiftType.Night);
-  });
 
   it('should call store save onSubmit', () => {
     subject.find(StyledForm).simulate('submit', eventStub);
@@ -146,11 +110,3 @@ describe('AirmanProfileManager', () => {
     expect(subject.find(StyledAlert).exists()).toBeTruthy();
   });
 });
-
-function changeValue(wrapper: ShallowWrapper, name: string, value: any, event: string = 'change') {
-  wrapper.findWhere(x => x.prop('name') === name).first().simulate(event, {target: {name, value}});
-}
-
-function expectPropToBe(wrapper: ShallowWrapper, name: string, value: any, prop: string = 'value') {
-  expect(wrapper.findWhere(x => x.prop('name') === name).prop(prop)).toBe(value);
-}

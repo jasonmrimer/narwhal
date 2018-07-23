@@ -18,8 +18,8 @@ class FlightsPage
   def assert_shows_airman
     expandFlightContainer
     click_on_airman('Angie, Patton')
-    expect(page).to have_content('94 IS')
-    expect(page).to have_content('DMS Maryland')
+    find_typeahead_text('.airman-squadron', '94 IS')
+    find_typeahead_text('.airman-site', 'DMS Maryland')
   end
 
   def assert_edit_airman
@@ -29,41 +29,45 @@ class FlightsPage
 
     fill_in 'lastName', with: 'Bob'
     fill_in 'firstName', with: 'Sponge'
-    find('#airman-site').find(:option, text: 'DGS 1').select_option
-    find('#airman-squadron').find(:option, text: '30 IS').select_option
-    find('#airman-flight').find(:option, text: 'JKB').select_option
-    find('#airman-schedule').find(:option, text: 'Back Half').select_option
-    find('#airman-shift').find(:option, text: 'Day').select_option
-    find('#airman-rank').find(:option, text: 'SSgt').select_option
+
+    typeahead_select('.airman-site', 'DGS 1')
+    typeahead_select('.airman-squadron', '30 IS')
+    typeahead_select('.airman-flight', 'JKB')
+    typeahead_select('.airman-schedule', 'Back Half')
+    typeahead_select('.airman-shift', 'Day')
+    typeahead_select('.airman-rank', 'SSgt')
 
     find('input[type="submit"]').click
 
     expect(page).to have_content 'Bob, Sponge'
-    expect(find('#airman-site').value).to eq '1'
-    expect(find('#airman-squadron').value).to eq '1'
-    expect(find('#airman-flight').value).to eq '3'
-    expect(find('#airman-schedule').value).to eq '3'
-    expect(find('#airman-shift').value).to eq 'Day'
-    expect(find('#airman-rank').value).to eq '6'
+
+    find_typeahead_text('.airman-site', 'DGS 1')
+    find_typeahead_text('.airman-squadron', '30 IS')
+    find_typeahead_text('.airman-flight', 'JKB')
+    find_typeahead_text('.airman-schedule', 'Back Half')
+    find_typeahead_text('.airman-shift', 'Day')
+    find_typeahead_text('.airman-rank', 'SSgt')
 
     fill_in 'lastName', with: 'Angie'
     fill_in 'firstName', with: 'Patton'
-    find('#airman-site').find(:option, text: 'DMS Maryland').select_option
-    find('#airman-squadron').find(:option, text: '94 IS').select_option
-    find('#airman-flight').find(:option, text: 'DOB').select_option
-    find('#airman-schedule').find(:option, text: 'No Schedule').select_option
-    find('#airman-shift').find(:option, text: 'Night').select_option
-    find('#airman-rank').find(:option, text: 'No Rank').select_option
+
+    typeahead_select('.airman-site', 'DMS Maryland')
+    typeahead_select('.airman-squadron', '94 IS')
+    typeahead_select('.airman-flight', 'DOB')
+    typeahead_select('.airman-schedule', 'No Schedule')
+    typeahead_select('.airman-shift', 'Night')
+    typeahead_select('.airman-rank', 'No Rank')
 
     find('input[type="submit"]').click
 
     expect(page).to have_content 'Angie, Patton'
-    expect(find('#airman-site').value).to eq '14'
-    expect(find('#airman-squadron').value).to eq '16'
-    expect(find('#airman-flight').value).to eq '1'
-    expect(find('#airman-schedule').value).to eq '1'
-    expect(find('#airman-shift').value).to eq 'Night'
-    expect(find('#airman-rank').value).to eq '1'
+
+    find_typeahead_text('.airman-site', 'DMS Maryland')
+    find_typeahead_text('.airman-squadron', '94 IS')
+    find_typeahead_text('.airman-flight', 'DOB')
+    find_typeahead_text('.airman-schedule', 'No Schedule')
+    find_typeahead_text('.airman-shift', 'Night')
+    find_typeahead_text('.airman-rank', 'No Rank')
   end
 
   def assert_edit_certification
@@ -105,7 +109,7 @@ class FlightsPage
 
     fill_in 'lastName', with: 'Aaron'
     fill_in 'firstName', with: 'Aadam'
-    find('#airman-site').find(:option, text: 'DMS Maryland').select_option
+    typeahead_select('.airman-site', 'DMS Maryland')
 
     find('input[type="submit"]').click
 
@@ -154,5 +158,18 @@ class FlightsPage
   def click_on_certification(name)
     page.find('a', text: name).click
     expect(page).to have_content('Certification')
+  end
+
+  def typeahead_select(className, value)
+    page.within(className) do
+      find('.rbt-input').click
+      click_on(value);
+    end
+  end
+
+  def find_typeahead_text(typeaheadClass, value)
+    page.within(typeaheadClass) do
+      expect(page.find('.rbt-input-main').value).to eq value
+    end
   end
 end

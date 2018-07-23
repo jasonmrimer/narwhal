@@ -1,5 +1,5 @@
 import { action, computed, observable } from 'mobx';
-import { AirmanModel } from '../../airman/models/AirmanModel';
+import { AirmanModel, ShiftType } from '../../airman/models/AirmanModel';
 import { SiteModel } from '../../site/models/SiteModel';
 import { AirmanRipItemModel } from '../../airman/models/AirmanRipItemModel';
 import { FilterOption } from '../../widgets/inputs/FilterOptionModel';
@@ -22,6 +22,12 @@ export class AirmanProfileManagerStore extends NotificationStore {
   @observable _errors: FormErrors = {};
   @observable _didSaveAirman: boolean = false;
   @observable _pendingDeleteAirman: boolean = false;
+
+  shiftOptions = [
+    {value: ShiftType.Day, label: ShiftType.Day},
+    {value: ShiftType.Night, label: ShiftType.Night},
+    {value: ShiftType.Swing, label: ShiftType.Swing}
+  ];
 
   constructor(private airmanRepository: AirmanRepository) {
     super();
@@ -110,6 +116,11 @@ export class AirmanProfileManagerStore extends NotificationStore {
     }));
   }
 
+  @action.bound
+  getSelectedSiteOption(id: number) {
+    return this.siteOptions.find(s => s.value === id);
+  }
+
   @computed
   get squadronOptions(): FilterOption[] {
     const site = this._sites.find(s => s.id === this._airman.siteId);
@@ -120,6 +131,11 @@ export class AirmanProfileManagerStore extends NotificationStore {
     return site.squadrons.map(squadron => {
       return {value: squadron.id, label: squadron.name};
     });
+  }
+
+  @action.bound
+  getSelectedSquadronOption(id: number) {
+    return this.squadronOptions.find(s => s.value === id);
   }
 
   @computed
@@ -139,6 +155,11 @@ export class AirmanProfileManagerStore extends NotificationStore {
     });
   }
 
+  @action.bound
+  getSelectedFlightOption(id: number) {
+    return this.flightOptions.find(f => f.value === id);
+  }
+
   @computed
   get scheduleOptions() {
     return this._schedules.map(schedule => {
@@ -146,11 +167,26 @@ export class AirmanProfileManagerStore extends NotificationStore {
     });
   }
 
+  @action.bound
+  getSelectedScheduleOption(id: number) {
+    return this.scheduleOptions.find(s => s.value === id);
+  }
+
   @computed
   get rankOptions() {
     return this._ranks.map(rank => {
       return {value: rank.id, label: rank.abbreviation};
     });
+  }
+
+  @action.bound
+  getSelectedRankOption(id: number) {
+    return this.rankOptions.find(i => i.value === id);
+  }
+
+  @action.bound
+  getSelectedShiftOption(shift: ShiftType) {
+    return this.shiftOptions.find(s => s.value === shift);
   }
 
   @computed
