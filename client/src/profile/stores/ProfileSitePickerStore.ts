@@ -8,6 +8,7 @@ import { SquadronModel } from '../../squadron/models/SquadronModel';
 import { AppActions } from '../../app/AppActions';
 import { EventRepository } from '../../event/repositories/EventRepository';
 import { readerAbility } from '../../app/abilities';
+import { ShiftType } from '../../airman/models/AirmanModel';
 
 export class ProfileSitePickerStore extends NotificationStore {
   private profileRepository: ProfileRepository;
@@ -30,6 +31,21 @@ export class ProfileSitePickerStore extends NotificationStore {
     this._profile = profile;
     this._pendingRequest =
       profile.ability === readerAbility ? false : await this.eventRepository.hasPendingRequests();
+  }
+
+  @computed
+  get shiftOptions() {
+    return [
+      {value: ShiftType.Day, label: ShiftType.Day},
+      {value: ShiftType.Night, label: ShiftType.Night},
+      {value: ShiftType.Swing, label: ShiftType.Swing}
+    ];
+  }
+
+  @action.bound
+  selectedShiftOption(shift: ShiftType | null | undefined) {
+    const shiftOption = this.shiftOptions.find(s => s.value === shift);
+    return shiftOption === undefined ? null : shiftOption;
   }
 
   @computed

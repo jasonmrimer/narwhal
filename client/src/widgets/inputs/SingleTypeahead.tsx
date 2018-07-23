@@ -14,6 +14,7 @@ interface  Props {
   selected?: FilterOption | null;
   className?: string;
   filterBy?: any;
+  onMenuHide?: (e: Event) => any;
 }
 
 export const SingleTypeahead = (props: Props) => {
@@ -28,6 +29,7 @@ export const SingleTypeahead = (props: Props) => {
         onChange={(opt: FilterOption[]) => {
           props.onChange(opt.length === 1 ? opt[0] : null);
         }}
+        onMenuHide={props.onMenuHide}
         options={props.options}
         placeholder={props.placeholder}
         clearButton={props.clearButton}
@@ -114,7 +116,7 @@ export const StyledSingleTypeahead = styled(SingleTypeahead)`
       display: flex;
       align-items: center;
       list-style: none;
-      padding: 0.5rem 1rem;
+      padding: 0.5rem 0.5rem;
 
       a {
         text-decoration: none;

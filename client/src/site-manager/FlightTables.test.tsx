@@ -3,9 +3,7 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import { FlightTables } from './FlightTables';
 import { FlightModel } from '../flight/model/FlightModel';
 import { AirmanModelFactory } from '../airman/factories/AirmanModelFactory';
-import { StyledShiftDropdown } from '../tracker/ShiftDropdown';
 import { ShiftType } from '../airman/models/AirmanModel';
-import { StyledDropdown } from '../widgets/inputs/Dropdown';
 import { StyledFlightSchedulePopup } from '../widgets/popups/FlightSchedulePopup';
 import { StyledFlightShiftPopup } from '../widgets/popups/FlightShiftPopup';
 import { FlightAirmanSelectionStore } from './stores/FlightAirmanSelectionStore';
@@ -18,6 +16,7 @@ import { CertificationModelFactory } from '../skills/certification/factories/Cer
 import { ScheduleModel, ScheduleType } from '../schedule/models/ScheduleModel';
 import { Link } from 'react-router-dom';
 import { StyledFlightTableRow } from './FlightTableRow';
+import { StyledSingleTypeahead } from '../widgets/inputs/SingleTypeahead';
 
 describe('FlightTables', () => {
   const flights = [
@@ -68,8 +67,8 @@ describe('FlightTables', () => {
     );
   });
 
-  it('should render StyledDropdown for schedules', () => {
-    expect(subject.find(StyledDropdown).length).toBe(0);
+  it('should render StyledSingleTypeahead for schedules', () => {
+    expect(subject.find(StyledSingleTypeahead).length).toBe(0);
 
     siteManagerStore.addFlightToExpandedFlights(1);
     siteManagerStore.addFlightToExpandedFlights(2);
@@ -77,23 +76,8 @@ describe('FlightTables', () => {
 
     subject.update();
 
-    const scheduleDropdowns = subject.find(StyledDropdown);
-    expect(scheduleDropdowns.length).toBe(flights.length);
-    expect(scheduleDropdowns.at(0).prop('options')).toBe(siteManagerStore.scheduleOptions);
-    expect(scheduleDropdowns.at(0).prop('value')).toBe(siteManagerStore.getScheduleIdByFlightId(1));
-
-    scheduleDropdowns.at(0).simulate('change', {target: {value: 2}});
-    expect(siteManagerActions.setFlightSchedule).toHaveBeenCalledWith(flights[0].id, 2);
-  });
-
-  it('should call setFlightShift when selecting a shift', () => {
-    siteManagerStore.addFlightToExpandedFlights(1);
-    subject.update();
-
-    const setShift = subject.find(StyledShiftDropdown).at(0).prop('setShift');
-    setShift(ShiftType.Night);
-    expect(siteManagerActions.setFlightShift)
-      .toHaveBeenLastCalledWith(flights[0].id, ShiftType.Night);
+    const scheduleTypeaheads = subject.find(StyledSingleTypeahead);
+    expect(scheduleTypeaheads.length).toBe(flights.length);
   });
 
   it('should shows a header above the list of airmen', () => {

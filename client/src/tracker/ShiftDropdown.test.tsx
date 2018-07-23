@@ -9,6 +9,7 @@ import { adminAbility, readerAbility } from '../app/abilities';
 import { makeFakeProfile } from '../utils/testUtils';
 import { ProfileModel } from '../profile/models/ProfileModel';
 import Mock = jest.Mock;
+import { StyledSingleTypeahead } from '../widgets/inputs/SingleTypeahead';
 
 describe('ShiftDropdown', () => {
   let profileStore: ProfileSitePickerStore;
@@ -35,11 +36,11 @@ describe('ShiftDropdown', () => {
   });
 
   it('should render the selected shift', () => {
-    expect(subject.find(StyledDropdown).prop('value')).toEqual(ShiftType.Day);
+    expect(subject.html()).toContain('value="Day"');
   });
 
   it('should call setShift with a new shift', () => {
-    subject.find(StyledDropdown).simulate('change', {target: {value: ShiftType.Swing}});
+    subject.find(StyledSingleTypeahead).simulate('change', {value: ShiftType.Swing});
     expect(setShift).toHaveBeenCalledWith(ShiftType.Swing);
   });
 

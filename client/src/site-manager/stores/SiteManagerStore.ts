@@ -28,7 +28,9 @@ export class SiteManagerStore extends NotificationStore {
   @observable private _shouldShowAddFlightPrompt: boolean = false;
   @observable private _pendingFlightId: number | null = null;
   @observable private _pendingScheduleId: number | null = null;
+  @observable private _selectedScheduleId: number | null = null;
   @observable private _pendingShift: ShiftType | null = null;
+  @observable private _selectedShift: ShiftType | null = null;
   @observable private _pendingScheduleStartDate: any = moment(moment.now());
   @observable private _pendingNewFlight: FlightModel | null = null;
   @observable private _pendingOperatorFlightId: number | null = null;
@@ -147,6 +149,11 @@ export class SiteManagerStore extends NotificationStore {
   }
 
   @computed
+  get selectedScheduleId() {
+    return this._selectedScheduleId;
+  }
+
+  @computed
   get pendingShift() {
     return this._pendingShift;
   }
@@ -166,6 +173,19 @@ export class SiteManagerStore extends NotificationStore {
     return this._schedules.map(schedule => {
       return {value: schedule.id, label: schedule.type};
     });
+  }
+
+  @action.bound
+  getScheduleOption(id: number | null) {
+    if (id !== null) {
+      return this.scheduleOptions.find(s => s.value === id);
+    }
+    return null;
+  }
+
+  @computed
+  get selectedShift() {
+    return this._selectedShift;
   }
 
   @computed
@@ -273,6 +293,16 @@ export class SiteManagerStore extends NotificationStore {
     this._shouldShowShiftPrompt = true;
     this._pendingFlightId = flightId;
     this._pendingShift = shift;
+  }
+
+  @action.bound
+  setSelectedShift(shift: ShiftType) {
+    this._selectedShift = shift;
+  }
+
+  @action.bound
+  setSelectedSchedule(id: number) {
+    this._selectedScheduleId = id;
   }
 
   @action.bound

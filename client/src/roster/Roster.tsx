@@ -254,7 +254,7 @@ export const StyledRow = inject(
   }
   
   .shift {
-    width: 6rem;
+    width: 7.5rem;
     padding: 0 0.5rem;
   }
   

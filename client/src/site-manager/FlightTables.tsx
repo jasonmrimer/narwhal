@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { AirmanModel, ShiftType } from '../airman/models/AirmanModel';
+import { AirmanModel } from '../airman/models/AirmanModel';
 import { ShiftDisplay } from '../roster/ShiftDisplay';
 import { FlightModel } from '../flight/model/FlightModel';
 import { SiteManagerStore } from './stores/SiteManagerStore';
@@ -7,7 +7,6 @@ import { inject, observer } from 'mobx-react';
 import styled from 'styled-components';
 import { StyledShiftDropdown } from '../tracker/ShiftDropdown';
 import { SiteManagerActions } from './actions/SiteManagerActions';
-import { StyledDropdown } from '../widgets/inputs/Dropdown';
 import { StyledFlightSchedulePopup } from '../widgets/popups/FlightSchedulePopup';
 import * as classNames from 'classnames';
 import { ExpandIcon } from '../icons/ExpandIcon';
@@ -21,6 +20,7 @@ import { ProfileIcon } from '../icons/ProfileIcon';
 import { Link } from 'react-router-dom';
 import { OperatorIcon } from '../icons/OperatorIcon';
 import { StyledFlightTableRow } from './FlightTableRow';
+import { StyledSingleTypeahead } from '../widgets/inputs/SingleTypeahead';
 
 interface Props {
   flights: FlightModel[];
@@ -108,8 +108,16 @@ export class FlightTables extends React.Component<Props> {
                 </div> :
                 <StyledShiftDropdown
                   selectedShift={siteManagerStore!.getShiftByFlightId(flight.id)}
-                  setShift={(shift: ShiftType) => {
-                    return siteManagerActions!.setFlightShift(flight.id, shift);
+                  setShift={e => {
+                    if (e !== null) {
+                      siteManagerStore!.setSelectedShift(e);
+                    }
+                    return Promise.resolve();
+                  }}
+                  onMenuHide={async () => {
+                    if (siteManagerStore!.selectedShift !== null) {
+                      await siteManagerActions!.setFlightShift(flight.id, siteManagerStore!.selectedShift!);
+                    }
                   }}
                   className="shift"
                 />
@@ -120,14 +128,25 @@ export class FlightTables extends React.Component<Props> {
             {
               !siteManagerStore!.shouldExpandFlight(flight.id) ?
                 <div>{this.flightScheduleLabel(flight)}</div> :
-                <StyledDropdown
-                  onChange={(e) => {
-                    return siteManagerActions!.setFlightSchedule(flight.id, Number(e.target.value));
-                  }}
-                  name="schedule-select"
-                  id="schedule-select"
+                <StyledSingleTypeahead
                   options={siteManagerStore!.scheduleOptions}
-                  value={siteManagerStore!.getScheduleIdByFlightId(flight.id)}
+                  onChange={e => {
+                    if (e !== null) {
+                      siteManagerStore!.setSelectedSchedule(Number(e.value));
+                    }
+                  }}
+                  clearButton={false}
+                  onMenuHide={async () => {
+                    if (siteManagerStore!.selectedScheduleId !== null) {
+                      await siteManagerActions!.setFlightSchedule(flight.id, siteManagerStore!.selectedScheduleId!);
+                    }
+                  }}
+                  filterBy={() => true}
+                  selected={
+                    siteManagerStore!.getScheduleOption(
+                      Number(siteManagerStore!.getScheduleIdByFlightId(flight.id))
+                    )
+                  }
                 />
             }
           </div>
@@ -266,7 +285,7 @@ export const StyledFlightTables = inject(
         font-size: 1.25rem;
         font-weight: 500;
         margin-right: 0.25rem;
-        display: inline;   
+        display: inline;
         vertical-align: middle;    
       }
       
@@ -279,8 +298,7 @@ export const StyledFlightTables = inject(
       
       
       .shift {
-        width: 5rem;
-        border-bottom: 1px solid ${props => props.theme.purpleSteel};
+        width: 8rem;
       }
       
       .header-section {
