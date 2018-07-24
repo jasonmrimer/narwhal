@@ -6,7 +6,7 @@ import { LocationFilterStore } from '../widgets/stores/LocationFilterStore';
 import { SkillFormStore } from '../skills/stores/SkillFormStore';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { AppointmentFormStore } from '../event/stores/AppointmentFormStore';
-import { AdminStore } from '../admin/stores/AdminStore';
+import { AdminProfileStore } from '../admin/stores/AdminProfileStore';
 import { LeaveFormStore } from '../event/stores/LeaveFormStore';
 import { MissionPlannerStore } from '../crew/stores/MissionPlannerStore';
 import { SidePanelStore } from '../tracker/stores/SidePanelStore';
@@ -50,7 +50,7 @@ const dashboardStore = new DashboardStore(WebRepositories);
 
 const crewStore = new CrewStore(WebRepositories);
 const missionPlannerStore = new MissionPlannerStore(WebRepositories);
-const adminStore = new AdminStore(WebRepositories);
+const adminProfileStore = new AdminProfileStore(WebRepositories);
 const airmanProfileManagerStore = new AirmanProfileManagerStore(WebRepositories.airmanRepository);
 const flightAirmanSelectionStore = new FlightAirmanSelectionStore();
 const siteManagerStore = new SiteManagerStore(WebRepositories);
@@ -76,7 +76,7 @@ export interface Stores {
   dashboardStore: DashboardStore;
   crewStore: CrewStore;
   missionPlannerStore: MissionPlannerStore;
-  adminStore: AdminStore;
+  adminProfileStore: AdminProfileStore;
   airmanProfileManagerStore: AirmanProfileManagerStore;
   flightAirmanSelectionStore: FlightAirmanSelectionStore;
   siteManagerStore: SiteManagerStore;
@@ -85,7 +85,7 @@ export interface Stores {
 }
 
 export const stores = {
-  adminStore,
+  adminProfileStore,
   airmanRipItemFormStore,
   appointmentFormStore,
   availabilityStore,

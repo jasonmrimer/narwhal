@@ -46,10 +46,13 @@ public abstract class BaseIntegrationTest {
   protected Mission mission;
   protected Flight flight;
   protected Site site;
+  protected Squadron squadron;
+  protected Squadron squadron2;
   protected Role adminRole;
   protected Role readerRole;
   protected Role writerRole;
   protected Rank rank;
+
 
   static {
     objectMapper.registerModule(module);
@@ -61,11 +64,13 @@ public abstract class BaseIntegrationTest {
   public void setUp() {
     flight = new Flight("flight");
 
-    final Squadron squadron = new Squadron("squadron");
+    squadron = new Squadron("squadron");
     squadron.addFlight(flight);
+    squadron2 = new Squadron("squadron2");
 
     site = new Site("site");
     site.addSquadron(squadron);
+    site.addSquadron(squadron2);
 
     siteRepository.save(site);
 

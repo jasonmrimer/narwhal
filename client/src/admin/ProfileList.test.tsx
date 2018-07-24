@@ -2,18 +2,18 @@ import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { ErrorResponse } from '../utils/HTTPClient';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
-import { AdminStore } from './stores/AdminStore';
+import { AdminProfileStore } from './stores/AdminProfileStore';
 import { ProfileList } from './ProfileList';
 import { DoubleRepositories } from '../utils/Repositories';
 import { StyledSingleTypeahead } from '../widgets/inputs/SingleTypeahead';
 
 describe('ProfileList', () => {
   let subject: ShallowWrapper;
-  let store: AdminStore;
+  let store: AdminProfileStore;
   let profileStore: ProfileSitePickerStore;
 
   beforeEach(async () => {
-    store = new AdminStore(DoubleRepositories);
+    store = new AdminProfileStore(DoubleRepositories);
     profileStore = new ProfileSitePickerStore(DoubleRepositories);
 
     const profiles = [
@@ -24,7 +24,7 @@ describe('ProfileList', () => {
     await profileStore.hydrate([], profiles[0]);
     store.setProfileRole = jest.fn();
 
-    subject = shallow(<ProfileList adminStore={store} profileStore={profileStore}/>);
+    subject = shallow(<ProfileList adminProfileStore={store} profileStore={profileStore}/>);
   });
 
   it('should display a list of users', () => {
@@ -51,7 +51,7 @@ describe('ProfileList', () => {
     const errorResponse = new ErrorResponse('A Message');
     store.hydrate(errorResponse, [{value: 1, name: 'role1'}, {value: 1, name: 'role1'}]);
 
-    subject = shallow(<ProfileList adminStore={store} profileStore={profileStore}/>);
+    subject = shallow(<ProfileList adminProfileStore={store} profileStore={profileStore}/>);
 
     subject.update();
 

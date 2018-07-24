@@ -1,12 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { inject, observer } from 'mobx-react';
-import { AdminStore } from './stores/AdminStore';
+import { AdminProfileStore } from './stores/AdminProfileStore';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 import { StyledSingleTypeahead } from '../widgets/inputs/SingleTypeahead';
 
 interface Props {
-  adminStore?: AdminStore;
+  adminProfileStore?: AdminProfileStore;
   profileStore?: ProfileSitePickerStore;
   className?: string;
 }
@@ -14,8 +14,8 @@ interface Props {
 @observer
 export class ProfileList extends React.Component<Props> {
   render() {
-    const {profileStore, adminStore} = this.props;
-    const {hasError, error, roleOptions, setProfileRole, profiles, performLoading, getSelectedRoleOption} = adminStore!;
+    const {profileStore, adminProfileStore} = this.props;
+    const {hasError, error, roleOptions, setProfileRole, profiles, performLoading, getSelectedRoleOption} = adminProfileStore!;
     return (
       <div className={this.props.className}>
         {
@@ -25,7 +25,7 @@ export class ProfileList extends React.Component<Props> {
           </h1>
         }
         {
-          !this.props.adminStore!.hasError &&
+          !this.props.adminProfileStore!.hasError &&
           <div className="profile-table">
             <div
               className="profile-header"
@@ -73,7 +73,7 @@ export class ProfileList extends React.Component<Props> {
   }
 }
 
-export const StyledProfileList = inject('profileStore', 'adminStore')(styled(ProfileList)`
+export const StyledProfileList = inject('profileStore', 'adminProfileStore')(styled(ProfileList)`
     width: 800px;
     margin-left: auto;
     margin-right: auto;

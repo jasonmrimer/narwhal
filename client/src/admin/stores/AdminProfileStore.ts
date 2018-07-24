@@ -5,7 +5,7 @@ import { ErrorResponse } from '../../utils/HTTPClient';
 import { NotificationStore } from '../../widgets/stores/NotificationStore';
 import { Repositories } from '../../utils/Repositories';
 
-export class AdminStore extends NotificationStore {
+export class AdminProfileStore extends NotificationStore {
   @observable private _profiles: ProfileModel[] = [];
   @observable private _error: ErrorResponse | null = null;
   @observable private _roles: { id: number; name: string }[] = [];

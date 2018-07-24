@@ -1,8 +1,8 @@
-import { AdminStore } from './AdminStore';
+import { AdminProfileStore } from './AdminProfileStore';
 import { UnauthorizedErrorResponse } from '../../utils/HTTPClient';
 import { DoubleRepositories } from '../../utils/Repositories';
 
-describe('AdminStore', () => {
+describe('AdminProfileStore', () => {
   const profiles = [{
     id: 1,
     username: 'user',
@@ -15,10 +15,10 @@ describe('AdminStore', () => {
   const roles = [
     {id: 1, name: 'ROLE !'}
   ];
-  let subject: AdminStore;
+  let subject: AdminProfileStore;
 
   it('should fetch profiles and roles on hydrate', () => {
-    subject = new AdminStore(DoubleRepositories);
+    subject = new AdminProfileStore(DoubleRepositories);
 
     expect(subject.profiles.length).toBe(0);
     expect(subject.roleOptions.length).toBe(0);
@@ -31,7 +31,7 @@ describe('AdminStore', () => {
   });
 
   it('should show a message when the user is unauthorized', () => {
-    subject = new AdminStore(DoubleRepositories);
+    subject = new AdminProfileStore(DoubleRepositories);
 
     subject.hydrate(new UnauthorizedErrorResponse('Some clever response'), roles);
 
@@ -41,7 +41,7 @@ describe('AdminStore', () => {
   });
 
   it('should update the profiles with the provided role Id', async () => {
-    subject = new AdminStore(DoubleRepositories);
+    subject = new AdminProfileStore(DoubleRepositories);
     subject.hydrate(profiles, roles);
 
     const profile = subject.profiles[0];

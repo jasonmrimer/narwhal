@@ -80,7 +80,9 @@ public class AuthorizedRequestsTest {
 
     expectations =
       Arrays.asList(
-        new EndpointAuthorizationExpectations("/api/airmen")
+        new EndpointAuthorizationExpectations("/api/admin")
+          .setStatusCodeDictionaryGET(adminOnly)
+        , new EndpointAuthorizationExpectations("/api/airmen")
           .setStatusCodeDictionaryPOST(modifiersOnly)
           .setStatusCodeDictionaryPUT(modifiersOnly)
         , new EndpointAuthorizationExpectations("/api/airmen/1")

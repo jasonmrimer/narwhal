@@ -3,16 +3,16 @@ import { StyledTopBar } from '../../widgets/TopBar';
 import { observer } from 'mobx-react';
 import { StyledProfileList } from '../../admin/ProfileList';
 import { inject } from 'mobx-react/custom';
-import { AdminStore } from '../../admin/stores/AdminStore';
+import { AdminProfileStore } from '../../admin/stores/AdminProfileStore';
 import { ProfileSitePickerStore } from '../../profile/stores/ProfileSitePickerStore';
 import { WebRepositories } from '../../utils/Repositories';
 
 interface Props {
-  adminStore?: AdminStore;
+  adminStore?: AdminProfileStore;
   profileStore?: ProfileSitePickerStore;
 }
 
-@inject('adminStore', 'profileStore')
+@inject('adminProfileStore', 'profileStore')
 @observer
 export class AdminPage extends React.Component<Props> {
   async componentDidMount() {
