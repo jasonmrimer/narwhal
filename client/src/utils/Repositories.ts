@@ -40,8 +40,12 @@ import { CertificationRepositoryStub } from '../skills/certification/repositorie
 import { WebFlightRepository } from '../flight/repositories/WebFlightRepository';
 import { FlightRepositoryStub } from '../flight/repositories/FlightRepositoryStub';
 import { FlightRepository } from '../flight/repositories/FlightRepository';
+import { AdminSquadronRepository } from '../admin/repositories/AdminSquadronRepository';
+import { WebAdminSquadronRepository } from '../admin/repositories/web/WebAdminSquadronRepository';
+import { AdminSquadronRepositoryStub } from '../admin/repositories/doubles/AdminSquadronRepositoryStub';
 
 export interface Repositories {
+  adminSquadronRepository: AdminSquadronRepository;
   airmanRepository: AirmanRepository;
   siteRepository: SiteRepository;
   qualificationRepository: QualificationRepository;
@@ -60,6 +64,7 @@ export interface Repositories {
 const client = new HTTPClient();
 
 export const WebRepositories: Repositories = Object.freeze({
+  adminSquadronRepository: new WebAdminSquadronRepository(client),
   airmanRepository: new WebAirmanRepository(client),
   siteRepository: new WebSiteRepository(client),
   qualificationRepository: new WebQualificationRepository(client),
@@ -76,6 +81,7 @@ export const WebRepositories: Repositories = Object.freeze({
 });
 
 export const DoubleRepositories: Repositories = {
+  adminSquadronRepository: new AdminSquadronRepositoryStub(),
   airmanRepository: new FakeAirmanRepository(),
   siteRepository: new SiteRepositoryStub(),
   qualificationRepository: new QualificationRepositoryStub(),

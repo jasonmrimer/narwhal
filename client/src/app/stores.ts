@@ -6,7 +6,7 @@ import { LocationFilterStore } from '../widgets/stores/LocationFilterStore';
 import { SkillFormStore } from '../skills/stores/SkillFormStore';
 import { TrackerStore } from '../tracker/stores/TrackerStore';
 import { AppointmentFormStore } from '../event/stores/AppointmentFormStore';
-import { AdminStore } from '../admin/stores/AdminStore';
+import { AdminProfileStore } from '../admin/stores/AdminProfileStore';
 import { LeaveFormStore } from '../event/stores/LeaveFormStore';
 import { MissionPlannerStore } from '../crew/stores/MissionPlannerStore';
 import { SidePanelStore } from '../tracker/stores/SidePanelStore';
@@ -24,6 +24,7 @@ import { CertificationFormStore } from '../skills/certification/stores/Certifica
 import { SkillsFieldStore } from '../skills/stores/SkillsFieldStore';
 import { PendingEventStore } from '../widgets/stores/PendingEventStore';
 import { FlightAirmanSelectionStore } from '../site-manager/stores/FlightAirmanSelectionStore';
+import { AdminSquadronStore } from '../admin/stores/AdminSquadronStore';
 
 const timeService = new MomentTimeService();
 const profileStore = new ProfileSitePickerStore(WebRepositories);
@@ -50,7 +51,8 @@ const dashboardStore = new DashboardStore(WebRepositories);
 
 const crewStore = new CrewStore(WebRepositories);
 const missionPlannerStore = new MissionPlannerStore(WebRepositories);
-const adminStore = new AdminStore(WebRepositories);
+const adminProfileStore = new AdminProfileStore(WebRepositories);
+const adminSquadronStore = new AdminSquadronStore();
 const airmanProfileManagerStore = new AirmanProfileManagerStore(WebRepositories.airmanRepository);
 const flightAirmanSelectionStore = new FlightAirmanSelectionStore();
 const siteManagerStore = new SiteManagerStore(WebRepositories);
@@ -76,7 +78,8 @@ export interface Stores {
   dashboardStore: DashboardStore;
   crewStore: CrewStore;
   missionPlannerStore: MissionPlannerStore;
-  adminStore: AdminStore;
+  adminProfileStore: AdminProfileStore;
+  adminSquadronStore: AdminSquadronStore;
   airmanProfileManagerStore: AirmanProfileManagerStore;
   flightAirmanSelectionStore: FlightAirmanSelectionStore;
   siteManagerStore: SiteManagerStore;
@@ -85,7 +88,8 @@ export interface Stores {
 }
 
 export const stores = {
-  adminStore,
+  adminProfileStore,
+  adminSquadronStore,
   airmanRipItemFormStore,
   appointmentFormStore,
   availabilityStore,

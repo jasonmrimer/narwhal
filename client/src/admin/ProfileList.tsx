@@ -1,12 +1,12 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { inject, observer } from 'mobx-react';
-import { AdminStore } from './stores/AdminStore';
+import { AdminProfileStore } from './stores/AdminProfileStore';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 import { StyledSingleTypeahead } from '../widgets/inputs/SingleTypeahead';
 
 interface Props {
-  adminStore?: AdminStore;
+  adminProfileStore?: AdminProfileStore;
   profileStore?: ProfileSitePickerStore;
   className?: string;
 }
@@ -14,8 +14,16 @@ interface Props {
 @observer
 export class ProfileList extends React.Component<Props> {
   render() {
-    const {profileStore, adminStore} = this.props;
-    const {hasError, error, roleOptions, setProfileRole, profiles, performLoading, getSelectedRoleOption} = adminStore!;
+    const {profileStore, adminProfileStore} = this.props;
+    const {
+      hasError,
+      error,
+      roleOptions,
+      setProfileRole,
+      profiles,
+      performLoading,
+      getSelectedRoleOption
+    } = adminProfileStore!;
     return (
       <div className={this.props.className}>
         {
@@ -25,7 +33,7 @@ export class ProfileList extends React.Component<Props> {
           </h1>
         }
         {
-          !this.props.adminStore!.hasError &&
+          !this.props.adminProfileStore!.hasError &&
           <div className="profile-table">
             <div
               className="profile-header"
@@ -73,12 +81,11 @@ export class ProfileList extends React.Component<Props> {
   }
 }
 
-export const StyledProfileList = inject('profileStore', 'adminStore')(styled(ProfileList)`
-    width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10rem;
-    
+export const StyledProfileList = inject('profileStore', 'adminProfileStore')(styled(ProfileList)`
+    display: inline-block;
+    float: left;
+    width: 500px;
+    margin-left: 10rem;
     .error {
       width: 100%;
       text-align: center;
@@ -87,6 +94,7 @@ export const StyledProfileList = inject('profileStore', 'adminStore')(styled(Pro
     
     .profile-table {
       border: 1px solid ${props => props.theme.graySteel};
+      margin-bottom: 2rem;
     }
     
     .profile-row, .profile-header {
