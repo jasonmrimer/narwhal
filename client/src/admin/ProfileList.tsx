@@ -1,9 +1,9 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { inject, observer } from 'mobx-react';
-import { StyledDropdown } from '../widgets/inputs/Dropdown';
 import { AdminStore } from './stores/AdminStore';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
+import { StyledSingleTypeahead } from '../widgets/inputs/SingleTypeahead';
 
 interface Props {
   adminStore?: AdminStore;
@@ -15,7 +15,7 @@ interface Props {
 export class ProfileList extends React.Component<Props> {
   render() {
     const {profileStore, adminStore} = this.props;
-    const {hasError, error, roleOptions, setProfileRole, profiles} = adminStore!;
+    const {hasError, error, roleOptions, setProfileRole, profiles, performLoading, getSelectedRoleOption} = adminStore!;
     return (
       <div className={this.props.className}>
         {
@@ -44,15 +44,22 @@ export class ProfileList extends React.Component<Props> {
                     >
                       <span>{profile.username}</span>
                       <span>{profile.siteName}</span>
-                      <StyledDropdown
-                        disabled={profile.id === profileStore!.profile!.id}
-                        name="roleId"
+                      <StyledSingleTypeahead
                         options={roleOptions}
-                        value={profile.roleId}
-                        onChange={async (evt: any) =>
-                          await this.props.adminStore!.performLoading(async () => {
-                          await setProfileRole(profile, evt.target.value);
-                        })}
+                        onChange={async (evt) => {
+                          if (evt !== null) {
+                            await performLoading(
+                              async () => {
+                                await setProfileRole(profile, Number(evt.value));
+                              }
+                            );
+                          }
+                        }}
+                        clearButton={false}
+                        className="role-selector"
+                        selected={getSelectedRoleOption(profile.roleId)}
+                        filterBy={() => true}
+                        disabled={profile.id === profileStore!.profile!.id}
                       />
                     </div>
                   );
@@ -85,7 +92,7 @@ export const StyledProfileList = inject('profileStore', 'adminStore')(styled(Pro
     .profile-row, .profile-header {
       padding: 1rem;
       
-      & > span, & > select {
+      & > span, & > .role-selector {
         width: 33%;
         display: inline-block;
        }

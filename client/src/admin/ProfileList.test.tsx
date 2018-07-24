@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { ErrorResponse } from '../utils/HTTPClient';
-import { StyledDropdown } from '../widgets/inputs/Dropdown';
 import { ProfileSitePickerStore } from '../profile/stores/ProfileSitePickerStore';
 import { AdminStore } from './stores/AdminStore';
 import { ProfileList } from './ProfileList';
 import { DoubleRepositories } from '../utils/Repositories';
+import { StyledSingleTypeahead } from '../widgets/inputs/SingleTypeahead';
 
 describe('ProfileList', () => {
   let subject: ShallowWrapper;
@@ -34,21 +34,17 @@ describe('ProfileList', () => {
   });
 
   it('should render a list of role options', () => {
-    const dropdowns = subject.find(StyledDropdown);
-    expect(dropdowns.length).toBe(store.profiles.length);
-    expect(dropdowns.at(0).prop('options')).toEqual(store.roleOptions);
-    expect(dropdowns.at(0).prop('value')).toEqual(store.profiles[0].roleId);
-    dropdowns.at(0).simulate('change', {
-      target: {
-        value: store.roleOptions[1].value
-      }
-    });
-    expect(store.setProfileRole).toHaveBeenCalledWith(store.profiles[0], store.roleOptions[1].value);
+    const controls = subject.find(StyledSingleTypeahead);
+    expect(controls.length).toBe(store.profiles.length);
+    expect(controls.at(0).prop('options')).toEqual(store.roleOptions);
+    expect(controls.at(0).html()).toContain(store.profiles[0].roleId);
+    controls.at(0).simulate('change', {value: store.roleOptions[1].value});
+    expect(store.setProfileRole).toHaveBeenCalled();
   });
 
   it('should disable the role drop down for the current user', () => {
-    expect(subject.find(StyledDropdown).at(0).prop('disabled')).toBeTruthy();
-    expect(subject.find(StyledDropdown).at(1).prop('disabled')).toBeFalsy();
+    expect(subject.find(StyledSingleTypeahead).at(0).prop('disabled')).toBeTruthy();
+    expect(subject.find(StyledSingleTypeahead).at(1).prop('disabled')).toBeFalsy();
   });
 
   it('should display an error', () => {

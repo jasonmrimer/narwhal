@@ -75,17 +75,15 @@ describe('SidePanelActions', () => {
     const pendingEventStore = {setShowList: setShowListSpy};
 
     const sidePanelStore = {setSelectedTab: setSelectedTabSpy};
-
-    subject = new SidePanelActions({
-        trackerStore,
-        availabilityStore,
-        currencyStore,
-        plannerStore,
-        sidePanelStore,
-        pendingEventStore,
-      } as any,
-      new TimeServiceStub()
-    );
+    const stores = {
+      trackerStore,
+      availabilityStore,
+      currencyStore,
+      plannerStore,
+      sidePanelStore,
+      pendingEventStore,
+    } as any;
+    subject = new SidePanelActions(stores , new TimeServiceStub());
   });
 
   it('should close the side panel', () => {

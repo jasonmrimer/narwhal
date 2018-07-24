@@ -52,6 +52,11 @@ export class AdminStore extends NotificationStore {
   }
 
   @action.bound
+  getSelectedRoleOption(id: number) {
+    return this.roleOptions.find(r => r.value === id);
+  }
+
+  @action.bound
   async setProfileRole(profile: ProfileModel, roleId: number) {
     const updatedProfile = await this.profileRepository.save(Object.assign({}, profile, {roleId}));
     const index = this._profiles.findIndex(p => p.id === profile.id);

@@ -89,7 +89,6 @@ describe('AirmanProfileManager', () => {
     expect(subject.find(StyledRipItemsTile).exists()).toBeTruthy();
   });
 
-
   it('should call store save onSubmit', () => {
     subject.find(StyledForm).simulate('submit', eventStub);
     expect(profileActions.handleFormSubmit).toHaveBeenCalled();
