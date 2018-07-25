@@ -1,12 +1,14 @@
 package mil.af.us.narwhal.admin;
 
 import mil.af.us.narwhal.BaseIntegrationTest;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.greaterThan;
 
 public class AdminSquadronControllerTest extends BaseIntegrationTest {
 
@@ -42,5 +44,27 @@ public class AdminSquadronControllerTest extends BaseIntegrationTest {
       .body("[1].squadronId", equalTo(2))
       .body("[1].squadronName", equalTo("squadron2"));
     //    // @formatter:on
+  }
+
+  @Test
+  public void createSquadronTest() throws JsonProcessingException {
+    final String json = objectMapper.writeValueAsString(
+      new AdminSquadronItemJSON(site.getId(), site.getName(), null, "OurNewSquadron")
+    );
+
+    // @formatter:off
+    given()
+      .port(port)
+      .auth()
+      .preemptive()
+      .basic("tytus", "password")
+      .body(json)
+      .contentType("application/json")
+      .when()
+      .post(AdminSquadronController.URI)
+      .then()
+      .statusCode(201)
+      .body("squadronId", greaterThan(2));
+    // @formatter:on
   }
 }

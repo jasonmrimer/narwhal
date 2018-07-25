@@ -15,7 +15,9 @@ import { WebRepositories } from '../utils/Repositories';
 import { SiteManagerActions } from '../site-manager/actions/SiteManagerActions';
 import { CertificationActions } from '../skills/certification/CertificationActions';
 import { TopBarActions } from '../widgets/TopBarActions';
+import { AdminSquadronActions } from '../admin/actions/AdminSquadronActions';
 
+const adminSquadronActions = new AdminSquadronActions(stores, WebRepositories);
 const availabilityActions = new AvailabilityActions(stores);
 const missionPlannerActions = new MissionPlannerActions(stores);
 const currencyActions = new CurrencyActions(stores);
@@ -32,6 +34,7 @@ const certificationActions = new CertificationActions(stores, WebRepositories);
 const topBarActions = new TopBarActions(stores, WebRepositories);
 
 export const actions = {
+  adminSquadronActions,
   availabilityActions,
   missionPlannerActions,
   currencyActions,
