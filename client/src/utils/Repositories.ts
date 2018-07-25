@@ -43,8 +43,12 @@ import { FlightRepository } from '../flight/repositories/FlightRepository';
 import { AdminSquadronRepository } from '../admin/repositories/AdminSquadronRepository';
 import { WebAdminSquadronRepository } from '../admin/repositories/web/WebAdminSquadronRepository';
 import { AdminSquadronRepositoryStub } from '../admin/repositories/doubles/AdminSquadronRepositoryStub';
+import { AdminSiteRepository } from '../admin/repositories/AdminSiteRepository';
+import { WebAdminSiteRepository } from '../admin/repositories/web/WebAdminSiteRepository';
+import { AdminSiteRepositoryStub } from '../admin/repositories/doubles/AdminSiteRepositoryStub';
 
 export interface Repositories {
+  adminSiteRepository: AdminSiteRepository;
   adminSquadronRepository: AdminSquadronRepository;
   airmanRepository: AirmanRepository;
   siteRepository: SiteRepository;
@@ -64,6 +68,7 @@ export interface Repositories {
 const client = new HTTPClient();
 
 export const WebRepositories: Repositories = Object.freeze({
+  adminSiteRepository: new WebAdminSiteRepository(client),
   adminSquadronRepository: new WebAdminSquadronRepository(client),
   airmanRepository: new WebAirmanRepository(client),
   siteRepository: new WebSiteRepository(client),
@@ -81,6 +86,7 @@ export const WebRepositories: Repositories = Object.freeze({
 });
 
 export const DoubleRepositories: Repositories = {
+  adminSiteRepository: new AdminSiteRepositoryStub(),
   adminSquadronRepository: new AdminSquadronRepositoryStub(),
   airmanRepository: new FakeAirmanRepository(),
   siteRepository: new SiteRepositoryStub(),
