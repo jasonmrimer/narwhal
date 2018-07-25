@@ -15,7 +15,15 @@ interface Props {
 export class ProfileList extends React.Component<Props> {
   render() {
     const {profileStore, adminProfileStore} = this.props;
-    const {hasError, error, roleOptions, setProfileRole, profiles, performLoading, getSelectedRoleOption} = adminProfileStore!;
+    const {
+      hasError,
+      error,
+      roleOptions,
+      setProfileRole,
+      profiles,
+      performLoading,
+      getSelectedRoleOption
+    } = adminProfileStore!;
     return (
       <div className={this.props.className}>
         {
@@ -74,11 +82,10 @@ export class ProfileList extends React.Component<Props> {
 }
 
 export const StyledProfileList = inject('profileStore', 'adminProfileStore')(styled(ProfileList)`
-    width: 800px;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 10rem;
-    
+    display: inline-block;
+    float: left;
+    width: 500px;
+    margin-left: 10rem;
     .error {
       width: 100%;
       text-align: center;
@@ -87,6 +94,7 @@ export const StyledProfileList = inject('profileStore', 'adminProfileStore')(sty
     
     .profile-table {
       border: 1px solid ${props => props.theme.graySteel};
+      margin-bottom: 2rem;
     }
     
     .profile-row, .profile-header {

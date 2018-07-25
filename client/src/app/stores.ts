@@ -24,6 +24,7 @@ import { CertificationFormStore } from '../skills/certification/stores/Certifica
 import { SkillsFieldStore } from '../skills/stores/SkillsFieldStore';
 import { PendingEventStore } from '../widgets/stores/PendingEventStore';
 import { FlightAirmanSelectionStore } from '../site-manager/stores/FlightAirmanSelectionStore';
+import { AdminSquadronStore } from '../admin/stores/AdminSquadronStore';
 
 const timeService = new MomentTimeService();
 const profileStore = new ProfileSitePickerStore(WebRepositories);
@@ -51,6 +52,7 @@ const dashboardStore = new DashboardStore(WebRepositories);
 const crewStore = new CrewStore(WebRepositories);
 const missionPlannerStore = new MissionPlannerStore(WebRepositories);
 const adminProfileStore = new AdminProfileStore(WebRepositories);
+const adminSquadronStore = new AdminSquadronStore();
 const airmanProfileManagerStore = new AirmanProfileManagerStore(WebRepositories.airmanRepository);
 const flightAirmanSelectionStore = new FlightAirmanSelectionStore();
 const siteManagerStore = new SiteManagerStore(WebRepositories);
@@ -77,6 +79,7 @@ export interface Stores {
   crewStore: CrewStore;
   missionPlannerStore: MissionPlannerStore;
   adminProfileStore: AdminProfileStore;
+  adminSquadronStore: AdminSquadronStore;
   airmanProfileManagerStore: AirmanProfileManagerStore;
   flightAirmanSelectionStore: FlightAirmanSelectionStore;
   siteManagerStore: SiteManagerStore;
@@ -86,6 +89,7 @@ export interface Stores {
 
 export const stores = {
   adminProfileStore,
+  adminSquadronStore,
   airmanRipItemFormStore,
   appointmentFormStore,
   availabilityStore,

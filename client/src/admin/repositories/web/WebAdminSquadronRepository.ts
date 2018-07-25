@@ -6,7 +6,7 @@ export class WebAdminSquadronRepository implements AdminSquadronRepository {
   constructor(private client: HTTPClient) {
   }
   async findAll(): Promise<AdminSquadronModel[]> {
-    const json = await this.client.getJSON('/api/admins/squadrons');
+    const json = await this.client.getJSON('/api/admin/squadrons');
     return json.map((obj: any) => {
       return new AdminSquadronModel(
         obj.siteId,
