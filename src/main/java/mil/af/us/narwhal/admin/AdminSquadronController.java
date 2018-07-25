@@ -1,9 +1,9 @@
 package mil.af.us.narwhal.admin;
 
 import mil.af.us.narwhal.squadron.SquadronRepository;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -20,6 +20,11 @@ public class AdminSquadronController{
   @GetMapping
   public List<AdminSquadronItemJSON> Index() {
     return this.squadronRepository.getAdminSquadrons();
+  }
+
+  @PostMapping
+  public AdminSquadronItemJSON Create(@Valid @RequestBody AdminSquadronItemJSON item) {
+    return new AdminSquadronItemJSON();
   }
 }
 
