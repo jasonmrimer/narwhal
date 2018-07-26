@@ -3,9 +3,12 @@ import { inject, observer } from 'mobx-react';
 import { StyledSquadronList } from './SquadronList';
 import styled from 'styled-components';
 import { StyledProfileList } from './ProfileList';
+import { AdminSquadronStore } from './stores/AdminSquadronStore';
+import { StyledAddSquadronPopup } from './popups/AddSquadronPopup';
 
 interface Props {
   className?: string;
+  adminSquadronStore?: AdminSquadronStore;
 }
 
 @observer
@@ -15,6 +18,10 @@ export class AdminManager extends React.Component<Props> {
       <React.Fragment>
         <div className={this.props.className}>
           <StyledProfileList/>
+          {
+            this.props.adminSquadronStore!.hasPendingSquadron &&
+              <StyledAddSquadronPopup/>
+          }
           <StyledSquadronList/>
         </div>
       </React.Fragment>
@@ -22,7 +29,9 @@ export class AdminManager extends React.Component<Props> {
   }
 }
 
-export const StyledAdminManager = inject()(styled(AdminManager)`
+export const StyledAdminManager = inject(
+  `adminSquadronStore`
+)(styled(AdminManager)`
   display: flex; 
   flex-wrap: nowrap;
   width: 100%;

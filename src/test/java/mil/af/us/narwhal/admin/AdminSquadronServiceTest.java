@@ -55,5 +55,4 @@ public class AdminSquadronServiceTest {
     assertThat(returnedJSON.getSquadronId()).isEqualTo(32L);
     assertThat(returnedJSON.getSquadronName()).isEqualTo("SquadronOne");
   }
-
 }

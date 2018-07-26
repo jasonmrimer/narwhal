@@ -2,8 +2,11 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { inject, observer } from 'mobx-react';
 import { AdminSquadronStore } from './stores/AdminSquadronStore';
+import { AdminSquadronActions } from './actions/AdminSquadronActions';
+import { OperatorIcon } from '../icons/OperatorIcon';
 
 interface Props {
+  adminSquadronActions?: AdminSquadronActions;
   adminSquadronStore?: AdminSquadronStore;
   className?: string;
 }
@@ -11,7 +14,8 @@ interface Props {
 @observer
 export class SquadronList extends React.Component<Props> {
   render() {
-    const {className, adminSquadronStore} = this.props;
+    const {adminSquadronActions, adminSquadronStore, className} = this.props;
+
     const {
       hasData
       , squadrons
@@ -23,13 +27,19 @@ export class SquadronList extends React.Component<Props> {
         <div className={className}>
           <div className="header">
             <span>All Squadrons</span>
+            <span onClick={async () => {
+              await adminSquadronStore!.performLoading(adminSquadronActions!.showAddSquadron);
+            }}>
+              <OperatorIcon/>
+              <div>New Squadron</div>
+            </span>
           </div>
           <div className="sub-header">
             SITE/SQUADRON
           </div>
           {squadrons.map((squadron) => {
             return (
-              <div key={squadron.squadronId} className="row">
+              <div key={squadron.squadronId!} className="row">
                 <span>{squadron.siteName}/{squadron.squadronName}</span>
               </div>
             );
@@ -40,7 +50,10 @@ export class SquadronList extends React.Component<Props> {
   }
 }
 
-export const StyledSquadronList = inject('adminSquadronStore')(styled(SquadronList)`
+export const StyledSquadronList = inject(
+  'adminSquadronActions',
+  'adminSquadronStore'
+)(styled(SquadronList)`
     display: inline-block;
     float: left;
     width: 500px;
