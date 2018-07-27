@@ -35,13 +35,13 @@ public class AdminSquadronControllerTest extends BaseIntegrationTest {
       .then()
       .statusCode(200)
       .body("$.size()", equalTo(2))
-      .body("[0].siteId", equalTo(1))
+      .body("[0].siteId", greaterThan(0))
       .body("[0].siteName", equalTo("site"))
-      .body("[0].squadronId", equalTo(1))
+      .body("[0].squadronId", greaterThan(0))
       .body("[0].squadronName", equalTo("squadron"))
-      .body("[1].siteId", equalTo(1))
+      .body("[1].siteId", greaterThan(0))
       .body("[1].siteName", equalTo("site"))
-      .body("[1].squadronId", equalTo(2))
+      .body("[1].squadronId", greaterThan(0))
       .body("[1].squadronName", equalTo("squadron2"));
     //    // @formatter:on
   }
