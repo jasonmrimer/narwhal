@@ -53,5 +53,16 @@ export const StyledAddSquadronPopup = inject(
     
     .message {
       margin: 0 0.5rem;
+      display: flex;
+      justify-content: center;
+      
+      .site {
+        width: 10rem;
+        margin-right: 4rem;
+      }
+      
+      .name {
+        width: 12rem;
+      }
     }
 `);

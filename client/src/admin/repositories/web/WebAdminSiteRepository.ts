@@ -11,7 +11,6 @@ export class WebAdminSiteRepository implements AdminSiteRepository {
 
   async findAll(): Promise<AdminSiteModel[]> {
     const json = await this.client.getJSON('/api/admin/sites');
-    console.log(json);
     return json.map((obj: any) => {
       return this.serializer.deserialize(obj);
     });

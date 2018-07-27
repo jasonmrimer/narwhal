@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { inject, observer } from 'mobx-react';
 import { AdminSquadronStore } from './stores/AdminSquadronStore';
 import { AdminSquadronActions } from './actions/AdminSquadronActions';
-import { OperatorIcon } from '../icons/OperatorIcon';
+import { AddIcon } from '../icons/AddIcon';
 
 interface Props {
   adminSquadronActions?: AdminSquadronActions;
@@ -25,13 +25,15 @@ export class SquadronList extends React.Component<Props> {
       <React.Fragment>
         {hasData &&
         <div className={className}>
-          <div className="header">
-            <span>All Squadrons</span>
-            <span onClick={async () => {
-              await adminSquadronStore!.performLoading(adminSquadronActions!.showAddSquadron);
-            }}>
-              <OperatorIcon/>
-              <div>New Squadron</div>
+          <div className="title">
+            <span className="squadron-title">All Squadrons</span>
+            <span
+              className="add-squadron-button"
+              onClick={async () => {
+                await adminSquadronStore!.performLoading(adminSquadronActions!.showAddSquadron);
+              }}
+            >
+              <AddIcon/> Add Squadron
             </span>
           </div>
           <div className="sub-header">
@@ -40,7 +42,7 @@ export class SquadronList extends React.Component<Props> {
           {squadrons.map((squadron) => {
             return (
               <div key={squadron.squadronId!} className="row">
-                <span>{squadron.siteName}/{squadron.squadronName}</span>
+                <span className="cell">{squadron.siteName}/{squadron.squadronName}</span>
               </div>
             );
           })}
@@ -56,19 +58,42 @@ export const StyledSquadronList = inject(
 )(styled(SquadronList)`
     display: inline-block;
     float: left;
-    width: 500px;
+    height: 32rem;
+    width: 32rem;
     margin-left: 10rem;
     border: 1px solid ${props => props.theme.graySteel};
     overflow: auto;
-    height: 500px;
     
-    .row, .header, .sub-header {
+    .row, .sub-header {
       padding: 1rem;
       
-      & > span {
+      & > .cell {
         width: 33%;
         display: inline-block;
        }
+    }
+    
+    .title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      margin: 0;
+      background: ${props => props.theme.lightest};
+    
+      .squadron-title, .add-squadron-button {
+        display: flex;
+        align-items: center;
+        width: 33%;
+      }
+      
+      .add-squadron-button {
+        justify-content: flex-end;
+        
+        & > .icon {
+          margin-right: 0.5rem;
+        }
+      }
     }
     
     .row {

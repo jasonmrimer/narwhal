@@ -21,8 +21,8 @@ describe('AdminSquadronActions', () => {
       setPendingSquadron: jest.fn(),
       setSites: jest.fn(),
       sites: [
-        new AdminSiteModel(1, "Site One"),
-        new AdminSiteModel(14, "Site Fourteen")
+        new AdminSiteModel(1, 'Site One'),
+        new AdminSiteModel(14, 'Site Fourteen')
       ]
     };
 
@@ -45,7 +45,7 @@ describe('AdminSquadronActions', () => {
 
   it('should set the pendingSquadron site', async () => {
     await subject.showAddSquadron();
-    const site = {value: 14, label: "Site Fourteen"};
+    const site = {value: 14, label: 'Site Fourteen'};
     subject.onSquadronSiteChange(site);
     expect(adminSquadronStore.pendingSquadron.setSiteId).toHaveBeenCalledWith(site.value);
     expect(adminSquadronStore.pendingSquadron.setSiteName).toHaveBeenCalledWith(site.label);
@@ -53,7 +53,7 @@ describe('AdminSquadronActions', () => {
 
   it('should set the pendingSquadron name', async () => {
     await subject.showAddSquadron();
-    const name = "Squadron One";
+    const name = 'Squadron One';
     subject.onSquadronNameChange(name);
     expect(adminSquadronStore.pendingSquadron.setSquadronName).toHaveBeenCalledWith(name);
   });

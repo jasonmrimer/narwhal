@@ -8,7 +8,7 @@ export class AdminSquadronModel {
 
   constructor(siteId: number | null = null,
               siteName: string = '',
-              squadronId: number | null = null,
+              squadronId: number = 0,
               squadronName: string = ''
               ) {
     this._siteId = siteId;

@@ -5,8 +5,6 @@ import mil.af.us.narwhal.squadron.SquadronRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -30,7 +28,7 @@ public class AdminSquadronController{
   }
 
   @PostMapping
-  public ResponseEntity<AdminSquadronItemJSON> createAdminSquadronItem(@Valid @RequestBody AdminSquadronItemJSON item) {
+  public ResponseEntity<AdminSquadronItemJSON> createAdminSquadronItem(@RequestBody AdminSquadronItemJSON item) {
     final AdminSquadronService adminSquadronService = new AdminSquadronService(
       this.siteRepository,
       this.squadronRepository
