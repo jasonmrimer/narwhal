@@ -50,11 +50,7 @@ export class SquadronList extends React.Component<Props> {
                 >
                   <div
                     className="icon"
-                    onClick={async () => {
-                      await adminSquadronStore!.performLoading(async () =>
-                        await adminSquadronActions!.deleteSquadron(squadron.squadronId!)
-                      );
-                    }}
+                    onClick={() => adminSquadronStore!.setPendingDeleteSquadron(squadron)}
                   >
                     <CloseIcon/>
                   </div>
@@ -106,7 +102,8 @@ export const StyledSquadronList = inject(
       
       .add-squadron-button {
         justify-content: flex-end;
-        
+        cursor: pointer;
+
         & > .icon {
           margin-right: 0.5rem;
         }
@@ -117,6 +114,7 @@ export const StyledSquadronList = inject(
         width: 66%;
         display: flex;
         justify-content: flex-end;
+        cursor: pointer;
         
         & > .icon {
           margin-right: 0.5rem;

@@ -38,6 +38,7 @@ export class AdminSquadronActions {
   async deleteSquadron(id: number) {
     await this.adminSquadronRepository.delete(id);
     this.adminSquadronStore.deleteSquadron(id);
+    this.adminSquadronStore.setPendingDeleteSquadron(null);
   }
 
   @action.bound

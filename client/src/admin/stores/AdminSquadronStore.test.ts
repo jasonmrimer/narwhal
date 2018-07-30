@@ -46,4 +46,10 @@ describe('AdminSquadronStore', () => {
     subject.deleteSquadron(682);
     expect(subject.squadrons.find(s => s.squadronId === 682)).toBeUndefined();
   });
+
+  it('should set a squadron to be deleted', () => {
+    expect(subject.hasPendingDeleteSquadron).toBeFalsy();
+    subject.setPendingDeleteSquadron(new AdminSquadronModel(14, 'Site Fourteen', 682, 'Squadron SixEightyTwo', 0));
+    expect(subject.hasPendingDeleteSquadron).toBeTruthy();
+  });
 });

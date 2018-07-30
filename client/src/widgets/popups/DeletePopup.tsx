@@ -6,8 +6,9 @@ import { AirmanCertificationModel } from '../../airman/models/AirmanCertificatio
 import { AirmanQualificationModel } from '../../airman/models/AirmanQualificationModel';
 import { AirmanModel } from '../../airman/models/AirmanModel';
 import { StyledPopupModal } from './PopupModal';
+import { AdminSquadronModel } from '../../admin/models/AdminSquadronModel';
 
-type Deletable = AirmanModel | EventModel | Skill;
+type Deletable = AirmanModel | EventModel | Skill | AdminSquadronModel;
 
 interface Props {
   item: Deletable;
@@ -19,15 +20,18 @@ interface Props {
 export const renderItemInformation = (item: Deletable) => {
   const format = 'DD MMM YY HH:mm';
   switch (item.constructor) {
+    case AdminSquadronModel:
+      const model = item as AdminSquadronModel;
+      return `Are you sure you want to delete '${model.siteName}/${model.squadronName}'?`;
+    case AirmanCertificationModel:
+      return `Remove ${(item as AirmanCertificationModel).title}?`;
+    case AirmanModel:
+      return `Delete ${(item as AirmanModel).fullName}? This action cannot be undone.`;
+    case AirmanQualificationModel:
+      return `Remove ${(item as AirmanQualificationModel).acronym}?`;
     case EventModel:
       const event = item as EventModel;
       return `Remove ${event.title}, from ${event.startTime.format(format)} - ${event.endTime.format(format)}?`;
-    case AirmanCertificationModel:
-      return `Remove ${(item as AirmanCertificationModel).title}?`;
-    case AirmanQualificationModel:
-      return `Remove ${(item as AirmanQualificationModel).acronym}?`;
-    case AirmanModel:
-      return `Delete ${(item as AirmanModel).fullName}? This action cannot be undone.`;
     default:
       return 'REMOVE ITEM';
   }
@@ -35,14 +39,16 @@ export const renderItemInformation = (item: Deletable) => {
 
 export const renderTitle = (item: Deletable) => {
   switch (item.constructor) {
-    case EventModel:
-      return 'REMOVE EVENT';
+    case AdminSquadronModel:
+      return 'DELETE SQUADRON';
     case AirmanCertificationModel:
       return 'REMOVE CERTIFICATION';
-    case AirmanQualificationModel:
-      return 'REMOVE QUALIFICATION';
     case AirmanModel:
       return 'DELETE MEMBER';
+    case AirmanQualificationModel:
+      return 'REMOVE QUALIFICATION';
+    case EventModel:
+      return 'REMOVE EVENT';
     default:
       return 'REMOVE ITEM';
   }

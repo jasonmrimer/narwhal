@@ -21,6 +21,7 @@ describe('AdminSquadronActions', () => {
         siteId: 14
       },
       performLoading: jest.fn(),
+      setPendingDeleteSquadron: jest.fn(),
       setPendingSquadron: jest.fn(),
       setSites: jest.fn(),
       showDelete: jest.fn(),
