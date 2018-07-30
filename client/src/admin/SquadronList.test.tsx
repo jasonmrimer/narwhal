@@ -3,9 +3,18 @@ import { AdminSquadronModel } from './models/AdminSquadronModel';
 import { AdminSquadronStore } from './stores/AdminSquadronStore';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { SquadronList } from './SquadronList';
+import { AdminSquadronActions } from './actions/AdminSquadronActions';
+import { AdminSquadronRepositoryStub } from './repositories/doubles/AdminSquadronRepositoryStub';
+import { AdminSiteRepositoryStub } from './repositories/doubles/AdminSiteRepositoryStub';
+import { AdminSquadronRepository } from './repositories/AdminSquadronRepository';
+import { AdminSiteRepository } from './repositories/AdminSiteRepository';
 
 describe('SquadronList', () => {
+  let adminSquadronActions: AdminSquadronActions;
   let adminSquadronStore: AdminSquadronStore;
+  let adminSiteRepository: AdminSiteRepository;
+  let adminSquadronRepository: AdminSquadronRepository;
+
   let subject: ShallowWrapper;
   beforeEach(() => {
     const squadrons = [
@@ -13,9 +22,20 @@ describe('SquadronList', () => {
       new AdminSquadronModel(2, 'Site2', 2, 'Squad2')
     ];
     adminSquadronStore = new AdminSquadronStore();
+    adminSiteRepository = new AdminSiteRepositoryStub();
+    adminSquadronRepository = new AdminSquadronRepositoryStub();
+    adminSquadronActions = new AdminSquadronActions({adminSquadronStore}, {
+      adminSiteRepository,
+      adminSquadronRepository
+    });
     adminSquadronStore.hydrate(squadrons);
 
-    subject = shallow(<SquadronList adminSquadronStore={adminSquadronStore} />);
+    subject = shallow(
+      <SquadronList
+        adminSquadronStore={adminSquadronStore}
+        adminSquadronActions={adminSquadronActions}
+      />
+    );
   });
 
   it('should display a list of squadrons', () => {

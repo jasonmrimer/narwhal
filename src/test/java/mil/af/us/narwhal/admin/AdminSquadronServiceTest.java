@@ -34,7 +34,8 @@ public class AdminSquadronServiceTest {
       site.getId(),
       site.getName(),
       null,
-      "SquadronOne"
+      "SquadronOne",
+      0L
     );
 
     when(siteRepository.findOne(1L))

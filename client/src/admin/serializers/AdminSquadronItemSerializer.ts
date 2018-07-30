@@ -7,7 +7,8 @@ export class AdminSquadronItemSerializer implements Serializer<AdminSquadronMode
       siteId: item.siteId,
       siteName: item.siteName,
       squadronId: item.squadronId,
-      squadronName: item.squadronName
+      squadronName: item.squadronName,
+      airmenCount: item.airmenCount
     });
   }
 
@@ -16,7 +17,8 @@ export class AdminSquadronItemSerializer implements Serializer<AdminSquadronMode
       item.siteId,
       item.siteName,
       item.squadronId,
-      item.squadronName
+      item.squadronName,
+      item.airmenCount
     );
   }
 }

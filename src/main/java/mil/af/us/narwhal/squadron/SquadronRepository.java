@@ -1,17 +1,28 @@
 package mil.af.us.narwhal.squadron;
-
-import mil.af.us.narwhal.admin.AdminSquadronItemJSON;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-
-import java.util.List;
 
 public interface SquadronRepository extends JpaRepository<Squadron, Long> {
 
   @Query(
-    "SELECT " +
-      "new mil.af.us.narwhal.admin.AdminSquadronItemJSON(sq.site.id, sq.site.name, sq.id, sq.name) " +
-      "FROM Squadron AS sq "
+    value = "SELECT" +
+      "  s.id siteId, " +
+      "  s.name siteName, " +
+      "  sq.id squadronId, " +
+      "  sq.name squadronName, " +
+      "  COALESCE( c.squadron_count, 0) airmenCount " +
+      "FROM squadron sq JOIN " +
+      "  site s ON sq.site_id = s.id " +
+      "LEFT OUTER JOIN " +
+      "  (Select " +
+      "    squadron_id, " +
+      "    Count(1) as squadron_count " +
+      "    FROM airman a " +
+      "    JOIN flight f ON f.id = a.flight_id " +
+      "    JOIN squadron s2 on f.squadron_id = s2.id " +
+      "    GROUP BY squadron_id " +
+      "  ) AS c ON c.squadron_id = sq.id ",
+    nativeQuery = true
   )
-  List<AdminSquadronItemJSON> getAdminSquadrons();
+  Object[][] getAdminSquadrons();
 }

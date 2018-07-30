@@ -1,16 +1,19 @@
 import { AdminSquadronActions } from './AdminSquadronActions';
 import { AdminSiteRepositoryStub } from '../repositories/doubles/AdminSiteRepositoryStub';
 import { AdminSiteModel } from '../models/AdminSiteModel';
+import { AdminSquadronModel } from '../models/AdminSquadronModel';
 
 describe('AdminSquadronActions', () => {
   let adminSquadronStore: any;
   let adminSiteRepository: AdminSiteRepositoryStub;
+  let adminSquadronRepository: any;
   let subject: AdminSquadronActions;
 
   beforeEach(() => {
     adminSiteRepository = new AdminSiteRepositoryStub();
     adminSquadronStore = {
       defaultPendingSquadron: jest.fn(),
+      deleteSquadron: jest.fn(),
       pendingSquadron: {
         setSiteId: jest.fn(),
         setSiteName: jest.fn(),
@@ -20,15 +23,20 @@ describe('AdminSquadronActions', () => {
       performLoading: jest.fn(),
       setPendingSquadron: jest.fn(),
       setSites: jest.fn(),
+      showDelete: jest.fn(),
       sites: [
         new AdminSiteModel(1, 'Site One'),
         new AdminSiteModel(14, 'Site Fourteen')
       ]
     };
 
+    adminSquadronRepository = {
+      delete: jest.fn()
+    };
+
     subject = new AdminSquadronActions(
       {adminSquadronStore} as any,
-      {adminSiteRepository} as any
+      {adminSiteRepository, adminSquadronRepository} as any
     );
   });
 
@@ -66,5 +74,22 @@ describe('AdminSquadronActions', () => {
   it('should perform loading', async () => {
     await subject.performLoading(async () => { return; });
     expect(adminSquadronStore.performLoading).toHaveBeenCalled();
+  });
+
+  it('should show delete button', () => {
+    const squad =  new AdminSquadronModel(
+      1,
+      'site',
+      1,
+      'squadron',
+      0);
+    subject.showDeleteForSquadron(squad);
+    expect(adminSquadronStore.showDelete).toHaveBeenCalled();
+  });
+
+  it('should delete a squadron', async () => {
+    await subject.deleteSquadron(15);
+    expect(adminSquadronStore.deleteSquadron).toHaveBeenCalledWith(15);
+    expect(adminSquadronRepository.delete).toHaveBeenCalledWith(15);
   });
 });
