@@ -19,14 +19,19 @@ export class AdminSquadronActions {
   }
 
   @action.bound
+  async hideAddSquadron() {
+    this.adminSquadronStore.defaultPendingSquadron();
+  }
+
+  @action.bound
   async showAddSquadron() {
     this.adminSquadronStore.setSites(await this.adminSiteRepository.findAll());
     this.adminSquadronStore.setPendingSquadron(new AdminSquadronModel());
   }
 
   @action.bound
-  async hideAddSquadron() {
-    this.adminSquadronStore.defaultPendingSquadron();
+  showDeleteForSquadron(squadron: AdminSquadronModel) {
+    return this.adminSquadronStore.showDelete(squadron);
   }
 
   @action.bound

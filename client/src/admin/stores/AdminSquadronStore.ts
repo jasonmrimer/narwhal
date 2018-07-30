@@ -33,6 +33,11 @@ export class AdminSquadronStore extends NotificationStore {
     return this._squadrons.length !== 0;
   }
 
+  @action.bound
+  showDelete(squadron: AdminSquadronModel) {
+    return squadron.airmenCount === 0;
+  }
+
   @computed
   get hasPendingSquadron() {
     return this._pendingSquadron !== null;

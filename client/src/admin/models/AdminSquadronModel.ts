@@ -5,16 +5,19 @@ export class AdminSquadronModel {
   @observable private _siteName: string = '';
   @observable private _squadronId: number | null = null;
   @observable private _squadronName: string = '';
+  @observable private _airmenCount: number = 0;
 
   constructor(siteId: number | null = null,
               siteName: string = '',
               squadronId: number = 0,
-              squadronName: string = ''
+              squadronName: string = '',
+              airmenCount: number = 0
               ) {
     this._siteId = siteId;
     this._siteName = siteName;
     this._squadronId = squadronId;
     this._squadronName = squadronName;
+    this._airmenCount = airmenCount;
   }
 
   @computed
@@ -37,6 +40,11 @@ export class AdminSquadronModel {
     return this._squadronName;
   }
 
+  @computed
+  get airmenCount() {
+    return this._airmenCount;
+  }
+
   @action.bound
   setSiteId(id: number | null) {
     this._siteId = id;
@@ -55,5 +63,10 @@ export class AdminSquadronModel {
   @action.bound
   setSquadronName(name: string) {
     this._squadronName = name;
+  }
+
+  @action.bound
+  setAirmenCount(count: number) {
+    this._airmenCount = count;
   }
 }

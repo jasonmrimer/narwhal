@@ -12,4 +12,5 @@ public class AdminSquadronItemJSON {
   private String siteName;
   private Long squadronId;
   private String squadronName;
+  private Long airmenCount;
 }

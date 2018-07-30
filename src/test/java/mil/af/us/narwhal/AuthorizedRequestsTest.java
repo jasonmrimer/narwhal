@@ -83,6 +83,7 @@ public class AuthorizedRequestsTest {
         new EndpointAuthorizationExpectations("/api/admin")
           .setStatusCodeDictionaryGET(adminOnly)
           .setStatusCodeDictionaryPOST(adminOnly)
+          .setStatusCodeDictionaryDELETE(adminOnly)
         , new EndpointAuthorizationExpectations("/api/airmen")
           .setStatusCodeDictionaryPOST(modifiersOnly)
           .setStatusCodeDictionaryPUT(modifiersOnly)

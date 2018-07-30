@@ -20,4 +20,9 @@ export class WebAdminSquadronRepository implements AdminSquadronRepository {
     const json = await this.client.postJSON('/api/admin/squadrons', this.serializer.serialize(squadron));
     return this.serializer.deserialize(json);
   }
+
+  async delete(id: number): Promise<void> {
+    await this.client.delete('/api/admin/squadrons/' + id);
+    return Promise.resolve();
+  }
 }

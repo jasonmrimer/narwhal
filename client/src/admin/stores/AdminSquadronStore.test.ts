@@ -29,4 +29,14 @@ describe('AdminSquadronStore', () => {
     subject.defaultPendingSquadron();
     expect(subject.hasPendingSquadron).toBeFalsy();
   });
+
+  it('should hide delete button', () => {
+    const item = new AdminSquadronModel(
+      1,
+      'Site1',
+      1,
+      'Squadron1',
+      0);
+    expect(subject.showDelete(item)).toBeTruthy();
+  });
 });

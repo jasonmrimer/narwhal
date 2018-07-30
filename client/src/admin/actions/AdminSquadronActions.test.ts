@@ -1,6 +1,7 @@
 import { AdminSquadronActions } from './AdminSquadronActions';
 import { AdminSiteRepositoryStub } from '../repositories/doubles/AdminSiteRepositoryStub';
 import { AdminSiteModel } from '../models/AdminSiteModel';
+import { AdminSquadronModel } from '../models/AdminSquadronModel';
 
 describe('AdminSquadronActions', () => {
   let adminSquadronStore: any;
@@ -20,6 +21,7 @@ describe('AdminSquadronActions', () => {
       performLoading: jest.fn(),
       setPendingSquadron: jest.fn(),
       setSites: jest.fn(),
+      showDelete: jest.fn(),
       sites: [
         new AdminSiteModel(1, 'Site One'),
         new AdminSiteModel(14, 'Site Fourteen')
@@ -66,5 +68,16 @@ describe('AdminSquadronActions', () => {
   it('should perform loading', async () => {
     await subject.performLoading(async () => { return; });
     expect(adminSquadronStore.performLoading).toHaveBeenCalled();
+  });
+
+  it('should show delete button', () => {
+    const squad =  new AdminSquadronModel(
+      1,
+      'site',
+      1,
+      'squadron',
+      0);
+    subject.showDeleteForSquadron(squad);
+    expect(adminSquadronStore.showDelete).toHaveBeenCalled();
   });
 });

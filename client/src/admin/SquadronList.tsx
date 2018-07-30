@@ -4,6 +4,7 @@ import { inject, observer } from 'mobx-react';
 import { AdminSquadronStore } from './stores/AdminSquadronStore';
 import { AdminSquadronActions } from './actions/AdminSquadronActions';
 import { AddIcon } from '../icons/AddIcon';
+import { CloseIcon } from '../icons/CloseIcon';
 
 interface Props {
   adminSquadronActions?: AdminSquadronActions;
@@ -43,6 +44,14 @@ export class SquadronList extends React.Component<Props> {
             return (
               <div key={squadron.squadronId!} className="row">
                 <span className="cell">{squadron.siteName}/{squadron.squadronName}</span>
+                {adminSquadronActions!.showDeleteForSquadron(squadron) &&
+                <span
+                  className="row-button"
+                >
+                  <div className="icon">
+                    <CloseIcon/>
+                  </div>
+                </span>}
               </div>
             );
           })}
@@ -66,6 +75,7 @@ export const StyledSquadronList = inject(
     
     .row, .sub-header {
       padding: 1rem;
+      display:flex;
       
       & > .cell {
         width: 33%;
@@ -95,6 +105,16 @@ export const StyledSquadronList = inject(
         }
       }
     }
+    
+    .row-button {
+        width: 66%;
+        display: flex;
+        
+        & > .icon {
+          margin-right: 0.5rem;
+          justify-content: flex-end;
+        }
+      }
     
     .row {
       &:nth-child(odd) {

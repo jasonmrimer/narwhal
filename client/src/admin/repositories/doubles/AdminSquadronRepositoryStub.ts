@@ -12,4 +12,8 @@ export class AdminSquadronRepositoryStub implements AdminSquadronRepository {
     squadron.setSquadronId(42);
     return Promise.resolve(squadron);
   }
+
+  delete(id: number): Promise<void> {
+    return Promise.resolve();
+  }
 }
