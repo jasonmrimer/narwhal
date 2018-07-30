@@ -48,7 +48,14 @@ export class SquadronList extends React.Component<Props> {
                 <span
                   className="row-button"
                 >
-                  <div className="icon">
+                  <div
+                    className="icon"
+                    onClick={async () => {
+                      await adminSquadronStore!.performLoading(async () =>
+                        await adminSquadronActions!.deleteSquadron(squadron.squadronId!)
+                      );
+                    }}
+                  >
                     <CloseIcon/>
                   </div>
                 </span>}
@@ -79,7 +86,7 @@ export const StyledSquadronList = inject(
       
       & > .cell {
         width: 33%;
-        display: inline-block;
+        display: flex;
        }
     }
     
@@ -109,10 +116,10 @@ export const StyledSquadronList = inject(
     .row-button {
         width: 66%;
         display: flex;
+        justify-content: flex-end;
         
         & > .icon {
           margin-right: 0.5rem;
-          justify-content: flex-end;
         }
       }
     

@@ -35,6 +35,12 @@ export class AdminSquadronActions {
   }
 
   @action.bound
+  async deleteSquadron(id: number) {
+    await this.adminSquadronRepository.delete(id);
+    this.adminSquadronStore.deleteSquadron(id);
+  }
+
+  @action.bound
   async confirmAddSquadron() {
     const squadron = await this.adminSquadronRepository.saveSquadron(this.adminSquadronStore!.pendingSquadron!);
     this.adminSquadronStore.squadrons.push(squadron);

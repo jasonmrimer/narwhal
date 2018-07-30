@@ -33,14 +33,20 @@ export class AdminSquadronStore extends NotificationStore {
     return this._squadrons.length !== 0;
   }
 
+  @computed
+  get hasPendingSquadron() {
+    return this._pendingSquadron !== null;
+  }
+
   @action.bound
   showDelete(squadron: AdminSquadronModel) {
     return squadron.airmenCount === 0;
   }
 
-  @computed
-  get hasPendingSquadron() {
-    return this._pendingSquadron !== null;
+  @action.bound
+  deleteSquadron(id: number) {
+   const index = this._squadrons.findIndex(s => s.squadronId === id);
+   this._squadrons.splice(index, 1);
   }
 
   @action.bound
@@ -57,5 +63,4 @@ export class AdminSquadronStore extends NotificationStore {
   defaultPendingSquadron() {
     this._pendingSquadron = null;
   }
-
 }

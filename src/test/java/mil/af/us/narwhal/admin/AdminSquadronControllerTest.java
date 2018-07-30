@@ -2,7 +2,6 @@ package mil.af.us.narwhal.admin;
 
 import mil.af.us.narwhal.BaseIntegrationTest;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import mil.af.us.narwhal.event.EventController;
 import mil.af.us.narwhal.flight.Flight;
 import mil.af.us.narwhal.flight.FlightRepository;
 import mil.af.us.narwhal.squadron.Squadron;
@@ -84,10 +83,8 @@ public class AdminSquadronControllerTest extends BaseIntegrationTest {
     final Flight flightToDelete = new Flight();
     flight.setName("DeleteFlight");
     item.addFlight(flightToDelete);
-
     item = squadronRepository.save(item);
-    System.out.println("marker 1");
-    System.out.println(item.getId());
+
     // @formatter:off
     given()
       .port(port)

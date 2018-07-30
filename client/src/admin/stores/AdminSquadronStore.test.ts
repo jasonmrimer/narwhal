@@ -39,4 +39,11 @@ describe('AdminSquadronStore', () => {
       0);
     expect(subject.showDelete(item)).toBeTruthy();
   });
+
+  it('should delete a squadron', () => {
+    subject.squadrons.push(new AdminSquadronModel(14, 'Site Fourteen', 682, 'Squadron SixEightyTwo', 0));
+    expect(subject.squadrons.find(s => s.squadronId === 682)).toBeDefined();
+    subject.deleteSquadron(682);
+    expect(subject.squadrons.find(s => s.squadronId === 682)).toBeUndefined();
+  });
 });

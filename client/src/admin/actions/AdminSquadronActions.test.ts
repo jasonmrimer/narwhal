@@ -6,12 +6,14 @@ import { AdminSquadronModel } from '../models/AdminSquadronModel';
 describe('AdminSquadronActions', () => {
   let adminSquadronStore: any;
   let adminSiteRepository: AdminSiteRepositoryStub;
+  let adminSquadronRepository: any;
   let subject: AdminSquadronActions;
 
   beforeEach(() => {
     adminSiteRepository = new AdminSiteRepositoryStub();
     adminSquadronStore = {
       defaultPendingSquadron: jest.fn(),
+      deleteSquadron: jest.fn(),
       pendingSquadron: {
         setSiteId: jest.fn(),
         setSiteName: jest.fn(),
@@ -28,9 +30,13 @@ describe('AdminSquadronActions', () => {
       ]
     };
 
+    adminSquadronRepository = {
+      delete: jest.fn()
+    };
+
     subject = new AdminSquadronActions(
       {adminSquadronStore} as any,
-      {adminSiteRepository} as any
+      {adminSiteRepository, adminSquadronRepository} as any
     );
   });
 
@@ -79,5 +85,11 @@ describe('AdminSquadronActions', () => {
       0);
     subject.showDeleteForSquadron(squad);
     expect(adminSquadronStore.showDelete).toHaveBeenCalled();
+  });
+
+  it('should delete a squadron', async () => {
+    await subject.deleteSquadron(15);
+    expect(adminSquadronStore.deleteSquadron).toHaveBeenCalledWith(15);
+    expect(adminSquadronRepository.delete).toHaveBeenCalledWith(15);
   });
 });

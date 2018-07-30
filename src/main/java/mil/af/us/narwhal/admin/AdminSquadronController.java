@@ -9,9 +9,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.util.Collections.emptyList;
 
 @RestController
 @RequestMapping(AdminSquadronController.URI)
@@ -55,12 +58,23 @@ public class AdminSquadronController{
   }
 
   @DeleteMapping(value = "/{id}")
-  public void delete(@PathVariable Long id) {
-    Squadron squadron = squadronRepository.findOne(id);
-    System.out.println(squadron == null);
-    List<Flight> flights = flightRepository.findAllBySquadron(squadron);
-    flights.stream().forEach(f -> flightRepository.delete(f.getId()));
-    squadronRepository.delete(id);
+  public ResponseEntity<Object> delete(@PathVariable Long id) {
+//    this.squadronRepository.delete(id);
+
+    Squadron squadron = this.squadronRepository.findOne(id);
+
+    List<Flight> flightList = this.flightRepository.findAllBySquadron(squadron);
+
+    List<Squadron> squadronList = new ArrayList<>();
+    squadronList.add(squadron);
+
+    this.flightRepository.deleteInBatch(flightList);
+    this.squadronRepository.deleteInBatch(squadronList);
+
+    return new ResponseEntity<>(
+      emptyList(),
+      HttpStatus.OK
+    );
   }
 }
 
