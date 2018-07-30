@@ -27,7 +27,7 @@ export class SquadronList extends React.Component<Props> {
         {hasData &&
         <div className={className}>
           <div className="title">
-            <span className="squadron-title">All Squadrons</span>
+            <span className="squadron-title">All Sites/Squadrons</span>
             <span
               className="add-squadron-button"
               onClick={async () => {
@@ -37,26 +37,32 @@ export class SquadronList extends React.Component<Props> {
               <AddIcon/> Add Squadron
             </span>
           </div>
-          <div className="sub-header">
-            SITE/SQUADRON
-          </div>
-          {squadrons.map((squadron) => {
-            return (
-              <div key={squadron.squadronId!} className="row">
-                <span className="cell">{squadron.siteName}/{squadron.squadronName}</span>
-                {adminSquadronActions!.showDeleteForSquadron(squadron) &&
-                <span
-                  className="row-button"
-                >
-                  <div
-                    className="icon"
-                    onClick={() => adminSquadronStore!.setPendingDeleteSquadron(squadron)}
-                  >
-                    <CloseIcon/>
-                  </div>
-                </span>}
+          {squadrons.map(parent => {
+            return (<React.Fragment key={parent.parent.siteId!}>
+              <div className="sub-header">
+                {parent.parent.siteName}
               </div>
-            );
+              {
+                parent.children.map((squadron) => {
+                  return (
+                    <div key={squadron.squadronId!} className="row">
+                      <span className="cell">{squadron.squadronName}</span>
+                      {adminSquadronActions!.showDeleteForSquadron(squadron) &&
+                      <span
+                        className="row-button"
+                      >
+                        <div
+                          className="icon"
+                          onClick={() => adminSquadronStore!.setPendingDeleteSquadron(squadron)}
+                        >
+                          <CloseIcon/>
+                        </div>
+                      </span>}
+                    </div>
+                  );
+                })
+              }
+            </React.Fragment>);
           })}
         </div>}
       </React.Fragment>
@@ -76,14 +82,25 @@ export const StyledSquadronList = inject(
     border: 1px solid ${props => props.theme.graySteel};
     overflow: auto;
     
-    .row, .sub-header {
+    .row {
+      padding: 1rem 1rem 1rem 2rem;
+    }
+    
+    .sub-header {
       padding: 1rem;
+    }
+    
+    .row, .sub-header {
       display:flex;
       
       & > .cell {
         width: 33%;
         display: flex;
        }
+    }
+    
+    .title, .sub-header {
+      font-weight: 500;
     }
     
     .title {
@@ -101,6 +118,7 @@ export const StyledSquadronList = inject(
       }
       
       .add-squadron-button {
+        font-size: 0.75rem;
         justify-content: flex-end;
         cursor: pointer;
 

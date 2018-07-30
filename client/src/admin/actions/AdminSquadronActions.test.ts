@@ -14,6 +14,7 @@ describe('AdminSquadronActions', () => {
     adminSquadronStore = {
       defaultPendingSquadron: jest.fn(),
       deleteSquadron: jest.fn(),
+      hydrate: jest.fn(),
       pendingSquadron: {
         setSiteId: jest.fn(),
         setSiteName: jest.fn(),
@@ -32,7 +33,8 @@ describe('AdminSquadronActions', () => {
     };
 
     adminSquadronRepository = {
-      delete: jest.fn()
+      delete: jest.fn(),
+      findAll: jest.fn()
     };
 
     subject = new AdminSquadronActions(
@@ -90,7 +92,7 @@ describe('AdminSquadronActions', () => {
 
   it('should delete a squadron', async () => {
     await subject.deleteSquadron(15);
-    expect(adminSquadronStore.deleteSquadron).toHaveBeenCalledWith(15);
+    expect(adminSquadronStore.hydrate).toHaveBeenCalled();
     expect(adminSquadronRepository.delete).toHaveBeenCalledWith(15);
   });
 });

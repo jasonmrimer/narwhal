@@ -2,27 +2,32 @@ import { action, computed, observable } from 'mobx';
 import { AdminSquadronModel } from '../models/AdminSquadronModel';
 import { NotificationStore } from '../../widgets/stores/NotificationStore';
 import { AdminSiteModel } from '../models/AdminSiteModel';
+import { NestedModel } from '../models/NestedModel';
 
 export class AdminSquadronStore extends NotificationStore {
   @observable private _pendingDeleteSquadron: AdminSquadronModel | null = null;
   @observable private _pendingSquadron: AdminSquadronModel | null = null;
   @observable private _sites: AdminSiteModel[] = [];
-  @observable private _squadrons: AdminSquadronModel[] = [];
+  @observable private _squadrons: NestedModel<AdminSiteModel, AdminSquadronModel>[] = [];
 
   @action.bound
   hydrate(squadrons: AdminSquadronModel[]) {
-    this._squadrons = squadrons;
+    this._squadrons = [];
+    squadrons.forEach(s => {
+      let parent = this._squadrons.find(sq => sq.parent.siteName === s.siteName);
+      if (parent === undefined) {
+        parent =
+          new NestedModel<AdminSiteModel, AdminSquadronModel>(
+            new AdminSiteModel(s.siteId, s.siteName));
+        this._squadrons.push(parent);
+      }
+      parent.children.push(s);
+    });
   }
 
   @action.bound
   defaultPendingSquadron() {
     this._pendingSquadron = null;
-  }
-
-  @action.bound
-  deleteSquadron(id: number) {
-    const index = this._squadrons.findIndex(s => s.squadronId === id);
-    this._squadrons.splice(index, 1);
   }
 
   @action.bound
@@ -77,6 +82,8 @@ export class AdminSquadronStore extends NotificationStore {
 
   @computed
   get squadrons() {
-    return this._squadrons;
+    return this._squadrons.sort((a, b) => {
+      return a.parent.siteName > b.parent.siteName ? 1 : -1;
+    });
   }
 }

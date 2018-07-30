@@ -40,7 +40,7 @@ describe('SquadronList', () => {
 
   it('should display a list of squadrons', () => {
     expect(subject.find('.row').length).toBe(2);
-    expect(subject.find('.row').at(0).text()).toContain('Site1/Squad1');
-    expect(subject.find('.row').at(1).text()).toContain('Site2/Squad2');
+    expect(subject.find('.row').at(0).text()).toContain('Squad1');
+    expect(subject.find('.row').at(1).text()).toContain('Squad2');
   });
 });
