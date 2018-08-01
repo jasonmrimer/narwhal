@@ -20,6 +20,34 @@
       Learn how to configure a non-root public URL by running `npm run buildList`.
     -->
     <title>Narwhal</title>
+
+    <!--Piwik-->
+
+    <script type="text/javascript">
+      var _paq = [];
+      _paq.push(["setDomains",[".siteUrl.com","siteUrl2.com"]]);
+      _paq.push(['trackPageView']);
+      _paq.push(['enableLinkTracking']);
+      function embedTrackingCode(){
+        var u="//analytics.intelink.ic.gov/";
+        _paq.push(['setTrackerUrl',u+'piwik.php']);
+        _paq.push(['setSiteId', '40611']);
+        var d=document, g=d.createElement('script'),s=d.getElementsByTagName('script')[0];
+        g.type='text/javascript';g.async=true;g.defer=true;g.src=u+'piwik.js';s.parentNode.insertBefore(g,s);
+      };
+
+      if (window.addEventListener) {
+        window.addEventListener("load", embedTrackingCode, false);
+      } else if (window.attachEvent) {
+        window.attachEvent("onload",embedTrackingCode);
+      } else {
+        embedTrackingCode();
+      }
+
+    </script>
+    <noscript><p><img src="//analytics.intellink.ic.gov/piwik.php?idsite=40611" style="border:0;"alt=""/></p></noscript>
+    <!--End Piwik Code -->
+
   </head>
   <body>
     <noscript>
